@@ -1,0 +1,39 @@
+#=============================
+#
+# セーブモデル
+# Author : koki nishiyama
+#
+#=============================
+SCRIPT
+     OBJECTSET
+        TYPE = 0
+        POS = -0.000 300.000 -1700.000
+        ROT = 0.000 0.000 0.000
+        SIZE = 150.000 150.000 0.000
+        COL = 1.0 0.0 0.0 1.0
+    END_OBJECTSET
+    
+    OBJECTSET
+        TYPE = 1
+        POS = -0.000 300.000 -1600.000
+        ROT = 0.000 0.000 0.000
+        SIZE = 70.000 70.000 0.000
+        COL = 1.0 1.0 0.0 1.0
+    END_OBJECTSET
+    
+    OBJECTSET
+        TYPE = 0
+        POS = -0.000 200.000 -0.000
+        ROT = 0.000 0.000 0.000
+        SIZE = 150.000 150.000 0.000
+        COL = 1.0 0.0 1.0 1.0
+    END_OBJECTSET
+    
+    OBJECTSET
+        TYPE = 1
+        POS = -0.000 200.000 -0.000
+        ROT = 0.000 0.000 0.000
+        SIZE = 70.000 70.000 0.000
+        COL = 1.0 1.0 0.0 1.0
+    END_OBJECTSET
+END_SCRIPT

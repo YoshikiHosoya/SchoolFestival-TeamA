@@ -1,0 +1,701 @@
+#=============================
+#
+# ÉZÅ[Éu
+# Author : Fujiwara Masato
+#
+#=============================
+
+SCRIPT
+    OBJECTSET
+        TYPE = 0 
+        POS = 0.000 0.000 -600.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = 0.000 0.000 -900.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = 0.000 0.000 -1200.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = 0.000 0.000 -1500.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = 0.000 0.000 -1800.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = 0.000 0.000 -2100.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = 0.000 0.000 -2400.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = 0.000 0.000 -2700.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = 0.000 0.000 -3000.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = 300.000 0.000 -3000.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = 600.000 0.000 -3000.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = 900.000 0.000 -3000.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = 1200.000 0.000 -3000.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = 1500.000 0.000 -3000.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = 1800.000 0.000 -3000.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = 2100.000 0.000 -3000.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = 2400.000 0.000 -3000.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = 2700.000 0.000 -3000.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = 2700.000 0.000 -2700.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = 2700.000 0.000 -2400.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = 2700.000 0.000 -2100.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = 2700.000 0.000 -1800.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = 2700.000 0.000 -1500.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = 2400.000 0.000 -1500.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = 2100.000 0.000 -1500.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = 1800.000 0.000 -1500.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = 1500.000 0.000 -1500.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = 1500.000 0.000 -1800.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = 1500.000 0.000 -2100.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = 1500.000 0.000 -2400.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = 1500.000 0.000 -2700.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = 2700.000 0.000 -1200.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = 2700.000 0.000 -900.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = 2700.000 0.000 -600.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = 2700.000 0.000 0.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = 2700.000 0.000 300.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = 2400.000 0.000 300.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = 2100.000 0.000 300.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = 1800.000 0.000 300.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = 1500.000 0.000 300.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = 1200.000 0.000 300.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = 1200.000 0.000 0.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = 1200.000 0.000 -600.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = 900.000 0.000 -600.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = 600.000 0.000 -600.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = 300.000 0.000 -600.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = 2700.000 0.000 600.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = 2700.000 0.000 900.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = 2700.000 0.000 1200.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = 2700.000 0.000 1500.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = 2700.000 0.000 1800.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = 2700.000 0.000 2100.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = 2700.000 0.000 2400.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = 2400.000 0.000 2400.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = 2100.000 0.000 2400.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = 1800.000 0.000 2400.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = 1500.000 0.000 2400.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = 1200.000 0.000 2400.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = 900.000 0.000 2400.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = 600.000 0.000 2400.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = 300.000 0.000 2400.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = 0.000 0.000 2400.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = 0.000 0.000 2100.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = 0.000 0.000 1800.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = 0.000 0.000 1500.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = 300.000 0.000 1500.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = 600.000 0.000 1500.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = 900.000 0.000 1500.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = 1200.000 0.000 1500.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = 1200.000 0.000 1200.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = 1200.000 0.000 900.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = 1200.000 0.000 600.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = 0.000 0.000 1200.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = 0.000 0.000 900.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = 0.000 0.000 600.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = 0.000 0.000 300.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = -300.000 0.000 300.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = -300.000 0.000 2400.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = -600.000 0.000 2400.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = -900.000 0.000 2400.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = -1200.000 0.000 2400.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = -1500.000 0.000 2400.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = -1500.000 0.000 2100.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = -1500.000 0.000 1800.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = -1500.000 0.000 1500.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = -1500.000 0.000 1200.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = -1500.000 0.000 900.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = -1500.000 0.000 600.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = -1500.000 0.000 300.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = -1200.000 0.000 300.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = -900.000 0.000 300.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = -600.000 0.000 300.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = -1800.000 0.000 300.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = -2100.000 0.000 300.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = -2400.000 0.000 300.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = -2700.000 0.000 300.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = -2700.000 0.000 0.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = -2700.000 0.000 -600.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = -2400.000 0.000 -600.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = -2100.000 0.000 -600.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = -1800.000 0.000 -600.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = -1500.000 0.000 -600.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = -1200.000 0.000 -600.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = -900.000 0.000 -600.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = -600.000 0.000 -600.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = -300.000 0.000 -600.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = -600.000 0.000 -1200.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = -600.000 0.000 -1500.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = -600.000 0.000 -1800.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = -600.000 0.000 -2100.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = -600.000 0.000 -2400.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = -600.000 0.000 -2700.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = -600.000 0.000 -3000.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = -900.000 0.000 -3000.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = -1200.000 0.000 -3000.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = -1500.000 0.000 -3000.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = -1800.000 0.000 -3000.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = -2100.000 0.000 -3000.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = -2400.000 0.000 -3000.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = -2700.000 0.000 -3000.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = -2700.000 0.000 -2700.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = -2700.000 0.000 -2400.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = -2700.000 0.000 -2100.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = -2700.000 0.000 -1800.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = -2700.000 0.000 -1500.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = -2400.000 0.000 -1200.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = -2100.000 0.000 -1200.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = -1800.000 0.000 -1200.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = -1500.000 0.000 -1200.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = -1200.000 0.000 -1200.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = -900.000 0.000 -1200.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = -1800.000 0.000 2400.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = -2700.000 0.000 -1200.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = -2700.000 0.000 -300.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = 1200.000 0.000 -300.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    OBJECTSET
+        TYPE = 0 
+        POS = 2700.000 0.000 -300.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    
+    OBJECTSET
+        TYPE = 2 
+        POS = 0.000 0.000 -3300.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+    
+    OBJECTSET
+        TYPE = 3 
+        POS = 0.000 0.000 2700.000
+        ROT = 0.000 0.000 0.000
+    END_OBJECTSET
+END_SCRIPT

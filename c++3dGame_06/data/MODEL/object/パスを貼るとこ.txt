@@ -1,0 +1,3 @@
+"data/TEXTURE/Item00.png";
+data/TEXTURE/Item00.png
+data/TEXTURE/obj_tex/WallPattern00.jpg

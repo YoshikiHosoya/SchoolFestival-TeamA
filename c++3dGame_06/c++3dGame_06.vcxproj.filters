@@ -1,0 +1,405 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="ヘッダー ファイル">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="リソース ファイル">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="ソース &amp; ヘッダー">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="cpp&amp;h\2DAnimationUI.cpp">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp&amp;h\3Deffect.cpp">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp&amp;h\3DItem.cpp">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp&amp;h\3Dline.cpp">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp&amp;h\3Dparticle.cpp">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp&amp;h\3DTexture.cpp">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp&amp;h\bulletinboard.cpp">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp&amp;h\Calculation.cpp">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp&amp;h\camera.cpp">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp&amp;h\ceiling.cpp">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp&amp;h\collision.cpp">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp&amp;h\debugcollision.cpp">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp&amp;h\debugproc.cpp">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp&amp;h\enemy.cpp">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp&amp;h\explosion.cpp">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp&amp;h\fade.cpp">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp&amp;h\floartile.cpp">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp&amp;h\floor.cpp">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp&amp;h\game.cpp">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp&amp;h\gauge.cpp">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp&amp;h\input.cpp">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp&amp;h\item.cpp">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp&amp;h\joypad.cpp">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp&amp;h\key.cpp">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp&amp;h\keyboard.cpp">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp&amp;h\light.cpp">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp&amp;h\lighteffect.cpp">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp&amp;h\line.cpp">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp&amp;h\load.cpp">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp&amp;h\load2D.cpp">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp&amp;h\main.cpp">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp&amp;h\manager.cpp">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp&amp;h\mapmark.cpp">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp&amp;h\meshdome.cpp">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp&amp;h\meshsphere.cpp">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp&amp;h\model.cpp">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp&amp;h\model_info.cpp">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp&amp;h\motion.cpp">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp&amp;h\mouse.cpp">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp&amp;h\object.cpp">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp&amp;h\pause.cpp">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp&amp;h\player.cpp">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp&amp;h\pointlight.cpp">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp&amp;h\renderer.cpp">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp&amp;h\scene.cpp">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp&amp;h\scene_load.cpp">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp&amp;h\scene_three.cpp">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp&amp;h\scene_two.cpp">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp&amp;h\scene_X.cpp">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp&amp;h\sound.cpp">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp&amp;h\telop.cpp">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp&amp;h\TelopComment.cpp">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp&amp;h\title.cpp">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp&amp;h\title_ui.cpp">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp&amp;h\titleEnemy.cpp">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp&amp;h\TitleObject.cpp">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp&amp;h\tlybg.cpp">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp&amp;h\tutorial.cpp">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp&amp;h\tutorial_ui.cpp">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp&amp;h\wall.cpp">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp&amp;h\ability.cpp">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp&amp;h\gameui.cpp">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp&amp;h\gate.cpp">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClCompile>
+    <ClCompile Include="cpp&amp;h\Manual.cpp">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="cpp&amp;h\2DAnimationUI.h">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="cpp&amp;h\3Deffect.h">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="cpp&amp;h\3DItem.h">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="cpp&amp;h\3Dline.h">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="cpp&amp;h\3Dparticle.h">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="cpp&amp;h\3DTexture.h">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="cpp&amp;h\bulletinboard.h">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="cpp&amp;h\Calculation.h">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="cpp&amp;h\camera.h">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="cpp&amp;h\ceiling.h">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="cpp&amp;h\collision.h">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="cpp&amp;h\debugcollision.h">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="cpp&amp;h\debugproc.h">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="cpp&amp;h\enemy.h">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="cpp&amp;h\explosion.h">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="cpp&amp;h\fade.h">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="cpp&amp;h\floartile.h">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="cpp&amp;h\floor.h">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="cpp&amp;h\game.h">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="cpp&amp;h\gauge.h">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="cpp&amp;h\input.h">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="cpp&amp;h\item.h">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="cpp&amp;h\joypad.h">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="cpp&amp;h\key.h">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="cpp&amp;h\keyboard.h">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="cpp&amp;h\light.h">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="cpp&amp;h\lighteffect.h">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="cpp&amp;h\line.h">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="cpp&amp;h\load.h">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="cpp&amp;h\load2D.h">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="cpp&amp;h\main.h">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="cpp&amp;h\manager.h">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="cpp&amp;h\mapmark.h">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="cpp&amp;h\meshdome.h">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="cpp&amp;h\meshsphere.h">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="cpp&amp;h\model.h">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="cpp&amp;h\model_info.h">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="cpp&amp;h\motion.h">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="cpp&amp;h\mouse.h">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="cpp&amp;h\object.h">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="cpp&amp;h\pause.h">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="cpp&amp;h\player.h">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="cpp&amp;h\pointlight.h">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="cpp&amp;h\renderer.h">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="cpp&amp;h\scene.h">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="cpp&amp;h\scene_load.h">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="cpp&amp;h\scene_three.h">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="cpp&amp;h\scene_two.h">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="cpp&amp;h\scene_X.h">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="cpp&amp;h\sound.h">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="cpp&amp;h\telop.h">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="cpp&amp;h\TelopComment.h">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="cpp&amp;h\title.h">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="cpp&amp;h\title_ui.h">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="cpp&amp;h\titleEnemy.h">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="cpp&amp;h\TitleObject.h">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="cpp&amp;h\tlybg.h">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="cpp&amp;h\tutorial.h">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="cpp&amp;h\tutorial_ui.h">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="cpp&amp;h\wall.h">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="cpp&amp;h\ability.h">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="cpp&amp;h\gameui.h">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="cpp&amp;h\gate.h">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="cpp&amp;h\Manual.h">
+      <Filter>ソース &amp; ヘッダー</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
