@@ -1,0 +1,41 @@
+#==============================================================================
+#
+# テクスチャ名
+# Author : Yoshiki Hosoya
+#
+#==============================================================================
+SCRIPT			# この行は絶対消さないこと！
+
+#------------------------------------------------------------------------------
+# テクスチャ数
+#-----------------------------------------------------------------------------
+NUM_TEXTURE = 23
+
+#------------------------------------------------------------------------------
+# モデルファイル名
+#------------------------------------------------------------------------------
+TEXTURE_FILENAME = data/TEXTURE/UI/other/TexNone.png			//0
+TEXTURE_FILENAME = data/TEXTURE/UI/other/PressButton.png		//1
+TEXTURE_FILENAME = data/TEXTURE/UI/title/TitleLogo02.png		//2
+TEXTURE_FILENAME = data/TEXTURE/UI/result/ResultLogo.png		//3
+TEXTURE_FILENAME = data/TEXTURE/UI/ranking/RankingLogo.png		//4
+TEXTURE_FILENAME = data/TEXTURE/UI/pause/PauseLogo.png			//5
+TEXTURE_FILENAME = data/TEXTURE/UI/other/Finish.png				//6
+TEXTURE_FILENAME = data/TEXTURE/UI/game/Combo.png				//7
+TEXTURE_FILENAME = data/TEXTURE/UI/game/KILL01.png				//8
+TEXTURE_FILENAME = data/TEXTURE/UI/game/PlayerIcon.png			//9
+TEXTURE_FILENAME = data/TEXTURE/UI/tutorial/Tutorial.png		//10
+TEXTURE_FILENAME = data/TEXTURE/UI/tutorial/Skip.png			//11
+TEXTURE_FILENAME = data/TEXTURE/UI/tutorial/ComboPattern.png	//12
+TEXTURE_FILENAME = data/TEXTURE/UI/ranking/1ST.png				//13
+TEXTURE_FILENAME = data/TEXTURE/UI/ranking/2ND.png				//14
+TEXTURE_FILENAME = data/TEXTURE/UI/ranking/3RD.png				//15
+TEXTURE_FILENAME = data/TEXTURE/UI/ranking/4TH.png				//16
+TEXTURE_FILENAME = data/TEXTURE/UI/ranking/5TH.png				//17
+TEXTURE_FILENAME = data/TEXTURE/UI/result/BG.jpg				//18
+TEXTURE_FILENAME = data/TEXTURE/UI/result/TotalScore.png		//19
+TEXTURE_FILENAME = data/TEXTURE/UI/result/ResultCalc.png		//20
+TEXTURE_FILENAME = data/TEXTURE/UI/title/BG.jpg					//21
+TEXTURE_FILENAME = data/TEXTURE/UI/game/Time.png				//22
+
+END_SCRIPT

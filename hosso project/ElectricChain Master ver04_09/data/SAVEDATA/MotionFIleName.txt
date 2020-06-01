@@ -1,0 +1,41 @@
+//------------------------------------------------------------
+//
+//モーションのファイル名
+//Author:Yoshiki Hosoya
+//
+//------------------------------------------------------------
+SCRIPT
+	FILENAME = data/SAVEDATA/Woman/Neutral.txt
+	FILENAME = data/SAVEDATA/Woman/Walk.txt
+	FILENAME = data/SAVEDATA/Woman/Dash.txt
+	FILENAME = data/SAVEDATA/Woman/Boost.txt
+	FILENAME = data/SAVEDATA/Woman/Attack_Land_X_01.txt
+	FILENAME = data/SAVEDATA/Woman/Attack_Land_X_02.txt
+	FILENAME = data/SAVEDATA/Woman/Attack_Land_X_03.txt
+	FILENAME = data/SAVEDATA/Woman/Attack_Land_X_04.txt
+	FILENAME = data/SAVEDATA/Woman/Attack_Land_X_05.txt
+	FILENAME = data/SAVEDATA/Woman/Attack_Land_Y_01.txt
+	FILENAME = data/SAVEDATA/Woman/Attack_Land_Y_02.txt
+	FILENAME = data/SAVEDATA/Woman/Attack_Land_Y_03.txt
+	FILENAME = data/SAVEDATA/Woman/Attack_Land_Y_04.txt
+	FILENAME = data/SAVEDATA/Woman/Attack_Land_Y_05.txt
+	FILENAME = data/SAVEDATA/Woman/Attack_Land_Y_Spear.txt
+	FILENAME = data/SAVEDATA/Woman/Attack_Thunder.txt
+	FILENAME = data/SAVEDATA/Woman/Jump.txt
+	FILENAME = data/SAVEDATA/Woman/Air_Neutral.txt
+	FILENAME = data/SAVEDATA/Woman/Attack_Upper.txt
+	FILENAME = data/SAVEDATA/Woman/Attack_Slams.txt
+	FILENAME = data/SAVEDATA/Woman/Attack_Air_X_01.txt
+	FILENAME = data/SAVEDATA/Woman/Attack_Air_X_02.txt
+	FILENAME = data/SAVEDATA/Woman/Attack_Air_X_03.txt
+	FILENAME = data/SAVEDATA/Woman/Attack_Air_X_04.txt
+	FILENAME = data/SAVEDATA/Woman/Hit.txt
+	FILENAME = data/SAVEDATA/Woman/Death.txt
+	FILENAME = data/SAVEDATA/Woman/Result.txt
+	FILENAME = data/SAVEDATA/Armor/Neutral.txt
+	FILENAME = data/SAVEDATA/Armor/Walk.txt
+	FILENAME = data/SAVEDATA/Armor/Attack01.txt
+	FILENAME = data/SAVEDATA/Armor/Attack02.txt
+	FILENAME = data/SAVEDATA/Armor/Hit.txt
+	FILENAME = data/SAVEDATA/Armor/Stan.txt
+END_SCRIPT
