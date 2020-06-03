@@ -24,9 +24,13 @@ private:
 	//グローバル変数
 	LPDIRECT3D9 g_pD3D = NULL;				//Direc3Dオブジェクトへのポインタ
 	LPDIRECT3DDEVICE9 g_pD3DDevice = NULL;	//Direct3dデバイスへのポインタ
+	D3DPRESENT_PARAMETERS m_d3dpp;			//プレゼンテーションパラメータ
+
 	CLight *pLight;
 	CCamera *pCamera;
 	CDebugProc *pDebug;
+
+	void ResetDevice();		//デバイスリセット
 };
 #endif
 #pragma once

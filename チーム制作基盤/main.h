@@ -16,6 +16,9 @@
 #include "xaudio2.h"
 #include <Xinput.h>
 #include <vector>
+#include "SourceCode/ImGui/Imgui.h"
+#include "SourceCode/ImGui/imgui_impl_dx9.h"
+#include "SourceCode/ImGui/imgui_impl_win32.h"
 
 //ライブラリのリンク
 #pragma comment(lib,"d3d9.lib")		//描画処理に必要
@@ -27,7 +30,7 @@
 
 //マクロ定義
 #define SCREEN_WIDTH	(1280)
-#define SCREEN_HEIGHT	(720) 
+#define SCREEN_HEIGHT	(720)
 #define FVF_VERTEX_2D	(D3DFVF_XYZRHW | D3DFVF_DIFFUSE| D3DFVF_TEX1)
 #define FVF_VERTEX_3D (D3DFVF_XYZ | D3DFVF_NORMAL | D3DFVF_DIFFUSE | D3DFVF_TEX1)
 

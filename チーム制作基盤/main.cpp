@@ -51,20 +51,20 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hInstancePrev, LPSTR IpCmdLine
 	AdjustWindowRect(&rect, WS_OVERLAPPEDWINDOW, false);
 	//ウィンドウの生成
 	//拡張ウィンドウスタイル
-	hWnd = CreateWindowEx(0,//拡張ウィンドウスタイル
-		CLASS_NAME,         //ウィンドウクラス名
-		WINDOW_NAME,        //ウィンドウの名前
-		WS_OVERLAPPEDWINDOW,//ウィンドウのスタイル
-		CW_USEDEFAULT,      //ウィンドウ左上X座標
-		CW_USEDEFAULT,      //ウィンドウ左上Y座標
-		SCREEN_WIDTH,       //ウィンドウの幅
-		SCREEN_HEIGHT,      //ウィンドウの高さ
-		NULL,               //親ウィンドウのハンドル
-		NULL,               //メニューもしくは子ウィンドウID
-		hInstance,          //インスタンスハンドル
-		NULL);              //ウィンドウ作成データ
-							//ウィンドウの表示
-							//指定されたウィンドウの表示設定
+	hWnd = CreateWindowEx(0,			//拡張ウィンドウスタイル
+		CLASS_NAME,						//ウィンドウクラス名
+		WINDOW_NAME,					//ウィンドウの名前
+		WS_OVERLAPPEDWINDOW,			//ウィンドウのスタイル
+		CW_USEDEFAULT,					//ウィンドウ左上X座標
+		CW_USEDEFAULT,					//ウィンドウ左上Y座標
+		(rect.right - rect.left),		//ウィンドウの幅
+		(rect.bottom - rect.top),		//ウィンドウの高さ
+		NULL,							//親ウィンドウのハンドル
+		NULL,							//メニューもしくは子ウィンドウID
+		hInstance,						//インスタンスハンドル
+		NULL);							//ウィンドウ作成データ
+	//ウィンドウの表示
+	//指定されたウィンドウの表示設定
 	ShowWindow(hWnd, Cmdshow);
 
 	DWORD dwCurrentTime;			//現在時間
@@ -119,12 +119,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hInstancePrev, LPSTR IpCmdLine
 				g_nCountFPS = (dwFrameCount * 1000) / (dwCurrentTime - dwFPSLastTime);
 #endif // _DEBUG
 
-				dwFPSLastTime = dwCurrentTime;//処理した時間を保存　
+				dwFPSLastTime = dwCurrentTime;//処理した時間を保存
 				dwFrameCount = 0;
 			}
 			if ((dwCurrentTime - dwExeclastTime) >= (1000 / 60))// 1/60秒ごと実行
 			{
-				dwExeclastTime = dwCurrentTime;//処理した時間を保存　
+				dwExeclastTime = dwCurrentTime;//処理した時間を保存
 											   //更新処理
 				pManager->Update();
 				//描画処理
@@ -150,9 +150,17 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hInstancePrev, LPSTR IpCmdLine
 	return(int)msg.wParam;
 }
 
+//ImGui用　これがないとマウス操作できない
+extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+
+
 //ウィンドウプロシージャ関数
 LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
+	if (ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam))
+	{
+		return true;
+	}
 	switch (uMsg)
 	{
 	case WM_KEYDOWN:

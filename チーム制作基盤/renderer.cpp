@@ -6,7 +6,7 @@
 //プロトタイプ宣言
 #ifdef _DEBUG
 LPD3DXFONT			g_pFont = NULL;	 // フォントへのポインタ
-#endif		
+#endif
 //=============================================================================
 CRenderer::CRenderer()
 {
@@ -21,7 +21,6 @@ CRenderer::~CRenderer()
 HRESULT  CRenderer::Init(HWND hWnd, BOOL bWindow)
 {
 	D3DDISPLAYMODE d3ddm;			// ディスプレイモード
-	D3DPRESENT_PARAMETERS d3dpp;	// プレゼンテーションパラメータ
 	pLight  = new CLight;
 	pCamera = new CCamera;
 	pDebug  = new CDebugProc;
@@ -37,18 +36,18 @@ HRESULT  CRenderer::Init(HWND hWnd, BOOL bWindow)
 		return E_FAIL;
 	}
 	// デバイスのプレゼンテーションパラメータの設定
-	ZeroMemory(&d3dpp, sizeof(d3dpp));							// ワークをゼロクリア
-	d3dpp.BackBufferWidth = SCREEN_WIDTH;						// ゲーム画面サイズ(幅)
-	d3dpp.BackBufferHeight = SCREEN_HEIGHT;						// ゲーム画面サイズ(高さ)
-	d3dpp.BackBufferFormat = d3ddm.Format;						// バックバッファの形式
-	d3dpp.BackBufferCount = 1;									// バックバッファの数
-	d3dpp.SwapEffect = D3DSWAPEFFECT_DISCARD;					// ダブルバッファの切り替え(映像信号に同期)
-	d3dpp.EnableAutoDepthStencil = TRUE;						// デプスバッファ(Ｚバッファ)とステンシルバッファを作成
-	d3dpp.AutoDepthStencilFormat = D3DFMT_D16;					// デプスバッファとして16bitを使う
-	d3dpp.Windowed = bWindow = TRUE;							// ウィンドウモード
-	d3dpp.FullScreen_RefreshRateInHz = D3DPRESENT_RATE_DEFAULT;	// リフレッシュレート(現在の速度に合わせる)
-	d3dpp.PresentationInterval = D3DPRESENT_INTERVAL_DEFAULT;	// インターバル(VSyncを待って描画)
-	d3dpp.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE;	// クライアント領域を直ちに更新する
+	ZeroMemory(&m_d3dpp, sizeof(m_d3dpp));							// ワークをゼロクリア
+	m_d3dpp.BackBufferWidth = SCREEN_WIDTH;						// ゲーム画面サイズ(幅)
+	m_d3dpp.BackBufferHeight = SCREEN_HEIGHT;						// ゲーム画面サイズ(高さ)
+	m_d3dpp.BackBufferFormat = d3ddm.Format;						// バックバッファの形式
+	m_d3dpp.BackBufferCount = 1;									// バックバッファの数
+	m_d3dpp.SwapEffect = D3DSWAPEFFECT_DISCARD;					// ダブルバッファの切り替え(映像信号に同期)
+	m_d3dpp.EnableAutoDepthStencil = TRUE;						// デプスバッファ(Ｚバッファ)とステンシルバッファを作成
+	m_d3dpp.AutoDepthStencilFormat = D3DFMT_D16;					// デプスバッファとして16bitを使う
+	m_d3dpp.Windowed = bWindow = TRUE;							// ウィンドウモード
+	m_d3dpp.FullScreen_RefreshRateInHz = D3DPRESENT_RATE_DEFAULT;	// リフレッシュレート(現在の速度に合わせる)
+	m_d3dpp.PresentationInterval = D3DPRESENT_INTERVAL_DEFAULT;	// インターバル(VSyncを待って描画)
+	m_d3dpp.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE;	// クライアント領域を直ちに更新する
 
 																// Direct3Dデバイスの生成
 																// [デバイス作成制御]<描画>と<頂点処理>をハードウェアで行なう
@@ -56,7 +55,7 @@ HRESULT  CRenderer::Init(HWND hWnd, BOOL bWindow)
 		D3DDEVTYPE_HAL,											// デバイスタイプ
 		hWnd,													// フォーカスするウインドウへのハンドル
 		D3DCREATE_HARDWARE_VERTEXPROCESSING,					// デバイス作成制御の組み合わせ
-		&d3dpp,													// デバイスのプレゼンテーションパラメータ
+		&m_d3dpp,													// デバイスのプレゼンテーションパラメータ
 		&g_pD3DDevice)))										// デバイスインターフェースへのポインタ
 	{
 		// 上記の設定が失敗したら
@@ -65,7 +64,7 @@ HRESULT  CRenderer::Init(HWND hWnd, BOOL bWindow)
 			D3DDEVTYPE_HAL,
 			hWnd,
 			D3DCREATE_SOFTWARE_VERTEXPROCESSING,
-			&d3dpp,
+			&m_d3dpp,
 			&g_pD3DDevice)))
 		{
 			// 上記の設定が失敗したら
@@ -74,7 +73,7 @@ HRESULT  CRenderer::Init(HWND hWnd, BOOL bWindow)
 				D3DDEVTYPE_REF,
 				hWnd,
 				D3DCREATE_SOFTWARE_VERTEXPROCESSING,
-				&d3dpp,
+				&m_d3dpp,
 				&g_pD3DDevice)))
 			{
 				// 初期化失敗
@@ -113,6 +112,16 @@ HRESULT  CRenderer::Init(HWND hWnd, BOOL bWindow)
 	pLight->InitLight();
 	pCamera->InitCamera();
 	pDebug->Init();
+
+	//生成
+	ImGui::CreateContext();
+
+	//デフォルトカラー設定
+	ImGui::StyleColorsDark();
+
+	//初期化
+	ImGui_ImplWin32_Init(hWnd);
+	ImGui_ImplDX9_Init(g_pD3DDevice);
 	return S_OK;
 }
 //=============================================================================
@@ -142,12 +151,21 @@ void CRenderer::Uninit(void)
 		g_pFont = NULL;
 	}
 #endif // _DEBUG
+
+	ImGui_ImplDX9_Shutdown();
+	ImGui_ImplWin32_Shutdown();
+	ImGui::DestroyContext();
 }
 //=============================================================================
 //更新処理
 //=============================================================================
 void CRenderer::Update(void)
 {
+	//ImGuiの更新
+	ImGui_ImplDX9_NewFrame();
+	ImGui_ImplWin32_NewFrame();
+	ImGui::NewFrame();
+
 	static bool trigger = false;
 	CKeyboard *key;
 	key = CManager::GetInputKeyboard();
@@ -157,15 +175,28 @@ void CRenderer::Update(void)
 	}
 	if (trigger == true)
 	{
-		g_pD3DDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);		//ワイヤーフレーム	
+		g_pD3DDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);		//ワイヤーフレーム
 	}
 	else
 	{
 		g_pD3DDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);			//ワイヤーフレームの初期化
 	}
+
+
+	//Sceneで管理してる情報
+	ImGui::Begin("SceneInfo");
+
 	pLight->UpdateLight();
 	pCamera->UpdateCamera();
 	CScene::UpdateAll();
+
+	//Sceneで管理してる情報 終了
+	ImGui::End();	//SceneInfo
+
+
+	//ImGui　更新終了
+	ImGui::EndFrame();
+
 }
 //=============================================================================
 //描画処理
@@ -183,6 +214,11 @@ void CRenderer::Draw(void)
 		pDebug->Draw();
 #ifdef _DEBUG
 		DrawFPS();
+
+		//ImGui描画
+		ImGui::Render();
+		ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
+
 #endif // _DEBUG
 
 	}
@@ -199,6 +235,18 @@ LPDIRECT3DDEVICE9 CRenderer::GetDevice(void)
 {
 	return g_pD3DDevice;
 }
+//=============================================================================
+//デバイスリセット imGui用の処理含む
+//=============================================================================
+void CRenderer::ResetDevice()
+{
+	ImGui_ImplDX9_InvalidateDeviceObjects();
+	HRESULT hr = g_pD3DDevice->Reset(&m_d3dpp);
+	if (hr == D3DERR_INVALIDCALL)
+		IM_ASSERT(0);
+	ImGui_ImplDX9_CreateDeviceObjects();
+}
+
 //=============================================================================
 //デバック表示
 //=============================================================================
