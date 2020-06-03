@@ -1,0 +1,77 @@
+#include "game.h"
+#include "manager.h"
+#include "renderer.h"
+#include "player.h"
+#include "inputKeyboard.h"
+#include "fade.h"
+#include "createmap.h"
+#define _CRT_SECURE_NO_WARNINGS // 警告除去
+int CGame::m_Counter = 0;
+CPlayer *CGame::m_pPlayer = NULL;
+int CGame::HP = 0;
+int CGame::HPPotion = 0;
+int CGame::MP = 0;
+int CGame::MPPotion = 0;
+
+//==========================================================
+// コンストラクタ
+//==========================================================
+CGame::CGame()
+{
+}
+//==========================================================
+// デストラクタ
+//==========================================================
+CGame::~CGame()
+{
+}
+//==========================================================
+// 初期化
+//==========================================================
+HRESULT CGame::Init(void)
+{
+	m_pCreateMap = CCreateMap::Create(1);
+	m_pPlayer = CPlayer::Create();
+	m_pPlayer->SetLife(50);
+	m_pPlayer->SetPosition(D3DXVECTOR3(0.0f, 55.0f, 0.0f));
+	return S_OK;
+}
+//==========================================================
+// 終了
+//==========================================================
+void CGame::Uninit(void)
+{
+}
+//==========================================================
+// 更新
+//==========================================================
+void CGame::Update(void)
+{
+	CKeyboard *key;
+	key = CManager::GetInputKeyboard();
+	if (key->GetKeyboardPress(DIK_P))
+	{
+		CFADE::SetFade(CManager::MODE_GAME2);
+	}
+ }
+//==========================================================
+// プレイヤー取得
+//==========================================================
+CPlayer * CGame::GetPlayer(void)
+{
+	return m_pPlayer;
+}
+//==========================================================
+// 体力の取得
+//==========================================================
+int CGame::GetHP(void)
+{
+	return HP;
+}
+//==========================================================
+// 描画
+//==========================================================
+CCreateMap * CGame::GetCreateMap(void)
+{
+	return m_pCreateMap;
+}

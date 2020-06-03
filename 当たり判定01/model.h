@@ -144,7 +144,7 @@ private:
 	CModel *m_pParent;					//親のポインタ
 	int m_modelCount;					//モデルの種類
 	int m_type;
-	int m_nIdxModelpalent;				//親のインデックス
+	int m_nIdxModelpalzajient;				//親のインデックス
 	int m_nIdx;							//モデルのインデックス
 };
 #endif
