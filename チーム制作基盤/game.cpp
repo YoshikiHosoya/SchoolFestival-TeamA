@@ -5,9 +5,11 @@
 #include "inputKeyboard.h"
 #include "fade.h"
 #include "createmap.h"
+#include "Enemy.h"
 #define _CRT_SECURE_NO_WARNINGS // Œxœ‹Ž
 int CGame::m_Counter = 0;
 CPlayer *CGame::m_pPlayer = NULL;
+CEnemy *CGame::m_pEnemy = NULL;
 int CGame::HP = 0;
 int CGame::HPPotion = 0;
 int CGame::MP = 0;
@@ -34,6 +36,10 @@ HRESULT CGame::Init(void)
 	m_pPlayer = CPlayer::Create();
 	m_pPlayer->SetLife(50);
 	m_pPlayer->SetPosition(D3DXVECTOR3(0.0f, 55.0f, 0.0f));
+
+	m_pEnemy = CEnemy::Create();
+	m_pEnemy->SetLife(50);
+	m_pEnemy->SetPosition(D3DXVECTOR3(0.0f, 55.0f, 0.0f));
 	return S_OK;
 }
 //==========================================================

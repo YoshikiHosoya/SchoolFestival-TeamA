@@ -41,10 +41,10 @@ char *CModel::m_EnemyFileName[MODEL_ENEMY_MAX] =
 	{ "data/MODEL/EnemyFire/EnemySholder_R01.x" },	//4
 	{ "data/MODEL/EnemyFire/EnemyHand_L01.x" },		//5
 	{ "data/MODEL/EnemyFire/EnemyHand_R01.x" },		//6
-	{ "data/MODEL/EnemyFire/EnemyLeg_L01.x" },		//7
-	{ "data/MODEL/EnemyFire/EnemyLeg_R01.x" },		//8
 	{ "data/MODEL/EnemyFire/EnemyFoot_L01.x" },		//9
 	{ "data/MODEL/EnemyFire/EnemyFoot_R01.x" },		//10
+	{ "data/MODEL/EnemyFire/EnemyLeg_L01.x" },		//7
+	{ "data/MODEL/EnemyFire/EnemyLeg_R01.x" },		//8
 	{ "data/MODEL/EnemyFire/Enemy_Wepon01.x" },		//11
 	{ "data/MODEL/EnemyDark/EnemyHead02.x" },		//12  ==闇==
 	{ "data/MODEL/EnemyDark/EnemyChin.x" },			//13
@@ -412,8 +412,6 @@ void CModel::Draw(D3DXMATRIX mat)
 		}
 	}
 	pDevice->SetRenderState(D3DRS_SPECULARENABLE, FALSE);						// すぺきゅらモード有効
-
-	CDebugProc::Print("posX:%2f\nposY:%2f\nposZ:%2f", m_pos.x, m_pos.y, m_pos.z);
 
 	// マテリアルをデフォルトに戻す
 	//pDevice->SetMaterial(&matDef);

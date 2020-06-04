@@ -1,0 +1,111 @@
+//[0]==================
+SET_START
+
+MODEL_TYPE = 1
+INDEX = 1
+PARENT = -1
+POS = 0 33 0
+
+SET_END
+
+//[1]==================
+SET_START
+
+MODEL_TYPE = 1
+INDEX = 0
+PARENT = 0
+POS = 0 19 -18
+
+SET_END
+
+//[2]==================
+SET_START
+
+MODEL_TYPE = 1
+INDEX = 2
+PARENT = 0
+POS = 10 10 -10
+
+SET_END
+
+//[3]==================
+SET_START
+
+MODEL_TYPE = 1
+INDEX = 3
+PARENT = 0
+POS = -10 10 -10
+
+SET_END
+
+//[4]==================
+SET_START
+
+MODEL_TYPE = 1
+INDEX = 4
+PARENT = 2
+POS = 6 -6 0
+
+SET_END
+
+//[5]==================
+SET_START
+
+MODEL_TYPE = 1
+INDEX = 5
+PARENT = 3
+POS = -6 -6 0
+
+SET_END
+
+//[6]==================
+SET_START
+
+MODEL_TYPE = 1
+INDEX = 6
+PARENT = 0
+POS = 5 -10 0
+
+SET_END
+
+//[7]==================
+SET_START
+
+MODEL_TYPE = 1
+INDEX = 7
+PARENT = 0
+POS = -5 -10 0
+
+SET_END
+
+//[8]==================
+SET_START
+
+MODEL_TYPE = 1
+INDEX = 8
+PARENT = 6
+POS = 3 -8 -3
+
+SET_END
+
+//[9]==================
+SET_START
+
+MODEL_TYPE = 1
+INDEX = 9
+PARENT = 7
+POS = -3 -8 -3
+
+SET_END
+
+//[10]==================
+SET_START
+
+MODEL_TYPE = 1
+INDEX = 10
+PARENT = 5
+POS = 0 -7 0
+
+SET_END
+
+MODEL_OFFSET_END
