@@ -40,6 +40,7 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 
 	CModel::LoadModel();
 	CManager::SetGameMode(MODE_GAME);
+	CTexture::TexLoad(hWnd);
 	return S_OK;
 }
 //===========================================
@@ -48,6 +49,7 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 void CManager::Uninit(void)
 {
 	CModel::UnLoad();
+	CTexture::TexUnload();
 	m_pRendere->Uninit();
 }
 //===========================================

@@ -19,15 +19,15 @@ std::vector<D3DXVECTOR2> CTexture::m_UVCntList = {};
 //テクスチャ名の設定
 std::vector<std::string> CTexture::m_aTexFileName =
 {
-	{ "data/TEXTURE/UI/other/TexNone.png" },					//白紙
-	{ "data/TEXTURE/UI/other/PressButton.png" },				//プレスボタン
+	{ "data/TEXTURE/TexNone.png" },					//白紙
+	{ "data/TEXTURE/particle.jpg" },					//パーティクル用の丸いの
 };
 
 
 //テクスチャ名の設定
 std::vector<std::string> CTexture::m_aSeparateTexFileName =
 {
-	{ "data/texture/DarkExplosion.png" },					//爆発
+	{ "data/TEXTURE/Explosion.png" },				//爆発
 };
 
 //-----------------------------------------------------------------------------

@@ -27,7 +27,7 @@ public:
 	{
 		TEX_NONE = 0,
 
-		TEX_UI_PRESS_ANY_BUTTON,				//PressButton
+		TEX_EFFECT_PARTICLE,					//パーティクル
 		TEX_MAX									//MAX
 	};
 

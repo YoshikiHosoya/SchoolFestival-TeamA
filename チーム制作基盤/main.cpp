@@ -13,11 +13,23 @@
 
 //プロトタイプ宣言
 LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
-int g_nCountFPS;
+//デバッグ用
+#ifdef _DEBUG
+int	g_nCountFPS = 0;
+void DispConsol();
+#endif
 
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hInstancePrev, LPSTR IpCmdLine, int Cmdshow)
 {
+	//CRTライブラリを使ってメモリーリークチェック
+	_CrtDumpMemoryLeaks();
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+	_CrtSetReportMode(_CRT_ERROR, _CRTDBG_MODE_DEBUG);
+
+	//メモリ番号でブレークポイント設定
+	//_CrtSetBreakAlloc(8768);
+
 	WNDCLASSEX wcex =
 	{
 		//WNDCLASSEXのメモリサイズ
@@ -63,6 +75,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hInstancePrev, LPSTR IpCmdLine
 		NULL,							//メニューもしくは子ウィンドウID
 		hInstance,						//インスタンスハンドル
 		NULL);							//ウィンドウ作成データ
+
+	//Debug
+#ifdef _DEBUG
+	//デバッグ用のコンソールウィンドウ表示
+	DispConsol();
+#endif
+
 	//ウィンドウの表示
 	//指定されたウィンドウの表示設定
 	ShowWindow(hWnd, Cmdshow);
@@ -94,6 +113,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hInstancePrev, LPSTR IpCmdLine
 	dwExeclastTime = timeGetTime();	//現在時間を取得
 	dwFrameCount = 0;
 	dwFPSLastTime = timeGetTime();
+
 
 	//メッセージループ（メッセージキューからメッセージを取得）
 	while (1)
@@ -195,7 +215,42 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	return DefWindowProc(hWnd, uMsg, wParam, lParam);
 }
 
+
+//デバッグ用
+#ifdef _DEBUG
+//------------------------------------------------------------------------------
+//コンソール画面出力
+//------------------------------------------------------------------------------
+void DispConsol()
+{
+	//変数宣言
+	FILE *pFile = NULL;										//ファイルのポインタ
+	char aConsoleWindowTitle[512] = { "DebugLog" };			//コンソールウィンドウのタイトル
+	HWND ConsoleWindow;										//コンソールウィンドウ
+	RECT WindowRect;										//ウィンドウの大きさ
+
+	//コンコールを開く
+	AllocConsole();
+
+	//出力先に設定
+	freopen_s(&pFile, "CONOUT$", "w", stdout);
+
+	// コンソールウインドウのタイトルを取得
+	GetConsoleTitle(aConsoleWindowTitle, sizeof(aConsoleWindowTitle));
+
+	// タイトルからウインドウを検索してウインドウハンドルを取得
+	ConsoleWindow = FindWindow(NULL, aConsoleWindowTitle);
+
+	// 現在のウインドウのRectを取得
+	GetWindowRect(ConsoleWindow, &WindowRect);
+
+	// ウインドウの座標設定
+	MoveWindow(ConsoleWindow, 0, 0, WindowRect.right - WindowRect.left, WindowRect.bottom - WindowRect.top, TRUE);
+}
+
 int GetFps(void)
 {
 	return g_nCountFPS;
 }
+
+#endif
