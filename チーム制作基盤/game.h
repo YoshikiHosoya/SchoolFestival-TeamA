@@ -24,6 +24,7 @@ public:
 private:
 	static LPDIRECT3DTEXTURE9 m_pTexture;
 	static CPlayer *m_pPlayer;
+	static CEnemy *m_pEnemy;
 	CCreateMap *m_pCreateMap;
 	static int m_Counter;
 	static int MP;

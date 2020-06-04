@@ -23,7 +23,7 @@ HRESULT CPlayer::Init(void)
 {
 	//キャラの初期化
 	CCharacter::Init();
-
+	LoadOffset(CCharacter::CHARACTER_TYPE_PLAYER);
 	LPDIRECT3DDEVICE9 pDevice = CManager::GetRendere()->GetDevice();
 	m_Attack = false;
 	CPlayer::LoadMotion();
@@ -44,12 +44,10 @@ void CPlayer::Uninit(void)
 //====================================================================
 void CPlayer::Update(void)
 {
-	CCharacter::Update();
 	float rot = 0.0f;
 	static bool trigger = false;
 	static bool trigger2 = false;
 	CKeyboard *key;
-//	CParticle *pParticle;
 	key = CManager::GetInputKeyboard();
 	Oldstate = state.Gamepad.wButtons;
 
@@ -181,8 +179,16 @@ void CPlayer::Update(void)
 	{
 		GetMove().y -= 2;
 	}
-	CPlayer::Moation();
+	if (key->GetKeyboardTrigger(DIK_1))
+	{
+		SetMotion(CCharacter::PLAYER_MOTION_NORMAL);
+	}
+	if (key->GetKeyboardTrigger(DIK_2))
+	{
+		SetMotion(CCharacter::PLAYER_MOTION_WALK);
+	}
 	XInputSetState(0, &vibration);
+	CCharacter::Update();
 }
 //====================================================================
 //描画
@@ -205,6 +211,10 @@ CPlayer *CPlayer::Create(void)
 	pPlayer = new CPlayer(OBJTYPE_PLAYER);
 	pPlayer->Init();
 	return pPlayer;
+}
+void CPlayer::DefaultMotion(void)
+{
+	SetMotion(CCharacter::PLAYER_MOTION_NORMAL);
 }
 //====================================================================
 //デバッグステータスの取得

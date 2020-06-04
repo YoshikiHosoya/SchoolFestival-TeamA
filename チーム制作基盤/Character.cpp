@@ -11,13 +11,33 @@
 
 #define MAX_RAY_LENGTH (35)		//Rayの最大の長さ
 #define RAY_FIRST_POINT (40.0f)	//Rayの始点
-char *CCharacter::m_LoadFileName = { "data/Load/LoadOffset01.txt" };
-
+//オフセットの読み込みファイル
+char *CCharacter::m_LoadOffsetFileName[CHARACTER_TYPE_MAX] =
+{
+	{ "data/Load/PlayerOffset.txt"},
+	{"data/Load/EnemyOffset.txt"},
+	{"data/Load/EnemyOffset.txt"}
+};
+//モーションの読み込みファイル
+char *CCharacter::m_LoadMotionFileName[CHARACTER_MOTION_MAX] =
+{
+	{ "data/Load/PlayerWalk.txt" },
+	{ "data/Load/PlayerNeutral.txt" },
+	{ "data/Load/PlayerAttack.txt" },
+	{ "data/Load/EnemyWalk.txt" },
+	{ "data/Load/EnemyNeutral.txt" },
+	{ "data/Load/EnemyAttack.txt" }
+};
+CCharacter::MOTION CCharacter::m_CharacterMotion[CHARACTER_MOTION_MAX] = {};
+//====================================================================
+//コンストラクタ
+//====================================================================
 CCharacter::CCharacter(OBJ_TYPE type) :CScene(type)
 {
-	SetObjType(OBJTYPE_PLAYER);
 }
-
+//====================================================================
+//デストラクタ
+//====================================================================
 CCharacter::~CCharacter()
 {
 }
@@ -32,7 +52,6 @@ HRESULT CCharacter::Init(void)
 	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_Life = 50;
 	m_state = CHARACTER_STATE_NORMAL;
-	LoadOffset();
 	return S_OK;
 }
 //====================================================================
@@ -107,7 +126,7 @@ void CCharacter::Update(void)
 		CFADE::SetFade(CManager::MODE_RESULT);
 		Rerease();
 	}
-	m_MotionType = PLAYER_MOTION_WALK;
+	Moation();
 	RayCollision();
 }
 //====================================================================
@@ -142,17 +161,6 @@ void CCharacter::Draw(void)
 	{
 		m_vModelList[nCnt]->Draw(m_mtxWorld);
 	}
-}
-//====================================================================
-//モデルのクリエイト
-//====================================================================
-CCharacter *CCharacter::Create(void)
-{
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRendere()->GetDevice();
-	CCharacter*pSceneX;
-	pSceneX = new CCharacter(OBJTYPE_PLAYER);
-	pSceneX->Init();
-	return pSceneX;
 }
 //====================================================================
 //モデルのムーヴ
@@ -228,6 +236,18 @@ void CCharacter::SetState(CHARACTER_STATE state)
 void CCharacter::SetMtxWorld(D3DXMATRIX mtxWorld)
 {
 	m_mtxWorld = mtxWorld;
+}
+//====================================================================
+//モーションの設定
+//====================================================================
+void CCharacter::SetMotion(CHARACTER_MOTION_STATE type)
+{
+	if (m_MotionType != type)
+	{
+	m_Fram = 0;
+	m_CntKeySet = 0;
+	}
+	m_MotionType = type;
 }
 //====================================================================
 //回転の差分の取得
@@ -344,9 +364,6 @@ void CCharacter::RayCollision(void)
 			m_move.y = 0;
 		}
 	}
-	CDebugProc::Print("Rayの長さ(%f)\n", fLandDistance);
-	CDebugProc::Print("キャラの高さ(%f)\n", m_pos.y);
-	CDebugProc::Print("Rayからキャラの位置を引いた値(%f)\n", m_pos.y - fLandDistance);
 }
 //====================================================================
 //モーションのロード
@@ -355,7 +372,6 @@ void CCharacter::LoadMotion(void)
 {
 	//ファイルポイント
 	FILE *pFile;
-	int nCntMotion = 0;		//モーションの数
 	int nCntModel = 0;		//モデルのカウント
 	int nCntKeySet = 0;		//フーレームの分割数
 	int nCntKey = 0;		//パーツの番号
@@ -363,98 +379,98 @@ void CCharacter::LoadMotion(void)
 	char cHeadText[128];	//比較する用
 	char cDie[128];			//不要な文字
 
-							//ファイルを開く
-	pFile = fopen("data/Load/PlayerMotion.txt", "r");
-
-	//あいたら
-	if (pFile != NULL)
+	for (int nCnt = 0; nCnt < CHARACTER_MOTION_MAX; nCnt++)
 	{
-		//スクリプトが来るまでループ
-		while (strcmp(cHeadText, "SCRIPT") != 0)
+		pFile = fopen(m_LoadMotionFileName[nCnt], "r");//ファイルを開く
+		//あいたら
+		if (pFile != NULL)
 		{
-			fgets(cReadText, sizeof(cReadText), pFile);	//一文を読み込む
-			sscanf(cReadText, "%s", &cHeadText);		//比較用テキストに文字を代入
-		}
-		//スクリプトだったら
-		if (strcmp(cHeadText, "SCRIPT") == 0)
-		{
-			//エンドスクリプトが来るまでループ
-			while (strcmp(cHeadText, "END_SCRIPT") != 0)
+			//スクリプトが来るまでループ
+			while (strcmp(cHeadText, "SCRIPT") != 0)
 			{
-				fgets(cReadText, sizeof(cReadText), pFile);
-				sscanf(cReadText, "%s", &cHeadText);
-				//モーションセットが来たら
-				if (strcmp(cHeadText, "MOTIONSET") == 0)
+				fgets(cReadText, sizeof(cReadText), pFile);	//一文を読み込む
+ 				sscanf(cReadText, "%s", &cHeadText);		//比較用テキストに文字を代入
+			}
+			//スクリプトだったら
+			if (strcmp(cHeadText, "SCRIPT") == 0)
+			{
+				//エンドスクリプトが来るまでループ
+				while (strcmp(cHeadText, "END_SCRIPT") != 0)
 				{
-					//フレーム分割数の初期化
-					nCntKeySet = 0;
-					//エンドモーションセットが来るまでループ
-					while (strcmp(cHeadText, "END_MOTIONSET") != 0)
+					fgets(cReadText, sizeof(cReadText), pFile);
+					sscanf(cReadText, "%s", &cHeadText);
+					//モーションセットが来たら
+					if (strcmp(cHeadText, "MOTIONSET") == 0)
 					{
-						fgets(cReadText, sizeof(cReadText), pFile);//一文を抜き取る
-						sscanf(cReadText, "%s", &cHeadText);
-						//ループするかどうかの情報読み込み
-						if (strcmp(cHeadText, "LOOP") == 0)
+						//フレーム分割数の初期化
+						nCntKeySet = 0;
+						//エンドモーションセットが来るまでループ
+						while (strcmp(cHeadText, "END_MOTIONSET") != 0)
 						{
-							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_PlayerMotion[nCntMotion].nLoop);
-						}
-						else if (strcmp(cHeadText, "NUM_KEY") == 0)
-						{
-							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_PlayerMotion[nCntMotion].nNumKey);
-						}
-						else if (strcmp(cHeadText, "KEYSET") == 0)
-						{
-							nCntKey = 0;//キー情報初期化
-							while (strcmp(cHeadText, "END_KEYSET") != 0)
+							fgets(cReadText, sizeof(cReadText), pFile);//一文を抜き取る
+							sscanf(cReadText, "%s", &cHeadText);
+							//ループするかどうかの情報読み込み
+							if (strcmp(cHeadText, "LOOP") == 0)
 							{
-								fgets(cReadText, sizeof(cReadText), pFile);
-								sscanf(cReadText, "%s", &cHeadText);
-
-								if (strcmp(cHeadText, "FRAME") == 0)
-								{
-									sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_PlayerMotion[nCntMotion].key_info[nCntKeySet].nFram);
-								}
-								else if (strcmp(cHeadText, "KEY") == 0)
-								{
-									while (strcmp(cHeadText, "END_KEY") != 0)
-									{
-										fgets(cReadText, sizeof(cReadText), pFile);
-										sscanf(cReadText, "%s", &cHeadText);
-										if (strcmp(cHeadText, "POS") == 0)
-										{
-											//sscanf(cReadText, "%s %s %f %f %f",
-											//	&cDie, &cDie,
-											//	&m_PlayerMotion[nCntMotion].key_info[nCntKeySet].key[nCntKey].pos.x,
-											//	&m_PlayerMotion[nCntMotion].key_info[nCntKeySet].key[nCntKey].pos.y,
-											//	&m_PlayerMotion[nCntMotion].key_info[nCntKeySet].key[nCntKey].pos.z);
-
-											//m_PlayerMotion[nCntMotion].key_info[nCntKeySet].key[nCntKey].pos += m_vModelList[nCntKey]->GetPosition();
-										}
-										else if (strcmp(cHeadText, "ROT") == 0)
-										{
-											sscanf(cReadText, "%s %s %f %f %f",
-												&cDie, &cDie,
-												&m_PlayerMotion[nCntMotion].key_info[nCntKeySet].key[nCntKey].rot.x,
-												&m_PlayerMotion[nCntMotion].key_info[nCntKeySet].key[nCntKey].rot.y,
-												&m_PlayerMotion[nCntMotion].key_info[nCntKeySet].key[nCntKey].rot.z);
-										}
-									}
-									nCntKey++;
-								}
+								sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_CharacterMotion[nCnt].nLoop);
 							}
-							nCntKeySet++;
+							else if (strcmp(cHeadText, "NUM_KEY") == 0)
+							{
+								sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_CharacterMotion[nCnt].nNumKey);
+							}
+							else if (strcmp(cHeadText, "KEYSET") == 0)
+							{
+								nCntKey = 0;//キー情報初期化
+								while (strcmp(cHeadText, "END_KEYSET") != 0)
+								{
+									fgets(cReadText, sizeof(cReadText), pFile);
+									sscanf(cReadText, "%s", &cHeadText);
+
+									if (strcmp(cHeadText, "FRAME") == 0)
+									{
+										sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_CharacterMotion[nCnt].key_info[nCntKeySet].nFram);
+									}
+									else if (strcmp(cHeadText, "KEY") == 0)
+									{
+										while (strcmp(cHeadText, "END_KEY") != 0)
+										{
+											fgets(cReadText, sizeof(cReadText), pFile);
+											sscanf(cReadText, "%s", &cHeadText);
+											if (strcmp(cHeadText, "POS") == 0)
+											{
+												//sscanf(cReadText, "%s %s %f %f %f",
+												//	&cDie, &cDie,
+												//	&m_CharacterMotion[nCntMotion].key_info[nCntKeySet].key[nCntKey].pos.x,
+												//	&m_CharacterMotion[nCntMotion].key_info[nCntKeySet].key[nCntKey].pos.y,
+												//	&m_CharacterMotion[nCntMotion].key_info[nCntKeySet].key[nCntKey].pos.z);
+
+												//m_CharacterMotion[nCntMotion].key_info[nCntKeySet].key[nCntKey].pos += m_vModelList[nCntKey]->GetPosition();
+											}
+											else if (strcmp(cHeadText, "ROT") == 0)
+											{
+												sscanf(cReadText, "%s %s %f %f %f",
+													&cDie, &cDie,
+													&m_CharacterMotion[nCnt].key_info[nCntKeySet].key[nCntKey].rot.x,
+													&m_CharacterMotion[nCnt].key_info[nCntKeySet].key[nCntKey].rot.y,
+													&m_CharacterMotion[nCnt].key_info[nCntKeySet].key[nCntKey].rot.z);
+											}
+										}
+										nCntKey++;
+									}
+								}
+								nCntKeySet++;
+							}
 						}
 					}
-					nCntMotion++;
 				}
 			}
+			//ファイルを閉じる
+			fclose(pFile);
 		}
-		//ファイルを閉じる
-		fclose(pFile);
-	}
-	else
-	{
-		MessageBox(NULL, "モデルデータの読み込み失敗", "警告", MB_ICONWARNING);
+		else
+		{
+			MessageBox(NULL, "モデルデータの読み込み失敗", "警告", MB_ICONWARNING);
+		}
 	}
 }
 //====================================================================
@@ -462,8 +478,6 @@ void CCharacter::LoadMotion(void)
 //====================================================================
 void CCharacter::Moation(void)
 {
-	CKeyboard *key;
-	key = CManager::GetInputKeyboard();
 	D3DXVECTOR3 Difrot;
 	if (m_MotionType != m_MotionOld)
 	{
@@ -474,10 +488,10 @@ void CCharacter::Moation(void)
 	{
 		if (m_Fram == 0)
 		{
-			if (m_PlayerMotion[m_MotionType].key_info[m_CntKeySet].nFram != 0)
+			if (m_CharacterMotion[m_MotionType].key_info[m_CntKeySet].nFram != 0)
 			{
 				//移動量ROTの計算-------------------------------------■■■■■
-				Difrot = (m_PlayerMotion[m_MotionType].key_info[m_CntKeySet].key[nCnt].rot - m_vModelList[nCnt]->GetRot());
+				Difrot = (m_CharacterMotion[m_MotionType].key_info[m_CntKeySet].key[nCnt].rot - m_vModelList[nCnt]->GetRot());
 
 				if (Difrot.y > D3DX_PI)
 				{
@@ -497,20 +511,20 @@ void CCharacter::Moation(void)
 					Difrot.x += D3DX_PI * 2;
 				}
 
-				rotBET[nCnt] = Difrot / (float)m_PlayerMotion[m_MotionType].key_info[m_CntKeySet].nFram;
+				rotBET[nCnt] = Difrot / (float)m_CharacterMotion[m_MotionType].key_info[m_CntKeySet].nFram;
 				//----------------------------------------------------■■■■■
 			}
 			else
 			{
-				//m_vModelList[nCnt]->GetPosition() = m_PlayerMotion[m_MotionType].key_info[m_CntKeySet].key[nCnt].pos;
-				//m_vModelList[nCnt]->GetRot()		 = m_PlayerMotion[m_MotionType].key_info[m_CntKeySet].key[nCnt].rot;
+				//m_vModelList[nCnt]->GetPosition() = m_CharacterMotion[m_MotionType].key_info[m_CntKeySet].key[nCnt].pos;
+				//m_vModelList[nCnt]->GetRot()		 = m_CharacterMotion[m_MotionType].key_info[m_CntKeySet].key[nCnt].rot;
 				//posBET[nCnt] = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 				//rotBET[nCnt] = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 			}
 		}
 
 		//フレーム移動--------------------------------------------■■■■■
-		if (m_Fram <= m_PlayerMotion[m_MotionType].key_info[m_CntKeySet].nFram)
+		if (m_Fram <= m_CharacterMotion[m_MotionType].key_info[m_CntKeySet].nFram)
 		{
 			//	m_vModelList[nCnt]->SetPosition(m_vModelList[nCnt]->GetPosition() + posBET[nCnt]);
 			m_vModelList[nCnt]->SetRot(m_vModelList[nCnt]->GetRot() + rotBET[nCnt]);
@@ -533,25 +547,24 @@ void CCharacter::Moation(void)
 		}
 		//--------------------------------------------------------■■■■■
 	}
-	if (m_Fram == m_PlayerMotion[m_MotionType].key_info[m_CntKeySet].nFram)
+	if (m_Fram == m_CharacterMotion[m_MotionType].key_info[m_CntKeySet].nFram)
 	{
 		m_CntKeySet++;
 		m_Fram = 0;
 		//キーセット数が規定値と同じになったら--------------------■■■■■
-		if (m_CntKeySet == m_PlayerMotion[m_MotionType].nNumKey)
+		if (m_CntKeySet == m_CharacterMotion[m_MotionType].nNumKey)
 		{
 			//ループしないとき------------------------------------■■■■■
-			if (m_PlayerMotion[m_MotionType].nLoop == 0)
+			if (m_CharacterMotion[m_MotionType].nLoop == 0)
 			{
 				m_CntKeySet = 0;
-				m_MotionType = 0;
-				m_Fram = m_PlayerMotion[m_MotionType].key_info[m_CntKeySet].nFram;
+				DefaultMotion();
+				m_Fram = m_CharacterMotion[m_MotionType].key_info[m_CntKeySet].nFram;
 			}
 			//ループするとき--------------------------------------■■■■■
-			else if (m_PlayerMotion[m_MotionType].nLoop == 1)
+			else if (m_CharacterMotion[m_MotionType].nLoop == 1)
 			{
 				m_CntKeySet = 0;
-				m_MotionType = 0;
 			}
 		}
 	}
@@ -560,11 +573,14 @@ void CCharacter::Moation(void)
 	{
 		m_Fram++;
 	}
+	CDebugProc::Print("モーションタイプ: %d \n", m_MotionType);
+	CDebugProc::Print("カウントキーセット: %d \n", m_CntKeySet);
+	CDebugProc::Print("フレーム: %d \n", m_Fram);
 }
 //====================================================================
 //オフセットの読み込み
 //====================================================================
-void CCharacter::LoadOffset(void)
+void CCharacter::LoadOffset(CHARACTER_TYPE nType)
 {
 	char cReadText[1080];	//文字として読み取り用
 	char cHeadText[1080];	//比較する用
@@ -577,7 +593,7 @@ void CCharacter::LoadOffset(void)
 	int nIdx;				//モデルのインデックス
 	int type;
 
-	pFile = fopen(m_LoadFileName, "r");
+	pFile = fopen(m_LoadOffsetFileName[nType], "r");
 	if (pFile != NULL)
 	{
 		while (strcmp(cHeadText, "MODEL_OFFSET_END") != 0)
