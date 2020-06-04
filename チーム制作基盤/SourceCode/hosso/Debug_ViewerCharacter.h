@@ -21,6 +21,7 @@ class CDebug_ViewerCharacter : public CCharacter
 public:
 
 	CDebug_ViewerCharacter();							//コンストラクタ
+	CDebug_ViewerCharacter(OBJ_TYPE type);
 	~CDebug_ViewerCharacter();							//デストラクタ
 
 	HRESULT Init();									//初期化
@@ -32,9 +33,10 @@ public:
 	void DeathAction() {};							//死亡時のリアクション
 	void AttackTurning() {};						//攻撃時の旋回
 	static CDebug_ViewerCharacter* Create();		//生成関数
+	void DefaultMotion() { return SetMotion(CCharacter::PLAYER_MOTION_NORMAL); };
 
 private:
-	bool ShowMotionComboBox(CCharacter::MOTION_PLAYER &motiontype);		//モーションのコンボボックス
+	bool ShowMotionComboBox(CCharacter::MOTION &motiontype);		//モーションのコンボボックス
 
 	void MotionViewer();		//モーションビューワ
 	void OffsetViewer();		//オフセットビューワ

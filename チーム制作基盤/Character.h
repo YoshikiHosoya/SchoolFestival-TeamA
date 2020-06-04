@@ -60,6 +60,7 @@ public:
 		CHARACTER_MOTION_MAX		//最大数
 	}CHARACTER_MOTION_STATE;
 
+	CCharacter() {};
 	CCharacter(OBJ_TYPE type);
 	~CCharacter();
 	HRESULT Init(void);
@@ -116,6 +117,6 @@ private:
 	CHARACTER_STATE m_state;								//
 	D3DXMATRIX  m_mtxWorld;									//マトリックス
 	CHARACTER_TYPE m_nType;									//キャラクターのタイプ
-	
+
 };
 #endif

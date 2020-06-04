@@ -37,7 +37,6 @@ private:
 	void ModelViewer();
 	void MotionViewer();
 
-
 };
 
 #endif

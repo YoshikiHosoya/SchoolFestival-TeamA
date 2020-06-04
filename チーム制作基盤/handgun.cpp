@@ -78,7 +78,7 @@ void CHandgun::Update(void)
 //
 // =====================================================================================================================================================================
 void CHandgun::Draw(void)
-{	
+{
 	// 描画
 	CBullet::Draw();
 }
@@ -103,10 +103,10 @@ CHandgun * CHandgun::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 	pHandgun->SetPosition(pos);
 
 	// プレイヤーの向きに合わせる
-	pHandgun->GetMove() = D3DXVECTOR3(-sinf(rot.y), 0.0f, -cosf(rot.y) * 2.0f),
+	pHandgun->GetMove() = D3DXVECTOR3(-sinf(rot.y), 0.0f, -cosf(rot.y) * 2.0f);
 
 	// テクスチャの割り当て
-	pHandgun->BindTexture(m_pTexture);
+	//pHandgun->BindTexture(m_pTexture);
 
 	return pHandgun;
 }
@@ -121,23 +121,26 @@ HRESULT CHandgun::Load(void)
 	// デバイスの取得
 	LPDIRECT3DDEVICE9 pDevice = CManager::GetRendere()->GetDevice();
 
+	//テクスチャ
+	LPDIRECT3DTEXTURE9 pTex;
+
 	// テクスチャ読み込み
-	D3DXCreateTextureFromFile(pDevice, TEXTURE_FILE_HUNDGUN, &m_pTexture);
+	D3DXCreateTextureFromFile(pDevice, TEXTURE_FILE_HUNDGUN, &pTex);
 
 	return S_OK;
 }
 
 // =====================================================================================================================================================================
-//  
+//
 // アンロード
 //
 // =====================================================================================================================================================================
 void CHandgun::Unload(void)
 {
-	// テクスチャの開放
-	if (m_pTexture)
-	{
-		m_pTexture->Release();
-		m_pTexture = NULL;
-	}
+	//// テクスチャの開放
+	//if (m_pTexture)
+	//{
+	//	m_pTexture->Release();
+	//	m_pTexture = NULL;
+	//}
 }

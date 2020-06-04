@@ -36,6 +36,6 @@ public:
 
 private:
 	/* 静的メンバ変数 */
-	static	LPDIRECT3DTEXTURE9	m_pTexture;				// 共有テクスチャのポインタ
+
 };
 #endif

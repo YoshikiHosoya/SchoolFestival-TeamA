@@ -16,6 +16,8 @@
 #include "xaudio2.h"
 #include <Xinput.h>
 #include <vector>
+#include <iostream>
+#include "SourceCode/hosso/HossoLibrary.h"
 #include "SourceCode/ImGui/Imgui.h"
 #include "SourceCode/ImGui/imgui_impl_dx9.h"
 #include "SourceCode/ImGui/imgui_impl_win32.h"
