@@ -21,14 +21,14 @@ char *CCharacter::m_LoadOffsetFileName[CHARACTER_TYPE_MAX] =
 //モーションの読み込みファイル
 char *CCharacter::m_LoadMotionFileName[CHARACTER_MOTION_MAX] =
 {
-	{ "data/Load/PlayerWalk.txt" },
 	{ "data/Load/PlayerNeutral.txt" },
+	{ "data/Load/PlayerWalk.txt" },
 	{ "data/Load/PlayerAttack.txt" },
-	{ "data/Load/EnemyWalk.txt" },
 	{ "data/Load/EnemyNeutral.txt" },
+	{ "data/Load/EnemyWalk.txt" },
 	{ "data/Load/EnemyAttack.txt" }
 };
-CCharacter::MOTION CCharacter::m_CharacterMotion[CHARACTER_MOTION_MAX] = {};
+std::vector<CCharacter::MOTION*> CCharacter::m_CharacterMotion = {};
 //====================================================================
 //コンストラクタ
 //====================================================================
@@ -306,6 +306,13 @@ D3DXMATRIX CCharacter::GetMtxWorld(void)
 	return m_mtxWorld;
 }
 //====================================================================
+//モーション情報の取得
+//====================================================================
+CCharacter::MOTION *CCharacter::GetCharacterMotion(CHARACTER_MOTION_STATE type)
+{
+	return m_CharacterMotion[type];
+}
+//====================================================================
 //当たり判定
 //====================================================================
 void CCharacter::RayCollision(void)
@@ -374,17 +381,23 @@ void CCharacter::LoadMotion(void)
 	FILE *pFile;
 	int nCntModel = 0;		//モデルのカウント
 	int nCntKeySet = 0;		//フーレームの分割数
-	int nCntKey = 0;		//パーツの番号
+	int nCntKey = 0;
 	char cReadText[128];	//文字として読み取り用
 	char cHeadText[128];	//比較する用
 	char cDie[128];			//不要な文字
 
+	KEY *key;
+	KEY_INFO *key_info;
+
+	MOTION *pMotion;
 	for (int nCnt = 0; nCnt < CHARACTER_MOTION_MAX; nCnt++)
 	{
 		pFile = fopen(m_LoadMotionFileName[nCnt], "r");//ファイルを開く
 		//あいたら
 		if (pFile != NULL)
 		{
+			pMotion = new MOTION;
+			m_CharacterMotion.emplace_back(pMotion);
 			//スクリプトが来るまでループ
 			while (strcmp(cHeadText, "SCRIPT") != 0)
 			{
@@ -402,6 +415,7 @@ void CCharacter::LoadMotion(void)
 					//モーションセットが来たら
 					if (strcmp(cHeadText, "MOTIONSET") == 0)
 					{
+
 						//フレーム分割数の初期化
 						nCntKeySet = 0;
 						//エンドモーションセットが来るまでループ
@@ -412,15 +426,18 @@ void CCharacter::LoadMotion(void)
 							//ループするかどうかの情報読み込み
 							if (strcmp(cHeadText, "LOOP") == 0)
 							{
-								sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_CharacterMotion[nCnt].nLoop);
+								sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_CharacterMotion[nCnt]->nLoop);
 							}
 							else if (strcmp(cHeadText, "NUM_KEY") == 0)
 							{
-								sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_CharacterMotion[nCnt].nNumKey);
+								sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_CharacterMotion[nCnt]->nNumKey);
 							}
 							else if (strcmp(cHeadText, "KEYSET") == 0)
 							{
-								nCntKey = 0;//キー情報初期化
+								key_info = new KEY_INFO;
+								m_CharacterMotion[nCnt]->key_info.emplace_back(key_info);
+								nCntKey = 0;
+
 								while (strcmp(cHeadText, "END_KEYSET") != 0)
 								{
 									fgets(cReadText, sizeof(cReadText), pFile);
@@ -428,10 +445,12 @@ void CCharacter::LoadMotion(void)
 
 									if (strcmp(cHeadText, "FRAME") == 0)
 									{
-										sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_CharacterMotion[nCnt].key_info[nCntKeySet].nFram);
+										sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_CharacterMotion[nCnt]->key_info[nCntKeySet]->nFram);
 									}
 									else if (strcmp(cHeadText, "KEY") == 0)
 									{
+										key = new KEY;
+										m_CharacterMotion[nCnt]->key_info[nCntKeySet]->key.emplace_back(key);
 										while (strcmp(cHeadText, "END_KEY") != 0)
 										{
 											fgets(cReadText, sizeof(cReadText), pFile);
@@ -450,17 +469,21 @@ void CCharacter::LoadMotion(void)
 											{
 												sscanf(cReadText, "%s %s %f %f %f",
 													&cDie, &cDie,
-													&m_CharacterMotion[nCnt].key_info[nCntKeySet].key[nCntKey].rot.x,
-													&m_CharacterMotion[nCnt].key_info[nCntKeySet].key[nCntKey].rot.y,
-													&m_CharacterMotion[nCnt].key_info[nCntKeySet].key[nCntKey].rot.z);
+													&m_CharacterMotion[nCnt]->key_info[nCntKeySet]->key[nCntKey]->rot.x,
+													&m_CharacterMotion[nCnt]->key_info[nCntKeySet]->key[nCntKey]->rot.y,
+													&m_CharacterMotion[nCnt]->key_info[nCntKeySet]->key[nCntKey]->rot.z);
+											}
+											else if (strcmp(cHeadText, "END_KEY") == 0)
+											{
+												nCntKey++;
 											}
 										}
-										nCntKey++;
 									}
 								}
 								nCntKeySet++;
 							}
 						}
+
 					}
 				}
 			}
@@ -488,10 +511,10 @@ void CCharacter::Moation(void)
 	{
 		if (m_Fram == 0)
 		{
-			if (m_CharacterMotion[m_MotionType].key_info[m_CntKeySet].nFram != 0)
+			if (m_CharacterMotion[m_MotionType]->key_info[m_CntKeySet]->nFram != 0)
 			{
 				//移動量ROTの計算-------------------------------------■■■■■
-				Difrot = (m_CharacterMotion[m_MotionType].key_info[m_CntKeySet].key[nCnt].rot - m_vModelList[nCnt]->GetRot());
+				Difrot = (m_CharacterMotion[m_MotionType]->key_info[m_CntKeySet]->key[nCnt]->rot - m_vModelList[nCnt]->GetRot());
 
 				if (Difrot.y > D3DX_PI)
 				{
@@ -511,7 +534,7 @@ void CCharacter::Moation(void)
 					Difrot.x += D3DX_PI * 2;
 				}
 
-				rotBET[nCnt] = Difrot / (float)m_CharacterMotion[m_MotionType].key_info[m_CntKeySet].nFram;
+				m_rotBET[nCnt] = Difrot / (float)m_CharacterMotion[m_MotionType]->key_info[m_CntKeySet]->nFram;
 				//----------------------------------------------------■■■■■
 			}
 			else
@@ -524,10 +547,10 @@ void CCharacter::Moation(void)
 		}
 
 		//フレーム移動--------------------------------------------■■■■■
-		if (m_Fram <= m_CharacterMotion[m_MotionType].key_info[m_CntKeySet].nFram)
+		if (m_Fram <= m_CharacterMotion[m_MotionType]->key_info[m_CntKeySet]->nFram)
 		{
 			//	m_vModelList[nCnt]->SetPosition(m_vModelList[nCnt]->GetPosition() + posBET[nCnt]);
-			m_vModelList[nCnt]->SetRot(m_vModelList[nCnt]->GetRot() + rotBET[nCnt]);
+			m_vModelList[nCnt]->SetRot(m_vModelList[nCnt]->GetRot() + m_rotBET[nCnt]);
 			if (m_vModelList[nCnt]->GetRot().y > D3DX_PI)
 			{
 				m_vModelList[nCnt]->SetRot(m_vModelList[nCnt]->GetRot() - D3DXVECTOR3(0.0f, D3DX_PI * 2.0f, 0.0f));
@@ -547,22 +570,22 @@ void CCharacter::Moation(void)
 		}
 		//--------------------------------------------------------■■■■■
 	}
-	if (m_Fram == m_CharacterMotion[m_MotionType].key_info[m_CntKeySet].nFram)
+	if (m_Fram == m_CharacterMotion[m_MotionType]->key_info[m_CntKeySet]->nFram)
 	{
 		m_CntKeySet++;
 		m_Fram = 0;
 		//キーセット数が規定値と同じになったら--------------------■■■■■
-		if (m_CntKeySet == m_CharacterMotion[m_MotionType].nNumKey)
+		if (m_CntKeySet == m_CharacterMotion[m_MotionType]->nNumKey)
 		{
 			//ループしないとき------------------------------------■■■■■
-			if (m_CharacterMotion[m_MotionType].nLoop == 0)
+			if (m_CharacterMotion[m_MotionType]->nLoop == 0)
 			{
 				m_CntKeySet = 0;
 				DefaultMotion();
-				m_Fram = m_CharacterMotion[m_MotionType].key_info[m_CntKeySet].nFram;
+				m_Fram = m_CharacterMotion[m_MotionType]->key_info[m_CntKeySet]->nFram;
 			}
 			//ループするとき--------------------------------------■■■■■
-			else if (m_CharacterMotion[m_MotionType].nLoop == 1)
+			else if (m_CharacterMotion[m_MotionType]->nLoop == 1)
 			{
 				m_CntKeySet = 0;
 			}
@@ -664,4 +687,53 @@ void CCharacter::LoadOffset(CHARACTER_TYPE nType)
 
 	}
 
+}
+//====================================================================
+//モーションタイプの取得
+//====================================================================
+CCharacter::CHARACTER_MOTION_STATE CCharacter::GetMotionType(void)
+{
+	return m_MotionType;
+}
+//====================================================================
+//前のモーションタイプの取得
+//====================================================================
+CCharacter::CHARACTER_MOTION_STATE CCharacter::GetMotionOldType(void)
+{
+	return m_MotionOld;
+}
+//====================================================================
+//キーセットの取得
+//====================================================================
+int CCharacter::GetKeySet(void)
+{
+	return m_CntKeySet;
+}
+//====================================================================
+//フレームの取得
+//====================================================================
+int CCharacter::GetFram(void)
+{
+	return m_Fram;
+}
+//====================================================================
+//前のモーションタイプの設定
+//====================================================================
+void CCharacter::SetMotionOldType(CHARACTER_MOTION_STATE type)
+{
+	m_MotionOld = type;
+}
+//====================================================================
+//キーセットの設定
+//====================================================================
+void CCharacter::SetKeySet(int keyset)
+{
+	m_CntKeySet = keyset;
+}
+//====================================================================
+//フレームの設定
+//====================================================================
+void CCharacter::SetFram(int fram)
+{
+	m_Fram = fram;
 }

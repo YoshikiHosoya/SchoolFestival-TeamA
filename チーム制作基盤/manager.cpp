@@ -4,6 +4,7 @@
 #include "Player.h"
 #include "model.h"
 #include "game.h"
+#include "texture.h"
 #include "Xinput.h"
 //‘¼‚Ì‚Æ‚±‚Å‚àg‚¦‚é‚æ‚¤‚É‚·‚éƒƒ“ƒo
 CRenderer *CManager::m_pRendere		  = NULL;
