@@ -4,6 +4,7 @@
 #include "Player.h"
 #include "model.h"
 #include "game.h"
+#include "texture.h"
 #include "Xinput.h"
 #include "texture.h"
 

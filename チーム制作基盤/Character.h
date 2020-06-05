@@ -6,7 +6,7 @@
 #include "manager.h"
 #include "renderer.h"
 
-#define MAX_MODEL (11)			//モデルのパーツ数
+#define MAX_MODEL (20)			//モデルのパーツ数
 class CModel;
 //レンダリングクラス
 class CCharacter :public CScene
@@ -38,14 +38,14 @@ public:
 	typedef struct
 	{
 		int nFram;					//フレーム数
-		KEY key[MAX_MODEL];			//パーツ数
+		std::vector<KEY*> key;
 	}KEY_INFO;
 	//モデルのモーション
 	typedef struct
 	{
 		int nLoop;					//ループ
 		int nNumKey;				//キー情報の数
-		KEY_INFO key_info[10];		//キーが何セットあるか
+		std::vector<KEY_INFO*> key_info;
 	}MOTION;
 	typedef enum
 	{
@@ -83,6 +83,10 @@ public:
 	void SetState(CHARACTER_STATE state);
 	void SetMtxWorld(D3DXMATRIX mtxWorld);
 	void SetMotion(CHARACTER_MOTION_STATE type);
+	void SetMotionOldType(CHARACTER_MOTION_STATE type);
+	void SetKeySet(int keyset);
+	void SetFram(int fram);
+
 	//ゲット
 	D3DXVECTOR3 GetPosition(void);
 	D3DXVECTOR3 GetPositionOld(void);
@@ -92,21 +96,25 @@ public:
 	CHARACTER_STATE GetCharacterState(void);
 	int GetLife(void);
 	D3DXMATRIX GetMtxWorld(void);
+	MOTION *GetCharacterMotion(CHARACTER_MOTION_STATE type);//キャラクターモーション情報の取得
+	CHARACTER_MOTION_STATE GetMotionType(void);				//モーションタイプの取得
+	CHARACTER_MOTION_STATE GetMotionOldType(void);			//前のモーションタイプ取得
+	int GetKeySet(void);									//キーセットの取得
+	int GetFram(void);										//フレームの取得
+
+
 	void RayCollision(void);
 private:
-
-	D3DXVECTOR3 rotBET[MAX_MODEL];							//回転の差分
-	static MOTION m_CharacterMotion[CHARACTER_MOTION_MAX];	//キャラクターのモーション情報
-	CHARACTER_MOTION_STATE m_MotionState;					//モーションの変数
-	int m_MotionType;										//モーションの数
-	int m_MotionOld;										//前のモーション
+	static std::vector<MOTION*>m_CharacterMotion;			//キャラクターのモーション情報
+	//CHARACTER_MOTION_STATE m_MotionState;					//モーションの変数
+	CHARACTER_MOTION_STATE m_MotionType;					//モーションの数
+	CHARACTER_MOTION_STATE m_MotionOld;						//前のモーション
 	int m_CntKeySet;										//キーセットのカウント
 	int m_Fram;												//フレーム
-	bool m_bMotionChange;
 	static char *m_LoadOffsetFileName[CHARACTER_TYPE_MAX];	//読み込むファイル名
 	static char *m_LoadMotionFileName[CHARACTER_MOTION_MAX];//読み込むファイル名
 	std::vector<CModel*> m_vModelList;						//可変長配列 設置したモデル
-
+	D3DXVECTOR3 m_rotBET[MAX_MODEL];
 	D3DXVECTOR3 m_pos;										//位置
 	D3DXVECTOR3 m_posold;									//前の位置
 	D3DXVECTOR3 m_move;										//移動量
@@ -117,6 +125,7 @@ private:
 	CHARACTER_STATE m_state;								//
 	D3DXMATRIX  m_mtxWorld;									//マトリックス
 	CHARACTER_TYPE m_nType;									//キャラクターのタイプ
+
 
 };
 #endif
