@@ -117,6 +117,9 @@
     <ClCompile Include="SourceCode\hosso\HossoLibrary.cpp">
       <Filter>Hosso</Filter>
     </ClCompile>
+    <ClCompile Include="heavymachinegun.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Scene.h">
@@ -217,6 +220,9 @@
     </ClInclude>
     <ClInclude Include="SourceCode\hosso\HossoLibrary.h">
       <Filter>Hosso</Filter>
+    </ClInclude>
+    <ClInclude Include="heavymachinegun.h">
+      <Filter>ソース ファイル</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -28,6 +28,8 @@ CScene3D::~CScene3D()
 HRESULT CScene3D::Init(void)
 {
 	CSceneBase::Init();
+	MakeVertex();
+
 	return S_OK;
 }
 //==========================================================
@@ -93,8 +95,50 @@ CScene3D * CScene3D::Create(D3DXVECTOR3 pos, D3DXVECTOR3 size,D3DXVECTOR3 rot)
 	pScene3D->SetPosition(pos);
 	pScene3D->SetSize(size);
 	pScene3D->SetRot(rot);
-	pScene3D->MakeVertex();
 	return pScene3D;
+}
+//==========================================================
+// サイズ設定
+//==========================================================
+void CScene3D::SetSize(D3DXVECTOR3 size)
+{
+	GetSize() = size;
+
+	//頂点情報へのポインタ
+	VERTEX_3D *pVtx;
+
+	//頂点データの範囲をロックし、頂点バッファへのポインタを取得
+	GetVtxBuff()->Lock(0, 0, (void**)&pVtx, 0);
+	// 頂点情報の
+	pVtx[0].pos = D3DXVECTOR3(-GetSize().x, +GetSize().y, +GetSize().z);
+	pVtx[1].pos = D3DXVECTOR3(+GetSize().x, +GetSize().y, +GetSize().z);
+	pVtx[2].pos = D3DXVECTOR3(-GetSize().x, -GetSize().y, -GetSize().z);
+	pVtx[3].pos = D3DXVECTOR3(+GetSize().x, -GetSize().y, -GetSize().z);
+
+	//頂点データをアンロック
+	GetVtxBuff()->Unlock();
+}
+//==========================================================
+// カラー設定
+//==========================================================
+void CScene3D::SetColor(D3DXCOLOR col)
+{
+	GetColor() = col;
+
+	//頂点情報へのポインタ
+	VERTEX_3D *pVtx;
+
+	//頂点データの範囲をロックし、頂点バッファへのポインタを取得
+	GetVtxBuff()->Lock(0, 0, (void**)&pVtx, 0);
+
+	// 頂点情報の
+	pVtx[0].col = GetColor();
+	pVtx[1].col = GetColor();
+	pVtx[2].col = GetColor();
+	pVtx[3].col = GetColor();
+
+	//頂点データをアンロック
+	GetVtxBuff()->Unlock();
 }
 //==========================================================
 // コンストラクタ
@@ -115,7 +159,7 @@ void CScene3D::MakeVertex(void)
 	//頂点情報へのポインタ
 	VERTEX_3D *pVtx;
 	//頂点データの範囲をロックし、頂点バッファへのポインタを取得
-	GetVtxBuff()->Lock(0, 0, (void**)&pVtx, 0);
+	pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
 	// 頂点情報の
 	pVtx[0].pos = D3DXVECTOR3(-GetSize().x, +GetSize().y, +GetSize().z);
 	pVtx[1].pos = D3DXVECTOR3(+GetSize().x, +GetSize().y, +GetSize().z);
@@ -138,7 +182,7 @@ void CScene3D::MakeVertex(void)
 	pVtx[3].tex = D3DXVECTOR2(1.0f, 1.0f);
 
 	//頂点データをアンロック
-	GetVtxBuff()->Unlock();
+	pVtxBuff->Unlock();
 
 	CSceneBase::BindVtxBuff(pVtxBuff);
 }

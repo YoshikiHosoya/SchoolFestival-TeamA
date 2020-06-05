@@ -183,8 +183,8 @@ void CDebug_ViewerCharacter::MotionViewer()
 	//int &nNowKey =
 
 	//ƒ‚[ƒVƒ‡ƒ“‚ÉŠÖ‚·‚éî•ñ
-	CMotion::MOTION_TYPE &NowMotionType = pModelCharacter->GetMotion();
-	CMotion::MOTION_INFO *MotionInfo = CMotion::GetMotion(NowMotionType);
+	//CMotion::MOTION_TYPE &NowMotionType = pModelCharacter->GetMotion();
+	//CMotion::MOTION_INFO *MotionInfo = CMotion::GetMotion(NowMotionType);
 
 	//UŒ‚Œn‚Ìî•ñ‚ª•Ï‚í‚Á‚½‚©‚Ç‚¤‚©
 	bool bChangeAttackInfo = false;

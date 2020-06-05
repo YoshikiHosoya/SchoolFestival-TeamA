@@ -1,10 +1,10 @@
 // =====================================================================================================================================================================
 //
-// ハンドガンの処理 [handgun.cpp]
+// ヘビーマシンガンの処理 [heavymachinegun.cpp]
 // Author : Sato Yoshiki
 //
 // =====================================================================================================================================================================
-#include "handgun.h"			// インクルードファイル
+#include "heavymachinegun.h"			// インクルードファイル
 #include "manager.h"
 #include "renderer.h"
 #include "game.h"
@@ -19,16 +19,16 @@
 // マクロ定義
 // =====================================================================================================================================================================
 #define TEXTURE_FILE_HUNDGUN		"data/TEXTURE/00.png"		// 読み込むテクスチャファイル名
-#define BULLET_SPEED				(2.0f)						// 弾速
-#define BULLET_SIZE_X				(25)						// 弾の横のサイズ
-#define BULLET_SIZE_Y				(25)						// 弾の縦のサイズ
+#define BULLET_SPEED				(3.0f)						// 弾速
+#define BULLET_SIZE_X				(50)						// 弾の横のサイズ
+#define BULLET_SIZE_Y				(50)						// 弾の縦のサイズ
 
 // =====================================================================================================================================================================
 //
 // コンストラクタ
 //
 // =====================================================================================================================================================================
-CHandgun::CHandgun(OBJ_TYPE type) :CBullet(type)
+CHeavyMachinegun::CHeavyMachinegun(OBJ_TYPE type) :CBullet(type)
 {
 	SetObjType(OBJTYPE_BULLET);
 }
@@ -38,7 +38,7 @@ CHandgun::CHandgun(OBJ_TYPE type) :CBullet(type)
 // デストラクタ
 //
 // =====================================================================================================================================================================
-CHandgun::~CHandgun()
+CHeavyMachinegun::~CHeavyMachinegun()
 {
 }
 
@@ -47,7 +47,7 @@ CHandgun::~CHandgun()
 // 初期化処理
 //
 // =====================================================================================================================================================================
-HRESULT CHandgun::Init()
+HRESULT CHeavyMachinegun::Init()
 {
 	// 初期化
 	CBullet::Init();
@@ -63,7 +63,7 @@ HRESULT CHandgun::Init()
 // 終了処理
 //
 // =====================================================================================================================================================================
-void CHandgun::Uninit(void)
+void CHeavyMachinegun::Uninit(void)
 {
 	// 終了
 	CBullet::Uninit();
@@ -74,7 +74,7 @@ void CHandgun::Uninit(void)
 // 更新処理
 //
 // =====================================================================================================================================================================
-void CHandgun::Update(void)
+void CHeavyMachinegun::Update(void)
 {
 	// 更新
 	CBullet::Update();
@@ -85,7 +85,7 @@ void CHandgun::Update(void)
 // 描画処理
 //
 // =====================================================================================================================================================================
-void CHandgun::Draw(void)
+void CHeavyMachinegun::Draw(void)
 {
 	// 描画
 	CBullet::Draw();
@@ -93,28 +93,28 @@ void CHandgun::Draw(void)
 
 // =====================================================================================================================================================================
 //
-// ハンドガンの生成
+// ヘビーマシンガンの生成
 //
 // =====================================================================================================================================================================
-CHandgun * CHandgun::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
+CHeavyMachinegun * CHeavyMachinegun::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 {
 	// 変数
-	CHandgun *pHandgun;
+	CHeavyMachinegun *pHeavyMachinegun;
 
 	// メモリの確保
-	pHandgun = new CHandgun(OBJTYPE_BULLET);
+	pHeavyMachinegun = new CHeavyMachinegun(OBJTYPE_BULLET);
 
 	// 初期化
-	pHandgun->Init();
+	pHeavyMachinegun->Init();
 
 	// ハンドガンの位置の設定
-	pHandgun->SetPosition(pos);
+	pHeavyMachinegun->SetPosition(pos);
 
 	// プレイヤーの向きに合わせる
-	pHandgun->GetMove() = D3DXVECTOR3(-sinf(rot.y), 0.0f, -cosf(rot.y) * BULLET_SPEED);
+	pHeavyMachinegun->GetMove() = D3DXVECTOR3(-sinf(rot.y), 0.0f, -cosf(rot.y) * BULLET_SPEED);
 
 	// テクスチャの割り当て
-	pHandgun->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_BULLET_HANDGUN));
+	pHeavyMachinegun->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_BULLET_HANDGUN));
 
-	return pHandgun;
+	return pHeavyMachinegun;
 }

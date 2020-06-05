@@ -18,6 +18,10 @@ public:
 	void SetAnimation(D3DXVECTOR2 UV, D3DXVECTOR2 UVsize);
 	//ゲットするもの
 	static CScene3D *Create(D3DXVECTOR3 pos, D3DXVECTOR3 size, D3DXVECTOR3 rot);
+
+	//set関数　オーバーライド
+	void SetSize(D3DXVECTOR3 size);
+	void SetColor(D3DXCOLOR col);
 protected:
 
 private:

@@ -8,6 +8,9 @@
 #include "fade.h"
 #include "createmap.h"
 #include "Xinput.h"
+#include "handgun.h"
+#include "heavymachinegun.h"
+
 CPlayer::CPlayer(OBJ_TYPE type) :CCharacter(type)
 {
 	SetObjType(OBJTYPE_PLAYER);
@@ -102,7 +105,19 @@ void CPlayer::Update(void)
 
 	//ƒL[ƒ{[ƒhˆ—
 
-	// A‚Æ‚Ì‘g‚Ý‡‚í‚¹
+		// e‚ðŒ‚‚Â
+		if (key->GetKeyboardTrigger(DIK_P))
+		{
+			// ƒnƒ“ƒhƒKƒ“‚Ì’e‚Ì¶¬
+			CHandgun::Create(CPlayer::GetPosition(), CPlayer::GetRot());
+		}
+		if (key->GetKeyboardTrigger(DIK_O))
+		{
+			// ƒwƒr[ƒ}ƒVƒ“ƒKƒ“‚Ì’e‚Ì¶¬
+			CHeavyMachinegun::Create(CPlayer::GetPosition(), CPlayer::GetRot());
+		}
+
+		// A‚Æ‚Ì‘g‚Ý‡‚í‚¹
 	if (key->GetKeyboardPress(DIK_A))
 	{
 		if (key->GetKeyboardPress(DIK_S))

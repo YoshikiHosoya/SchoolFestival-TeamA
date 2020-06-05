@@ -20,18 +20,14 @@ class CBullet : public CScene3D
 {
 public:
 
-	CBullet();											// コンストラクタ
+	CBullet(OBJ_TYPE type);											// コンストラクタ
 	~CBullet();											// デストラクタ
 
 	/* メンバ関数 */
-	HRESULT						Init();					// 初期化
-	void						Uninit();				// 終了
-	void						Update();				// 更新
-	void						Draw();					// 描画
-
-	/* 静的メンバ関数 */		
-	static	HRESULT				Load();					// ロード
-	static	void				Unload();				// アンロード
+	virtual HRESULT				Init();					// 初期化
+	virtual void				Uninit();				// 終了
+	virtual void				Update();				// 更新
+	virtual void				Draw();					// 描画
 
 	/* メンバ関数 */
 	D3DXVECTOR3					&GetMove()					{ return m_move; };		// 移動値の取得

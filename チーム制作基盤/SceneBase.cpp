@@ -120,21 +120,21 @@ void CSceneBase::SetMtxWorld(D3DXMATRIX mtxWorld)
 //==========================================================
 // ポジションの取得
 //==========================================================
-D3DXVECTOR3 CSceneBase::GetPosition(void)
+D3DXVECTOR3 &CSceneBase::GetPosition(void)
 {
 	return m_pos;
 }
 //==========================================================
 // 色の取得
 //==========================================================
-D3DXCOLOR CSceneBase::GetColor(void)
+D3DXCOLOR &CSceneBase::GetColor(void)
 {
 	return m_col;
 }
 //==========================================================
 // 回転の取得
 //==========================================================
-D3DXVECTOR3 CSceneBase::GetRot(void)
+D3DXVECTOR3 &CSceneBase::GetRot(void)
 {
 	return m_rot;
 }
@@ -162,7 +162,7 @@ D3DXMATRIX CSceneBase::GetMtxWorld(void)
 //==========================================================
 // 大きさの取得
 //==========================================================
-D3DXVECTOR3 CSceneBase::GetSize(void)
+D3DXVECTOR3 &CSceneBase::GetSize(void)
 {
 	return m_size;
 }

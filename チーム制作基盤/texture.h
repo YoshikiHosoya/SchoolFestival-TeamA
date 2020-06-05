@@ -28,6 +28,7 @@ public:
 		TEX_NONE = 0,
 
 		TEX_EFFECT_PARTICLE,					//パーティクル
+		TEX_BULLET_HANDGUN,						//ハンドガンの弾
 		TEX_MAX									//MAX
 	};
 

@@ -27,10 +27,10 @@ public:
 	virtual void BindVtxBuff(LPDIRECT3DVERTEXBUFFER9 pVtxBuff);
 	virtual void SetMtxWorld(D3DXMATRIX mtxWorld);
 	//ƒQƒbƒg‚·‚é‚à‚Ì
-	D3DXVECTOR3 GetPosition(void);
-	D3DXVECTOR3 GetSize(void);
-	D3DXCOLOR GetColor(void);
-	D3DXVECTOR3 GetRot(void);
+	D3DXVECTOR3 &GetPosition(void);
+	D3DXVECTOR3 &GetSize(void);
+	D3DXCOLOR &GetColor(void);
+	D3DXVECTOR3 &GetRot(void);
 	LPDIRECT3DTEXTURE9 GetTexture(void);
 	LPDIRECT3DVERTEXBUFFER9 GetVtxBuff(void);
 	D3DXMATRIX GetMtxWorld(void);

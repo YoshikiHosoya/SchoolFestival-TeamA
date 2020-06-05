@@ -5,6 +5,8 @@
 #include "model.h"
 #include "game.h"
 #include "Xinput.h"
+#include "texture.h"
+
 //‘¼‚Ì‚Æ‚±‚Å‚àg‚¦‚é‚æ‚¤‚É‚·‚éƒƒ“ƒo
 CRenderer *CManager::m_pRendere		  = NULL;
 CKeyboard *CManager::m_pInputKeyboard = NULL;

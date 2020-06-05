@@ -20,7 +20,8 @@ std::vector<D3DXVECTOR2> CTexture::m_UVCntList = {};
 std::vector<std::string> CTexture::m_aTexFileName =
 {
 	{ "data/TEXTURE/TexNone.png" },					//白紙
-	{ "data/TEXTURE/particle.jpg" },					//パーティクル用の丸いの
+	{ "data/TEXTURE/particle.jpg" },				//パーティクル用の丸いの
+	{ "data/TEXTURE/particle.jpg" },						//ハンドガンの弾
 };
 
 
