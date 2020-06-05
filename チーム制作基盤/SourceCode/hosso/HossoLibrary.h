@@ -10,7 +10,6 @@
 //インクルード
 //------------------------------------------------------------------------------
 #include "../../main.h"
-#include "../../texture.h"
 //------------------------------------------------------------------------------
 //マクロ
 //------------------------------------------------------------------------------
@@ -44,13 +43,18 @@ typedef struct INTEGER2
 	int y;
 
 	//コンストラクタ
-	INTEGER2() {};
+	INTEGER2()
+	{
+		//引数で数値が入ってこなかったら0
+		x = 0;
+		y = 0;
+	};
 	INTEGER2(int nX, int nY)
 	{
+		//引数通りの数値
 		x = nX;
 		y = nY;
-	}
-
+	};
 }INTEGER2;
 
 //int型を3つ格納できる
@@ -61,45 +65,29 @@ typedef struct INTEGER3
 	int z;
 
 	//コンストラクタ
-	INTEGER3() {};
+	INTEGER3()
+	{
+		//引数で数値が入ってこなかったら0
+		x = 0;
+		y = 0;
+		z = 0;
+	};
 	INTEGER3(int nX, int nY,int nZ)
 	{
+		//引数通りの数値
 		x = nX;
 		y = nY;
 		z = nZ;
-	}
+	};
 }INTEGER3;
 
 
 //------------------------------------------------------------------------------
 //クラス定義
 //------------------------------------------------------------------------------
-class CKeyboard;
-class CPad_XInput;
-class CModelInfo;
-
 class CHossoLibrary
 {
 public:
-
-	//入力の種類
-	enum INPUTTYPE
-	{
-		PRESS = 0,	//プレス
-		TRIGGER,	//トリガー
-		MAX
-	};
-
-	//方向
-	enum DIRECTION
-	{
-		NONE = -1,
-		UP,			//↑
-		DOWN,		//↓
-		LEFT,		//←
-		RIGHT		//→
-	};
-
 	static float Vec2Cross(D3DXVECTOR2 const &rVecA, D3DXVECTOR2 const &rVecB);									//2D 外積計算
 	static void CalcMatrix(D3DXMATRIX *pMtx,D3DXVECTOR3 const &rPos, D3DXVECTOR3 const &rRot);					//ワールドマトリックス計算
 	static void SetBillboard(D3DXMATRIX *pMtx);																	//ビルボード設定

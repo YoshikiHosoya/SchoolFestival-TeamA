@@ -26,6 +26,8 @@ public:
 		MODE_PAUSE,
 		MODE_CLEAR,
 		MODE_TUTORIAL,
+
+		MODE_DEBUG_MODELVIEWER,		//デバッグ用モデルビューワ
 		MODE_MAX,
 	}GAME_MODE;
 

@@ -120,14 +120,8 @@ CDebug_ViewerCharacter* CDebug_ViewerCharacter::Create()
 		//初期化7
 		pCharacter->Init();
 
-		//パラメータ設定
-		//pCharacter->SetParameter(chara, paramtype,pCharacter);
-
 		////オブジェクトタイプ設定
-		//pCharacter->SetObjType(OBJTYPE_PLAYER);
-
-		////リストに追加
-		//pCharacter->AddSharedList(pCharacter);
+		pCharacter->SetObjType(OBJTYPE_PLAYER);
 	}
 
 	//生成した情報
@@ -185,23 +179,20 @@ void CDebug_ViewerCharacter::MotionViewer()
 	//キーボードのポインタ
 	CKeyboard *pKeyboard = CManager::GetInputKeyboard();
 
-	////モデルキャラクターのポインタ
-	//CModelCharacter *pModelCharacter = GetModelCharacterPtr();
+	//現在のキー
+	//int &nNowKey =
 
-	////現在のキー
-	//int &nNowKey = pModelCharacter->GetKey();
+	//モーションに関する情報
+	CMotion::MOTION_TYPE &NowMotionType = pModelCharacter->GetMotion();
+	CMotion::MOTION_INFO *MotionInfo = CMotion::GetMotion(NowMotionType);
 
-	////モーションに関する情報
-	//CMotion::MOTION_TYPE &NowMotionType = pModelCharacter->GetMotion();
-	//CMotion::MOTION_INFO *MotionInfo = CMotion::GetMotion(NowMotionType);
+	//攻撃系の情報が変わったかどうか
+	bool bChangeAttackInfo = false;
+	bool bChangeNowKey = false;
 
-	////攻撃系の情報が変わったかどうか
-	//bool bChangeAttackInfo = false;
-	//bool bChangeNowKey = false;
-
-	////コピペ用のキー
-	//static CMotion::MOTION_TYPE CopyMotionType = CMotion::MOTION_NONE;
-	//static int nCopyKey = -1;
+	//コピペ用のキー
+	static CCharacter::CHARACTER_MOTION_STATE CopyMotionType = CCharacter::CHARACTER_MOTION_STATE::ENEMY_MOTION_WALK;
+	static int nCopyKey = -1;
 
 
 

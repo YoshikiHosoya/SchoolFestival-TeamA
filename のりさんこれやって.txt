@@ -1,0 +1,17 @@
+のりさんこれ追加して
+	Character.cppのプライベート変数のGet関数とSet関数
+		Motion関連の値の書き換えがしたい
+
+	CHARACTER_MOTION_STATE_NONE
+		モーションしないステート
+		値は-1
+		Updateの時にモーションの処理をしなければOK
+
+	BaseMode
+		TitleとかGameの基底クラス
+		Managerとか色々書き換えになっちゃうけどあったら便利
+		DebugCommand使いたい
+			HossoProject参照 > BaseMode.cpp
+				テンキーでモード遷移できるようになる　これほしい
+	
+	
