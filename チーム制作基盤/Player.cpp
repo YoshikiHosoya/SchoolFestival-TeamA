@@ -196,7 +196,7 @@ void CPlayer::Update(void)
 	}
 	if (key->GetKeyboardTrigger(DIK_1))
 	{
-		SetMotion(CCharacter::PLAYER_MOTION_NORMAL);
+		SetMotion(CCharacter::CHARACTER_MOTION_STATE_NONE);
 	}
 	if (key->GetKeyboardTrigger(DIK_2))
 	{
