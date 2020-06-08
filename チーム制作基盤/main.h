@@ -22,7 +22,7 @@
 #include "SourceCode/ImGui/Imgui.h"
 #include "SourceCode/ImGui/imgui_impl_dx9.h"
 #include "SourceCode/ImGui/imgui_impl_win32.h"
-
+#include "texture.h"
 //ライブラリのリンク
 #pragma comment(lib,"d3d9.lib")		//描画処理に必要
 #pragma comment(lib,"d3dx9.lib")	//[d3d9.lib]の拡張ライブラリ

@@ -35,11 +35,11 @@ HRESULT CGame::Init(void)
 	m_pCreateMap = CCreateMap::Create(1);
 	m_pPlayer = CPlayer::Create();
 	m_pPlayer->SetLife(50);
-	m_pPlayer->SetPosition(D3DXVECTOR3(0.0f, 55.0f, 0.0f));
+	m_pPlayer->SetPosition(D3DXVECTOR3(50.0f, 0.0f, 0.0f));
 
 	m_pEnemy = CEnemy::Create();
 	m_pEnemy->SetLife(50);
-	m_pEnemy->SetPosition(D3DXVECTOR3(0.0f, 55.0f, 0.0f));
+	m_pEnemy->SetPosition(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 	return S_OK;
 }
 //==========================================================
@@ -55,10 +55,7 @@ void CGame::Update(void)
 {
 	CKeyboard *key;
 	key = CManager::GetInputKeyboard();
-	if (key->GetKeyboardPress(DIK_P))
-	{
-		CFADE::SetFade(CManager::MODE_GAME2);
-	}
+
  }
 //==========================================================
 // ÉvÉåÉCÉÑÅ[éÊìæ
@@ -73,6 +70,12 @@ CPlayer * CGame::GetPlayer(void)
 int CGame::GetHP(void)
 {
 	return HP;
+}
+void CGame::Draw(void)
+{
+}
+void CGame::ShowDebugInfo(void)
+{
 }
 //==========================================================
 // ï`âÊ

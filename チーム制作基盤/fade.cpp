@@ -9,22 +9,18 @@
 // マクロ定義
 //=============================================================================
 #define	TEXTURE_FADE	"data/TEXTURE/fade000.jpg"	// 読み込むテクスチャファイル名
+#define FADE_COLOR	(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f))
 //=============================================================================
 // プロトタイプ宣言
 //=============================================================================
-//=============================================================================
-// Staticメンバ変数
-//=============================================================================
-CFADE::FADE CFADE::m_fade = FADE_IN;
-CManager::GAME_MODE CFADE::m_modeNext = {};
-D3DXCOLOR CFADE::m_colorFade = D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f);
-
 //=============================================================================
 // 初期化処理
 //=============================================================================
 void CFADE::InitFade(void)
 {
 	LPDIRECT3DDEVICE9 pDevice = CManager::GetRendere()->GetDevice();
+	m_colorFade = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);
+	m_fade = FADE_NONE;
 	// テクスチャの読み込み
 	D3DXCreateTextureFromFile(pDevice,				// デバイスへのポインタ
 		TEXTURE_FADE,		// ファイルの名前
@@ -77,7 +73,14 @@ void CFADE::UpdateFade(void)
 		{
 			m_colorFade.a = 1.0f;
 			m_fade = FADE_IN;
-			CManager::SetGameMode(m_modeNext);
+			if (m_modeNext != CManager::MODE_NONE)
+			{
+				CManager::SetGameMode(m_modeNext);
+			}
+			else
+			{
+
+			}
 		}
 	}
 	pVtx[0].col = m_colorFade;
@@ -163,15 +166,23 @@ void CFADE::SetFade(CManager::GAME_MODE modeNext)
 	{
 		m_fade = FADE_OUT;
 		m_modeNext = modeNext;
-		m_colorFade = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);
+		m_colorFade = FADE_COLOR;
 	}
-
 }
-
 //=============================================================================
 // フェードの状態取得
 //=============================================================================
 CFADE::FADE CFADE::GetFade(void)
 {
 	return m_fade;
+}
+//=============================================================================
+// フェードのクリエイト
+//=============================================================================
+CFADE *CFADE::CreateFade(void)
+{
+	CFADE *pfade;
+	pfade = new CFADE;
+	pfade->InitFade();
+	return pfade;
 }

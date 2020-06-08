@@ -123,7 +123,6 @@ void CCharacter::Update(void)
 	//Ž€‚ñ‚¾‚Æ‚«
 	if (m_Life <= 0)
 	{
-		CFADE::SetFade(CManager::MODE_RESULT);
 		Rerease();
 	}
 	Moation();
@@ -318,7 +317,7 @@ CCharacter::MOTION *CCharacter::GetCharacterMotion(CHARACTER_MOTION_STATE type)
 void CCharacter::RayCollision(void)
 {
 	CCreateMap *pCreateMap;
-	pCreateMap = CManager::GetGame()->GetCreateMap();
+	pCreateMap = CManager::GetBaseMode()->GetCreateMap();
 	// ’nŒ`”»’è
 	BOOL  bIsHit = false;
 	float fLandDistance = 0;

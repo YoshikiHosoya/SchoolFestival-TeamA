@@ -32,15 +32,16 @@ public:
 	void UninitFade(void);
 	void UpdateFade(void);
 	void DrawFade(void);
-	static void SetFade(CManager::GAME_MODE modeNext);
-	static FADE GetFade(void);
 	void MakeVertexFade(void);
+	void SetFade(CManager::GAME_MODE modeNext);
+	FADE GetFade(void);
+	static CFADE *CreateFade(void);
 private:
 	LPDIRECT3DTEXTURE9		m_pTextureFade = NULL;		// テクスチャへのポインタ
 	LPDIRECT3DVERTEXBUFFER9 m_pVtxBuffFade = NULL;		// 頂点バッファへのポインタ
-	static FADE					m_fade;						// フェード状態
-	static CManager::GAME_MODE		m_modeNext;					// 次の画面（モード）
-	static D3DXCOLOR				m_colorFade;				// フェード色
+	FADE					m_fade;						// フェード状態
+	CManager::GAME_MODE		m_modeNext;					// 次の画面（モード）
+	D3DXCOLOR				m_colorFade;				// フェード色
 };
 
 #endif

@@ -115,7 +115,6 @@ void CModel::LoadModel(void)
 			m_Model[PLAYER_MODEL][nCnt].m_pTexture[nCntmat] = NULL;
 			D3DXCreateTextureFromFile(pDevice, pMat[nCntmat].pTextureFilename, &m_Model[PLAYER_MODEL][nCnt].m_pTexture[nCntmat]);
 		}
-
 	}
 
 	//マップのモデル読み込み
@@ -168,9 +167,7 @@ void CModel::LoadModel(void)
 			m_Model[ENEMY_MODEL][nCnt].m_pTexture[nCntmat] = NULL;
 			D3DXCreateTextureFromFile(pDevice, pMat[nCntmat].pTextureFilename, &m_Model[ENEMY_MODEL][nCnt].m_pTexture[nCntmat]);
 		}
-
 	}
-
 }
 //====================================================================
 //モデルの開放

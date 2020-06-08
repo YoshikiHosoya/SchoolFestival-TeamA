@@ -235,6 +235,10 @@ LPDIRECT3DDEVICE9 CRenderer::GetDevice(void)
 {
 	return g_pD3DDevice;
 }
+CFADE * CRenderer::GetFade(void)
+{
+	return pFade;
+}
 //=============================================================================
 //デバイスリセット imGui用の処理含む
 //=============================================================================

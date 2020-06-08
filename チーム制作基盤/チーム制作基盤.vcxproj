@@ -154,6 +154,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BaseMode.cpp" />
     <ClCompile Include="bullet.cpp" />
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="Character.cpp" />
@@ -162,9 +163,11 @@
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="fade.cpp" />
     <ClCompile Include="game.cpp" />
+    <ClCompile Include="gun.cpp" />
     <ClCompile Include="handgun.cpp" />
     <ClCompile Include="heavymachinegun.cpp" />
     <ClCompile Include="inputKeyboard.cpp" />
+    <ClCompile Include="item.cpp" />
     <ClCompile Include="light.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="manager.cpp" />
@@ -187,6 +190,7 @@
     <ClCompile Include="texture.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BaseMode.h" />
     <ClInclude Include="bullet.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="Character.h" />
@@ -195,9 +199,11 @@
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="fade.h" />
     <ClInclude Include="game.h" />
+    <ClInclude Include="gun.h" />
     <ClInclude Include="handgun.h" />
     <ClInclude Include="heavymachinegun.h" />
     <ClInclude Include="inputKeyboard.h" />
+    <ClInclude Include="item.h" />
     <ClInclude Include="light.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="manager.h" />
@@ -221,6 +227,9 @@
     <ClInclude Include="SourceCode\ImGui\imstb_textedit.h" />
     <ClInclude Include="SourceCode\ImGui\imstb_truetype.h" />
     <ClInclude Include="texture.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="imgui.ini" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

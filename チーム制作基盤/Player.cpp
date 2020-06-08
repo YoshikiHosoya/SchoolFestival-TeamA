@@ -31,7 +31,6 @@ HRESULT CPlayer::Init(void)
 
 	LPDIRECT3DDEVICE9 pDevice = CManager::GetRendere()->GetDevice();
 	m_Attack = false;
-	CPlayer::LoadMotion();
 	ZeroMemory(&state, sizeof(XINPUT_STATE));
 	ZeroMemory(&vibration, sizeof(XINPUT_VIBRATION));
 

@@ -27,8 +27,6 @@ HRESULT CEnemy::Init(void)
 	SetCharacterType(CCharacter::CHARACTER_TYPE_ENEMY);
 	LPDIRECT3DDEVICE9 pDevice = CManager::GetRendere()->GetDevice();
 	m_Attack = false;
-	CEnemy::LoadMotion();
-
 	return S_OK;
 }
 //====================================================================
