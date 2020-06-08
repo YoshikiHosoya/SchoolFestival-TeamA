@@ -26,9 +26,13 @@ public:
 	enum TEX_TYPE
 	{
 		TEX_NONE = 0,
-
 		TEX_EFFECT_PARTICLE,					//パーティクル
 		TEX_BULLET_HANDGUN,						//ハンドガンの弾
+		TEX_ITEM_HEAVYMACHINEGUN,				//ヘビーマシンガン
+		TEX_ITEM_SHOTGUN,						//ショットガン
+		TEX_ITEM_LASERGUN,						//レーザーガン
+		TEX_ITEM_ROCKETLAUNCHER,				//ロケットランチャー
+		TEX_ITEM_FLAMESHOT,						//フレイムショット
 		TEX_MAX									//MAX
 	};
 
