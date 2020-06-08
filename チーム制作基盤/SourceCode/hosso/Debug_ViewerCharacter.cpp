@@ -14,6 +14,7 @@
 #include "../../game.h"
 #include "../../camera.h"
 #include "../../inputKeyboard.h"
+#include "../../model.h"
 
 //------------------------------------------------------------------------------
 //静的メンバ変数の初期化
@@ -113,7 +114,7 @@ void CDebug_ViewerCharacter::ShowDebugInfo()
 CDebug_ViewerCharacter* CDebug_ViewerCharacter::Create()
 {
 	//変数宣言
-	CDebug_ViewerCharacter *pCharacter = new CDebug_ViewerCharacter;
+	CDebug_ViewerCharacter *pCharacter = new CDebug_ViewerCharacter(OBJTYPE_PLAYER);
 
 	if (pCharacter)
 	{
@@ -180,11 +181,11 @@ void CDebug_ViewerCharacter::MotionViewer()
 	CKeyboard *pKeyboard = CManager::GetInputKeyboard();
 
 	//現在のキー
-	//int &nNowKey =
+	int &nNowKey = CCharacter::GetKeySet();
 
 	//モーションに関する情報
-	//CMotion::MOTION_TYPE &NowMotionType = pModelCharacter->GetMotion();
-	//CMotion::MOTION_INFO *MotionInfo = CMotion::GetMotion(NowMotionType);
+	CCharacter::CHARACTER_MOTION_STATE &NowMotionType = GetMotionType();
+	CCharacter::MOTION *MotionInfo = CCharacter::GetCharacterMotion(NowMotionType);
 
 	//攻撃系の情報が変わったかどうか
 	bool bChangeAttackInfo = false;
@@ -210,153 +211,58 @@ void CDebug_ViewerCharacter::MotionViewer()
 	//	ChangeMotion(NowMotionType);
 	//	pModelCharacter->ForcedUpdate(NowMotionType, nNowKey);
 	//	MotionInfo = CMotion::GetMotion(NowMotionType);
-
 	//}
 
-	////改行しない
-	//ImGui::SameLine();
+	//改行しない
+	ImGui::SameLine();
 
-	////モーションリスタート
-	//if (ImGui::Button("ReStart") || pKeyboard->GetTrigger(DIK_RETURN))
-	//{
-	//	nNowKey = 0;
-	//	SetAttack(false);
-	//	pModelCharacter->SetMotionStop(false);
-	//	ChangeMotion(NowMotionType);
-	//	pModelCharacter->ForcedUpdate(NowMotionType, nNowKey);
-	//	MotionInfo = CMotion::GetMotion(NowMotionType);
-	//}
+	//モーションリスタート
+	if (ImGui::Button("ReStart") || pKeyboard->GetKeyboardTrigger(DIK_RETURN))
+	{
+		nNowKey = 0;
+		SetMotion(NowMotionType);
+		ForcedUpdate();
+		MotionInfo = CCharacter::GetCharacterMotion(NowMotionType);
+	}
 
-	////Widgetの大きさ設定
-	//ImGui::PushItemWidth(100);
+	//Widgetの大きさ設定
+	ImGui::PushItemWidth(100);
 
-	////ループ
+	////モーションストップ
 	//if (ImGui::Checkbox("bMotionStop", &pModelCharacter->GetMotionStop()))
 	//{
 
 	//}
 
-	////ループ
-	//if (ImGui::Checkbox("bLoop", &MotionInfo->bLoop))
-	//{
+	//ループ
+	if (ImGui::Checkbox("bLoop", (bool*)MotionInfo->nLoop))
+	{
 
-	//}
+	}
 
-	////攻撃するかどうか
-	//ImGui::Text("bAttack %d", (int)MotionInfo->bAttack);
+	//改行
+	ImGui::Separator();
 
-	////改行
-	//ImGui::Separator();
+	//１F前のキーフレーム
+	int nNumKeyOld = MotionInfo->nNumKey;
 
-	////攻撃のモーションだった時
-	//if (MotionInfo->bAttack)
-	//{
-	//	if (ImGui::TreeNode("AttackInfo"))
-	//	{
+	//キー数
+	if (ImGui::InputInt("NumKey", &MotionInfo->nNumKey))
+	{
+		//範囲内に修正する
+		CHossoLibrary::RangeLimit_Equal_Int(MotionInfo->nNumKey, 0, 100);
 
-	//		//軌跡の色　float型にキャスト
-	//		float *rCol = MotionInfo->pAttackInfo->orbitcol;
+		////キーが増えたか減ったか
+		//MotionInfo->nNumKey > nNumKeyOld ?
+		//	CMotion::AddKeyInfo(NowMotionType, pModelCharacter->GetType()) :			//要素の追加　末尾
+		//	CMotion::PopbackKeyInfo(NowMotionType);										//要素の削除　末尾
+	}
 
-	//		ImGui::SetNextItemWidth(250.0f);
+	//フレーム数
+	if (ImGui::InputInt("MaxFrame", &MotionInfo->key_info[nNowKey]->nFram))
+	{
 
-	//		//色の設定
-	//		if (ImGui::ColorEdit4("OrbitColor", rCol)) { bChangeAttackInfo = true; };
-
-	//		//攻撃に関する情報
-	//		if (ImGui::DragInt("AttackValue", &MotionInfo->pAttackInfo->nAttack, 0.3f, 0, 100))
-	//		{
-	//			bChangeAttackInfo = true;
-	//		}
-	//		if (ImGui::DragInt("BlueAttackValue", &MotionInfo->pAttackInfo->nBlueAttack, 0.3f, 0, 100))
-	//		{
-	//			bChangeAttackInfo = true;
-	//		}
-	//		if (ImGui::DragFloat("CollisionLength", &MotionInfo->pAttackInfo->fLength, 0.1f, 0.0f, 200.0f))
-	//		{
-	//			bChangeAttackInfo = true;
-	//		}
-	//		if (ImGui::DragFloat("CollisionRadius", &MotionInfo->pAttackInfo->fRadius, 0.1f, 0.0f, 50.0f))
-	//		{
-	//			bChangeAttackInfo = true;
-	//		}
-
-	//		//攻撃に関する情報が変わった時
-	//		if (bChangeAttackInfo)
-	//		{
-	//			//攻撃の情報更新
-	//			pModelCharacter->UpdateAttackInfo();
-	//		}
-
-	//		//開始のキー
-	//		if (ImGui::InputInt("CollisionStartKey", &MotionInfo->pAttackInfo->nStartCollisonKey))
-	//		{
-	//			//範囲内に修正する
-	//			CHossoLibrary::RangeLimit_Equal_Int(MotionInfo->pAttackInfo->nStartCollisonKey, 0, MotionInfo->pAttackInfo->nEndCollisionKey);
-
-	//		}
-	//		//終了のキー
-	//		if (ImGui::InputInt("CollisionEndKEy", &MotionInfo->pAttackInfo->nEndCollisionKey))
-	//		{
-	//			//範囲内に修正する
-	//			CHossoLibrary::RangeLimit_Equal_Int(MotionInfo->pAttackInfo->nEndCollisionKey, MotionInfo->pAttackInfo->nStartCollisonKey, MotionInfo->nNumKey);
-	//		}
-
-	//		//移動速度
-	//		if (ImGui::DragFloat("MoveFront", &MotionInfo->pAttackInfo->fMoveFront, 0.02f, 0.0f, 30.0f))
-	//		{
-
-	//		}
-	//		ImGui::SameLine();
-	//		//移動速度
-	//		if (ImGui::DragFloat("MoveUp", &MotionInfo->pAttackInfo->fMoveUp, 0.02f, -30.0f, 30.0f))
-	//		{
-
-	//		}
-	//		ImGui::SameLine();
-	//		//移動速度
-	//		if (ImGui::InputInt("MoveKey", &MotionInfo->pAttackInfo->nMoveKey))
-	//		{
-	//			//範囲内に修正する
-	//			CHossoLibrary::RangeLimit_Equal_Int(MotionInfo->pAttackInfo->nMoveKey, 0, MotionInfo->nNumKey);
-	//		}
-
-	//		//ノックバック
-	//		if (ImGui::DragFloat("KnockBack_Front", &MotionInfo->pAttackInfo->fKnockBack_Front, 0.02f, 0.0f, 30.0f))
-	//		{
-
-	//		}
-	//		ImGui::SameLine();
-	//		//ノックバック
-	//		if (ImGui::DragFloat("KnockBack_Up", &MotionInfo->pAttackInfo->fKnockBack_Up, 0.02f, -30.0f, 30.0f))
-	//		{
-
-	//		}
-	//		ImGui::TreePop();
-	//	}
-	//	//改行
-	//	ImGui::Separator();
-	//}
-
-	////１F前のキーフレーム
-	//int nNumKeyOld = MotionInfo->nNumKey;
-
-	////キー数
-	//if (ImGui::InputInt("NumKey", &MotionInfo->nNumKey))
-	//{
-	//	//範囲内に修正する
-	//	CHossoLibrary::RangeLimit_Equal_Int(MotionInfo->nNumKey, 0, 100);
-
-	//	//キーが増えたか減ったか
-	//	MotionInfo->nNumKey > nNumKeyOld ?
-	//		CMotion::AddKeyInfo(NowMotionType, pModelCharacter->GetType()) :			//要素の追加　末尾
-	//		CMotion::PopbackKeyInfo(NowMotionType);										//要素の削除　末尾
-	//}
-
-	////フレーム数
-	//if (ImGui::InputInt("MaxFrame", &MotionInfo->pKeyInfoList[nNowKey]->nFrame))
-	//{
-
-	//}
+	}
 
 	////改行
 	//ImGui::Separator();
@@ -368,108 +274,108 @@ void CDebug_ViewerCharacter::MotionViewer()
 	//}
 
 
-	////現在のキー
-	//if (ImGui::InputInt("NowKey", &nNowKey))
-	//{
-	//	bChangeNowKey = true;
-	//}
+	//現在のキー
+	if (ImGui::InputInt("NowKey", &nNowKey))
+	{
+		bChangeNowKey = true;
+	}
 
-	////キーボードの←→でも現在のキー変えたい
-	//if (pKeyboard->GetTrigger(DIK_LEFT))
-	//{
-	//	bChangeNowKey = true;
-	//	nNowKey--;
-	//}
+	//キーボードの←→でも現在のキー変えたい
+	if (pKeyboard->GetKeyboardTrigger(DIK_LEFT))
+	{
+		bChangeNowKey = true;
+		nNowKey--;
+	}
 
-	//if (pKeyboard->GetTrigger(DIK_RIGHT))
-	//{
-	//	bChangeNowKey = true;
-	//	nNowKey++;
-	//}
+	if (pKeyboard->GetKeyboardTrigger(DIK_RIGHT))
+	{
+		bChangeNowKey = true;
+		nNowKey++;
+	}
 
-	////モーションの保存
-	//if (ImGui::Button("Copy"))
-	//{
-	//	//コピーのキーとモーションを保存
-	//	nCopyKey = nNowKey;
-	//	CopyMotionType = NowMotionType;
-	//}
+	//モーションの保存
+	if (ImGui::Button("Copy"))
+	{
+		//コピーのキーとモーションを保存
+		nCopyKey = nNowKey;
+		CopyMotionType = NowMotionType;
+	}
 
-	////改行しない
-	//ImGui::SameLine();
+	//改行しない
+	ImGui::SameLine();
 
-	////モーションの保存
-	//if (ImGui::Button("Paste"))
-	//{
-	//	//コピーしたのをはりつけ
-	//	CMotion::MotionCopy(NowMotionType, nNowKey, CopyMotionType, nCopyKey);
+	//モーションの保存
+	if (ImGui::Button("Paste"))
+	{
+		//コピーしたのをはりつけ
+		//MotionCopy(NowMotionType, nNowKey, CopyMotionType, nCopyKey);
 
-	//	//モーション強制変更
-	//	pModelCharacter->ForcedUpdate(NowMotionType, nNowKey);
+		//モーション強制変更
+		ForcedUpdate();
 
-	//}
+	}
 
-	////コピー中のモーションとキー
-	//ImGui::Text("CopyMotion [%d] CopyKey [%d]", CopyMotionType, nCopyKey);
+	//コピー中のモーションとキー
+	ImGui::Text("CopyMotion [%d] CopyKey [%d]", CopyMotionType, nCopyKey);
 
-	////現在のキーに変更があった時
-	//if (bChangeNowKey)
-	//{
-	//	//0以下は０
-	//	if (nNowKey < 0)
-	//	{
-	//		nNowKey = 0;
-	//	}
-	//	//キーチェック
-	//	pModelCharacter->KeyCheck();
+	//現在のキーに変更があった時
+	if (bChangeNowKey)
+	{
+		//0以下は０
+		if (nNowKey < 0)
+		{
+			nNowKey = 0;
+		}
+		////キーチェック
+		//pModelCharacter->KeyCheck();
 
-	//	//モーション強制変更
-	//	pModelCharacter->ForcedUpdate(NowMotionType, nNowKey);
-	//}
+		//モーション強制変更
+		ForcedUpdate();
+	}
 
-	////改行
-	//ImGui::Separator();
-	////パーツ回転
-	//if (ImGui::TreeNode("PartsRot"))
-	//{
+	//改行
+	ImGui::Separator();
+	//パーツ回転
+	if (ImGui::TreeNode("PartsRot"))
+	{
 
-	//	////モデル数分繰り替えす
-	//	//for (int nCnt = 0; nCnt < pModelCharacter->GetModelNum(pModelCharacter->GetType()); nCnt++)
-	//	//{
-	//	//	//モデル名取得
-	//	//	//std::string aPartsName = CModelCharacter::GetModelName(pModelCharacter->GetType(), nCnt).data();
+		//モデル数分繰り替えす
+		for (size_t nCnt = 0; nCnt < MotionInfo->key_info[nNowKey]->key.size(); nCnt++)
+		{
+			//モデル名取得
+			//std::string aPartsName = CModelCharacter::GetModelName(pModelCharacter->GetType(), nCnt).data();
 
-	//	//	//頭の部分の文字列を消す("data/MODEL/)
-	//	//	aPartsName.erase(aPartsName.begin(), aPartsName.begin() + 11);
+			////頭の部分の文字列を消す("data/MODEL/)
+			//aPartsName.erase(aPartsName.begin(), aPartsName.begin() + 11);
 
-	//	//	//次の項目の枠の大きさ設定
-	//	//	ImGui::SetNextItemWidth(250);
+			//次の項目の枠の大きさ設定
+			ImGui::SetNextItemWidth(250);
 
-	//	//	//それぞれの回転量を調整
-	//	//	if (ImGui::DragFloat3(aPartsName.data(), MotionInfo->pKeyInfoList[nNowKey]->pKeyList[nCnt]->rotDest, 0.01f, -3.14f, 3.14f))
-	//	//	{
-	//	//		//モーション強制変更
-	//	//		pModelCharacter->ForcedUpdate(NowMotionType, nNowKey);
-	//	//	}
-	//	//}
+			////それぞれの回転量を調整
+			//if (ImGui::DragFloat3(aPartsName.data(), MotionInfo->key_info[nNowKey]->key[nCnt]->rot, 0.01f, -3.14f, 3.14f))
+			//{
+			//	//モーション強制変更
+			//	ForcedUpdate();
+			//}
+		}
 
-	//	//回転量リセット
-	//	if (ImGui::Button("AllReset"))
-	//	{
-	//		//モデル数分繰り替えす
-	//		for (int nCnt = 0; nCnt < pModelCharacter->GetModelNum(pModelCharacter->GetType()); nCnt++)
-	//		{
-	//			//モーション強制変更
-	//			MotionInfo->pKeyInfoList[nNowKey]->pKeyList[nCnt]->rotDest = ZeroVector3;
-	//			pModelCharacter->ForcedUpdate(NowMotionType, nNowKey);
-	//		}
-	//	}
-	//	//tree
-	//	ImGui::TreePop();
-	//}
+		//回転量リセット
+		if (ImGui::Button("AllReset"))
+		{
+			//モデル数分繰り替えす
+			for (size_t nCnt = 0; nCnt < MotionInfo->key_info[nNowKey]->key.size(); nCnt++)
+			{
+				//モーション強制変更
+				MotionInfo->key_info[nNowKey]->key[nCnt]->rot = ZeroVector3;
+				ForcedUpdate();
+			}
+		}
+		//tree
+		ImGui::TreePop();
+	}
 
-	////改行
-	//ImGui::Separator();
+	//改行
+	ImGui::Separator();
 
 	////モーションの保存
 	//if (ImGui::Button("MotionSave"))
@@ -477,36 +383,37 @@ void CDebug_ViewerCharacter::MotionViewer()
 	//	CMotion::SaveMotion(NowMotionType);
 	//}
 
-	////Widgetの大きさ調整終了
-	//ImGui::PopItemWidth();
-
+	//Widgetの大きさ調整終了
+	ImGui::PopItemWidth();
 }
 //------------------------------------------------------------------------------
 //オフセットの設定
 //------------------------------------------------------------------------------
 void CDebug_ViewerCharacter::OffsetViewer()
 {
-	////モデル数分繰り替えす
-	//for (int nCnt = 0; nCnt < m_vModelList->size(); nCnt++)
-	//{
-	//	//モデル名取得
-	//	std::string aPartsName = CModelCharacter::GetModelName(pModelCharacter->GetType(), nCnt).data();
+	CModel * pModel;
 
-	//	//頭の部分の文字列を消す("data/MODEL/)
-	//	aPartsName.erase(aPartsName.begin(), aPartsName.begin() + 11);
+	//モデル数分繰り替えす
+	for (size_t nCnt = 0; nCnt < GetCharacterModelList().size(); nCnt++)
+	{
+		////モデル名取得
+		//std::string aPartsName = CModelCharacter::GetModelName(pModelCharacter->GetType(), nCnt).data();
 
-	//	//次の項目の枠の大きさ設定
-	//	ImGui::SetNextItemWidth(250);
+		////頭の部分の文字列を消す("data/MODEL/)
+		//aPartsName.erase(aPartsName.begin(), aPartsName.begin() + 11);
 
-	//	//モデルパーツのポインタ取得
-	//	pModelParts = pModelCharacter->GetPartsPtr(nCnt);
+		//次の項目の枠の大きさ設定
+		ImGui::SetNextItemWidth(250);
 
-	//	//それぞれの回転量を調整
-	//	if (ImGui::DragFloat3(aPartsName.data(), pModelParts->GetPos(), 0.05f, -100.0f, 100.0f))
-	//	{
+		//モデルパーツのポインタ取得
+		pModel = GetCharacterModelList()[nCnt];
 
-	//	}
-	//}
+		////それぞれのオフセットを調整
+		//if (ImGui::DragFloat3(aPartsName.data(), pModel->GetPosition(), 0.05f, -100.0f, 100.0f))
+		//{
+
+		//}
+	}
 
 	//if(ImGui::Button("OffsetSave"))
 	//{

@@ -68,7 +68,7 @@ void CFADE::UpdateFade(void)
 				m_colorFade.a = 0.0f;
 				m_fade = FADE_NONE;
 			}
-		
+
 	}
 	else if (m_fade == FADE_OUT)
 	{

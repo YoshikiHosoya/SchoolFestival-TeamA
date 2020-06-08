@@ -1,11 +1,11 @@
 //------------------------------------------------------------------------------
 //
-//エフェクトビューワ用処理  [Debug_EffectViewer.h]
+//モデルビューワ用処理  [Debug_ModelViewer.h]
 //Author:Yoshiki Hosoya
 //
 //------------------------------------------------------------------------------
-#ifndef _DEBUG_EFFECTVIEWER_H_
-#define _DEBUG_EFFECTVIEWER_H_
+#ifndef _DEBUG_MODELVIEWER_H_
+#define _DEBUG_MODELVIEWER_H_
 //------------------------------------------------------------------------------
 //インクルード
 //------------------------------------------------------------------------------
@@ -18,12 +18,14 @@
 //------------------------------------------------------------------------------
 //クラス定義
 //------------------------------------------------------------------------------
-class CDebug_EffectViewer
+class CDebug_ViewerCharacter;
+
+class CDebug_ModelViewer
 {
 public:
 
-	CDebug_EffectViewer();
-	~CDebug_EffectViewer();
+	CDebug_ModelViewer();
+	~CDebug_ModelViewer();
 	HRESULT Init(HWND hWnd);			//初期化
 	void Uninit();						//終了
 	void Update();						//更新
@@ -32,11 +34,7 @@ public:
 
 private:
 	bool m_bModel;
-
-
-	void ModelViewer();
-	void MotionViewer();
-
+	CDebug_ViewerCharacter *m_pViewerCharacter;
 };
 
 #endif

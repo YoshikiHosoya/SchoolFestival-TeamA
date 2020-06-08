@@ -24,6 +24,7 @@ HRESULT CEnemy::Init(void)
 	//ƒLƒƒƒ‰‚Ì‰Šú‰»
 	CCharacter::Init();
 	LoadOffset(CCharacter::CHARACTER_TYPE_ENEMY);
+	SetCharacterType(CCharacter::CHARACTER_TYPE_ENEMY);
 	LPDIRECT3DDEVICE9 pDevice = CManager::GetRendere()->GetDevice();
 	m_Attack = false;
 	CEnemy::LoadMotion();

@@ -9,6 +9,7 @@
 //インクルード
 //------------------------------------------------------------------------------
 #include "Debug_ModelViewer.h"
+#include "Debug_ViewerCharacter.h"
 #include "../../Scene.h"
 #include "../../manager.h"
 #include "../../renderer.h"
@@ -28,17 +29,15 @@
 //------------------------------------------------------------------------------
 //コンストラクタ
 //------------------------------------------------------------------------------
-CDebug_EffectViewer::CDebug_EffectViewer()
+CDebug_ModelViewer::CDebug_ModelViewer()
 {
-	//初期化
-
-
-
+	//ビューワ用のキャラクター作成
+	m_pViewerCharacter = CDebug_ViewerCharacter::Create();
 }
 //------------------------------------------------------------------------------
 //デストラクタ
 //------------------------------------------------------------------------------
-CDebug_EffectViewer::~CDebug_EffectViewer()
+CDebug_ModelViewer::~CDebug_ModelViewer()
 {
 
 }
@@ -46,7 +45,7 @@ CDebug_EffectViewer::~CDebug_EffectViewer()
 //------------------------------------------------------------------------------
 //初期化処理
 //------------------------------------------------------------------------------
-HRESULT CDebug_EffectViewer::Init(HWND hWnd)
+HRESULT CDebug_ModelViewer::Init(HWND hWnd)
 {
 	return S_OK;
 }
@@ -54,7 +53,7 @@ HRESULT CDebug_EffectViewer::Init(HWND hWnd)
 //------------------------------------------------------------------------------
 //終了処理
 //------------------------------------------------------------------------------
-void CDebug_EffectViewer::Uninit()
+void CDebug_ModelViewer::Uninit()
 {
 
 	//終了処理
@@ -64,7 +63,7 @@ void CDebug_EffectViewer::Uninit()
 //------------------------------------------------------------------------------
 //更新処理
 //------------------------------------------------------------------------------
-void CDebug_EffectViewer::Update()
+void CDebug_ModelViewer::Update()
 {
 
 }
@@ -72,56 +71,43 @@ void CDebug_EffectViewer::Update()
 //------------------------------------------------------------------------------
 //描画処理
 //------------------------------------------------------------------------------
-void CDebug_EffectViewer::Draw()
+void CDebug_ModelViewer::Draw()
 {
 
 }
 //------------------------------------------------------------------------------
 //デバッグ情報表記
 //------------------------------------------------------------------------------
-void CDebug_EffectViewer::ShowDebugInfo()
+void CDebug_ModelViewer::ShowDebugInfo()
 {
 #ifdef _DEBUG
 
 	//キャラクター情報情報
 	if (ImGui::Begin("MotionViewer"))
 	{
+		//Tab
 		if (ImGui::BeginTabBar("Viewer", m_bModel))
 		{
+			//Tab
 			if (ImGui::BeginTabItem("MotionViewer"))
 			{
-				MotionViewer();
+				//モーションビューワ
+				m_pViewerCharacter->MotionViewer();
 				ImGui::EndTabItem();
 			}
+			//Tab
 			if (ImGui::BeginTabItem("OffsetViewer"))
 			{
-				ModelViewer();
+				//オフセットビューワ
+				m_pViewerCharacter->OffsetViewer();
 				ImGui::EndTabItem();
 			}
-
+			//TabEnd
 			ImGui::EndTabBar();
 		}
 
 		ImGui::End();
 
 	}
-
 #endif
-}
-
-//------------------------------------------------------------------------------
-//
-//------------------------------------------------------------------------------
-void CDebug_EffectViewer::ModelViewer()
-{
-
-
-}
-
-//------------------------------------------------------------------------------
-//デバッグ情報表記
-//------------------------------------------------------------------------------
-void CDebug_EffectViewer::MotionViewer()
-{
-
 }

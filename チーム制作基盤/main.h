@@ -17,6 +17,7 @@
 #include <Xinput.h>
 #include <vector>
 #include <iostream>
+#include <memory>
 #include "SourceCode/hosso/HossoLibrary.h"
 #include "SourceCode/ImGui/Imgui.h"
 #include "SourceCode/ImGui/imgui_impl_dx9.h"

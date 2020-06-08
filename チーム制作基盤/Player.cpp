@@ -27,6 +27,8 @@ HRESULT CPlayer::Init(void)
 	//ƒLƒƒƒ‰‚Ì‰Šú‰»
 	CCharacter::Init();
 	LoadOffset(CCharacter::CHARACTER_TYPE_PLAYER);
+	SetCharacterType(CCharacter::CHARACTER_TYPE_PLAYER);
+
 	LPDIRECT3DDEVICE9 pDevice = CManager::GetRendere()->GetDevice();
 	m_Attack = false;
 	CPlayer::LoadMotion();

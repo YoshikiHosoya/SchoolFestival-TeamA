@@ -252,7 +252,7 @@ void CCharacter::SetMotion(CHARACTER_MOTION_STATE type)
 //====================================================================
 //回転の差分の取得
 //====================================================================
-D3DXVECTOR3 CCharacter::GetRotDest(void)
+D3DXVECTOR3 &CCharacter::GetRotDest(void)
 {
 	return m_rotDest;
 }
@@ -266,14 +266,14 @@ CCharacter::CHARACTER_STATE CCharacter::GetCharacterState(void)
 //====================================================================
 //ポジションの取得
 //====================================================================
-D3DXVECTOR3 CCharacter::GetPosition(void)
+D3DXVECTOR3 &CCharacter::GetPosition(void)
 {
 	return m_pos;
 }
 //====================================================================
 //前のポジションの取得
 //====================================================================
-D3DXVECTOR3 CCharacter::GetPositionOld(void)
+D3DXVECTOR3 &CCharacter::GetPositionOld(void)
 {
 	return m_posold;
 }
@@ -287,7 +287,7 @@ D3DXVECTOR3 &CCharacter::GetMove(void)
 //====================================================================
 //回転の取得
 //====================================================================
-D3DXVECTOR3 CCharacter::GetRot(void)
+D3DXVECTOR3 &CCharacter::GetRot(void)
 {
 	return m_rot;
 }
@@ -689,9 +689,21 @@ void CCharacter::LoadOffset(CHARACTER_TYPE nType)
 
 }
 //====================================================================
+//強制的に更新
+//====================================================================
+void CCharacter::ForcedUpdate()
+{
+	//モデル数分繰り返す
+	for (size_t nCntKey = 0; nCntKey < m_vModelList.size(); nCntKey++)
+	{
+		//モーションの回転の決定先取得
+		m_vModelList[nCntKey]->SetRot(m_CharacterMotion[m_MotionType]->key_info[m_CntKeySet]->key[nCntKey]->rot);
+	}
+}
+//====================================================================
 //モーションタイプの取得
 //====================================================================
-CCharacter::CHARACTER_MOTION_STATE CCharacter::GetMotionType(void)
+CCharacter::CHARACTER_MOTION_STATE &CCharacter::GetMotionType(void)
 {
 	return m_MotionType;
 }
@@ -705,16 +717,32 @@ CCharacter::CHARACTER_MOTION_STATE CCharacter::GetMotionOldType(void)
 //====================================================================
 //キーセットの取得
 //====================================================================
-int CCharacter::GetKeySet(void)
+int &CCharacter::GetKeySet(void)
 {
 	return m_CntKeySet;
 }
 //====================================================================
 //フレームの取得
 //====================================================================
-int CCharacter::GetFram(void)
+int &CCharacter::GetFram(void)
 {
 	return m_Fram;
+
+}
+//====================================================================
+//前のモーションタイプの設定
+//====================================================================
+CCharacter::CHARACTER_TYPE CCharacter::GetCharacterType()
+{
+	return m_CharaType;
+}
+
+//====================================================================
+//モデルのリストを返す　参照渡し
+//====================================================================
+std::vector<CModel*>& CCharacter::GetCharacterModelList()
+{
+	return m_vModelList;
 }
 //====================================================================
 //前のモーションタイプの設定
@@ -736,4 +764,11 @@ void CCharacter::SetKeySet(int keyset)
 void CCharacter::SetFram(int fram)
 {
 	m_Fram = fram;
+}
+//====================================================================
+//キャラクタータイプ設定
+//====================================================================
+void CCharacter::SetCharacterType(CHARACTER_TYPE CharaType)
+{
+	m_CharaType = CharaType;
 }

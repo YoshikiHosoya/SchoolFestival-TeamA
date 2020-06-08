@@ -67,12 +67,15 @@ public:
 	void Uninit(void);
 	void Update(void);
 	void Draw(void);
+	virtual void DefaultMotion(void) = 0;
+
 	void Move(float move, float fdest);
 	void AddDamage(int Damage);
 	void Moation(void);
 	void LoadMotion(void);
 	void LoadOffset(CHARACTER_TYPE nType);
-	virtual void DefaultMotion(void) = 0;
+	void ForcedUpdate();						//強制的にモーションチェンジ
+
 	//セッツ
 	void SetPosition(D3DXVECTOR3 pos);
 	void SetPotisionOld(D3DXVECTOR3 posOld);
@@ -82,49 +85,59 @@ public:
 	void SetLife(int Life);
 	void SetState(CHARACTER_STATE state);
 	void SetMtxWorld(D3DXMATRIX mtxWorld);
+	void SetCharacterType(CHARACTER_TYPE CharaType);
+
+	//モーション関連
 	void SetMotion(CHARACTER_MOTION_STATE type);
 	void SetMotionOldType(CHARACTER_MOTION_STATE type);
 	void SetKeySet(int keyset);
 	void SetFram(int fram);
 
 	//ゲット
-	D3DXVECTOR3 GetPosition(void);
-	D3DXVECTOR3 GetPositionOld(void);
-	D3DXVECTOR3 &GetMove(void);		//※参照渡しの関数
-	D3DXVECTOR3 GetRot(void);
-	D3DXVECTOR3 GetRotDest(void);
+	D3DXVECTOR3 &GetPosition(void);				//参照渡し
+	D3DXVECTOR3 &GetPositionOld(void);			//参照渡し
+	D3DXVECTOR3 &GetMove(void);					//参照渡し
+	D3DXVECTOR3 &GetRot(void);					//参照渡し
+	D3DXVECTOR3 &GetRotDest(void);				//参照渡し
 	CHARACTER_STATE GetCharacterState(void);
-	int GetLife(void);
 	D3DXMATRIX GetMtxWorld(void);
-	MOTION *GetCharacterMotion(CHARACTER_MOTION_STATE type);//キャラクターモーション情報の取得
-	CHARACTER_MOTION_STATE GetMotionType(void);				//モーションタイプの取得
-	CHARACTER_MOTION_STATE GetMotionOldType(void);			//前のモーションタイプ取得
-	int GetKeySet(void);									//キーセットの取得
-	int GetFram(void);										//フレームの取得
+	int GetLife(void);
 
+	CHARACTER_TYPE GetCharacterType();								//キャラクターの種類取得
+	std::vector<CModel*> &GetCharacterModelList();					//キャラクターのモデル取得
 
+	//モーション関連
+	int &GetKeySet(void);											//キーセットの取得
+	int &GetFram(void);												//フレームの取得
+	MOTION *GetCharacterMotion(CHARACTER_MOTION_STATE type);		//キャラクターモーション情報の取得
+	CHARACTER_MOTION_STATE &GetMotionType(void);					//モーションタイプの取得
+	CHARACTER_MOTION_STATE GetMotionOldType(void);					//前のモーションタイプ取得
+
+	//Rayの判定
 	void RayCollision(void);
+
 private:
-	static std::vector<MOTION*>m_CharacterMotion;			//キャラクターのモーション情報
-	//CHARACTER_MOTION_STATE m_MotionState;					//モーションの変数
-	CHARACTER_MOTION_STATE m_MotionType;					//モーションの数
-	CHARACTER_MOTION_STATE m_MotionOld;						//前のモーション
-	int m_CntKeySet;										//キーセットのカウント
-	int m_Fram;												//フレーム
-	static char *m_LoadOffsetFileName[CHARACTER_TYPE_MAX];	//読み込むファイル名
-	static char *m_LoadMotionFileName[CHARACTER_MOTION_MAX];//読み込むファイル名
-	std::vector<CModel*> m_vModelList;						//可変長配列 設置したモデル
+	static char *m_LoadOffsetFileName[CHARACTER_TYPE_MAX];			//読み込むファイル名
+	static char *m_LoadMotionFileName[CHARACTER_MOTION_MAX];		//読み込むファイル名
+	std::vector<CModel*> m_vModelList;								//可変長配列 設置したモデル
 	D3DXVECTOR3 m_rotBET[MAX_MODEL];
-	D3DXVECTOR3 m_pos;										//位置
-	D3DXVECTOR3 m_posold;									//前の位置
-	D3DXVECTOR3 m_move;										//移動量
-	D3DXVECTOR3 m_rot;										//回転
-	D3DXVECTOR3 m_rotDest;									//回転する差分
-	int m_Life;												//ライフ
-	int m_nStateCnt;										//ステータスのカウント
-	CHARACTER_STATE m_state;								//
-	D3DXMATRIX  m_mtxWorld;									//マトリックス
-	CHARACTER_TYPE m_nType;									//キャラクターのタイプ
+	D3DXVECTOR3 m_pos;												//位置
+	D3DXVECTOR3 m_posold;											//前の位置
+	D3DXVECTOR3 m_move;												//移動量
+	D3DXVECTOR3 m_rot;												//回転
+	D3DXVECTOR3 m_rotDest;											//回転する差分
+	D3DXMATRIX  m_mtxWorld;											//マトリックス
+	CHARACTER_STATE m_state;										//
+	CHARACTER_TYPE m_CharaType;										//キャラクターのタイプ
+	int m_Life;														//ライフ
+	int m_nStateCnt;												//ステータスのカウント
+
+	//モーション関連の情報
+	static std::vector<MOTION*>m_CharacterMotion;					//キャラクターのモーション情報
+	CHARACTER_MOTION_STATE m_MotionType;							//現在のモーション
+	CHARACTER_MOTION_STATE m_MotionOld;								//前のモーション
+	int m_CntKeySet;												//キーセットのカウント
+	int m_Fram;														//フレーム
 
 
 };

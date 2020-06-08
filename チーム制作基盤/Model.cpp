@@ -370,9 +370,9 @@ void CModel::Draw(D3DXMATRIX mat)
 		&mtxRot);
 
 	// à⁄ìÆÇîΩâf
-	D3DXMatrixTranslation(&mtxTrans, 
+	D3DXMatrixTranslation(&mtxTrans,
 		m_pos.x,
-		m_pos.y, 
+		m_pos.y,
 		m_pos.z);
 	D3DXMatrixMultiply(&m_mtxWorld,
 		&m_mtxWorld,
@@ -457,14 +457,14 @@ void CModel::SetType(int type)
 //====================================================================
 //à íuÇÃéÊìæ
 //====================================================================
-D3DXVECTOR3 CModel::GetPosition(void)
+D3DXVECTOR3 &CModel::GetPosition(void)
 {
 	return m_pos;
 }
 //====================================================================
 //âÒì]ÇÃéÊìæ
 //====================================================================
-D3DXVECTOR3 CModel::GetRot(void)
+D3DXVECTOR3 &CModel::GetRot(void)
 {
 	return m_rot;
 }
@@ -475,6 +475,9 @@ int CModel::GetType(void)
 {
 	return m_modelCount;
 }
+//====================================================================
+//ÉÅÉbÉVÉÖéÊìæ
+//====================================================================
 LPD3DXMESH CModel::GetMesh(void)
 {
 	return m_Model[m_type][m_modelCount].pMesh;

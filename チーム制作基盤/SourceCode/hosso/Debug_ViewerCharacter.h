@@ -35,10 +35,10 @@ public:
 	static CDebug_ViewerCharacter* Create();		//生成関数
 	void DefaultMotion() { return SetMotion(CCharacter::PLAYER_MOTION_NORMAL); };
 
+	void MotionViewer();							//モーションビューワ
+	void OffsetViewer();							//オフセットビューワ
 private:
 	bool ShowMotionComboBox(CCharacter::MOTION &motiontype);		//モーションのコンボボックス
 
-	void MotionViewer();		//モーションビューワ
-	void OffsetViewer();		//オフセットビューワ
 };
 #endif
