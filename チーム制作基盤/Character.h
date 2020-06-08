@@ -71,7 +71,7 @@ public:
 	void Move(float move, float fdest);
 	void AddDamage(int Damage);
 	void Moation(void);
-	void LoadMotion(void);
+	static void LoadMotion(void);
 	void LoadOffset(CHARACTER_TYPE nType);
 	virtual void DefaultMotion(void) = 0;
 	//ƒZƒbƒc

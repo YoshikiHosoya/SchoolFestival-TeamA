@@ -123,6 +123,9 @@
     <ClCompile Include="game.cpp">
       <Filter>Mode</Filter>
     </ClCompile>
+    <ClCompile Include="BaseMode.cpp">
+      <Filter>Mode</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Scene.h">
@@ -225,6 +228,9 @@
       <Filter>ソース ファイル</Filter>
     </ClInclude>
     <ClInclude Include="game.h">
+      <Filter>Mode</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseMode.h">
       <Filter>Mode</Filter>
     </ClInclude>
   </ItemGroup>

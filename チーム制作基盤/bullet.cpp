@@ -70,7 +70,7 @@ void CBullet::Uninit(void)
 void CBullet::Update(void)
 {
 	// プレイヤーの情報取得
-	CPlayer *pPlayer = CManager::GetGame()->GetPlayer();
+	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
 
 	// 位置の取得
 	D3DXVECTOR3 pos = CScene3D::GetPosition();

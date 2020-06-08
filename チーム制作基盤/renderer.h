@@ -4,7 +4,7 @@
 #include "light.h"
 #include "camera.h"
 #include "debugproc.h"
-//class CFADE;
+class CFADE;
 //レンダリングクラス
 class CRenderer
 {
@@ -17,6 +17,7 @@ public:
 	void Update(void);
 	void Draw(void);
 	LPDIRECT3DDEVICE9 GetDevice(void);
+	CFADE *GetFade(void);
 #ifdef _DEBUG
 	void DrawFPS(void);
 #endif
@@ -29,7 +30,7 @@ private:
 	CLight *pLight;
 	CCamera *pCamera;
 	CDebugProc *pDebug;
-
+	CFADE *pFade;
 	void ResetDevice();		//デバイスリセット
 };
 #endif

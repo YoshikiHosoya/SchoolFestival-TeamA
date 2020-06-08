@@ -7,7 +7,7 @@
 #include "texture.h"
 #include "Xinput.h"
 #include "texture.h"
-
+#include "BaseMode.h"
 //他のとこでも使えるようにするメンバ
 CRenderer *CManager::m_pRendere		  = NULL;
 CKeyboard *CManager::m_pInputKeyboard = NULL;
@@ -15,7 +15,7 @@ CSceneX   *CManager::m_SceneX		  = NULL;
 CCreateMap*CManager::m_CreateMap      = NULL;
 CParticle *CManager::m_Particle       = NULL;
 CModel    *CManager::m_Model = NULL;
-CGame *CManager::m_pGame = NULL;
+CBaseMode *CManager::m_pBaseMode = NULL;
 CManager::GAME_MODE CManager::m_mode = CManager::MODE_TITLE;
 CManager::CManager()
 {
@@ -39,11 +39,8 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 		return -1;
 	}
 	m_pInputKeyboard->InitInput(hInstance, hWnd);
-
-
-	CModel::LoadModel();
+	CBaseMode::BaseLoad(hWnd);
 	CManager::SetGameMode(MODE_GAME);
-	CTexture::TexLoad(hWnd);
 	return S_OK;
 }
 //===========================================
@@ -51,9 +48,14 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 //===========================================
 void CManager::Uninit(void)
 {
-	CModel::UnLoad();
-	CTexture::TexUnload();
+	//ベースの素材破棄
+	CBaseMode::BaseUnload();
 	m_pRendere->Uninit();
+	if (m_pBaseMode)
+	{
+		//モード
+		m_pBaseMode->Uninit();
+	}
 }
 //===========================================
 //更新
@@ -63,23 +65,9 @@ void CManager::Update(void)
 	m_pInputKeyboard->UpdateInput();
 	m_pRendere->Update();
 	m_Model->Update();
-	switch (m_mode)
-	{
-	case MODE_TITLE:
-		break;
-	case MODE_RESULT:
-		break;
-	case MODE_GAME:
-		m_pGame->Update();
-		break;
-	case MODE_GAME2:
-		break;
-	case MODE_GAME3:
-		break;
-	case MODE_TUTORIAL:
-		break;
-	case MODE_CLEAR:
-		break;
+	if (m_pBaseMode)
+	{	//モード
+		m_pBaseMode->Update();
 	}
 }
 //===========================================
@@ -87,6 +75,10 @@ void CManager::Update(void)
 //===========================================
 void CManager::Draw(void)
 {
+	if (m_pBaseMode)
+	{	//モード
+		m_pBaseMode->Draw();
+	}
 	m_pRendere->Draw();
 }
 //===========================================
@@ -94,35 +86,13 @@ void CManager::Draw(void)
 //===========================================
 void CManager::SetGameMode(GAME_MODE mode)
 {
-	switch (m_mode)
+	if (m_pBaseMode)
 	{
-	case MODE_TITLE:
 		CScene::RereaseAll();
-		break;
-	case MODE_GAME:
-		CScene::RereaseAll();
-		m_pGame->Uninit();
-		delete m_pGame;
-		m_pGame = NULL;
-		break;
-	case MODE_GAME2:
-		CScene::RereaseAll();
-		break;
-	case MODE_GAME3:
-		CScene::RereaseAll();
-		break;
-
-	case MODE_RESULT:
-		CScene::RereaseAll();
-		break;
-	case MODE_TUTORIAL:
-		CScene::RereaseAll();
-		break;
-	case MODE_CLEAR:
-		CScene::RereaseAll();
-		break;
+		m_pBaseMode->Uninit();
+		delete m_pBaseMode;
+		m_pBaseMode = nullptr;
 	}
-
 	m_mode = mode;
 
 	switch (mode)
@@ -130,12 +100,8 @@ void CManager::SetGameMode(GAME_MODE mode)
 	case MODE_TITLE:
 		break;
 	case MODE_GAME:
-		m_pGame = new CGame;
-		m_pGame->Init();
-		break;
-	case MODE_GAME2:
-		break;
-	case MODE_GAME3:
+		m_pBaseMode = new CGame;
+		m_pBaseMode->Init();
 		break;
 	case MODE_RESULT:
 		break;
@@ -179,13 +145,13 @@ CCreateMap * CManager::GetCreateMap(void)
 	return nullptr;
 }
 //===========================================
-//ゲーム情報の取得
+//ベースモード情報の取得
 //===========================================
-CGame * CManager::GetGame(void)
+CBaseMode * CManager::GetBaseMode(void)
 {
-	if (m_pGame)
+	if (m_pBaseMode)
 	{
-	return m_pGame;
+		return m_pBaseMode;
 	}
 	return nullptr;
 }

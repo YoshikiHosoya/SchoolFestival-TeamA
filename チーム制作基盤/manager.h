@@ -12,6 +12,7 @@ class CModel;
 class CParticle;
 class CEnemy;
 class CGame;
+class CBaseMode;
 class CManager
 {
 public:
@@ -20,8 +21,6 @@ public:
 		MODE_NONE,
 		MODE_TITLE,
 		MODE_GAME,
-		MODE_GAME2,
-		MODE_GAME3,
 		MODE_RESULT,
 		MODE_PAUSE,
 		MODE_CLEAR,
@@ -41,17 +40,16 @@ public:
 	static GAME_MODE GetGameState(void);
 	static CRenderer *GetRendere(void);
 	static CKeyboard *GetInputKeyboard(void);
-	static GAME_MODE m_mode;
 	static CCreateMap *GetCreateMap(void);
-	static CGame *GetGame(void);
+	static CBaseMode *GetBaseMode(void);
 private:
+	static GAME_MODE m_mode;
 	static CKeyboard *m_pInputKeyboard;
 	static CRenderer *m_pRendere;
 	static CSceneX *m_SceneX;
 	static CCreateMap *m_CreateMap;
 	static CParticle *m_Particle;
 	static CModel *m_Model;
-	static CGame *m_pGame;
-
+	static CBaseMode *m_pBaseMode;
 };
 #endif
