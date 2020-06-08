@@ -507,94 +507,102 @@ void CCharacter::Moation(void)
 		m_Fram = 0;
 		m_CntKeySet = 0;
 	}
-	for (unsigned int nCnt = 0; nCnt < m_vModelList.size(); nCnt++)
+	if (m_MotionType != -1)
 	{
-		if (m_Fram == 0)
+		for (unsigned int nCnt = 0; nCnt < m_vModelList.size(); nCnt++)
 		{
-			if (m_CharacterMotion[m_MotionType]->key_info[m_CntKeySet]->nFram != 0)
+			if (m_Fram == 0)
 			{
-				//移動量ROTの計算-------------------------------------■■■■■
-				Difrot = (m_CharacterMotion[m_MotionType]->key_info[m_CntKeySet]->key[nCnt]->rot - m_vModelList[nCnt]->GetRot());
+				if (m_CharacterMotion[m_MotionType]->key_info[m_CntKeySet]->nFram != 0)
+				{
+					//移動量ROTの計算-------------------------------------■■■■■
+					Difrot = (m_CharacterMotion[m_MotionType]->key_info[m_CntKeySet]->key[nCnt]->rot - m_vModelList[nCnt]->GetRot());
 
-				if (Difrot.y > D3DX_PI)
-				{
-					Difrot.y -= D3DX_PI * 2;
-				}
-				else if (Difrot.y < -D3DX_PI)
-				{
-					Difrot.y += D3DX_PI * 2;
-				}
+					if (Difrot.y > D3DX_PI)
+					{
+						Difrot.y -= D3DX_PI * 2;
+					}
+					else if (Difrot.y < -D3DX_PI)
+					{
+						Difrot.y += D3DX_PI * 2;
+					}
 
-				if (Difrot.x > D3DX_PI)
-				{
-					Difrot.x -= D3DX_PI * 2;
-				}
-				else if (Difrot.x < -D3DX_PI)
-				{
-					Difrot.x += D3DX_PI * 2;
-				}
+					if (Difrot.x > D3DX_PI)
+					{
+						Difrot.x -= D3DX_PI * 2;
+					}
+					else if (Difrot.x < -D3DX_PI)
+					{
+						Difrot.x += D3DX_PI * 2;
+					}
 
-				m_rotBET[nCnt] = Difrot / (float)m_CharacterMotion[m_MotionType]->key_info[m_CntKeySet]->nFram;
-				//----------------------------------------------------■■■■■
+					m_rotBET[nCnt] = Difrot / (float)m_CharacterMotion[m_MotionType]->key_info[m_CntKeySet]->nFram;
+					//----------------------------------------------------■■■■■
+				}
+				else
+				{
+					//m_vModelList[nCnt]->GetPosition() = m_CharacterMotion[m_MotionType].key_info[m_CntKeySet].key[nCnt].pos;
+					//m_vModelList[nCnt]->GetRot()		 = m_CharacterMotion[m_MotionType].key_info[m_CntKeySet].key[nCnt].rot;
+					//posBET[nCnt] = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+					//rotBET[nCnt] = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+				}
 			}
-			else
+
+			//フレーム移動--------------------------------------------■■■■■
+			if (m_Fram <= m_CharacterMotion[m_MotionType]->key_info[m_CntKeySet]->nFram)
 			{
-				//m_vModelList[nCnt]->GetPosition() = m_CharacterMotion[m_MotionType].key_info[m_CntKeySet].key[nCnt].pos;
-				//m_vModelList[nCnt]->GetRot()		 = m_CharacterMotion[m_MotionType].key_info[m_CntKeySet].key[nCnt].rot;
-				//posBET[nCnt] = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-				//rotBET[nCnt] = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+				//	m_vModelList[nCnt]->SetPosition(m_vModelList[nCnt]->GetPosition() + posBET[nCnt]);
+				m_vModelList[nCnt]->SetRot(m_vModelList[nCnt]->GetRot() + m_rotBET[nCnt]);
+				if (m_vModelList[nCnt]->GetRot().y > D3DX_PI)
+				{
+					m_vModelList[nCnt]->SetRot(m_vModelList[nCnt]->GetRot() - D3DXVECTOR3(0.0f, D3DX_PI * 2.0f, 0.0f));
+				}
+				else if (m_vModelList[nCnt]->GetRot().y < -D3DX_PI)
+				{
+					m_vModelList[nCnt]->SetRot(m_vModelList[nCnt]->GetRot() + D3DXVECTOR3(0.0f, D3DX_PI * 2.0f, 0.0f));
+				}
+				if (m_vModelList[nCnt]->GetRot().x > D3DX_PI)
+				{
+					m_vModelList[nCnt]->SetRot(m_vModelList[nCnt]->GetRot() - D3DXVECTOR3(D3DX_PI * 2.0f, 0.0f, 0.0f));
+				}
+				else if (m_vModelList[nCnt]->GetRot().x < -D3DX_PI)
+				{
+					m_vModelList[nCnt]->SetRot(m_vModelList[nCnt]->GetRot() + D3DXVECTOR3(D3DX_PI * 2.0f, 0.0f, 0.0f));
+				}
+			}
+			//--------------------------------------------------------■■■■■
+		}
+		if (m_Fram == m_CharacterMotion[m_MotionType]->key_info[m_CntKeySet]->nFram)
+		{
+			m_CntKeySet++;
+			m_Fram = 0;
+			//キーセット数が規定値と同じになったら--------------------■■■■■
+			if (m_CntKeySet == m_CharacterMotion[m_MotionType]->nNumKey)
+			{
+				//ループしないとき------------------------------------■■■■■
+				if (m_CharacterMotion[m_MotionType]->nLoop == 0)
+				{
+					m_CntKeySet = 0;
+					DefaultMotion();
+					m_Fram = m_CharacterMotion[m_MotionType]->key_info[m_CntKeySet]->nFram;
+				}
+				//ループするとき--------------------------------------■■■■■
+				else if (m_CharacterMotion[m_MotionType]->nLoop == 1)
+				{
+					m_CntKeySet = 0;
+				}
 			}
 		}
-
-		//フレーム移動--------------------------------------------■■■■■
-		if (m_Fram <= m_CharacterMotion[m_MotionType]->key_info[m_CntKeySet]->nFram)
+		//フレーム数が規定値と同じではないとき------------------------■■■■■
+		else
 		{
-			//	m_vModelList[nCnt]->SetPosition(m_vModelList[nCnt]->GetPosition() + posBET[nCnt]);
-			m_vModelList[nCnt]->SetRot(m_vModelList[nCnt]->GetRot() + m_rotBET[nCnt]);
-			if (m_vModelList[nCnt]->GetRot().y > D3DX_PI)
-			{
-				m_vModelList[nCnt]->SetRot(m_vModelList[nCnt]->GetRot() - D3DXVECTOR3(0.0f, D3DX_PI * 2.0f, 0.0f));
-			}
-			else if (m_vModelList[nCnt]->GetRot().y < -D3DX_PI)
-			{
-				m_vModelList[nCnt]->SetRot(m_vModelList[nCnt]->GetRot() + D3DXVECTOR3(0.0f, D3DX_PI * 2.0f, 0.0f));
-			}
-			if (m_vModelList[nCnt]->GetRot().x > D3DX_PI)
-			{
-				m_vModelList[nCnt]->SetRot(m_vModelList[nCnt]->GetRot() - D3DXVECTOR3(D3DX_PI * 2.0f, 0.0f, 0.0f));
-			}
-			else if (m_vModelList[nCnt]->GetRot().x < -D3DX_PI)
-			{
-				m_vModelList[nCnt]->SetRot(m_vModelList[nCnt]->GetRot() + D3DXVECTOR3(D3DX_PI * 2.0f, 0.0f, 0.0f));
-			}
+			m_Fram++;
 		}
-		//--------------------------------------------------------■■■■■
 	}
-	if (m_Fram == m_CharacterMotion[m_MotionType]->key_info[m_CntKeySet]->nFram)
-	{
-		m_CntKeySet++;
-		m_Fram = 0;
-		//キーセット数が規定値と同じになったら--------------------■■■■■
-		if (m_CntKeySet == m_CharacterMotion[m_MotionType]->nNumKey)
-		{
-			//ループしないとき------------------------------------■■■■■
-			if (m_CharacterMotion[m_MotionType]->nLoop == 0)
-			{
-				m_CntKeySet = 0;
-				DefaultMotion();
-				m_Fram = m_CharacterMotion[m_MotionType]->key_info[m_CntKeySet]->nFram;
-			}
-			//ループするとき--------------------------------------■■■■■
-			else if (m_CharacterMotion[m_MotionType]->nLoop == 1)
-			{
-				m_CntKeySet = 0;
-			}
-		}
-	}
-	//フレーム数が規定値と同じではないとき------------------------■■■■■
 	else
 	{
-		m_Fram++;
+		m_Fram = 0;
+		m_CntKeySet = 0;
 	}
 	CDebugProc::Print("モーションタイプ: %d \n", m_MotionType);
 	CDebugProc::Print("カウントキーセット: %d \n", m_CntKeySet);

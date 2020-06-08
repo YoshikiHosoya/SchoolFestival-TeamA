@@ -25,6 +25,9 @@
     <Filter Include="Hosso">
       <UniqueIdentifier>{9da6a297-60a7-4eec-8632-a974756d695e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Mode">
+      <UniqueIdentifier>{c26fc224-5a07-4ec9-8321-a24245f7a19f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Scene.cpp">
@@ -52,9 +55,6 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="fade.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="game.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="inputKeyboard.cpp">
@@ -120,6 +120,9 @@
     <ClCompile Include="heavymachinegun.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="game.cpp">
+      <Filter>Mode</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Scene.h">
@@ -147,9 +150,6 @@
       <Filter>ソース ファイル</Filter>
     </ClInclude>
     <ClInclude Include="fade.h">
-      <Filter>ソース ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="game.h">
       <Filter>ソース ファイル</Filter>
     </ClInclude>
     <ClInclude Include="inputKeyboard.h">
@@ -223,6 +223,9 @@
     </ClInclude>
     <ClInclude Include="heavymachinegun.h">
       <Filter>ソース ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="game.h">
+      <Filter>Mode</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

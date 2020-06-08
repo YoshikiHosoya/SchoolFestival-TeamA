@@ -49,15 +49,16 @@ public:
 	}MOTION;
 	typedef enum
 	{
-		PLAYER_MOTION_NORMAL = 0,	//ニュートラル
-		PLAYER_MOTION_WALK,			//歩き
-		PLAYER_MOTION_ATTACK01,		//通常攻撃1
+		CHARACTER_MOTION_STATE_NONE = -1,	//何もしないモーションステート
+		PLAYER_MOTION_NORMAL = 0,			//ニュートラル
+		PLAYER_MOTION_WALK,					//歩き
+		PLAYER_MOTION_ATTACK01,				//通常攻撃1
 
-		ENEMY_MOTION_NORMAL,		//ニュートラル
-		ENEMY_MOTION_WALK,			//歩き
-		ENEMY_MOTION_ATTACK01,		//通常攻撃1
+		ENEMY_MOTION_NORMAL,				//ニュートラル
+		ENEMY_MOTION_WALK,					//歩き
+		ENEMY_MOTION_ATTACK01,				//通常攻撃1
 
-		CHARACTER_MOTION_MAX		//最大数
+		CHARACTER_MOTION_MAX				//最大数
 	}CHARACTER_MOTION_STATE;
 
 	CCharacter() {};
