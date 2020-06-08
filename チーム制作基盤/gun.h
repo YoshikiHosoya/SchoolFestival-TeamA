@@ -48,7 +48,7 @@ public:
 private:
 	/* メンバ変数 */
 	GUN_TYPE				m_type;					// ガンの種類
-	int						m_nAmmo[GUNTYPE_MAX];	// 弾薬数
+	int						m_nAmmo;				// 弾薬数
 	int						m_nInterval;			// インターバル
 	D3DXMATRIX				*m_mtx;					// マトリックス
 };

@@ -77,13 +77,13 @@ void CGun::Update(void)
 	if (m_type != GUN_TYPE::GUNTYPE_HANDGUN)
 	{
 		// デクリメント
-		m_nAmmo[m_type]--;
+		m_nAmmo--;
 
 		// 弾薬が無くなったとき
-		if (m_nAmmo[m_type] <= 0)
+		if (m_nAmmo <= 0)
 		{
 			// 弾薬数を0にする
-			m_nAmmo[m_type] = 0;
+			m_nAmmo = 0;
 			// ハンドガンに戻す
 			m_type = GUN_TYPE::GUNTYPE_HANDGUN;
 		}
@@ -143,11 +143,11 @@ void CGun::SetGunType(GUN_TYPE type)
 	switch (type)
 	{
 	case CGun::GUNTYPE_HANDGUN:
-		m_nAmmo[type] = HANDGUN_AMMO;
+		m_nAmmo = HANDGUN_AMMO;
 		break;
 
 	case CGun::GUNTYPE_HEAVYMACHINEGUN:
-		m_nAmmo[type] = HEAVYMACHINEGUN_AMMO;
+		m_nAmmo = HEAVYMACHINEGUN_AMMO;
 		break;
 	}
 }
