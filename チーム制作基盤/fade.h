@@ -34,12 +34,12 @@ public:
 	void DrawFade(void);
 	void MakeVertexFade(void);
 	void SetFade(CManager::GAME_MODE modeNext);
-	FADE GetFade(void);
+	FADE GetFadeState(void);
 	static CFADE *CreateFade(void);
 private:
 	LPDIRECT3DTEXTURE9		m_pTextureFade = NULL;		// テクスチャへのポインタ
 	LPDIRECT3DVERTEXBUFFER9 m_pVtxBuffFade = NULL;		// 頂点バッファへのポインタ
-	FADE					m_fade;						// フェード状態
+	FADE					m_fadeState;				// フェード状態
 	CManager::GAME_MODE		m_modeNext;					// 次の画面（モード）
 	D3DXCOLOR				m_colorFade;				// フェード色
 };

@@ -10,6 +10,7 @@
 //インクルード
 //------------------------------------------------------------------------------
 #include "../../main.h"
+#include "../../BaseMode.h"
 
 //------------------------------------------------------------------------------
 //マクロ
@@ -20,17 +21,21 @@
 //------------------------------------------------------------------------------
 class CDebug_ViewerCharacter;
 
-class CDebug_ModelViewer
+class CDebug_ModelViewer : public CBaseMode
 {
 public:
 
 	CDebug_ModelViewer();
 	~CDebug_ModelViewer();
-	HRESULT Init(HWND hWnd);			//初期化
+	HRESULT Init();			//初期化
 	void Uninit();						//終了
 	void Update();						//更新
 	void Draw();						//描画
 	void ShowDebugInfo();				//デバッグ情報表記
+	CCreateMap *GetCreateMap();			//クリエイトマップ
+	CPlayer* GetPlayer();				//プレイヤーのポインタ取得
+
+
 
 private:
 	bool m_bModel;

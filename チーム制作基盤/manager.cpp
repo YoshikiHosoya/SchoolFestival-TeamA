@@ -8,6 +8,7 @@
 #include "Xinput.h"
 #include "texture.h"
 #include "BaseMode.h"
+#include "SourceCode/hosso/Debug_ModelViewer.h"
 //‘¼‚Ì‚Æ‚±‚Å‚àŽg‚¦‚é‚æ‚¤‚É‚·‚éƒƒ“ƒo
 CRenderer *CManager::m_pRendere		  = NULL;
 CKeyboard *CManager::m_pInputKeyboard = NULL;
@@ -108,6 +109,11 @@ void CManager::SetGameMode(GAME_MODE mode)
 	case MODE_TUTORIAL:
 		break;
 	case MODE_CLEAR:
+		break;
+	case MODE_DEBUG_MODELVIEWER:
+		m_pBaseMode = new CDebug_ModelViewer;
+		m_pBaseMode->Init();
+
 		break;
 	}
 }

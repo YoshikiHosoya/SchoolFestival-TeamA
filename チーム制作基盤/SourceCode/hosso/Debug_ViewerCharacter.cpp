@@ -235,10 +235,10 @@ void CDebug_ViewerCharacter::MotionViewer()
 	//}
 
 	//ƒ‹[ƒv
-	if (ImGui::Checkbox("bLoop", (bool*)MotionInfo->nLoop))
-	{
+	//if (ImGui::Checkbox("bLoop", (bool*)MotionInfo->nLoop))
+	//{
 
-	}
+	//}
 
 	//‰üs
 	ImGui::Separator();

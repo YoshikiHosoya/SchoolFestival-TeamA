@@ -20,7 +20,7 @@ void CFADE::InitFade(void)
 {
 	LPDIRECT3DDEVICE9 pDevice = CManager::GetRendere()->GetDevice();
 	m_colorFade = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);
-	m_fade = FADE_NONE;
+	m_fadeState = FADE_NONE;
 	// テクスチャの読み込み
 	D3DXCreateTextureFromFile(pDevice,				// デバイスへのポインタ
 		TEXTURE_FADE,		// ファイルの名前
@@ -56,23 +56,23 @@ void CFADE::UpdateFade(void)
 {
 	VERTEX_2D *pVtx;
 	m_pVtxBuffFade->Lock(0, 0, (void**)&pVtx, 0);
-	if (m_fade == FADE_IN)
+	if (m_fadeState == FADE_IN)
 	{
 			m_colorFade.a -= 0.01f;
 			if (m_colorFade.a <= 0.0f)
 			{
 				m_colorFade.a = 0.0f;
-				m_fade = FADE_NONE;
+				m_fadeState = FADE_NONE;
 			}
 
 	}
-	else if (m_fade == FADE_OUT)
+	else if (m_fadeState == FADE_OUT)
 	{
 		m_colorFade.a += 0.05f;
 		if (m_colorFade.a >= 1.0f)
 		{
 			m_colorFade.a = 1.0f;
-			m_fade = FADE_IN;
+			m_fadeState = FADE_IN;
 			if (m_modeNext != CManager::MODE_NONE)
 			{
 				CManager::SetGameMode(m_modeNext);
@@ -162,9 +162,9 @@ void CFADE::MakeVertexFade(void)
 //=============================================================================
 void CFADE::SetFade(CManager::GAME_MODE modeNext)
 {
-	if (m_fade == FADE_NONE)
+	if (m_fadeState == FADE_NONE)
 	{
-		m_fade = FADE_OUT;
+		m_fadeState = FADE_OUT;
 		m_modeNext = modeNext;
 		m_colorFade = FADE_COLOR;
 	}
@@ -172,9 +172,9 @@ void CFADE::SetFade(CManager::GAME_MODE modeNext)
 //=============================================================================
 // フェードの状態取得
 //=============================================================================
-CFADE::FADE CFADE::GetFade(void)
+CFADE::FADE CFADE::GetFadeState(void)
 {
-	return m_fade;
+	return m_fadeState;
 }
 //=============================================================================
 // フェードのクリエイト

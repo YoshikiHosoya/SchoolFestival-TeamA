@@ -2,6 +2,8 @@
 #include "scene.h"
 #include "renderer.h"
 #include "manager.h"
+#include "BaseMode.h"
+#include "fade.h"
 #include "inputKeyboard.h"
 //プロトタイプ宣言
 #ifdef _DEBUG
@@ -21,9 +23,10 @@ CRenderer::~CRenderer()
 HRESULT  CRenderer::Init(HWND hWnd, BOOL bWindow)
 {
 	D3DDISPLAYMODE d3ddm;			// ディスプレイモード
-	pLight  = new CLight;
-	pCamera = new CCamera;
-	pDebug  = new CDebugProc;
+	m_pLight  = new CLight;
+	m_pCamera = new CCamera;
+	m_pDebug  = new CDebugProc;
+
 	// Direct3Dオブジェクトの生成
 	g_pD3D = Direct3DCreate9(D3D_SDK_VERSION);
 	if (g_pD3D == NULL)
@@ -108,10 +111,6 @@ HRESULT  CRenderer::Init(HWND hWnd, BOOL bWindow)
 		OUT_DEFAULT_PRECIS, DEFAULT_QUALITY,
 		DEFAULT_PITCH, "MSEゴシック",
 		&g_pFont);
-#endif
-	pLight->InitLight();
-	pCamera->InitCamera();
-	pDebug->Init();
 
 	//生成
 	ImGui::CreateContext();
@@ -122,6 +121,13 @@ HRESULT  CRenderer::Init(HWND hWnd, BOOL bWindow)
 	//初期化
 	ImGui_ImplWin32_Init(hWnd);
 	ImGui_ImplDX9_Init(g_pD3DDevice);
+#endif
+
+	m_pLight->InitLight();
+	m_pCamera->InitCamera();
+	m_pDebug->Init();
+	m_pFade = CFADE::CreateFade();
+
 	return S_OK;
 }
 //=============================================================================
@@ -129,8 +135,11 @@ HRESULT  CRenderer::Init(HWND hWnd, BOOL bWindow)
 //=============================================================================
 void CRenderer::Uninit(void)
 {
-	pCamera->UninitCamera();
-	pDebug->Uninit();
+	m_pCamera->UninitCamera();
+	m_pDebug->Uninit();
+	m_pFade->UninitFade();
+
+
 	CScene::RereaseAll();
 	if (g_pD3DDevice != NULL)
 	{
@@ -186,13 +195,33 @@ void CRenderer::Update(void)
 	//Sceneで管理してる情報
 	ImGui::Begin("SceneInfo");
 
-	pLight->UpdateLight();
-	pCamera->UpdateCamera();
+	m_pLight->UpdateLight();
+	m_pCamera->UpdateCamera();
+	m_pFade->UpdateFade();
 	CScene::UpdateAll();
 
 	//Sceneで管理してる情報 終了
 	ImGui::End();	//SceneInfo
 
+#ifdef _DEBUG
+
+	//BaseModeで管理してるやつの情報
+	ImGui::Begin("BaseMode");
+
+	//ポインタ取得
+	CBaseMode *pBase = CManager::GetBaseMode();
+
+	//nullcheck
+	if (pBase)
+	{
+		//デバッグ表記
+		pBase->DebugCommand();
+	}
+
+	//BaseModeで管理してる情報 終了
+	ImGui::End();	//BaseMode
+
+#endif // _DEBUG
 
 	//ImGui　更新終了
 	ImGui::EndFrame();
@@ -209,9 +238,10 @@ void CRenderer::Draw(void)
 	if (SUCCEEDED(g_pD3DDevice->BeginScene()))
 	{
 		//GetScene()->Drow();
-	pCamera->SetCamera();
+		m_pCamera->SetCamera();
 		CScene::DrawAll();
-		pDebug->Draw();
+		m_pDebug->Draw();
+		m_pFade->DrawFade();
 #ifdef _DEBUG
 		DrawFPS();
 
@@ -235,9 +265,12 @@ LPDIRECT3DDEVICE9 CRenderer::GetDevice(void)
 {
 	return g_pD3DDevice;
 }
+//=============================================================================
+//フェードの取得
+//=============================================================================
 CFADE * CRenderer::GetFade(void)
 {
-	return pFade;
+	return m_pFade;
 }
 //=============================================================================
 //デバイスリセット imGui用の処理含む

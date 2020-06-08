@@ -27,10 +27,10 @@ private:
 	LPDIRECT3DDEVICE9 g_pD3DDevice = NULL;	//Direct3dデバイスへのポインタ
 	D3DPRESENT_PARAMETERS m_d3dpp;			//プレゼンテーションパラメータ
 
-	CLight *pLight;
-	CCamera *pCamera;
-	CDebugProc *pDebug;
-	CFADE *pFade;
+	CLight *m_pLight;
+	CCamera *m_pCamera;
+	CDebugProc *m_pDebug;
+	CFADE *m_pFade;
 	void ResetDevice();		//デバイスリセット
 };
 #endif

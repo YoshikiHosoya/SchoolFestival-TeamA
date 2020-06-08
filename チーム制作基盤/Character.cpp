@@ -318,6 +318,13 @@ void CCharacter::RayCollision(void)
 {
 	CCreateMap *pCreateMap;
 	pCreateMap = CManager::GetBaseMode()->GetCreateMap();
+
+	//nullcheck
+	if (!pCreateMap)
+	{
+		//null‚¾‚Á‚½‚çˆ—‚µ‚È‚¢
+		return;
+	}
 	// ’nŒ`”»’è
 	BOOL  bIsHit = false;
 	float fLandDistance = 0;

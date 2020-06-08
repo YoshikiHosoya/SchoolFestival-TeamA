@@ -28,6 +28,9 @@
     <Filter Include="Mode">
       <UniqueIdentifier>{c26fc224-5a07-4ec9-8321-a24245f7a19f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Bullet">
+      <UniqueIdentifier>{16d7f6b5-a328-42ae-95ca-3a9532f42d6a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Scene.cpp">
@@ -99,12 +102,6 @@
     <ClCompile Include="Enemy.cpp">
       <Filter>Model</Filter>
     </ClCompile>
-    <ClCompile Include="bullet.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="handgun.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="SourceCode\hosso\Debug_ModelViewer.cpp">
       <Filter>Hosso</Filter>
     </ClCompile>
@@ -117,20 +114,26 @@
     <ClCompile Include="SourceCode\hosso\HossoLibrary.cpp">
       <Filter>Hosso</Filter>
     </ClCompile>
-    <ClCompile Include="heavymachinegun.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="game.cpp">
       <Filter>Mode</Filter>
     </ClCompile>
     <ClCompile Include="BaseMode.cpp">
       <Filter>Mode</Filter>
     </ClCompile>
-    <ClCompile Include="gun.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="item.cpp">
       <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="handgun.cpp">
+      <Filter>Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="gun.cpp">
+      <Filter>Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="heavymachinegun.cpp">
+      <Filter>Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="bullet.cpp">
+      <Filter>Bullet</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -212,12 +215,6 @@
     <ClInclude Include="Enemy.h">
       <Filter>Model</Filter>
     </ClInclude>
-    <ClInclude Include="bullet.h">
-      <Filter>ソース ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="handgun.h">
-      <Filter>ソース ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="SourceCode\hosso\Debug_ModelViewer.h">
       <Filter>Hosso</Filter>
     </ClInclude>
@@ -230,20 +227,26 @@
     <ClInclude Include="SourceCode\hosso\HossoLibrary.h">
       <Filter>Hosso</Filter>
     </ClInclude>
-    <ClInclude Include="heavymachinegun.h">
-      <Filter>ソース ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="game.h">
       <Filter>Mode</Filter>
     </ClInclude>
     <ClInclude Include="BaseMode.h">
       <Filter>Mode</Filter>
     </ClInclude>
-    <ClInclude Include="gun.h">
-      <Filter>ソース ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="item.h">
       <Filter>ソース ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="gun.h">
+      <Filter>Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="heavymachinegun.h">
+      <Filter>Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="handgun.h">
+      <Filter>Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="bullet.h">
+      <Filter>Bullet</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -13,19 +13,52 @@
 //==========================================================
 void CBaseMode::DebugCommand(void)
 {
+#ifdef _DEBUG
 	//キーボード取得
 	CKeyboard *key = CManager::GetInputKeyboard();
 
-	//現在のモード再始動
-	if (key->GetKeyboardTrigger(DIK_NUMPAD0))
+	//使い方説明
+	CDebugProc::Print("[Ctrl] + テンキー [0] : 現在のModeに遷移\n");
+	CDebugProc::Print("[Ctrl] + テンキー [1] : Titleに遷移\n");
+	CDebugProc::Print("[Ctrl] + テンキー [2] : Gameに遷移\n");
+	CDebugProc::Print("[Ctrl] + テンキー [3] : Resultに遷移\n");
+	CDebugProc::Print("[Ctrl] + テンキー [9] : Tutorialに遷移\n");
+
+	//Ctrl押しながら
+	if (key->GetKeyboardPress(DIK_LCONTROL))
 	{
-		CManager::GetRendere()->GetFade()->SetFade(CManager::GetGameState());
+		//現在のモード再始動
+		if (key->GetKeyboardTrigger(DIK_NUMPAD0))
+		{
+			CManager::GetRendere()->GetFade()->SetFade(CManager::GetGameState());
+		}
+		//タイトル
+		if (key->GetKeyboardTrigger(DIK_NUMPAD1))
+		{
+			//CManager::GetRendere()->GetFade()->SetFade(CManager::MODE_TITLE);
+		}
+		//ゲーム
+		if (key->GetKeyboardTrigger(DIK_NUMPAD2))
+		{
+			CManager::GetRendere()->GetFade()->SetFade(CManager::MODE_GAME);
+		}
+		//リザルト
+		if (key->GetKeyboardTrigger(DIK_NUMPAD3))
+		{
+			//CManager::GetRendere()->GetFade()->SetFade(CManager::MODE_RESULT);
+		}
+		//モーションビューワ
+		if (key->GetKeyboardTrigger(DIK_NUMPAD9))
+		{
+			CManager::GetRendere()->GetFade()->SetFade(CManager::MODE_DEBUG_MODELVIEWER);
+		}
 	}
-	//タイトル
-	if (key->GetKeyboardTrigger(DIK_NUMPAD1))
-	{
-		CManager::GetRendere()->GetFade()->SetFade(CManager::MODE_TITLE);
-	}
+
+	//デバッグ情報表記
+	//オーバーライド用　それぞれのモードで処理
+	ShowDebugInfo();
+
+#endif //_DEBUG
 }
 //==========================================================
 //使うテクスチャやモデルの読み込み

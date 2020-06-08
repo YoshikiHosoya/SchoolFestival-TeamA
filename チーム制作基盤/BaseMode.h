@@ -27,10 +27,11 @@ public:
 	virtual void Draw() = 0;				//描画
 	virtual void ShowDebugInfo() = 0;		//デバッグ情報表記
 	virtual CCreateMap *GetCreateMap() = 0;	//クリエイトマップ
+	virtual CPlayer* GetPlayer() = 0;		//プレイヤーのポインタ取得
+
 	void DebugCommand(void);				//デバッグコマンド
 	static void BaseLoad(HWND hWnd);		//全ての場面で使われるであろう素材の生成
 	static void BaseUnload(void);			//全ての場面で使われるであろう素材の破棄
-	virtual CPlayer* GetPlayer() = 0;		//プレイヤーのポインタ取得
 private:
 };
 
