@@ -72,7 +72,7 @@ void CItem::Uninit(void)
 void CItem::Update(void)
 {
 	// ƒvƒŒƒCƒ„[‚Ìî•ñŽæ“¾
-	CPlayer *pPlayer = CManager::GetGame()->GetPlayer();
+//	CPlayer *pPlayer = CManager::GetGame()->GetPlayer();
 
 	// “–‚½‚è”»’è
 	//{

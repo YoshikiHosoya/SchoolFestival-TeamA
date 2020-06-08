@@ -126,6 +126,12 @@
     <ClCompile Include="BaseMode.cpp">
       <Filter>Mode</Filter>
     </ClCompile>
+    <ClCompile Include="gun.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="item.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Scene.h">
@@ -233,5 +239,16 @@
     <ClInclude Include="BaseMode.h">
       <Filter>Mode</Filter>
     </ClInclude>
+    <ClInclude Include="gun.h">
+      <Filter>ソース ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="item.h">
+      <Filter>ソース ファイル</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="imgui.ini">
+      <Filter>ソース ファイル</Filter>
+    </None>
   </ItemGroup>
 </Project>
