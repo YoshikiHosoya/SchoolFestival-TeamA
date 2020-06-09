@@ -17,7 +17,7 @@ CCreateMap	*CManager::m_CreateMap		= NULL;
 CParticle	*CManager::m_Particle		= NULL;
 CBaseMode	*CManager::m_pBaseMode		= NULL;
 CMouse		*CManager::m_pMouse			= NULL;
-CManager::GAME_MODE CManager::m_mode = CManager::MODE_TITLE;
+CManager::GAME_MODE CManager::m_mode = CManager::MODE_GAME;
 CManager::CManager()
 {
 }
@@ -43,7 +43,7 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	m_pInputKeyboard->InitInput(hInstance, hWnd);
 	m_pMouse->Init(hInstance, hWnd);
 	CBaseMode::BaseLoad(hWnd);
-	CManager::SetGameMode(MODE_DEBUG_MODELVIEWER);
+	CManager::SetGameMode(MODE_GAME);
 	return S_OK;
 }
 //===========================================
