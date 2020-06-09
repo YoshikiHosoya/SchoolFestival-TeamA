@@ -101,7 +101,7 @@ public:
 	D3DXVECTOR3 &GetRot(void);					//参照渡し
 	D3DXVECTOR3 &GetRotDest(void);				//参照渡し
 	CHARACTER_STATE GetCharacterState(void);
-	D3DXMATRIX GetMtxWorld(void);
+	D3DXMATRIX *GetMtxWorld(void);
 	int GetLife(void);
 
 	CHARACTER_TYPE GetCharacterType();								//キャラクターの種類取得

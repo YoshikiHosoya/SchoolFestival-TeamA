@@ -60,10 +60,6 @@ void CEnemy::Update(void)
 void CEnemy::Draw(void)
 {
 	CCharacter::Draw();
-
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRendere()->GetDevice();
-	D3DXMATRIX mtxRot, mtxTrans;
-	D3DXMATRIX mtxWorld = GetMtxWorld();
 }
 //====================================================================
 //モデルのクリエイト

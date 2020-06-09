@@ -52,6 +52,9 @@ HRESULT CCharacter::Init(void)
 	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_Life = 50;
 	m_state = CHARACTER_STATE_NORMAL;
+
+	//マトリックス初期化
+	D3DXMatrixIdentity(&m_mtxWorld);
 	return S_OK;
 }
 //====================================================================
@@ -300,9 +303,9 @@ int CCharacter::GetLife(void)
 //====================================================================
 //マトリックスの取得
 //====================================================================
-D3DXMATRIX CCharacter::GetMtxWorld(void)
+D3DXMATRIX *CCharacter::GetMtxWorld(void)
 {
-	return m_mtxWorld;
+	return &m_mtxWorld;
 }
 //====================================================================
 //モーション情報の取得

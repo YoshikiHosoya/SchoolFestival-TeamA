@@ -122,10 +122,6 @@ public:
 	void SetModelConut(int nModelCount) { m_modelCount = nModelCount; };	// モデルカウントの設定
 	int GetType()						{ return m_type; };					// モデルタイプの取得
 	int GetModelCount()					{ return m_modelCount; };			// モデルカウントの取得
-	void SetType(int type);
-	void SetModelCount(int nCntModel);
-	int GetType(void);
-	int GetModelCount(void);
 	LPD3DXMESH GetMesh(void);
 	D3DXMATRIX *GetMatrix(void);
 	static void LoadModel(void);

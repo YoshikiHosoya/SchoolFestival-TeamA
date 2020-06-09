@@ -122,7 +122,7 @@ void CGun::Update(void)
 //
 // =====================================================================================================================================================================
 void CGun::Draw(void)
-{	
+{
 	// 描画
 	CModel::Draw(*m_mtx);
 }
@@ -150,7 +150,7 @@ CGun * CGun::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXMATRIX *mtx)
 	pGun->SetPosition(pos);
 
 	// モデルタイプの設定
-	pGun->SetType(2);
+	pGun->SetType(0);
 
 	// モデルカウントの設定
 	pGun->SetModelConut(0);
