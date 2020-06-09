@@ -97,7 +97,7 @@ void CModelParts::Draw()
 	D3DXMatrixMultiply(GetMtx(), GetMtx(), m_pParentMtx);
 
 	//モデルの描画
-	CSceneX::DrawShader();
+	CSceneX::DrawMesh();
 
 	////ワールドマトリックスの初期化
 	//D3DXMatrixIdentity(&mtxShadow);

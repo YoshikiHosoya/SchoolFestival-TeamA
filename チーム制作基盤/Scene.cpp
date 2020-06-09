@@ -17,17 +17,25 @@ CScene*CScene::m_pCur = NULL;
 //==========================================================
 CScene::CScene(OBJ_TYPE type)
 {
-	m_flag = false;
+	// オブジェクトタイプのチェック
+	if (type != TYPE_NONE)
+	{
+		m_flag = false;
 
-	if (m_pCur != NULL)
-	{
-		m_pPrev = m_pCur;
-		m_pCur->m_pNext = this;
+		if (m_pCur != NULL)
+		{
+			m_pPrev = m_pCur;
+			m_pCur->m_pNext = this;
+		}
+		m_pCur = this;
+		if (m_pTop == NULL)
+		{
+			m_pTop = this;
+		}
 	}
-	m_pCur = this;
-	if (m_pTop == NULL)
+	else
 	{
-		m_pTop = this;
+		return;
 	}
 }
 //==========================================================

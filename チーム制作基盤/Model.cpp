@@ -78,7 +78,7 @@ char *CModel::m_EnemyFileName[MODEL_ENEMY_MAX] =
 	{ "data/MODEL/EnemyBoss/axe.x" },				//41
 	{ "data/MODEL/EnemyBoss/sowrd.x" },				//42
 };
-CModel::CModel()
+CModel::CModel(OBJ_TYPE type) : CScene(type)
 {
 }
 
@@ -109,7 +109,6 @@ void CModel::LoadModel(void)
 		);
 		m_Model[PLAYER_MODEL][nCnt].m_pTexture = new LPDIRECT3DTEXTURE9[(int)m_Model[PLAYER_MODEL][nCnt].nNumMat];
 		pMat = (D3DXMATERIAL*)m_Model[PLAYER_MODEL][nCnt].pBuffmat->GetBufferPointer();
-
 		for (int nCntmat = 0; nCntmat < (int)m_Model[PLAYER_MODEL][nCnt].nNumMat; nCntmat++)
 		{
 			m_Model[PLAYER_MODEL][nCnt].m_pTexture[nCntmat] = NULL;
@@ -399,6 +398,7 @@ void CModel::Draw(D3DXMATRIX mat)
 	{
 		pMat = (D3DXMATERIAL*)m_Model[m_type][m_modelCount].pBuffmat->GetBufferPointer();
 		pDevice->SetRenderState(D3DRS_SPECULARENABLE, TRUE);						// すぺきゅらモード有効
+
 		for (int nCnt = 0; nCnt < (int)m_Model[m_type][m_modelCount].nNumMat; nCnt++)
 		{
 			pDevice->SetTexture(0, m_Model[m_type][m_modelCount].m_pTexture[nCnt]);
@@ -414,12 +414,18 @@ void CModel::Draw(D3DXMATRIX mat)
 	//pDevice->SetMaterial(&matDef);
 }
 //====================================================================
+//描画
+//====================================================================
+void CModel::Draw()
+{
+}
+//====================================================================
 //モデルのクリエイト
 //====================================================================
 CModel *CModel::Create(int type, int modelCount)
 {
 	CModel*pModel;
-	pModel = new CModel();
+	pModel = new CModel(TYPE_NONE);
 	pModel->Init();
 	pModel->m_type = type;
 	pModel->m_modelCount = modelCount;
