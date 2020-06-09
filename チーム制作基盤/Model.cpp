@@ -426,6 +426,29 @@ CModel *CModel::Create(int type, int modelCount)
 	return pModel;
 }
 //====================================================================
+//モデルのファイル名取得
+//====================================================================
+char * CModel::GetModelFileName(int nType, int nModelCount)
+{
+	//タイプで読み込む配列を変える
+	switch (nType)
+	{
+		//プレイヤー
+	case 0:
+		return m_PlayerFileName[nModelCount];
+		break;
+		//マップ
+	case 1:
+		return m_MapFileName[nModelCount];
+		break;
+		//敵
+	case 2:
+		return m_EnemyFileName[nModelCount];
+		break;
+	}
+	return nullptr;
+}
+//====================================================================
 //親の設定
 //====================================================================
 void CModel::SetParent(CModel * pModel)
@@ -449,7 +472,14 @@ void CModel::SetSize(D3DXVECTOR3 size)
 }
 void CModel::SetType(int type)
 {
-	m_modelCount = type;
+	m_type = type;
+}
+//====================================================================
+//モデルタイプの取得
+//====================================================================
+void CModel::SetModelCount(int nCntModel)
+{
+	m_modelCount = nCntModel;
 }
 //====================================================================
 //位置の取得
@@ -469,6 +499,13 @@ D3DXVECTOR3 &CModel::GetRot(void)
 //モデルタイプの取得
 //====================================================================
 int CModel::GetType(void)
+{
+	return m_type;
+}
+//====================================================================
+//モデルタイプの取得
+//====================================================================
+int CModel::GetModelCount(void)
 {
 	return m_modelCount;
 }

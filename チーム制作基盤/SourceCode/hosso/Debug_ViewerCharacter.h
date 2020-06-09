@@ -29,9 +29,6 @@ public:
 	void Update();									//更新
 	void Draw();									//描画
 	void ShowDebugInfo();							//デバッグ情報表記
-	void DamageAction() {};							//ダメージ時のリアクション
-	void DeathAction() {};							//死亡時のリアクション
-	void AttackTurning() {};						//攻撃時の旋回
 	static CDebug_ViewerCharacter* Create();		//生成関数
 	void DefaultMotion() { return SetMotion(CCharacter::PLAYER_MOTION_NORMAL); };
 

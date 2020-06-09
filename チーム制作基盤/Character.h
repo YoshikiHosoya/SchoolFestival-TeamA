@@ -117,6 +117,10 @@ public:
 	//Rayの判定
 	void RayCollision(void);
 
+	char* GetOffsetFileName(CHARACTER_TYPE type);
+	char* GetLoadFileName(CHARACTER_MOTION_STATE motionstate);
+
+
 private:
 	static char *m_LoadOffsetFileName[CHARACTER_TYPE_MAX];			//読み込むファイル名
 	static char *m_LoadMotionFileName[CHARACTER_MOTION_MAX];		//読み込むファイル名

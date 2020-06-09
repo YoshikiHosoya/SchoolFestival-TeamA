@@ -51,6 +51,8 @@ HRESULT CDebug_ViewerCharacter::Init()
 {
 	CCharacter::Init();
 
+	CCharacter::LoadOffset(CCharacter::CHARACTER_TYPE_PLAYER);
+
 	//成功
 	return S_OK;
 }
@@ -82,29 +84,6 @@ void CDebug_ViewerCharacter::ShowDebugInfo()
 {
 #ifdef _DEBUG
 	static bool bMotion = true;
-
-	//キャラクター情報情報
-	if (ImGui::Begin("MotionViewer"))
-	{
-		if (ImGui::BeginTabBar("Viewer", bMotion))
-		{
-			if (ImGui::BeginTabItem("MotionViewer"))
-			{
-				MotionViewer();
-				ImGui::EndTabItem();
-			}
-			if (ImGui::BeginTabItem("OffsetViewer"))
-			{
-				OffsetViewer();
-				ImGui::EndTabItem();
-			}
-
-			ImGui::EndTabBar();
-		}
-
-		ImGui::End();
-
-	}
 #endif //DEBUG
 }
 
@@ -182,6 +161,7 @@ void CDebug_ViewerCharacter::MotionViewer()
 
 	//現在のキー
 	int &nNowKey = CCharacter::GetKeySet();
+	int &nNowFrame = CCharacter::GetFram();
 
 	//モーションに関する情報
 	CCharacter::CHARACTER_MOTION_STATE &NowMotionType = GetMotionType();
@@ -192,7 +172,7 @@ void CDebug_ViewerCharacter::MotionViewer()
 	bool bChangeNowKey = false;
 
 	//コピペ用のキー
-	static CCharacter::CHARACTER_MOTION_STATE CopyMotionType = CCharacter::CHARACTER_MOTION_STATE::ENEMY_MOTION_WALK;
+	static CCharacter::CHARACTER_MOTION_STATE CopyMotionType = CHARACTER_MOTION_STATE_NONE;
 	static int nCopyKey = -1;
 
 
@@ -212,9 +192,6 @@ void CDebug_ViewerCharacter::MotionViewer()
 	//	pModelCharacter->ForcedUpdate(NowMotionType, nNowKey);
 	//	MotionInfo = CMotion::GetMotion(NowMotionType);
 	//}
-
-	//改行しない
-	ImGui::SameLine();
 
 	//モーションリスタート
 	if (ImGui::Button("ReStart") || pKeyboard->GetKeyboardTrigger(DIK_RETURN))
@@ -246,6 +223,10 @@ void CDebug_ViewerCharacter::MotionViewer()
 	//１F前のキーフレーム
 	int nNumKeyOld = MotionInfo->nNumKey;
 
+	ImGui::Text("NowKey : %d / ", nNowKey);
+
+	ImGui::SameLine();
+
 	//キー数
 	if (ImGui::InputInt("NumKey", &MotionInfo->nNumKey))
 	{
@@ -257,6 +238,11 @@ void CDebug_ViewerCharacter::MotionViewer()
 		//	CMotion::AddKeyInfo(NowMotionType, pModelCharacter->GetType()) :			//要素の追加　末尾
 		//	CMotion::PopbackKeyInfo(NowMotionType);										//要素の削除　末尾
 	}
+
+	ImGui::Text("NowFrame : %d / ", nNowFrame);
+
+	ImGui::SameLine();
+
 
 	//フレーム数
 	if (ImGui::InputInt("MaxFrame", &MotionInfo->key_info[nNowKey]->nFram))
@@ -274,11 +260,7 @@ void CDebug_ViewerCharacter::MotionViewer()
 	//}
 
 
-	//現在のキー
-	if (ImGui::InputInt("NowKey", &nNowKey))
-	{
-		bChangeNowKey = true;
-	}
+
 
 	//キーボードの←→でも現在のキー変えたい
 	if (pKeyboard->GetKeyboardTrigger(DIK_LEFT))
@@ -393,14 +375,16 @@ void CDebug_ViewerCharacter::OffsetViewer()
 {
 	CModel * pModel;
 
-	//モデル数分繰り替えす
-	for (size_t nCnt = 0; nCnt < GetCharacterModelList().size(); nCnt++)
-	{
-		////モデル名取得
-		//std::string aPartsName = CModelCharacter::GetModelName(pModelCharacter->GetType(), nCnt).data();
+	std::vector<CModel*> vModelList = GetCharacterModelList();
 
-		////頭の部分の文字列を消す("data/MODEL/)
-		//aPartsName.erase(aPartsName.begin(), aPartsName.begin() + 11);
+	//モデル数分繰り替えす
+	for (size_t nCnt = 0; nCnt < vModelList.size(); nCnt++)
+	{
+		//モデル名取得
+		std::string aPartsName = CModel::GetModelFileName(vModelList[nCnt]->GetType(), nCnt);
+
+		//頭の部分の文字列を消す("data/MODEL/)
+		aPartsName.erase(aPartsName.begin(), aPartsName.begin() + 11);
 
 		//次の項目の枠の大きさ設定
 		ImGui::SetNextItemWidth(250);
@@ -408,11 +392,11 @@ void CDebug_ViewerCharacter::OffsetViewer()
 		//モデルパーツのポインタ取得
 		pModel = GetCharacterModelList()[nCnt];
 
-		////それぞれのオフセットを調整
-		//if (ImGui::DragFloat3(aPartsName.data(), pModel->GetPosition(), 0.05f, -100.0f, 100.0f))
-		//{
+		//それぞれのオフセットを調整
+		if (ImGui::DragFloat3(aPartsName.data(), pModel->GetPosition(), 0.05f, -100.0f, 100.0f))
+		{
 
-		//}
+		}
 	}
 
 	//if(ImGui::Button("OffsetSave"))

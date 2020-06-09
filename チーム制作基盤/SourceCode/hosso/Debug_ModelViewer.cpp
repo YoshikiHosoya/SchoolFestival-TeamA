@@ -83,8 +83,8 @@ void CDebug_ModelViewer::ShowDebugInfo()
 #ifdef _DEBUG
 
 	//キャラクター情報情報
-	if (ImGui::Begin("MotionViewer"))
-	{
+	ImGui::Begin("MotionViewer");
+
 		//Tab
 		if (ImGui::BeginTabBar("Viewer", m_bModel))
 		{
@@ -106,9 +106,7 @@ void CDebug_ModelViewer::ShowDebugInfo()
 			ImGui::EndTabBar();
 		}
 
-		ImGui::End();
-
-	}
+	ImGui::End();
 #endif
 }
 //------------------------------------------------------------------------------

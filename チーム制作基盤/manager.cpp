@@ -8,15 +8,15 @@
 #include "Xinput.h"
 #include "texture.h"
 #include "BaseMode.h"
+#include "mouse.h"
 #include "SourceCode/hosso/Debug_ModelViewer.h"
 //他のとこでも使えるようにするメンバ
-CRenderer *CManager::m_pRendere		  = NULL;
-CKeyboard *CManager::m_pInputKeyboard = NULL;
-CSceneX   *CManager::m_SceneX		  = NULL;
-CCreateMap*CManager::m_CreateMap      = NULL;
-CParticle *CManager::m_Particle       = NULL;
-CModel    *CManager::m_Model = NULL;
-CBaseMode *CManager::m_pBaseMode = NULL;
+CRenderer	*CManager::m_pRendere		= NULL;
+CKeyboard	*CManager::m_pInputKeyboard	= NULL;
+CCreateMap	*CManager::m_CreateMap		= NULL;
+CParticle	*CManager::m_Particle		= NULL;
+CBaseMode	*CManager::m_pBaseMode		= NULL;
+CMouse		*CManager::m_pMouse			= NULL;
 CManager::GAME_MODE CManager::m_mode = CManager::MODE_TITLE;
 CManager::CManager()
 {
@@ -33,6 +33,7 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	//メモリ確保
 	m_pRendere		 = new CRenderer;
 	m_pInputKeyboard = new CKeyboard;
+	m_pMouse = new CMouse;
 	//m_pMouse = new CMouse;
 	//初期化処理
 	if (FAILED(m_pRendere->Init(hWnd, TRUE)))
@@ -40,8 +41,9 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 		return -1;
 	}
 	m_pInputKeyboard->InitInput(hInstance, hWnd);
+	m_pMouse->Init(hInstance, hWnd);
 	CBaseMode::BaseLoad(hWnd);
-	CManager::SetGameMode(MODE_GAME);
+	CManager::SetGameMode(MODE_DEBUG_MODELVIEWER);
 	return S_OK;
 }
 //===========================================
@@ -52,6 +54,7 @@ void CManager::Uninit(void)
 	//ベースの素材破棄
 	CBaseMode::BaseUnload();
 	m_pRendere->Uninit();
+	m_pMouse->Uninit();
 	if (m_pBaseMode)
 	{
 		//モード
@@ -65,7 +68,7 @@ void CManager::Update(void)
 {
 	m_pInputKeyboard->UpdateInput();
 	m_pRendere->Update();
-	m_Model->Update();
+	m_pMouse->Update();
 	if (m_pBaseMode)
 	{	//モード
 		m_pBaseMode->Update();
@@ -158,6 +161,17 @@ CBaseMode * CManager::GetBaseMode(void)
 	if (m_pBaseMode)
 	{
 		return m_pBaseMode;
+	}
+	return nullptr;
+}
+//===========================================
+//マウスの情報取得
+//===========================================
+CMouse * CManager::GetMouse()
+{
+	if (m_pMouse)
+	{
+		return m_pMouse;
 	}
 	return nullptr;
 }

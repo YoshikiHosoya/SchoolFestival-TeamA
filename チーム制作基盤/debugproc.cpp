@@ -32,12 +32,12 @@ void CDebugProc::Init(void)
 	LPDIRECT3DDEVICE9 pDevice = CManager::GetRendere()->GetDevice();
 
 	D3DXCreateFont(pDevice,
+		12, 6,
 		0, 0,
-		5, 0,
 		false,
 		SHIFTJIS_CHARSET,
 		OUT_DEFAULT_PRECIS, DEFAULT_QUALITY,
-		DEFAULT_PITCH, "MSEゴシック",
+		DEFAULT_PITCH, "ＭＳ ゴシック",
 		&m_pFont);
 }
 //==========================================================
@@ -81,6 +81,6 @@ void CDebugProc::Draw(void)
 		&rect,
 		DT_LEFT,
 		D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
-	//文字列型の先頭の初期化　
+	//文字列型の先頭の初期化
 	m_aStr[0] = '\0';
 }

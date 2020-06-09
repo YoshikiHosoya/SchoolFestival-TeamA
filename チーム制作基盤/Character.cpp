@@ -379,6 +379,20 @@ void CCharacter::RayCollision(void)
 	}
 }
 //====================================================================
+//オフセットのファイル取得
+//====================================================================
+char * CCharacter::GetOffsetFileName(CHARACTER_TYPE type)
+{
+	return m_LoadOffsetFileName[type];
+}
+//====================================================================
+//モーションのファイル取得
+//====================================================================
+char * CCharacter::GetLoadFileName(CHARACTER_MOTION_STATE motionstate)
+{
+	return m_LoadOffsetFileName[motionstate];
+}
+//====================================================================
 //モーションのロード
 //====================================================================
 void CCharacter::LoadMotion(void)
@@ -678,7 +692,7 @@ void CCharacter::LoadOffset(CHARACTER_TYPE nType)
 					//SET_ENDが来たら作成し追加
 					else if (strcmp(cHeadText, "SET_END") == 0)
 					{
-						CModel *pModel = CModel::Create(type , nIdx);
+						CModel *pModel = CModel::Create(type, nIdx);
 						pModel->SetPosition(pos);
 						if (nIdxParent == -1)
 						{
@@ -686,7 +700,7 @@ void CCharacter::LoadOffset(CHARACTER_TYPE nType)
 						}
 						else
 						{
-						pModel->SetParent(m_vModelList[nIdxParent]);
+							pModel->SetParent(m_vModelList[nIdxParent]);
 						}
 						m_vModelList.emplace_back(pModel);
 					}

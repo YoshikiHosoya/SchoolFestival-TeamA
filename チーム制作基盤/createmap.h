@@ -8,6 +8,8 @@
 #include "Scene.h"
 #include "inputKeyboard.h"
 class CModel;
+class CPlayer;
+class CEnemy;
 //レンダリングクラス
 class CCreateMap:public CScene
 {

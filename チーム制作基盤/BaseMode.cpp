@@ -18,11 +18,12 @@ void CBaseMode::DebugCommand(void)
 	CKeyboard *key = CManager::GetInputKeyboard();
 
 	//使い方説明
+	CDebugProc::Print("---------Debug Command----------\n");
 	CDebugProc::Print("[Ctrl] + テンキー [0] : 現在のModeに遷移\n");
 	CDebugProc::Print("[Ctrl] + テンキー [1] : Titleに遷移\n");
 	CDebugProc::Print("[Ctrl] + テンキー [2] : Gameに遷移\n");
 	CDebugProc::Print("[Ctrl] + テンキー [3] : Resultに遷移\n");
-	CDebugProc::Print("[Ctrl] + テンキー [9] : Tutorialに遷移\n");
+	CDebugProc::Print("[Ctrl] + テンキー [9] : MotionViewerに遷移\n");
 
 	//Ctrl押しながら
 	if (key->GetKeyboardPress(DIK_LCONTROL))

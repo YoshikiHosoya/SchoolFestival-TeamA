@@ -5,14 +5,11 @@
 //レンダリングクラス
 class CRenderer;
 class CKeyboard;
-class CPlayer;
-class CSceneX;
 class CCreateMap;
-class CModel;
 class CParticle;
-class CEnemy;
 class CGame;
 class CBaseMode;
+class CMouse;
 class CManager
 {
 public:
@@ -42,14 +39,14 @@ public:
 	static CKeyboard *GetInputKeyboard(void);
 	static CCreateMap *GetCreateMap(void);
 	static CBaseMode *GetBaseMode(void);
+	static CMouse *GetMouse();
 private:
 	static GAME_MODE m_mode;
 	static CKeyboard *m_pInputKeyboard;
+	static CMouse *m_pMouse;
 	static CRenderer *m_pRendere;
-	static CSceneX *m_SceneX;
 	static CCreateMap *m_CreateMap;
 	static CParticle *m_Particle;
-	static CModel *m_Model;
 	static CBaseMode *m_pBaseMode;
 };
 #endif

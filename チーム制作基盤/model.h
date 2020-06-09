@@ -116,7 +116,9 @@ public:
 	void SetRot(D3DXVECTOR3 rot);
 	void SetSize(D3DXVECTOR3 size);
 	void SetType(int type);
+	void SetModelCount(int nCntModel);
 	int GetType(void);
+	int GetModelCount(void);
 	LPD3DXMESH GetMesh(void);
 	D3DXMATRIX *GetMatrix(void);
 	static void LoadModel(void);
@@ -126,6 +128,8 @@ public:
 	D3DXVECTOR3 GetvtxMax(int nCnt);
 	D3DXVECTOR3 GetvtxMin(int nCnt);
 	static CModel *Create(int type, int modelCount);
+
+	static char* GetModelFileName(int nType, int nModelCount);
 private:
 
 	static MODEL m_Model[TYPE_MAX][MAX_ALLMODEL];
