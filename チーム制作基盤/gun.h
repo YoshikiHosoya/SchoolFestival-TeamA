@@ -28,7 +28,7 @@ public:
 		GUNTYPE_MAX									// 銃の種類の最大数
 	};
 
-	CGun();											// コンストラクタ
+	CGun(OBJ_TYPE type);							// コンストラクタ
 	~CGun();										// デストラクタ
 
 	/* メンバ関数 */

@@ -12,6 +12,7 @@ class CCreateMap;
 class CMeshOrbit;
 class CParticle;
 class CUI;
+class CGun;
 //レンダリングクラス
 class CPlayer :public CCharacter
 {
@@ -41,5 +42,6 @@ private:
 		XINPUT_STATE state;								//コントローラーのステータス
 		XINPUT_VIBRATION vibration;						//コントローラーのバイブレーション
 		WORD Oldstate;									//コントローラーの1frame前のステート
+		CGun	*m_pGun;								// ガンクラスのポインタ
 };
 #endif

@@ -4,9 +4,11 @@
 #include "main.h"
 #include "manager.h"
 #include "renderer.h"
+#include "Scene.h"
+
 #define MAX_ALLMODEL (100)
 //レンダリングクラス
-class CModel
+class CModel : public CScene
 {
 public:
 	typedef enum
@@ -105,18 +107,21 @@ public:
 		//D3DXVECTOR3 Dest;
 	} MODEL;
 
-	CModel();
+	CModel(OBJ_TYPE type);
 	~CModel();
 	HRESULT Init(void);
 	void Uninit(void);
 	void Update(void);
 	void Draw(D3DXMATRIX mat);
+	void Draw();
 	void SetParent(CModel *pModel);
 	void SetPosition(D3DXVECTOR3 pos);
 	void SetRot(D3DXVECTOR3 rot);
 	void SetSize(D3DXVECTOR3 size);
-	void SetType(int type);
-	int GetType(void);
+	void SetType(int type)				{ m_type = type; };					// モデルタイプの設定
+	void SetModelConut(int nModelCount) { m_modelCount = nModelCount; };	// モデルカウントの設定
+	int GetType()						{ return m_type; };					// モデルタイプの取得
+	int GetModelCount()					{ return m_modelCount; };			// モデルカウントの取得
 	LPD3DXMESH GetMesh(void);
 	D3DXMATRIX *GetMatrix(void);
 	static void LoadModel(void);

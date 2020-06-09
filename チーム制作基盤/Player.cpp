@@ -10,6 +10,7 @@
 #include "Xinput.h"
 #include "handgun.h"
 #include "heavymachinegun.h"
+#include "gun.h"
 
 CPlayer::CPlayer(OBJ_TYPE type) :CCharacter(type)
 {
@@ -33,6 +34,9 @@ HRESULT CPlayer::Init(void)
 	m_Attack = false;
 	ZeroMemory(&state, sizeof(XINPUT_STATE));
 	ZeroMemory(&vibration, sizeof(XINPUT_VIBRATION));
+
+	// 銃の生成
+	m_pGun = CGun::Create(CPlayer::GetPosition(), CPlayer::GetRot(), &CCharacter::GetMtxWorld());
 
 	return S_OK;
 }
@@ -109,8 +113,8 @@ void CPlayer::Update(void)
 		// 銃を撃つ
 		if (key->GetKeyboardTrigger(DIK_P))
 		{
-			// ハンドガンの弾の生成
-			CHandgun::Create(CPlayer::GetPosition(), CPlayer::GetRot());
+			// 銃の生成
+			m_pGun->Shot();
 		}
 		if (key->GetKeyboardTrigger(DIK_O))
 		{
@@ -212,10 +216,6 @@ void CPlayer::Update(void)
 void CPlayer::Draw(void)
 {
 	CCharacter::Draw();
-
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRendere()->GetDevice();
-	D3DXMATRIX mtxRot, mtxTrans;
-	D3DXMATRIX mtxWorld = GetMtxWorld();
 }
 //====================================================================
 //モデルのクリエイト

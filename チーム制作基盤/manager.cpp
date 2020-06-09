@@ -65,7 +65,6 @@ void CManager::Update(void)
 {
 	m_pInputKeyboard->UpdateInput();
 	m_pRendere->Update();
-	m_Model->Update();
 	if (m_pBaseMode)
 	{	//ƒ‚[ƒh
 		m_pBaseMode->Update();

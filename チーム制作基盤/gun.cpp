@@ -27,7 +27,7 @@
 // コンストラクタ
 //
 // =====================================================================================================================================================================
-CGun::CGun() :CModel()
+CGun::CGun(OBJ_TYPE type) :CModel(type)
 {
 }
 
@@ -89,8 +89,31 @@ void CGun::Update(void)
 		}
 	}
 
+	//SetPosition(D3DXVECTOR3(50.0f, 10.0f, 10.0f));
+	//SetRot(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+
 	// 更新
 	CModel::Update();
+
+	CDebugProc::Print("%.1f\n", m_mtx->_11);
+	CDebugProc::Print("%.1f\n", m_mtx->_12);
+	CDebugProc::Print("%.1f\n", m_mtx->_13);
+	CDebugProc::Print("%.1f\n\n", m_mtx->_14);
+
+	CDebugProc::Print("%.1f\n", m_mtx->_21);
+	CDebugProc::Print("%.1f\n", m_mtx->_22);
+	CDebugProc::Print("%.1f\n", m_mtx->_23);
+	CDebugProc::Print("%.1f\n\n", m_mtx->_24);
+
+	CDebugProc::Print("%.1f\n", m_mtx->_31);
+	CDebugProc::Print("%.1f\n", m_mtx->_32);
+	CDebugProc::Print("%.1f\n", m_mtx->_33);
+	CDebugProc::Print("%.1f\n\n", m_mtx->_34);
+
+	CDebugProc::Print("%.1f\n", m_mtx->_41);
+	CDebugProc::Print("%.1f\n", m_mtx->_42);
+	CDebugProc::Print("%.1f\n", m_mtx->_43);
+	CDebugProc::Print("%.1f\n\n", m_mtx->_44);
 }
 
 // =====================================================================================================================================================================
@@ -115,7 +138,7 @@ CGun * CGun::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXMATRIX *mtx)
 	CGun *pGun;
 
 	// メモリの確保
-	pGun = new CGun();
+	pGun = new CGun(OBJTYPE_MODEL);
 
 	// 初期化
 	pGun->Init();
@@ -125,6 +148,12 @@ CGun * CGun::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXMATRIX *mtx)
 
 	// 銃の位置の設定
 	pGun->SetPosition(pos);
+
+	// モデルタイプの設定
+	pGun->SetType(2);
+
+	// モデルカウントの設定
+	pGun->SetModelConut(0);
 
 	return pGun;
 }
