@@ -22,9 +22,13 @@ public:
 	//set関数　オーバーライド
 	void SetSize(D3DXVECTOR3 size);
 	void SetColor(D3DXCOLOR col);
+	void SetBillboard(bool bBillboard)	{ m_bBillboard = bBillboard; };			// ビルボードの設定
+	bool GetBillboard()					{ return m_bBillboard; };				// ビルボードの取得
 protected:
 
 private:
 	void MakeVertex(void);
+	bool					m_bBillboard;			// ビルボードフラグ
+
 };
 #endif

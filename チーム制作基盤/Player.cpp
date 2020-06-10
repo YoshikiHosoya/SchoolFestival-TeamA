@@ -114,12 +114,12 @@ void CPlayer::Update(void)
 		if (key->GetKeyboardTrigger(DIK_P))
 		{
 			// e‚Ì¶¬
-			m_pGun->Shot();
+			m_pGun->Shot(CCharacter::GetRot());
 		}
 		if (key->GetKeyboardTrigger(DIK_O))
 		{
 			// ƒwƒr[ƒ}ƒVƒ“ƒKƒ“‚Ì’e‚Ì¶¬
-			CHeavyMachinegun::Create(CPlayer::GetPosition(), CPlayer::GetRot());
+			CHeavyMachinegun::Create(CCharacter::GetPosition(), CCharacter::GetRot());
 		}
 
 		// A‚Æ‚Ì‘g‚İ‡‚í‚¹

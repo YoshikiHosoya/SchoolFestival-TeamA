@@ -43,7 +43,7 @@ public:
 	/* ƒƒ“ƒoŠÖ” */
 	GUN_TYPE				&GetGunType() { return m_type; };				// e‚Ìí—Ş‚Ìæ“¾
 	void					SetGunType(GUN_TYPE type);						// e‚Ìí—Ş‚Ìİ’è
-	void					Shot();											// e‚Ì”­Ë
+	void					Shot(D3DXVECTOR3 rot);							// e‚Ì”­Ë
 
 private:
 	/* ƒƒ“ƒo•Ï” */

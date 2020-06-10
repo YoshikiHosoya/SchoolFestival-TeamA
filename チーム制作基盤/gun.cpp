@@ -22,8 +22,8 @@
 #define HANDGUN_AMMO				(1)			// ƒnƒ“ƒhƒKƒ“‚Ì’e–ò”
 #define HEAVYMACHINEGUN_AMMO		(200)		// ƒwƒr[ƒ}ƒVƒ“ƒKƒ“‚Ì’e–ò”
 
-#define HANDGUN_POS_X				(0)			// ƒnƒ“ƒhƒKƒ“‚ÌˆÊ’uX
-#define HANDGUN_POS_Y				(20)		// ƒnƒ“ƒhƒKƒ“‚ÌˆÊ’uY
+#define HANDGUN_POS_X				(-10)		// ƒnƒ“ƒhƒKƒ“‚ÌˆÊ’uX
+#define HANDGUN_POS_Y				(10)		// ƒnƒ“ƒhƒKƒ“‚ÌˆÊ’uY
 #define HANDGUN_POS_Z				(0)			// ƒnƒ“ƒhƒKƒ“‚ÌˆÊ’uZ
 
 // =====================================================================================================================================================================
@@ -190,13 +190,13 @@ void CGun::SetGunType(GUN_TYPE type)
 // e‚Ì”­ŽË
 //
 // =====================================================================================================================================================================
-void CGun::Shot()
+void CGun::Shot(D3DXVECTOR3 rot)
 {
 	switch (m_type)
 	{
 	case CGun::GUNTYPE_HANDGUN:
 		// ƒnƒ“ƒhƒKƒ“‚Ì¶¬
-		CHandgun::Create(D3DXVECTOR3(m_mtx->_41, m_mtx->_42, m_mtx->_43), GetRot());
+		CHandgun::Create(D3DXVECTOR3(m_mtx->_41, m_mtx->_42, m_mtx->_43), rot);
 		break;
 
 	case CGun::GUNTYPE_HEAVYMACHINEGUN:

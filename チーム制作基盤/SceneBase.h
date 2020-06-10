@@ -33,7 +33,7 @@ public:
 	D3DXVECTOR3 &GetRot(void);
 	LPDIRECT3DTEXTURE9 GetTexture(void);
 	LPDIRECT3DVERTEXBUFFER9 GetVtxBuff(void);
-	D3DXMATRIX GetMtxWorld(void);
+	D3DXMATRIX *GetMtxWorld(void);
 protected:
 
 private:
