@@ -89,11 +89,19 @@ public:
 		MODEL_BOSS_WEPON02,		//武器
 		MODEL_ENEMY_MAX
 	}ENEMY_PARTS_MODEL;
+	/*--- 銃のモデル ---*/
+	typedef enum
+	{
+		MODEL_GUN_HANDGUN,				// ハンドガン
+		MODEL_GUN_HEAVYMACHINEGUN,		// ヘビーマシンガン
+		MODEL_GUN_MAX
+	}GUN_MODEL;
 	typedef enum
 	{
 		PLAYER_MODEL,
 		ENEMY_MODEL,
 		MAP_MODEL,
+		GUN_MODEL,
 		TYPE_MAX
 	}MODEL_TYPE;
 	typedef struct
@@ -138,6 +146,7 @@ private:
 	static MODEL m_Model[TYPE_MAX][MAX_ALLMODEL];
 	static char *m_PlayerFileName[MODEL_PLAYER_MAX];
 	static char *m_EnemyFileName[MODEL_ENEMY_MAX];
+	static char *m_GunFileName[MODEL_GUN_MAX];
 	static char *m_MapFileName[MODEL_MAP_MAX];
 
 	D3DXVECTOR3 m_pos;					//位置

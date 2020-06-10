@@ -22,6 +22,10 @@
 #define HANDGUN_AMMO				(1)			// ハンドガンの弾薬数
 #define HEAVYMACHINEGUN_AMMO		(200)		// ヘビーマシンガンの弾薬数
 
+#define HANDGUN_POS_X				(0)			// ハンドガンの位置X
+#define HANDGUN_POS_Y				(20)		// ハンドガンの位置Y
+#define HANDGUN_POS_Z				(0)			// ハンドガンの位置Z
+
 // =====================================================================================================================================================================
 //
 // コンストラクタ
@@ -89,31 +93,30 @@ void CGun::Update(void)
 		}
 	}
 
-	//SetPosition(D3DXVECTOR3(50.0f, 10.0f, 10.0f));
-	//SetRot(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
-
 	// 更新
 	CModel::Update();
+	
+	CDebugProc::Print("\n\nHGPos %.1f, %.1f, %.1f\n\n", GetPosition().x, GetPosition().y, GetPosition().z);
 
-	CDebugProc::Print("%.1f\n", m_mtx->_11);
-	CDebugProc::Print("%.1f\n", m_mtx->_12);
-	CDebugProc::Print("%.1f\n", m_mtx->_13);
-	CDebugProc::Print("%.1f\n\n", m_mtx->_14);
+	//CDebugProc::Print("%.1f\n", m_mtx->_11);
+	//CDebugProc::Print("%.1f\n", m_mtx->_12);
+	//CDebugProc::Print("%.1f\n", m_mtx->_13);
+	//CDebugProc::Print("%.1f\n\n", m_mtx->_14);
 
-	CDebugProc::Print("%.1f\n", m_mtx->_21);
-	CDebugProc::Print("%.1f\n", m_mtx->_22);
-	CDebugProc::Print("%.1f\n", m_mtx->_23);
-	CDebugProc::Print("%.1f\n\n", m_mtx->_24);
+	//CDebugProc::Print("%.1f\n", m_mtx->_21);
+	//CDebugProc::Print("%.1f\n", m_mtx->_22);
+	//CDebugProc::Print("%.1f\n", m_mtx->_23);
+	//CDebugProc::Print("%.1f\n\n", m_mtx->_24);
 
-	CDebugProc::Print("%.1f\n", m_mtx->_31);
-	CDebugProc::Print("%.1f\n", m_mtx->_32);
-	CDebugProc::Print("%.1f\n", m_mtx->_33);
-	CDebugProc::Print("%.1f\n\n", m_mtx->_34);
+	//CDebugProc::Print("%.1f\n", m_mtx->_31);
+	//CDebugProc::Print("%.1f\n", m_mtx->_32);
+	//CDebugProc::Print("%.1f\n", m_mtx->_33);
+	//CDebugProc::Print("%.1f\n\n", m_mtx->_34);
 
-	CDebugProc::Print("%.1f\n", m_mtx->_41);
-	CDebugProc::Print("%.1f\n", m_mtx->_42);
-	CDebugProc::Print("%.1f\n", m_mtx->_43);
-	CDebugProc::Print("%.1f\n\n", m_mtx->_44);
+	//CDebugProc::Print("%.1f\n", m_mtx->_41);
+	//CDebugProc::Print("%.1f\n", m_mtx->_42);
+	//CDebugProc::Print("%.1f\n", m_mtx->_43);
+	//CDebugProc::Print("%.1f\n\n", m_mtx->_44);
 }
 
 // =====================================================================================================================================================================
@@ -132,7 +135,7 @@ void CGun::Draw(void)
 // 銃の生成
 //
 // =====================================================================================================================================================================
-CGun * CGun::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXMATRIX *mtx)
+CGun * CGun::Create(D3DXMATRIX *mtx)
 {
 	// 変数
 	CGun *pGun;
@@ -146,14 +149,15 @@ CGun * CGun::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXMATRIX *mtx)
 	// マトリックス代入
 	pGun->m_mtx = mtx;
 
-	// 銃の位置の設定
+	D3DXVECTOR3	pos = D3DXVECTOR3(HANDGUN_POS_X, HANDGUN_POS_Y, HANDGUN_POS_Z);
+	// 位置の設定
 	pGun->SetPosition(pos);
 
 	// モデルタイプの設定
-	pGun->SetType(0);
+	pGun->SetType(GUN_MODEL);
 
 	// モデルカウントの設定
-	pGun->SetModelConut(0);
+	pGun->SetModelConut(MODEL_GUN_HANDGUN);
 
 	return pGun;
 }
@@ -192,7 +196,7 @@ void CGun::Shot()
 	{
 	case CGun::GUNTYPE_HANDGUN:
 		// ハンドガンの生成
-		CHandgun::Create(GetPosition(), GetRot());
+		CHandgun::Create(D3DXVECTOR3(m_mtx->_41, m_mtx->_42, m_mtx->_43), GetRot());
 		break;
 
 	case CGun::GUNTYPE_HEAVYMACHINEGUN:

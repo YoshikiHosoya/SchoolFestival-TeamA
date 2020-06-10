@@ -38,7 +38,7 @@ public:
 	virtual void			Draw();					// •`‰æ
 
 	/* Ã“Iƒƒ“ƒoŠÖ” */
-	static	CGun			*Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXMATRIX *mtx);		// e‚Ì¶¬
+	static	CGun			*Create(D3DXMATRIX *mtx);		// e‚Ì¶¬
 
 	/* ƒƒ“ƒoŠÖ” */
 	GUN_TYPE				&GetGunType() { return m_type; };				// e‚Ìí—Ş‚Ìæ“¾

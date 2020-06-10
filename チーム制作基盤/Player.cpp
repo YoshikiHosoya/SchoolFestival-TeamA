@@ -36,7 +36,7 @@ HRESULT CPlayer::Init(void)
 	ZeroMemory(&vibration, sizeof(XINPUT_VIBRATION));
 
 	// èeÇÃê∂ê¨
-	m_pGun = CGun::Create(CCharacter::GetPosition(), CCharacter::GetRot(), CCharacter::GetMtxWorld());
+	m_pGun = CGun::Create(CCharacter::GetMtxWorld());
 
 	return S_OK;
 }
