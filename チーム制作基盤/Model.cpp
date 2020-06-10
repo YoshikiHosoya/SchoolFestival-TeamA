@@ -26,7 +26,7 @@ char *CModel::m_PlayerFileName[MODEL_PLAYER_MAX] =
 };
 char *CModel::m_MapFileName[MODEL_MAP_MAX] =
 {
-	{ "data/MODEL/坂だお.x" },
+	{ "data/MODEL/map/プロトタイプマップ.x" },
 	{ "data/MODEL/block02.x" },
 	{ "data/MODEL/MPPotion.x" },
 	{ "data/MODEL/HPPotion.x" },

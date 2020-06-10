@@ -125,45 +125,45 @@ void CPlayer::Update(void)
 		// Aとの組み合わせ
 	if (key->GetKeyboardPress(DIK_A))
 	{
-		if (key->GetKeyboardPress(DIK_S))
-		{
-			CPlayer::Move(0.75f, 0.25f);
-		}
-		else if (key->GetKeyboardPress(DIK_W))
-		{
-			CPlayer::Move(0.25f, 0.75f);
-		}
-		else
-		{
+		//if (key->GetKeyboardPress(DIK_S))
+		//{
+		//	CPlayer::Move(0.75f, 0.25f);
+		//}
+		//else if (key->GetKeyboardPress(DIK_W))
+		//{
+		//	CPlayer::Move(0.25f, 0.75f);
+		//}
+		//else
+		//{
 			CPlayer::Move(0.5f, 0.5f);
-		}
+		//}
 	}
 	// Dとの組み合わせ
 	else if (key->GetKeyboardPress(DIK_D))
 	{
-		if (key->GetKeyboardPress(DIK_W))
-		{
-			CPlayer::Move(-0.25f, -0.75f);
-		}
-		else if (key->GetKeyboardPress(DIK_S))
-		{
-			CPlayer::Move(-0.75f, -0.25f);
-		}
-		else
-		{
+		//if (key->GetKeyboardPress(DIK_W))
+		//{
+		//	CPlayer::Move(-0.25f, -0.75f);
+		//}
+		//else if (key->GetKeyboardPress(DIK_S))
+		//{
+		//	CPlayer::Move(-0.75f, -0.25f);
+		//}
+		//else
+		//{
 			CPlayer::Move(-0.5f, -0.5f);
-		}
+		//}
 	}
-	// Wとの組み合わせ
-	else if (key->GetKeyboardPress(DIK_W))
-	{
-		CPlayer::Move(0.0f, 1.0f);
-	}
-	// Sとの組み合わせ
-	else if (key->GetKeyboardPress(DIK_S))
-	{
-		CPlayer::Move(1.0f, 0.0f);
-	}
+	//// Wとの組み合わせ
+	//else if (key->GetKeyboardPress(DIK_W))
+	//{
+	//	CPlayer::Move(0.0f, 1.0f);
+	//}
+	//// Sとの組み合わせ
+	//else if (key->GetKeyboardPress(DIK_S))
+	//{
+	//	CPlayer::Move(1.0f, 0.0f);
+	//}
 	//デバッグモードの切り替え
 	if (key->GetKeyboardTrigger(DIK_F2))
 	{
@@ -246,5 +246,5 @@ void CPlayer::Move(float move, float fdest)
 {
 	GetMove().x += sinf(move * -D3DX_PI) * 1.0f;
 	GetMove().z += cosf(move * -D3DX_PI) * 1.0f;
-	//m_rotDest.y = fdest *  D3DX_PI;
+	GetRotDest().y = fdest *  D3DX_PI;
 }

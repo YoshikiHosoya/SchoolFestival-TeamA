@@ -52,7 +52,7 @@ HRESULT CCharacter::Init(void)
 	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_Life = 50;
 	m_state = CHARACTER_STATE_NORMAL;
-
+	m_rotDest.y = -0.5f*  D3DX_PI;
 	//マトリックス初期化
 	D3DXMatrixIdentity(&m_mtxWorld);
 	return S_OK;
@@ -83,6 +83,17 @@ void CCharacter::Update(void)
 		m_move.y = 0;
 		m_pos.y = 0;
 	}
+
+	if (m_move.x < 0)
+	{
+		m_CharacterDirection = CHARACTER_LEFT;
+		CDebugProc::Print("左向いてます\n");
+	}
+	else
+	{
+		m_CharacterDirection = CHARACTER_RIGHT;
+		CDebugProc::Print("右向いてます\n");
+	}
 	//目標点と現在の差分（回転）
 	float diffRot = m_rotDest.y - m_rot.y;
 	//3.14の超過分の初期化（回転）
@@ -102,6 +113,8 @@ void CCharacter::Update(void)
 	{
 		diffRot += D3DX_PI * 2;
 	}
+	//求めた差分だけ追従する計算
+	m_rot.y += diffRot * 0.1f;
 	//ステータスの処理
 	switch (m_state)
 	{
