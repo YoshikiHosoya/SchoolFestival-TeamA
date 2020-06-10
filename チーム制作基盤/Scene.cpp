@@ -6,12 +6,16 @@
 //==========================================================
 #include "scene.h"
 #include "renderer.h"
+#include "pause.h"
+#include "inputKeyboard.h"
+
 //プロトタイプ宣言
 //グローバル変数　何番目の表示↓　↓表示の最高数
 CScene*CScene::m_pScene[TYPE_MAX][MAX] = {};
 int CScene::m_NumAll = 0;
 CScene*CScene::m_pTop = NULL;
 CScene*CScene::m_pCur = NULL;
+bool CScene::m_stopflag = false;
 //==========================================================
 //コンストラクタ
 //==========================================================
@@ -50,11 +54,14 @@ CScene::~CScene()
 void CScene::UpdateAll(void)
 {
 	CScene *pScene = m_pTop;
-	while (pScene)
+	if (m_stopflag == false)
 	{
-		CScene *pSceneNext = pScene->m_pNext;
-		pScene->Update();
-		pScene = pSceneNext;
+		while (pScene)
+		{
+			CScene *pSceneNext = pScene->m_pNext;
+			pScene->Update();
+			pScene = pSceneNext;
+		}
 	}
 	pScene = m_pTop;
 	while (pScene)
@@ -103,6 +110,13 @@ int  CScene::GetAll(void)
 CScene * CScene::GetTop(void)
 {
 	return m_pTop;
+}
+//==========================================================
+//ストップの状態取得
+//==========================================================
+bool &CScene::GetStopFlag(void)
+{
+	return m_stopflag;
 }
 //==========================================================
 //次の取得
@@ -180,4 +194,11 @@ void CScene::Delete(void)
 		delete this;
 		m_NumAll--;
 	}
+}
+//==========================================================
+//ストップの変更
+//==========================================================
+void CScene::StopUpdate(void)
+{
+	m_stopflag ^= 1;
 }

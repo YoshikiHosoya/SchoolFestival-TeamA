@@ -8,6 +8,7 @@
 #include "main.h"
 
 #define MAX (1000)
+class CPause;
 //レンダリングクラス
 class CScene
 {
@@ -29,6 +30,7 @@ public:
 		OBJTYPE_UI,
 		OBJTYPE_NUMBER,
 		OBJTYPE_SKILLSLOT,
+		OBJTYPE_PAUSE,
 		TYPE_MAX
 	}OBJ_TYPE;
 	CScene() {};
@@ -43,12 +45,14 @@ public:
 	static void DrawAll(void);
 	static int GetAll(void);
 	static CScene *GetTop(void);
+	static bool &GetStopFlag(void);
 	CScene *GetNext(void);
 	void SetObjType(OBJ_TYPE type);
 	static CScene *GetScene(OBJ_TYPE type);
 	OBJ_TYPE GetObjType(void);
 	void Rerease(void);
 	void Delete(void);
+	static void StopUpdate(void);
 protected:
 
 private:
@@ -58,6 +62,7 @@ private:
 	int m_bId;
 	int n_Id;
 	bool m_flag;
+	static bool m_stopflag;
 	static CScene *m_pTop;	//先頭オブジェクトへのポインタ
 	static CScene *m_pCur;	//現在オブジェクトへのポインタ
 	CScene *m_pPrev;		//前のオブジェクトへのポインタ

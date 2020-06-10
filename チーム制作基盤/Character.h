@@ -76,6 +76,12 @@ public:
 		CHARACTER_MOTION_MAX				//最大数
 	}CHARACTER_MOTION_STATE;
 
+	typedef enum
+	{
+		CHARACTER_LEFT,						//左向き
+		CHARACTER_RIGHT,					//右向き
+	}CHARACTER_DIRECTION;
+
 	CCharacter() {};
 	CCharacter(OBJ_TYPE type);
 	~CCharacter();
@@ -151,7 +157,7 @@ private:
 	CHARACTER_TYPE m_CharaType;										//キャラクターのタイプ
 	int m_Life;														//ライフ
 	int m_nStateCnt;												//ステータスのカウント
-
+	CHARACTER_DIRECTION	m_CharacterDirection;						//キャラクターの向き
 	//モーション関連の情報
 	static std::vector<MOTION*>m_CharacterMotion;					//キャラクターのモーション情報
 	CHARACTER_MOTION_STATE m_MotionType;							//現在のモーション

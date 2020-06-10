@@ -173,6 +173,7 @@
     <ClCompile Include="manager.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="mouse.cpp" />
+    <ClCompile Include="pause.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="renderer.cpp" />
     <ClCompile Include="Scene.cpp" />
@@ -210,6 +211,7 @@
     <ClInclude Include="manager.h" />
     <ClInclude Include="model.h" />
     <ClInclude Include="mouse.h" />
+    <ClInclude Include="pause.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="renderer.h" />
     <ClInclude Include="Scene.h" />

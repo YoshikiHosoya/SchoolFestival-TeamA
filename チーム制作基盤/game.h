@@ -10,6 +10,7 @@ class CKeyboard;
 class CPlayer;
 class CEnemy;
 class CCreateMap;
+class CPause;
 class CGame :public CBaseMode
 {
 public:
@@ -35,6 +36,6 @@ private:
 	static int HP;
 	static int MPPotion;
 	static int HPPotion;
-
+	CPause *m_pPause;
 };
 #endif

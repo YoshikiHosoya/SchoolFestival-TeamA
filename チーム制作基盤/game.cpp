@@ -6,6 +6,7 @@
 #include "fade.h"
 #include "createmap.h"
 #include "Enemy.h"
+#include "pause.h"
 #define _CRT_SECURE_NO_WARNINGS // Œxœ‹
 int CGame::m_Counter = 0;
 CPlayer *CGame::m_pPlayer = NULL;
@@ -40,6 +41,8 @@ HRESULT CGame::Init(void)
 	m_pEnemy = CEnemy::Create();
 	m_pEnemy->SetLife(50);
 	m_pEnemy->SetPosition(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+
+	m_pPause->CreatePause();
 	return S_OK;
 }
 //==========================================================
@@ -55,7 +58,10 @@ void CGame::Update(void)
 {
 	CKeyboard *key;
 	key = CManager::GetInputKeyboard();
-
+	if (key->GetKeyboardTrigger(DIK_F9))
+	{
+		CScene::StopUpdate();
+	}
  }
 //==========================================================
 // ƒvƒŒƒCƒ„[æ“¾

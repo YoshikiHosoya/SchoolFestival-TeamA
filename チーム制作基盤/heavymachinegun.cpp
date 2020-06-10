@@ -111,7 +111,7 @@ CHeavyMachinegun * CHeavyMachinegun::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 	pHeavyMachinegun->SetPosition(pos);
 
 	// プレイヤーの向きに合わせる
-	pHeavyMachinegun->GetMove() = D3DXVECTOR3(-sinf(rot.y), 0.0f, -cosf(rot.y) * BULLET_SPEED);
+	pHeavyMachinegun->GetMove() = D3DXVECTOR3(-sinf(rot.y) * BULLET_SPEED, 0.0f, -cosf(rot.y) * BULLET_SPEED);
 
 	// テクスチャの割り当て
 	pHeavyMachinegun->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_BULLET_HANDGUN));
