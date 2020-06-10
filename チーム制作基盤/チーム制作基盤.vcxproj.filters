@@ -138,6 +138,9 @@
     <ClCompile Include="mouse.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="pause.cpp">
+      <Filter>Mode</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Scene.h">
@@ -253,6 +256,9 @@
     </ClInclude>
     <ClInclude Include="mouse.h">
       <Filter>ソース ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="pause.h">
+      <Filter>Mode</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

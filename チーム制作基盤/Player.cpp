@@ -87,7 +87,7 @@ void CPlayer::Update(void)
 		vibration.wLeftMotorSpeed = 0;
 		vibration.wRightMotorSpeed = 0;
 	}
-	 //デットゾーンの処理
+	//デットゾーンの処理
 	if ((state.Gamepad.sThumbLX <  XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE &&
 		state.Gamepad.sThumbLX > -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE) &&
 		(state.Gamepad.sThumbLY <  XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE &&
@@ -96,74 +96,43 @@ void CPlayer::Update(void)
 		state.Gamepad.sThumbLX = 0;
 		state.Gamepad.sThumbLY = 0;
 	}
-		D3DXVECTOR3 speed = D3DXVECTOR3(state.Gamepad.sThumbLX / 32767.0f, 0.0f, state.Gamepad.sThumbLY / 32767.0f);
+	D3DXVECTOR3 speed = D3DXVECTOR3(state.Gamepad.sThumbLX / 32767.0f, 0.0f, state.Gamepad.sThumbLY / 32767.0f);
 
-		float fDistance = D3DXVec2Length(&D3DXVECTOR2(speed.x, speed.z));
-		if (fabsf(fDistance) > 0.2f && m_Attack == false)
-		{
-			//m_MotionType = PLAYER_MOTION_WALK;
-			//角度の計算
-			GetMove().x += sinf(m_Angle) * 1;
-			GetMove().z += cosf(m_Angle) * 1;
-		}
+	float fDistance = D3DXVec2Length(&D3DXVECTOR2(speed.x, speed.z));
+	if (fabsf(fDistance) > 0.2f && m_Attack == false)
+	{
+		//m_MotionType = PLAYER_MOTION_WALK;
+		//角度の計算
+		GetMove().x += sinf(m_Angle) * 1;
+		GetMove().z += cosf(m_Angle) * 1;
+	}
 	//Dest.y = atan2f(-m_move.x, -m_move.z);
 
 	//キーボード処理
 
 		// 銃を撃つ
-		if (key->GetKeyboardTrigger(DIK_P))
-		{
-			// 銃の生成
-			m_pGun->Shot();
-		}
-		if (key->GetKeyboardTrigger(DIK_O))
-		{
-			// ヘビーマシンガンの弾の生成
-			CHeavyMachinegun::Create(CPlayer::GetPosition(), CPlayer::GetRot());
-		}
+	if (key->GetKeyboardTrigger(DIK_P))
+	{
+		// 銃の生成
+		m_pGun->Shot();
+	}
+	if (key->GetKeyboardTrigger(DIK_O))
+	{
+		// ヘビーマシンガンの弾の生成
+		CHeavyMachinegun::Create(CPlayer::GetPosition(), CPlayer::GetRot());
+	}
 
-		// Aとの組み合わせ
+	// Aとの組み合わせ
 	if (key->GetKeyboardPress(DIK_A))
 	{
-		//if (key->GetKeyboardPress(DIK_S))
-		//{
-		//	CPlayer::Move(0.75f, 0.25f);
-		//}
-		//else if (key->GetKeyboardPress(DIK_W))
-		//{
-		//	CPlayer::Move(0.25f, 0.75f);
-		//}
-		//else
-		//{
-			CPlayer::Move(0.5f, 0.5f);
-		//}
+		CPlayer::Move(0.5f, 0.5f);
 	}
 	// Dとの組み合わせ
 	else if (key->GetKeyboardPress(DIK_D))
 	{
-		//if (key->GetKeyboardPress(DIK_W))
-		//{
-		//	CPlayer::Move(-0.25f, -0.75f);
-		//}
-		//else if (key->GetKeyboardPress(DIK_S))
-		//{
-		//	CPlayer::Move(-0.75f, -0.25f);
-		//}
-		//else
-		//{
-			CPlayer::Move(-0.5f, -0.5f);
-		//}
+		CPlayer::Move(-0.5f, -0.5f);
 	}
-	//// Wとの組み合わせ
-	//else if (key->GetKeyboardPress(DIK_W))
-	//{
-	//	CPlayer::Move(0.0f, 1.0f);
-	//}
-	//// Sとの組み合わせ
-	//else if (key->GetKeyboardPress(DIK_S))
-	//{
-	//	CPlayer::Move(1.0f, 0.0f);
-	//}
+
 	//デバッグモードの切り替え
 	if (key->GetKeyboardTrigger(DIK_F2))
 	{
@@ -177,13 +146,14 @@ void CPlayer::Update(void)
 		}
 		if (trigger2 == true)
 		{
-		m_DebugState = DEBUG_CREATE_ENEMY;
+			m_DebugState = DEBUG_CREATE_ENEMY;
 		}
 		else
 		{
-		m_DebugState = DEBUG_CREATE_MAP;
+			m_DebugState = DEBUG_CREATE_MAP;
 		}
 	}
+
 	else
 	{
 		m_DebugState = DEBUG_NORMAL;
