@@ -35,5 +35,6 @@ public:
 private:
 	/* ƒƒ“ƒo•Ï” */
 	D3DXVECTOR3					m_move;					// ˆÚ“®’l
+	int							m_nLife;				// ‘Ì—Í
 };
 #endif

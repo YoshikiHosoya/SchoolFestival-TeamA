@@ -27,6 +27,8 @@ CScene3D::~CScene3D()
 //==========================================================
 HRESULT CScene3D::Init(void)
 {
+	m_bBillboard = false;														// ビルボードフラグ
+
 	CSceneBase::Init();
 	MakeVertex();
 
@@ -53,8 +55,13 @@ void CScene3D::Draw(void)
 	LPDIRECT3DDEVICE9 pDevice = CManager::GetRendere()->GetDevice();
 	//ワールドマトリックスの計算
 	MtxCalc();
+	// ビルボードするとき
+	if (m_bBillboard)
+	{
+		CHossoLibrary::SetBillboard(GetMtxWorld());
+	}
 	// ワールドマトリックスの設定
-	pDevice->SetTransform(D3DTS_WORLD, &GetMtxWorld());
+	pDevice->SetTransform(D3DTS_WORLD, GetMtxWorld());
 	// 頂点バッファをデータストリームに設定
 	pDevice->SetStreamSource(0, GetVtxBuff(), 0, sizeof(VERTEX_3D));
 	// 頂点フォーマットの設定

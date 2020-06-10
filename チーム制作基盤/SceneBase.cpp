@@ -155,9 +155,9 @@ LPDIRECT3DVERTEXBUFFER9 CSceneBase::GetVtxBuff(void)
 //==========================================================
 // ワールドマトリックスの取得
 //==========================================================
-D3DXMATRIX CSceneBase::GetMtxWorld(void)
+D3DXMATRIX *CSceneBase::GetMtxWorld(void)
 {
-	return m_mtxWorld;
+	return &m_mtxWorld;
 }
 //==========================================================
 // 大きさの取得

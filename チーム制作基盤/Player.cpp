@@ -36,7 +36,7 @@ HRESULT CPlayer::Init(void)
 	ZeroMemory(&vibration, sizeof(XINPUT_VIBRATION));
 
 	// e‚Ì¶¬
-	m_pGun = CGun::Create(CCharacter::GetPosition(), CCharacter::GetRot(), CCharacter::GetMtxWorld());
+	m_pGun = CGun::Create(CCharacter::GetMtxWorld());
 
 	return S_OK;
 }
@@ -114,7 +114,7 @@ void CPlayer::Update(void)
 	if (key->GetKeyboardTrigger(DIK_P))
 	{
 		// e‚Ì¶¬
-		m_pGun->Shot();
+			m_pGun->Shot(CCharacter::GetRot());
 	}
 	if (key->GetKeyboardTrigger(DIK_O))
 	{

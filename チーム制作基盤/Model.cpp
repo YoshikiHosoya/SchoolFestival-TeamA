@@ -78,6 +78,12 @@ char *CModel::m_EnemyFileName[MODEL_ENEMY_MAX] =
 	{ "data/MODEL/EnemyBoss/axe.x" },				//41
 	{ "data/MODEL/EnemyBoss/sowrd.x" },				//42
 };
+char *CModel::m_GunFileName[MODEL_GUN_MAX] =
+{
+	{ "data/MODEL/HandGun.x" },
+	{ "data/MODEL/block02.x" },
+};
+
 CModel::CModel(OBJ_TYPE type) : CScene(type)
 {
 }
@@ -167,6 +173,31 @@ void CModel::LoadModel(void)
 			D3DXCreateTextureFromFile(pDevice, pMat[nCntmat].pTextureFilename, &m_Model[ENEMY_MODEL][nCnt].m_pTexture[nCntmat]);
 		}
 	}
+	//銃のモデル読み込み
+	for (int nCnt = 0; nCnt < MODEL_GUN_MAX; nCnt++)
+	{
+		// Xファイルの読み込み
+		D3DXLoadMeshFromX(
+			m_GunFileName[nCnt],
+			D3DXMESH_SYSTEMMEM,
+			pDevice,
+			NULL,
+			&m_Model[GUN_MODEL][nCnt].pBuffmat,
+			NULL,
+			&m_Model[GUN_MODEL][nCnt].nNumMat,
+			&m_Model[GUN_MODEL][nCnt].pMesh
+		);
+		//テクスチャのメモリ確保
+		m_Model[GUN_MODEL][nCnt].m_pTexture = new LPDIRECT3DTEXTURE9[(int)m_Model[GUN_MODEL][nCnt].nNumMat];
+		pMat = (D3DXMATERIAL*)m_Model[GUN_MODEL][nCnt].pBuffmat->GetBufferPointer();
+
+		for (int nCntmat = 0; nCntmat < (int)m_Model[GUN_MODEL][nCnt].nNumMat; nCntmat++)
+		{
+			m_Model[GUN_MODEL][nCnt].m_pTexture[nCntmat] = NULL;
+			D3DXCreateTextureFromFile(pDevice, pMat[nCntmat].pTextureFilename, &m_Model[GUN_MODEL][nCnt].m_pTexture[nCntmat]);
+		}
+	}
+
 }
 //====================================================================
 //モデルの開放
@@ -250,6 +281,32 @@ void CModel::UnLoad(void)
 			}
 			delete[] m_Model[ENEMY_MODEL][nCnt].m_pTexture;
 			m_Model[ENEMY_MODEL][nCnt].m_pTexture = NULL;
+		}
+	}
+	for (int nCnt = 0; nCnt < MODEL_GUN_MAX; nCnt++)
+	{
+		if (m_Model[GUN_MODEL][nCnt].pBuffmat != NULL)
+		{
+			m_Model[GUN_MODEL][nCnt].pBuffmat->Release();
+			m_Model[GUN_MODEL][nCnt].pBuffmat = NULL;
+		}
+		if (m_Model[GUN_MODEL][nCnt].pMesh != NULL)
+		{
+			m_Model[GUN_MODEL][nCnt].pMesh->Release();
+			m_Model[GUN_MODEL][nCnt].pMesh = NULL;
+		}
+		if (m_Model[GUN_MODEL][nCnt].m_pTexture != NULL)
+		{
+			for (int nCntmat = 0; nCntmat < (int)m_Model[GUN_MODEL][nCnt].nNumMat; nCntmat++)
+			{
+				if (m_Model[GUN_MODEL][nCnt].m_pTexture[nCntmat] != NULL)
+				{
+					m_Model[GUN_MODEL][nCnt].m_pTexture[nCntmat]->Release();
+					m_Model[GUN_MODEL][nCnt].m_pTexture[nCntmat] = NULL;
+				}
+			}
+			delete[] m_Model[GUN_MODEL][nCnt].m_pTexture;
+			m_Model[GUN_MODEL][nCnt].m_pTexture = NULL;
 		}
 	}
 }
