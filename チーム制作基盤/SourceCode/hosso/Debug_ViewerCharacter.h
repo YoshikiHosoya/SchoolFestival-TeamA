@@ -35,7 +35,10 @@ public:
 	void MotionViewer();							//モーションビューワ
 	void OffsetViewer();							//オフセットビューワ
 private:
-	bool ShowMotionComboBox(CCharacter::MOTION &motiontype);		//モーションのコンボボックス
+	bool ShowMotionComboBox(CCharacter::CHARACTER_MOTION_STATE &motiontype);		//モーションのコンボボックス
 
+	void AddKeyInfo(CCharacter::MOTION *pMotion);
+	void PopbackKeyInfo(CCharacter::MOTION *pMotion);
+	void ResetKey();
 };
 #endif

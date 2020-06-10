@@ -29,16 +29,31 @@ public:
 	}CHARACTER_TYPE;
 
 	//キー要素
-	typedef struct
+	typedef struct KEY
 	{
 		D3DXVECTOR3 pos;			//位置
 		D3DXVECTOR3 rot;			//回転
+
+		//コンストラクタ　初期化しておく
+		KEY()
+		{
+			pos = ZeroVector3;
+			rot = ZeroVector3;
+		}
 	}KEY;
+
 	//キー情報
-	typedef struct
+	typedef struct KEY_INFO
 	{
 		int nFram;					//フレーム数
 		std::vector<KEY*> key;
+
+		//コンストラクタ
+		KEY_INFO()
+		{
+			nFram = 60;
+			key = {};
+		}
 	}KEY_INFO;
 	//モデルのモーション
 	typedef struct
@@ -118,7 +133,7 @@ public:
 	void RayCollision(void);
 
 	char* GetOffsetFileName(CHARACTER_TYPE type);
-	char* GetLoadFileName(CHARACTER_MOTION_STATE motionstate);
+	char* GetMotionFileName(CHARACTER_MOTION_STATE motionstate);
 
 
 private:

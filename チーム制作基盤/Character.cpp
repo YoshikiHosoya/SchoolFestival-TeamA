@@ -246,8 +246,8 @@ void CCharacter::SetMotion(CHARACTER_MOTION_STATE type)
 {
 	if (m_MotionType != type)
 	{
-	m_Fram = 0;
-	m_CntKeySet = 0;
+		m_Fram = 0;
+		m_CntKeySet = 0;
 	}
 	m_MotionType = type;
 }
@@ -391,9 +391,9 @@ char * CCharacter::GetOffsetFileName(CHARACTER_TYPE type)
 //====================================================================
 //モーションのファイル取得
 //====================================================================
-char * CCharacter::GetLoadFileName(CHARACTER_MOTION_STATE motionstate)
+char * CCharacter::GetMotionFileName(CHARACTER_MOTION_STATE motionstate)
 {
-	return m_LoadOffsetFileName[motionstate];
+	return m_LoadMotionFileName[motionstate];
 }
 //====================================================================
 //モーションのロード

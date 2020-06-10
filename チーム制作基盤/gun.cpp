@@ -94,26 +94,6 @@ void CGun::Update(void)
 
 	// XV
 	CModel::Update();
-
-	CDebugProc::Print("%.1f\n", m_mtx->_11);
-	CDebugProc::Print("%.1f\n", m_mtx->_12);
-	CDebugProc::Print("%.1f\n", m_mtx->_13);
-	CDebugProc::Print("%.1f\n\n", m_mtx->_14);
-
-	CDebugProc::Print("%.1f\n", m_mtx->_21);
-	CDebugProc::Print("%.1f\n", m_mtx->_22);
-	CDebugProc::Print("%.1f\n", m_mtx->_23);
-	CDebugProc::Print("%.1f\n\n", m_mtx->_24);
-
-	CDebugProc::Print("%.1f\n", m_mtx->_31);
-	CDebugProc::Print("%.1f\n", m_mtx->_32);
-	CDebugProc::Print("%.1f\n", m_mtx->_33);
-	CDebugProc::Print("%.1f\n\n", m_mtx->_34);
-
-	CDebugProc::Print("%.1f\n", m_mtx->_41);
-	CDebugProc::Print("%.1f\n", m_mtx->_42);
-	CDebugProc::Print("%.1f\n", m_mtx->_43);
-	CDebugProc::Print("%.1f\n\n", m_mtx->_44);
 }
 
 // =====================================================================================================================================================================
