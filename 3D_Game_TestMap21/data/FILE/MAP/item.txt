@@ -1,0 +1,144 @@
+#------------------------------------------------------------------------------
+# アイテムの配置情報
+#------------------------------------------------------------------------------
+#------------------------------------------------------------------------------
+# TYPE情報
+#
+#	[ 0 ]	スピードアップ
+#	[ 1 ]	ダイヤ
+#	[ 2 ]	宝石
+#	[ 3 ]	金貨
+#	[ 4 ]	鍵
+#	[ 5 ]	1up
+#	[ 6 ]	財宝
+#	[ 7 ]	エネルギー
+#
+#------------------------------------------------------------------------------
+SCRIPT
+
+ITEMSET									# 0
+	TYPE	= 7
+	POS		= 85 120 845
+END_ITEMSET
+
+ITEMSET									# 1
+	TYPE	= 3
+	POS		= -70 75 750
+END_ITEMSET
+
+ITEMSET									# 2
+	TYPE	= 3
+	POS		= -70 75 850
+END_ITEMSET
+
+ITEMSET									# 3
+	TYPE	= 3
+	POS		= -70 75 950
+END_ITEMSET
+
+ITEMSET									# 4
+	TYPE	= 7
+	POS		= 0 100 2420
+END_ITEMSET
+
+ITEMSET									# 5
+	TYPE	= 2
+	POS		= 0 25 5235
+END_ITEMSET
+
+ITEMSET									# 6
+	TYPE	= 1
+	POS		= 70 25 2775
+END_ITEMSET
+
+ITEMSET									# 7
+	TYPE	= 5
+	POS		= 80 25 5235
+END_ITEMSET
+
+ITEMSET									# 8
+	TYPE	= 3
+	POS		= -80 25 5235
+END_ITEMSET
+
+ITEMSET									# 9
+	TYPE	= 3
+	POS		= -70 270 5870
+END_ITEMSET
+
+ITEMSET									# 10
+	TYPE	= 0
+	POS		= 0 -250 7100
+END_ITEMSET
+
+ITEMSET									# 11
+	TYPE	= 0
+	POS		= -70 -250 7100
+END_ITEMSET
+
+ITEMSET									# 12
+	TYPE	= 0
+	POS		= 70 -250 7100
+END_ITEMSET
+
+ITEMSET									# 13
+	TYPE	= 1
+	POS		= 0 -250 7200
+END_ITEMSET
+
+ITEMSET									# 14
+	TYPE	= 0
+	POS		= -70 -250 7200
+END_ITEMSET
+
+ITEMSET									# 15
+	TYPE	= 0
+	POS		= 70 -250 7200
+END_ITEMSET
+
+ITEMSET									# 16
+	TYPE	= 0
+	POS		= 0 -250 7300
+END_ITEMSET
+
+ITEMSET									# 17
+	TYPE	= 0
+	POS		= -70 -250 7300
+END_ITEMSET
+
+ITEMSET									# 18
+	TYPE	= 0
+	POS		= 70 -250 7300
+END_ITEMSET
+
+ITEMSET									# 19
+	TYPE	= 7
+	POS		= 0 25 6600
+END_ITEMSET
+
+ITEMSET									# 20
+	TYPE	= 5
+	POS		= 70 25 7125
+END_ITEMSET
+
+ITEMSET									# 21
+	TYPE	= 7
+	POS		= 0 415 8100
+END_ITEMSET
+
+ITEMSET									# 22
+	TYPE	= 5
+	POS		= -120 415 8930
+END_ITEMSET
+
+ITEMSET									# 23
+	TYPE	= 3
+	POS		= 120 415 8750
+END_ITEMSET
+
+ITEMSET									# 24
+	TYPE	= 6
+	POS		= 0 415 9500
+END_ITEMSET
+
+END_SCRIPT
