@@ -53,6 +53,7 @@ HRESULT CCharacter::Init(void)
 	m_Life = 50;
 	m_state = CHARACTER_STATE_NORMAL;
 	m_rotDest.y = -0.5f*  D3DX_PI;
+	m_bJump = false;
 	//マトリックス初期化
 	D3DXMatrixIdentity(&m_mtxWorld);
 	return S_OK;
@@ -313,6 +314,10 @@ int CCharacter::GetLife(void)
 {
 	return m_Life;
 }
+bool CCharacter::GetJump(void)
+{
+	return m_bJump;
+}
 //====================================================================
 //マトリックスの取得
 //====================================================================
@@ -391,8 +396,23 @@ void CCharacter::RayCollision(void)
 		{
 			m_pos.y = m_pos.y - fData + MAX_RAY_LENGTH;
 			m_move.y = 0;
+			m_bJump = true;
+			CDebugProc::Print("ジャンプできるよ\n");
+		}
+		//Rayの判定圏内じゃなかったらジャンプできない
+		else
+		{
+			m_bJump = false;
+			CDebugProc::Print("ジャンプ出来無いよ\n");
 		}
 	}
+	//Rayに判定がなかったらジャンプできない
+	else
+	{
+		m_bJump = false;
+		CDebugProc::Print("ジャンプ出来無いよ\n");
+	}
+
 }
 //====================================================================
 //オフセットのファイル取得

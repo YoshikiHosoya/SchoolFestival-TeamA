@@ -161,9 +161,9 @@ void CPlayer::Update(void)
 	if (m_DebugState != DEBUG_NORMAL)
 	{
 	}
-	if (key->GetKeyboardPress(DIK_SPACE))
+	if (key->GetKeyboardTrigger(DIK_SPACE) && GetJump() == true)
 	{
-		GetMove().y += 2;
+		GetMove().y += 20;
 	}
 	if (key->GetKeyboardPress(DIK_LCONTROL))
 	{
