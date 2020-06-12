@@ -85,7 +85,7 @@ void CCreateMap::Update(void)
 			{
 				//末尾に要素を追加する
 				m_vec.emplace_back(CModel::Create(CModel::MAP_MODEL, m_type));
-				m_vec[m_vec.size() - 1]->SetPosition(D3DXVECTOR3(pPos.x, pPos.y - 50, pPos.z));
+				m_vec[m_vec.size() - 1]->SetPosition(D3DXVECTOR3(pPos.x, pPos.y, pPos.z));
 				m_vec[m_vec.size() - 1]->SetSize(D3DXVECTOR3(1.0f, 1.0f, 1.0f));
 			}
 			//モデルの位置をセーブ
@@ -101,7 +101,7 @@ void CCreateMap::Update(void)
 
 			if (m_map.size() > 0)
 			{
-				m_map[m_map.size() - 1]->SetPosition(D3DXVECTOR3(pPos.x, pPos.y - 50, pPos.z));
+				m_map[m_map.size() - 1]->SetPosition(D3DXVECTOR3(pPos.x, pPos.y, pPos.z));
 				m_map[m_map.size() - 1]->SetSize(D3DXVECTOR3(1.0f, 1.0f, 1.0f));
 				m_map[0]->SetType(m_type);
 			}

@@ -108,7 +108,7 @@ public:
 	void SetState(CHARACTER_STATE state);
 	void SetMtxWorld(D3DXMATRIX mtxWorld);
 	void SetCharacterType(CHARACTER_TYPE CharaType);
-
+	
 	//モーション関連
 	void SetMotion(CHARACTER_MOTION_STATE type);
 	void SetMotionOldType(CHARACTER_MOTION_STATE type);
@@ -124,7 +124,7 @@ public:
 	CHARACTER_STATE GetCharacterState(void);
 	D3DXMATRIX *GetMtxWorld(void);
 	int GetLife(void);
-
+	bool GetJump(void);
 	CHARACTER_TYPE GetCharacterType();								//キャラクターの種類取得
 	std::vector<CModel*> &GetCharacterModelList();					//キャラクターのモデル取得
 
@@ -164,7 +164,7 @@ private:
 	CHARACTER_MOTION_STATE m_MotionOld;								//前のモーション
 	int m_CntKeySet;												//キーセットのカウント
 	int m_Fram;														//フレーム
-
+	bool m_bJump;
 
 };
 #endif
