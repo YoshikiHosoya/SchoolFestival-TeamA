@@ -36,11 +36,11 @@ HRESULT CGame::Init(void)
 	m_pCreateMap = CCreateMap::Create(1);
 	m_pPlayer = CPlayer::Create();
 	m_pPlayer->SetLife(50);
-	m_pPlayer->SetPosition(D3DXVECTOR3(50.0f, 0.0f, 0.0f));
+	m_pPlayer->SetPosition(D3DXVECTOR3(50.0f, 100.0f, 0.0f));
 
 	m_pEnemy = CEnemy::Create();
 	m_pEnemy->SetLife(50);
-	m_pEnemy->SetPosition(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+	m_pEnemy->SetPosition(D3DXVECTOR3(0.0f, 100.0f, 0.0f));
 
 	m_pPause->CreatePause();
 	return S_OK;

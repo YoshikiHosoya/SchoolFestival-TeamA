@@ -29,7 +29,6 @@ HRESULT CPlayer::Init(void)
 	CCharacter::Init();
 	LoadOffset(CCharacter::CHARACTER_TYPE_PLAYER);
 	SetCharacterType(CCharacter::CHARACTER_TYPE_PLAYER);
-
 	LPDIRECT3DDEVICE9 pDevice = CManager::GetRendere()->GetDevice();
 	m_Attack = false;
 	ZeroMemory(&state, sizeof(XINPUT_STATE));
@@ -113,7 +112,7 @@ void CPlayer::Update(void)
 		// e‚ðŒ‚‚Â
 	if (key->GetKeyboardTrigger(DIK_P))
 	{
-		// e‚Ì¶¬
+		// e”­ŽËˆ—
 			m_pGun->Shot(CCharacter::GetRot());
 	}
 	if (key->GetKeyboardTrigger(DIK_O))
@@ -140,31 +139,28 @@ void CPlayer::Update(void)
 	}
 	if (trigger == true)
 	{
-		if (key->GetKeyboardTrigger(DIK_F3))
-		{
-			trigger2 ^= 1;
-		}
-		if (trigger2 == true)
-		{
-			m_DebugState = DEBUG_CREATE_ENEMY;
-		}
-		else
-		{
-			m_DebugState = DEBUG_CREATE_MAP;
-		}
+		m_DebugState = DEBUG_CREATE_MAP;
+		SetGravity(false);
 	}
-
 	else
 	{
 		m_DebugState = DEBUG_NORMAL;
+		SetGravity(true);
 	}
 	if (m_DebugState != DEBUG_NORMAL)
 	{
 	}
-	if (key->GetKeyboardTrigger(DIK_SPACE) && GetJump() == true)
+	//ƒWƒƒƒ“ƒv
+	if (key->GetKeyboardTrigger(DIK_SPACE) && GetJump() == true && m_DebugState == DEBUG_NORMAL)
 	{
-		GetMove().y += 20;
+		GetMove().y += 40;
 	}
+
+	else if (key->GetKeyboardPress(DIK_SPACE) && m_DebugState != DEBUG_NORMAL)
+	{
+		GetMove().y += 2;
+	}
+
 	if (key->GetKeyboardPress(DIK_LCONTROL))
 	{
 		GetMove().y -= 2;

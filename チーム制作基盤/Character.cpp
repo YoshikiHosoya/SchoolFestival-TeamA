@@ -9,8 +9,8 @@
 #include "createmap.h"
 #include "Xinput.h"
 
-#define MAX_RAY_LENGTH (35)		//Rayの最大の長さ
-#define RAY_FIRST_POINT (40.0f)	//Rayの始点
+#define MAX_RAY_LENGTH (40)		//Rayの最大の長さ
+#define RAY_FIRST_POINT (30.0f)	//Rayの始点
 //オフセットの読み込みファイル
 char *CCharacter::m_LoadOffsetFileName[CHARACTER_TYPE_MAX] =
 {
@@ -54,6 +54,7 @@ HRESULT CCharacter::Init(void)
 	m_state = CHARACTER_STATE_NORMAL;
 	m_rotDest.y = -0.5f*  D3DX_PI;
 	m_bJump = false;
+	m_bGravity = true;
 	//マトリックス初期化
 	D3DXMatrixIdentity(&m_mtxWorld);
 	return S_OK;
@@ -76,8 +77,13 @@ void CCharacter::Update(void)
 	//慣性の抵抗
 	m_move.x += (0 - m_move.x)* 0.2f;
 	m_move.z += (0 - m_move.z)* 0.2f;
+	m_move.y += m_move.y * -0.1f;
+	if (m_bGravity == true)
+	{
 	m_move.y -= 1;
+	}
 	m_pos += m_move;
+
 
 	if (m_pos.y < 0)
 	{
@@ -314,9 +320,19 @@ int CCharacter::GetLife(void)
 {
 	return m_Life;
 }
+//====================================================================
+//ジャンプの取得
+//====================================================================
 bool CCharacter::GetJump(void)
 {
 	return m_bJump;
+}
+//====================================================================
+//重力の取得
+//====================================================================
+bool CCharacter::GetGravity(void)
+{
+	return m_bGravity;
 }
 //====================================================================
 //マトリックスの取得
@@ -395,7 +411,6 @@ void CCharacter::RayCollision(void)
 		if (fData < MAX_RAY_LENGTH)//Rayの長さの指定条件
 		{
 			m_pos.y = m_pos.y - fData + MAX_RAY_LENGTH;
-			m_move.y = 0;
 			m_bJump = true;
 			CDebugProc::Print("ジャンプできるよ\n");
 		}
@@ -835,4 +850,11 @@ void CCharacter::SetFram(int fram)
 void CCharacter::SetCharacterType(CHARACTER_TYPE CharaType)
 {
 	m_CharaType = CharaType;
+}
+//====================================================================
+//重力の設定
+//====================================================================
+void CCharacter::SetGravity(bool gravity)
+{
+	m_bGravity = gravity;
 }
