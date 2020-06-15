@@ -26,10 +26,11 @@ void CCamera::InitCamera(void)
 	vecV = D3DXVECTOR3(0.0f,1.0f,0.0f);
 	pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	D3DXVECTOR3 diff = (posV-posR);
-	fDistance = sqrtf(diff.x*diff.x + diff.z*diff.z);
+	//fDistance = sqrtf(diff.x*diff.x + diff.z*diff.z);
+	fDistance = 500;
 	move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	rot  = D3DXVECTOR3(atan2f(diff.y, diff.z),atan2f(diff.x, diff.z),atan2f(diff.x,diff.y));
-
+	rot = D3DXVECTOR3(0.1f, 0.0f, 0.0f);
+	//rot  = D3DXVECTOR3(atan2f(diff.y, diff.z),atan2f(diff.x, diff.z),atan2f(diff.x,diff.y));
 	m_bCameraMode = false;
 }
 //=============================================================================
@@ -212,6 +213,7 @@ void CCamera::CharacterFollowingMoveCamera()
 
 	CDebugProc::Print("posV.x:%0.2f\nposV.y:%0.2f\nposV.z:%0.2f\n\n", posV.x, posV.y, posV.z);
 	CDebugProc::Print("posR.x:%0.2f\nposR.y:%0.2f\nposR.z:%0.2f\n", posR.x, posR.y, posR.z);
+	CDebugProc::Print("rot.x:%0.2f\nrot.y:%0.2f\nrot.z:%0.2f\n", rot.x, rot.y, rot.z);
 
 }
 

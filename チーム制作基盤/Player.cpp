@@ -113,7 +113,7 @@ void CPlayer::Update(void)
 	if (key->GetKeyboardTrigger(DIK_P))
 	{
 		// e”­ŽËˆ—
-			m_pGun->Shot(CCharacter::GetRot());
+		m_pGun->Shot(CCharacter::GetRot());
 	}
 	if (key->GetKeyboardTrigger(DIK_O))
 	{
