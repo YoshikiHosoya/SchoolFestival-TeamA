@@ -153,7 +153,7 @@ void CPlayer::Update(void)
 	//ƒWƒƒƒ“ƒv
 	if (key->GetKeyboardTrigger(DIK_SPACE) && GetJump() == true && m_DebugState == DEBUG_NORMAL)
 	{
-		GetMove().y += 40;
+		GetMove().y += 27;
 	}
 
 	else if (key->GetKeyboardPress(DIK_SPACE) && m_DebugState != DEBUG_NORMAL)

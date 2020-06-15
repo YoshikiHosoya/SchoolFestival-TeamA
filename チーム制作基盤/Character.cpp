@@ -80,8 +80,9 @@ void CCharacter::Update(void)
 	m_move.y += m_move.y * -0.1f;
 	if (m_bGravity == true)
 	{
-	m_move.y -= 1;
+	m_move.y -= 0.5f;
 	}
+
 	m_pos += m_move;
 
 
@@ -148,6 +149,8 @@ void CCharacter::Update(void)
 	{
 		Rerease();
 	}
+	CDebugProc::Print("move.y:%2f\n",m_move.y);
+
 	Moation();
 	RayCollision();
 }
