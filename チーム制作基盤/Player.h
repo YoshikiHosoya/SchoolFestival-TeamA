@@ -43,5 +43,6 @@ private:
 		XINPUT_VIBRATION vibration;						//コントローラーのバイブレーション
 		WORD Oldstate;									//コントローラーの1frame前のステート
 		CGun	*m_pGun;								// ガンクラスのポインタ
+		D3DXVECTOR3 m_ShotRot;							//撃つ向き
 };
 #endif

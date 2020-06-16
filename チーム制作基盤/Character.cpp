@@ -102,6 +102,14 @@ void CCharacter::Update(void)
 		m_CharacterDirection = CHARACTER_RIGHT;
 		CDebugProc::Print("右向いてます\n");
 	}
+	if (m_CharacterDirection == CHARACTER_DOWN)
+	{
+		CDebugProc::Print("下向いてます\n");
+	}
+	else if (m_CharacterDirection == CHARACTER_UP)
+	{
+		CDebugProc::Print("上向いてます\n");
+	}
 	//目標点と現在の差分（回転）
 	float diffRot = m_rotDest.y - m_rot.y;
 	//3.14の超過分の初期化（回転）
@@ -826,6 +834,10 @@ std::vector<CModel*>& CCharacter::GetCharacterModelList()
 {
 	return m_vModelList;
 }
+CCharacter::CHARACTER_DIRECTION CCharacter::GetCharacterDirection(void)
+{
+	return m_CharacterDirection;
+}
 //====================================================================
 //前のモーションタイプの設定
 //====================================================================
@@ -860,4 +872,9 @@ void CCharacter::SetCharacterType(CHARACTER_TYPE CharaType)
 void CCharacter::SetGravity(bool gravity)
 {
 	m_bGravity = gravity;
+}
+
+void CCharacter::SetCharacterDirection(CHARACTER_DIRECTION direction)
+{
+	m_CharacterDirection = direction;
 }
