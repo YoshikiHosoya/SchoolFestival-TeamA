@@ -9,8 +9,9 @@ class CRenderer;
 class CKeyboard;
 class CPlayer;
 class CEnemy;
-class CCreateMap;
 class CPause;
+class CMap;
+
 class CGame :public CBaseMode
 {
 public:
@@ -21,16 +22,17 @@ public:
 	void Uninit(void);
 	void Update(void);
 	CPlayer * GetPlayer(void);
-	CCreateMap *GetCreateMap(void);
+	CMap *GetMap(void);
 	static int GetHP(void);
+
 	void Draw(void);							//描画
 	void ShowDebugInfo(void);					//デバッグ情報表記
 
 private:
 	static LPDIRECT3DTEXTURE9 m_pTexture;
-	static CPlayer *m_pPlayer;
-	static CEnemy *m_pEnemy;
-	CCreateMap *m_pCreateMap;
+	static CPlayer	*m_pPlayer;
+	static CEnemy	*m_pEnemy;
+	static CMap		*m_pMap;
 	static int m_Counter;
 	static int MP;
 	static int HP;

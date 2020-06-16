@@ -112,7 +112,7 @@ void CDebug_ModelViewer::ShowDebugInfo()
 //------------------------------------------------------------------------------
 //デバッグ情報表記
 //------------------------------------------------------------------------------
-CCreateMap * CDebug_ModelViewer::GetCreateMap()
+CMap * CDebug_ModelViewer::GetMap()
 {
 	return nullptr;
 }

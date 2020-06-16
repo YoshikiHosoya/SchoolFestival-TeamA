@@ -6,7 +6,7 @@
 #include "model.h"
 #include "game.h"
 #include "fade.h"
-#include "createmap.h"
+#include "map.h"
 #include "Xinput.h"
 
 #define MAX_RAY_LENGTH (40)		//Rayの最大の長さ
@@ -356,11 +356,11 @@ CCharacter::MOTION *CCharacter::GetCharacterMotion(CHARACTER_MOTION_STATE type)
 //====================================================================
 void CCharacter::RayCollision(void)
 {
-	CCreateMap *pCreateMap;
-	pCreateMap = CManager::GetBaseMode()->GetCreateMap();
+	CMap *pMap;
+	pMap = CManager::GetBaseMode()->GetMap();
 
 	//nullcheck
-	if (!pCreateMap)
+	if (!pMap)
 	{
 		//nullだったら処理しない
 		return;
@@ -377,17 +377,17 @@ void CCharacter::RayCollision(void)
 	D3DXVECTOR3 direction;	//	変換後の位置、方向を格納する変数：
 	std::vector<float> vDistance;//長さの配列保存
 	float fData = 0.0f;
-	for (int nCnt = 0; nCnt < pCreateMap->GetMaxModel(); nCnt++)
+	for (int nCnt = 0; nCnt < pMap->GetMaxModel(); nCnt++)
 	{
-		D3DXMatrixInverse(&invmat, NULL, pCreateMap->GetModel(nCnt)->GetMatrix());	//	逆行列の取得
-																					//	逆行列を使用し、レイ始点情報を変換　位置と向きで変換する関数が異なるので要注意
+		D3DXMatrixInverse(&invmat, NULL, pMap->GetModel(nCnt)->GetMatrix());	//	逆行列の取得
+		//	逆行列を使用し、レイ始点情報を変換　位置と向きで変換する関数が異なるので要注意
 		D3DXVec3TransformCoord(&m_posBefore, &D3DXVECTOR3(m_pos.x, m_pos.y + RAY_FIRST_POINT, m_pos.z), &invmat);
 		//	レイ終点情報を変換
 		D3DXVec3TransformCoord(&m_posAfter, &D3DXVECTOR3(m_pos.x, m_pos.y, m_pos.z), &invmat);
 		//	レイ方向情報を変換
 		D3DXVec3Normalize(&direction, &(m_posAfter - m_posBefore));
 		//Rayを飛ばす
-		D3DXIntersect(pCreateMap->GetMesh(nCnt), &m_posBefore, &direction, &bIsHit, &dwHitIndex, &fHitU, &fHitV, &fLandDistance, NULL, NULL);
+		D3DXIntersect(pMap->GetMesh(nCnt), &m_posBefore, &direction, &bIsHit, &dwHitIndex, &fHitU, &fHitV, &fLandDistance, NULL, NULL);
 		if (bIsHit == TRUE)
 		{
 			CDebugProc::Print("当たってるよ\n");

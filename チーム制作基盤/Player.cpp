@@ -6,7 +6,6 @@
 #include "model.h"
 #include "game.h"
 #include "fade.h"
-#include "createmap.h"
 #include "Xinput.h"
 #include "handgun.h"
 #include "heavymachinegun.h"

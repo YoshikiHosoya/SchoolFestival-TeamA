@@ -29,30 +29,40 @@ class CEnemy;
 class CMap
 {
 public:
-	enum MAPOBJECT_TYPE
+	// マップのオブジェクトの種類
+	enum MAP
 	{
-		MAPOBJECT_MODEL,			// モデル
-		MAPOBJECT_ENEMY,			// 敵
-		MAPOBJECT_MAX
+		MAP_1,			// 1
+		MAP_2,			// 2
+		MAP_MAX
 	};
 
+	CMap();									// コンストラクタ
+	~CMap();								// デストラクタ
+
 	/* 静的メンバ関数 */
-	static	void	ModelLoad();							// モデルのロード
-	static	void	EnemyLoad();							// 敵のロード
+	void			ModelLoad(int nCnt);							// モデルのロード
+	void			EnemyLoad(int nCnt);							// 敵のロード
+	void			DebugMap();								// マップのデバッグ配置
+	static	CMap	*MapCreate(int nCnt);					// マップの生成
+
+	/* メンバ関数 */
+	int				GetMaxModel();										// モデルの最大数取得
+	LPD3DXMESH		GetMesh(int nCnt);									// メッシュの取得
+	CModel			*GetModel(int nCnt) { return m_pModel[nCnt]; };		// モデルの取得
+	CEnemy			*GetEnemy(int nCnt) { return m_pEnemy[nCnt]; };		// 敵の取得
 
 private:
 	/* 静的メンバ関数 */
-	static	void	ModelSave();							// モデルのセーブ
-	static	void	EnemySave();							// 敵のセーブ
-	/* メンバ関数 */
-	CModel	*GetModel(int nCnt);				// モデルの取得
-	CEnemy	*GetEnemy(int nCnt);				// 敵の取得
+	void	ModelSave();							// モデルのセーブ
+	void	EnemySave();							// 敵のセーブ
 
 	/* 静的メンバ変数 */
-	static char					*m_FileName[MAPOBJECT_MAX];		// ファイル名
-	static std::vector<CModel*> m_pModel;						// 可変長配列 設置するモデル
-	static std::vector<CEnemy*> m_pEnemy;						// 可変長配列 設置したエネミー
+	static char					*m_MapFileName[MAP_MAX];	// マップファイル名
+	static char					*m_EnemyFileName[MAP_MAX];	// 敵ファイル名
 
 	/* メンバ変数 */
+	std::vector<CModel*> m_pModel;					// 可変長配列 設置するモデル
+	std::vector<CEnemy*> m_pEnemy;					// 可変長配列 設置したエネミー
 };
 #endif

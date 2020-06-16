@@ -10,10 +10,10 @@
 #include "BaseMode.h"
 #include "mouse.h"
 #include "SourceCode/hosso/Debug_ModelViewer.h"
+
 //他のとこでも使えるようにするメンバ
 CRenderer	*CManager::m_pRendere		= NULL;
 CKeyboard	*CManager::m_pInputKeyboard	= NULL;
-CCreateMap	*CManager::m_CreateMap		= NULL;
 CParticle	*CManager::m_Particle		= NULL;
 CBaseMode	*CManager::m_pBaseMode		= NULL;
 CMouse		*CManager::m_pMouse			= NULL;
@@ -141,17 +141,6 @@ CRenderer * CManager::GetRendere(void)
 CKeyboard * CManager::GetInputKeyboard(void)
 {
 	return m_pInputKeyboard;
-}
-//===========================================
-//クリエイトマップの取得
-//===========================================
-CCreateMap * CManager::GetCreateMap(void)
-{
-	if (m_CreateMap)
-	{
-	return m_CreateMap;
-	}
-	return nullptr;
 }
 //===========================================
 //ベースモード情報の取得
