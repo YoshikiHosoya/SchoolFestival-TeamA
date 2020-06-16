@@ -30,6 +30,7 @@ HRESULT CPlayer::Init(void)
 	SetCharacterType(CCharacter::CHARACTER_TYPE_PLAYER);
 	LPDIRECT3DDEVICE9 pDevice = CManager::GetRendere()->GetDevice();
 	m_Attack = false;
+	m_ShotRot = D3DXVECTOR3(0.0f, 0.5f, 0.0f);
 	ZeroMemory(&state, sizeof(XINPUT_STATE));
 	ZeroMemory(&vibration, sizeof(XINPUT_VIBRATION));
 
@@ -112,7 +113,7 @@ void CPlayer::Update(void)
 	if (key->GetKeyboardTrigger(DIK_P))
 	{
 		// 銃発射処理
-		m_pGun->Shot(CCharacter::GetRot());
+		m_pGun->Shot(m_ShotRot);
 	}
 	if (key->GetKeyboardTrigger(DIK_O))
 	{
@@ -120,15 +121,38 @@ void CPlayer::Update(void)
 		CHeavyMachinegun::Create(CPlayer::GetPosition(), CPlayer::GetRot());
 	}
 
-	// Aとの組み合わせ
+	// Aの処理
 	if (key->GetKeyboardPress(DIK_A))
 	{
 		CPlayer::Move(0.5f, 0.5f);
+		m_ShotRot.x = 0.0f;
+		m_ShotRot.y = 0.5f * D3DX_PI;
 	}
-	// Dとの組み合わせ
+	// Dの処理
 	else if (key->GetKeyboardPress(DIK_D))
 	{
 		CPlayer::Move(-0.5f, -0.5f);
+		m_ShotRot.x = 0.0f;
+		m_ShotRot.y = -0.5f * D3DX_PI;
+	}
+
+	else if (key->GetKeyboardPress(DIK_W))
+	{
+		SetCharacterDirection(CHARACTER_UP);
+		m_ShotRot.y = 0.0f;
+		m_ShotRot.x = 0.5f * D3DX_PI;
+	}
+	//ジャンプしたときの下向発射
+	if (key->GetKeyboardPress(DIK_S) && GetJump() == false)
+	{
+		SetCharacterDirection(CHARACTER_DOWN);
+		m_ShotRot.y = 0.0f;
+		m_ShotRot.x = -0.5f * D3DX_PI;
+	}
+	if (GetCharacterDirection() == CHARACTER_DOWN && GetJump() == true  )
+	{
+		m_ShotRot.x = GetRot().x;
+		m_ShotRot.y = GetRot().y;
 	}
 
 	//デバッグモードの切り替え
@@ -162,7 +186,7 @@ void CPlayer::Update(void)
 
 	if (key->GetKeyboardPress(DIK_LCONTROL))
 	{
-		GetMove().y -= 2;
+		GetRot().x -= 0.2f;
 	}
 	if (key->GetKeyboardTrigger(DIK_1))
 	{
@@ -172,6 +196,7 @@ void CPlayer::Update(void)
 	{
 		SetMotion(CCharacter::PLAYER_MOTION_WALK);
 	}
+
 	XInputSetState(0, &vibration);
 	CCharacter::Update();
 }

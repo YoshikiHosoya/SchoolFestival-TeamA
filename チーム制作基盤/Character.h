@@ -80,6 +80,8 @@ public:
 	{
 		CHARACTER_LEFT,						//左向き
 		CHARACTER_RIGHT,					//右向き
+		CHARACTER_UP,						//上向き
+		CHARACTER_DOWN,						//下向き
 	}CHARACTER_DIRECTION;
 
 	CCharacter() {};
@@ -109,6 +111,7 @@ public:
 	void SetMtxWorld(D3DXMATRIX mtxWorld);
 	void SetCharacterType(CHARACTER_TYPE CharaType);
 	void SetGravity(bool gravity);
+	void SetCharacterDirection(CHARACTER_DIRECTION direction);
 	//モーション関連
 	void SetMotion(CHARACTER_MOTION_STATE type);
 	void SetMotionOldType(CHARACTER_MOTION_STATE type);
@@ -128,7 +131,7 @@ public:
 	bool GetGravity(void);
 	CHARACTER_TYPE GetCharacterType();								//キャラクターの種類取得
 	std::vector<CModel*> &GetCharacterModelList();					//キャラクターのモデル取得
-
+	CHARACTER_DIRECTION GetCharacterDirection(void);				//向きの取得
 	//モーション関連
 	int &GetKeySet(void);											//キーセットの取得
 	int &GetFram(void);												//フレームの取得

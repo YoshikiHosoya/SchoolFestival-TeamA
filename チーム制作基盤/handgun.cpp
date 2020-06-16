@@ -111,7 +111,7 @@ CHandgun * CHandgun::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 	pHandgun->SetPosition(pos);
 
 	// プレイヤーの向きに合わせる
-	pHandgun->GetMove() = D3DXVECTOR3(-sinf(rot.y) * BULLET_SPEED, 0.0f, -cosf(rot.y) * BULLET_SPEED);
+	pHandgun->GetMove() = D3DXVECTOR3(-sinf(rot.y) * cosf(rot.x) * BULLET_SPEED, sinf(rot.x) * BULLET_SPEED, -cosf(rot.y) * cosf(rot.x) * BULLET_SPEED);
 
 	// テクスチャの割り当て
 	pHandgun->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_BULLET_HANDGUN));
