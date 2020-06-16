@@ -492,8 +492,8 @@ HRESULT CDebug_ViewerCharacter::SaveMotion(CCharacter::CHARACTER_MOTION_STATE mo
 	char cWriteText[128];
 
 	//ÉtÉ@ÉCÉãì«Ç›çûÇ›
-	//pFile = fopen(GetMotionFileName(motiontype), "w");
-	pFile = fopen("test.txt", "w");
+	pFile = fopen(GetMotionFileName(motiontype), "w");
+	//pFile = fopen("test.txt", "w");
 
 	CCharacter::MOTION *pMotionInfo = CCharacter::GetCharacterMotion(motiontype);
 
