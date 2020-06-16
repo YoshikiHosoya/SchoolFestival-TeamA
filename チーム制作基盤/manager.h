@@ -5,7 +5,6 @@
 //レンダリングクラス
 class CRenderer;
 class CKeyboard;
-class CCreateMap;
 class CParticle;
 class CGame;
 class CBaseMode;
@@ -37,7 +36,6 @@ public:
 	static GAME_MODE GetGameState(void);
 	static CRenderer *GetRendere(void);
 	static CKeyboard *GetInputKeyboard(void);
-	static CCreateMap *GetCreateMap(void);
 	static CBaseMode *GetBaseMode(void);
 	static CMouse *GetMouse();
 private:
@@ -45,7 +43,6 @@ private:
 	static CKeyboard *m_pInputKeyboard;
 	static CMouse *m_pMouse;
 	static CRenderer *m_pRendere;
-	static CCreateMap *m_CreateMap;
 	static CParticle *m_Particle;
 	static CBaseMode *m_pBaseMode;
 };

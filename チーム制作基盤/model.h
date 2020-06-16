@@ -100,6 +100,7 @@ public:
 	D3DXVECTOR3 GetvtxMax(int nCnt);
 	D3DXVECTOR3 GetvtxMin(int nCnt);
 	static CModel *Create(int type, int modelCount);
+	static CModel *CreateSceneManagement(int type, int modelCount);
 
 	static char* GetModelFileName(int nType, int nModelCount);
 private:

@@ -32,7 +32,7 @@ public:
 	void Update();						//更新
 	void Draw();						//描画
 	void ShowDebugInfo();				//デバッグ情報表記
-	CCreateMap *GetCreateMap();			//クリエイトマップ
+	CMap *GetMap();						//マップ
 	CPlayer* GetPlayer();				//プレイヤーのポインタ取得
 
 

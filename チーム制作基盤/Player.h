@@ -8,7 +8,6 @@
 #include "Scene.h"
 #include "Character.h"
 class CModel;
-class CCreateMap;
 class CMeshOrbit;
 class CParticle;
 class CUI;
