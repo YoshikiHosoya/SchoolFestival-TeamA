@@ -160,7 +160,6 @@
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="Character.cpp" />
     <ClCompile Include="collision.cpp" />
-    <ClCompile Include="createmap.cpp" />
     <ClCompile Include="debugcollision.cpp" />
     <ClCompile Include="debugproc.cpp" />
     <ClCompile Include="Enemy.cpp" />
@@ -202,7 +201,6 @@
     <ClInclude Include="camera.h" />
     <ClInclude Include="Character.h" />
     <ClInclude Include="collision.h" />
-    <ClInclude Include="createmap.h" />
     <ClInclude Include="debugcollision.h" />
     <ClInclude Include="debugproc.h" />
     <ClInclude Include="Enemy.h" />

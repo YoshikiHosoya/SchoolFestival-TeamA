@@ -54,9 +54,6 @@
     <ClCompile Include="camera.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="createmap.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="debugproc.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
@@ -174,9 +171,6 @@
       <Filter>Scene</Filter>
     </ClInclude>
     <ClInclude Include="camera.h">
-      <Filter>ソース ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="createmap.h">
       <Filter>ソース ファイル</Filter>
     </ClInclude>
     <ClInclude Include="debugproc.h">
