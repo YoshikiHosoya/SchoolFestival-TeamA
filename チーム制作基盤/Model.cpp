@@ -420,6 +420,30 @@ void CModel::Draw(D3DXMATRIX mat)
 //====================================================================
 void CModel::Draw()
 {
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetRendere()->GetDevice();
+	D3DXMATERIAL *pMat;
+
+	// マトリックスの計算
+	CHossoLibrary::CalcMatrix(&m_mtxWorld, m_pos, m_rot);
+
+	// ワールドマトリックスの設定
+	pDevice->SetTransform(D3DTS_WORLD, &m_mtxWorld);
+
+	// マテリアル情報に対するポインタを取得
+	if (m_Model[m_type][m_modelCount].pBuffmat != NULL)
+	{
+		pMat = (D3DXMATERIAL*)m_Model[m_type][m_modelCount].pBuffmat->GetBufferPointer();
+		pDevice->SetRenderState(D3DRS_SPECULARENABLE, TRUE);						// すぺきゅらモード有効
+
+		for (int nCnt = 0; nCnt < (int)m_Model[m_type][m_modelCount].nNumMat; nCnt++)
+		{
+			pDevice->SetTexture(0, m_Model[m_type][m_modelCount].m_pTexture[nCnt]);
+			// マテリアルの設定
+			pDevice->SetMaterial(&pMat[nCnt].MatD3D);
+			// 描画
+			m_Model[m_type][m_modelCount].pMesh->DrawSubset(nCnt);
+		}
+	}
 }
 //====================================================================
 //モデルのクリエイト
@@ -428,6 +452,18 @@ CModel *CModel::Create(int type, int modelCount)
 {
 	CModel*pModel;
 	pModel = new CModel(TYPE_NONE);
+	pModel->Init();
+	pModel->m_type = type;
+	pModel->m_modelCount = modelCount;
+	return pModel;
+}
+//====================================================================
+//モデルのクリエイト(シーンで管理する)
+//====================================================================
+CModel * CModel::CreateSceneManagement(int type, int modelCount)
+{
+	CModel*pModel;
+	pModel = new CModel(OBJTYPE_MODEL);
 	pModel->Init();
 	pModel->m_type = type;
 	pModel->m_modelCount = modelCount;

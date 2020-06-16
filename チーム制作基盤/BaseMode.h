@@ -14,7 +14,7 @@
 //==========================================================
 //前方宣言
 class CPlayer;
-class CCreateMap;
+class CMap;
 class CBaseMode
 {
 public:
@@ -26,8 +26,8 @@ public:
 	virtual void Update() = 0;				//更新
 	virtual void Draw() = 0;				//描画
 	virtual void ShowDebugInfo() = 0;		//デバッグ情報表記
-	virtual CCreateMap *GetCreateMap() = 0;	//クリエイトマップ
 	virtual CPlayer* GetPlayer() = 0;		//プレイヤーのポインタ取得
+	virtual CMap* GetMap() = 0;				// マップのポインタ取得
 
 	void DebugCommand(void);				//デバッグコマンド
 	static void BaseLoad(HWND hWnd);		//全ての場面で使われるであろう素材の生成
