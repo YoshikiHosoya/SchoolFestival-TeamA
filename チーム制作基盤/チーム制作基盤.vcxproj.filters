@@ -31,6 +31,9 @@
     <Filter Include="Bullet">
       <UniqueIdentifier>{16d7f6b5-a328-42ae-95ca-3a9532f42d6a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Collision">
+      <UniqueIdentifier>{c5767690-32c7-4937-b180-6bec850151c5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Scene.cpp">
@@ -143,6 +146,15 @@
     </ClCompile>
     <ClCompile Include="map.cpp">
       <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="3Dline.cpp">
+      <Filter>Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="collision.cpp">
+      <Filter>Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="debugcollision.cpp">
+      <Filter>Collision</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -265,6 +277,15 @@
     </ClInclude>
     <ClInclude Include="map.h">
       <Filter>ソース ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="3Dline.h">
+      <Filter>Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="collision.h">
+      <Filter>Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="debugcollision.h">
+      <Filter>Collision</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
