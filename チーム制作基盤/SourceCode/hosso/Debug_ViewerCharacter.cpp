@@ -178,12 +178,16 @@ void CDebug_ViewerCharacter::MotionViewer()
 	//攻撃系の情報が変わったかどうか
 	bool bChangeAttackInfo = false;
 	bool bChangeNowKey = false;
+	bool rMotionStop = CScene::GetStopFlag();
 
 	//コピペ用のキー
 	static CCharacter::CHARACTER_MOTION_STATE CopyMotionType = CHARACTER_MOTION_STATE_NONE;
 	static int nCopyKey = -1;
 
-
+	if (pKeyboard->GetKeyboardTrigger(DIK_F5))
+	{
+		CScene::StopUpdate();
+	}
 
 	////プレイヤー座標リセット
 	//if (ImGui::Button("PlayerPosReset"))
@@ -301,7 +305,7 @@ void CDebug_ViewerCharacter::MotionViewer()
 	if (ImGui::Button("Paste"))
 	{
 		//コピーしたのをはりつけ
-		//MotionCopy(NowMotionType, nNowKey, CopyMotionType, nCopyKey);
+		CopyMotionPaste(NowMotionType, nNowKey, CopyMotionType, nCopyKey);
 
 		//モーション強制変更
 		ForcedUpdate();
@@ -366,11 +370,11 @@ void CDebug_ViewerCharacter::MotionViewer()
 	//改行
 	ImGui::Separator();
 
-	////モーションの保存
-	//if (ImGui::Button("MotionSave"))
-	//{
-	//	CMotion::SaveMotion(NowMotionType);
-	//}
+	//モーションの保存
+	if (ImGui::Button("MotionSave"))
+	{
+		SaveMotion(NowMotionType);
+	}
 
 	//Widgetの大きさ調整終了
 	ImGui::PopItemWidth();
@@ -457,3 +461,136 @@ void CDebug_ViewerCharacter::ResetKey()
 
 }
 
+//------------------------------------------------------------------------------
+//コピーしたモーションペースト
+//------------------------------------------------------------------------------
+void CDebug_ViewerCharacter::CopyMotionPaste(CCharacter::CHARACTER_MOTION_STATE NowMotion, int nNowKey ,CCharacter::CHARACTER_MOTION_STATE CopyMotionType,int nCopyKey)
+{
+	//範囲外じゃないかどうか
+	if (CopyMotionType != CCharacter::CHARACTER_MOTION_STATE_NONE && nCopyKey != -1)
+	{
+		CCharacter::MOTION *pCopyMotion = CCharacter::GetCharacterMotion(CopyMotionType);
+		CCharacter::MOTION *pNowMotion = CCharacter::GetCharacterMotion(NowMotion);
+
+		//コピー
+		for (size_t nCnt = 0; nCnt < GetCharacterModelList().size(); nCnt++)
+		{
+			pNowMotion->key_info[nNowKey]->key[nCnt]->rot = pCopyMotion->key_info[nCopyKey]->key[nCnt]->rot;
+		}
+	}
+}
+
+//------------------------------------------------------------------------------
+//モーションの保存
+//------------------------------------------------------------------------------
+HRESULT CDebug_ViewerCharacter::SaveMotion(CCharacter::CHARACTER_MOTION_STATE motiontype)
+{
+	FILE *pFile;
+
+	int nRotNum = 0;
+	char cHeadtext[128];
+	char cWriteText[128];
+
+	//ファイル読み込み
+	//pFile = fopen(GetMotionFileName(motiontype), "w");
+	pFile = fopen("test.txt", "w");
+
+	CCharacter::MOTION *pMotionInfo = CCharacter::GetCharacterMotion(motiontype);
+
+	//nullcheck
+	if (pFile && pMotionInfo)
+	{
+		//ブロックコメント
+		fputs(COMMENT02, pFile);
+		fputs(COMMENT01, pFile);
+
+		strcpy(cHeadtext, "//Motion\n");
+		fputs(cHeadtext, pFile);
+
+		strcpy(cHeadtext, "//Author:Yoshiki Hosoya\n");
+		fputs(cHeadtext, pFile);
+
+		fputs(COMMENT01, pFile);
+		fputs(COMMENT02, pFile);
+		fputs(NEWLINE, pFile);
+
+		//ブロックコメント終了//
+
+		//スクリプト
+		strcpy(cHeadtext, "SCRIPT");
+		fputs(cHeadtext, pFile);
+		fputs(NEWLINE, pFile);
+
+		//改行
+		fputs(NEWLINE, pFile);
+
+		//ループ
+		strcpy(cHeadtext, "LOOP");
+		sprintf(cWriteText, "	%s %s %d		%s", "LOOP", &EQUAL, pMotionInfo->nLoop, "//ループするかどうか");
+		fputs(cWriteText, pFile);
+		fputs(NEWLINE, pFile);
+
+		//キー数
+		strcpy(cHeadtext, "NUM_KEY");
+		sprintf(cWriteText, "	%s %s %d		%s", "NUM_KEY", &EQUAL, pMotionInfo->nNumKey, "//キー数");
+		fputs(cWriteText, pFile);
+		fputs(NEWLINE, pFile);
+		fputs(NEWLINE, pFile);
+
+		//nullcheck
+		if (!pMotionInfo->key_info.empty())
+		{
+			for (int nCnt = 0; nCnt < pMotionInfo->nNumKey; nCnt++)
+			{
+				//キーセット
+				sprintf(cWriteText, "	KEYSET		//---< KEY : %d / %d >---", nCnt, pMotionInfo->nNumKey);
+				fputs(cWriteText, pFile);
+				fputs(NEWLINE, pFile);
+
+				//フレーム数
+				sprintf(cWriteText, "		%s %s %d		%s", "FRAME", &EQUAL, pMotionInfo->key_info[nCnt]->nFram, "//フレーム数");
+				fputs(cWriteText, pFile);
+				fputs(NEWLINE, pFile);
+
+				////高さ
+				//sprintf(cWriteText, "		%s %s %.2f		%s", "HEIGHT", &EQUAL, pMotionInfo->key_info[nCnt]->fOriginHeight, "//原点の高さ");
+				//fputs(cWriteText, pFile);
+				//fputs(NEWLINE, pFile);
+
+				fputs(NEWLINE, pFile);
+
+				for (size_t nCntParts = 0; nCntParts < pMotionInfo->key_info[nCnt]->key.size(); nCntParts++)
+				{
+					//キー
+					sprintf(cWriteText, "		KEY [%d] = %.3f %.3f %.3f", nCntParts, pMotionInfo->key_info[nCnt]->key[nCntParts]->rot.x,
+						pMotionInfo->key_info[nCnt]->key[nCntParts]->rot.y, pMotionInfo->key_info[nCnt]->key[nCntParts]->rot.z);
+					fputs(cWriteText, pFile);
+					fputs(NEWLINE, pFile);
+
+				}
+				//キーセット終了
+				fputs("	END_KEYSET", pFile);
+				fputs(NEWLINE, pFile);
+				fputs(NEWLINE, pFile);
+			}
+
+		}
+
+		//キーセット終了
+		fputs("END_SCRIPT", pFile);
+		fputs(NEWLINE, pFile);
+
+		//保存成功
+		std::cout << "Motion Save Succsess!! >>" << GetMotionFileName(motiontype) << NEWLINE;
+
+		//ファイルを閉じる
+		fclose(pFile);
+	}
+	else
+	{
+		//ファイルが開けませんでした
+		std::cout << "Motion Save FAILED!!  Can't Open File. SavePlaceData()" << NEWLINE;
+		return E_FAIL;
+	}
+	return S_OK;
+}

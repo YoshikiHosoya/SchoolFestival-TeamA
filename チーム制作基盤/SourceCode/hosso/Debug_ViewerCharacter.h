@@ -40,5 +40,7 @@ private:
 	void AddKeyInfo(CCharacter::MOTION *pMotion);
 	void PopbackKeyInfo(CCharacter::MOTION *pMotion);
 	void ResetKey();
+	void CopyMotionPaste(CCharacter::CHARACTER_MOTION_STATE CopyMotionType, int nCopyKey, CCharacter::CHARACTER_MOTION_STATE NowMotion, int nNowKey);
+	HRESULT SaveMotion(CCharacter::CHARACTER_MOTION_STATE motiontype);
 };
 #endif
