@@ -22,16 +22,11 @@ char *CModel::m_PlayerFileName[MODEL_PLAYER_MAX] =
 	{ "data/MODEL/secondchar/炎剣.x" },
 	{ "data/MODEL/secondchar/氷剣.x" },
 	{ "data/MODEL/secondchar/雷剣.x" },
-	{ "data/MODEL/earth000.x" },
 };
 char *CModel::m_MapFileName[MODEL_MAP_MAX] =
 {
 	{ "data/MODEL/map/testMap.x" },
-	{ "data/MODEL/block02.x" },
-	{ "data/MODEL/MPPotion.x" },
-	{ "data/MODEL/HPPotion.x" },
-	{ "data/MODEL/block03.x" },
-	{ "data/MODEL/block04.x" },
+	{ "data/MODEL/map/block02.x" },
 };
 char *CModel::m_EnemyFileName[MODEL_ENEMY_MAX] =
 {
@@ -46,42 +41,11 @@ char *CModel::m_EnemyFileName[MODEL_ENEMY_MAX] =
 	{ "data/MODEL/EnemyFire/EnemyLeg_L01.x" },		//7
 	{ "data/MODEL/EnemyFire/EnemyLeg_R01.x" },		//8
 	{ "data/MODEL/EnemyFire/Enemy_Wepon01.x" },		//11
-	{ "data/MODEL/EnemyDark/EnemyHead02.x" },		//12  ==闇==
-	{ "data/MODEL/EnemyDark/EnemyChin.x" },			//13
-	{ "data/MODEL/EnemyDark/EnemyBody02.x" },		//14
-	{ "data/MODEL/EnemyDark/EnemySholder_L02.x" },	//15
-	{ "data/MODEL/EnemyDark/EnemySholder_R02.x" },	//16
-	{ "data/MODEL/EnemyDark/EnemyHand_L02.x" },		//17
-	{ "data/MODEL/EnemyDark/EnemyHand_R02.x" },		//18
-	{ "data/MODEL/EnemyDark/EnemyLeg_L02.x" },		//19
-	{ "data/MODEL/EnemyDark/EnemyLeg_R02.x" },		//20
-	{ "data/MODEL/EnemyDark/EnemyFoot_L02.x" },		//21
-	{ "data/MODEL/EnemyDark/EnemyFoot_R02.x" },		//22
-	{ "data/MODEL/EnemyDark/EnemyWepon02.x" },		//23
-	{ "data/MODEL/EnemyIce/EnemyHead03.x" },		//24  ==氷==
-	{ "data/MODEL/EnemyIce/EnemyBody03.x" },		//25
-	{ "data/MODEL/EnemyIce/EnemySholder_L03.x" },	//26
-	{ "data/MODEL/EnemyIce/EnemySholder_R03.x" },	//27
-	{ "data/MODEL/EnemyIce/EnemyHand_L03.x" },		//28
-	{ "data/MODEL/EnemyIce/EnemyHand_R03.x" },		//29
-	{ "data/MODEL/EnemyIce/EnemyLeg03.x" },			//30
-	{ "data/MODEL/EnemyIce/Enemy_Wepon03.x" },		//31
-	{ "data/MODEL/EnemyBoss/head.x" },				//32  ==氷==
-	{ "data/MODEL/EnemyBoss/body.x" },				//33
-	{ "data/MODEL/EnemyBoss/L_arm.x" },				//34
-	{ "data/MODEL/EnemyBoss/R_arm.x" },				//35
-	{ "data/MODEL/EnemyBoss/L_hand.x" },			//36
-	{ "data/MODEL/EnemyBoss/R_hand.x" },			//27
-	{ "data/MODEL/EnemyBoss/L_leg.x" },				//38
-	{ "data/MODEL/EnemyBoss/R_leg.x" },				//39
-	{ "data/MODEL/EnemyBoss/foot.x" },				//40
-	{ "data/MODEL/EnemyBoss/axe.x" },				//41
-	{ "data/MODEL/EnemyBoss/sowrd.x" },				//42
 };
 char *CModel::m_GunFileName[MODEL_GUN_MAX] =
 {
-	{ "data/MODEL/HandGun.x" },
-	{ "data/MODEL/block02.x" },
+	{ "data/MODEL/Gun/HandGun.x" },
+	{ "data/MODEL/map/block02.x" },
 };
 
 CModel::CModel(OBJ_TYPE type) : CScene(type)
@@ -375,25 +339,6 @@ HRESULT CModel::Init(void)
 //====================================================================
 void CModel::Uninit(void)
 {
-	for (int nCnttype = 0; nCnttype < TYPE_MAX; nCnttype++)
-	{
-		for (int nCnt = 0; nCnt < MODEL_MAP_MAX; nCnt++)
-		{
-			// メッシュの開放
-			if (m_Model[nCnttype][nCnt].pMesh != NULL)
-			{
-				m_Model[nCnttype][nCnt].pMesh->Release();
-				m_Model[nCnttype][nCnt].pMesh = NULL;
-			}
-
-			// マテリアルの開放
-			if (m_Model[nCnttype][nCnt].pBuffmat != NULL)
-			{
-				m_Model[nCnttype][nCnt].pBuffmat->Release();
-				m_Model[nCnttype][nCnt].pBuffmat = NULL;
-			}
-		}
-	}
 }
 //====================================================================
 //更新

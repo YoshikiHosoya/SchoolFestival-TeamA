@@ -156,20 +156,7 @@ void CCreateMap::Update(void)
 		//	CDebugProc::Print("エネミータイプ%d\n", m_type);
 		//}
 	}
-	if (m_Enemy.size() == 0)
-	{
-		for (unsigned int nCnt = 0; nCnt < m_vec.size(); nCnt++)
-		{
-			if (m_vec[nCnt]->GetType() == CModel::MODEL_MAP_BLOCK02)
-			{
-				m_vec.erase(m_vec.begin() + nCnt);//最初から[nCnt]番目を消去
-			}
-		}
-	}
-	else
-	{
 		CDebugProc::Print("[F2]でマップエディタ\n");
-	}
 	//for (unsigned int nCnt = 0; nCnt < m_Enemy.size(); nCnt++)
 	//{
 	//	if (m_Enemy[nCnt] != nullptr)

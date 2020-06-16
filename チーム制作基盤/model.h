@@ -26,17 +26,12 @@ public:
 		MODEL_PLAYER_FIRESWORD,		//プレイヤーの武器
 		MODEL_PLAYER_ICESWORD,		//プレイヤーの武器
 		MODEL_PLAYER_THUNDERSWORD,	//プレイヤーの武器
-		MODEL_PLAYER_BALL,			//たま
 		MODEL_PLAYER_MAX
 	}CHARA_MODEL;
 	typedef enum
 	{
-		MODEL_MAP_BLOCK,		//マップの武器
+		MODEL_MAP_BLOCK,			//マップの武器
 		MODEL_MAP_ICESWORD,			//マップの武器
-		MODEL_MAP_MPPOTION,		//マップの武器
-		MODEL_MAP_HPPOTION,				//
-		MODEL_MAP_PORTAL,				//
-		MODEL_MAP_BLOCK02,
 		MODEL_MAP_MAX
 	}CREATE_MAP_MODEL;
 	typedef enum
@@ -53,40 +48,6 @@ public:
 		MODEL_ENEMY_LFOOT_01,		//左足
 		MODEL_ENEMY_RFOOT_01,		//右足
 		MODEL_ENEMY_WEPON_01,		//武器
-		//===[闇]===
-		MODEL_ENEMY_HEAD_02,		//頭
-		MODEL_ENEMY_CHIN,			//顎
-		MODEL_ENEMY_BODY_02,		//体
-		MODEL_ENEMY_LARM_02,		//左腕
-		MODEL_ENEMY_RARM_02,		//右腕
-		MODEL_ENEMY_LHAND_02,		//左手
-		MODEL_ENEMY_RHAND_02,		//右手
-		MODEL_ENEMY_LLEG_02,		//左脚
-		MODEL_ENEMY_RLEG_02,		//右脚
-		MODEL_ENEMY_LFOOT_02,		//左足
-		MODEL_ENEMY_RFOOT_02,		//右足
-		MODEL_ENEMY_WEPON_02,		//武器
-		//===[氷]===
-		MODEL_ENEMY_HEAD_03,		//頭
-		MODEL_ENEMY_BODY_03,		//体
-		MODEL_ENEMY_LARM_03,		//左腕
-		MODEL_ENEMY_RARM_03,		//右腕
-		MODEL_ENEMY_LHAND_03,		//左手
-		MODEL_ENEMY_RHAND_03,		//右手
-		MODEL_ENEMY_LEG_03,			//脚
-		MODEL_ENEMY_WEPON_03,		//武器
-		//===[BOSS]===
-		MODEL_BOSS_HEAD,		//頭
-		MODEL_BOSS_BODY,		//体
-		MODEL_BOSS_LARM,		//左腕
-		MODEL_BOSS_RARM,		//右腕
-		MODEL_BOSS_LHAND,		//左手
-		MODEL_BOSS_RHAND,		//右手
-		MODEL_BOSS_LFOOT,		//足
-		MODEL_BOSS_RFOOT,		//足
-		MODEL_BOSS_LEG,			//脚
-		MODEL_BOSS_WEPON01,		//武器
-		MODEL_BOSS_WEPON02,		//武器
 		MODEL_ENEMY_MAX
 	}ENEMY_PARTS_MODEL;
 	/*--- 銃のモデル ---*/
