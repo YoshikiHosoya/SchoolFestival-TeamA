@@ -731,6 +731,7 @@ void CCharacter::LoadOffset(CHARACTER_TYPE nType)
 					{
 						CModel *pModel = CModel::Create(type, nIdx);
 						pModel->SetPosition(pos);
+						pModel->SetParentIdx(nIdxParent);
 						if (nIdxParent == -1)
 						{
 							pModel->SetParent(NULL);

@@ -42,5 +42,6 @@ private:
 	void ResetKey();
 	void CopyMotionPaste(CCharacter::CHARACTER_MOTION_STATE CopyMotionType, int nCopyKey, CCharacter::CHARACTER_MOTION_STATE NowMotion, int nNowKey);
 	HRESULT SaveMotion(CCharacter::CHARACTER_MOTION_STATE motiontype);
+	HRESULT SaveModelOffset();
 };
 #endif

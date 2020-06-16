@@ -23,7 +23,7 @@
 //------------------------------------------------------------------------------
 //マクロ
 //------------------------------------------------------------------------------
-
+#define OFFSET_TEXT_PASS ("data/Load/SaveOffset.txt")
 //------------------------------------------------------------------------------
 //コンストラクタ
 //------------------------------------------------------------------------------
@@ -410,10 +410,10 @@ void CDebug_ViewerCharacter::OffsetViewer()
 		}
 	}
 
-	//if(ImGui::Button("OffsetSave"))
-	//{
-	//	pModelCharacter->SaveModelOffset();
-	//}
+	if(ImGui::Button("OffsetSave"))
+	{
+		SaveModelOffset();
+	}
 }
 
 
@@ -593,4 +593,101 @@ HRESULT CDebug_ViewerCharacter::SaveMotion(CCharacter::CHARACTER_MOTION_STATE mo
 		return E_FAIL;
 	}
 	return S_OK;
+}
+
+//------------------------------------------------------------------------------
+//モーションの保存
+//------------------------------------------------------------------------------
+HRESULT CDebug_ViewerCharacter::SaveModelOffset()
+{
+	FILE *pFile;
+
+	int nRotNum = 0;
+	char cHeadtext[128];
+	char cWriteText[128];
+
+	//モデル情報取得
+	std::vector<CModel*> vModelList = GetCharacterModelList();
+
+	//ファイル読み込み
+	pFile = fopen(OFFSET_TEXT_PASS, "w");
+
+	//nullcheck
+	if (pFile != nullptr)
+	{
+
+		//ブロックコメント
+		fputs(COMMENT02, pFile);
+		fputs(COMMENT01, pFile);
+
+		strcpy(cHeadtext, "//Offset\n");
+		strcpy(cHeadtext, "//テキストにコピペしてください\n");
+
+		fputs(cHeadtext, pFile);
+
+		strcpy(cHeadtext, "//Author:Yoshiki Hosoya\n");
+		fputs(cHeadtext, pFile);
+
+		fputs(COMMENT01, pFile);
+		fputs(COMMENT02, pFile);
+		fputs(NEWLINE, pFile);
+
+		//ブロックコメント終了//
+		//nullcheck
+		if (!vModelList.empty())
+		{
+			for (size_t nCnt = 0; nCnt < vModelList.size(); nCnt++)
+			{
+
+				//スタート
+				sprintf(cWriteText, "%s %s%d%s", "SET_START", "---------[", nCnt, "]----------");
+				fputs(cWriteText, pFile);
+				fputs(NEWLINE, pFile);
+
+				//モデルの種類
+				sprintf(cWriteText, "	%s %s %d", "MODEL_TYPE", &EQUAL, vModelList[nCnt]->GetType());
+				fputs(cWriteText, pFile);
+				fputs(NEWLINE, pFile);
+
+				//インデックス
+				sprintf(cWriteText, "	%s %s %d", "INDEX", &EQUAL, vModelList[nCnt]->GetModelCount());
+				fputs(cWriteText, pFile);
+				fputs(NEWLINE, pFile);
+
+				//親番号
+				sprintf(cWriteText, "	%s %s %d", "PARENT", &EQUAL, vModelList[nCnt]->GetParentIdx());
+				fputs(cWriteText, pFile);
+				fputs(NEWLINE, pFile);
+
+				//座標
+				sprintf(cWriteText, "	%s %s %.1f %.1f %.1f", "POS", &EQUAL,
+					vModelList[nCnt]->GetPosition().x,
+					vModelList[nCnt]->GetPosition().y,
+					vModelList[nCnt]->GetPosition().z);
+				fputs(cWriteText, pFile);
+				fputs(NEWLINE, pFile);
+
+				//パーツセット終了
+				fputs("SET_END", pFile);
+				fputs(NEWLINE, pFile);
+				fputs(NEWLINE, pFile);
+
+			}
+		}
+
+		//オフセット設定終了
+		fputs("MODEL_OFFSET_END", pFile);
+
+		//保存成功
+		std::cout << "Offset Save Succsess!! >> " << OFFSET_TEXT_PASS << NEWLINE;
+
+		//ファイルを閉じる
+		fclose(pFile);
+	}
+	else
+	{
+		//ファイルが開けませんでした
+		std::cout << "Motion Save FAILED!!  Can't Open File >> "<< OFFSET_TEXT_PASS << NEWLINE;
+		return E_FAIL;
+	}
 }
