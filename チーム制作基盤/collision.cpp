@@ -311,8 +311,8 @@ bool CCollision::Collision()
 					if (this->m_ppos->x + this->m_size.x * 0.5f > pCollision->m_ppos->x - pCollision->m_size.x * 0.5f&&
 						this->m_posOld.x + this->m_size.x * 0.5f <= pCollision->m_ppos->x - pCollision->m_size.x * 0.5f)
 					{
-						if (m_objtype != OBJTYPE_ITEM &&
-							m_objtype != OBJTYPE_ENEMY)
+						if (pCollision->m_objtype != OBJTYPE_ITEM &&
+							pCollision->m_objtype != OBJTYPE_ENEMY)
 						{
 							// ‘fÞó‚Ì¶‚É
 							this->m_ppos->x = pCollision->m_ppos->x - pCollision->m_size.x * 0.5f - this->m_size.x * 0.5f;
@@ -332,8 +332,8 @@ bool CCollision::Collision()
 					else if (this->m_ppos->x - this->m_size.x * 0.5f < pCollision->m_ppos->x + pCollision->m_size.x * 0.5f&&
 						m_posOld.x - this->m_size.x * 0.5f >= pCollision->m_ppos->x + pCollision->m_size.x * 0.5f)
 					{
-						if (m_objtype != OBJTYPE_ITEM &&
-							m_objtype != OBJTYPE_ENEMY)
+						if (pCollision->m_objtype != OBJTYPE_ITEM &&
+							pCollision->m_objtype != OBJTYPE_ENEMY)
 						{
 							// ‘fÞó‚Ì¶‚É
 							this->m_ppos->x = pCollision->m_ppos->x + pCollision->m_size.x * 0.5f + this->m_size.x * 0.5f;
@@ -356,8 +356,8 @@ bool CCollision::Collision()
 					if (this->m_ppos->z + this->m_size.z * 0.5f > pCollision->m_ppos->z - pCollision->m_size.z * 0.5f&&
 						m_posOld.z + this->m_size.z * 0.5f <= pCollision->m_ppos->z - pCollision->m_size.z * 0.5f)
 					{
-						if (m_objtype != OBJTYPE_ITEM &&
-							m_objtype != OBJTYPE_ENEMY)
+						if (pCollision->m_objtype != OBJTYPE_ITEM &&
+							pCollision->m_objtype != OBJTYPE_ENEMY)
 						{
 							// ‘fÞó‚Ì¶‚É
 							this->m_ppos->z = pCollision->m_ppos->z - pCollision->m_size.z * 0.5f - this->m_size.z * 0.5f;
@@ -375,8 +375,8 @@ bool CCollision::Collision()
 					else if (this->m_ppos->z - this->m_size.z * 0.5f < pCollision->m_ppos->z + pCollision->m_size.z * 0.5f&&
 						m_posOld.z - this->m_size.z * 0.5f >= pCollision->m_ppos->z + pCollision->m_size.z * 0.5f)
 					{
-						if (m_objtype != OBJTYPE_ITEM &&
-							m_objtype != OBJTYPE_ENEMY)
+						if (pCollision->m_objtype != OBJTYPE_ITEM &&
+							pCollision->m_objtype != OBJTYPE_ENEMY)
 						{
 							// ‘fÞó‚Ì¶‚É
 							this->m_ppos->z = pCollision->m_ppos->z +
@@ -406,8 +406,8 @@ bool CCollision::Collision()
 					if (this->m_ppos->y + this->m_size.y * 0.5f > pCollision->m_ppos->y - pCollision->m_size.y * 0.5f&&
 						m_posOld.y + this->m_size.y * 0.5f <= pCollision->m_ppos->y - pCollision->m_size.y * 0.5f)
 					{
-						if (m_objtype != OBJTYPE_ITEM &&
-							m_objtype != OBJTYPE_ENEMY)
+						if (pCollision->m_objtype != OBJTYPE_ITEM &&
+							pCollision->m_objtype != OBJTYPE_ENEMY)
 						{
 							// ‘fÞó‚Ì¶‚É
 							this->m_ppos->y = this->m_posOld.y;
@@ -425,8 +425,8 @@ bool CCollision::Collision()
 					else if (this->m_ppos->y - this->m_size.y * 0.5f < pCollision->m_ppos->y + pCollision->m_size.y * 0.5f&&
 						m_posOld.y - this->m_size.y * 0.5f >= pCollision->m_ppos->y + pCollision->m_size.y * 0.5f)
 					{
-						if (m_objtype != OBJTYPE_ITEM &&
-							m_objtype != OBJTYPE_ENEMY)
+						if (pCollision->m_objtype != OBJTYPE_ITEM &&
+							pCollision->m_objtype != OBJTYPE_ENEMY)
 						{
 							// ‘fÞó‚Ì¶‚É
 							this->m_ppos->y = pCollision->m_ppos->y + pCollision->m_size.y * 0.5f + this->m_size.y * 0.5f;
