@@ -154,10 +154,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="3Dline.cpp" />
     <ClCompile Include="BaseMode.cpp" />
     <ClCompile Include="bullet.cpp" />
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="Character.cpp" />
+    <ClCompile Include="collision.cpp" />
+    <ClCompile Include="debugcollision.cpp" />
     <ClCompile Include="debugproc.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="fade.cpp" />
@@ -192,10 +195,13 @@
     <ClCompile Include="texture.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="3Dline.h" />
     <ClInclude Include="BaseMode.h" />
     <ClInclude Include="bullet.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="Character.h" />
+    <ClInclude Include="collision.h" />
+    <ClInclude Include="debugcollision.h" />
     <ClInclude Include="debugproc.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="fade.h" />
