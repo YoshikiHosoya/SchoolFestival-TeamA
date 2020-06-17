@@ -36,6 +36,8 @@ HRESULT CPlayer::Init(void)
 
 	 // e‚Ì¶¬
 	m_pGun = CGun::Create(CCharacter::GetMtxWorld());
+	// e‚Ì’e‚Ìí—Ş
+	m_pGun->GetBulletType() = CGun::TYPE_PLAYER;
 
 	return S_OK;
 }
@@ -118,7 +120,7 @@ void CPlayer::Update(void)
 	if (key->GetKeyboardTrigger(DIK_O))
 	{
 		// ƒwƒr[ƒ}ƒVƒ“ƒKƒ“‚Ì’e‚Ì¶¬
-		CHeavyMachinegun::Create(CPlayer::GetPosition(), CPlayer::GetRot());
+		CHeavyMachinegun::Create(CPlayer::GetRot());
 	}
 
 	// A‚Ìˆ—

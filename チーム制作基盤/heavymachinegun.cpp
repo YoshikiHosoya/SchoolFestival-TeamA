@@ -96,7 +96,7 @@ void CHeavyMachinegun::Draw(void)
 // ヘビーマシンガンの生成
 //
 // =====================================================================================================================================================================
-CHeavyMachinegun * CHeavyMachinegun::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
+CHeavyMachinegun * CHeavyMachinegun::Create(D3DXVECTOR3 rot)
 {
 	// 変数
 	CHeavyMachinegun *pHeavyMachinegun;
@@ -106,9 +106,6 @@ CHeavyMachinegun * CHeavyMachinegun::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 
 	// 初期化
 	pHeavyMachinegun->Init();
-
-	// ハンドガンの位置の設定
-	pHeavyMachinegun->SetPosition(pos);
 
 	// プレイヤーの向きに合わせる
 	pHeavyMachinegun->GetMove() = D3DXVECTOR3(-sinf(rot.y) * cosf(rot.x) * BULLET_SPEED, sinf(rot.x) * BULLET_SPEED, -cosf(rot.y) * cosf(rot.x) * BULLET_SPEED);

@@ -21,7 +21,7 @@
 #define TEXTURE_FILE_HUNDGUN		"data/TEXTURE/00.png"		// 読み込むテクスチャファイル名
 #define BULLET_SPEED				(10.0f)						// 弾速
 #define BULLET_SIZE_X				(10)						// 弾の横のサイズ
-#define BULLET_SIZE_Y				(5)						// 弾の縦のサイズ
+#define BULLET_SIZE_Y				(5)							// 弾の縦のサイズ
 
 // =====================================================================================================================================================================
 //
@@ -51,9 +51,6 @@ HRESULT CHandgun::Init()
 {
 	// 初期化
 	CBullet::Init();
-
-	// サイズの設定
-	CBullet::SetSize(D3DXVECTOR3(BULLET_SIZE_X, BULLET_SIZE_Y, 0.0f));
 
 	return S_OK;
 }
@@ -96,7 +93,7 @@ void CHandgun::Draw(void)
 // ハンドガンの生成
 //
 // =====================================================================================================================================================================
-CHandgun * CHandgun::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
+CHandgun * CHandgun::Create(D3DXVECTOR3 rot)
 {
 	// 変数
 	CHandgun *pHandgun;
@@ -107,8 +104,8 @@ CHandgun * CHandgun::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 	// 初期化
 	pHandgun->Init();
 
-	// ハンドガンの位置の設定
-	pHandgun->SetPosition(pos);
+	// ハンドガンの弾のサイズ
+	pHandgun->SetSize(D3DXVECTOR3(BULLET_SIZE_X, BULLET_SIZE_Y, 0.0f));
 
 	// プレイヤーの向きに合わせる
 	pHandgun->GetMove() = D3DXVECTOR3(-sinf(rot.y) * cosf(rot.x) * BULLET_SPEED, sinf(rot.x) * BULLET_SPEED, -cosf(rot.y) * cosf(rot.x) * BULLET_SPEED);

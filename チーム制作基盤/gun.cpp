@@ -51,7 +51,7 @@ CGun::~CGun()
 // =====================================================================================================================================================================
 HRESULT CGun::Init()
 {
-	m_type = GUN_TYPE::GUNTYPE_HANDGUN;
+	m_GunType = GUN_TYPE::GUNTYPE_HANDGUN;
 
 	// ‰Šú‰»
 	CModel::Init();
@@ -78,7 +78,7 @@ void CGun::Uninit(void)
 void CGun::Update(void)
 {
 	// ƒnƒ“ƒhƒKƒ“ˆÈŠO‚Ì‚Æ‚«
-	if (m_type != GUN_TYPE::GUNTYPE_HANDGUN)
+	if (m_GunType != GUN_TYPE::GUNTYPE_HANDGUN)
 	{
 		// ƒfƒNƒŠƒƒ“ƒg
 		m_nAmmo--;
@@ -89,13 +89,15 @@ void CGun::Update(void)
 			// ’e–ò”‚ð0‚É‚·‚é
 			m_nAmmo = 0;
 			// ƒnƒ“ƒhƒKƒ“‚É–ß‚·
-			m_type = GUN_TYPE::GUNTYPE_HANDGUN;
+			m_GunType = GUN_TYPE::GUNTYPE_HANDGUN;
 		}
 	}
 
 	// XV
 	CModel::Update();
 	CDebugProc::Print("\n\nHGPos %.1f, %.1f, %.1f\n\n", GetPosition().x, GetPosition().y, GetPosition().z);
+	CDebugProc::Print("\n\nbtype %d\n\n", m_BulletType);
+
 }
 
 // =====================================================================================================================================================================
@@ -149,7 +151,7 @@ CGun * CGun::Create(D3DXMATRIX *mtx)
 void CGun::SetGunType(GUN_TYPE type)
 {
 	// Ží—Þ‚ÌÝ’è
-	m_type = type;
+	m_GunType = type;
 
 	// Ží—Þ‚²‚Æ‚Ì’e–ò”
 	switch (type)
@@ -171,16 +173,26 @@ void CGun::SetGunType(GUN_TYPE type)
 // =====================================================================================================================================================================
 void CGun::Shot(D3DXVECTOR3 rot)
 {
-	switch (m_type)
+	CBullet *pBullet = nullptr;
+
+	switch (m_GunType)
 	{
 	case CGun::GUNTYPE_HANDGUN:
 		// ƒnƒ“ƒhƒKƒ“‚Ì¶¬
-		CHandgun::Create(D3DXVECTOR3(m_mtx->_41, m_mtx->_42, m_mtx->_43), rot);
+		pBullet = CHandgun::Create(rot);
 		break;
 
 	case CGun::GUNTYPE_HEAVYMACHINEGUN:
 		// ƒwƒr[ƒ}ƒVƒ“ƒKƒ“‚Ì¶¬
-		CHeavyMachinegun::Create(GetPosition(), GetRot());
+		pBullet = CHeavyMachinegun::Create(rot);
 		break;
+	}
+	if (pBullet)
+	{
+		// ˆÊ’u‚ÌÝ’è
+		pBullet->SetPosition(D3DXVECTOR3(m_mtx->_41 - 15.0f, m_mtx->_42 + 8.0f, m_mtx->_43));
+
+		// ’e‚ÌŽí—Þ‚ÌÝ’è
+		pBullet->SetBulletType((CBullet::BULLET_TYPE)m_BulletType);
 	}
 }

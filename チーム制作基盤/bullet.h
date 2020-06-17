@@ -19,8 +19,15 @@
 class CBullet : public CScene3D
 {
 public:
+	// 弾の種類
+	enum BULLET_TYPE
+	{
+		TYPE_PLAYER = 0,
+		TYPE_ENEMY,
+		TYPE_MAX,
+	};
 
-	CBullet(OBJ_TYPE type);											// コンストラクタ
+	CBullet(OBJ_TYPE type);								// コンストラクタ
 	~CBullet();											// デストラクタ
 
 	/* メンバ関数 */
@@ -30,11 +37,15 @@ public:
 	virtual void				Draw();					// 描画
 
 	/* メンバ関数 */
-	D3DXVECTOR3					&GetMove()					{ return m_move; };		// 移動値の取得
-	void						SetMove(D3DXVECTOR3 move)	{ m_move = move; };		// 移動値の設定
+	D3DXVECTOR3					&GetMove()						{ return m_move; };		// 移動値の取得
+	void						SetMove(D3DXVECTOR3 move)		{ m_move = move; };		// 移動値の設定
+	BULLET_TYPE					&GetBulletType()				{ return m_type; };		// 弾の種類の取得
+	void						SetBulletType(BULLET_TYPE type) { m_type = type; };		// 弾の種類の設定
+
 private:
 	/* メンバ変数 */
 	D3DXVECTOR3					m_move;					// 移動値
 	int							m_nLife;				// 体力
+	BULLET_TYPE					m_type;					// 弾の種類
 };
 #endif
