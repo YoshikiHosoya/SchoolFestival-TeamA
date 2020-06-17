@@ -175,12 +175,12 @@ void CGun::Shot(D3DXVECTOR3 rot)
 	{
 	case CGun::GUNTYPE_HANDGUN:
 		// ƒnƒ“ƒhƒKƒ“‚Ì¶¬
-		CHandgun::Create(D3DXVECTOR3(m_mtx->_41, m_mtx->_42, m_mtx->_43), rot);
+		CHandgun::Create(D3DXVECTOR3(m_mtx->_41 - 15.0f, m_mtx->_42 + 8.0f, m_mtx->_43), rot);
 		break;
 
 	case CGun::GUNTYPE_HEAVYMACHINEGUN:
 		// ƒwƒr[ƒ}ƒVƒ“ƒKƒ“‚Ì¶¬
-		CHeavyMachinegun::Create(GetPosition(), GetRot());
+		CHeavyMachinegun::Create(D3DXVECTOR3(m_mtx->_41, m_mtx->_42, m_mtx->_43), rot);
 		break;
 	}
 }
