@@ -30,7 +30,7 @@ public:
 	void						Draw();					// 描画
 
 	/* 静的メンバ関数 */
-	static	CHandgun			*Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot);	// ハンドガンの生成
+	static	CHandgun			*Create(D3DXVECTOR3 rot);	// ハンドガンの生成
 
 private:
 	/* 静的メンバ変数 */

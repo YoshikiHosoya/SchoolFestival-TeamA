@@ -20,6 +20,14 @@ class CGun : public CModel
 {
 public:
 
+	// ’e‚Ìí—Ş
+	enum BULLET_TYPE
+	{
+		TYPE_PLAYER = 0,
+		TYPE_ENEMY,
+		TYPE_MAX,
+	};
+
 	// e‚Ìí—Ş
 	enum GUN_TYPE
 	{
@@ -41,13 +49,17 @@ public:
 	static	CGun			*Create(D3DXMATRIX *mtx);		// e‚Ì¶¬
 
 	/* ƒƒ“ƒoŠÖ” */
-	GUN_TYPE				&GetGunType() { return m_type; };				// e‚Ìí—Ş‚Ìæ“¾
-	void					SetGunType(GUN_TYPE type);						// e‚Ìí—Ş‚Ìİ’è
-	void					Shot(D3DXVECTOR3 rot);							// e‚Ì”­Ë
+	GUN_TYPE				&GetGunType() { return m_GunType; };				// e‚Ìí—Ş‚Ìæ“¾
+	void					SetGunType(GUN_TYPE type);							// e‚Ìí—Ş‚Ìİ’è
+	BULLET_TYPE				&GetBulletType() { return m_BulletType; };				// ’e‚Ìí—Ş‚Ìæ“¾
+	void					SetBulletType(BULLET_TYPE type) { m_BulletType = type; };	// ’e‚Ìí—Ş‚Ìİ’è
+
+	void					Shot(D3DXVECTOR3 rot);								// e‚Ì”­Ë
 
 private:
 	/* ƒƒ“ƒo•Ï” */
-	GUN_TYPE				m_type;					// ƒKƒ“‚Ìí—Ş
+	GUN_TYPE				m_GunType;				// ƒKƒ“‚Ìí—Ş
+	BULLET_TYPE				m_BulletType;			// ’e‚Ìí—Ş
 	int						m_nAmmo;				// ’e–ò”
 	int						m_nInterval;			// ƒCƒ“ƒ^[ƒoƒ‹
 	D3DXMATRIX				*m_mtx;					// ƒ}ƒgƒŠƒbƒNƒX

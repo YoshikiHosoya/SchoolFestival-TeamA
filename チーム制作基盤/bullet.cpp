@@ -9,6 +9,7 @@
 #include "renderer.h"
 #include "game.h"
 #include "debugproc.h"
+#include "gun.h"
 
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
@@ -78,7 +79,8 @@ void CBullet::Update(void)
 	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
 
 	// 位置の取得
-	D3DXVECTOR3 pos = CScene3D::GetPosition();
+	D3DXVECTOR3 pos		= CScene3D::GetPosition();
+	D3DXVECTOR3 size	= CScene3D::GetSize();
 
 	// 位置更新
 	pos += m_move;
