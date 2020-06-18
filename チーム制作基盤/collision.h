@@ -38,11 +38,11 @@ public:
 	// オブジェクトの種類
 	typedef enum
 	{
-		OBJTYPE_PLAYER = 0,					// プレイヤー
+		OBJTYPE_PLAYERBULLET = 0,			// プレイヤー弾
+		OBJTYPE_ENEMYBULLET,				// 敵弾
+		OBJTYPE_PLAYER,						// プレイヤー
 		OBJTYPE_ENEMY,						// エネミー
 		OBJTYPE_ITEM,						// アイテム
-		OBJTYPE_ENEMYBULLET,				// 敵弾
-		OBJTYPE_PLAYERBULLET,				// プレイヤー弾
 		OBJTYPE_OTHER,						// その他
 		OBJTYPE_MAX
 	} OBJTYPE;
@@ -67,6 +67,7 @@ public:
 	void SetMove(D3DXVECTOR3 *move);			// 移動量の設定
 	void SetType(OBJTYPE type);					// タイプの設定
 	bool Collision(OBJTYPE objtype);			// 箱型の当たり判定
+	bool Collision2D(CCollision *pCollision);	// 板型の当たり判定
 	bool GetHitFlag() {return m_bHitFlag;}		// 判定の結果を返す
 	OBJTYPE GetObjtype() {return m_objtype;};	// 誰の当たり判定なのかを返す
 

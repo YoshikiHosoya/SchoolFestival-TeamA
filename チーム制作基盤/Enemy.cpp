@@ -7,9 +7,12 @@
 #include "game.h"
 #include "fade.h"
 #include "Xinput.h"
+#include "collision.h"
+#include "debugproc.h"
 CEnemy::CEnemy(OBJ_TYPE type) :CCharacter(type)
 {
 	SetObjType(OBJTYPE_ENEMY);
+	m_pCollision = NULL;
 }
 
 CEnemy::~CEnemy()
@@ -26,6 +29,16 @@ HRESULT CEnemy::Init(void)
 	SetCharacterType(CCharacter::CHARACTER_TYPE_ENEMY);
 	LPDIRECT3DDEVICE9 pDevice = CManager::GetRendere()->GetDevice();
 	m_Attack = false;
+
+	// 当たり判定生成
+	m_pCollision = CCollision::Create();
+	m_pCollision->SetPos(&GetPosition());
+	m_pCollision->SetSize2D(D3DXVECTOR3(50.0f,100.0f,0.0f));
+	m_pCollision->SetMove(&GetMove());
+	m_pCollision->SetType(CCollision::OBJTYPE_ENEMY);
+
+
+	CCharacter::SetLife(50);
 	return S_OK;
 }
 //====================================================================
@@ -51,6 +64,14 @@ void CEnemy::Update(void)
 	{
 		SetMotion(CCharacter::ENEMY_MOTION_WALK);
 	}
+
+	if (m_pCollision != NULL)
+	{
+		// 座標の更新
+		m_pCollision->SetPos(&GetPosition());
+	}
+
+	CDebugProc::Print("\n敵のライフ %d\n", CCharacter::GetLife());
 	CCharacter::Update();
 }
 //====================================================================
@@ -74,6 +95,14 @@ CEnemy *CEnemy::Create(void)
 void CEnemy::DefaultMotion(void)
 {
 	SetMotion(CCharacter::ENEMY_MOTION_NORMAL);
+}
+//====================================================================
+//当たり判定の削除
+//====================================================================
+void CEnemy::DeleteCollision(void)
+{
+	m_pCollision->Delete(m_pCollision);
+	m_pCollision = NULL;
 }
 //====================================================================
 //移動

@@ -25,7 +25,7 @@ char *CMap::m_MapFileName[MAP_MAX] =
 };
 char *CMap::m_EnemyFileName[MAP_MAX] =
 {
-	{ "data/Load/Enemy.txt" },
+	{ "data/Load/Enemy_Map01.txt" },
 	{ "data/Load/Enemy.txt" },
 };
 
@@ -137,6 +137,7 @@ void CMap::EnemyLoad(int nCnt)
 	char cHeadText[128];			// 比較用
 	char cDie[128];					// 不要な文字
 	D3DXVECTOR3 pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 位置
+	int nLife		= 0;								// 体力
 	//CEnemy::TYPE type = CEnemy::NONE;		// 種類
 	int nType = 0;
 
@@ -181,12 +182,19 @@ void CMap::EnemyLoad(int nCnt)
 						{
 							sscanf(cReadText, "%s %s %f %f %f", &cDie, &cDie, &pos.x, &pos.y, &pos.z);		// 比較用テキストにPOSを代入
 						}
+						// LIFEが来たら
+						else if (strcmp(cHeadText, "LIFE") == 0)
+						{
+							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &nLife);		// 比較用テキストにTYPEを代入
+						}
 						else if (strcmp(cHeadText, "END_ENEMYSET") == 0)
 						{
 							// オブジェクトの生成
 							m_pEnemy.emplace_back(CEnemy::Create());
 							// 位置の設定
 							m_pEnemy[m_pEnemy.size() - 1]->SetPosition(pos);
+							// 体力の設定
+							m_pEnemy[m_pEnemy.size() - 1]->SetLife(nLife);
 						}
 					}
 				}
@@ -377,6 +385,20 @@ int CMap::GetMaxModel()
 
 // =====================================================================================================================================================================
 //
+// 敵の最大数取得
+//
+// =====================================================================================================================================================================
+int CMap::GetMaxEnemy()
+{
+	if (!m_pEnemy.empty())
+	{
+		return m_pEnemy.size();
+	}
+	return 0;
+}
+
+// =====================================================================================================================================================================
+//
 // メッシュの取得
 //
 // =====================================================================================================================================================================
@@ -465,8 +487,7 @@ void CMap::EnemySave()
 		fprintf(pFile, "#------------------------------------------------------------------------------\n");
 		fprintf(pFile, "# TYPE情報\n");
 		fprintf(pFile, "#\n");
-		fprintf(pFile, "#	[ 0 ]	床\n");
-		fprintf(pFile, "#	[ 1 ]	壁\n");
+		fprintf(pFile, "#	[ 0 ]	兵士\n");
 		fprintf(pFile, "#\n");
 		fprintf(pFile, "#------------------------------------------------------------------------------\n");
 
@@ -482,6 +503,7 @@ void CMap::EnemySave()
 				fprintf(pFile, "ENEMYSET									# %d\n", nCntEnemy);
 				fprintf(pFile, "	TYPE	= %d\n", 0 /*m_pEnemy[nCntEnemy]->GetType()*/);
 				fprintf(pFile, "	POS		= %.0f %.0f %.0f\n", EnemyPos.x, EnemyPos.y, EnemyPos.z);
+				fprintf(pFile, "	LIFE	= %d\n", m_pEnemy[nCntEnemy]->GetLife());
 				fprintf(pFile, "END_ENEMYSETSET\n\n");
 			}
 		}
@@ -494,5 +516,23 @@ void CMap::EnemySave()
 	{
 		// メッセージウィンドウで警告
 		MessageBox(NULL, "ファイルが開かれています", "警告", MB_OK | MB_ICONWARNING);
+	}
+}
+
+// =====================================================================================================================================================================
+//
+// 死亡フラグ確認関数
+//
+// =====================================================================================================================================================================
+void CMap::UpdateDieFlag()
+{
+	for (size_t nCnt = 0; nCnt < m_pEnemy.size(); nCnt++)
+	{
+		if (m_pEnemy[nCnt]->GetDieFlag())
+		{
+			m_pEnemy[nCnt]->Rerease();
+			m_pEnemy[nCnt] = nullptr;
+			m_pEnemy.erase(m_pEnemy.begin() + nCnt);
+		}
 	}
 }

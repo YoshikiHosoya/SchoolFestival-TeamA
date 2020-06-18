@@ -34,7 +34,7 @@ CCollision * CCollision::m_pCur = NULL;	// 現在オブジェクトへのポインタ
 // ----------------------------------------
 CCollision::CCollision()
 {
-	m_objtype			= OBJTYPE_PLAYER;					// タイプの初期化
+	m_objtype			= OBJTYPE_PLAYERBULLET;				// タイプの初期化
 	m_ppos				= NULL;								// 位置情報
 	m_posOld			= D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 前回の位置情報
 	m_size				= D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// サイズ情報
@@ -151,6 +151,15 @@ void CCollision::Delete(CCollision *pColl)
 				// 次の前回の情報を代入
 				pCollisionNext->m_pPrey = pCollision->m_pPrey;
 			}
+
+#ifdef _DEBUG
+			if (pCollision->m_Debugcollision != NULL)
+			{
+				// デバック用判定削除
+				pCollision->m_Debugcollision->DeleteDeCollision(pCollision->m_Debugcollision);
+			}
+#endif // _DEBUG
+
 			// レイヤーダウン
 			delete pCollision;
 			pCollision = NULL;
@@ -256,7 +265,7 @@ void CCollision::SetSize2D(D3DXVECTOR3 size)
 {
 	m_size = size;
 #ifdef _DEBUG
-	CDebugcollision::Create(m_ppos, &m_size, CDebugcollision::COLLISIONTYPE_BOARD);
+	m_Debugcollision = CDebugcollision::Create(m_ppos, &m_size, CDebugcollision::COLLISIONTYPE_BOARD);
 #endif
 }
 
@@ -307,10 +316,10 @@ bool CCollision::Collision(OBJTYPE objtype)
 						this->m_posOld.x + this->m_size.x * 0.5f <= pCollision->m_ppos->x - pCollision->m_size.x * 0.5f)
 					{
 						// 素材状の左に
-						this->m_ppos->x = pCollision->m_ppos->x - pCollision->m_size.x * 0.5f - this->m_size.x * 0.5f;
+						//this->m_ppos->x = pCollision->m_ppos->x - pCollision->m_size.x * 0.5f - this->m_size.x * 0.5f;
 
 						// 移動量の初期化
-						this->m_pmove->x = 0.0f;
+						//this->m_pmove->x = 0.0f;
 
 						// オブジェクトに当たったフラグ
 						m_bHitFlag = true;
@@ -321,9 +330,9 @@ bool CCollision::Collision(OBJTYPE objtype)
 						m_posOld.x - this->m_size.x * 0.5f >= pCollision->m_ppos->x + pCollision->m_size.x * 0.5f)
 					{
 						// 素材状の左に
-						this->m_ppos->x = pCollision->m_ppos->x + pCollision->m_size.x * 0.5f + this->m_size.x * 0.5f;
+						//this->m_ppos->x = pCollision->m_ppos->x + pCollision->m_size.x * 0.5f + this->m_size.x * 0.5f;
 						// 移動量の初期化
-						this->m_pmove->x = 0.0f;
+						//this->m_pmove->x = 0.0f;
 						// オブジェクトに当たったフラグ
 						m_bHitFlag = true;
 					}
@@ -338,9 +347,9 @@ bool CCollision::Collision(OBJTYPE objtype)
 						m_posOld.z + this->m_size.z * 0.5f <= pCollision->m_ppos->z - pCollision->m_size.z * 0.5f)
 					{
 						// 素材状の左に
-						this->m_ppos->z = pCollision->m_ppos->z - pCollision->m_size.z * 0.5f - this->m_size.z * 0.5f;
+						//this->m_ppos->z = pCollision->m_ppos->z - pCollision->m_size.z * 0.5f - this->m_size.z * 0.5f;
 						// 移動量の初期化
-						this->m_pmove->z = 0.0f;
+						//this->m_pmove->z = 0.0f;
 						// オブジェクトに当たったフラグ
 						m_bHitFlag = true;
 					}
@@ -350,11 +359,11 @@ bool CCollision::Collision(OBJTYPE objtype)
 						m_posOld.z - this->m_size.z * 0.5f >= pCollision->m_ppos->z + pCollision->m_size.z * 0.5f)
 					{
 						// 素材状の左に
-						this->m_ppos->z = pCollision->m_ppos->z +
-							pCollision->m_size.z * 0.5f +
-							this->m_size.z * 0.5f + 0.1f;
+						//this->m_ppos->z = pCollision->m_ppos->z +
+							//pCollision->m_size.z * 0.5f +
+							//this->m_size.z * 0.5f + 0.1f;
 						// 移動量の初期化
-						this->m_pmove->z = 0.0f;
+						//this->m_pmove->z = 0.0f;
 						// オブジェクトに当たったフラグ
 						m_bHitFlag = true;
 					}
@@ -374,9 +383,9 @@ bool CCollision::Collision(OBJTYPE objtype)
 						m_posOld.y + this->m_size.y * 0.5f <= pCollision->m_ppos->y - pCollision->m_size.y * 0.5f)
 					{
 						// 素材状の左に
-						this->m_ppos->y = this->m_posOld.y;
+						//this->m_ppos->y = this->m_posOld.y;
 						// 移動量の初期化
-						this->m_pmove->y = 0.0f;
+						//this->m_pmove->y = 0.0f;
 						// オブジェクトに当たったフラグ
 						m_bHitFlag = true;
 					}
@@ -386,9 +395,9 @@ bool CCollision::Collision(OBJTYPE objtype)
 						m_posOld.y - this->m_size.y * 0.5f >= pCollision->m_ppos->y + pCollision->m_size.y * 0.5f)
 					{
 						// 素材状の左に
-						this->m_ppos->y = pCollision->m_ppos->y + pCollision->m_size.y * 0.5f + this->m_size.y * 0.5f;
+						//this->m_ppos->y = pCollision->m_ppos->y + pCollision->m_size.y * 0.5f + this->m_size.y * 0.5f;
 						// 移動量の初期化
-						this->m_pmove->y = 0.0f;
+						//this->m_pmove->y = 0.0f;
 						// オブジェクトに当たったフラグ
 						m_bHitFlag = true;
 					}
@@ -397,6 +406,35 @@ bool CCollision::Collision(OBJTYPE objtype)
 		}
 		pCollision = pCollisionNext;
 	}
+	// 当たっているかいないかを返す
+	return m_bHitFlag;
+}
+
+// ----------------------------------------
+// 板型の当たり判定処理
+// ----------------------------------------
+bool CCollision::Collision2D(CCollision *pCollision)
+{
+	// 変数宣言
+
+	if (pCollision != NULL)
+	{
+		// X Yの範囲
+		if (this->m_ppos->y + this->m_size.y * 0.5f >= pCollision->m_ppos->y - pCollision->m_size.y * 0.5f&&
+			this->m_ppos->y - this->m_size.y * 0.5f <= pCollision->m_ppos->y + pCollision->m_size.y * 0.5f&&
+			this->m_ppos->x + this->m_size.x * 0.5f > pCollision->m_ppos->x - pCollision->m_size.x * 0.5f&&
+			this->m_ppos->x - this->m_size.x * 0.5f < pCollision->m_ppos->x + pCollision->m_size.x * 0.5f)
+		{
+			// オブジェクトに当たったフラグ
+			m_bHitFlag = true;
+		}
+
+		else
+		{
+			m_bHitFlag = false;
+		}
+	}
+
 	// 当たっているかいないかを返す
 	return m_bHitFlag;
 }
