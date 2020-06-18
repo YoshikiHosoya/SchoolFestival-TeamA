@@ -217,15 +217,19 @@ void CPlayer::Update(void)
 		if (m_pCollision->GetObjtype() == CCollision::OBJTYPE_PLAYER)
 		{
 			// 当たり判定 相手がエネミーだったら
-			if (m_pCollision->Collision2D(CCollision::OBJTYPE_ENEMY))
+			// 敵の総数分
+			/*for (int nCnt = 0; nCnt < nAll; nCnt++)
 			{
-				CDebugProc::Print("\n時機が敵に当たったよ！\n");
-			}
+				if (m_pCollision->Collision2D(pEnemy[nCnt]->m_pCollision))
+				{
+					CDebugProc::Print("\n時機が敵に当たったよ！\n");
+				}
 
-			else
-			{
-				CDebugProc::Print("\n時機が敵に当たってないよ！\n");
-			}
+				else
+				{
+					CDebugProc::Print("\n時機が敵に当たってないよ！\n");
+				}
+			}*/
 		}
 	}
 

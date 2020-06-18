@@ -129,25 +129,24 @@ void CBullet::Update(void)
 			// 敵の総数分
 			/*for (int nCnt = 0; nCnt < nAll; nCnt++)
 			{
-
-			}*/
-
-			//// 当たり判定 相手がエネミーだったら
-			//if (m_pCollision->Collision2D(CCollision::OBJTYPE_ENEMY))
-			//{
-			//	// 判定の削除
+			if (m_pCollision->Collision2D(pEnemy[nCnt]->m_pCollision))
+			{
+			// 判定の削除
+			//	m_pCollision->Delete(pEnemy[nCnt]->m_pCollision);
 			//	m_pCollision->Delete(m_pCollision);
 			//	m_pCollision = NULL;
 			//	// 弾の削除
 			//	Rerease();
 			//	// 敵のライフ減衰
-			//	//pEnemy->CCharacter::SetLife(-10);
-			//}
+			//	//pEnemy[nCnt]->CCharacter::SetLife(-10);
+			}
+			}*/
 
 			//else
 			//{
 			//	CDebugProc::Print("\n弾が敵に当たってないよ！ \n");
 			//}
+
 		}
 
 		// エネミーの弾だったら
