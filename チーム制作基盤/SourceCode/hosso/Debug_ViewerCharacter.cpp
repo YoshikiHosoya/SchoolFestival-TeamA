@@ -690,4 +690,5 @@ HRESULT CDebug_ViewerCharacter::SaveModelOffset()
 		std::cout << "Motion Save FAILED!!  Can't Open File >> "<< OFFSET_TEXT_PASS << NEWLINE;
 		return E_FAIL;
 	}
+	return S_OK;
 }

@@ -112,6 +112,7 @@ public:
 	void SetCharacterType(CHARACTER_TYPE CharaType);
 	void SetGravity(bool gravity);
 	void SetCharacterDirection(CHARACTER_DIRECTION direction);
+
 	//ÉÇÅ[ÉVÉáÉìä÷òA
 	void SetMotion(CHARACTER_MOTION_STATE type);
 	void SetMotionOldType(CHARACTER_MOTION_STATE type);
