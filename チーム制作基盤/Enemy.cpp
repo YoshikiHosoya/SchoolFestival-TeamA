@@ -7,9 +7,11 @@
 #include "game.h"
 #include "fade.h"
 #include "Xinput.h"
+#include "collision.h"
 CEnemy::CEnemy(OBJ_TYPE type) :CCharacter(type)
 {
 	SetObjType(OBJTYPE_ENEMY);
+	m_pCollision = NULL;
 }
 
 CEnemy::~CEnemy()
@@ -26,6 +28,14 @@ HRESULT CEnemy::Init(void)
 	SetCharacterType(CCharacter::CHARACTER_TYPE_ENEMY);
 	LPDIRECT3DDEVICE9 pDevice = CManager::GetRendere()->GetDevice();
 	m_Attack = false;
+
+	// “–‚½‚è”»’è¶¬
+	m_pCollision = CCollision::Create();
+	m_pCollision->SetPos(&GetPosition());
+	m_pCollision->SetSize2D(D3DXVECTOR3(50.0f,100.0f,0.0f));
+	m_pCollision->SetMove(&GetMove());
+	m_pCollision->SetType(CCollision::OBJTYPE_ENEMY);
+
 	return S_OK;
 }
 //====================================================================
@@ -50,6 +60,11 @@ void CEnemy::Update(void)
 	if (key->GetKeyboardTrigger(DIK_9))
 	{
 		SetMotion(CCharacter::ENEMY_MOTION_WALK);
+	}
+
+	if (m_pCollision != NULL)
+	{
+		m_pCollision->SetPos(&GetPosition());
 	}
 	CCharacter::Update();
 }

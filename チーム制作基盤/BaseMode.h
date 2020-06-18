@@ -14,6 +14,7 @@
 //==========================================================
 //‘O•ûéŒ¾
 class CPlayer;
+class CEnemy;
 class CMap;
 class CBaseMode
 {

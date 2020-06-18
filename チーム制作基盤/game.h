@@ -22,6 +22,7 @@ public:
 	void Uninit(void);
 	void Update(void);
 	CPlayer * GetPlayer(void);
+	CEnemy * GetEnemy (void);
 	CMap *GetMap(void);
 	static int GetHP(void);
 
