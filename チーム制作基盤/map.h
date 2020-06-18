@@ -48,6 +48,7 @@ public:
 
 	/* メンバ関数 */
 	int				GetMaxModel();										// モデルの最大数取得
+	int				GetMaxEnemy();										// 敵の最大数取得
 	LPD3DXMESH		GetMesh(int nCnt);									// メッシュの取得
 	CModel			*GetModel(int nCnt) { return m_pModel[nCnt]; };		// モデルの取得
 	CEnemy			*GetEnemy(int nCnt) { return m_pEnemy[nCnt]; };		// 敵の取得

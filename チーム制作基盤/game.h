@@ -8,7 +8,6 @@
 class CRenderer;
 class CKeyboard;
 class CPlayer;
-class CEnemy;
 class CPause;
 class CMap;
 
@@ -22,7 +21,6 @@ public:
 	void Uninit(void);
 	void Update(void);
 	CPlayer * GetPlayer(void);
-	CEnemy * GetEnemy (void);
 	CMap *GetMap(void);
 	static int GetHP(void);
 
@@ -32,7 +30,6 @@ public:
 private:
 	static LPDIRECT3DTEXTURE9 m_pTexture;
 	static CPlayer	*m_pPlayer;
-	static CEnemy	*m_pEnemy;
 	static CMap		*m_pMap;
 	static int m_Counter;
 	static int MP;
