@@ -89,8 +89,10 @@ public:
 	void SetSize(D3DXVECTOR3 size);
 	void SetType(int type)				{ m_type = type; };					// モデルタイプの設定
 	void SetModelConut(int nModelCount) { m_modelCount = nModelCount; };	// モデルカウントの設定
+	void SetParentIdx(int nParentIdx)	{ m_nParentIdx = nParentIdx; };		// 親番号設定
 	int GetType()						{ return m_type; };					// モデルタイプの取得
 	int GetModelCount()					{ return m_modelCount; };			// モデルカウントの取得
+	int GetParentIdx()					{ return m_nParentIdx; };			// 親番号取得
 	LPD3DXMESH GetMesh(void);
 	D3DXMATRIX *GetMatrix(void);
 	static void LoadModel(void);
@@ -124,5 +126,6 @@ private:
 	int m_type;
 	int m_nIdxModelpalent;				//親のインデックス
 	int m_nIdx;							//モデルのインデックス
+	int m_nParentIdx;					//親番号
 };
 #endif

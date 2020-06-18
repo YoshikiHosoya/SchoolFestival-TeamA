@@ -484,90 +484,65 @@ void CCharacter::LoadMotion(void)
 			while (strcmp(cHeadText, "SCRIPT") != 0)
 			{
 				fgets(cReadText, sizeof(cReadText), pFile);	//一文を読み込む
- 				sscanf(cReadText, "%s", &cHeadText);		//比較用テキストに文字を代入
+				sscanf(cReadText, "%s", &cHeadText);		//比較用テキストに文字を代入
 			}
 			//スクリプトだったら
 			if (strcmp(cHeadText, "SCRIPT") == 0)
 			{
+				//フレーム分割数の初期化
+				nCntKeySet = 0;
 				//エンドスクリプトが来るまでループ
 				while (strcmp(cHeadText, "END_SCRIPT") != 0)
 				{
 					fgets(cReadText, sizeof(cReadText), pFile);
 					sscanf(cReadText, "%s", &cHeadText);
-					//モーションセットが来たら
-					if (strcmp(cHeadText, "MOTIONSET") == 0)
+
+					//ループするかどうかの情報読み込み
+					if (strcmp(cHeadText, "LOOP") == 0)
 					{
+						sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_CharacterMotion[nCnt]->nLoop);
+					}
+					else if (strcmp(cHeadText, "NUM_KEY") == 0)
+					{
+						sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_CharacterMotion[nCnt]->nNumKey);
+					}
+					else if (strcmp(cHeadText, "KEYSET") == 0)
+					{
+						key_info = new KEY_INFO;
+						m_CharacterMotion[nCnt]->key_info.emplace_back(key_info);
+						nCntKey = 0;
 
-						//フレーム分割数の初期化
-						nCntKeySet = 0;
-						//エンドモーションセットが来るまでループ
-						while (strcmp(cHeadText, "END_MOTIONSET") != 0)
+						while (strcmp(cHeadText, "END_KEYSET") != 0)
 						{
-							fgets(cReadText, sizeof(cReadText), pFile);//一文を抜き取る
+							fgets(cReadText, sizeof(cReadText), pFile);
 							sscanf(cReadText, "%s", &cHeadText);
-							//ループするかどうかの情報読み込み
-							if (strcmp(cHeadText, "LOOP") == 0)
+
+							if (strcmp(cHeadText, "FRAME") == 0)
 							{
-								sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_CharacterMotion[nCnt]->nLoop);
+								sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_CharacterMotion[nCnt]->key_info[nCntKeySet]->nFram);
 							}
-							else if (strcmp(cHeadText, "NUM_KEY") == 0)
+							//キーだったら
+							else if (strcmp(cHeadText, "KEY") == 0)
 							{
-								sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_CharacterMotion[nCnt]->nNumKey);
-							}
-							else if (strcmp(cHeadText, "KEYSET") == 0)
-							{
-								key_info = new KEY_INFO;
-								m_CharacterMotion[nCnt]->key_info.emplace_back(key_info);
-								nCntKey = 0;
+								//メモリ確保
+								key = new KEY;
 
-								while (strcmp(cHeadText, "END_KEYSET") != 0)
-								{
-									fgets(cReadText, sizeof(cReadText), pFile);
-									sscanf(cReadText, "%s", &cHeadText);
+								//配列に追加
+								m_CharacterMotion[nCnt]->key_info[nCntKeySet]->key.emplace_back(key);
 
-									if (strcmp(cHeadText, "FRAME") == 0)
-									{
-										sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_CharacterMotion[nCnt]->key_info[nCntKeySet]->nFram);
-									}
-									else if (strcmp(cHeadText, "KEY") == 0)
-									{
-										key = new KEY;
-										m_CharacterMotion[nCnt]->key_info[nCntKeySet]->key.emplace_back(key);
-										while (strcmp(cHeadText, "END_KEY") != 0)
-										{
-											fgets(cReadText, sizeof(cReadText), pFile);
-											sscanf(cReadText, "%s", &cHeadText);
-											if (strcmp(cHeadText, "POS") == 0)
-											{
-												//sscanf(cReadText, "%s %s %f %f %f",
-												//	&cDie, &cDie,
-												//	&m_CharacterMotion[nCntMotion].key_info[nCntKeySet].key[nCntKey].pos.x,
-												//	&m_CharacterMotion[nCntMotion].key_info[nCntKeySet].key[nCntKey].pos.y,
-												//	&m_CharacterMotion[nCntMotion].key_info[nCntKeySet].key[nCntKey].pos.z);
+								sscanf(cReadText, "%s %s %s %f %f %f", &cDie, &cDie, &cDie,
+									&m_CharacterMotion[nCnt]->key_info[nCntKeySet]->key[nCntKey]->rot.x,
+									&m_CharacterMotion[nCnt]->key_info[nCntKeySet]->key[nCntKey]->rot.y,
+									&m_CharacterMotion[nCnt]->key_info[nCntKeySet]->key[nCntKey]->rot.z);
 
-												//m_CharacterMotion[nCntMotion].key_info[nCntKeySet].key[nCntKey].pos += m_vModelList[nCntKey]->GetPosition();
-											}
-											else if (strcmp(cHeadText, "ROT") == 0)
-											{
-												sscanf(cReadText, "%s %s %f %f %f",
-													&cDie, &cDie,
-													&m_CharacterMotion[nCnt]->key_info[nCntKeySet]->key[nCntKey]->rot.x,
-													&m_CharacterMotion[nCnt]->key_info[nCntKeySet]->key[nCntKey]->rot.y,
-													&m_CharacterMotion[nCnt]->key_info[nCntKeySet]->key[nCntKey]->rot.z);
-											}
-											else if (strcmp(cHeadText, "END_KEY") == 0)
-											{
-												nCntKey++;
-											}
-										}
-									}
-								}
-								nCntKeySet++;
+								//キー加算
+								nCntKey++;
 							}
 						}
-
+						nCntKeySet++;
 					}
 				}
+
 			}
 			//ファイルを閉じる
 			fclose(pFile);
@@ -756,6 +731,7 @@ void CCharacter::LoadOffset(CHARACTER_TYPE nType)
 					{
 						CModel *pModel = CModel::Create(type, nIdx);
 						pModel->SetPosition(pos);
+						pModel->SetParentIdx(nIdxParent);
 						if (nIdxParent == -1)
 						{
 							pModel->SetParent(NULL);
