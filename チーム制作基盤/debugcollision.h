@@ -62,6 +62,7 @@ public:
 	/* ƒƒ“ƒoŠÖ” */
 	void SetPos(D3DXVECTOR3 *pos);
 	void SetSize(D3DXVECTOR3 *size);
+	static void DeleteDeCollision(CDebugcollision *pDebugcollision);
 protected:
 
 private:

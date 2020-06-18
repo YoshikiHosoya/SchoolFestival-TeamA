@@ -10,10 +10,12 @@
 #include "handgun.h"
 #include "heavymachinegun.h"
 #include "gun.h"
+#include "collision.h"
 
 CPlayer::CPlayer(OBJ_TYPE type) :CCharacter(type)
 {
 	SetObjType(OBJTYPE_PLAYER);
+	m_pCollision = NULL;
 }
 
 CPlayer::~CPlayer()
@@ -38,6 +40,13 @@ HRESULT CPlayer::Init(void)
 	m_pGun = CGun::Create(CCharacter::GetMtxWorld());
 	// 銃の弾の種類
 	m_pGun->GetBulletType() = CGun::TYPE_PLAYER;
+
+	// 当たり判定生成
+	m_pCollision = CCollision::Create();
+	m_pCollision->SetPos(&GetPosition());
+	m_pCollision->SetSize2D(D3DXVECTOR3(50.0f, 100.0f, 0.0f));
+	m_pCollision->SetMove(&GetMove());
+	m_pCollision->SetType(CCollision::OBJTYPE_PLAYER);
 
 	return S_OK;
 }
@@ -197,6 +206,27 @@ void CPlayer::Update(void)
 	if (key->GetKeyboardTrigger(DIK_2))
 	{
 		SetMotion(CCharacter::PLAYER_MOTION_WALK);
+	}
+
+	// 当たり判定
+	if (m_pCollision != NULL)
+	{
+		// 座標の更新 posとposold
+		m_pCollision->SetPos(&GetPosition());
+
+		if (m_pCollision->GetObjtype() == CCollision::OBJTYPE_PLAYER)
+		{
+			// 当たり判定 相手がエネミーだったら
+			if (m_pCollision->Collision2D(CCollision::OBJTYPE_ENEMY))
+			{
+				CDebugProc::Print("\n時機が敵に当たったよ！\n");
+			}
+
+			else
+			{
+				CDebugProc::Print("\n時機が敵に当たってないよ！\n");
+			}
+		}
 	}
 
 	XInputSetState(0, &vibration);
