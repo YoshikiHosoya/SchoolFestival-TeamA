@@ -25,7 +25,6 @@ HRESULT  CRenderer::Init(HWND hWnd, BOOL bWindow)
 	D3DDISPLAYMODE d3ddm;			// ディスプレイモード
 	m_pLight  = new CLight;
 	m_pCamera = new CCamera;
-	m_pDebug  = new CDebugProc;
 
 	// Direct3Dオブジェクトの生成
 	g_pD3D = Direct3DCreate9(D3D_SDK_VERSION);
@@ -121,11 +120,14 @@ HRESULT  CRenderer::Init(HWND hWnd, BOOL bWindow)
 	//初期化
 	ImGui_ImplWin32_Init(hWnd);
 	ImGui_ImplDX9_Init(g_pD3DDevice);
+
+	//DebugProc
+	m_pDebug = new CDebugProc;
+	m_pDebug->Init();
 #endif
 
 	m_pLight->InitLight();
 	m_pCamera->InitCamera();
-	m_pDebug->Init();
 	m_pFade = CFADE::CreateFade();
 
 	return S_OK;
@@ -159,17 +161,19 @@ void CRenderer::Uninit(void)
 		g_pFont->Release();
 		g_pFont = NULL;
 	}
-#endif // _DEBUG
 
 	ImGui_ImplDX9_Shutdown();
 	ImGui_ImplWin32_Shutdown();
 	ImGui::DestroyContext();
+#endif // _DEBUG
 }
 //=============================================================================
 //更新処理
 //=============================================================================
 void CRenderer::Update(void)
 {
+#ifdef _DEBUG
+
 	//ImGuiの更新
 	ImGui_ImplDX9_NewFrame();
 	ImGui_ImplWin32_NewFrame();
@@ -192,18 +196,20 @@ void CRenderer::Update(void)
 	}
 
 
+
 	//Sceneで管理してる情報
 	ImGui::Begin("SceneInfo");
+
+#endif // _DEBUG
 
 	m_pLight->UpdateLight();
 	m_pCamera->UpdateCamera();
 	m_pFade->UpdateFade();
 	CScene::UpdateAll();
 
+#ifdef _DEBUG
 	//Sceneで管理してる情報 終了
 	ImGui::End();	//SceneInfo
-
-#ifdef _DEBUG
 
 	//BaseModeで管理してるやつの情報
 	ImGui::Begin("BaseMode");
@@ -221,11 +227,11 @@ void CRenderer::Update(void)
 	//BaseModeで管理してる情報 終了
 	ImGui::End();	//BaseMode
 
-#endif // _DEBUG
 
 	//ImGui　更新終了
 	ImGui::EndFrame();
 
+#endif // _DEBUG
 }
 //=============================================================================
 //描画処理
@@ -240,9 +246,10 @@ void CRenderer::Draw(void)
 		//GetScene()->Drow();
 		m_pCamera->SetCamera();
 		CScene::DrawAll();
-		m_pDebug->Draw();
 		m_pFade->DrawFade();
 #ifdef _DEBUG
+
+		m_pDebug->Draw();
 		DrawFPS();
 
 		//ImGui描画
