@@ -100,9 +100,13 @@ void CBullet::Update(void)
 	// 更新
 	CScene3D::Update();
 
+#ifdef _DEBUG
 	// デバッグ表示
 	CDebugProc::Print("\nbullet_pos %.1f, %.1f, %.1f\n", pos);
 	CDebugProc::Print("bullet_move %.1f, %.1f, %.1f\n\n", m_move);
+
+	CDebugProc::Print("\n\nbullet_type %d\n\n", m_type);		// 弾の種類(自分か敵か）
+#endif // DEBUG
 }
 
 // =====================================================================================================================================================================
