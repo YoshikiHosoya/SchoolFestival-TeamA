@@ -96,8 +96,6 @@ void CGun::Update(void)
 	// çXêV
 	CModel::Update();
 	CDebugProc::Print("\n\nHGPos %.1f, %.1f, %.1f\n\n", GetPosition().x, GetPosition().y, GetPosition().z);
-	CDebugProc::Print("\n\nbtype %d\n\n", m_BulletType);
-
 }
 
 // =====================================================================================================================================================================
