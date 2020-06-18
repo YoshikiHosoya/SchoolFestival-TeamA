@@ -11,6 +11,11 @@
 #include "heavymachinegun.h"
 #include "gun.h"
 #include "collision.h"
+#include "BaseMode.h"
+#include "manager.h"
+#include "enemy.h"
+#include "map.h"
+
 
 CPlayer::CPlayer(OBJ_TYPE type) :CCharacter(type)
 {
@@ -214,23 +219,24 @@ void CPlayer::Update(void)
 		// 座標の更新 posとposold
 		m_pCollision->SetPos(&GetPosition());
 
-		if (m_pCollision->GetObjtype() == CCollision::OBJTYPE_PLAYER)
+		// 当たり判定 相手がエネミーだったら
+		// 敵の総数分
+		for (int nCnt = 0; nCnt < CManager::GetBaseMode()->GetMap()->GetMaxEnemy(); nCnt++)
 		{
-			// 当たり判定 相手がエネミーだったら
-			// 敵の総数分
-			/*for (int nCnt = 0; nCnt < nAll; nCnt++)
+			CEnemy *pEnemy = CManager::GetBaseMode()->GetMap()->GetEnemy(nCnt);
+			if (pEnemy != NULL)
 			{
-				if (m_pCollision->Collision2D(pEnemy[nCnt]->m_pCollision))
+				/*if (m_pCollision->Collision2D(pEnemy->GetCollision()))
 				{
 					CDebugProc::Print("\n時機が敵に当たったよ！\n");
 				}
-
 				else
 				{
-					CDebugProc::Print("\n時機が敵に当たってないよ！\n");
-				}
-			}*/
+					CDebugProc::Print("\n時機が敵に当たってないよ！ \n");
+				}*/
+			}
 		}
+
 	}
 
 	XInputSetState(0, &vibration);

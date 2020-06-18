@@ -13,6 +13,7 @@
 #include "collision.h"
 #include "Player.h"
 #include "Enemy.h"
+#include "map.h"
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
 // =====================================================================================================================================================================
@@ -127,26 +128,38 @@ void CBullet::Update(void)
 		{
 			// 当たり判定 相手がエネミーだったら
 			// 敵の総数分
-			/*for (int nCnt = 0; nCnt < nAll; nCnt++)
+			for (int nCnt = 0; nCnt < CManager::GetBaseMode()->GetMap()->GetMaxEnemy(); nCnt++)
 			{
-			if (m_pCollision->Collision2D(pEnemy[nCnt]->m_pCollision))
-			{
-			// 判定の削除
-			//	m_pCollision->Delete(pEnemy[nCnt]->m_pCollision);
-			//	m_pCollision->Delete(m_pCollision);
-			//	m_pCollision = NULL;
-			//	// 弾の削除
-			//	Rerease();
-			//	// 敵のライフ減衰
-			//	//pEnemy[nCnt]->CCharacter::SetLife(-10);
+				CEnemy *pEnemy = CManager::GetBaseMode()->GetMap()->GetEnemy(nCnt);
+				if (pEnemy != NULL)
+				{
+					if (m_pCollision != NULL)
+					{
+						if (m_pCollision->Collision2D(pEnemy->GetCollision()))
+						{
+							// 敵のライフ減衰
+							pEnemy->CCharacter::AddDamage(10);
+							if (pEnemy->CCharacter::GetLife() <= 0)
+							{
+								// 敵の当たり判定の削除
+								//pEnemy->GetCollision()->Delete(pEnemy->GetCollision());
+								pEnemy->DeleteCollision();
+								pEnemy = NULL;
+							}
+
+							// 弾の判定の削除
+							m_pCollision->Delete(m_pCollision);
+							m_pCollision = NULL;
+							// 弾の削除
+							Rerease();
+						}
+						else
+						{
+							CDebugProc::Print("\n弾が敵に当たってないよ！ \n");
+						}
+					}
+				}
 			}
-			}*/
-
-			//else
-			//{
-			//	CDebugProc::Print("\n弾が敵に当たってないよ！ \n");
-			//}
-
 		}
 
 		// エネミーの弾だったら

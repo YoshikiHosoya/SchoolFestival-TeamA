@@ -145,6 +145,8 @@ public:
 	char* GetOffsetFileName(CHARACTER_TYPE type);
 	char* GetMotionFileName(CHARACTER_MOTION_STATE motionstate);
 
+	bool GetDieFlag(){return m_bDieFlag; };								// 死亡フラグの取得
+	void SetDieFlag(bool DieFlag) { m_bDieFlag = DieFlag; };			// 死亡フラグの設定
 
 private:
 	static char *m_LoadOffsetFileName[CHARACTER_TYPE_MAX];			//読み込むファイル名
@@ -170,5 +172,6 @@ private:
 	int m_Fram;														//フレーム
 	bool m_bJump;
 	bool m_bGravity;
+	bool m_bDieFlag;												// 死亡フラグ
 };
 #endif

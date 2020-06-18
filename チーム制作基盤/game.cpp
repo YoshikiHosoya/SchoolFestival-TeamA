@@ -58,6 +58,7 @@ void CGame::Update(void)
 	{
 		CScene::StopUpdate();
 	}
+	m_pMap->UpdateDieFlag();
  }
 //==========================================================
 // ƒvƒŒƒCƒ„[æ“¾

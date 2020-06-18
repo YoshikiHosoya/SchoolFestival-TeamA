@@ -8,6 +8,7 @@
 #include "fade.h"
 #include "Xinput.h"
 #include "collision.h"
+#include "debugproc.h"
 CEnemy::CEnemy(OBJ_TYPE type) :CCharacter(type)
 {
 	SetObjType(OBJTYPE_ENEMY);
@@ -36,6 +37,8 @@ HRESULT CEnemy::Init(void)
 	m_pCollision->SetMove(&GetMove());
 	m_pCollision->SetType(CCollision::OBJTYPE_ENEMY);
 
+
+	CCharacter::SetLife(50);
 	return S_OK;
 }
 //====================================================================
@@ -64,8 +67,11 @@ void CEnemy::Update(void)
 
 	if (m_pCollision != NULL)
 	{
+		// 座標の更新
 		m_pCollision->SetPos(&GetPosition());
 	}
+
+	CDebugProc::Print("\n敵のライフ %d\n", CCharacter::GetLife());
 	CCharacter::Update();
 }
 //====================================================================
@@ -89,6 +95,14 @@ CEnemy *CEnemy::Create(void)
 void CEnemy::DefaultMotion(void)
 {
 	SetMotion(CCharacter::ENEMY_MOTION_NORMAL);
+}
+//====================================================================
+//当たり判定の削除
+//====================================================================
+void CEnemy::DeleteCollision(void)
+{
+	m_pCollision->Delete(m_pCollision);
+	m_pCollision = NULL;
 }
 //====================================================================
 //移動

@@ -21,6 +21,8 @@ public:
 	void Draw(void);
 	static CEnemy *Create(void);
 	void DefaultMotion(void);
+	void DeleteCollision(void);
+	CCollision *GetCollision() { return m_pCollision; }; // “–‚½‚è”»’è
 
 private:
 	void Move(float move, float fdest);

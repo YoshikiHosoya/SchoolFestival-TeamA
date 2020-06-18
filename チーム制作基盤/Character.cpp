@@ -55,6 +55,7 @@ HRESULT CCharacter::Init(void)
 	m_rotDest.y = -0.5f*  D3DX_PI;
 	m_bJump = false;
 	m_bGravity = true;
+	m_bDieFlag = false;
 	//マトリックス初期化
 	D3DXMatrixIdentity(&m_mtxWorld);
 	return S_OK;

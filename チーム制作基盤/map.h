@@ -37,14 +37,14 @@ public:
 		MAP_MAX
 	};
 
-	CMap();									// コンストラクタ
-	~CMap();								// デストラクタ
+	CMap();																// コンストラクタ
+	~CMap();															// デストラクタ
 
 	/* 静的メンバ関数 */
-	void			ModelLoad(int nCnt);							// モデルのロード
-	void			EnemyLoad(int nCnt);							// 敵のロード
-	void			DebugMap();								// マップのデバッグ配置
-	static	CMap	*MapCreate(int nCnt);					// マップの生成
+	void			ModelLoad(int nCnt);								// モデルのロード
+	void			EnemyLoad(int nCnt);								// 敵のロード
+	void			DebugMap();											// マップのデバッグ配置
+	static	CMap	*MapCreate(int nCnt);								// マップの生成
 
 	/* メンバ関数 */
 	int				GetMaxModel();										// モデルの最大数取得
@@ -52,6 +52,7 @@ public:
 	LPD3DXMESH		GetMesh(int nCnt);									// メッシュの取得
 	CModel			*GetModel(int nCnt) { return m_pModel[nCnt]; };		// モデルの取得
 	CEnemy			*GetEnemy(int nCnt) { return m_pEnemy[nCnt]; };		// 敵の取得
+	void			UpdateDieFlag();									// 死亡フラグ確認関数
 
 private:
 	/* 静的メンバ関数 */
