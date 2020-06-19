@@ -41,6 +41,7 @@ public:
 	virtual void Uninit(void);
 	virtual void Update(void);
 	virtual void Draw(void);
+	virtual void DebugInfo(void);
 	virtual void SetPos(						// à íuê›íË
 		D3DXVECTOR3 &pos1,
 		D3DXVECTOR3 &pos2

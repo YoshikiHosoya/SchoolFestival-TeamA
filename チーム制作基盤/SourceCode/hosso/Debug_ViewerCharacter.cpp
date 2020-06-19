@@ -81,7 +81,7 @@ void CDebug_ViewerCharacter::Draw()
 //------------------------------------------------------------------------------
 //デバッグ情報表記
 //------------------------------------------------------------------------------
-void CDebug_ViewerCharacter::ShowDebugInfo()
+void CDebug_ViewerCharacter::DebugInfo()
 {
 #ifdef _DEBUG
 	static bool bMotion = true;

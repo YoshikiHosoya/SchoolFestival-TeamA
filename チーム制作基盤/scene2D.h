@@ -14,6 +14,7 @@ public:
 	void Uninit(void);
 	void Update(void);
 	void Draw(void);
+	void DebugInfo(void);
 	static CScene2D *Create(D3DXVECTOR3 pos, D3DXVECTOR3 size);
 	//ƒZƒbƒg‚·‚é‚à‚Ì
 	void SetAnimation(D3DXVECTOR2 UV, D3DXVECTOR2 UVsize);

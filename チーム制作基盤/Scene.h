@@ -42,10 +42,12 @@ public:
 	virtual void Uninit(void) = 0;
 	virtual void Update(void) = 0;
 	virtual void Draw(void) = 0;
+	virtual void DebugInfo(void) = 0;
 	static void UpdateAll(void);
 	static void RereaseAll(void);
 	static void DrawAll(void);
 	static int GetAll(void);
+	static void DebugAll(void);
 	static CScene *GetTop(void);
 	static bool &GetStopFlag(void);
 	CScene *GetNext(void);

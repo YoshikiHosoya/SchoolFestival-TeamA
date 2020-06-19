@@ -51,7 +51,7 @@ public:
 	virtual	void Uninit(void);
 	virtual	void Update(void);
 	virtual	void Draw(void);
-
+	virtual void DebugInfo(void);
 	/* Ã“Iƒƒ“ƒoŠÖ” */
 	static CDebugcollision * Create(
 		D3DXVECTOR3 * pos,

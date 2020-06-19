@@ -83,6 +83,7 @@ public:
 	void Update(void);
 	void Draw(D3DXMATRIX mat);
 	void Draw();
+	void DebugInfo();
 	void SetParent(CModel *pModel);
 	void SetPosition(D3DXVECTOR3 pos);
 	void SetRot(D3DXVECTOR3 rot);

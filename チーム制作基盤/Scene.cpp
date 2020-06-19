@@ -105,6 +105,31 @@ int  CScene::GetAll(void)
 	return m_NumAll;
 }
 //==========================================================
+//デバッグ情報の表示
+//==========================================================
+void CScene::DebugAll(void)
+{
+#ifdef _DEBUG
+	CScene *pScene = m_pTop;
+	if (m_stopflag == false)
+	{
+		while (pScene)
+		{
+			CScene *pSceneNext = pScene->m_pNext;
+			pScene->DebugInfo();
+			pScene = pSceneNext;
+		}
+	}
+	pScene = m_pTop;
+	while (pScene)
+	{
+		CScene *pSceneNext = pScene->m_pNext;
+		pScene->Delete();
+		pScene = pSceneNext;
+	}
+#endif
+}
+//==========================================================
 //最初の取得
 //==========================================================
 CScene * CScene::GetTop(void)

@@ -19,6 +19,7 @@ public:
 	void Uninit(void);
 	void Update(void);
 	void Draw(void);
+	void DebugInfo(void);
 	static CEnemy *Create(void);
 	void DefaultMotion(void);
 	void DeleteCollision(void);
