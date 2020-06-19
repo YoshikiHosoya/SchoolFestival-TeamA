@@ -243,6 +243,12 @@ void CDebugcollision::Update(void)
 void CDebugcollision::Draw(void)
 {
 }
+// ----------------------------------------
+// デバッグ
+// ----------------------------------------
+void CDebugcollision::DebugInfo(void)
+{
+}
 
 // ----------------------------------------
 // 生成処理

@@ -44,6 +44,7 @@ public:
 	virtual void			Uninit();				// 終了
 	virtual void			Update();				// 更新
 	virtual void			Draw();					// 描画
+	virtual void			DebugInfo();			//デバッグ
 
 	/* 静的メンバ関数 */
 	static	CGun			*Create(D3DXMATRIX *mtx);		// 銃の生成

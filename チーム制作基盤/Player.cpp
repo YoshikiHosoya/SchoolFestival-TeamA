@@ -131,11 +131,6 @@ void CPlayer::Update(void)
 		// 銃発射処理
 		m_pGun->Shot(m_ShotRot);
 	}
-	if (key->GetKeyboardTrigger(DIK_O))
-	{
-		// ヘビーマシンガンの弾の生成
-		CHeavyMachinegun::Create(CPlayer::GetRot());
-	}
 
 	// Aの処理
 	if (key->GetKeyboardPress(DIK_A))
@@ -200,10 +195,6 @@ void CPlayer::Update(void)
 		GetMove().y += 2;
 	}
 
-	if (key->GetKeyboardPress(DIK_LCONTROL))
-	{
-		GetRot().x -= 0.2f;
-	}
 	if (key->GetKeyboardTrigger(DIK_1))
 	{
 		SetMotion(CCharacter::CHARACTER_MOTION_STATE_NONE);
@@ -248,6 +239,12 @@ void CPlayer::Update(void)
 void CPlayer::Draw(void)
 {
 	CCharacter::Draw();
+}
+//====================================================================
+//デバッグ
+//====================================================================
+void CPlayer::DebugInfo(void)
+{
 }
 //====================================================================
 //モデルのクリエイト

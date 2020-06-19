@@ -31,6 +31,7 @@ public:
 	void Uninit(void);
 	void Update(void);
 	void Draw(void);
+	void DebugInfo(void);
 	DEBUG_STATE GetDebugState(void);
 	static CPlayer *Create(void);
 	void DefaultMotion(void);

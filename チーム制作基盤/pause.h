@@ -29,6 +29,7 @@ public:
 	void Uninit(void);
 	void Update(void);
 	void Draw(void);
+	void DebugInfo(void);
 	static void SetPause(PAUSE_STATE state);
 	static PAUSE_STATE GetPause(void);
 	static CPause* CreatePause(void);

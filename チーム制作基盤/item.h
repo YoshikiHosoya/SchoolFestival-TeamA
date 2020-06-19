@@ -45,7 +45,7 @@ public:
 	void						Update();										// 更新
 	void						Draw();											// 描画
 	void						ItemType(ITEMTYPE type);						// アイテム取得時の種類別処理
-
+	void						DebugInfo();									// デバッグ
 	/* 静的メンバ関数 */
 	static	CItem				*Create(D3DXVECTOR3 pos, ITEMTYPE type);		// アイテムの生成
 	static	void				SwitchTexture(ITEMTYPE type, CItem *pItem);		// 種類別テクスチャ設定
