@@ -147,7 +147,7 @@ void CBullet::Update(void)
 				CEnemy *pEnemy = CManager::GetBaseMode()->GetMap()->GetEnemy(nCnt);
 				if (pEnemy != nullptr)
 				{
-					if (m_pCollision->CharCollision2D(pEnemy->GetCollision()))
+					if (m_pCollision->OtherCollision2D(pEnemy->GetCollision()))
 					{
 						// “G‚Ìƒ‰ƒCƒtŒ¸Š
 						pEnemy->CCharacter::AddDamage(10);

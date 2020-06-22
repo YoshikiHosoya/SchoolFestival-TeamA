@@ -358,8 +358,8 @@ bool CCollision::CharCollision2D(CCollision * pCollision)
 	if (pCollision != nullptr)
 	{
 		// X Yの範囲
-		if (this->m_ppos->y + this->m_size.y * 0.5f >= pCollision->m_ppos->y&&
-			this->m_ppos->y - this->m_size.y * 0.5f <= pCollision->m_ppos->y + pCollision->m_size.y&&
+		if (this->m_ppos->y + this->m_size.y >= pCollision->m_ppos->y&&
+			this->m_ppos->y <= pCollision->m_ppos->y + pCollision->m_size.y&&
 			this->m_ppos->x + this->m_size.x * 0.5f > pCollision->m_ppos->x - pCollision->m_size.x * 0.5f&&
 			this->m_ppos->x - this->m_size.x * 0.5f < pCollision->m_ppos->x + pCollision->m_size.x * 0.5f)
 		{
@@ -385,10 +385,11 @@ bool CCollision::OtherCollision2D(CCollision * pCollision)
 	if (pCollision != nullptr)
 	{
 		// X Yの範囲
-		if (this->m_ppos->y + this->m_size.y >= pCollision->m_ppos->y&&
-			this->m_ppos->y <= pCollision->m_ppos->y + pCollision->m_size.y&&
+		if (this->m_ppos->y + this->m_size.y * 0.5f >= pCollision->m_ppos->y&&
+			this->m_ppos->y - this->m_size.y * 0.5f <= pCollision->m_ppos->y + pCollision->m_size.y&&
 			this->m_ppos->x + this->m_size.x * 0.5f > pCollision->m_ppos->x - pCollision->m_size.x * 0.5f&&
 			this->m_ppos->x - this->m_size.x * 0.5f < pCollision->m_ppos->x + pCollision->m_size.x * 0.5f)
+
 		{
 			// オブジェクトに当たったフラグ
 			m_bHitFlag = true;
