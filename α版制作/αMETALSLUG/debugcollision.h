@@ -40,6 +40,7 @@ public:
 	{
 		COLLISIONTYPE_BOX = 0,			//箱型
 		COLLISIONTYPE_BOARD,			//板型
+		COLLISIONTYPE_BOARDCHARA,		//キャラクター用板型
 		COLLISIONTYPE_MAX
 	} COLLISIONTYPE;
 
@@ -69,6 +70,7 @@ private:
 	/* メンバ関数 */
 	void BoxCollision(void);				// 箱型の判定
 	void BoardCollision(void);				// 板型の判定
+	void BoardCharaCollision(void);			// キャラクター板型の判定
 
 	/* メンバ変数 */
 	D3DXVECTOR3 * m_pos;					// 座標

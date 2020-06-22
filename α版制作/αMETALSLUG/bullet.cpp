@@ -79,6 +79,7 @@ HRESULT CBullet::Init()
 	m_pCollision->SetSize2D(D3DXVECTOR3(50.0f, 50.0f, 0.0f));
 	m_pCollision->SetMove(&m_move);
 	m_pCollision->SetType(CCollision::OBJTYPE_PLAYERBULLET);
+	m_pCollision->DeCollisionCreate(CCollision::COLLISIONTYPE_NORMAL);
 
 	return S_OK;
 }
@@ -118,11 +119,11 @@ void CBullet::Update(void)
 	// ‘Ì—Í‚ª0‚É‚È‚Á‚½‚ç									”z—ñ‚Ì[ 0 ]‚Ì‚Æ‚±‚ë‚É‚Íe‚Ìí—Ş‚ª“ü‚é
 	if (m_nLife <= 0)
 	{
-		if (m_pCollision != NULL)
+		if (m_pCollision != nullptr)
 		{
 			// ”»’è‚Ìíœ
-			m_pCollision->Delete(m_pCollision);
-			m_pCollision = NULL;
+			m_pCollision->ReleaseCollision(m_pCollision);
+			m_pCollision = nullptr;
 		}
 
 		Rerease();
@@ -132,7 +133,7 @@ void CBullet::Update(void)
 	CScene3D::SetPosition(pos);
 
 	// ------------- “–‚½‚è”»’è ------------- //
-	if (m_pCollision != NULL)
+	if (m_pCollision != nullptr)
 	{
 		// ”»’è‚ÌÀ•W‚ğXV
 		m_pCollision->SetPos(&GetPosition());
@@ -145,32 +146,29 @@ void CBullet::Update(void)
 			for (int nCnt = 0; nCnt < CManager::GetBaseMode()->GetMap()->GetMaxEnemy(); nCnt++)
 			{
 				CEnemy *pEnemy = CManager::GetBaseMode()->GetMap()->GetEnemy(nCnt);
-				if (pEnemy != NULL)
+				if (pEnemy != nullptr)
 				{
-					if (m_pCollision != NULL)
+					if (m_pCollision->CharCollision2D(pEnemy->GetCollision()))
 					{
-						if (m_pCollision->Collision2D(pEnemy->GetCollision()))
+						// “G‚Ìƒ‰ƒCƒtŒ¸Š
+						pEnemy->CCharacter::AddDamage(10);
+						if (pEnemy->CCharacter::GetLife() <= 0)
 						{
-							// “G‚Ìƒ‰ƒCƒtŒ¸Š
-							pEnemy->CCharacter::AddDamage(10);
-							if (pEnemy->CCharacter::GetLife() <= 0)
-							{
-								// “G‚Ì“–‚½‚è”»’è‚Ìíœ
-								//pEnemy->GetCollision()->Delete(pEnemy->GetCollision());
-								pEnemy->DeleteCollision();
-								pEnemy = NULL;
-							}
+							// “G‚Ì“–‚½‚è”»’è‚Ìíœ
+							//pEnemy->GetCollision()->Delete(pEnemy->GetCollision());
+							pEnemy->DeleteCollision();
+							pEnemy = NULL;
+						}
 
-							// ’e‚Ì”»’è‚Ìíœ
-							m_pCollision->Delete(m_pCollision);
-							m_pCollision = NULL;
-							// ’e‚Ìíœ
-							Rerease();
-						}
-						else
-						{
-							CDebugProc::Print("\n’e‚ª“G‚É“–‚½‚Á‚Ä‚È‚¢‚æI \n");
-						}
+						// ’e‚Ì”»’è‚Ìíœ
+						m_pCollision->ReleaseCollision(m_pCollision);
+						m_pCollision = nullptr;
+						// ’e‚Ìíœ
+						Rerease();
+					}
+					else
+					{
+						CDebugProc::Print("\n’e‚ª“G‚É“–‚½‚Á‚Ä‚È‚¢‚æI \n");
 					}
 				}
 			}
