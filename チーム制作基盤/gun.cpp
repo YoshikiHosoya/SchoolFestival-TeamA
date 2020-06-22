@@ -136,7 +136,8 @@ CGun * CGun::Create(D3DXMATRIX *mtx)
 	// マトリックス代入
 	pGun->m_mtx = mtx;
 
-	D3DXVECTOR3	pos = D3DXVECTOR3(HANDGUN_POS_X, HANDGUN_POS_Y, HANDGUN_POS_Z);
+	D3DXVECTOR3	pos = D3DXVECTOR3(0, 0, 0);
+
 	// 位置の設定
 	pGun->SetPosition(pos);
 
@@ -196,7 +197,7 @@ void CGun::Shot(D3DXVECTOR3 rot)
 	if (pBullet)
 	{
 		// 位置の設定
-		pBullet->SetPosition(D3DXVECTOR3(m_mtx->_41 - 15.0f, m_mtx->_42 + 8.0f, m_mtx->_43));
+		pBullet->SetPosition(D3DXVECTOR3(m_mtx->_41, m_mtx->_42, m_mtx->_43));
 
 		// 弾の種類の設定
 		pBullet->SetBulletType((CBullet::BULLET_TYPE)m_BulletType);
