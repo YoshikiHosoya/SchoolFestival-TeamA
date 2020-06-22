@@ -289,7 +289,7 @@ void CBullet::BulletLoad()
 							// POWERが来たら
 							else if (strcmp(cHeadText, "POWER") == 0)
 							{
-								sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_BulletParam[nCnt].nPower);			// 比較用テキストにPOWERを代入
+								sscanf(cReadText, "%s %s %f", &cDie, &cDie, &m_BulletParam[nCnt].fPower);			// 比較用テキストにPOWERを代入
 							}
 							// AMMOが来たら
 							else if (strcmp(cHeadText, "AMMO") == 0)
