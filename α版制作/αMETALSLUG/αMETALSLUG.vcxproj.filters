@@ -153,6 +153,9 @@
     <ClCompile Include="texture.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="XInputPad.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bullet.h">
@@ -279,6 +282,9 @@
       <Filter>ソース ファイル</Filter>
     </ClInclude>
     <ClInclude Include="texture.h">
+      <Filter>ソース ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="XInputPad.h">
       <Filter>ソース ファイル</Filter>
     </ClInclude>
   </ItemGroup>

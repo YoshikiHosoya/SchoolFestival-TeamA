@@ -206,7 +206,7 @@ void CRenderer::Update(void)
 	m_pCamera->UpdateCamera();
 	m_pFade->UpdateFade();
 	CScene::UpdateAll();
-
+	CScene::DebugAll();
 #ifdef _DEBUG
 	//Scene‚ÅŠÇ—‚µ‚Ä‚éî•ñ I—¹
 	ImGui::End();	//SceneInfo

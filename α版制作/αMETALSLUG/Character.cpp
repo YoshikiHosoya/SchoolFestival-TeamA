@@ -93,24 +93,6 @@ void CCharacter::Update(void)
 		m_pos.y = 0;
 	}
 
-	if (m_move.x < 0)
-	{
-		m_CharacterDirection = CHARACTER_LEFT;
-		CDebugProc::Print("左向いてます\n");
-	}
-	else
-	{
-		m_CharacterDirection = CHARACTER_RIGHT;
-		CDebugProc::Print("右向いてます\n");
-	}
-	if (m_CharacterDirection == CHARACTER_DOWN)
-	{
-		CDebugProc::Print("下向いてます\n");
-	}
-	else if (m_CharacterDirection == CHARACTER_UP)
-	{
-		CDebugProc::Print("上向いてます\n");
-	}
 	//目標点と現在の差分（回転）
 	float diffRot = m_rotDest.y - m_rot.y;
 	//3.14の超過分の初期化（回転）

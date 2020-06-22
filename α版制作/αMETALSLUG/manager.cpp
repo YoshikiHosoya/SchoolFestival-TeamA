@@ -10,7 +10,7 @@
 #include "BaseMode.h"
 #include "mouse.h"
 #include "SourceCode/hosso/Debug_ModelViewer.h"
-
+#include "XInputPad.h"
 //他のとこでも使えるようにするメンバ
 CRenderer	*CManager::m_pRendere		= NULL;
 CKeyboard	*CManager::m_pInputKeyboard	= NULL;
@@ -18,6 +18,7 @@ CParticle	*CManager::m_Particle		= NULL;
 CBaseMode	*CManager::m_pBaseMode		= NULL;
 CMouse		*CManager::m_pMouse			= NULL;
 CManager::GAME_MODE CManager::m_mode = CManager::MODE_GAME;
+CXInputPad	*CManager::m_pPad			= NULL;
 CManager::CManager()
 {
 }
@@ -34,6 +35,7 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	m_pRendere		 = new CRenderer;
 	m_pInputKeyboard = new CKeyboard;
 	m_pMouse = new CMouse;
+	m_pPad = new CXInputPad;
 	//m_pMouse = new CMouse;
 	//初期化処理
 	if (FAILED(m_pRendere->Init(hWnd, TRUE)))
@@ -42,6 +44,7 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	}
 	m_pInputKeyboard->InitInput(hInstance, hWnd);
 	m_pMouse->Init(hInstance, hWnd);
+	m_pPad->Init(hInstance, hWnd);
 	CBaseMode::BaseLoad(hWnd);
 	CManager::SetGameMode(MODE_GAME);
 	return S_OK;
@@ -55,6 +58,7 @@ void CManager::Uninit(void)
 	CBaseMode::BaseUnload();
 	m_pRendere->Uninit();
 	m_pMouse->Uninit();
+	m_pPad->Uninit();
 	if (m_pBaseMode)
 	{
 		//モード
@@ -69,6 +73,7 @@ void CManager::Update(void)
 	m_pInputKeyboard->UpdateInput();
 	m_pRendere->Update();
 	m_pMouse->Update();
+	m_pPad->Update();
 	if (m_pBaseMode)
 	{	//モード
 		m_pBaseMode->Update();
@@ -161,6 +166,17 @@ CMouse * CManager::GetMouse()
 	if (m_pMouse)
 	{
 		return m_pMouse;
+	}
+	return nullptr;
+}
+//===========================================
+//パッドの情報取得
+//===========================================
+CXInputPad * CManager::GetPad(void)
+{
+	if (m_pPad)
+	{
+	return m_pPad;
 	}
 	return nullptr;
 }
