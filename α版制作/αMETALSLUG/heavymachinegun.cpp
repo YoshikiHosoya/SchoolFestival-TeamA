@@ -112,6 +112,9 @@ CHeavyMachinegun * CHeavyMachinegun::Create(D3DXVECTOR3 rot)
 	// メモリの確保
 	pHeavyMachinegun = new CHeavyMachinegun(OBJTYPE_BULLET);
 
+	// ヘビーマシンガンのパラメーター取得
+	BULLET_PARAM *pBulletParam = pHeavyMachinegun->GetBulletParam(CGun::GUNTYPE_HEAVYMACHINEGUN);
+
 	// 初期化
 	pHeavyMachinegun->Init();
 
