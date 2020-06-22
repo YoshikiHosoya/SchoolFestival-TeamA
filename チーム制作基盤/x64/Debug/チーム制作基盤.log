@@ -1,0 +1,45 @@
+﻿camera.obj : error LNK2019: 未解決の外部シンボル D3DXMatrixLookAtLH が関数 "public: void __cdecl CCamera::SetCamera(void)" (?SetCamera@CCamera@@QEAAXXZ) で参照されました。
+camera.obj : error LNK2019: 未解決の外部シンボル D3DXMatrixPerspectiveFovLH が関数 "public: void __cdecl CCamera::SetCamera(void)" (?SetCamera@CCamera@@QEAAXXZ) で参照されました。
+Character.obj : error LNK2019: 未解決の外部シンボル D3DXVec3Normalize が関数 "public: void __cdecl CCharacter::RayCollision(void)" (?RayCollision@CCharacter@@QEAAXXZ) で参照されました。
+light.obj : error LNK2001: 外部シンボル "D3DXVec3Normalize" は未解決です。
+Character.obj : error LNK2019: 未解決の外部シンボル D3DXVec3TransformCoord が関数 "public: void __cdecl CCharacter::RayCollision(void)" (?RayCollision@CCharacter@@QEAAXXZ) で参照されました。
+Character.obj : error LNK2019: 未解決の外部シンボル D3DXMatrixMultiply が関数 "public: virtual void __cdecl CCharacter::Draw(void)" (?Draw@CCharacter@@UEAAXXZ) で参照されました。
+Model.obj : error LNK2001: 外部シンボル "D3DXMatrixMultiply" は未解決です。
+SceneBase.obj : error LNK2001: 外部シンボル "D3DXMatrixMultiply" は未解決です。
+HossoLibrary.obj : error LNK2001: 外部シンボル "D3DXMatrixMultiply" は未解決です。
+Character.obj : error LNK2019: 未解決の外部シンボル D3DXMatrixInverse が関数 "public: void __cdecl CCharacter::RayCollision(void)" (?RayCollision@CCharacter@@QEAAXXZ) で参照されました。
+Character.obj : error LNK2019: 未解決の外部シンボル D3DXMatrixTranslation が関数 "public: virtual void __cdecl CCharacter::Draw(void)" (?Draw@CCharacter@@UEAAXXZ) で参照されました。
+Model.obj : error LNK2001: 外部シンボル "D3DXMatrixTranslation" は未解決です。
+SceneBase.obj : error LNK2001: 外部シンボル "D3DXMatrixTranslation" は未解決です。
+HossoLibrary.obj : error LNK2001: 外部シンボル "D3DXMatrixTranslation" は未解決です。
+Character.obj : error LNK2019: 未解決の外部シンボル D3DXMatrixRotationYawPitchRoll が関数 "public: virtual void __cdecl CCharacter::Draw(void)" (?Draw@CCharacter@@UEAAXXZ) で参照されました。
+Model.obj : error LNK2001: 外部シンボル "D3DXMatrixRotationYawPitchRoll" は未解決です。
+SceneBase.obj : error LNK2001: 外部シンボル "D3DXMatrixRotationYawPitchRoll" は未解決です。
+HossoLibrary.obj : error LNK2001: 外部シンボル "D3DXMatrixRotationYawPitchRoll" は未解決です。
+Character.obj : error LNK2019: 未解決の外部シンボル D3DXIntersect が関数 "public: void __cdecl CCharacter::RayCollision(void)" (?RayCollision@CCharacter@@QEAAXXZ) で参照されました。
+debugproc.obj : error LNK2019: 未解決の外部シンボル D3DXCreateFontA が関数 "public: void __cdecl CDebugProc::Init(void)" (?Init@CDebugProc@@QEAAXXZ) で参照されました。
+renderer.obj : error LNK2001: 外部シンボル "D3DXCreateFontA" は未解決です。
+fade.obj : error LNK2019: 未解決の外部シンボル D3DXCreateTextureFromFileA が関数 "public: void __cdecl CFADE::InitFade(void)" (?InitFade@CFADE@@QEAAXXZ) で参照されました。
+Model.obj : error LNK2001: 外部シンボル "D3DXCreateTextureFromFileA" は未解決です。
+texture.obj : error LNK2001: 外部シンボル "D3DXCreateTextureFromFileA" は未解決です。
+inputKeyboard.obj : error LNK2019: 未解決の外部シンボル DirectInput8Create が関数 "public: long __cdecl CKeyboard::InitInput(struct HINSTANCE__ *,struct HWND__ *)" (?InitInput@CKeyboard@@QEAAJPEAUHINSTANCE__@@PEAUHWND__@@@Z) で参照されました。
+mouse.obj : error LNK2001: 外部シンボル "DirectInput8Create" は未解決です。
+inputKeyboard.obj : error LNK2001: 外部シンボル "IID_IDirectInput8A" は未解決です。
+mouse.obj : error LNK2001: 外部シンボル "IID_IDirectInput8A" は未解決です。
+inputKeyboard.obj : error LNK2001: 外部シンボル "GUID_SysKeyboard" は未解決です。
+inputKeyboard.obj : error LNK2001: 外部シンボル "c_dfDIKeyboard" は未解決です。
+Model.obj : error LNK2019: 未解決の外部シンボル D3DXLoadMeshFromXA が関数 "public: static void __cdecl CModel::LoadModel(void)" (?LoadModel@CModel@@SAXXZ) で参照されました。
+Model.obj : error LNK2019: 未解決の外部シンボル D3DXGetFVFVertexSize が関数 "public: virtual long __cdecl CModel::Init(void)" (?Init@CModel@@UEAAJXZ) で参照されました。
+mouse.obj : error LNK2001: 外部シンボル "GUID_SysMouse" は未解決です。
+mouse.obj : error LNK2001: 外部シンボル "c_dfDIMouse2" は未解決です。
+Player.obj : error LNK2019: 未解決の外部シンボル XInputGetState が関数 "public: virtual void __cdecl CPlayer::Update(void)" (?Update@CPlayer@@UEAAXXZ) で参照されました。
+imgui_impl_win32.obj : error LNK2001: 外部シンボル "XInputGetState" は未解決です。
+Player.obj : error LNK2019: 未解決の外部シンボル XInputSetState が関数 "public: virtual void __cdecl CPlayer::Update(void)" (?Update@CPlayer@@UEAAXXZ) で参照されました。
+renderer.obj : error LNK2019: 未解決の外部シンボル Direct3DCreate9 が関数 "public: long __cdecl CRenderer::Init(struct HWND__ *,int)" (?Init@CRenderer@@QEAAJPEAUHWND__@@H@Z) で参照されました。
+imgui_impl_win32.obj : error LNK2019: 未解決の外部シンボル XInputGetCapabilities が関数 "void __cdecl ImGui_ImplWin32_UpdateGamepads(void)" (?ImGui_ImplWin32_UpdateGamepads@@YAXXZ) で参照されました。
+C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Lib\x86\d3d9.lib : warning LNK4272: ライブラリのコンピューターの種類 'X86' がターゲットのコンピューターの種類' x64' と競合しています
+C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Lib\x86\d3dx9.lib : warning LNK4272: ライブラリのコンピューターの種類 'X86' がターゲットのコンピューターの種類' x64' と競合しています
+C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Lib\x86\dxguid.lib : warning LNK4272: ライブラリのコンピューターの種類 'X86' がターゲットのコンピューターの種類' x64' と競合しています
+C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Lib\x86\dinput8.lib : warning LNK4272: ライブラリのコンピューターの種類 'X86' がターゲットのコンピューターの種類' x64' と競合しています
+C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Lib\x86\xinput.lib : warning LNK4272: ライブラリのコンピューターの種類 'X86' がターゲットのコンピューターの種類' x64' と競合しています
+C:\Users\game309\Desktop\SchoolFestival-TeamA\チーム制作基盤\x64\Debug\チーム制作基盤.exe : fatal error LNK1120: 23 件の未解決の外部参照
