@@ -156,37 +156,41 @@ CGun * CGun::Create(D3DXMATRIX *mtx)
 // =====================================================================================================================================================================
 void CGun::SetGunType(GUN_TYPE type)
 {
+	BULLET_PARAM *pBulletParam = CBullet::GetBulletParam(type);
+
 	// Ží—Þ‚ÌÝ’è
 	m_GunType = type;
 
-	// Ží—Þ‚²‚Æ‚Ì’e–ò”
-	switch (type)
-	{
-	case CGun::GUNTYPE_HANDGUN:
-		m_nAmmo = HANDGUN_AMMO;
-		break;
+	// ’e–ò”
+	m_nAmmo = pBulletParam->nAmmo;
 
-	case CGun::GUNTYPE_HEAVYMACHINEGUN:
-		m_nAmmo = HEAVYMACHINEGUN_AMMO;
-		break;
+	//// Ží—Þ‚²‚Æ‚Ì’e–ò”
+	//switch (type)
+	//{
+	//case CGun::GUNTYPE_HANDGUN:
+	//	m_nAmmo = pBulletParam->nAmmo;
+	//	break;
 
-	case CGun::GUNTYPE_SHOTGUN:
-		m_nAmmo = 0;
-		break;
+	//case CGun::GUNTYPE_HEAVYMACHINEGUN:
+	//	m_nAmmo = pBulletParam->nAmmo;
+	//	break;
 
-	case CGun::GUNTYPE_LASERGUN:
-		m_nAmmo = 0;
-		break;
+	//case CGun::GUNTYPE_SHOTGUN:
+	//	m_nAmmo = pBulletParam->nAmmo;
+	//	break;
 
-	case CGun::GUNTYPE_ROCKETLAUNCHER:
-		m_nAmmo = 0;
-		break;
+	//case CGun::GUNTYPE_LASERGUN:
+	//	m_nAmmo = 0;
+	//	break;
 
-	case CGun::GUNTYPE_FLAMESHOT:
-		m_nAmmo = 0;
-		break;
+	//case CGun::GUNTYPE_ROCKETLAUNCHER:
+	//	m_nAmmo = 0;
+	//	break;
 
-	}
+	//case CGun::GUNTYPE_FLAMESHOT:
+	//	m_nAmmo = 0;
+	//	break;
+	//}
 }
 
 // =====================================================================================================================================================================
@@ -234,5 +238,8 @@ void CGun::Shot(D3DXVECTOR3 rot)
 
 		// ’e‚ÌŽí—Þ‚ÌÝ’è
 		pBullet->SetBulletType((CBullet::BULLET_TYPE)m_BulletType);
+
+		// ’e‚Ìƒpƒ‰ƒ[ƒ^[‚ÌÝ’è
+		pBullet->SetBulletParam(m_GunType);
 	}
 }
