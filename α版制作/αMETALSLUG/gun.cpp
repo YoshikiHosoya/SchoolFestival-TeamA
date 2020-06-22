@@ -169,6 +169,23 @@ void CGun::SetGunType(GUN_TYPE type)
 	case CGun::GUNTYPE_HEAVYMACHINEGUN:
 		m_nAmmo = HEAVYMACHINEGUN_AMMO;
 		break;
+
+	case CGun::GUNTYPE_SHOTGUN:
+		m_nAmmo = 0;
+		break;
+
+	case CGun::GUNTYPE_LASERGUN:
+		m_nAmmo = 0;
+		break;
+
+	case CGun::GUNTYPE_ROCKETLAUNCHER:
+		m_nAmmo = 0;
+		break;
+
+	case CGun::GUNTYPE_FLAMESHOT:
+		m_nAmmo = 0;
+		break;
+
 	}
 }
 
@@ -192,6 +209,23 @@ void CGun::Shot(D3DXVECTOR3 rot)
 		// ヘビーマシンガンの生成
 		pBullet = CHeavyMachinegun::Create(rot);
 		break;
+
+	case CGun::GUNTYPE_SHOTGUN:
+		// ショットガンの生成
+		break;
+
+	case CGun::GUNTYPE_LASERGUN:
+		// レーザーガンの生成
+		break;
+
+	case CGun::GUNTYPE_ROCKETLAUNCHER:
+		// ロケットランチャーの生成
+		break;
+
+	case CGun::GUNTYPE_FLAMESHOT:
+		// フレイムショットの生成
+		break;
+
 	}
 	if (pBullet)
 	{
