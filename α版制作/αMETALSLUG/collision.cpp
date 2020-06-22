@@ -26,8 +26,6 @@
 // 静的変数
 //
 //=============================================================================
-CCollision * CCollision::m_pTop = NULL;	// 先頭オブジェクトへのポインタ
-CCollision * CCollision::m_pCur = NULL;	// 現在オブジェクトへのポインタ
 
 // ----------------------------------------
 // コンストラクタ
@@ -35,29 +33,14 @@ CCollision * CCollision::m_pCur = NULL;	// 現在オブジェクトへのポインタ
 CCollision::CCollision()
 {
 	m_objtype			= OBJTYPE_PLAYERBULLET;				// タイプの初期化
-	m_ppos				= NULL;								// 位置情報
-	m_posOld			= D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 前回の位置情報
+	m_Collisiontype		= COLLISIONTYPE_NORMAL;				// 当たり判定の種類
+	m_ppos				= nullptr;							// 位置情報
+	m_posOld			= nullptr;							// 前回の位置情報
 	m_size				= D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// サイズ情報
-	m_pmove				= NULL;								// 移動情報
-	m_Debugcollision	= NULL;								// デバッグ用当たり判定のポインタ
+	m_pmove				= nullptr;							// 移動情報
+	m_Debugcollision	= nullptr;							// デバッグ用当たり判定のポインタ
 	m_bHitFlag			= false;							// 当たっているかどうか
-
-	/* 現在のポインタ */
-	if (m_pCur != NULL)
-	{
-		// 前のオブジェクトのポインタ
-		this->m_pPrey = m_pCur;
-		// 次のオブジェクトのポインタ
-		m_pCur->m_pNext = this;
-	}
-	// 現在のポインタ
-	m_pCur = this;
-
-	// 先頭オブジェクトのポインタ
-	if (m_pTop == NULL)
-	{
-		m_pTop = this;
-	}
+	m_pCollision		= nullptr;							// 当たり判定のポインタ
 }
 
 // ----------------------------------------
@@ -86,133 +69,31 @@ void CCollision::Uninit(void)
 // ----------------------------------------
 void CCollision::Update(void)
 {
-	// オブジェクトタイプがプレイヤーだったら当たり判定を持たせる
-	m_posOld = *m_ppos;
-}
-
-// ----------------------------------------
-// 当たり判定全体の更新
-// ----------------------------------------
-void CCollision::UpdateAll(void)
-{
-	// 変数宣言
-	CCollision * pCollision = NULL;
-	CCollision *pCollisionNext = NULL;	// 次のシーン
-	// 先頭ポイントを格納
-	pCollision = m_pTop;
-	while (pCollision != NULL)
-	{
-		// 次のポインタを代入
-		pCollisionNext = pCollision->m_pNext;
-		pCollision->Update();
-		pCollision = pCollisionNext;
-	}
+//#ifdef _DEBUG
+//	if (m_Debugcollision != nullptr)
+//	{
+//		m_Debugcollision->SetPos(m_ppos);
+//	}
+//#endif // _DEBUG
 }
 
 // ----------------------------------------
 // 当たり判定削除
 // ----------------------------------------
-void CCollision::Delete(CCollision *pColl)
+void CCollision::ReleaseCollision(CCollision *pColl)
 {
-	// 変数宣言
-	CCollision * pCollision;	// シーン
-	CCollision *pCollisionNext;	// 次のシーン
-	// 先頭ポイントを格納
-	pCollision = m_pTop;
-	while (pCollision != NULL)
-	{
-		// 次のポインタを代入
-		pCollisionNext = pCollision->m_pNext;
-		if (pColl == pCollision)
-		{
-			// 先頭と現在のオブジェクトのポインタが同じ場合
-			if (pCollision == m_pTop && pCollision == m_pCur)
-			{
-				m_pTop = NULL;
-				m_pCur = NULL;
-			}
-			// 先頭オブジェクトのポインタの変更
-			else if (pCollision == m_pTop)
-			{
-				m_pTop = pCollisionNext;
-				m_pTop->m_pPrey = NULL;
-			}
-			// 現在のオブジェクトのポインタの変更
-			else if (pCollision == m_pCur)
-			{
-				m_pCur = pCollision->m_pPrey;
-				m_pCur->m_pNext = NULL;
-			}
-			// 間のコネクト
-			else
-			{
-				// 前回の次の情報を代入
-				pCollision->m_pPrey->m_pNext = pCollisionNext;
-				// 次の前回の情報を代入
-				pCollisionNext->m_pPrey = pCollision->m_pPrey;
-			}
-
 #ifdef _DEBUG
-			if (pCollision->m_Debugcollision != NULL)
-			{
-				// デバック用判定削除
-				pCollision->m_Debugcollision->DeleteDeCollision(pCollision->m_Debugcollision);
-			}
+	if (pColl->m_pCollision->m_Debugcollision != nullptr)
+	{
+		// デバック用判定削除
+		pColl->m_pCollision->m_Debugcollision->DeleteDeCollision(pColl->m_pCollision->m_Debugcollision);
+	}
 #endif // _DEBUG
 
-			// レイヤーダウン
-			delete pCollision;
-			pCollision = NULL;
-		}
-		pCollision = pCollisionNext;
-	}
-}
-
-// ----------------------------------------
-// 当たり判定全部削除
-// ----------------------------------------
-void CCollision::DeleteAll(void)
-{
-	// 変数宣言
-	CCollision * pCollision;	// シーン
-	CCollision *pCollisionNext;	// 次のシーン
-
-	// 先頭ポイントを格納
-	pCollision = m_pTop;
-	while (pCollision != NULL)
+	if (pColl->m_pCollision == pColl)
 	{
-		// 次のポインタを代入
-		pCollisionNext = pCollision->m_pNext;
-		// 先頭と現在のオブジェクトのポインタが同じ場合
-		if (pCollision == m_pTop && pCollision == m_pCur)
-		{
-			m_pTop = NULL;
-			m_pCur = NULL;
-		}
-		// 先頭オブジェクトのポインタの変更
-		else if (pCollision == m_pTop)
-		{
-			m_pTop = pCollisionNext;
-			m_pTop->m_pPrey = NULL;
-		}
-		// 現在のオブジェクトのポインタの変更
-		else if (pCollision == m_pCur)
-		{
-			m_pCur = pCollision->m_pPrey;
-			m_pCur->m_pNext = NULL;
-		}
-		// 間のコネクト
-		else
-		{
-			// 前回の次の情報を代入
-			pCollision->m_pPrey->m_pNext = pCollisionNext;
-			// 次の前回の情報を代入
-			pCollisionNext->m_pPrey = pCollision->m_pPrey;
-		}
-		// レイヤーダウン
-		delete pCollision;
-		pCollision = NULL;
-		pCollision = pCollisionNext;
+		delete pColl->m_pCollision;
+		pColl->m_pCollision = nullptr;
 	}
 }
 
@@ -227,7 +108,37 @@ CCollision * CCollision::Create(void)
 	pCollision = new CCollision;
 	// 初期化
 	pCollision->Init();
+	// ポインタ情報を代入
+	pCollision->m_pCollision = pCollision;
 	return pCollision;
+}
+
+// ----------------------------------------
+// デバッグ用当たり判定生成処理
+// ----------------------------------------
+void CCollision::DeCollisionCreate(COLLISIONTYPE collisiontype)
+{
+#ifdef _DEBUG
+	switch (collisiontype)
+	{
+	case COLLISIONTYPE_NORMAL:{
+		m_Debugcollision = CDebugcollision::Create(
+			m_ppos,
+			&m_size,
+			CDebugcollision::COLLISIONTYPE_BOARD);
+	}break;
+
+	case COLLISIONTYPE_CHARACTER: {
+		m_Debugcollision = CDebugcollision::Create(
+			m_ppos,
+			&m_size,
+			CDebugcollision::COLLISIONTYPE_BOARDCHARA);
+	}break;
+
+	default:
+		break;
+	}
+#endif //DEBUG
 }
 
 // ----------------------------------------
@@ -236,14 +147,21 @@ CCollision * CCollision::Create(void)
 void CCollision::SetPos(D3DXVECTOR3 * pos)
 {
 	m_ppos = pos;
-	m_posOld = *pos;
 
 #ifdef _DEBUG
-	if (m_Debugcollision != NULL)
+	if (m_Debugcollision != nullptr)
 	{
 		m_Debugcollision->SetPos(m_ppos);
 	}
 #endif // _DEBUG
+}
+
+// ----------------------------------------
+// 1フレーム前の位置設定処理
+// ----------------------------------------
+void CCollision::SetPosOld(D3DXVECTOR3 * posold)
+{
+	m_posOld = posold;
 }
 
 // ----------------------------------------
@@ -252,10 +170,6 @@ void CCollision::SetPos(D3DXVECTOR3 * pos)
 void CCollision::SetSize(D3DXVECTOR3 size)
 {
 	m_size = size;
-#ifdef _DEBUG
-	// デバッグ用のラインを生成
-	m_Debugcollision = CDebugcollision::Create(m_ppos, &m_size, CDebugcollision::COLLISIONTYPE_BOX);
-#endif // _DEBUG
 }
 
 // ----------------------------------------
@@ -264,9 +178,6 @@ void CCollision::SetSize(D3DXVECTOR3 size)
 void CCollision::SetSize2D(D3DXVECTOR3 size)
 {
 	m_size = size;
-#ifdef _DEBUG
-	m_Debugcollision = CDebugcollision::Create(m_ppos, &m_size, CDebugcollision::COLLISIONTYPE_BOARD);
-#endif
 }
 
 // ----------------------------------------
@@ -290,122 +201,122 @@ void CCollision::SetType(OBJTYPE type)
 // ----------------------------------------
 bool CCollision::Collision(OBJTYPE objtype)
 {
-	// 変数宣言
-	CCollision * pCollision = NULL;
-	CCollision *pCollisionNext;	// 次のシーン
-	// 先頭ポイントを格納
-	pCollision = m_pTop;
+	//// 変数宣言
+	//CCollision * pCollision = NULL;
+	//CCollision *pCollisionNext;	// 次のシーン
+	//// 先頭ポイントを格納
+	//pCollision = m_pTop;
 
-	while (pCollision != NULL)
-	{
-		// 次のポインタを代入
-		pCollisionNext = pCollision->m_pNext;
+	//while (pCollision != NULL)
+	//{
+	//	// 次のポインタを代入
+	//	pCollisionNext = pCollision->m_pNext;
 
-		if (pCollision != this && pCollision->m_objtype == objtype)
-		{
-			// 素材のY範囲
-			if (this->m_ppos->y + this->m_size.y * 0.5f > pCollision->m_ppos->y - pCollision->m_size.y * 0.5f&&
-				this->m_ppos->y - this->m_size.y * 0.5f < pCollision->m_ppos->y + pCollision->m_size.y * 0.5f)
-			{
-				// 素材のZ範囲
-				if (this->m_ppos->z + this->m_size.z * 0.5f > pCollision->m_ppos->z - pCollision->m_size.z * 0.5f&&
-					this->m_ppos->z - this->m_size.z * 0.5f < pCollision->m_ppos->z + pCollision->m_size.z * 0.5f)
-				{
-					// 当たり判定(左)
-					if (this->m_ppos->x + this->m_size.x * 0.5f > pCollision->m_ppos->x - pCollision->m_size.x * 0.5f&&
-						this->m_posOld.x + this->m_size.x * 0.5f <= pCollision->m_ppos->x - pCollision->m_size.x * 0.5f)
-					{
-						// 素材状の左に
-						//this->m_ppos->x = pCollision->m_ppos->x - pCollision->m_size.x * 0.5f - this->m_size.x * 0.5f;
+	//	if (pCollision != this && pCollision->m_objtype == objtype)
+	//	{
+	//		// 素材のY範囲
+	//		if (this->m_ppos->y + this->m_size.y * 0.5f > pCollision->m_ppos->y - pCollision->m_size.y * 0.5f&&
+	//			this->m_ppos->y - this->m_size.y * 0.5f < pCollision->m_ppos->y + pCollision->m_size.y * 0.5f)
+	//		{
+	//			// 素材のZ範囲
+	//			if (this->m_ppos->z + this->m_size.z * 0.5f > pCollision->m_ppos->z - pCollision->m_size.z * 0.5f&&
+	//				this->m_ppos->z - this->m_size.z * 0.5f < pCollision->m_ppos->z + pCollision->m_size.z * 0.5f)
+	//			{
+	//				// 当たり判定(左)
+	//				if (this->m_ppos->x + this->m_size.x * 0.5f > pCollision->m_ppos->x - pCollision->m_size.x * 0.5f&&
+	//					this->m_posOld.x + this->m_size.x * 0.5f <= pCollision->m_ppos->x - pCollision->m_size.x * 0.5f)
+	//				{
+	//					// 素材状の左に
+	//					//this->m_ppos->x = pCollision->m_ppos->x - pCollision->m_size.x * 0.5f - this->m_size.x * 0.5f;
 
-						// 移動量の初期化
-						//this->m_pmove->x = 0.0f;
+	//					// 移動量の初期化
+	//					//this->m_pmove->x = 0.0f;
 
-						// オブジェクトに当たったフラグ
-						m_bHitFlag = true;
-					}
+	//					// オブジェクトに当たったフラグ
+	//					m_bHitFlag = true;
+	//				}
 
-					// 当たり判定(右)
-					else if (this->m_ppos->x - this->m_size.x * 0.5f < pCollision->m_ppos->x + pCollision->m_size.x * 0.5f&&
-						m_posOld.x - this->m_size.x * 0.5f >= pCollision->m_ppos->x + pCollision->m_size.x * 0.5f)
-					{
-						// 素材状の左に
-						//this->m_ppos->x = pCollision->m_ppos->x + pCollision->m_size.x * 0.5f + this->m_size.x * 0.5f;
-						// 移動量の初期化
-						//this->m_pmove->x = 0.0f;
-						// オブジェクトに当たったフラグ
-						m_bHitFlag = true;
-					}
-				}
+	//				// 当たり判定(右)
+	//				else if (this->m_ppos->x - this->m_size.x * 0.5f < pCollision->m_ppos->x + pCollision->m_size.x * 0.5f&&
+	//					m_posOld.x - this->m_size.x * 0.5f >= pCollision->m_ppos->x + pCollision->m_size.x * 0.5f)
+	//				{
+	//					// 素材状の左に
+	//					//this->m_ppos->x = pCollision->m_ppos->x + pCollision->m_size.x * 0.5f + this->m_size.x * 0.5f;
+	//					// 移動量の初期化
+	//					//this->m_pmove->x = 0.0f;
+	//					// オブジェクトに当たったフラグ
+	//					m_bHitFlag = true;
+	//				}
+	//			}
 
-				// 素材のX範囲
-				if (this->m_ppos->x + this->m_size.x * 0.5f > pCollision->m_ppos->x - pCollision->m_size.x * 0.5f&&
-					this->m_ppos->x - this->m_size.x * 0.5f < pCollision->m_ppos->x + pCollision->m_size.x * 0.5f)
-				{
-					// 当たり判定(手前)
-					if (this->m_ppos->z + this->m_size.z * 0.5f > pCollision->m_ppos->z - pCollision->m_size.z * 0.5f&&
-						m_posOld.z + this->m_size.z * 0.5f <= pCollision->m_ppos->z - pCollision->m_size.z * 0.5f)
-					{
-						// 素材状の左に
-						//this->m_ppos->z = pCollision->m_ppos->z - pCollision->m_size.z * 0.5f - this->m_size.z * 0.5f;
-						// 移動量の初期化
-						//this->m_pmove->z = 0.0f;
-						// オブジェクトに当たったフラグ
-						m_bHitFlag = true;
-					}
+	//			// 素材のX範囲
+	//			if (this->m_ppos->x + this->m_size.x * 0.5f > pCollision->m_ppos->x - pCollision->m_size.x * 0.5f&&
+	//				this->m_ppos->x - this->m_size.x * 0.5f < pCollision->m_ppos->x + pCollision->m_size.x * 0.5f)
+	//			{
+	//				// 当たり判定(手前)
+	//				if (this->m_ppos->z + this->m_size.z * 0.5f > pCollision->m_ppos->z - pCollision->m_size.z * 0.5f&&
+	//					m_posOld.z + this->m_size.z * 0.5f <= pCollision->m_ppos->z - pCollision->m_size.z * 0.5f)
+	//				{
+	//					// 素材状の左に
+	//					//this->m_ppos->z = pCollision->m_ppos->z - pCollision->m_size.z * 0.5f - this->m_size.z * 0.5f;
+	//					// 移動量の初期化
+	//					//this->m_pmove->z = 0.0f;
+	//					// オブジェクトに当たったフラグ
+	//					m_bHitFlag = true;
+	//				}
 
-					// 当たり判定(奥)
-					else if (this->m_ppos->z - this->m_size.z * 0.5f < pCollision->m_ppos->z + pCollision->m_size.z * 0.5f&&
-						m_posOld.z - this->m_size.z * 0.5f >= pCollision->m_ppos->z + pCollision->m_size.z * 0.5f)
-					{
-						// 素材状の左に
-						//this->m_ppos->z = pCollision->m_ppos->z +
-							//pCollision->m_size.z * 0.5f +
-							//this->m_size.z * 0.5f + 0.1f;
-						// 移動量の初期化
-						//this->m_pmove->z = 0.0f;
-						// オブジェクトに当たったフラグ
-						m_bHitFlag = true;
-					}
-				}
-			}
+	//				// 当たり判定(奥)
+	//				else if (this->m_ppos->z - this->m_size.z * 0.5f < pCollision->m_ppos->z + pCollision->m_size.z * 0.5f&&
+	//					m_posOld.z - this->m_size.z * 0.5f >= pCollision->m_ppos->z + pCollision->m_size.z * 0.5f)
+	//				{
+	//					// 素材状の左に
+	//					//this->m_ppos->z = pCollision->m_ppos->z +
+	//						//pCollision->m_size.z * 0.5f +
+	//						//this->m_size.z * 0.5f + 0.1f;
+	//					// 移動量の初期化
+	//					//this->m_pmove->z = 0.0f;
+	//					// オブジェクトに当たったフラグ
+	//					m_bHitFlag = true;
+	//				}
+	//			}
+	//		}
 
-			// 素材のZ範囲
-			if (this->m_ppos->z + this->m_size.z * 0.5f > pCollision->m_ppos->z - pCollision->m_size.z * 0.5f&&
-				this->m_ppos->z - this->m_size.z * 0.5f < pCollision->m_ppos->z + pCollision->m_size.z * 0.5f)
-			{
-				// 素材のX範囲
-				if (this->m_ppos->x + this->m_size.x * 0.5f > pCollision->m_ppos->x - pCollision->m_size.x * 0.5f&&
-					this->m_ppos->x - this->m_size.x * 0.5f < pCollision->m_ppos->x + pCollision->m_size.x * 0.5f)
-				{
-					// 当たり判定(下)
-					if (this->m_ppos->y + this->m_size.y * 0.5f > pCollision->m_ppos->y - pCollision->m_size.y * 0.5f&&
-						m_posOld.y + this->m_size.y * 0.5f <= pCollision->m_ppos->y - pCollision->m_size.y * 0.5f)
-					{
-						// 素材状の左に
-						//this->m_ppos->y = this->m_posOld.y;
-						// 移動量の初期化
-						//this->m_pmove->y = 0.0f;
-						// オブジェクトに当たったフラグ
-						m_bHitFlag = true;
-					}
+	//		// 素材のZ範囲
+	//		if (this->m_ppos->z + this->m_size.z * 0.5f > pCollision->m_ppos->z - pCollision->m_size.z * 0.5f&&
+	//			this->m_ppos->z - this->m_size.z * 0.5f < pCollision->m_ppos->z + pCollision->m_size.z * 0.5f)
+	//		{
+	//			// 素材のX範囲
+	//			if (this->m_ppos->x + this->m_size.x * 0.5f > pCollision->m_ppos->x - pCollision->m_size.x * 0.5f&&
+	//				this->m_ppos->x - this->m_size.x * 0.5f < pCollision->m_ppos->x + pCollision->m_size.x * 0.5f)
+	//			{
+	//				// 当たり判定(下)
+	//				if (this->m_ppos->y + this->m_size.y * 0.5f > pCollision->m_ppos->y - pCollision->m_size.y * 0.5f&&
+	//					m_posOld.y + this->m_size.y * 0.5f <= pCollision->m_ppos->y - pCollision->m_size.y * 0.5f)
+	//				{
+	//					// 素材状の左に
+	//					//this->m_ppos->y = this->m_posOld.y;
+	//					// 移動量の初期化
+	//					//this->m_pmove->y = 0.0f;
+	//					// オブジェクトに当たったフラグ
+	//					m_bHitFlag = true;
+	//				}
 
-					// 当たり判定(上)
-					else if (this->m_ppos->y - this->m_size.y * 0.5f < pCollision->m_ppos->y + pCollision->m_size.y * 0.5f&&
-						m_posOld.y - this->m_size.y * 0.5f >= pCollision->m_ppos->y + pCollision->m_size.y * 0.5f)
-					{
-						// 素材状の左に
-						//this->m_ppos->y = pCollision->m_ppos->y + pCollision->m_size.y * 0.5f + this->m_size.y * 0.5f;
-						// 移動量の初期化
-						//this->m_pmove->y = 0.0f;
-						// オブジェクトに当たったフラグ
-						m_bHitFlag = true;
-					}
-				}
-			}
-		}
-		pCollision = pCollisionNext;
-	}
+	//				// 当たり判定(上)
+	//				else if (this->m_ppos->y - this->m_size.y * 0.5f < pCollision->m_ppos->y + pCollision->m_size.y * 0.5f&&
+	//					m_posOld.y - this->m_size.y * 0.5f >= pCollision->m_ppos->y + pCollision->m_size.y * 0.5f)
+	//				{
+	//					// 素材状の左に
+	//					//this->m_ppos->y = pCollision->m_ppos->y + pCollision->m_size.y * 0.5f + this->m_size.y * 0.5f;
+	//					// 移動量の初期化
+	//					//this->m_pmove->y = 0.0f;
+	//					// オブジェクトに当たったフラグ
+	//					m_bHitFlag = true;
+	//				}
+	//			}
+	//		}
+	//	}
+	//	pCollision = pCollisionNext;
+	//}
 	// 当たっているかいないかを返す
 	return m_bHitFlag;
 }
@@ -417,11 +328,65 @@ bool CCollision::Collision2D(CCollision *pCollision)
 {
 	// 変数宣言
 
-	if (pCollision != NULL)
+	if (pCollision != nullptr)
 	{
 		// X Yの範囲
 		if (this->m_ppos->y + this->m_size.y * 0.5f >= pCollision->m_ppos->y - pCollision->m_size.y * 0.5f&&
 			this->m_ppos->y - this->m_size.y * 0.5f <= pCollision->m_ppos->y + pCollision->m_size.y * 0.5f&&
+			this->m_ppos->x + this->m_size.x * 0.5f > pCollision->m_ppos->x - pCollision->m_size.x * 0.5f&&
+			this->m_ppos->x - this->m_size.x * 0.5f < pCollision->m_ppos->x + pCollision->m_size.x * 0.5f)
+		{
+			// オブジェクトに当たったフラグ
+			m_bHitFlag = true;
+		}
+
+		else
+		{
+			m_bHitFlag = false;
+		}
+	}
+
+	// 当たっているかいないかを返す
+	return m_bHitFlag;
+}
+
+// ----------------------------------------
+// キャラクター用板型の当たり判定処理
+// ----------------------------------------
+bool CCollision::CharCollision2D(CCollision * pCollision)
+{
+	if (pCollision != nullptr)
+	{
+		// X Yの範囲
+		if (this->m_ppos->y + this->m_size.y * 0.5f >= pCollision->m_ppos->y&&
+			this->m_ppos->y - this->m_size.y * 0.5f <= pCollision->m_ppos->y + pCollision->m_size.y&&
+			this->m_ppos->x + this->m_size.x * 0.5f > pCollision->m_ppos->x - pCollision->m_size.x * 0.5f&&
+			this->m_ppos->x - this->m_size.x * 0.5f < pCollision->m_ppos->x + pCollision->m_size.x * 0.5f)
+		{
+			// オブジェクトに当たったフラグ
+			m_bHitFlag = true;
+		}
+
+		else
+		{
+			m_bHitFlag = false;
+		}
+	}
+
+	// 当たっているかいないかを返す
+	return m_bHitFlag;
+}
+
+// ----------------------------------------
+// キャラクターとアイテム、弾の判定
+// ----------------------------------------
+bool CCollision::OtherCollision2D(CCollision * pCollision)
+{
+	if (pCollision != nullptr)
+	{
+		// X Yの範囲
+		if (this->m_ppos->y + this->m_size.y >= pCollision->m_ppos->y&&
+			this->m_ppos->y <= pCollision->m_ppos->y + pCollision->m_size.y&&
 			this->m_ppos->x + this->m_size.x * 0.5f > pCollision->m_ppos->x - pCollision->m_size.x * 0.5f&&
 			this->m_ppos->x - this->m_size.x * 0.5f < pCollision->m_ppos->x + pCollision->m_size.x * 0.5f)
 		{

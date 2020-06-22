@@ -33,6 +33,10 @@ public:
 	{
 		GUNTYPE_HANDGUN = 0,						// ハンドガン
 		GUNTYPE_HEAVYMACHINEGUN,					// ヘビーマシンガン
+		GUNTYPE_SHOTGUN,							// ショットガン
+		GUNTYPE_LASERGUN,							// レーザーガン
+		GUNTYPE_ROCKETLAUNCHER,						// ロケットランチャー
+		GUNTYPE_FLAMESHOT,							// フレイムショット
 		GUNTYPE_MAX									// 銃の種類の最大数
 	};
 

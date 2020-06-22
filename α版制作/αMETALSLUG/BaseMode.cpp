@@ -8,6 +8,7 @@
 #include "fade.h"
 #include "inputKeyboard.h"
 #include "model.h"
+#include "bullet.h"
 //==========================================================
 //デバッグコマンド
 //==========================================================
@@ -68,8 +69,12 @@ void CBaseMode::BaseLoad(HWND hWnd)
 {
 	//テクスチャロード
 	CTexture::TexLoad(hWnd);
+	//モデルロード
 	CModel::LoadModel();
+	//モーションロード
 	CCharacter::LoadMotion();
+	//弾のパラメーターロード
+	CBullet::BulletLoad();
 }
 //==========================================================
 //生成したものを全て破棄

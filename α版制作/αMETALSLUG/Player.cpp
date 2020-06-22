@@ -16,6 +16,10 @@
 #include "enemy.h"
 #include "map.h"
 #include"XInputPad.h"
+//====================================================================
+//マクロ定義
+//====================================================================
+#define PLAYER_SIZE			(D3DXVECTOR3(50.0f,65.0f,0.0f)) //敵のサイズ
 
 CPlayer::CPlayer(OBJ_TYPE type) :CCharacter(type)
 {
@@ -47,9 +51,10 @@ HRESULT CPlayer::Init(void)
 	// 当たり判定生成
 	m_pCollision = CCollision::Create();
 	m_pCollision->SetPos(&GetPosition());
-	m_pCollision->SetSize2D(D3DXVECTOR3(50.0f, 100.0f, 0.0f));
+	m_pCollision->SetSize2D(PLAYER_SIZE);
 	m_pCollision->SetMove(&GetMove());
 	m_pCollision->SetType(CCollision::OBJTYPE_PLAYER);
+	m_pCollision->DeCollisionCreate(CCollision::COLLISIONTYPE_CHARACTER);
 
 	return S_OK;
 }
@@ -163,10 +168,11 @@ void CPlayer::Update(void)
 	}
 
 	// 当たり判定
-	if (m_pCollision != NULL)
+	if (m_pCollision != nullptr)
 	{
 		// 座標の更新 posとposold
 		m_pCollision->SetPos(&GetPosition());
+		m_pCollision->SetPosOld(&GetPositionOld());
 
 		// 当たり判定 相手がエネミーだったら
 		// 敵の総数分
@@ -175,17 +181,16 @@ void CPlayer::Update(void)
 			CEnemy *pEnemy = CManager::GetBaseMode()->GetMap()->GetEnemy(nCnt);
 			if (pEnemy != NULL)
 			{
-				/*if (m_pCollision->Collision2D(pEnemy->GetCollision()))
+				if (m_pCollision->CharCollision2D(pEnemy->GetCollision()))
 				{
 					CDebugProc::Print("\n時機が敵に当たったよ！\n");
 				}
 				else
 				{
 					CDebugProc::Print("\n時機が敵に当たってないよ！ \n");
-				}*/
+				}
 			}
 		}
-
 	}
 	if (CHossoLibrary::PressAnyButton())
 	{
