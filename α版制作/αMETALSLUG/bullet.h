@@ -17,6 +17,20 @@
 // 前方宣言
 // =====================================================================================================================================================================
 class CCollision;
+
+// =====================================================================================================================================================================
+// 弾のパラメーター
+// =====================================================================================================================================================================
+typedef struct
+{
+	float				fBulletSpeed;	// 弾速
+	int					nLife;			// 体力
+	D3DXVECTOR3			size;			// サイズ
+	int					nPower;			// 威力
+	int					nAmmo;			// 弾薬数
+	int					nTrigger;		// 1トリガーで発射される弾数
+}BULLET_PARAM;
+
 // =====================================================================================================================================================================
 // バレットクラス
 // =====================================================================================================================================================================
@@ -31,6 +45,18 @@ public:
 		TYPE_MAX,
 	};
 
+	// 銃の種類
+	enum GUN_TYPE
+	{
+		GUNTYPE_HANDGUN = 0,						// ハンドガン
+		GUNTYPE_HEAVYMACHINEGUN,					// ヘビーマシンガン
+		GUNTYPE_SHOTGUN,							// ショットガン
+		GUNTYPE_LASERGUN,							// レーザーガン
+		GUNTYPE_ROCKETLAUNCHER,						// ロケットランチャー
+		GUNTYPE_FLAMESHOT,							// フレイムショット
+		GUNTYPE_MAX									// 銃の種類の最大数
+	};
+
 	CBullet(OBJ_TYPE type);								// コンストラクタ
 	~CBullet();											// デストラクタ
 
@@ -40,17 +66,23 @@ public:
 	virtual void				Update();				// 更新
 	virtual void				Draw();					// 描画
 
+	/* 静的メンバ関数 */
+	static	void				BulletLoad();												// 弾のロード
+
 	/* メンバ関数 */
-	D3DXVECTOR3					&GetMove()						{ return m_move; };		// 移動値の取得
-	void						SetMove(D3DXVECTOR3 move)		{ m_move = move; };		// 移動値の設定
-	BULLET_TYPE					&GetBulletType()				{ return m_type; };		// 弾の種類の取得
-	void						SetBulletType(BULLET_TYPE type) { m_type = type; };		// 弾の種類の設定
+	D3DXVECTOR3					&GetMove()						{ return m_move; };					// 移動値の取得
+	void						SetMove(D3DXVECTOR3 move)		{ m_move = move; };					// 移動値の設定
+	BULLET_TYPE					&GetBulletType()				{ return m_type; };					// 弾の種類の取得
+	void						SetBulletType(BULLET_TYPE type) { m_type = type; };					// 弾の種類の設定
+	BULLET_PARAM				*GetBulletParam(int nCnt)		{ return &m_BulletParam[nCnt]; };	// 弾のパラメーターの構造体の取得
 
 private:
 	/* メンバ変数 */
 	D3DXVECTOR3					m_move;					// 移動値
-	int							m_nLife;				// 体力
 	BULLET_TYPE					m_type;					// 弾の種類
 	CCollision					*m_pCollision;			// 当たり判定情報
+	/* 静的メンバ変数 */
+	static char					*m_BulletFileName[GUNTYPE_MAX];	// 弾のファイル名
+	static	BULLET_PARAM		m_BulletParam[GUNTYPE_MAX];		// 弾のパラメーター
 };
 #endif
