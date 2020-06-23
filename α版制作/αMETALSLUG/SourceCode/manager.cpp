@@ -9,7 +9,7 @@
 #include "texture.h"
 #include "BaseMode.h"
 #include "mouse.h"
-#include "SourceCode/hosso/Debug_ModelViewer.h"
+#include "hosso/Debug_ModelViewer.h"
 #include "XInputPad.h"
 //‘¼‚Ì‚Æ‚±‚Å‚àg‚¦‚é‚æ‚¤‚É‚·‚éƒƒ“ƒo
 CRenderer	*CManager::m_pRendere		= NULL;

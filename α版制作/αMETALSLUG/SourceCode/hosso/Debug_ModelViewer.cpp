@@ -10,12 +10,12 @@
 //------------------------------------------------------------------------------
 #include "Debug_ModelViewer.h"
 #include "Debug_ViewerCharacter.h"
-#include "../../Scene.h"
-#include "../../manager.h"
-#include "../../renderer.h"
-#include "../../inputKeyboard.h"
-#include "../../camera.h"
-#include "../../fade.h"
+#include "../Scene.h"
+#include "../manager.h"
+#include "../renderer.h"
+#include "../inputKeyboard.h"
+#include "../camera.h"
+#include "../fade.h"
 //------------------------------------------------------------------------------
 //Ã“Iƒƒ“ƒo•Ï”‚Ì‰Šú‰»
 //------------------------------------------------------------------------------

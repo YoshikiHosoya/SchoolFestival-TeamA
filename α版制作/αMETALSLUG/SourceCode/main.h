@@ -18,10 +18,10 @@
 #include <vector>
 #include <iostream>
 #include <memory>
-#include "SourceCode/hosso/HossoLibrary.h"
-#include "SourceCode/ImGui/Imgui.h"
-#include "SourceCode/ImGui/imgui_impl_dx9.h"
-#include "SourceCode/ImGui/imgui_impl_win32.h"
+#include "hosso/HossoLibrary.h"
+#include "ImGui/Imgui.h"
+#include "ImGui/imgui_impl_dx9.h"
+#include "ImGui/imgui_impl_win32.h"
 #include "texture.h"
 //ライブラリのリンク
 #pragma comment(lib,"d3d9.lib")		//描画処理に必要

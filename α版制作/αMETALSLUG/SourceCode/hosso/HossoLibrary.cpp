@@ -9,10 +9,10 @@
 //インクルード
 //------------------------------------------------------------------------------
 #include "hossolibrary.h"
-#include "../../manager.h"
-#include "../../renderer.h"
-#include "../../inputKeyboard.h"
-#include "../../XInputPad.h"
+#include "../manager.h"
+#include "../renderer.h"
+#include "../inputKeyboard.h"
+#include "../XInputPad.h"
 //------------------------------------------------------------------------------
 //マクロ
 //------------------------------------------------------------------------------
