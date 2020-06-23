@@ -20,11 +20,30 @@ void CBaseMode::DebugCommand(void)
 
 	//使い方説明
 	CDebugProc::Print("---------Debug Command----------\n");
+
+	CDebugProc::Print("[F3] : 一時停止\n");
+	CDebugProc::Print("[F4] : 一時停止中に1Fだけ更新n");
+
 	CDebugProc::Print("[Ctrl] + テンキー [0] : 現在のModeに遷移\n");
 	CDebugProc::Print("[Ctrl] + テンキー [1] : Titleに遷移\n");
 	CDebugProc::Print("[Ctrl] + テンキー [2] : Gameに遷移\n");
 	CDebugProc::Print("[Ctrl] + テンキー [3] : Resultに遷移\n");
+	CDebugProc::Print("[Ctrl] + テンキー [8] : EffectViewerに遷移\n");
 	CDebugProc::Print("[Ctrl] + テンキー [9] : MotionViewerに遷移\n");
+
+
+
+	//一時停止
+	if (key->GetKeyboardTrigger(DIK_F3))
+	{
+		CScene::StopUpdate();
+	}
+
+	//1Fだけ更新
+	if (key->GetKeyboardTrigger(DIK_F4))
+	{
+		CScene::Set1FUpdate();
+	}
 
 	//Ctrl押しながら
 	if (key->GetKeyboardPress(DIK_LCONTROL))
@@ -32,27 +51,32 @@ void CBaseMode::DebugCommand(void)
 		//現在のモード再始動
 		if (key->GetKeyboardTrigger(DIK_NUMPAD0))
 		{
-			CManager::GetRendere()->GetFade()->SetFade(CManager::GetGameState());
+			CManager::GetRenderer()->GetFade()->SetFade(CManager::GetGameState());
 		}
 		//タイトル
 		if (key->GetKeyboardTrigger(DIK_NUMPAD1))
 		{
-			//CManager::GetRendere()->GetFade()->SetFade(CManager::MODE_TITLE);
+			//CManager::GetRenderer()->GetFade()->SetFade(CManager::MODE_TITLE);
 		}
 		//ゲーム
 		if (key->GetKeyboardTrigger(DIK_NUMPAD2))
 		{
-			CManager::GetRendere()->GetFade()->SetFade(CManager::MODE_GAME);
+			CManager::GetRenderer()->GetFade()->SetFade(CManager::MODE_GAME);
 		}
 		//リザルト
 		if (key->GetKeyboardTrigger(DIK_NUMPAD3))
 		{
-			//CManager::GetRendere()->GetFade()->SetFade(CManager::MODE_RESULT);
+			//CManager::GetRenderer()->GetFade()->SetFade(CManager::MODE_RESULT);
+		}
+		//エフェクトビューワ
+		if (key->GetKeyboardTrigger(DIK_NUMPAD8))
+		{
+			CManager::GetRenderer()->GetFade()->SetFade(CManager::MODE_DEBUG_EFFECTVIEWER);
 		}
 		//モーションビューワ
 		if (key->GetKeyboardTrigger(DIK_NUMPAD9))
 		{
-			CManager::GetRendere()->GetFade()->SetFade(CManager::MODE_DEBUG_MODELVIEWER);
+			CManager::GetRenderer()->GetFade()->SetFade(CManager::MODE_DEBUG_MODELVIEWER);
 		}
 	}
 

@@ -56,12 +56,6 @@ void CGame::Uninit(void)
 //==========================================================
 void CGame::Update(void)
 {
-	CKeyboard *key;
-	key = CManager::GetInputKeyboard();
-	if (key->GetKeyboardTrigger(DIK_F9))
-	{
-		CScene::StopUpdate();
-	}
 	m_pMap->UpdateDieFlag();
  }
 //==========================================================
@@ -96,7 +90,6 @@ void CGame::ShowDebugInfo(void)
 {
 	//キーボード情報取得
 	CKeyboard *key = CManager::GetInputKeyboard();;
-
 	//2Dエフェクト
 	if (key->GetKeyboardTrigger(DIK_2))
 	{

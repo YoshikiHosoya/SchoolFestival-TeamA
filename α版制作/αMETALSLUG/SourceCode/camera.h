@@ -14,9 +14,6 @@
 class CCamera
 {
 public:
-//=============================================================================
-// プロトタイプ宣言
-//=============================================================================
 	void InitCamera(void);
 	void UninitCamera(void);
 	void UpdateCamera(void);
@@ -29,11 +26,11 @@ public:
 private:
 	D3DXVECTOR3 posV;			//視点
 	D3DXVECTOR3 posVDest;		//視点の目的地
+	D3DXVECTOR3 posR;			//注視点
 	D3DXVECTOR3 posRDest;		//注視点の目的地
-	D3DXVECTOR3 move;			//移動視点
 	D3DXVECTOR3 rot;			//向き
 	D3DXVECTOR3 rotDest;		//向きたい方向
-	D3DXVECTOR3 posR;			//注視点
+	D3DXVECTOR3 move;			//移動視点
 	D3DXVECTOR3 vecV;			//上方向ベクトル
 	D3DXMATRIX mtxProjection;	//プロジェクションマトリックス
 	D3DXMATRIX mtxView;			//ビューマトリックス

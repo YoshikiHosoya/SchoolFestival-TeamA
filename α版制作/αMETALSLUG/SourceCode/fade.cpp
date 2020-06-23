@@ -18,7 +18,7 @@
 //=============================================================================
 void CFADE::InitFade(void)
 {
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRendere()->GetDevice();
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
 	m_colorFade = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);
 	m_fadeState = FADE_NONE;
 	// テクスチャの読み込み
@@ -95,7 +95,7 @@ void CFADE::UpdateFade(void)
 //=============================================================================
 void CFADE::DrawFade(void)
 {
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRendere()->GetDevice();
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
 
 	// 頂点バッファをデバイスのデータストリームにバインド
 	pDevice->SetStreamSource(0, m_pVtxBuffFade, 0, sizeof(VERTEX_2D));
@@ -115,7 +115,7 @@ void CFADE::DrawFade(void)
 //=============================================================================
 void CFADE::MakeVertexFade(void)
 {
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRendere()->GetDevice();
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
 	VERTEX_2D *pVtx;
 
 	// オブジェクトの頂点バッファを生成

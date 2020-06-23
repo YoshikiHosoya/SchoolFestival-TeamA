@@ -63,7 +63,7 @@ void CCamera::UpdateCamera(void)
 //=============================================================================
 void CCamera::SetCamera(void)
 {
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRendere()->GetDevice();
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
 
 	// プロジェクションマトリックスの初期化
 	D3DXMatrixIdentity(&mtxProjection);

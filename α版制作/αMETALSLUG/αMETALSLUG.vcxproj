@@ -164,6 +164,7 @@
     <ClCompile Include="SourceCode\gun.cpp" />
     <ClCompile Include="SourceCode\handgun.cpp" />
     <ClCompile Include="SourceCode\heavymachinegun.cpp" />
+    <ClCompile Include="SourceCode\hosso\Debug_EffectViewer.cpp" />
     <ClCompile Include="SourceCode\hosso\Debug_ModelViewer.cpp" />
     <ClCompile Include="SourceCode\hosso\Debug_ViewerCharacter.cpp" />
     <ClCompile Include="SourceCode\hosso\HossoLibrary.cpp" />
@@ -211,6 +212,7 @@
     <ClInclude Include="SourceCode\gun.h" />
     <ClInclude Include="SourceCode\handgun.h" />
     <ClInclude Include="SourceCode\heavymachinegun.h" />
+    <ClInclude Include="SourceCode\hosso\Debug_EffectViewer.h" />
     <ClInclude Include="SourceCode\hosso\Debug_ModelViewer.h" />
     <ClInclude Include="SourceCode\hosso\Debug_ViewerCharacter.h" />
     <ClInclude Include="SourceCode\hosso\HossoLibrary.h" />

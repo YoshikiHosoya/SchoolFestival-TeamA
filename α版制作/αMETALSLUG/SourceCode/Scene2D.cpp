@@ -66,7 +66,7 @@ void CScene2D::Update(void)
 //==========================================================
 void CScene2D::Draw(void)
 {
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRendere()->GetDevice();
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
 	// 頂点フォーマットの設定
 	pDevice->SetFVF(FVF_VERTEX_2D);
 	pDevice->SetTexture(0, GetTexture());
@@ -122,7 +122,7 @@ void CScene2D::SetAnimation(D3DXVECTOR2 UV, D3DXVECTOR2 UVsize)
 void CScene2D::MakeVertex(void)
 {
 	LPDIRECT3DVERTEXBUFFER9 pVtxBuff;
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRendere()->GetDevice();
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
 	// オブジェクトの頂点バッファを生成
 	pDevice->CreateVertexBuffer(sizeof(VERTEX_2D) * 4, D3DUSAGE_WRITEONLY,
 		FVF_VERTEX_2D,

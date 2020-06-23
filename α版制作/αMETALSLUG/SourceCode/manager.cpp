@@ -10,9 +10,10 @@
 #include "BaseMode.h"
 #include "mouse.h"
 #include "hosso/Debug_ModelViewer.h"
+#include "hosso/Debug_EffectViewer.h"
 #include "XInputPad.h"
 //他のとこでも使えるようにするメンバ
-CRenderer	*CManager::m_pRendere		= NULL;
+CRenderer	*CManager::m_pRenderer = NULL;
 CKeyboard	*CManager::m_pInputKeyboard	= NULL;
 CParticle	*CManager::m_Particle		= NULL;
 CBaseMode	*CManager::m_pBaseMode		= NULL;
@@ -32,13 +33,13 @@ CManager::~CManager()
 HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 {
 	//メモリ確保
-	m_pRendere		 = new CRenderer;
+	m_pRenderer = new CRenderer;
 	m_pInputKeyboard = new CKeyboard;
 	m_pMouse = new CMouse;
 	m_pPad = new CXInputPad;
 	//m_pMouse = new CMouse;
 	//初期化処理
-	if (FAILED(m_pRendere->Init(hWnd, TRUE)))
+	if (FAILED(m_pRenderer->Init(hWnd, TRUE)))
 	{
 		return -1;
 	}
@@ -46,7 +47,7 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	m_pMouse->Init(hInstance, hWnd);
 	m_pPad->Init(hInstance, hWnd);
 	CBaseMode::BaseLoad(hWnd);
-	CManager::SetGameMode(MODE_GAME);
+	CManager::SetGameMode(m_mode);
 	return S_OK;
 }
 //===========================================
@@ -56,7 +57,7 @@ void CManager::Uninit(void)
 {
 	//ベースの素材破棄
 	CBaseMode::BaseUnload();
-	m_pRendere->Uninit();
+	m_pRenderer->Uninit();
 	m_pMouse->Uninit();
 	m_pPad->Uninit();
 	if (m_pBaseMode)
@@ -71,7 +72,7 @@ void CManager::Uninit(void)
 void CManager::Update(void)
 {
 	m_pInputKeyboard->UpdateInput();
-	m_pRendere->Update();
+	m_pRenderer->Update();
 	m_pMouse->Update();
 	m_pPad->Update();
 	if (m_pBaseMode)
@@ -88,7 +89,7 @@ void CManager::Draw(void)
 	{	//モード
 		m_pBaseMode->Draw();
 	}
-	m_pRendere->Draw();
+	m_pRenderer->Draw();
 }
 //===========================================
 //モードの設定
@@ -123,6 +124,11 @@ void CManager::SetGameMode(GAME_MODE mode)
 		m_pBaseMode->Init();
 
 		break;
+	case MODE_DEBUG_EFFECTVIEWER:
+		m_pBaseMode = new CDebug_EffectViewer;
+		m_pBaseMode->Init();
+
+		break;
 	}
 }
 
@@ -136,9 +142,9 @@ CManager::GAME_MODE CManager::GetGameState(void)
 //===========================================
 //レンダラーの所得
 //===========================================
-CRenderer * CManager::GetRendere(void)
+CRenderer * CManager::GetRenderer(void)
 {
-	return m_pRendere;
+	return m_pRenderer;
 }
 //===========================================
 //キーボード取得

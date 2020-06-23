@@ -52,7 +52,7 @@ HRESULT C3DLine::Init(void)
 	// 変数宣言
 	VERTEX_3D *pVtx;	// 頂点情報へのポイント
 	LPDIRECT3DDEVICE9 pDevice =		// デバイスの取得
-		CManager::GetRendere()->GetDevice();
+		CManager::GetRenderer()->GetDevice();
 
 	// 頂点バッファの生成
 	pDevice->CreateVertexBuffer(
@@ -117,7 +117,7 @@ void C3DLine::Draw(void)
 {
 	// 変数宣言
 	LPDIRECT3DDEVICE9 pDevice =		// デバイスの取得
-		CManager::GetRendere()->GetDevice();
+		CManager::GetRenderer()->GetDevice();
 
 	// 回転・位置の計算用変数
 	D3DXMATRIX mtxRot, mtxTrans;

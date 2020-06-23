@@ -38,6 +38,7 @@ public:
 	void Draw(void);
 	LPDIRECT3DDEVICE9 GetDevice(void);
 	CFADE *GetFade(void);
+	CCamera *GetCamera();
 
 	void SetRendererCommand(RENDERER_COMMAND Command);		//レンダラー設定 ショートカット
 #ifdef _DEBUG

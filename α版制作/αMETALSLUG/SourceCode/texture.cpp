@@ -43,7 +43,7 @@ std::vector<std::string> CTexture::m_aSeparateTexFileName =
 void CTexture::TexLoad(HWND hwnd)
 {
 	//デバイス取得
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRendere()->GetDevice();
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
 	LPDIRECT3DTEXTURE9 pTexture;
 
 	//テクスチャ名のリストのサイズ分

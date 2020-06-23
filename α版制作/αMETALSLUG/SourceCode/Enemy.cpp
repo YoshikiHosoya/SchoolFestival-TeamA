@@ -33,7 +33,7 @@ HRESULT CEnemy::Init(void)
 	CCharacter::Init();
 	LoadOffset(CCharacter::CHARACTER_TYPE_ENEMY);
 	SetCharacterType(CCharacter::CHARACTER_TYPE_ENEMY);
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRendere()->GetDevice();
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
 	m_Attack = false;
 
 	// “–‚½‚è”»’è¶¬
@@ -99,7 +99,7 @@ void CEnemy::DebugInfo(void)
 //====================================================================
 CEnemy *CEnemy::Create(void)
 {
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRendere()->GetDevice();
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
 	CEnemy*pEnemy;
 	pEnemy = new CEnemy(OBJTYPE_ENEMY);
 	pEnemy->Init();
