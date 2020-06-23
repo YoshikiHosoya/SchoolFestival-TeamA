@@ -19,22 +19,22 @@ std::vector<D3DXVECTOR2> CTexture::m_UVCntList = {};
 //テクスチャ名の設定
 std::vector<std::string> CTexture::m_aTexFileName =
 {
-	{ "data/TEXTURE/TexNone.png" },					//白紙
-	{ "data/TEXTURE/particle.jpg" },				//パーティクル用の丸いの
-	{ "data/TEXTURE/bullet00.png" },				//ハンドガンの弾
-	{ "data/TEXTURE/Heavymachinegun.jpg" },			//ヘビーマシンガンの弾
-	{ "data/TEXTURE/Shotgun.jpg" },					//ショットガンの弾
-	{ "data/TEXTURE/Lasergun.jpg" },				//レーザーガンの弾
-	{ "data/TEXTURE/Rocketlauncher.jpg" },			//ロケットランチャーの弾
-	{ "data/TEXTURE/Flameshot.jpg" },				//フレイムショットの弾
+	{ "data/TEXTURE/TexNone.png" },							//白紙
+	{ "data/TEXTURE/particle.jpg" },						//パーティクル用の丸いの
+	{ "data/TEXTURE/bullet00.png" },						//ハンドガンの弾
+	{ "data/TEXTURE/Heavymachinegun.jpg" },					//ヘビーマシンガンの弾
+	{ "data/TEXTURE/Shotgun.jpg" },							//ショットガンの弾
+	{ "data/TEXTURE/Lasergun.jpg" },						//レーザーガンの弾
+	{ "data/TEXTURE/Rocketlauncher.jpg" },					//ロケットランチャーの弾
+	{ "data/TEXTURE/Flameshot.jpg" },						//フレイムショットの弾
 };
 
 
 //テクスチャ名の設定
 std::vector<std::string> CTexture::m_aSeparateTexFileName =
 {
-	{ "data/TEXTURE/TexNone.png" },					//白紙
-	{ "data/TEXTURE/Explosion.png" },				//爆発
+	{ "data/TEXTURE/TexNone.png" },							//白紙
+	{ "data/TEXTURE/Effect/Explosion.png" },				//爆発
 };
 
 //-----------------------------------------------------------------------------
