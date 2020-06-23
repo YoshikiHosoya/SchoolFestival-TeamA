@@ -11,6 +11,8 @@
 #include "hossolibrary.h"
 #include "../../manager.h"
 #include "../../renderer.h"
+#include "../../inputKeyboard.h"
+#include "../../XInputPad.h"
 //------------------------------------------------------------------------------
 //マクロ
 //------------------------------------------------------------------------------
@@ -63,6 +65,25 @@ void CHossoLibrary::CalcRotation(float &fRot)
 		//6.28加算
 		fRot += D3DX_PI * 2;
 	}
+}
+//------------------------------------------------------------------------------
+//何かしらキーを押したとき
+//------------------------------------------------------------------------------
+bool CHossoLibrary::PressAnyButton(void)
+{
+	CKeyboard *Keyboard;
+	Keyboard = CManager::GetInputKeyboard();
+	CXInputPad *InpudPad;
+	InpudPad = CManager::GetPad();
+
+	if (Keyboard->GetKeyboardTrigger(DIK_RETURN)||
+		Keyboard->GetKeyboardTrigger(DIK_SPACE)||
+		InpudPad->GetTrigger(CXInputPad::JOYPADKEY_START,1)||
+		InpudPad->GetTrigger(CXInputPad::JOYPADKEY_A, 1))
+	{
+		return true;
+	}
+	return false;
 }
 
 //------------------------------------------------------------------------------

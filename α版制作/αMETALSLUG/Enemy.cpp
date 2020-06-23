@@ -9,6 +9,12 @@
 #include "Xinput.h"
 #include "collision.h"
 #include "debugproc.h"
+//====================================================================
+//マクロ定義
+//====================================================================
+#define ENEMY_SIZE			(D3DXVECTOR3(50.0f,75.0f,0.0f)) //敵のサイズ
+
+
 CEnemy::CEnemy(OBJ_TYPE type) :CCharacter(type)
 {
 	SetObjType(OBJTYPE_ENEMY);
@@ -33,10 +39,11 @@ HRESULT CEnemy::Init(void)
 	// 当たり判定生成
 	m_pCollision = CCollision::Create();
 	m_pCollision->SetPos(&GetPosition());
-	m_pCollision->SetSize2D(D3DXVECTOR3(50.0f,100.0f,0.0f));
+	m_pCollision->SetPosOld(&GetPositionOld());
+	m_pCollision->SetSize2D(ENEMY_SIZE);
 	m_pCollision->SetMove(&GetMove());
 	m_pCollision->SetType(CCollision::OBJTYPE_ENEMY);
-
+	m_pCollision->DeCollisionCreate(CCollision::COLLISIONTYPE_CHARACTER);
 
 	CCharacter::SetLife(50);
 	return S_OK;
@@ -65,9 +72,9 @@ void CEnemy::Update(void)
 		SetMotion(CCharacter::ENEMY_MOTION_WALK);
 	}
 
-	if (m_pCollision != NULL)
+	if (m_pCollision != nullptr)
 	{
-		// 座標の更新
+		 //座標の更新
 		m_pCollision->SetPos(&GetPosition());
 	}
 
@@ -107,7 +114,7 @@ void CEnemy::DefaultMotion(void)
 //====================================================================
 void CEnemy::DeleteCollision(void)
 {
-	m_pCollision->Delete(m_pCollision);
+	m_pCollision->ReleaseCollision(m_pCollision);
 	m_pCollision = NULL;
 }
 //====================================================================

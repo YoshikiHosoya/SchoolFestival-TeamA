@@ -9,6 +9,7 @@ class CParticle;
 class CGame;
 class CBaseMode;
 class CMouse;
+class CXInputPad;
 class CManager
 {
 public:
@@ -38,6 +39,7 @@ public:
 	static CKeyboard *GetInputKeyboard(void);
 	static CBaseMode *GetBaseMode(void);
 	static CMouse *GetMouse();
+	static CXInputPad *GetPad(void);
 private:
 	static GAME_MODE m_mode;
 	static CKeyboard *m_pInputKeyboard;
@@ -45,5 +47,6 @@ private:
 	static CRenderer *m_pRendere;
 	static CParticle *m_Particle;
 	static CBaseMode *m_pBaseMode;
+	static CXInputPad *m_pPad;
 };
 #endif

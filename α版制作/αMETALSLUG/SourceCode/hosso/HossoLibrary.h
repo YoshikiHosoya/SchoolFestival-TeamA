@@ -85,6 +85,8 @@ typedef struct INTEGER3
 //------------------------------------------------------------------------------
 //クラス定義
 //------------------------------------------------------------------------------
+class CKeyboard;
+class CXInputPad;
 class CHossoLibrary
 {
 public:
@@ -99,6 +101,7 @@ public:
 	static float Random_PI();																					//-3.14から3.14までのランダムで返す
 	static void CalcRotation(float &fRot);	//回転を360度以内にする計算
 
+	static bool PressAnyButton(void);
 private:
 
 };

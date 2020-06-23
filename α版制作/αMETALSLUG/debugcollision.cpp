@@ -61,6 +61,10 @@ HRESULT CDebugcollision::Init(void)
 		BoardCollision();
 		break;
 
+	case COLLISIONTYPE_BOARDCHARA:
+		BoardCharaCollision();
+		break;
+
 	default:
 		break;
 	}
@@ -218,6 +222,45 @@ void CDebugcollision::BoardCollision(void)
 }
 
 // ----------------------------------------
+// キャラクタ用 板の当たり判定処理
+// ----------------------------------------
+void CDebugcollision::BoardCharaCollision(void)
+{
+	// 1本目 上辺
+	m_p2DLine[0] = C3DLine::Create(
+		*m_pos,
+		D3DXVECTOR3(0.0f, 0.0f, 0.0f),
+		D3DXVECTOR3(-m_size->x * 0.5f, m_size->y, -m_size->z * 0.5f),
+		D3DXVECTOR3(m_size->x * 0.5f, m_size->y, m_size->z * 0.5f),
+		D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f)
+	);
+	// 2本目 右辺
+	m_p2DLine[1] = C3DLine::Create(
+		*m_pos,
+		D3DXVECTOR3(0.0f, 0.0f, 0.0f),
+		D3DXVECTOR3(m_size->x * 0.5f, m_size->y, m_size->z * 0.5f),
+		D3DXVECTOR3(m_size->x * 0.5f, -m_size->y * 0.0f, m_size->z * 0.5f),
+		D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f)
+	);
+	// 3本目下辺
+	m_p2DLine[2] = C3DLine::Create(
+		*m_pos,
+		D3DXVECTOR3(0.0f, 0.0f, 0.0f),
+		D3DXVECTOR3(m_size->x * 0.5f, -m_size->y * 0.0f, m_size->z * 0.5f),
+		D3DXVECTOR3(-m_size->x * 0.5f, -m_size->y * 0.0f, -m_size->z * 0.5f),
+		D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f)
+	);
+	// 4本目左辺
+	m_p2DLine[3] = C3DLine::Create(
+		*m_pos,
+		D3DXVECTOR3(0.0f, 0.0f, 0.0f),
+		D3DXVECTOR3(-m_size->x * 0.5f, m_size->y, -m_size->z * 0.5f),
+		D3DXVECTOR3(-m_size->x * 0.5f, -m_size->y * 0.0f, -m_size->z * 0.5f),
+		D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f)
+	);
+}
+
+// ----------------------------------------
 // 終了処理
 // ----------------------------------------
 void CDebugcollision::Uninit(void)
@@ -310,6 +353,20 @@ void CDebugcollision::SetPos(D3DXVECTOR3 * pos)
 				}
 			}
 		}
+
+		// 判定の種類が板型だったら通す
+		else if (m_type == COLLISIONTYPE_BOARDCHARA)
+		{
+			// 座標のポインタをlineの座標に設定
+			for (int nCnt = 0; nCnt < MAX_VERTEX2D; nCnt++)
+			{
+				if (m_p2DLine[nCnt] != NULL)
+				{
+					m_p2DLine[nCnt]->SetPosColi(*pos);
+				}
+			}
+		}
+
 	}
 }
 
