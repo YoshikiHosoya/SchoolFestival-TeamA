@@ -34,6 +34,9 @@
     <Filter Include="Model">
       <UniqueIdentifier>{94809bfe-9cf4-45c1-a7a3-4ec2f333b704}</UniqueIdentifier>
     </Filter>
+    <Filter Include="TexAnimation">
+      <UniqueIdentifier>{113fa4b6-eab8-466d-ab58-5bb6efdb108e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="bullet.cpp">
@@ -152,6 +155,15 @@
     </ClCompile>
     <ClCompile Include="texture.cpp">
       <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="TexAnimationBase.cpp">
+      <Filter>TexAnimation</Filter>
+    </ClCompile>
+    <ClCompile Include="TexAnimation2D.cpp">
+      <Filter>TexAnimation</Filter>
+    </ClCompile>
+    <ClCompile Include="TexAnimation3D.cpp">
+      <Filter>TexAnimation</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -280,6 +292,15 @@
     </ClInclude>
     <ClInclude Include="texture.h">
       <Filter>ソース ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="TexAnimationBase.h">
+      <Filter>TexAnimation</Filter>
+    </ClInclude>
+    <ClInclude Include="TexAnimation2D.h">
+      <Filter>TexAnimation</Filter>
+    </ClInclude>
+    <ClInclude Include="TexAnimation3D.h">
+      <Filter>TexAnimation</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

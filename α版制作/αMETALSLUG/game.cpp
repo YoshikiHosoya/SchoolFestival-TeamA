@@ -6,15 +6,12 @@
 #include "fade.h"
 #include "map.h"
 #include "pause.h"
+#include "TexAnimation3D.h"
+#include "TexAnimation2D.h"
 #define _CRT_SECURE_NO_WARNINGS // 警告除去
 int			CGame::m_Counter	= 0;
 CPlayer		*CGame::m_pPlayer	= NULL;
 CMap		*CGame::m_pMap		= NULL;
-
-int CGame::HP = 0;
-int CGame::HPPotion = 0;
-int CGame::MP = 0;
-int CGame::MPPotion = 0;
 
 //==========================================================
 // コンストラクタ
@@ -78,16 +75,29 @@ CMap * CGame::GetMap(void)
 	}
 	return nullptr;
 }
+
 //==========================================================
 // 体力の取得
 //==========================================================
-int CGame::GetHP(void)
-{
-	return HP;
-}
 void CGame::Draw(void)
 {
 }
+//==========================================================
+// デバッグ情報表記
+//==========================================================
 void CGame::ShowDebugInfo(void)
 {
+	//キーボード情報取得
+	CKeyboard *key = CManager::GetInputKeyboard();;
+
+	//2Dエフェクト
+	if (key->GetKeyboardTrigger(DIK_2))
+	{
+		CTexAnimation2D::Create(SCREEN_CENTER_POS, D3DXVECTOR3(150.0f, 150.0f, 0.0f), ZeroVector3, CTexture::SEPARATE_TEX_EFFECT_EXPLOSION, 3, CScene::OBJTYPE_EXPROSION);
+	}
+	//3Dエフェクト
+	if (key->GetKeyboardTrigger(DIK_3))
+	{
+		CTexAnimation3D::Create(m_pPlayer->GetPosition(), D3DXVECTOR3(150.0f, 150.0f, 0.0f), ZeroVector3, CTexture::SEPARATE_TEX_EFFECT_EXPLOSION, 3, CScene::OBJTYPE_EXPROSION);
+	}
 }

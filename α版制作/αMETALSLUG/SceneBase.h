@@ -8,7 +8,7 @@
 class CSceneBase :public CScene
 {
 public:
-	CSceneBase() {};//Sceneで管理されないコンストラクタ
+	CSceneBase();//Sceneで管理されないコンストラクタ
 	CSceneBase(OBJ_TYPE type);
 	virtual	~CSceneBase()		= 0;
 	virtual	HRESULT Init(void);

@@ -22,7 +22,6 @@ public:
 	void Update(void);
 	CPlayer * GetPlayer(void);
 	CMap *GetMap(void);
-	static int GetHP(void);
 
 	void Draw(void);							//描画
 	void ShowDebugInfo(void);					//デバッグ情報表記
@@ -32,10 +31,6 @@ private:
 	static CPlayer	*m_pPlayer;
 	static CMap		*m_pMap;
 	static int m_Counter;
-	static int MP;
-	static int HP;
-	static int MPPotion;
-	static int HPPotion;
 	CPause *m_pPause;
 };
 #endif

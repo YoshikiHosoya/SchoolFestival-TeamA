@@ -30,6 +30,7 @@ CScene2D::~CScene2D()
 HRESULT CScene2D::Init(void)
 {
 	CSceneBase::Init();
+	MakeVertex();
 	return S_OK;
 }
 //==========================================================
@@ -48,10 +49,10 @@ void CScene2D::Update(void)
 	//頂点データの範囲をロックし、頂点バッファへのポインタを取得
 	CSceneBase::GetVtxBuff()->Lock(0, 0, (void**)&pVtx, 0);
 	// 頂点情報の設定
-	pVtx[0].pos = GetPosition() + D3DXVECTOR3(-GetSize().x, +GetSize().y, 0.0f);
-	pVtx[1].pos = GetPosition() + D3DXVECTOR3(+GetSize().x, +GetSize().y, 0.0f);
-	pVtx[2].pos = GetPosition() + D3DXVECTOR3(-GetSize().x, -GetSize().y, 0.0f);
-	pVtx[3].pos = GetPosition() + D3DXVECTOR3(+GetSize().x, -GetSize().y, 0.0f);
+	pVtx[0].pos = GetPosition() + D3DXVECTOR3(-GetSize().x, -GetSize().y, 0.0f);
+	pVtx[1].pos = GetPosition() + D3DXVECTOR3(+GetSize().x, -GetSize().y, 0.0f);
+	pVtx[2].pos = GetPosition() + D3DXVECTOR3(-GetSize().x, +GetSize().y, 0.0f);
+	pVtx[3].pos = GetPosition() + D3DXVECTOR3(+GetSize().x, +GetSize().y, 0.0f);
 
 	pVtx[0].col = GetColor();
 	pVtx[1].col = GetColor();
@@ -89,10 +90,9 @@ CScene2D * CScene2D::Create(D3DXVECTOR3 pos, D3DXVECTOR3 size)
 {
 	CScene2D*pScene2D;
 	pScene2D = new CScene2D();
-	pScene2D->Init();
 	pScene2D->SetPosition(pos);
 	pScene2D->SetSize(size);
-	pScene2D->MakeVertex();
+	pScene2D->Init();
 	return pScene2D;
 }
 

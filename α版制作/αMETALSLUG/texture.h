@@ -40,6 +40,7 @@ public:
 	//分割されているテクスチャ
 	enum SEPARATE_TEX_TYPE
 	{
+		SEPARATE_TEX_NONE = 0,
 		SEPARATE_TEX_EFFECT_EXPLOSION,			//爆発
 		SEPARATE_TEX_MAX						//MAX
 	};

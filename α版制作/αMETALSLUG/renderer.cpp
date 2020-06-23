@@ -27,13 +27,13 @@ HRESULT  CRenderer::Init(HWND hWnd, BOOL bWindow)
 	m_pCamera = new CCamera;
 
 	// Direct3Dオブジェクトの生成
-	g_pD3D = Direct3DCreate9(D3D_SDK_VERSION);
-	if (g_pD3D == NULL)
+	m_pD3D = Direct3DCreate9(D3D_SDK_VERSION);
+	if (m_pD3D == NULL)
 	{
 		return E_FAIL;
 	}
 	// 現在のディスプレイモードを取得
-	if (FAILED(g_pD3D->GetAdapterDisplayMode(D3DADAPTER_DEFAULT, &d3ddm)))
+	if (FAILED(m_pD3D->GetAdapterDisplayMode(D3DADAPTER_DEFAULT, &d3ddm)))
 	{
 		return E_FAIL;
 	}
@@ -53,30 +53,30 @@ HRESULT  CRenderer::Init(HWND hWnd, BOOL bWindow)
 
 																// Direct3Dデバイスの生成
 																// [デバイス作成制御]<描画>と<頂点処理>をハードウェアで行なう
-	if (FAILED(g_pD3D->CreateDevice(D3DADAPTER_DEFAULT,			// ディスプレイアダプタ
+	if (FAILED(m_pD3D->CreateDevice(D3DADAPTER_DEFAULT,			// ディスプレイアダプタ
 		D3DDEVTYPE_HAL,											// デバイスタイプ
 		hWnd,													// フォーカスするウインドウへのハンドル
 		D3DCREATE_HARDWARE_VERTEXPROCESSING,					// デバイス作成制御の組み合わせ
 		&m_d3dpp,													// デバイスのプレゼンテーションパラメータ
-		&g_pD3DDevice)))										// デバイスインターフェースへのポインタ
+		&m_pD3DDevice)))										// デバイスインターフェースへのポインタ
 	{
 		// 上記の設定が失敗したら
 		// [デバイス作成制御]<描画>をハードウェアで行い、<頂点処理>はCPUで行なう
-		if (FAILED(g_pD3D->CreateDevice(D3DADAPTER_DEFAULT,
+		if (FAILED(m_pD3D->CreateDevice(D3DADAPTER_DEFAULT,
 			D3DDEVTYPE_HAL,
 			hWnd,
 			D3DCREATE_SOFTWARE_VERTEXPROCESSING,
 			&m_d3dpp,
-			&g_pD3DDevice)))
+			&m_pD3DDevice)))
 		{
 			// 上記の設定が失敗したら
 			// [デバイス作成制御]<描画>と<頂点処理>をCPUで行なう
-			if (FAILED(g_pD3D->CreateDevice(D3DADAPTER_DEFAULT,
+			if (FAILED(m_pD3D->CreateDevice(D3DADAPTER_DEFAULT,
 				D3DDEVTYPE_REF,
 				hWnd,
 				D3DCREATE_SOFTWARE_VERTEXPROCESSING,
 				&m_d3dpp,
-				&g_pD3DDevice)))
+				&m_pD3DDevice)))
 			{
 				// 初期化失敗
 				return E_FAIL;
@@ -84,25 +84,25 @@ HRESULT  CRenderer::Init(HWND hWnd, BOOL bWindow)
 		}
 	}
 	//レンダラーステートパラメーターの設定
-	g_pD3DDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);				// 裏面(左回り)をカリングする
-	g_pD3DDevice->SetRenderState(D3DRS_ZENABLE, TRUE);						// Zバッファを使用
-	g_pD3DDevice->SetRenderState(D3DRS_LIGHTING, TRUE);						// ライティングモード有効
+	m_pD3DDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);				// 裏面(左回り)をカリングする
+	m_pD3DDevice->SetRenderState(D3DRS_ZENABLE, TRUE);						// Zバッファを使用
+	m_pD3DDevice->SetRenderState(D3DRS_LIGHTING, TRUE);						// ライティングモード有効
 
-	g_pD3DDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);				// αブレンドを行う
-	g_pD3DDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);		// αソースカラーの指定
-	g_pD3DDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);	// αデスティネーションカラーの指定
+	m_pD3DDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);				// αブレンドを行う
+	m_pD3DDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);		// αソースカラーの指定
+	m_pD3DDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);	// αデスティネーションカラーの指定
 																			// サンプラーステートの設定
-	g_pD3DDevice->SetSamplerState(0, D3DSAMP_ADDRESSU, D3DTADDRESS_WRAP);
-	g_pD3DDevice->SetSamplerState(0, D3DSAMP_ADDRESSV, D3DTADDRESS_WRAP);
-	g_pD3DDevice->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
-	//g_pD3DDevice->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
+	m_pD3DDevice->SetSamplerState(0, D3DSAMP_ADDRESSU, D3DTADDRESS_WRAP);
+	m_pD3DDevice->SetSamplerState(0, D3DSAMP_ADDRESSV, D3DTADDRESS_WRAP);
+	m_pD3DDevice->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
+	//m_pD3DDevice->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
 	// テクスチャステージステートの設定
-	g_pD3DDevice->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_MODULATE);	// アルファブレンディング処理
-	g_pD3DDevice->SetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);	// 最初のアルファ引数
-	g_pD3DDevice->SetTextureStageState(0, D3DTSS_ALPHAARG2, D3DTA_CURRENT);	// ２番目のアルファ引数
+	m_pD3DDevice->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_MODULATE);	// アルファブレンディング処理
+	m_pD3DDevice->SetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);	// 最初のアルファ引数
+	m_pD3DDevice->SetTextureStageState(0, D3DTSS_ALPHAARG2, D3DTA_CURRENT);	// ２番目のアルファ引数
 
 #ifdef _DEBUG
-	D3DXCreateFont(g_pD3DDevice,
+	D3DXCreateFont(m_pD3DDevice,
 		0, 0,
 		5, 0,
 		false,
@@ -119,7 +119,7 @@ HRESULT  CRenderer::Init(HWND hWnd, BOOL bWindow)
 
 	//初期化
 	ImGui_ImplWin32_Init(hWnd);
-	ImGui_ImplDX9_Init(g_pD3DDevice);
+	ImGui_ImplDX9_Init(m_pD3DDevice);
 
 	//DebugProc
 	m_pDebug = new CDebugProc;
@@ -143,17 +143,17 @@ void CRenderer::Uninit(void)
 
 
 	CScene::RereaseAll();
-	if (g_pD3DDevice != NULL)
+	if (m_pD3DDevice != NULL)
 	{
 		//Direct3Dオブジェクトの開放
-		g_pD3DDevice->Release();
-		g_pD3DDevice = NULL;
+		m_pD3DDevice->Release();
+		m_pD3DDevice = NULL;
 	}
 
-	if (g_pD3D != NULL)
+	if (m_pD3D != NULL)
 	{
-		g_pD3D->Release();
-		g_pD3D = NULL;
+		m_pD3D->Release();
+		m_pD3D = NULL;
 	}
 #ifdef _DEBUG
 	if (g_pFont != NULL)
@@ -188,11 +188,11 @@ void CRenderer::Update(void)
 	}
 	if (trigger == true)
 	{
-		g_pD3DDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);		//ワイヤーフレーム
+		m_pD3DDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);		//ワイヤーフレーム
 	}
 	else
 	{
-		g_pD3DDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);			//ワイヤーフレームの初期化
+		m_pD3DDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);			//ワイヤーフレームの初期化
 	}
 
 
@@ -239,9 +239,9 @@ void CRenderer::Update(void)
 void CRenderer::Draw(void)
 {
 	//バックバッファ＆Zバッファの
-	g_pD3DDevice->Clear(0, NULL, (D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER), D3DCOLOR_RGBA(0, 0, 0, 0), 1.0f, 0);
+	m_pD3DDevice->Clear(0, NULL, (D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER), D3DCOLOR_RGBA(0, 0, 0, 0), 1.0f, 0);
 	//Direct3Dによる描画開始
-	if (SUCCEEDED(g_pD3DDevice->BeginScene()))
+	if (SUCCEEDED(m_pD3DDevice->BeginScene()))
 	{
 		//GetScene()->Drow();
 		m_pCamera->SetCamera();
@@ -260,17 +260,17 @@ void CRenderer::Draw(void)
 
 	}
 	//Direct3Dによる描画終了
-	g_pD3DDevice->EndScene();
+	m_pD3DDevice->EndScene();
 
 	//バックバッファとフロントバッファの入れ替え
-	g_pD3DDevice->Present(NULL, NULL, NULL, NULL);
+	m_pD3DDevice->Present(NULL, NULL, NULL, NULL);
 }
 //=============================================================================
 //デバイスの取得
 //=============================================================================
 LPDIRECT3DDEVICE9 CRenderer::GetDevice(void)
 {
-	return g_pD3DDevice;
+	return m_pD3DDevice;
 }
 //=============================================================================
 //フェードの取得
@@ -279,13 +279,115 @@ CFADE * CRenderer::GetFade(void)
 {
 	return m_pFade;
 }
+//------------------------------------------------------------------------------
+//レンダリングに関する設定
+//ある程度処理を纏めておく事で簡略化
+//------------------------------------------------------------------------------
+void CRenderer::SetRendererCommand(RENDERER_COMMAND Command)
+{
+	//引数によって処理を変える
+	switch (Command)
+	{
+		//ライティングON
+	case CRenderer::RENDERER_LIGHTING_ON:
+		m_pD3DDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
+		break;
+
+		//ラインティングOFF
+	case CRenderer::RENDERER_LIGHTING_OFF:
+		m_pD3DDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
+		break;
+
+		//カリングしない
+	case CRenderer::RENDERER_CULLING_NONE:
+		m_pD3DDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
+		break;
+
+		//裏面(左回り)をカリングする
+	case CRenderer::RENDERER_CULLING_CCW:
+		m_pD3DDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
+		break;
+
+		//表面(右回り)をカリングする
+	case CRenderer::RENDERER_CULLING_CW:
+		m_pD3DDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CW);
+		break;
+
+		//加算合成
+	case CRenderer::RENDERER_ALPHABLEND_ADD:
+		m_pD3DDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
+		break;
+
+		//減算合成 影とか
+	case CRenderer::RENDERER_ALPHABLEND_SUB:
+		m_pD3DDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_REVSUBTRACT);
+		m_pD3DDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
+		break;
+
+		//通常合成
+	case CRenderer::REDNERER_ALPHABLEND_DEFAULT:
+		m_pD3DDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
+		m_pD3DDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
+		break;
+
+		//Zテスト通常
+	case CRenderer::RENDERER_ZTEST_DEFAULT:
+		m_pD3DDevice->SetRenderState(D3DRS_ZENABLE, D3DZB_TRUE);
+		m_pD3DDevice->SetRenderState(D3DRS_ZWRITEENABLE, D3DZB_TRUE);
+		m_pD3DDevice->SetRenderState(D3DRS_ZFUNC, D3DCMP_LESSEQUAL);
+		break;
+
+		//Zテスト無効
+	case CRenderer::RENDERER_ZTEST_OFF:
+		m_pD3DDevice->SetRenderState(D3DRS_ZENABLE, D3DZB_FALSE);
+		m_pD3DDevice->SetRenderState(D3DRS_ZWRITEENABLE, D3DZB_FALSE);
+		break;
+
+		//Zテスト無効&&Zライティング有効
+	case CRenderer::RENDERER_ZTEST_OFF_ZWRITING_ON:
+		m_pD3DDevice->SetRenderState(D3DRS_ZENABLE, D3DZB_FALSE);
+		m_pD3DDevice->SetRenderState(D3DRS_ZWRITEENABLE, D3DZB_TRUE);
+		m_pD3DDevice->SetRenderState(D3DRS_ZFUNC, D3DCMP_LESSEQUAL);
+		break;
+
+		//Zテスト有効&&Zライティング無効
+	case CRenderer::RENDERER_ZTEST_ON_ZWRITING_OFF:
+		m_pD3DDevice->SetRenderState(D3DRS_ZENABLE, D3DZB_TRUE);
+		m_pD3DDevice->SetRenderState(D3DRS_ZWRITEENABLE, D3DZB_FALSE);
+		m_pD3DDevice->SetRenderState(D3DRS_ZFUNC, D3DCMP_LESSEQUAL);
+		break;
+
+		//フォグON
+	case CRenderer::RENDERER_FOG_ON:
+		m_pD3DDevice->SetRenderState(D3DRS_FOGENABLE, TRUE);
+		break;
+
+		//フォグOFF
+	case CRenderer::RENDERER_FOG_OFF:
+		m_pD3DDevice->SetRenderState(D3DRS_FOGENABLE, FALSE);
+		break;
+
+		//ワイヤーON
+	case CRenderer::RENDERER_WIRE_ON:
+		m_pD3DDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
+		break;
+
+		//ワイヤーOFF
+	case CRenderer::RENDERER_WIRE_OFF:
+		m_pD3DDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
+		break;
+
+	default:
+		break;
+	}
+}
 //=============================================================================
 //デバイスリセット imGui用の処理含む
 //=============================================================================
 void CRenderer::ResetDevice()
 {
 	ImGui_ImplDX9_InvalidateDeviceObjects();
-	HRESULT hr = g_pD3DDevice->Reset(&m_d3dpp);
+	HRESULT hr = m_pD3DDevice->Reset(&m_d3dpp);
 	if (hr == D3DERR_INVALIDCALL)
 		IM_ASSERT(0);
 	ImGui_ImplDX9_CreateDeviceObjects();

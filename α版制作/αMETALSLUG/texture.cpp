@@ -33,6 +33,7 @@ std::vector<std::string> CTexture::m_aTexFileName =
 //テクスチャ名の設定
 std::vector<std::string> CTexture::m_aSeparateTexFileName =
 {
+	{ "data/TEXTURE/TexNone.png" },					//白紙
 	{ "data/TEXTURE/Explosion.png" },				//爆発
 };
 
@@ -107,10 +108,14 @@ void CTexture::TexLoad(HWND hwnd)
 		//それぞれのUV枚数設定
 		switch (nCnt)
 		{
-		case SEPARATE_TEX_EFFECT_EXPLOSION:
-			UVCnt = D3DXVECTOR2(2, 5);
+		case SEPARATE_TEX_NONE:
+			UVCnt = D3DXVECTOR2(1, 1);
 			break;
 
+		case SEPARATE_TEX_EFFECT_EXPLOSION:
+			UVCnt = D3DXVECTOR2(5, 2);
+			break;
+		}
 
 			//UVサイズ設定
 			UVSize = D3DXVECTOR2(1.0f / UVCnt.x, 1.0f / UVCnt.y);
@@ -118,8 +123,6 @@ void CTexture::TexLoad(HWND hwnd)
 			//リストに追加
 			m_UVSizeList.emplace_back(UVSize);
 			m_UVCntList.emplace_back(UVCnt);
-
-		}
 	}
 }
 
