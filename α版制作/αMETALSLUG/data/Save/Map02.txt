@@ -1,0 +1,39 @@
+Å°Å°Å°==========ÉÇÉfÉãèÓïÒ==========Å°Å°Å°
+MAXMODEL = 5
+
+SET
+
+  POS = -150.0 -50.0 -150.0 
+  TYPE = 0 
+
+END_SET
+
+SET
+
+  POS = 50.0 -50.0 -150.0 
+  TYPE = 0 
+
+END_SET
+
+SET
+
+  POS = 250.0 -50.0 -150.0 
+  TYPE = 0 
+
+END_SET
+
+SET
+
+  POS = 150.0 0.0 -150.0 
+  TYPE = 1 
+
+END_SET
+
+SET
+
+  POS = -50.0 0.0 -150.0 
+  TYPE = 1 
+
+END_SET
+
+END_SETMODEL

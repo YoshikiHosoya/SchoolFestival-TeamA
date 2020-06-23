@@ -1,0 +1,12 @@
+¡¡¡==========ƒ‚ƒfƒ‹î•ñ==========¡¡¡
+MAXMODEL = 1
+
+SET
+
+  POS = 50.0 104.0 0.0 
+  TYPE = 2 
+
+END_SET
+
+END_SETMODEL
+
