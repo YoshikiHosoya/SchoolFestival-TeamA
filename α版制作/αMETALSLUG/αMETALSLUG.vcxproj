@@ -180,6 +180,8 @@
     <ClCompile Include="SourceCode\map.cpp" />
     <ClCompile Include="SourceCode\Model.cpp" />
     <ClCompile Include="SourceCode\mouse.cpp" />
+    <ClCompile Include="SourceCode\particle.cpp" />
+    <ClCompile Include="SourceCode\ParticleManager.cpp" />
     <ClCompile Include="SourceCode\pause.cpp" />
     <ClCompile Include="SourceCode\Player.cpp" />
     <ClCompile Include="SourceCode\renderer.cpp" />
@@ -228,6 +230,8 @@
     <ClInclude Include="SourceCode\map.h" />
     <ClInclude Include="SourceCode\model.h" />
     <ClInclude Include="SourceCode\mouse.h" />
+    <ClInclude Include="SourceCode\particle.h" />
+    <ClInclude Include="SourceCode\ParticleManager.h" />
     <ClInclude Include="SourceCode\pause.h" />
     <ClInclude Include="SourceCode\Player.h" />
     <ClInclude Include="SourceCode\renderer.h" />

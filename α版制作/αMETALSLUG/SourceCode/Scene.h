@@ -20,13 +20,13 @@ public:
 		OBJTYPE_PLAYER,
 		OBJTYPE_BULLET,
 		OBJTYPE_ITEM,
-		OBJTYPE_PARTICLE,
 		OBJTYPE_MODEL,
 		OBJTYPE_CREATE,
 		OBJTYPE_ENEMY,
 		OBJTYPE_DEBUG3DLINE,
 		OBJTYPE_DEBUGCOLLISION,
 		OBJTYPE_SCORE,
+		OBJTYPE_PARTICLE,
 		OBJTYPE_ORBIT,
 		OBJTYPE_EXPROSION,
 		OBJTYPE_UI,
@@ -35,6 +35,8 @@ public:
 		OBJTYPE_PAUSE,
 		TYPE_MAX
 	}OBJ_TYPE;
+
+
 	CScene() {};
 	CScene(OBJ_TYPE type);
 	virtual ~CScene();
@@ -48,28 +50,22 @@ public:
 	static void DrawAll(void);
 	static int GetAll(void);
 	static void DebugAll(void);
-	static CScene *GetTop(void);
 	static bool &GetStopFlag(void);
-	CScene *GetNext(void);
 	void SetObjType(OBJ_TYPE type);
 	static CScene *GetScene(OBJ_TYPE type);
 	OBJ_TYPE GetObjType(void);
 	void Rerease(void);
-	void Delete(void);
 	static void StopUpdate(void);
+	static void Set1FUpdate() { m_b1FUpdateFlag = true; };
 protected:
 
 private:
 	OBJ_TYPE objtype;
-	static CScene *m_pScene[TYPE_MAX][MAX];
+	static std::vector<CScene*> m_pSceneList[TYPE_MAX];
 	static int m_NumAll;
-	int m_bId;
-	int n_Id;
-	bool m_flag;
-	static bool m_stopflag;
-	static CScene *m_pTop;	//先頭オブジェクトへのポインタ
-	static CScene *m_pCur;	//現在オブジェクトへのポインタ
-	CScene *m_pPrev;		//前のオブジェクトへのポインタ
-	CScene *m_pNext;		//次のオブジェクトへのポインタ
+	static bool m_bStopFlag;			//画面停止のフラグ
+	static bool m_b1FUpdateFlag;		//画面停止中に1Fだけ更新するフラグ
+	bool m_bflag;
+
 };
 #endif
