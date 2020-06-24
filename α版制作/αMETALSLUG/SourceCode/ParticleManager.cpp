@@ -1,6 +1,6 @@
 //------------------------------------------------------------------------------
 //
-//デバッグ　エフェクトビューワ用の処理  [Debug_EffectViewer.cpp]
+//パーティクルの管理処理  [ParticleManager.h]
 //Author:Yoshiki Hosoya
 //
 //------------------------------------------------------------------------------
@@ -8,119 +8,141 @@
 //------------------------------------------------------------------------------
 //インクルード
 //------------------------------------------------------------------------------
-#include "Debug_ModelViewer.h"
-#include "Debug_ViewerCharacter.h"
-#include "../Scene.h"
-#include "../manager.h"
-#include "../renderer.h"
-#include "../inputKeyboard.h"
-#include "../camera.h"
-#include "../fade.h"
+#include "ParticleManager.h"
+#include "manager.h"
+#include "renderer.h"
 //------------------------------------------------------------------------------
 //静的メンバ変数の初期化
 //------------------------------------------------------------------------------
+std::vector<std::unique_ptr<CParticle>> CParticleManager::m_pParticleList = {};
 
 //------------------------------------------------------------------------------
 //マクロ
 //------------------------------------------------------------------------------
-#define DEFAULT_PLAYER_POS (ZeroVector3)
-#define DEFAULT_SCORE_POS (D3DXVECTOR3(1150.0f, 50.0f, 0.0f))
 
 //------------------------------------------------------------------------------
 //コンストラクタ
 //------------------------------------------------------------------------------
-CDebug_ModelViewer::CDebug_ModelViewer()
+CParticleManager::CParticleManager()
 {
-	//ビューワ用のキャラクター作成
-	m_pViewerCharacter = CDebug_ViewerCharacter::Create();
+}
+//------------------------------------------------------------------------------
+//コンストラクタ
+//------------------------------------------------------------------------------
+CParticleManager::CParticleManager(OBJ_TYPE obj) : CScene(obj)
+{
 }
 //------------------------------------------------------------------------------
 //デストラクタ
 //------------------------------------------------------------------------------
-CDebug_ModelViewer::~CDebug_ModelViewer()
+CParticleManager::~CParticleManager()
 {
 
 }
-
 //------------------------------------------------------------------------------
 //初期化処理
 //------------------------------------------------------------------------------
-HRESULT CDebug_ModelViewer::Init()
+HRESULT CParticleManager::Init()
 {
 	return S_OK;
 }
-
 //------------------------------------------------------------------------------
 //終了処理
 //------------------------------------------------------------------------------
-void CDebug_ModelViewer::Uninit()
+void CParticleManager::Uninit()
 {
 
-	//終了処理
-	CScene::RereaseAll();
 }
-
 //------------------------------------------------------------------------------
 //更新処理
 //------------------------------------------------------------------------------
-void CDebug_ModelViewer::Update()
+void CParticleManager::Update()
 {
+	//頂点番号リセット
+	CParticle::ResetVertexID();
+
+	//nullcheck
+	if (!m_pParticleList.empty())
+	{
+		for (size_t nCnt = 0; nCnt < m_pParticleList.size(); nCnt++)
+		{
+			//更新処理
+			m_pParticleList[nCnt]->Update();
+
+			//フラグ立っているかチェック
+			if(m_pParticleList[nCnt]->GetDeleteFlag())
+			{
+				//終了処理してメモリ開放
+				m_pParticleList[nCnt]->Uninit();
+				m_pParticleList[nCnt].reset();
+
+				//配列から削除
+				m_pParticleList.erase(m_pParticleList.begin() + nCnt);
+
+				//削除してカウントがずれた分修正
+				nCnt--;
+			}
+		}
+
+		for (size_t nCnt = 0; nCnt < m_pParticleList.size(); nCnt++)
+		{
+			//頂点バッファ更新処理
+			m_pParticleList[nCnt]->UpdateVertex();
+		}
+
+	}
+
 
 }
-
 //------------------------------------------------------------------------------
 //描画処理
 //------------------------------------------------------------------------------
-void CDebug_ModelViewer::Draw()
+void CParticleManager::Draw()
 {
+	//頂点番号リセット
+	CParticle::ResetVertexID();
 
+	//nullcheck
+	if (!m_pParticleList.empty())
+	{
+		for (size_t nCnt = 0; nCnt < m_pParticleList.size(); nCnt++)
+		{
+			m_pParticleList[nCnt]->Draw();
+		}
+	}
 }
+
 //------------------------------------------------------------------------------
-//デバッグ情報表記
+//デバッグ情報表示
 //------------------------------------------------------------------------------
-void CDebug_ModelViewer::ShowDebugInfo()
+void CParticleManager::DebugInfo()
 {
 #ifdef _DEBUG
 
-	//キャラクター情報情報
-	ImGui::Begin("MotionViewer");
-
-		//Tab
-		if (ImGui::BeginTabBar("Viewer", m_bModel))
-		{
-			//Tab
-			if (ImGui::BeginTabItem("MotionViewer"))
-			{
-				//モーションビューワ
-				m_pViewerCharacter->MotionViewer();
-				ImGui::EndTabItem();
-			}
-			//Tab
-			if (ImGui::BeginTabItem("OffsetViewer"))
-			{
-				//オフセットビューワ
-				m_pViewerCharacter->OffsetViewer();
-				ImGui::EndTabItem();
-			}
-			//TabEnd
-			ImGui::EndTabBar();
-		}
-
-	ImGui::End();
-#endif
+#endif // _DEBUG
 }
+
 //------------------------------------------------------------------------------
-//デバッグ情報表記
+//パーティクル生成
 //------------------------------------------------------------------------------
-CMap * CDebug_ModelViewer::GetMap()
+void CParticleManager::Create()
 {
-	return nullptr;
+	//メモリ確保
+	CParticleManager *pParticle = new CParticleManager(OBJTYPE_PARTICLE);
+
+	//初期化
+	pParticle->Init();
+
+	//パーティクルの頂点バッファ確保
+	CParticle::MakeVertex();
+
+}
+//------------------------------------------------------------------------------
+//パーティクルのリスト
+//------------------------------------------------------------------------------
+void CParticleManager::AddParticleList(std::unique_ptr<CParticle> pParticle)
+{
+	//配列に追加
+	m_pParticleList.emplace_back(std::move(pParticle));
 }
 
-//------------------------------------------------------------------------------
-//デバッグ情報表記
-//------------------------------------------------------------------------------
-CPlayer * CDebug_ModelViewer::GetPlayer()
-{
-	return nullptr;
-}

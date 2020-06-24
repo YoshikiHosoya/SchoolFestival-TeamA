@@ -9,10 +9,10 @@
 //インクルード
 //------------------------------------------------------------------------------
 #include "hossolibrary.h"
-#include "../../manager.h"
-#include "../../renderer.h"
-#include "../../inputKeyboard.h"
-#include "../../XInputPad.h"
+#include "../manager.h"
+#include "../renderer.h"
+#include "../inputKeyboard.h"
+#include "../XInputPad.h"
 //------------------------------------------------------------------------------
 //マクロ
 //------------------------------------------------------------------------------
@@ -92,7 +92,7 @@ bool CHossoLibrary::PressAnyButton(void)
 void CHossoLibrary::SetBillboard_XZ_Only(D3DXMATRIX * pMtx)
 {
 	// デバイスの取得
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRendere()->GetDevice();
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
 
 	//計算用変数
 	D3DXMATRIX mtxView;
@@ -117,7 +117,7 @@ void CHossoLibrary::SetBillboard_XZ_Only(D3DXMATRIX * pMtx)
 void CHossoLibrary::SetBillboard(D3DXMATRIX * pMtx)
 {
 	// デバイスの取得
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRendere()->GetDevice();
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
 
 	//計算用変数
 	D3DXMATRIX mtxView;

@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{D1B8C1AE-5791-434A-A083-A9347B258333}</ProjectGuid>
+    <ProjectGuid>{3B2EED0A-1CC6-4E71-9C9E-3B1E9E6B138E}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>αMETALSLUG</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
@@ -150,36 +150,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="3Dline.cpp" />
-    <ClCompile Include="BaseMode.cpp" />
-    <ClCompile Include="bullet.cpp" />
-    <ClCompile Include="camera.cpp" />
-    <ClCompile Include="Character.cpp" />
-    <ClCompile Include="collision.cpp" />
-    <ClCompile Include="debugcollision.cpp" />
-    <ClCompile Include="debugproc.cpp" />
-    <ClCompile Include="Enemy.cpp" />
-    <ClCompile Include="fade.cpp" />
-    <ClCompile Include="game.cpp" />
-    <ClCompile Include="gun.cpp" />
-    <ClCompile Include="handgun.cpp" />
-    <ClCompile Include="heavymachinegun.cpp" />
-    <ClCompile Include="inputKeyboard.cpp" />
-    <ClCompile Include="item.cpp" />
-    <ClCompile Include="light.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="manager.cpp" />
-    <ClCompile Include="map.cpp" />
-    <ClCompile Include="Model.cpp" />
-    <ClCompile Include="mouse.cpp" />
-    <ClCompile Include="pause.cpp" />
-    <ClCompile Include="Player.cpp" />
-    <ClCompile Include="renderer.cpp" />
-    <ClCompile Include="Scene.cpp" />
-    <ClCompile Include="Scene2D.cpp" />
-    <ClCompile Include="Scene3D.cpp" />
-    <ClCompile Include="SceneBase.cpp" />
-    <ClCompile Include="SceneX.cpp" />
+    <ClCompile Include="SourceCode\3Dline.cpp" />
+    <ClCompile Include="SourceCode\BaseMode.cpp" />
+    <ClCompile Include="SourceCode\bullet.cpp" />
+    <ClCompile Include="SourceCode\camera.cpp" />
+    <ClCompile Include="SourceCode\Character.cpp" />
+    <ClCompile Include="SourceCode\collision.cpp" />
+    <ClCompile Include="SourceCode\debugcollision.cpp" />
+    <ClCompile Include="SourceCode\debugproc.cpp" />
+    <ClCompile Include="SourceCode\Enemy.cpp" />
+    <ClCompile Include="SourceCode\fade.cpp" />
+    <ClCompile Include="SourceCode\game.cpp" />
+    <ClCompile Include="SourceCode\gun.cpp" />
+    <ClCompile Include="SourceCode\handgun.cpp" />
+    <ClCompile Include="SourceCode\heavymachinegun.cpp" />
+    <ClCompile Include="SourceCode\hosso\Debug_EffectViewer.cpp" />
     <ClCompile Include="SourceCode\hosso\Debug_ModelViewer.cpp" />
     <ClCompile Include="SourceCode\hosso\Debug_ViewerCharacter.cpp" />
     <ClCompile Include="SourceCode\hosso\HossoLibrary.cpp" />
@@ -188,40 +173,46 @@
     <ClCompile Include="SourceCode\ImGui\imgui_impl_dx9.cpp" />
     <ClCompile Include="SourceCode\ImGui\imgui_impl_win32.cpp" />
     <ClCompile Include="SourceCode\ImGui\imgui_widgets.cpp" />
-    <ClCompile Include="texture.cpp" />
-    <ClCompile Include="XInputPad.cpp" />
+    <ClCompile Include="SourceCode\inputKeyboard.cpp" />
+    <ClCompile Include="SourceCode\item.cpp" />
+    <ClCompile Include="SourceCode\light.cpp" />
+    <ClCompile Include="SourceCode\main.cpp" />
+    <ClCompile Include="SourceCode\manager.cpp" />
+    <ClCompile Include="SourceCode\map.cpp" />
+    <ClCompile Include="SourceCode\Model.cpp" />
+    <ClCompile Include="SourceCode\mouse.cpp" />
+    <ClCompile Include="SourceCode\particle.cpp" />
+    <ClCompile Include="SourceCode\ParticleManager.cpp" />
+    <ClCompile Include="SourceCode\pause.cpp" />
+    <ClCompile Include="SourceCode\Player.cpp" />
+    <ClCompile Include="SourceCode\renderer.cpp" />
+    <ClCompile Include="SourceCode\Scene.cpp" />
+    <ClCompile Include="SourceCode\Scene2D.cpp" />
+    <ClCompile Include="SourceCode\Scene3D.cpp" />
+    <ClCompile Include="SourceCode\SceneBase.cpp" />
+    <ClCompile Include="SourceCode\SceneX.cpp" />
+    <ClCompile Include="SourceCode\TexAnimation2D.cpp" />
+    <ClCompile Include="SourceCode\TexAnimation3D.cpp" />
+    <ClCompile Include="SourceCode\TexAnimationBase.cpp" />
+    <ClCompile Include="SourceCode\texture.cpp" />
+    <ClCompile Include="SourceCode\XInputPad.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="3Dline.h" />
-    <ClInclude Include="BaseMode.h" />
-    <ClInclude Include="bullet.h" />
-    <ClInclude Include="camera.h" />
-    <ClInclude Include="Character.h" />
-    <ClInclude Include="collision.h" />
-    <ClInclude Include="debugcollision.h" />
-    <ClInclude Include="debugproc.h" />
-    <ClInclude Include="Enemy.h" />
-    <ClInclude Include="fade.h" />
-    <ClInclude Include="game.h" />
-    <ClInclude Include="gun.h" />
-    <ClInclude Include="handgun.h" />
-    <ClInclude Include="heavymachinegun.h" />
-    <ClInclude Include="inputKeyboard.h" />
-    <ClInclude Include="item.h" />
-    <ClInclude Include="light.h" />
-    <ClInclude Include="main.h" />
-    <ClInclude Include="manager.h" />
-    <ClInclude Include="map.h" />
-    <ClInclude Include="model.h" />
-    <ClInclude Include="mouse.h" />
-    <ClInclude Include="pause.h" />
-    <ClInclude Include="Player.h" />
-    <ClInclude Include="renderer.h" />
-    <ClInclude Include="Scene.h" />
-    <ClInclude Include="scene2D.h" />
-    <ClInclude Include="Scene3D.h" />
-    <ClInclude Include="SceneBase.h" />
-    <ClInclude Include="SceneX.h" />
+    <ClInclude Include="SourceCode\3Dline.h" />
+    <ClInclude Include="SourceCode\BaseMode.h" />
+    <ClInclude Include="SourceCode\bullet.h" />
+    <ClInclude Include="SourceCode\camera.h" />
+    <ClInclude Include="SourceCode\Character.h" />
+    <ClInclude Include="SourceCode\collision.h" />
+    <ClInclude Include="SourceCode\debugcollision.h" />
+    <ClInclude Include="SourceCode\debugproc.h" />
+    <ClInclude Include="SourceCode\Enemy.h" />
+    <ClInclude Include="SourceCode\fade.h" />
+    <ClInclude Include="SourceCode\game.h" />
+    <ClInclude Include="SourceCode\gun.h" />
+    <ClInclude Include="SourceCode\handgun.h" />
+    <ClInclude Include="SourceCode\heavymachinegun.h" />
+    <ClInclude Include="SourceCode\hosso\Debug_EffectViewer.h" />
     <ClInclude Include="SourceCode\hosso\Debug_ModelViewer.h" />
     <ClInclude Include="SourceCode\hosso\Debug_ViewerCharacter.h" />
     <ClInclude Include="SourceCode\hosso\HossoLibrary.h" />
@@ -233,11 +224,29 @@
     <ClInclude Include="SourceCode\ImGui\imstb_rectpack.h" />
     <ClInclude Include="SourceCode\ImGui\imstb_textedit.h" />
     <ClInclude Include="SourceCode\ImGui\imstb_truetype.h" />
-    <ClInclude Include="texture.h" />
-    <ClInclude Include="XInputPad.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="imgui.ini" />
+    <ClInclude Include="SourceCode\inputKeyboard.h" />
+    <ClInclude Include="SourceCode\item.h" />
+    <ClInclude Include="SourceCode\light.h" />
+    <ClInclude Include="SourceCode\main.h" />
+    <ClInclude Include="SourceCode\manager.h" />
+    <ClInclude Include="SourceCode\map.h" />
+    <ClInclude Include="SourceCode\model.h" />
+    <ClInclude Include="SourceCode\mouse.h" />
+    <ClInclude Include="SourceCode\particle.h" />
+    <ClInclude Include="SourceCode\ParticleManager.h" />
+    <ClInclude Include="SourceCode\pause.h" />
+    <ClInclude Include="SourceCode\Player.h" />
+    <ClInclude Include="SourceCode\renderer.h" />
+    <ClInclude Include="SourceCode\Scene.h" />
+    <ClInclude Include="SourceCode\scene2D.h" />
+    <ClInclude Include="SourceCode\Scene3D.h" />
+    <ClInclude Include="SourceCode\SceneBase.h" />
+    <ClInclude Include="SourceCode\SceneX.h" />
+    <ClInclude Include="SourceCode\TexAnimation2D.h" />
+    <ClInclude Include="SourceCode\TexAnimation3D.h" />
+    <ClInclude Include="SourceCode\TexAnimationBase.h" />
+    <ClInclude Include="SourceCode\texture.h" />
+    <ClInclude Include="SourceCode\XInputPad.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

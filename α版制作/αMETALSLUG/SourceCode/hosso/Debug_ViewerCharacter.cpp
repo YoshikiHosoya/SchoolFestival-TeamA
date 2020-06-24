@@ -9,13 +9,12 @@
 //インクルード
 //------------------------------------------------------------------------------
 #include "Debug_ViewerCharacter.h"
-#include "../../manager.h"
-#include "../../renderer.h"
-#include "../../game.h"
-#include "../../camera.h"
-#include "../../inputKeyboard.h"
-#include "../../model.h"
-
+#include "../manager.h"
+#include "../renderer.h"
+#include "../game.h"
+#include "../camera.h"
+#include "../inputKeyboard.h"
+#include "../model.h"
 //------------------------------------------------------------------------------
 //静的メンバ変数の初期化
 //------------------------------------------------------------------------------
