@@ -11,11 +11,10 @@
 
 //プロトタイプ宣言
 //グローバル変数　何番目の表示↓　↓表示の最高数
-CScene*CScene::m_pScene[TYPE_MAX][MAX] = {};
 int CScene::m_NumAll = 0;
-CScene*CScene::m_pTop = NULL;
-CScene*CScene::m_pCur = NULL;
-bool CScene::m_stopflag = false;
+bool CScene::m_bStopFlag = false;
+bool CScene::m_b1FUpdateFlag = false;
+std::vector<CScene*> CScene::m_pSceneList[TYPE_MAX] = {};
 //==========================================================
 //コンストラクタ
 //==========================================================
@@ -24,18 +23,9 @@ CScene::CScene(OBJ_TYPE type)
 	// オブジェクトタイプのチェック
 	if (type != TYPE_NONE)
 	{
-		m_flag = false;
+		m_bflag = false;
 
-		if (m_pCur != NULL)
-		{
-			m_pPrev = m_pCur;
-			m_pCur->m_pNext = this;
-		}
-		m_pCur = this;
-		if (m_pTop == NULL)
-		{
-			m_pTop = this;
-		}
+		m_pSceneList[type].emplace_back(this);
 	}
 	else
 	{
@@ -53,48 +43,114 @@ CScene::~CScene()
 //==========================================================
 void CScene::UpdateAll(void)
 {
-	CScene *pScene = m_pTop;
-	if (m_stopflag == false)
+	//ストップのフラグ確認
+	if (!m_bStopFlag || m_b1FUpdateFlag)
 	{
-		while (pScene)
+		//OBJTYPE分回す
+		for (int nCntObjtype = 0; nCntObjtype < TYPE_MAX; nCntObjtype++)
 		{
-			CScene *pSceneNext = pScene->m_pNext;
-			pScene->Update();
-			pScene = pSceneNext;
+			//配列が空かどうか
+			if (!m_pSceneList[nCntObjtype].empty())
+			{
+				//Sceneの配列の大きさ分
+				for (size_t nCnt = 0; nCnt < m_pSceneList[nCntObjtype].size(); nCnt++)
+				{
+					//nullcheck
+					if (m_pSceneList[nCntObjtype][nCnt])
+					{
+						//更新処理
+						m_pSceneList[nCntObjtype][nCnt]->Update();
+					}
+				}
+			}
 		}
 	}
-	pScene = m_pTop;
-	while (pScene)
+
+	//OBJTYPE分回す
+	for (int nCntObjtype = 0; nCntObjtype < TYPE_MAX; nCntObjtype++)
 	{
-		CScene *pSceneNext = pScene->m_pNext;
-		pScene->Delete();
-		pScene = pSceneNext;
+		//配列が空かどうか
+		if (!m_pSceneList[nCntObjtype].empty())
+		{
+			//Sceneの配列の大きさ分
+			for (size_t nCnt = 0; nCnt < m_pSceneList[nCntObjtype].size(); nCnt++)
+			{
+				//フラグチェック
+				if (m_pSceneList[nCntObjtype][nCnt]->m_bflag)
+				{
+					//終了処理
+					m_pSceneList[nCntObjtype][nCnt]->Uninit();
+					//メモリ開放
+					delete m_pSceneList[nCntObjtype][nCnt];
+					m_pSceneList[nCntObjtype][nCnt] = nullptr;
+
+					//配列から削除
+					m_pSceneList[nCntObjtype].erase(m_pSceneList[nCntObjtype].begin() + nCnt);
+
+					//配列でずれた分修正
+					nCnt--;
+
+				}
+			}
+		}
 	}
+
+	m_b1FUpdateFlag = false;
 }
 //==========================================================
 //すべての消去
 //==========================================================
 void CScene::RereaseAll(void)
 {
-	CScene *pScene = m_pTop;
-	while (pScene)
+	//OBJTYPE分回す
+	for (int nCntObjtype = 0; nCntObjtype < TYPE_MAX; nCntObjtype++)
 	{
-		CScene *pSceneNext = pScene->m_pNext;
-		pScene->Rerease();
-		pScene = pSceneNext;
+		//配列が空かどうか
+		if (!m_pSceneList[nCntObjtype].empty())
+		{
+			//Sceneの配列の大きさ分
+			for (size_t nCnt = 0; nCnt < m_pSceneList[nCntObjtype].size(); nCnt++)
+			{
+				//nullcheck
+				if (m_pSceneList[nCntObjtype][nCnt])
+				{
+					//終了処理
+					m_pSceneList[nCntObjtype][nCnt]->Uninit();
+
+					//メモリ開放
+					delete m_pSceneList[nCntObjtype][nCnt];
+					m_pSceneList[nCntObjtype][nCnt] = nullptr;
+				}
+			}
+			//配列を空にする
+			m_pSceneList[nCntObjtype].clear();
+		}
 	}
+	//配列を空にする
+	m_pSceneList->clear();
 }
 //==========================================================
 //すべての描画
 //==========================================================
 void CScene::DrawAll(void)
 {
-	CScene *pScene = m_pTop;
-	while (pScene)
+	//OBJTYPE分回す
+	for (int nCntObjtype = 0; nCntObjtype < TYPE_MAX; nCntObjtype++)
 	{
-		CScene *pSceneNext = pScene->m_pNext;
-		pScene->Draw();
-		pScene = pSceneNext;
+		//配列が空かどうか
+		if (!m_pSceneList[nCntObjtype].empty())
+		{
+			//Sceneの配列の大きさ分
+			for (size_t nCnt = 0; nCnt < m_pSceneList[nCntObjtype].size(); nCnt++)
+			{
+				//nullcheck
+				if (m_pSceneList[nCntObjtype][nCnt])
+				{
+					//描画
+					m_pSceneList[nCntObjtype][nCnt]->Draw();
+				}
+			}
+		}
 	}
 }
 //==========================================================
@@ -110,45 +166,33 @@ int  CScene::GetAll(void)
 void CScene::DebugAll(void)
 {
 #ifdef _DEBUG
-	CScene *pScene = m_pTop;
-	if (m_stopflag == false)
+	//OBJTYPE分回す
+	for (int nCntObjtype = 0; nCntObjtype < TYPE_MAX; nCntObjtype++)
 	{
-		while (pScene)
+		//配列が空かどうか
+		if (!m_pSceneList[nCntObjtype].empty())
 		{
-			CScene *pSceneNext = pScene->m_pNext;
-			pScene->DebugInfo();
-			pScene = pSceneNext;
+			//Sceneの配列の大きさ分
+			for (size_t nCnt = 0; nCnt < m_pSceneList[nCntObjtype].size(); nCnt++)
+			{
+				//nullcheck
+				if (m_pSceneList[nCntObjtype][nCnt])
+				{
+					//更新処理
+					m_pSceneList[nCntObjtype][nCnt]->DebugInfo();
+				}
+			}
 		}
-	}
-	pScene = m_pTop;
-	while (pScene)
-	{
-		CScene *pSceneNext = pScene->m_pNext;
-		pScene->Delete();
-		pScene = pSceneNext;
 	}
 #endif
 }
-//==========================================================
-//最初の取得
-//==========================================================
-CScene * CScene::GetTop(void)
-{
-	return m_pTop;
-}
+
 //==========================================================
 //ストップの状態取得
 //==========================================================
 bool &CScene::GetStopFlag(void)
 {
-	return m_stopflag;
-}
-//==========================================================
-//次の取得
-//==========================================================
-CScene * CScene::GetNext(void)
-{
-	return m_pNext;
+	return m_bStopFlag;
 }
 //==========================================================
 //オブジェクトの設定
@@ -162,16 +206,6 @@ void CScene::SetObjType(OBJ_TYPE type)
 //==========================================================
 CScene *CScene::GetScene(OBJ_TYPE type)
 {
-	CScene *pScene = m_pTop;
-	while (pScene)
-	{
-		CScene *pSceneNext = pScene->m_pNext;
-		if (pScene->GetObjType() == type)
-		{
-			return pScene;
-		}
-		pScene = pSceneNext;
-	}
 	return NULL;
 }
 //==========================================================
@@ -186,44 +220,13 @@ CScene::OBJ_TYPE CScene::GetObjType(void)
 //==========================================================
 void CScene::Rerease(void)
 {
-	m_flag = true;
+	m_bflag = true;
 }
-//==========================================================
-//消去
-//==========================================================
-void CScene::Delete(void)
-{
-	int type = objtype;
-	if (m_flag == true)
-	{
-		if (this == m_pTop && this == m_pCur)
-		{
-			m_pTop = m_pCur= NULL;
-		}
-		else if (this == m_pTop)
-		{
-			m_pTop = this->m_pNext;
-		}
-		else if (this == m_pCur)
-		{
-			m_pCur= this->m_pPrev;
-			m_pCur->m_pNext = NULL;
-		}
-		else
-		{
-			this->m_pNext->m_pPrev= this->m_pPrev;
-			this->m_pPrev->m_pNext= this->m_pNext;
-		}
 
-		Uninit();
-		delete this;
-		m_NumAll--;
-	}
-}
 //==========================================================
 //ストップの変更
 //==========================================================
 void CScene::StopUpdate(void)
 {
-	m_stopflag ^= 1;
+	m_bStopFlag ^= 1;
 }

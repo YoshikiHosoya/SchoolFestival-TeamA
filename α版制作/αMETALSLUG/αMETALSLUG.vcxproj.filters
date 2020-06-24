@@ -34,14 +34,14 @@
     <Filter Include="Scene">
       <UniqueIdentifier>{06f72619-76f1-4b88-9835-6d6fac25cdde}</UniqueIdentifier>
     </Filter>
-    <Filter Include="TexAnimation">
-      <UniqueIdentifier>{0fe29e5a-2065-44c5-b045-e25bc99790db}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Collision">
       <UniqueIdentifier>{2ada6d24-72de-4c97-853c-061894b2d94b}</UniqueIdentifier>
     </Filter>
     <Filter Include="ImGui">
       <UniqueIdentifier>{b8b91183-4e3a-461c-9316-b057b8381158}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Effect\TexAnimation">
+      <UniqueIdentifier>{0fe29e5a-2065-44c5-b045-e25bc99790db}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -79,13 +79,13 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\TexAnimationBase.cpp">
-      <Filter>TexAnimation</Filter>
+      <Filter>Effect\TexAnimation</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\TexAnimation2D.cpp">
-      <Filter>TexAnimation</Filter>
+      <Filter>Effect\TexAnimation</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\TexAnimation3D.cpp">
-      <Filter>TexAnimation</Filter>
+      <Filter>Effect\TexAnimation</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\Scene.cpp">
       <Filter>Scene</Filter>
@@ -174,6 +174,15 @@
     <ClCompile Include="SourceCode\hosso\HossoLibrary.cpp">
       <Filter>Hosso</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\particle.cpp">
+      <Filter>Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\ParticleManager.cpp">
+      <Filter>Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\hosso\Debug_EffectViewer.cpp">
+      <Filter>Hosso</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SourceCode\camera.h">
@@ -210,13 +219,13 @@
       <Filter>ソース ファイル</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\TexAnimationBase.h">
-      <Filter>TexAnimation</Filter>
+      <Filter>Effect\TexAnimation</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\TexAnimation2D.h">
-      <Filter>TexAnimation</Filter>
+      <Filter>Effect\TexAnimation</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\TexAnimation3D.h">
-      <Filter>TexAnimation</Filter>
+      <Filter>Effect\TexAnimation</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\SceneBase.h">
       <Filter>Scene</Filter>
@@ -312,6 +321,15 @@
       <Filter>Hosso</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\hosso\HossoLibrary.h">
+      <Filter>Hosso</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\particle.h">
+      <Filter>Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\ParticleManager.h">
+      <Filter>Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\hosso\Debug_EffectViewer.h">
       <Filter>Hosso</Filter>
     </ClInclude>
   </ItemGroup>

@@ -210,7 +210,7 @@ void CBullet::Update(void)
 // =====================================================================================================================================================================
 void CBullet::Draw(void)
 {
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRendere()->GetDevice();
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
 
 	// ライティングモード無効
 	pDevice->SetRenderState(D3DRS_LIGHTING, FALSE);

@@ -29,7 +29,7 @@ CDebugProc::~CDebugProc()
 void CDebugProc::Init(void)
 {
 
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRendere()->GetDevice();
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
 
 	D3DXCreateFont(pDevice,
 		12, 6,

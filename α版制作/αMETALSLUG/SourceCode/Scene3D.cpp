@@ -52,7 +52,7 @@ void CScene3D::Update(void)
 //==========================================================
 void CScene3D::Draw(void)
 {
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRendere()->GetDevice();
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
 	//ワールドマトリックスの計算
 	MtxCalc();
 	// ビルボードするとき
@@ -160,8 +160,8 @@ void CScene3D::MakeVertex(void)
 {
 	LPDIRECT3DVERTEXBUFFER9 pVtxBuff;
 
-	CRenderer*pRenderer = CManager::GetRendere();
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRendere()->GetDevice();
+	CRenderer*pRenderer = CManager::GetRenderer();
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
 	pDevice->CreateVertexBuffer(
 		sizeof(VERTEX_3D) * 4,
 		D3DUSAGE_WRITEONLY,

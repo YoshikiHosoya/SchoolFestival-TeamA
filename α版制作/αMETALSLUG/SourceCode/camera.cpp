@@ -7,6 +7,7 @@
 #include "manager.h"
 #include "renderer.h"
 #include "debugproc.h"
+#include "basemode.h"
 #include "Player.h"
 #include "Scene.h"
 #include "mouse.h"
@@ -62,7 +63,7 @@ void CCamera::UpdateCamera(void)
 //=============================================================================
 void CCamera::SetCamera(void)
 {
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRendere()->GetDevice();
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
 
 	// プロジェクションマトリックスの初期化
 	D3DXMatrixIdentity(&mtxProjection);
@@ -178,12 +179,20 @@ void CCamera::CharacterFollowingMoveCamera()
 		rot.x = -D3DX_PI*0.5f;
 	}
 	//追従処理
-	//キャスト
-	CScene *pScene;
-	pScene = CScene::GetScene(CScene::OBJTYPE_PLAYER);
-	if (pScene != NULL)
+	CBaseMode *pBaseMode = CManager::GetBaseMode();
+
+	//nullcheck
+	if (pBaseMode)
 	{
-		pos = ((CPlayer*)pScene)->GetPosition();
+		//プレイヤーのポインタ取得
+		CPlayer *pPlayer = pBaseMode->GetPlayer();
+
+		//nullcheck
+		if (pPlayer)
+		{
+			//座標取得
+			pos = pPlayer->GetPosition();
+		}
 	}
 
 	//視点の目的地の計算

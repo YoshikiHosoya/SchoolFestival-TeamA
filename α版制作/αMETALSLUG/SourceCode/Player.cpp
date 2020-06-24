@@ -39,7 +39,7 @@ HRESULT CPlayer::Init(void)
 	CCharacter::Init();
 	LoadOffset(CCharacter::CHARACTER_TYPE_PLAYER);
 	SetCharacterType(CCharacter::CHARACTER_TYPE_PLAYER);
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRendere()->GetDevice();
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
 	m_Attack = false;
 	m_ShotRot = D3DXVECTOR3(0.0f, 0.5f, 0.0f);
 
@@ -217,7 +217,7 @@ void CPlayer::DebugInfo(void)
 //====================================================================
 CPlayer *CPlayer::Create(void)
 {
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRendere()->GetDevice();
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
 	CPlayer*pPlayer;
 	pPlayer = new CPlayer(OBJTYPE_PLAYER);
 	pPlayer->Init();

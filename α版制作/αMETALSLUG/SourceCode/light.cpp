@@ -10,7 +10,7 @@
 //=============================================================================
 void CLight::InitLight(void)
 {
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRendere()->GetDevice();
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
 	D3DXVECTOR3 vecDir;
 
 	// ライトをクリアする
@@ -64,7 +64,7 @@ void CLight::UpdateLight(void)
 {
 	CKeyboard *key;
 	key = CManager::GetInputKeyboard();
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRendere()->GetDevice();
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
 	static float rot;
 
 	if (key->GetKeyboardPress(DIK_P))

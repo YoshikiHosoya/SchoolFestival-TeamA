@@ -60,7 +60,7 @@ CModel::~CModel()
 //====================================================================
 void CModel::LoadModel(void)
 {
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRendere()->GetDevice();
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
 	D3DXMATERIAL *pMat;
 
 	//プレイヤーのモデル読み込み
@@ -279,7 +279,7 @@ void CModel::UnLoad(void)
 //====================================================================
 HRESULT CModel::Init(void)
 {
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRendere()->GetDevice();
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
 	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
@@ -351,7 +351,7 @@ void CModel::Update(void)
 //====================================================================
 void CModel::Draw(D3DXMATRIX mat)
 {
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRendere()->GetDevice();
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
 	D3DXMATRIX mtxRot, mtxTrans,mtxScal;
 	D3DXMATERIAL *pMat;
 	D3DMATERIAL9 matDef;
@@ -420,7 +420,7 @@ void CModel::Draw(D3DXMATRIX mat)
 //====================================================================
 void CModel::Draw()
 {
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRendere()->GetDevice();
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
 	D3DXMATERIAL *pMat;
 
 	// マトリックスの計算

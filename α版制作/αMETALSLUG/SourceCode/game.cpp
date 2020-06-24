@@ -8,6 +8,8 @@
 #include "pause.h"
 #include "TexAnimation3D.h"
 #include "TexAnimation2D.h"
+#include "particleManager.h"
+#include "particle.h"
 #define _CRT_SECURE_NO_WARNINGS // 警告除去
 int			CGame::m_Counter	= 0;
 CPlayer		*CGame::m_pPlayer	= NULL;
@@ -36,7 +38,12 @@ HRESULT CGame::Init(void)
 	m_pPlayer->SetPosition(D3DXVECTOR3(50.0f, 100.0f, 0.0f));
 
 	m_pPause->CreatePause();
+
+	//パーティクル生成
+	CParticleManager::Create();
+
 	return S_OK;
+
 }
 //==========================================================
 // 終了
@@ -49,12 +56,6 @@ void CGame::Uninit(void)
 //==========================================================
 void CGame::Update(void)
 {
-	CKeyboard *key;
-	key = CManager::GetInputKeyboard();
-	if (key->GetKeyboardTrigger(DIK_F9))
-	{
-		CScene::StopUpdate();
-	}
 	m_pMap->UpdateDieFlag();
  }
 //==========================================================
@@ -89,7 +90,6 @@ void CGame::ShowDebugInfo(void)
 {
 	//キーボード情報取得
 	CKeyboard *key = CManager::GetInputKeyboard();;
-
 	//2Dエフェクト
 	if (key->GetKeyboardTrigger(DIK_2))
 	{
@@ -99,5 +99,10 @@ void CGame::ShowDebugInfo(void)
 	if (key->GetKeyboardTrigger(DIK_3))
 	{
 		CTexAnimation3D::Create(m_pPlayer->GetPosition(), D3DXVECTOR3(150.0f, 150.0f, 0.0f), ZeroVector3, CTexture::SEPARATE_TEX_EFFECT_EXPLOSION, 3, CScene::OBJTYPE_EXPROSION);
+	}
+	//パーティクル
+	if (key->GetKeyboardTrigger(DIK_4))
+	{
+		CParticle::Create(m_pPlayer->GetPosition(), 60, 50.0f, RedColor, 20, 5);
 	}
 }

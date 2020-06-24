@@ -1,6 +1,6 @@
 //------------------------------------------------------------------------------
 //
-//テクスチャアニメーション2D処理  [TexAnimation2D.h]
+//パーティクルの管理処理  [ParticleManager.h]
 //Author:Yoshiki Hosoya
 //
 //------------------------------------------------------------------------------
@@ -8,12 +8,13 @@
 //------------------------------------------------------------------------------
 //インクルード
 //------------------------------------------------------------------------------
-#include "TexAnimation2D.h"
+#include "ParticleManager.h"
 #include "manager.h"
 #include "renderer.h"
 //------------------------------------------------------------------------------
 //静的メンバ変数の初期化
 //------------------------------------------------------------------------------
+std::vector<std::unique_ptr<CParticle>> CParticleManager::m_pParticleList = {};
 
 //------------------------------------------------------------------------------
 //マクロ
@@ -22,118 +23,126 @@
 //------------------------------------------------------------------------------
 //コンストラクタ
 //------------------------------------------------------------------------------
-CTexAnimation2D::CTexAnimation2D()
+CParticleManager::CParticleManager()
 {
-
 }
 //------------------------------------------------------------------------------
 //コンストラクタ
 //------------------------------------------------------------------------------
-CTexAnimation2D::CTexAnimation2D(OBJ_TYPE obj) : CScene2D(obj)
+CParticleManager::CParticleManager(OBJ_TYPE obj) : CScene(obj)
 {
-
 }
 //------------------------------------------------------------------------------
 //デストラクタ
 //------------------------------------------------------------------------------
-CTexAnimation2D::~CTexAnimation2D()
+CParticleManager::~CParticleManager()
 {
+
 }
 //------------------------------------------------------------------------------
 //初期化処理
 //------------------------------------------------------------------------------
-HRESULT CTexAnimation2D::Init()
+HRESULT CParticleManager::Init()
 {
-	//初期化処理
-	if (FAILED(CScene2D::Init()))
-	{
-		return E_FAIL;
-	}
 	return S_OK;
 }
 //------------------------------------------------------------------------------
 //終了処理
 //------------------------------------------------------------------------------
-void CTexAnimation2D::Uninit()
+void CParticleManager::Uninit()
 {
-	//終了処理
-	CScene2D::Uninit();
+
 }
 //------------------------------------------------------------------------------
 //更新処理
 //------------------------------------------------------------------------------
-void CTexAnimation2D::Update()
+void CParticleManager::Update()
 {
-	//更新処理
-	CScene2D::Update();
+	//頂点番号リセット
+	CParticle::ResetVertexID();
 
-	//テクスチャアニメーションの更新
-	if (CTexAnimationBase::UpdateAnimation(this))
+	//nullcheck
+	if (!m_pParticleList.empty())
 	{
-		//消去
-		Rerease();
-		return;
+		for (size_t nCnt = 0; nCnt < m_pParticleList.size(); nCnt++)
+		{
+			//更新処理
+			m_pParticleList[nCnt]->Update();
+
+			//フラグ立っているかチェック
+			if(m_pParticleList[nCnt]->GetDeleteFlag())
+			{
+				//終了処理してメモリ開放
+				m_pParticleList[nCnt]->Uninit();
+				m_pParticleList[nCnt].reset();
+
+				//配列から削除
+				m_pParticleList.erase(m_pParticleList.begin() + nCnt);
+
+				//削除してカウントがずれた分修正
+				nCnt--;
+			}
+		}
+
+		for (size_t nCnt = 0; nCnt < m_pParticleList.size(); nCnt++)
+		{
+			//頂点バッファ更新処理
+			m_pParticleList[nCnt]->UpdateVertex();
+		}
+
 	}
+
 
 }
 //------------------------------------------------------------------------------
 //描画処理
 //------------------------------------------------------------------------------
-void CTexAnimation2D::Draw()
+void CParticleManager::Draw()
 {
-	//デバイス取得
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
+	//頂点番号リセット
+	CParticle::ResetVertexID();
 
-	//Zテスト無効でZライティング有効
-	CManager::GetRenderer()->SetRendererCommand(CRenderer::RENDERER_ZTEST_OFF_ZWRITING_ON);
-
-	//加算合成
-	CManager::GetRenderer()->SetRendererCommand(CRenderer::RENDERER_ALPHABLEND_ADD);
-
-	//描画処理
-	CScene2D::Draw();
-
-	//Zテスト通常
-	CManager::GetRenderer()->SetRendererCommand(CRenderer::RENDERER_ZTEST_DEFAULT);
-
-	//通常合成
-	CManager::GetRenderer()->SetRendererCommand(CRenderer::REDNERER_ALPHABLEND_DEFAULT);
+	//nullcheck
+	if (!m_pParticleList.empty())
+	{
+		for (size_t nCnt = 0; nCnt < m_pParticleList.size(); nCnt++)
+		{
+			m_pParticleList[nCnt]->Draw();
+		}
+	}
 }
+
 //------------------------------------------------------------------------------
 //デバッグ情報表示
 //------------------------------------------------------------------------------
-void CTexAnimation2D::ShowDebugInfo()
+void CParticleManager::DebugInfo()
 {
 #ifdef _DEBUG
-	CDebugProc::Print("pos %.1f %.1f %.1f", GetPosition().x, GetPosition().x, GetPosition().x);
-	CDebugProc::Print("col %.1f %.1f %.1f %.1f", GetColor().r, GetColor().g, GetColor().b, GetColor().a);
 
-
-#endif //_DEBUG
+#endif // _DEBUG
 }
+
 //------------------------------------------------------------------------------
-//生成処理
+//パーティクル生成
 //------------------------------------------------------------------------------
-void CTexAnimation2D::Create(D3DXVECTOR3 pos, D3DXVECTOR3 size, D3DXVECTOR3 rot, CTexture::SEPARATE_TEX_TYPE type, int nCntSwitch, CScene::OBJ_TYPE objtype)
+void CParticleManager::Create()
 {
 	//メモリ確保
-	CTexAnimation2D *pEffectAnimation = new CTexAnimation2D(objtype);
+	CParticleManager *pParticle = new CParticleManager(OBJTYPE_PARTICLE);
 
-	//nullcheck
-	if (pEffectAnimation)
-	{
-		//初期化
-		pEffectAnimation->Init();
+	//初期化
+	pParticle->Init();
 
-		//情報をいれる　Scene側
-		pEffectAnimation->SetPosition(pos);
-		pEffectAnimation->SetSize(size);
-		pEffectAnimation->SetRot(rot);
-		pEffectAnimation->BindTexture(CTexture::GetSeparateTexture(type));
-		pEffectAnimation->SetAnimation(ZeroVector2, CTexture::GetSparateTex_UVSize(type));
+	//パーティクルの頂点バッファ確保
+	CParticle::MakeVertex();
 
-		//情報をいれる　TexAnimation側
-		pEffectAnimation->SetTex(type);
-		pEffectAnimation->SetCntSwitch(nCntSwitch);
-	}
 }
+//------------------------------------------------------------------------------
+//パーティクルのリスト
+//------------------------------------------------------------------------------
+void CParticleManager::AddParticleList(std::unique_ptr<CParticle> pParticle)
+{
+	//配列に追加
+	m_pParticleList.emplace_back(std::move(pParticle));
+}
+

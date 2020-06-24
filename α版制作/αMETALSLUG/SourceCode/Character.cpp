@@ -46,7 +46,7 @@ CCharacter::~CCharacter()
 //====================================================================
 HRESULT CCharacter::Init(void)
 {
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRendere()->GetDevice();
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
 	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
@@ -150,7 +150,7 @@ void CCharacter::Update(void)
 //====================================================================
 void CCharacter::Draw(void)
 {
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRendere()->GetDevice();
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
 	D3DXMATRIX mtxRot, mtxTrans;
 	// ワールドマトリックスの初期化
 	D3DXMatrixIdentity(&m_mtxWorld);

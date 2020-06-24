@@ -93,7 +93,7 @@ void CItem::Draw(void)
 {
 	// 変数宣言
 	LPDIRECT3DDEVICE9 pDevice =									// デバイスの取得
-		CManager::GetRendere()->GetDevice();
+		CManager::GetRenderer()->GetDevice();
 
 	// アルファテストの設定に変更
 	pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);		// アルファテスト有効

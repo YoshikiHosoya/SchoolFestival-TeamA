@@ -164,6 +164,7 @@
     <ClCompile Include="SourceCode\gun.cpp" />
     <ClCompile Include="SourceCode\handgun.cpp" />
     <ClCompile Include="SourceCode\heavymachinegun.cpp" />
+    <ClCompile Include="SourceCode\hosso\Debug_EffectViewer.cpp" />
     <ClCompile Include="SourceCode\hosso\Debug_ModelViewer.cpp" />
     <ClCompile Include="SourceCode\hosso\Debug_ViewerCharacter.cpp" />
     <ClCompile Include="SourceCode\hosso\HossoLibrary.cpp" />
@@ -180,6 +181,8 @@
     <ClCompile Include="SourceCode\map.cpp" />
     <ClCompile Include="SourceCode\Model.cpp" />
     <ClCompile Include="SourceCode\mouse.cpp" />
+    <ClCompile Include="SourceCode\particle.cpp" />
+    <ClCompile Include="SourceCode\ParticleManager.cpp" />
     <ClCompile Include="SourceCode\pause.cpp" />
     <ClCompile Include="SourceCode\Player.cpp" />
     <ClCompile Include="SourceCode\renderer.cpp" />
@@ -209,6 +212,7 @@
     <ClInclude Include="SourceCode\gun.h" />
     <ClInclude Include="SourceCode\handgun.h" />
     <ClInclude Include="SourceCode\heavymachinegun.h" />
+    <ClInclude Include="SourceCode\hosso\Debug_EffectViewer.h" />
     <ClInclude Include="SourceCode\hosso\Debug_ModelViewer.h" />
     <ClInclude Include="SourceCode\hosso\Debug_ViewerCharacter.h" />
     <ClInclude Include="SourceCode\hosso\HossoLibrary.h" />
@@ -228,6 +232,8 @@
     <ClInclude Include="SourceCode\map.h" />
     <ClInclude Include="SourceCode\model.h" />
     <ClInclude Include="SourceCode\mouse.h" />
+    <ClInclude Include="SourceCode\particle.h" />
+    <ClInclude Include="SourceCode\ParticleManager.h" />
     <ClInclude Include="SourceCode\pause.h" />
     <ClInclude Include="SourceCode\Player.h" />
     <ClInclude Include="SourceCode\renderer.h" />
