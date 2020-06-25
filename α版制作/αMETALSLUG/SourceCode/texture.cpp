@@ -17,12 +17,13 @@ std::vector<std::string> CTexture::m_aTexFileName =
 {
 	{ "data/TEXTURE/TexNone.png" },							//白紙
 	{ "data/TEXTURE/Effect/particle.jpg" },					//パーティクル用の丸いの
-	{ "data/TEXTURE/bullet00.png" },						//ハンドガンの弾
-	{ "data/TEXTURE/Heavymachinegun.jpg" },					//ヘビーマシンガンの弾
-	{ "data/TEXTURE/Shotgun.jpg" },							//ショットガンの弾
-	{ "data/TEXTURE/Lasergun.jpg" },						//レーザーガンの弾
-	{ "data/TEXTURE/Rocketlauncher.jpg" },					//ロケットランチャーの弾
-	{ "data/TEXTURE/Flameshot.jpg" },						//フレイムショットの弾
+	{ "data/TEXTURE/Bullet/bullet00.png" },					//ハンドガンの弾
+	{ "data/TEXTURE/Item/Heavymachinegun.png" },			//ヘビーマシンガンの弾
+	{ "data/TEXTURE/Item/Shotgun.png" },					//ショットガンの弾
+	{ "data/TEXTURE/Item/Lasergun.jpg" },					//レーザーガンの弾
+	{ "data/TEXTURE/Item/Rocketlauncher.jpg" },				//ロケットランチャーの弾
+	{ "data/TEXTURE/Item/Flameshot.jpg" },					//フレイムショットの弾
+	{ "data/TEXTURE/Item/Bear.png" },						//熊
 };
 
 
