@@ -53,7 +53,7 @@ public:
 	static bool &GetStopFlag(void);
 	void SetObjType(OBJ_TYPE type);
 	static CScene *GetScene(OBJ_TYPE type);
-	static std::vector<CScene*> GetSceneList(OBJ_TYPE objtype, std::vector<CScene*> &rSceneList);
+	static void GetSceneList(OBJ_TYPE objtype, std::vector<CScene*> &rSceneList);
 	OBJ_TYPE GetObjType(void);
 	void Rerease(void);
 	static void StopUpdate(void);

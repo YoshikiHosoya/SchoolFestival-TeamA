@@ -211,7 +211,7 @@ CScene *CScene::GetScene(OBJ_TYPE type)
 //==========================================================
 //ƒV[ƒ“‚Ì”z—ñæ“¾
 //==========================================================
-std::vector<CScene*> CScene::GetSceneList(OBJ_TYPE objtype, std::vector<CScene*>& rSceneList)
+void CScene::GetSceneList(OBJ_TYPE objtype, std::vector<CScene*>& rSceneList)
 {
 	rSceneList = m_pSceneList[objtype];
 }
