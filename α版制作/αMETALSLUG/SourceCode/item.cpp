@@ -9,6 +9,8 @@
 #include "renderer.h"
 #include "game.h"
 #include "texture.h"
+#include "collision.h"
+#include "debugproc.h"
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
 // =====================================================================================================================================================================
@@ -16,7 +18,8 @@
 // =====================================================================================================================================================================
 // マクロ定義
 // =====================================================================================================================================================================
-#define ITEM_SIZE_XY				(100.0f)						// アイテムのサイズ
+#define ITEM_SIZE_XY				(D3DXVECTOR3(20.0f,20.0f,0.0f))				// アイテムのサイズ
+#define ITEM_COLLISION_SIZE_XY		(D3DXVECTOR3(40.0f,40.0f,0.0f))				// アイテムのサイズ
 
 // =====================================================================================================================================================================
 //
@@ -25,7 +28,7 @@
 // =====================================================================================================================================================================
 CItem::CItem(OBJ_TYPE type) :CScene3D(type)
 {
-	SetObjType(OBJTYPE_ITEM);
+	m_pCollision = nullptr;
 }
 
 // =====================================================================================================================================================================
@@ -50,6 +53,14 @@ HRESULT CItem::Init()
 	// 初期化
 	CScene3D::Init();
 
+	// 当たり判定生成
+	m_pCollision = CCollision::Create();
+	m_pCollision->SetPos(&GetPosition());
+	m_pCollision->SetSize2D(ITEM_COLLISION_SIZE_XY);
+	m_pCollision->SetMove(nullptr);
+	m_pCollision->SetType(CCollision::OBJTYPE_ITEM);
+	m_pCollision->DeCollisionCreate(CCollision::COLLISIONTYPE_NORMAL);
+
 	return S_OK;
 }
 
@@ -71,14 +82,14 @@ void CItem::Uninit(void)
 // =====================================================================================================================================================================
 void CItem::Update(void)
 {
-	// プレイヤーの情報取得
-//	CPlayer *pPlayer = CManager::GetGame()->GetPlayer();
-
 	// 当たり判定
-	//{
-		// アイテム取得時の種類別処理
-		//ItemType(this->m_type)
-	//}
+	if (m_pCollision != nullptr)
+	{
+		// 座標の更新 pos
+		m_pCollision->SetPos(&GetPosition());
+	}
+
+	CDebugProc::Print("アイテムのサイズ %f,%f\n",GetSize().x, GetSize().y);
 
 	// 更新
 	CScene3D::Update();
@@ -107,6 +118,8 @@ void CItem::Draw(void)
 	D3DXMATRIX mtxView;
 	// 現在のビューマトリックスを取得
 	pDevice->GetTransform(D3DTS_VIEW, &mtxView);
+
+	//CHossoLibrary::SetBillboard(&mtxView);
 	// 逆行列
 	m_mtxWorld._11 = mtxView._11;
 	m_mtxWorld._12 = mtxView._21;
@@ -153,6 +166,10 @@ void CItem::ItemType(ITEMTYPE type)
 	case (ITEMTYPE_FLAMESHOT): {
 	}break;
 
+		//熊
+	case (ITEMTYPE_BEAR): {
+	}break;
+
 	default:
 		break;
 	}
@@ -162,9 +179,21 @@ void CItem::ItemType(ITEMTYPE type)
 // デバッグ
 //
 // =====================================================================================================================================================================
-
 void CItem::DebugInfo()
 {
+}
+
+// =====================================================================================================================================================================
+//
+// アイテムが判定をもらった時
+//
+// =====================================================================================================================================================================
+void CItem::HitItem(ITEMTYPE type)
+{
+	// 種類ごとの処理
+	ItemType(type);
+	// 削除
+	Rerease();
 }
 
 // =====================================================================================================================================================================
@@ -184,7 +213,7 @@ CItem * CItem::Create(D3DXVECTOR3 pos, ITEMTYPE type)
 	pItem->Init();
 
 	// サイズの設定
-	pItem->SetSize(D3DXVECTOR3(ITEM_SIZE_XY, ITEM_SIZE_XY, 0.0f));
+	pItem->SetSize(ITEM_SIZE_XY);
 
 	// アイテムの位置の設定
 	pItem->SetPosition(pos);
@@ -237,7 +266,23 @@ void CItem::SwitchTexture(ITEMTYPE type, CItem *pItem)
 		pItem->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_FLAMESHOT));
 	}break;
 
+		//熊
+	case (ITEMTYPE_BEAR): {
+		// テクスチャの割り当て
+		pItem->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_BEAR));
+	}break;
+
 	default:
 		break;
 	}
+}
+//====================================================================
+//
+//当たり判定の削除
+//
+//====================================================================
+void CItem::DeleteCollision(void)
+{
+	m_pCollision->ReleaseCollision(m_pCollision);
+	m_pCollision = NULL;
 }

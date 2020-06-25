@@ -76,7 +76,7 @@ HRESULT CBullet::Init()
 	// “–‚½‚è”»’è¶¬
 	m_pCollision = CCollision::Create();
 	m_pCollision->SetPos(&GetPosition());
-	m_pCollision->SetSize2D(D3DXVECTOR3(50.0f, 50.0f, 0.0f));
+	m_pCollision->SetSize2D(D3DXVECTOR3(40.0f, 40.0f, 0.0f));
 	m_pCollision->SetMove(&m_move);
 	m_pCollision->SetType(CCollision::OBJTYPE_PLAYERBULLET);
 	m_pCollision->DeCollisionCreate(CCollision::COLLISIONTYPE_NORMAL);
@@ -148,7 +148,7 @@ void CBullet::Update(void)
 				CEnemy *pEnemy = CManager::GetBaseMode()->GetMap()->GetEnemy(nCnt);
 				if (pEnemy != nullptr)
 				{
-					if (m_pCollision->CharCollision2D(pEnemy->GetCollision()))
+					if (m_pCollision->OtherCollision2D(pEnemy->GetCollision()))
 					{
 						// “G‚Ìƒ‰ƒCƒtŒ¸Š
 						pEnemy->CCharacter::AddDamage(10);
