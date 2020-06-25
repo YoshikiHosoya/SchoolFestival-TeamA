@@ -55,6 +55,7 @@ typedef struct INTEGER2
 		x = nX;
 		y = nY;
 	};
+
 }INTEGER2;
 
 //intŒ^‚ð3‚ÂŠi”[‚Å‚«‚é

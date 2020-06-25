@@ -209,6 +209,13 @@ CScene *CScene::GetScene(OBJ_TYPE type)
 	return NULL;
 }
 //==========================================================
+//シーンの配列取得
+//==========================================================
+std::vector<CScene*> CScene::GetSceneList(OBJ_TYPE objtype, std::vector<CScene*>& rSceneList)
+{
+	rSceneList = m_pSceneList[objtype];
+}
+//==========================================================
 //オブジェクトタイプの取得
 //==========================================================
 CScene::OBJ_TYPE CScene::GetObjType(void)

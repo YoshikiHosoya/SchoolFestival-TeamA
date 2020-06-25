@@ -93,12 +93,12 @@ void CGame::ShowDebugInfo(void)
 	//2Dエフェクト
 	if (key->GetKeyboardTrigger(DIK_2))
 	{
-		CTexAnimation2D::Create(SCREEN_CENTER_POS, D3DXVECTOR3(150.0f, 150.0f, 0.0f), ZeroVector3, CTexture::SEPARATE_TEX_EFFECT_EXPLOSION, 3, CScene::OBJTYPE_EXPROSION);
+		CTexAnimation2D::Create(SCREEN_CENTER_POS, D3DXVECTOR3(150.0f, 150.0f, 0.0f), ZeroVector3, CTexture::SEPARATE_TEX_EFFECT_EXPLOSION01, 3, CScene::OBJTYPE_EXPROSION);
 	}
 	//3Dエフェクト
 	if (key->GetKeyboardTrigger(DIK_3))
 	{
-		CTexAnimation3D::Create(m_pPlayer->GetPosition(), D3DXVECTOR3(150.0f, 150.0f, 0.0f), ZeroVector3, CTexture::SEPARATE_TEX_EFFECT_EXPLOSION, 3, CScene::OBJTYPE_EXPROSION);
+		CTexAnimation3D::Create(m_pPlayer->GetPosition(), D3DXVECTOR3(150.0f, 150.0f, 0.0f), ZeroVector3, CTexture::SEPARATE_TEX_EFFECT_EXPLOSION01, 3, CScene::OBJTYPE_EXPROSION);
 	}
 	//パーティクル
 	if (key->GetKeyboardTrigger(DIK_4))
