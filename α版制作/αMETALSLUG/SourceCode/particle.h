@@ -17,6 +17,13 @@
 //------------------------------------------------------------------------------
 //クラス定義
 //------------------------------------------------------------------------------
+
+
+class CParticleParam
+{
+
+};
+
 //パーティクルの粒子
 class COneParticle
 {
@@ -76,10 +83,10 @@ private:
 	int m_nLife;													//ライフ
 	int m_nNumber;													//個数
 	float m_fRadius;												//半径
-	D3DXCOLOR m_col;												//色
 	float m_fRadiusDamping;											//半径の減衰値
 	float m_fAlphaDamping;											//アルファ値の減衰値
 	CTexture::TEX_TYPE m_Textype;									//テクスチャ
+	D3DXCOLOR m_col;												//色
 	std::vector<std::unique_ptr<COneParticle>> m_pParticleList;		//パーティクルの構造体のリスト
 
 	bool m_bDeleteFlag;												//消去フラグ

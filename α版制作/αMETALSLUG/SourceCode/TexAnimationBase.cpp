@@ -29,7 +29,7 @@ CTexAnimationBase::CTexAnimationBase()
 	m_nCntAnim = 0;
 	m_nCntSwitch = 0;
 	m_bLoop = false;
-	m_EffectTex = CTexture::SEPARATE_TEX_EFFECT_EXPLOSION;
+	m_EffectTex = CTexture::SEPARATE_TEX_EFFECT_EXPLOSION01;
 }
 //------------------------------------------------------------------------------
 //デストラクタ
