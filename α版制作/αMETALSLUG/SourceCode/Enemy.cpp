@@ -9,6 +9,7 @@
 #include "Xinput.h"
 #include "collision.h"
 #include "debugproc.h"
+#include "item.h"
 //====================================================================
 //マクロ定義
 //====================================================================
@@ -76,6 +77,12 @@ void CEnemy::Update(void)
 	{
 		 //座標の更新
 		m_pCollision->SetPos(&GetPosition());
+	}
+
+	//体力が0以下になった時
+	if (this->GetLife() <= 0)
+	{//アイテムを生成
+		CItem::Create(this->GetPosition(), CItem::ITEMTYPE_HEAVYMACHINEGUN);
 	}
 
 	CDebugProc::Print("\n敵のライフ %d\n", CCharacter::GetLife());

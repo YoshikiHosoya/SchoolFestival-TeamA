@@ -24,7 +24,7 @@
 CPlayer::CPlayer(OBJ_TYPE type) :CCharacter(type)
 {
 	SetObjType(OBJTYPE_PLAYER);
-	m_pCollision = NULL;
+	m_pCollision = nullptr;
 }
 
 CPlayer::~CPlayer()
@@ -174,12 +174,12 @@ void CPlayer::Update(void)
 		m_pCollision->SetPos(&GetPosition());
 		m_pCollision->SetPosOld(&GetPositionOld());
 
-		// 当たり判定 相手がエネミーだったら
+		//相手がエネミーだったら
 		// 敵の総数分
 		for (int nCnt = 0; nCnt < CManager::GetBaseMode()->GetMap()->GetMaxEnemy(); nCnt++)
 		{
 			CEnemy *pEnemy = CManager::GetBaseMode()->GetMap()->GetEnemy(nCnt);
-			if (pEnemy != NULL)
+			if (pEnemy != nullptr)
 			{
 				if (m_pCollision->CharCollision2D(pEnemy->GetCollision()))
 				{
@@ -191,6 +191,21 @@ void CPlayer::Update(void)
 				}
 			}
 		}
+
+		//相手がアイテムだったら
+		//アイテムの総数分
+		/*for (int nCnt = 0; nCnt < ; nCnt++)
+		{
+			pItem = ;
+			if (pItem != nullptr)
+			{
+				if (m_pCollision->OtherCollision2D(pItem->GetCollision()))
+				{
+					pItem->HitItem(pItem->GetItemType());
+				}
+			}
+
+		}*/
 	}
 	if (CHossoLibrary::PressAnyButton())
 	{
