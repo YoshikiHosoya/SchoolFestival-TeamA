@@ -28,7 +28,6 @@
 // =====================================================================================================================================================================
 CItem::CItem(OBJ_TYPE type) :CScene3D(type)
 {
-	SetObjType(OBJTYPE_ITEM);
 	m_pCollision = nullptr;
 }
 
@@ -276,4 +275,14 @@ void CItem::SwitchTexture(ITEMTYPE type, CItem *pItem)
 	default:
 		break;
 	}
+}
+//====================================================================
+//
+//“–‚½‚è”»’è‚Ìíœ
+//
+//====================================================================
+void CItem::DeleteCollision(void)
+{
+	m_pCollision->ReleaseCollision(m_pCollision);
+	m_pCollision = NULL;
 }

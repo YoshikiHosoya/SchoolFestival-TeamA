@@ -16,6 +16,7 @@
 #include "enemy.h"
 #include "map.h"
 #include"XInputPad.h"
+#include "item.h"
 //====================================================================
 //マクロ定義
 //====================================================================
@@ -193,19 +194,28 @@ void CPlayer::Update(void)
 		}
 
 		//相手がアイテムだったら
+		// ベクター型の変数
+		std::vector<CScene*> SceneList;
+
+		// 指定したオブジェクトのポインタを取得
+		CScene::GetSceneList(OBJTYPE_ITEM, SceneList);
+
 		//アイテムの総数分
-		/*for (int nCnt = 0; nCnt < ; nCnt++)
+		for (size_t nCnt = 0; nCnt < SceneList.size(); nCnt++)
 		{
-			pItem = ;
+			CItem *pItem = (CItem*)SceneList[nCnt];
 			if (pItem != nullptr)
 			{
 				if (m_pCollision->OtherCollision2D(pItem->GetCollision()))
 				{
+					// アイテムごとの処理を通す
 					pItem->HitItem(pItem->GetItemType());
+					pItem->DeleteCollision();
+					pItem = nullptr;
 				}
 			}
 
-		}*/
+		}
 	}
 	if (CHossoLibrary::PressAnyButton())
 	{

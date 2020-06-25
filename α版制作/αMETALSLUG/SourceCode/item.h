@@ -54,6 +54,8 @@ public:
 	void						DebugInfo();									// デバッグ
 	void						HitItem(ITEMTYPE type);							// アイテム取得時の種類別処理
 	ITEMTYPE					GetItemType() { return m_Type; };				// アイテムタイプの取得
+	CCollision					*GetCollision() { return m_pCollision; };		// 当たり判定
+	void						DeleteCollision(void);
 	/* 静的メンバ関数 */
 	static	CItem				*Create(D3DXVECTOR3 pos, ITEMTYPE type);		// アイテムの生成
 	static	void				SwitchTexture(ITEMTYPE type, CItem *pItem);		// 種類別テクスチャ設定
