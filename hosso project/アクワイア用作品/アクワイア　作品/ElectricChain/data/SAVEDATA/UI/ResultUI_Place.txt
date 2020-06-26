@@ -1,0 +1,29 @@
+#------------------------------------------------------------
+#
+#ResultUI�̈ʒu
+#Author:Yoshiki Hosoya
+#
+#------------------------------------------------------------
+
+SCRIPT
+	SCENE2DSET
+		TEX_TYPE = 10
+		POS = 640.0 150.0 0.0
+		SIZE = 700.0 200.0 0.0
+		COLOR = 1.0 1.0 1.0 1.0
+	END_SCENE2DSET
+	
+	SCENE2DSET
+		TEX_TYPE = 11
+		POS = 900.0 400.0 0.0
+		SIZE = 600.0 400.0 0.0
+		COLOR = 1.0 1.0 1.0 1.0
+	END_SCENE2DSET
+
+	SCENE2DSET
+		TEX_TYPE = 1
+		POS = 640.0 650.0 0.0
+		SIZE = 640.0 85.0 0.0
+		COLOR = 1.0 1.0 1.0 1.0
+	END_SCENE2DSET
+END_SCRIPT
