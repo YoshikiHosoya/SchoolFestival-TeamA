@@ -317,7 +317,7 @@ void CBullet::BulletLoad()
 							// INTERVALが来たら
 							else if (strcmp(cHeadText, "INTERVAL") == 0)
 							{
-								sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_BulletParam[nCnt].fInterval);		// 比較用テキストにINTERVALを代入
+								sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_BulletParam[nCnt].nInterval);		// 比較用テキストにINTERVALを代入
 							}
 							else if (strcmp(cHeadText, "END_BULLETSET") == 0)
 							{

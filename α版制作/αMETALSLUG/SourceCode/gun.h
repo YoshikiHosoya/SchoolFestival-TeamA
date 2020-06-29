@@ -62,11 +62,17 @@ public:
 	void					Shot(D3DXVECTOR3 rot);								// 銃の発射
 
 private:
+	/* メンバ関数 */
+	void					MultipleShot();			// 複数発撃つ処理
 	/* メンバ変数 */
 	GUN_TYPE				m_GunType;				// ガンの種類
 	BULLET_TYPE				m_BulletType;			// 弾の種類
 	int						m_nAmmo;				// 弾薬数
 	int						m_nInterval;			// インターバル
 	D3DXMATRIX				*m_mtx;					// マトリックス
+	bool					m_bMultiple;			// 複数撃つフラグ
+	D3DXVECTOR3				m_rot;					// 回転
+	int						m_nCntFrame;			// フレームカウント
+	int						m_nCntBullet;			// 弾のカウント
 };
 #endif
