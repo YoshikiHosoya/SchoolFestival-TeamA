@@ -34,7 +34,7 @@ public:
 	void DebugInfo(void);
 	DEBUG_STATE GetDebugState(void);
 	static CPlayer *Create(void);
-	void DefaultMotion(void);
+	bool DefaultMotion(void);
 private:
 	void Move(float move, float fdest);
 		DEBUG_STATE m_DebugState;						//デバッグのステータス

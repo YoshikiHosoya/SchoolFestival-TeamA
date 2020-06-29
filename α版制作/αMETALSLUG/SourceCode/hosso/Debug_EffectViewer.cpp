@@ -32,19 +32,10 @@
 //------------------------------------------------------------------------------
 CDebug_EffectViewer::CDebug_EffectViewer()
 {
-	//初期化
-	m_nLife = 100;
-	m_col = WhiteColor;
-	m_fRadius = 30.0f;
-	m_nNumParticle = 10;
-	m_fSpeed = 30.0f;
-	m_fAlphaDamping = 0.95f;
-	m_fRadiusDamping = 0.95f;
-	m_textype = CTexture::TEX_EFFECT_PARTICLE;
-
 	m_bLoop = false;
 	m_nLoopInterval = 60;
 	m_nCnt = 0;
+	m_pParticleParam.reset();
 }
 //------------------------------------------------------------------------------
 //デストラクタ
@@ -67,6 +58,9 @@ HRESULT CDebug_EffectViewer::Init()
 	//CMeshField::Create(ZeroVector3, D3DXVECTOR3(100.0f, 0.0f, 100.0f), INTEGER2(5, 5));
 
 	CParticleManager::Create();
+
+	//パーティクルのパラメータのメモリ確保
+	m_pParticleParam.reset(new CParticleParam);
 
 	return S_OK;
 }
@@ -119,21 +113,28 @@ void CDebug_EffectViewer::ShowDebugInfo()
 	ImGui::PushItemWidth(120);
 
 	//パラメータ設定
-	ImGui::DragInt("Life", &m_nLife, 1, 1, 300);
-	ImGui::DragFloat("Radius", &m_fRadius, 0.5f, 1.0f, 250.0f);
-	ImGui::DragFloat("Speed", &m_fSpeed, 0.5f, 1.0f, 250.0f);
-	ImGui::DragInt("ParticleNum", &m_nNumParticle, 1, 0, 300);
-	ImGui::DragFloat("RadiusDamping", &m_fRadiusDamping, 0.001f, 0.5f, 1.0f);
-	ImGui::DragFloat("AlphaDamping", &m_fAlphaDamping, 0.001f, 0.5f, 1.0f);
+	ImGui::DragInt("Life", &m_pParticleParam->GetLife(), 1, 1, 300);
+	ImGui::DragFloat("Radius", &m_pParticleParam->GetRadius(), 0.5f, 1.0f, 250.0f);
+	ImGui::DragFloat("Speed", &m_pParticleParam->GetSpeed(), 0.5f, 1.0f, 250.0f);
+	ImGui::DragInt("ParticleNum", &m_pParticleParam->GetNumber(), 1, 0, 300);
+	ImGui::DragFloat("RadiusDamping", &m_pParticleParam->GetRadiusDamping(), 0.001f, 0.5f, 1.0f);
+	ImGui::DragFloat("AlphaDamping", &m_pParticleParam->GetAlphaDamping(), 0.001f, 0.5f, 1.0f);
 
 
 	//軌跡の色　float型にキャスト
-	float *rCol = m_col;
+	float *rCol = m_pParticleParam->GetCol();
 
 	ImGui::SetNextItemWidth(250);
 
 	//色の設定
-	ImGui::ColorEdit4("OrbitColor", rCol);
+	ImGui::ColorEdit4("Color", rCol);
+
+	//パーティクル情報保存
+	if(ImGui::Button("Save"))
+	{
+		//セーブ
+		CParticleParam::SaveParticleDefaultParam(m_pParticleParam.get());
+	}
 
 	//[Ctrl] + [Enter]
 	if ((pKeyboard->GetKeyboardPress(DIK_LCONTROL) && pKeyboard->GetKeyboardTrigger(DIK_RETURN)))
@@ -145,7 +146,9 @@ void CDebug_EffectViewer::ShowDebugInfo()
 	//[Enter]を押したとき　または　ループする時
 	if (pKeyboard->GetKeyboardTrigger(DIK_RETURN) || (m_bLoop && m_nCnt % m_nLoopInterval == 0))
 	{
-		CParticle::DetailsCreate(D3DXVECTOR3(0.0f, 50.0f, 100.0f), m_nLife, m_fRadius, m_col, m_nNumParticle, m_fSpeed,m_fAlphaDamping,m_fRadiusDamping,m_textype);
+		CParticle::DetailsCreate(D3DXVECTOR3(0.0f, 50.0f, 100.0f),
+			m_pParticleParam->GetLife(), m_pParticleParam->GetRadius(), m_pParticleParam->GetCol(), m_pParticleParam->GetNumber(),
+			m_pParticleParam->GetSpeed(), m_pParticleParam->GetAlphaDamping(), m_pParticleParam->GetRadiusDamping(), m_pParticleParam->GetTex());
 	}
 
 #endif

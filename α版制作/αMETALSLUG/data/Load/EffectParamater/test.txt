@@ -1,0 +1,18 @@
+//------------------------------------------------------------
+//
+//Motion
+//Author:Yoshiki Hosoya
+//
+//------------------------------------------------------------
+SCRIPT
+	PARAMSET
+		LIFE = 150		//ライフ
+		RADIUS = 5.0		//半径
+		COLOR = 0.6 0.3 0.1 1.0		//色
+		NUMBER = 3		//個数
+		SPEED = 0.0		//速度
+		RADIUSDAMPING = 0.0		//半径の減衰値
+		ALPHADAMPING = 0.0		//アルファ値の減衰値
+		TEXTURE = 1		//テクスチャ
+	END_PARAMSET
+END_SCRIPT

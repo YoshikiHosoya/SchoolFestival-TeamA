@@ -248,9 +248,13 @@ CPlayer *CPlayer::Create(void)
 	pPlayer->Init();
 	return pPlayer;
 }
-void CPlayer::DefaultMotion(void)
+//====================================================================
+//デフォルトモーションに戻る
+//====================================================================
+bool CPlayer::DefaultMotion(void)
 {
 	SetMotion(CCharacter::PLAYER_MOTION_NORMAL);
+	return true;
 }
 //====================================================================
 //デバッグステータスの取得

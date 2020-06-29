@@ -210,6 +210,7 @@ void CDebug_ViewerCharacter::MotionViewer()
 		SetMotion(NowMotionType);
 		ForcedUpdate();
 		pMotionInfo = CCharacter::GetCharacterMotion(NowMotionType);
+		GetMotion() = true;
 	}
 
 	//WidgetÇÃëÂÇ´Ç≥ê›íË
@@ -503,11 +504,10 @@ HRESULT CDebug_ViewerCharacter::SaveMotion(CCharacter::CHARACTER_MOTION_STATE mo
 		fputs(COMMENT02, pFile);
 		fputs(COMMENT01, pFile);
 
-		strcpy(cHeadtext, "//Motion\n");
-		fputs(cHeadtext, pFile);
+		fputs("//Motion\n", pFile);
+		fputs("//ÉÇÅ[ÉVÉáÉìÇ…ä÷Ç∑ÇÈèÓïÒ\n", pFile);
+		fputs("//Author:Yoshiki Hosoya\n", pFile);
 
-		strcpy(cHeadtext, "//Author:Yoshiki Hosoya\n");
-		fputs(cHeadtext, pFile);
 
 		fputs(COMMENT01, pFile);
 		fputs(COMMENT02, pFile);

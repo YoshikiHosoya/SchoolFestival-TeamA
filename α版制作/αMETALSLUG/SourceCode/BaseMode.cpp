@@ -9,6 +9,8 @@
 #include "inputKeyboard.h"
 #include "model.h"
 #include "bullet.h"
+#include "particle.h"
+
 //==========================================================
 //デバッグコマンド
 //==========================================================
@@ -99,6 +101,8 @@ void CBaseMode::BaseLoad(HWND hWnd)
 	CCharacter::LoadMotion();
 	//弾のパラメーターロード
 	CBullet::BulletLoad();
+	//パーティクルのパラメータロード
+	CParticleParam::LoadParticleDefaultParam();
 }
 //==========================================================
 //生成したものを全て破棄

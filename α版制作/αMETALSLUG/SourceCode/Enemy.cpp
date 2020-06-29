@@ -112,9 +112,10 @@ CEnemy *CEnemy::Create(void)
 	pEnemy->Init();
 	return pEnemy;
 }
-void CEnemy::DefaultMotion(void)
+bool CEnemy::DefaultMotion(void)
 {
 	SetMotion(CCharacter::ENEMY_MOTION_NORMAL);
+	return true;
 }
 //====================================================================
 //“–‚½‚è”»’è‚Ìíœ
