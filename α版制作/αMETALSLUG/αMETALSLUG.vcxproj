@@ -164,6 +164,7 @@
     <ClCompile Include="SourceCode\debugproc.cpp" />
     <ClCompile Include="SourceCode\Enemy.cpp" />
     <ClCompile Include="SourceCode\fade.cpp" />
+    <ClCompile Include="SourceCode\flameshot.cpp" />
     <ClCompile Include="SourceCode\game.cpp" />
     <ClCompile Include="SourceCode\gun.cpp" />
     <ClCompile Include="SourceCode\handgun.cpp" />
@@ -179,6 +180,7 @@
     <ClCompile Include="SourceCode\ImGui\imgui_widgets.cpp" />
     <ClCompile Include="SourceCode\inputKeyboard.cpp" />
     <ClCompile Include="SourceCode\item.cpp" />
+    <ClCompile Include="SourceCode\lasergun.cpp" />
     <ClCompile Include="SourceCode\light.cpp" />
     <ClCompile Include="SourceCode\main.cpp" />
     <ClCompile Include="SourceCode\manager.cpp" />
@@ -190,11 +192,13 @@
     <ClCompile Include="SourceCode\pause.cpp" />
     <ClCompile Include="SourceCode\Player.cpp" />
     <ClCompile Include="SourceCode\renderer.cpp" />
+    <ClCompile Include="SourceCode\rocketlauncher.cpp" />
     <ClCompile Include="SourceCode\Scene.cpp" />
     <ClCompile Include="SourceCode\Scene2D.cpp" />
     <ClCompile Include="SourceCode\Scene3D.cpp" />
     <ClCompile Include="SourceCode\SceneBase.cpp" />
     <ClCompile Include="SourceCode\SceneX.cpp" />
+    <ClCompile Include="SourceCode\shotgun.cpp" />
     <ClCompile Include="SourceCode\TexAnimation2D.cpp" />
     <ClCompile Include="SourceCode\TexAnimation3D.cpp" />
     <ClCompile Include="SourceCode\TexAnimationBase.cpp" />
@@ -212,6 +216,7 @@
     <ClInclude Include="SourceCode\debugproc.h" />
     <ClInclude Include="SourceCode\Enemy.h" />
     <ClInclude Include="SourceCode\fade.h" />
+    <ClInclude Include="SourceCode\flameshot.h" />
     <ClInclude Include="SourceCode\game.h" />
     <ClInclude Include="SourceCode\gun.h" />
     <ClInclude Include="SourceCode\handgun.h" />
@@ -230,6 +235,7 @@
     <ClInclude Include="SourceCode\ImGui\imstb_truetype.h" />
     <ClInclude Include="SourceCode\inputKeyboard.h" />
     <ClInclude Include="SourceCode\item.h" />
+    <ClInclude Include="SourceCode\lasergun.h" />
     <ClInclude Include="SourceCode\light.h" />
     <ClInclude Include="SourceCode\main.h" />
     <ClInclude Include="SourceCode\manager.h" />
@@ -241,11 +247,13 @@
     <ClInclude Include="SourceCode\pause.h" />
     <ClInclude Include="SourceCode\Player.h" />
     <ClInclude Include="SourceCode\renderer.h" />
+    <ClInclude Include="SourceCode\rocketlauncher.h" />
     <ClInclude Include="SourceCode\Scene.h" />
     <ClInclude Include="SourceCode\scene2D.h" />
     <ClInclude Include="SourceCode\Scene3D.h" />
     <ClInclude Include="SourceCode\SceneBase.h" />
     <ClInclude Include="SourceCode\SceneX.h" />
+    <ClInclude Include="SourceCode\shotgun.h" />
     <ClInclude Include="SourceCode\TexAnimation2D.h" />
     <ClInclude Include="SourceCode\TexAnimation3D.h" />
     <ClInclude Include="SourceCode\TexAnimationBase.h" />
