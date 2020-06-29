@@ -183,6 +183,18 @@
     <ClCompile Include="SourceCode\hosso\Debug_EffectViewer.cpp">
       <Filter>Hosso</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\flameshot.cpp">
+      <Filter>Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\lasergun.cpp">
+      <Filter>Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\rocketlauncher.cpp">
+      <Filter>Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\shotgun.cpp">
+      <Filter>Bullet</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SourceCode\camera.h">
@@ -331,6 +343,18 @@
     </ClInclude>
     <ClInclude Include="SourceCode\hosso\Debug_EffectViewer.h">
       <Filter>Hosso</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\flameshot.h">
+      <Filter>Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\lasergun.h">
+      <Filter>Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\rocketlauncher.h">
+      <Filter>Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\shotgun.h">
+      <Filter>Bullet</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
