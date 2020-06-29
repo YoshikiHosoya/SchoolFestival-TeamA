@@ -28,6 +28,7 @@ public:
 	void						Uninit();				// 終了
 	void						Update();				// 更新
 	void						Draw();					// 描画
+	void						DeleteBullet();			// 弾を消す処理
 	void						DebugInfo();			//デバッグ
 
 	/* 静的メンバ関数 */
