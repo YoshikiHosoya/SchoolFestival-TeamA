@@ -143,13 +143,6 @@ bool CDebug_ViewerCharacter::ShowMotionComboBox(CCharacter::CHARACTER_MOTION_STA
 				motiontype = (CCharacter::CHARACTER_MOTION_STATE)nCnt;
 				bChange = true;
 			}
-
-			////
-			//if (is_selected)
-			//{
-			//	//スクロールの初期位置設定
-			//	ImGui::SetItemDefaultFocus();
-			//}
 		}
 		//combo終了
 		ImGui::EndCombo();

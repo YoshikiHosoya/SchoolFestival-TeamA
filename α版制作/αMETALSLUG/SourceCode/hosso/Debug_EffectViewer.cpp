@@ -97,6 +97,8 @@ void CDebug_EffectViewer::ShowDebugInfo()
 {
 #ifdef _DEBUG
 
+	//CParticleParam::PARTICLE_TYPE type = ;
+
 	if (!CScene::GetStopFlag())
 	{
 		//カウンタ++
@@ -135,6 +137,16 @@ void CDebug_EffectViewer::ShowDebugInfo()
 		//セーブ
 		CParticleParam::SaveParticleDefaultParam(m_pParticleParam.get());
 	}
+
+	////コンボボックス表示
+	//if (CParticleParam::ShowParamConboBox(m_pParticleParam->GetType()))
+	//{
+	//	CParticleParam *pParam = new CParticleParam;
+
+	//	//情報設定
+	//	//Uniqueptrを使うとオペレータできなかったから普通のポインタ同士でオペレータ
+	//	*pParam = *CParticleParam::GetDefaultParam(type);
+	//}
 
 	//[Ctrl] + [Enter]
 	if ((pKeyboard->GetKeyboardPress(DIK_LCONTROL) && pKeyboard->GetKeyboardTrigger(DIK_RETURN)))

@@ -37,12 +37,12 @@ public:
 	CPlayer* GetPlayer() { return nullptr; };
 
 private:
-	std::unique_ptr<CParticleParam> m_pParticleParam;
 
+	std::unique_ptr<CParticleParam> m_pParticleParam;	//パーティクルのパラメータ
 
-	bool m_bLoop;					//ループさせるか
-	int m_nLoopInterval;			//ループのインターバル
-	int m_nCnt;						//カウント
+	bool m_bLoop;										//ループさせるか
+	int m_nLoopInterval;								//ループのインターバル
+	int m_nCnt;											//カウント
 
 
 };

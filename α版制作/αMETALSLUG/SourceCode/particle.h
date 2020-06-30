@@ -24,6 +24,7 @@
 class CParticleParam
 {
 public:
+	//パーティクルの種類
 	enum PARTICLE_TYPE
 	{
 		PARTICLE_DEFAULT = 0,
@@ -32,6 +33,7 @@ public:
 		PARTICLE_MAX,
 	};
 
+	//コンストラクタ
 	CParticleParam()
 	{
 		m_nLife = 50;										//ライフ
@@ -44,6 +46,8 @@ public:
 		m_fRadiusDamping = DEFAULT_DAMPING;					//半径の減衰地
 		m_fAlphaDamping = DEFAULT_DAMPING;					//アルファ値の減衰値
 		m_Textype = CTexture::TEX_EFFECT_PARTICLE;			//テクスチャ
+		m_ParticleType = PARTICLE_DEFAULT;					//パーティクルのタイプ
+
 	}
 	~CParticleParam() {};
 
@@ -58,7 +62,7 @@ public:
 	//Get関数
 	int &GetLife()					{ return m_nLife; };				//ライフ
 	float &GetRadius()				{ return m_fRadius; };				//半径
-	D3DXCOLOR &GetCol()					{ return m_col; };				//色
+	D3DXCOLOR &GetCol()				{ return m_col; };					//色
 
 	int &GetNumber()				{ return m_nNumber; };				//個数
 	float &GetSpeed()				{ return m_fSpeed; };				//速度
@@ -66,8 +70,10 @@ public:
 	float &GetRadiusDamping()		{ return m_fRadiusDamping; };		//半径の減衰地
 	float &GetAlphaDamping()		{ return m_fAlphaDamping; };		//アルファ値の減衰値
 	CTexture::TEX_TYPE &GetTex()	{ return m_Textype; };				//テクスチャ
+	PARTICLE_TYPE &GetType()		{ return m_ParticleType; };			//テクスチャ
 
 	static CParticleParam *GetDefaultParam(CParticleParam::PARTICLE_TYPE type) { return m_pParticleDefaultParamList[type].get(); };
+	static bool ShowParamConboBox(CParticleParam::PARTICLE_TYPE & rType);
 	//オペレータ
 	void *operator = (const CParticleParam *pParam);
 
@@ -75,16 +81,18 @@ private:
 	static std::vector<std::unique_ptr<CParticleParam>> m_pParticleDefaultParamList;	//パーティクルの初期パラメータのリスト
 	static std::vector<std::string> m_aFileNameList;									//読み込むファイルのリスト
 
-	int m_nLife;													//ライフ
-	float m_fRadius;												//半径
-	D3DXCOLOR m_col;												//色
+	int m_nLife;									//ライフ
+	float m_fRadius;								//半径
+	D3DXCOLOR m_col;								//色
 
-	int m_nNumber;													//個数
-	float m_fSpeed;													//速度
+	int m_nNumber;									//個数
+	float m_fSpeed;									//速度
 
-	float m_fRadiusDamping;											//半径の減衰値
-	float m_fAlphaDamping;											//アルファ値の減衰値
-	CTexture::TEX_TYPE m_Textype;									//テクスチャ
+	float m_fRadiusDamping;							//半径の減衰値
+	float m_fAlphaDamping;							//アルファ値の減衰値
+	CTexture::TEX_TYPE m_Textype;					//テクスチャ
+	PARTICLE_TYPE m_ParticleType;					//パーティクルのタイプ
+
 };
 
 //パーティクルの粒子
@@ -151,6 +159,7 @@ private:
 	bool m_bDeleteFlag;												//消去フラグ
 
 	void SetParticle(D3DXVECTOR3 &pos,float fSpeed, int nNumber);				//パーティクル設定
+
 };
 
 #endif

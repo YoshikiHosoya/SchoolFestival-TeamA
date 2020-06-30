@@ -356,6 +356,8 @@ HRESULT CParticleParam::LoadParticleDefaultParam()
 							fgets(cReadText, sizeof(cReadText), pFile);
 							sscanf(cReadText, "%s", &cHeadText);
 
+
+							//それぞれの項目を読み込み
 							if (strcmp(cHeadText, "LIFE") == 0)
 							{
 								sscanf(cReadText, "%s %s %d", &cDie, &cDie, &pParam->m_nLife);
@@ -391,6 +393,7 @@ HRESULT CParticleParam::LoadParticleDefaultParam()
 							}
 							if (strcmp(cHeadText, "END_PARAMSET") == 0)
 							{
+								pParam->m_ParticleType = (CParticleParam::PARTICLE_TYPE)nCnt;
 								m_pParticleDefaultParamList.emplace_back(std::move(pParam));
 							}
 						}
@@ -633,6 +636,40 @@ void CParticle::SetParticle(D3DXVECTOR3 &pos, float fSpeed,int nNumber)
 	}
 }
 
+
+//------------------------------------------------------------------------------
+//コンボボックス
+//------------------------------------------------------------------------------
+bool CParticleParam::ShowParamConboBox(CParticleParam::PARTICLE_TYPE &rType)
+{
+	bool bChange = false;
+
+#ifdef _DEBUG
+	//combo開始
+	if (ImGui::BeginCombo("ParamFileName", m_aFileNameList[rType].data()))
+	{
+		//要素分繰り返す
+		for (size_t nCnt = 0; nCnt < m_aFileNameList.size(); nCnt++)
+		{
+
+			//選択番号があってるかどうか
+			bool is_selected = (m_aFileNameList[rType] == m_aFileNameList[nCnt]);
+
+			//選択された時の処理
+			if (ImGui::Selectable(m_aFileNameList[nCnt].data(), is_selected))
+			{
+				//現在の選択項目設定
+				rType = (CParticleParam::PARTICLE_TYPE)nCnt;
+				bChange = true;
+			}
+		}
+		//combo終了
+		ImGui::EndCombo();
+
+	}
+#endif //DEBUG
+	return bChange;
+}
 //------------------------------------------------------------------------------
 //パラメータ設定
 //------------------------------------------------------------------------------
@@ -676,6 +713,7 @@ void * CParticleParam::operator=(const CParticleParam * pParam)
 	m_fRadiusDamping = pParam->m_fRadiusDamping;
 	m_fAlphaDamping = pParam->m_fAlphaDamping;
 	m_Textype = pParam->m_Textype;
+	m_ParticleType = pParam->m_ParticleType;
 
 	return this;
 }
