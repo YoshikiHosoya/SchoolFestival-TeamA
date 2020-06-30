@@ -42,6 +42,7 @@ public:
 		OBJTYPE_ENEMYBULLET,				// 敵弾
 		OBJTYPE_PLAYER,						// プレイヤー
 		OBJTYPE_ENEMY,						// エネミー
+		OBJTYPE_PRISONER,					// 捕虜
 		OBJTYPE_ITEM,						// アイテム
 		OBJTYPE_OBSTACLE,					// 障害物
 		OBJTYPE_OTHER,						// その他

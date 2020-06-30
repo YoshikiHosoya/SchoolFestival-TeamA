@@ -28,6 +28,22 @@ public:
 		MODEL_PLAYER_THUNDERSWORD,	//プレイヤーの武器
 		MODEL_PLAYER_MAX
 	}CHARA_MODEL;
+
+	typedef enum
+	{
+		MODEL_PRISONER_HEAD,			//捕虜の頭
+		MODEL_PRISONER_BODY,			//捕虜の体
+		MODEL_PRISONER_LARM,			//捕虜の左腕
+		MODEL_PRISONER_RARM,			//捕虜の右腕
+		MODEL_PRISONER_LHAND,			//捕虜の左手
+		MODEL_PRISONER_RHAND,			//捕虜の右手
+		MODEL_PRISONER_LLEG,			//捕虜の左脚
+		MODEL_PRISONER_RLEG,			//捕虜の右脚
+		MODEL_PRISONER_LFOOT,			//捕虜の左足
+		MODEL_PRISONER_RFOOT,			//捕虜の右足
+		MODEL_PRISONER_MAX
+	}PRISONER_MODEL;
+
 	typedef enum
 	{
 		MODEL_MAP_BLOCK,			//マップの武器
@@ -64,6 +80,7 @@ public:
 		MAP_MODEL,
 		GUN_MODEL,
 		OBSTACLE_MODEL,
+		PRISONER_MODEL,
 		TYPE_MAX
 	}MODEL_TYPE;
 
@@ -125,6 +142,7 @@ private:
 	static char *m_GunFileName[MODEL_GUN_MAX];
 	static char *m_MapFileName[MODEL_MAP_MAX];
 	static char *m_ObstacleFileName[OBSTACLE_TYPE_MAX];
+	static char *m_PrisonerFileName[MODEL_PRISONER_MAX];
 
 
 	D3DXVECTOR3 m_pos;					//位置

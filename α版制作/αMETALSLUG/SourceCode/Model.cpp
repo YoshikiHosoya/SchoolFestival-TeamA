@@ -23,6 +23,21 @@ char *CModel::m_PlayerFileName[MODEL_PLAYER_MAX] =
 	{ "data/MODEL/secondchar/氷剣.x" },
 	{ "data/MODEL/secondchar/雷剣.x" },
 };
+
+char *CModel::m_PrisonerFileName[MODEL_PRISONER_MAX] =
+{
+	{ "data/MODEL/Prisoner/Head.x" },
+	{ "data/MODEL/Prisoner/Body.x" },
+	{ "data/MODEL/Prisoner/L_Sholder.x" },
+	{ "data/MODEL/Prisoner/R_Sholder.x" },
+	{ "data/MODEL/Prisoner/L_Hand.x" },
+	{ "data/MODEL/Prisoner/R_Hand.x" },
+	{ "data/MODEL/Prisoner/L_Foot.x" },
+	{ "data/MODEL/Prisoner/R_Foot.x" },
+	{ "data/MODEL/Prisoner/L_Leg.x" },
+	{ "data/MODEL/Prisoner/R_Leg.x" }
+};
+
 char *CModel::m_MapFileName[MODEL_MAP_MAX] =
 {
 	{ "data/MODEL/map/alphamap.x" },
@@ -141,6 +156,31 @@ void CModel::LoadModel(void)
 		{
 			m_Model[ENEMY_MODEL][nCnt].m_pTexture[nCntmat] = NULL;
 			D3DXCreateTextureFromFile(pDevice, pMat[nCntmat].pTextureFilename, &m_Model[ENEMY_MODEL][nCnt].m_pTexture[nCntmat]);
+		}
+	}
+
+	//捕虜のモデル読み込み
+	for (int nCnt = 0; nCnt < MODEL_PRISONER_MAX; nCnt++)
+	{
+		// Xファイルの読み込み
+		D3DXLoadMeshFromX(
+			m_PrisonerFileName[nCnt],
+			D3DXMESH_SYSTEMMEM,
+			pDevice,
+			NULL,
+			&m_Model[PRISONER_MODEL][nCnt].pBuffmat,
+			NULL,
+			&m_Model[PRISONER_MODEL][nCnt].nNumMat,
+			&m_Model[PRISONER_MODEL][nCnt].pMesh
+		);
+		//テクスチャのメモリ確保
+		m_Model[PRISONER_MODEL][nCnt].m_pTexture = new LPDIRECT3DTEXTURE9[(int)m_Model[PRISONER_MODEL][nCnt].nNumMat];
+		pMat = (D3DXMATERIAL*)m_Model[PRISONER_MODEL][nCnt].pBuffmat->GetBufferPointer();
+
+		for (int nCntmat = 0; nCntmat < (int)m_Model[PRISONER_MODEL][nCnt].nNumMat; nCntmat++)
+		{
+			m_Model[PRISONER_MODEL][nCnt].m_pTexture[nCntmat] = NULL;
+			D3DXCreateTextureFromFile(pDevice, pMat[nCntmat].pTextureFilename, &m_Model[PRISONER_MODEL][nCnt].m_pTexture[nCntmat]);
 		}
 	}
 	//銃のモデル読み込み
@@ -277,6 +317,36 @@ void CModel::UnLoad(void)
 			m_Model[ENEMY_MODEL][nCnt].m_pTexture = NULL;
 		}
 	}
+
+
+	for (int nCnt = 0; nCnt < MODEL_PRISONER_MAX; nCnt++)
+	{
+		if (m_Model[PRISONER_MODEL][nCnt].pBuffmat != NULL)
+		{
+			m_Model[PRISONER_MODEL][nCnt].pBuffmat->Release();
+			m_Model[PRISONER_MODEL][nCnt].pBuffmat = NULL;
+		}
+		if (m_Model[PRISONER_MODEL][nCnt].pMesh != NULL)
+		{
+			m_Model[PRISONER_MODEL][nCnt].pMesh->Release();
+			m_Model[PRISONER_MODEL][nCnt].pMesh = NULL;
+		}
+		if (m_Model[PRISONER_MODEL][nCnt].m_pTexture != NULL)
+		{
+			for (int nCntmat = 0; nCntmat < (int)m_Model[PRISONER_MODEL][nCnt].nNumMat; nCntmat++)
+			{
+				if (m_Model[PRISONER_MODEL][nCnt].m_pTexture[nCntmat] != NULL)
+				{
+					m_Model[PRISONER_MODEL][nCnt].m_pTexture[nCntmat]->Release();
+					m_Model[PRISONER_MODEL][nCnt].m_pTexture[nCntmat] = NULL;
+				}
+			}
+			delete[] m_Model[PRISONER_MODEL][nCnt].m_pTexture;
+			m_Model[PRISONER_MODEL][nCnt].m_pTexture = NULL;
+		}
+	}
+
+
 	for (int nCnt = 0; nCnt < MODEL_GUN_MAX; nCnt++)
 	{
 		if (m_Model[GUN_MODEL][nCnt].pBuffmat != NULL)
@@ -553,6 +623,11 @@ char * CModel::GetModelFileName(int nType, int nModelCount)
 		//敵
 	case 2:
 		return m_EnemyFileName[nModelCount];
+		break;
+
+		//捕虜
+	case 3:
+		return m_PrisonerFileName[nModelCount];
 		break;
 	}
 	return nullptr;

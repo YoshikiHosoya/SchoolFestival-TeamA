@@ -11,6 +11,7 @@
 #include "model.h"
 #include <stdio.h>
 #include "Obstacle.h"
+#include "prisoner.h"
 
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
@@ -28,6 +29,11 @@ char *CMap::m_EnemyFileName[MAP_MAX] =
 {
 	{ "data/Load/Enemy_Map01.txt" },
 	{ "data/Load/Enemy.txt" },
+};
+char *CMap::m_PrisonerFileName[MAP_MAX] =
+{
+	{ "data/Load/Prisoner_Map00.txt" },
+	{ "data/Load/Prisoner_Map01.txt" },
 };
 
 char *CMap::m_ObstacleFileName[MAP_MAX] =
@@ -47,6 +53,8 @@ CMap::CMap()
 	// 初期化
 	m_pModel.clear();
 	m_pEnemy.clear();
+	m_pPrisoner.clear();
+	m_pObstacle.clear();
 }
 
 // =====================================================================================================================================================================
@@ -203,6 +211,72 @@ void CMap::EnemyLoad(int nCnt)
 							m_pEnemy[m_pEnemy.size() - 1]->SetPosition(pos);
 							// 体力の設定
 							m_pEnemy[m_pEnemy.size() - 1]->SetLife(nLife);
+						}
+					}
+				}
+			}
+		}
+		// ファイルを閉じる
+		fclose(pFile);
+	}
+}
+
+// =====================================================================================================================================================================
+//
+// 捕虜の配置
+//
+// =====================================================================================================================================================================
+void CMap::PrisonerLoad(int nCnt)
+{
+	// ファイルポイント
+	FILE *pFile;
+
+	char cReadText[128];								// 文字として読み取る
+	char cHeadText[128];								// 比較用
+	char cDie[128];										// 不要な文字
+	D3DXVECTOR3 pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 位置
+	// ファイルを開く
+	pFile = fopen(m_PrisonerFileName[nCnt], "r");
+
+	// 開いているとき
+	if (pFile != NULL)
+	{
+		// SCRIPTが来るまでループ
+		while (strcmp(cHeadText, "SCRIPT") != 0)
+		{
+			fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
+			sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
+		}
+
+		// SCRIPTが来たら
+		if (strcmp(cHeadText, "SCRIPT") == 0)
+		{
+			// END_SCRIPTが来るまでループ
+			while (strcmp(cHeadText, "END_SCRIPT") != 0)
+			{
+				fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
+				sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
+
+															// ENEMYSETが来たら
+				if (strcmp(cHeadText, "PRISONERSET") == 0)
+				{
+					// END_ENEMYSETが来るまでループ
+					while (strcmp(cHeadText, "END_PRISONERSET") != 0)
+					{
+						fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
+						sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
+
+						// POSが来たら
+						if (strcmp(cHeadText, "POS") == 0)
+						{
+							sscanf(cReadText, "%s %s %f %f %f", &cDie, &cDie, &pos.x, &pos.y, &pos.z);		// 比較用テキストにPOSを代入
+						}
+						else if (strcmp(cHeadText, "END_PRISONERSET") == 0)
+						{
+							// オブジェクトの生成
+							m_pPrisoner.emplace_back(CPrisoner::Create());
+							// 位置の設定
+							m_pPrisoner[m_pPrisoner.size() - 1]->SetPosition(pos);
 						}
 					}
 				}
@@ -459,6 +533,8 @@ CMap *CMap::MapCreate(int nCnt)
 	pMap->ModelLoad(nCnt);
 	// 敵のロード
 	pMap->EnemyLoad(nCnt);
+	// 捕虜のロード
+	pMap->PrisonerLoad(nCnt);
 	// 障害物のロード
 	pMap->ObstacleLoad(nCnt);
 
@@ -495,6 +571,20 @@ int CMap::GetMaxEnemy()
 
 // =====================================================================================================================================================================
 //
+// 敵の最大数取得
+//
+// =====================================================================================================================================================================
+int CMap::GetMaxPrisoner()
+{
+	if (!m_pPrisoner.empty())
+	{
+		return m_pPrisoner.size();
+	}
+	return 0;
+}
+
+// =====================================================================================================================================================================
+//
 // 障害物の最大数取得
 //
 // =====================================================================================================================================================================
@@ -506,7 +596,6 @@ int CMap::GetMaxObstacle()
 	}
 	return 0;
 }
-
 
 // =====================================================================================================================================================================
 //
@@ -637,7 +726,6 @@ void CMap::EnemySave()
 // =====================================================================================================================================================================
 void CMap::UpdateDieFlag()
 {
-
 	for (size_t nCnt = 0; nCnt < m_pEnemy.size(); nCnt++)
 	{
 		if (m_pEnemy[nCnt]->GetDieFlag())
@@ -655,6 +743,16 @@ void CMap::UpdateDieFlag()
 			m_pObstacle[nCnt]->Rerease();
 			m_pObstacle[nCnt] = nullptr;
 			m_pObstacle.erase(m_pObstacle.begin() + nCnt);
+		}
+	}
+
+	for (size_t nCnt = 0; nCnt < m_pPrisoner.size(); nCnt++)
+	{
+		if (m_pPrisoner[nCnt]->GetDieFlag())
+		{
+			m_pPrisoner[nCnt]->Rerease();
+			m_pPrisoner[nCnt] = nullptr;
+			m_pPrisoner.erase(m_pPrisoner.begin() + nCnt);
 		}
 	}
 }
