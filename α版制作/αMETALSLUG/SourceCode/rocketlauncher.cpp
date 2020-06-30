@@ -121,14 +121,14 @@ CRocketlauncher * CRocketlauncher::Create(D3DXVECTOR3 rot)
 	// 初期化
 	pRocketlauncher->Init();
 
-	// ロケットランチャーの弾のサイズ
-	pRocketlauncher->SetSize(D3DXVECTOR3(pBulletParam->size.x, pBulletParam->size.y, 0.0f));
-
 	// プレイヤーの向きに合わせる
 	pRocketlauncher->GetMove() = D3DXVECTOR3(-sinf(rot.y) * cosf(rot.x) * pBulletParam->fBulletSpeed, sinf(rot.x) * pBulletParam->fBulletSpeed, -cosf(rot.y) * cosf(rot.x) * pBulletParam->fBulletSpeed);
 
-	// テクスチャの割り当て
-	pRocketlauncher->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_BULLET_HANDGUN));
+	// モデルタイプの設定
+	pRocketlauncher->SetType(BULLET_MODEL);
+
+	// モデルカウントの設定
+	pRocketlauncher->SetModelConut(MODEL_BULLET_ROCKETLAUNCHER);
 
 	return pRocketlauncher;
 }

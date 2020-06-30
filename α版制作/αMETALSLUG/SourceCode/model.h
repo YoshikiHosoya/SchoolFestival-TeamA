@@ -55,14 +55,27 @@ public:
 	{
 		MODEL_GUN_HANDGUN,				// ハンドガン
 		MODEL_GUN_HEAVYMACHINEGUN,		// ヘビーマシンガン
+		MODEL_GUN_SHOTGUN,				// ショットガン
+		MODEL_GUN_LASERGUN,				// レーザーガン
+		MODEL_GUN_ROCKETLAUNCHER,		// ロケットランチャー
+		MODEL_GUN_FLAMESHOT,			// フレイムショット
 		MODEL_GUN_MAX
 	}GUN_MODEL;
+	/*--- 弾のモデル ---*/
+	typedef enum
+	{
+		MODEL_BULLET_SPHERE,			// 丸
+		MODEL_BULLET_ROCKETLAUNCHER,	// ロケットランチャー
+		MODEL_BULLET_GRENADE,			// グレネード
+		MODEL_BULLET_MAX
+	}BULLET_MODEL;
 	typedef enum
 	{
 		PLAYER_MODEL,
 		ENEMY_MODEL,
 		MAP_MODEL,
 		GUN_MODEL,
+		BULLET_MODEL,
 		OBSTACLE_MODEL,
 		TYPE_MAX
 	}MODEL_TYPE;
@@ -123,6 +136,7 @@ private:
 	static char *m_PlayerFileName[MODEL_PLAYER_MAX];
 	static char *m_EnemyFileName[MODEL_ENEMY_MAX];
 	static char *m_GunFileName[MODEL_GUN_MAX];
+	static char *m_BulletFileName[MODEL_BULLET_MAX];
 	static char *m_MapFileName[MODEL_MAP_MAX];
 	static char *m_ObstacleFileName[OBSTACLE_TYPE_MAX];
 

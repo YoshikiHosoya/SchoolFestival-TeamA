@@ -110,25 +110,25 @@ void CShotgun::DebugInfo()
 CShotgun * CShotgun::Create(D3DXVECTOR3 rot)
 {
 	// 変数
-	CShotgun *pHandgun;
+	CShotgun *pShotGun;
 
 	// メモリの確保
-	pHandgun = new CShotgun(OBJTYPE_BULLET);
+	pShotGun = new CShotgun(OBJTYPE_BULLET);
 
 	// ショットガンのパラメーター取得
-	BULLET_PARAM *pBulletParam = pHandgun->GetBulletParam(CGun::GUNTYPE_SHOTGUN);
+	BULLET_PARAM *pBulletParam = pShotGun->GetBulletParam(CGun::GUNTYPE_SHOTGUN);
 
 	// 初期化
-	pHandgun->Init();
-
-	// ショットガンの弾のサイズ
-	pHandgun->SetSize(D3DXVECTOR3(pBulletParam->size.x, pBulletParam->size.y, 0.0f));
+	pShotGun->Init();
 
 	// プレイヤーの向きに合わせる
-	pHandgun->GetMove() = D3DXVECTOR3(-sinf(rot.y) * cosf(rot.x) * pBulletParam->fBulletSpeed, sinf(rot.x) * pBulletParam->fBulletSpeed, -cosf(rot.y) * cosf(rot.x) * pBulletParam->fBulletSpeed);
+	pShotGun->GetMove() = D3DXVECTOR3(-sinf(rot.y) * cosf(rot.x) * pBulletParam->fBulletSpeed, sinf(rot.x) * pBulletParam->fBulletSpeed, -cosf(rot.y) * cosf(rot.x) * pBulletParam->fBulletSpeed);
+	
+	// モデルタイプの設定
+	pShotGun->SetType(BULLET_MODEL);
 
-	// テクスチャの割り当て
-	pHandgun->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_BULLET_HANDGUN));
+	// モデルカウントの設定
+	pShotGun->SetModelConut(MODEL_BULLET_SPHERE);
 
-	return pHandgun;
+	return pShotGun;
 }

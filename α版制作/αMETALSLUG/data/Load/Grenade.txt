@@ -4,10 +4,10 @@
 SCRIPT
 
 BULLETSET									# 0
-	SPEED		= 20
+	SPEED		= 5
 	LIFE		= 50
-	POWER		= 3
-	AMMO		= 30
+	POWER		= 1
+	AMMO		= 10
 	TRIGGER		= 1
 	INTERVAL	= 3
 END_BULLETSET

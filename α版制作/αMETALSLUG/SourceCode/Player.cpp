@@ -18,6 +18,8 @@
 #include "XInputPad.h"
 #include "item.h"
 #include "Obstacle.h"
+#include "grenade.h"
+
 //====================================================================
 //マクロ定義
 //====================================================================
@@ -83,6 +85,12 @@ void CPlayer::Update(void)
 	{
 		// 銃発射処理
 		m_pGun->Shot(m_ShotRot);
+	}
+	// グレネードを投げる
+	if (key->GetKeyboardTrigger(DIK_O))
+	{
+		// グレネード生成
+		CGrenade::Create(m_ShotRot);
 	}
 
 	// Aの処理

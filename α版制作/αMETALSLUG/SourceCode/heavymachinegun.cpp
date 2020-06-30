@@ -121,14 +121,14 @@ CHeavyMachinegun * CHeavyMachinegun::Create(D3DXVECTOR3 rot)
 	// 初期化
 	pHeavyMachinegun->Init();
 
-	// ヘビーマシンガンの弾のサイズ
-	pHeavyMachinegun->SetSize(D3DXVECTOR3(pBulletParam->size.x, pBulletParam->size.y, 0.0f));
-
 	// プレイヤーの向きに合わせる
 	pHeavyMachinegun->GetMove() = D3DXVECTOR3(-sinf(rot.y) * cosf(rot.x) * pBulletParam->fBulletSpeed, sinf(rot.x) * pBulletParam->fBulletSpeed, -cosf(rot.y) * cosf(rot.x) * pBulletParam->fBulletSpeed);
 
-	// テクスチャの割り当て
-	pHeavyMachinegun->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_BULLET_HANDGUN));
+	// モデルタイプの設定
+	pHeavyMachinegun->SetType(BULLET_MODEL);
+
+	// モデルカウントの設定
+	pHeavyMachinegun->SetModelConut(MODEL_BULLET_SPHERE);
 
 	return pHeavyMachinegun;
 }

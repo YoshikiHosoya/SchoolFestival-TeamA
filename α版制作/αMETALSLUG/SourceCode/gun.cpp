@@ -98,14 +98,14 @@ void CGun::Update(void)
 		MultipleShot();
 	}
 
-	//	// 弾薬が無くなったとき
-	//	if (m_nAmmo <= 0)
-	//	{
-	//		// 弾薬数を0にする
-	//		m_nAmmo = 0;
-	//		// ハンドガンに戻す
-	//		m_GunType = GUN_TYPE::GUNTYPE_HANDGUN;
-	//	}
+	//// 弾薬が無くなったとき
+	//if (m_nAmmo <= 0)
+	//{
+	//	// 弾薬数を0にする
+	//	m_nAmmo = 0;
+	//	// ハンドガンに戻す
+	//	m_GunType = GUN_TYPE::GUNTYPE_HANDGUN;
+	//}
 
 	// 更新
 	CModel::Update();
@@ -151,6 +151,7 @@ CGun * CGun::Create(D3DXMATRIX *mtx)
 	pGun->m_mtx = mtx;
 
 	D3DXVECTOR3	pos = D3DXVECTOR3(HANDGUN_POS_X, HANDGUN_POS_Y, HANDGUN_POS_Z);
+
 	// 位置の設定
 	pGun->SetPosition(pos);
 
@@ -171,6 +172,9 @@ CGun * CGun::Create(D3DXMATRIX *mtx)
 void CGun::SetGunType(GUN_TYPE type)
 {
 	BULLET_PARAM *pBulletParam = CBullet::GetBulletParam(type);
+
+	// モデルの差し替え
+	SetModelConut(type);
 
 	// 種類の設定
 	m_GunType = type;
@@ -258,7 +262,7 @@ void CGun::MultipleShot()
 {
 	CBullet *pBullet = nullptr;
 
-	float pos_y = (float)(rand() % 10 - 5);
+	float randPos_y = (float)(rand() % 10 - 5);
 
 	if (m_nCntBullet < CBullet::GetBulletParam(m_GunType)->nTrigger)
 	{
@@ -289,7 +293,7 @@ void CGun::MultipleShot()
 		if (pBullet)
 		{
 			// 位置の設定
-			pBullet->SetPosition(D3DXVECTOR3(m_mtx->_41, m_mtx->_42 + pos_y, m_mtx->_43));
+			pBullet->SetPosition(D3DXVECTOR3(m_mtx->_41, m_mtx->_42 + randPos_y, m_mtx->_43));
 
 			// 弾の種類の設定
 			pBullet->SetBulletType((CBullet::BULLET_TYPE)m_BulletType);

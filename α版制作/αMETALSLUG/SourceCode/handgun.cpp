@@ -121,14 +121,14 @@ CHandgun * CHandgun::Create(D3DXVECTOR3 rot)
 	// 初期化
 	pHandgun->Init();
 
-	// ハンドガンの弾のサイズ
-	pHandgun->SetSize(D3DXVECTOR3(pBulletParam->size.x, pBulletParam->size.y, 0.0f));
-
 	// プレイヤーの向きに合わせる
 	pHandgun->GetMove() = D3DXVECTOR3(-sinf(rot.y) * cosf(rot.x) * pBulletParam->fBulletSpeed, sinf(rot.x) * pBulletParam->fBulletSpeed, -cosf(rot.y) * cosf(rot.x) * pBulletParam->fBulletSpeed);
+	
+	// モデルタイプの設定
+	pHandgun->SetType(BULLET_MODEL);
 
-	// テクスチャの割り当て
-	pHandgun->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_BULLET_HANDGUN));
+	// モデルカウントの設定
+	pHandgun->SetModelConut(MODEL_BULLET_SPHERE);
 
 	return pHandgun;
 }

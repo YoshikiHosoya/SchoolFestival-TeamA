@@ -37,6 +37,7 @@ public:
 		GUNTYPE_LASERGUN,							// レーザーガン
 		GUNTYPE_ROCKETLAUNCHER,						// ロケットランチャー
 		GUNTYPE_FLAMESHOT,							// フレイムショット
+		GUNTYPE_GRENADE,							// グレネード
 		GUNTYPE_MAX									// 銃の種類の最大数
 	};
 

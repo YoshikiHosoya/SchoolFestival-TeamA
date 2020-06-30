@@ -31,6 +31,7 @@ char *CBullet::m_BulletFileName[CGun::GUNTYPE_MAX] =
 	{ "data/Load/LaserGun.txt" },				// レーザーガン
 	{ "data/Load/RocketLauncher.txt" },			// ロケットランチャー
 	{ "data/Load/FlameShot.txt" },				// フレイムショット
+	{ "data/Load/Grenade.txt" },				// グレネード
 };
 
 // =====================================================================================================================================================================
@@ -43,7 +44,7 @@ char *CBullet::m_BulletFileName[CGun::GUNTYPE_MAX] =
 // コンストラクタ
 //
 // =====================================================================================================================================================================
-CBullet::CBullet(OBJ_TYPE type) :CScene3D(type)
+CBullet::CBullet(OBJ_TYPE type) :CModel(type)
 {
 }
 
@@ -69,10 +70,7 @@ HRESULT CBullet::Init()
 	m_nLife			= 0;				// 体力
 
 	// 初期化
-	CScene3D::Init();
-
-	// ビルボードの設定
-	CScene3D::SetBillboard(true);
+	CModel::Init();
 
 	// 当たり判定生成
 	m_pCollision = CCollision::Create();
@@ -92,7 +90,7 @@ HRESULT CBullet::Init()
 // =====================================================================================================================================================================
 void CBullet::Uninit(void)
 {
-	CScene3D::Uninit();
+	CModel::Uninit();
 }
 
 // =====================================================================================================================================================================
@@ -103,8 +101,7 @@ void CBullet::Uninit(void)
 void CBullet::Update(void)
 {
 	// 位置の取得
-	D3DXVECTOR3 pos		= CScene3D::GetPosition();
-	D3DXVECTOR3 size	= CScene3D::GetSize();
+	D3DXVECTOR3 pos		= CModel::GetPosition();
 
 	// 位置更新
 	pos += m_move;
@@ -125,7 +122,7 @@ void CBullet::Update(void)
 	}
 
 	// 位置の設定
-	CScene3D::SetPosition(pos);
+	CModel::SetPosition(pos);
 
 	// ------------- 当たり判定 ------------- //
 	if (m_pCollision != nullptr)
@@ -218,7 +215,7 @@ void CBullet::Update(void)
 	}
 
 	// 更新
-	CScene3D::Update();
+	CModel::Update();
 
 #ifdef _DEBUG
 	// デバッグ表示
@@ -235,21 +232,14 @@ void CBullet::Draw(void)
 {
 	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
 
-	pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);						 // アルファテストを有効にする
-	pDevice->SetRenderState(D3DRS_ALPHAREF, 30);								 // 基準値を指定する
-	pDevice->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);					 // 基準値より大きいと描画する
-
-	// ライティングモード無効
-	pDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
+	//// ライティングモード無効
+	//pDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
 
 	// 描画
-	CScene3D::Draw();
+	CModel::Draw();
 
-	// ライティングモード有効
-	pDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
-
-	// アルファテストを無効にする
-	pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
+	//// ライティングモード有効
+	//pDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
 }
 
 // =====================================================================================================================================================================
@@ -323,11 +313,6 @@ void CBullet::BulletLoad()
 							else if (strcmp(cHeadText, "LIFE") == 0)
 							{
 								sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_BulletParam[nCnt].nLife);			// 比較用テキストにLIFEを代入
-							}
-							// SIZEが来たら
-							else if (strcmp(cHeadText, "SIZE") == 0)
-							{
-								sscanf(cReadText, "%s %s %f %f %f", &cDie, &cDie, &m_BulletParam[nCnt].size.x, &m_BulletParam[nCnt].size.y, &m_BulletParam[nCnt].size.z);		// 比較用テキストにSIZEを代入
 							}
 							// POWERが来たら
 							else if (strcmp(cHeadText, "POWER") == 0)

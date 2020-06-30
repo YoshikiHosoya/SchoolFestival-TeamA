@@ -121,14 +121,14 @@ CFlameshot * CFlameshot::Create(D3DXVECTOR3 rot)
 	// 初期化
 	pFlameshot->Init();
 
-	// フレイムショットの弾のサイズ
-	pFlameshot->SetSize(D3DXVECTOR3(pBulletParam->size.x, pBulletParam->size.y, 0.0f));
-
 	// プレイヤーの向きに合わせる
 	pFlameshot->GetMove() = D3DXVECTOR3(-sinf(rot.y) * cosf(rot.x) * pBulletParam->fBulletSpeed, sinf(rot.x) * pBulletParam->fBulletSpeed, -cosf(rot.y) * cosf(rot.x) * pBulletParam->fBulletSpeed);
 
-	// テクスチャの割り当て
-	pFlameshot->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_BULLET_HANDGUN));
+	// モデルタイプの設定
+	pFlameshot->SetType(BULLET_MODEL);
 
+	// モデルカウントの設定
+	pFlameshot->SetModelConut(MODEL_BULLET_SPHERE);
+	
 	return pFlameshot;
 }

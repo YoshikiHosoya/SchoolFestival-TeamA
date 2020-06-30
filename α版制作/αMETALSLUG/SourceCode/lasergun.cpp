@@ -121,14 +121,14 @@ CLasergun * CLasergun::Create(D3DXVECTOR3 rot)
 	// 初期化
 	pLasergun->Init();
 
-	// レーザーガンの弾のサイズ
-	pLasergun->SetSize(D3DXVECTOR3(pBulletParam->size.x, pBulletParam->size.y, 0.0f));
-
 	// プレイヤーの向きに合わせる
 	pLasergun->GetMove() = D3DXVECTOR3(-sinf(rot.y) * cosf(rot.x) * pBulletParam->fBulletSpeed, sinf(rot.x) * pBulletParam->fBulletSpeed, -cosf(rot.y) * cosf(rot.x) * pBulletParam->fBulletSpeed);
 
-	// テクスチャの割り当て
-	pLasergun->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_BULLET_HANDGUN));
+	// モデルタイプの設定
+	pLasergun->SetType(BULLET_MODEL);
+
+	// モデルカウントの設定
+	pLasergun->SetModelConut(MODEL_BULLET_SPHERE);
 
 	return pLasergun;
 }
