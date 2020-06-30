@@ -25,12 +25,12 @@ BULLET_PARAM	CBullet::m_BulletParam[CGun::GUNTYPE_MAX] = {};
 // =====================================================================================================================================================================
 char *CBullet::m_BulletFileName[CGun::GUNTYPE_MAX] =
 {
-	{ "data/Load/HandGun.txt" },				// ハンドガン
-	{ "data/Load/HeavyMachineGun.txt" },		// ヘビーマシンガン
-	{ "data/Load/ShotGun.txt" },				// ショットガン
-	{ "data/Load/LaserGun.txt" },				// レーザーガン
-	{ "data/Load/RocketLauncher.txt" },			// ロケットランチャー
-	{ "data/Load/FlameShot.txt" },				// フレイムショット
+	{ "data/Load/Gun/HandGun.txt" },				// ハンドガン
+	{ "data/Load/Gun/HeavyMachineGun.txt" },		// ヘビーマシンガン
+	{ "data/Load/Gun/ShotGun.txt" },				// ショットガン
+	{ "data/Load/Gun/LaserGun.txt" },				// レーザーガン
+	{ "data/Load/Gun/RocketLauncher.txt" },			// ロケットランチャー
+	{ "data/Load/Gun/FlameShot.txt" },				// フレイムショット
 };
 
 // =====================================================================================================================================================================
@@ -222,9 +222,6 @@ void CBullet::Update(void)
 
 #ifdef _DEBUG
 	// デバッグ表示
-	CDebugProc::Print("\nbullet_pos %.1f, %.1f, %.1f\n", pos);
-	CDebugProc::Print("bullet_move %.1f, %.1f, %.1f\n\n", m_move);
-
 	CDebugProc::Print("\n\nbullet_type %d\n\n", m_type);		// 弾の種類(自分か敵か）
 #endif // DEBUG
 }

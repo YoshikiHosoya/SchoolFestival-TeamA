@@ -6,7 +6,7 @@ SCRIPT
 BULLETSET									# 0
 	SPEED		= 20
 	LIFE		= 50
-	SIZE		= 30 20 0
+	SIZE		= 12 6 0
 	POWER		= 1
 	AMMO		= 200
 	TRIGGER		= 3
