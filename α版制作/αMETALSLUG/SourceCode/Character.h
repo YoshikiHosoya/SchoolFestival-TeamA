@@ -107,6 +107,7 @@ public:
 	void SetRot(D3DXVECTOR3 rot);
 	void SetRotDest(D3DXVECTOR3 rotDest);
 	void SetLife(int Life);
+	void SetJump(bool bJump);
 	void SetState(CHARACTER_STATE state);
 	void SetMtxWorld(D3DXMATRIX mtxWorld);
 	void SetCharacterType(CHARACTER_TYPE CharaType);

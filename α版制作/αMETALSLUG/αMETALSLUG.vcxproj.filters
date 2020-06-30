@@ -183,6 +183,10 @@
     <ClCompile Include="SourceCode\hosso\Debug_EffectViewer.cpp">
       <Filter>Hosso</Filter>
     </ClCompile>
+<<<<<<< HEAD
+    <ClCompile Include="SourceCode\Obstacle.cpp">
+      <Filter>Model</Filter>
+=======
     <ClCompile Include="SourceCode\flameshot.cpp">
       <Filter>Bullet</Filter>
     </ClCompile>
@@ -194,6 +198,7 @@
     </ClCompile>
     <ClCompile Include="SourceCode\shotgun.cpp">
       <Filter>Bullet</Filter>
+>>>>>>> 8c90cc9c5c4b21b19805bf5c88b64e9a469075ac
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -344,6 +349,10 @@
     <ClInclude Include="SourceCode\hosso\Debug_EffectViewer.h">
       <Filter>Hosso</Filter>
     </ClInclude>
+<<<<<<< HEAD
+    <ClInclude Include="SourceCode\Obstacle.h">
+      <Filter>Model</Filter>
+=======
     <ClInclude Include="SourceCode\flameshot.h">
       <Filter>Bullet</Filter>
     </ClInclude>
@@ -355,6 +364,7 @@
     </ClInclude>
     <ClInclude Include="SourceCode\shotgun.h">
       <Filter>Bullet</Filter>
+>>>>>>> 8c90cc9c5c4b21b19805bf5c88b64e9a469075ac
     </ClInclude>
   </ItemGroup>
 </Project>

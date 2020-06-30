@@ -9,6 +9,7 @@
 #include "inputKeyboard.h"
 #include "model.h"
 #include "bullet.h"
+#include "Obstacle.h"
 #include "particle.h"
 
 //==========================================================

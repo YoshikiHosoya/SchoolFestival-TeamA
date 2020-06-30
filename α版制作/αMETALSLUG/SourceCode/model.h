@@ -63,8 +63,17 @@ public:
 		ENEMY_MODEL,
 		MAP_MODEL,
 		GUN_MODEL,
+		OBSTACLE_MODEL,
 		TYPE_MAX
 	}MODEL_TYPE;
+
+	// 障害物の種類
+	typedef enum
+	{
+		OBSTACLE_TYPE_BOX = 0,								// ハコ
+		OBSTACLE_TYPE_MAX,
+	}OBSTACLE_TYPE;
+
 	typedef struct
 	{
 		LPD3DXBUFFER pBuffmat;
@@ -106,6 +115,8 @@ public:
 	static CModel *CreateSceneManagement(int type, int modelCount);
 
 	static char* GetModelFileName(int nType, int nModelCount);
+	bool GetDieFlag() { return m_bDieFlag; };							// 死亡フラグの取得
+	void SetDieFlag(bool DieFlag) { m_bDieFlag = DieFlag; };			// 死亡フラグの設定
 private:
 
 	static MODEL m_Model[TYPE_MAX][MAX_ALLMODEL];
@@ -113,6 +124,8 @@ private:
 	static char *m_EnemyFileName[MODEL_ENEMY_MAX];
 	static char *m_GunFileName[MODEL_GUN_MAX];
 	static char *m_MapFileName[MODEL_MAP_MAX];
+	static char *m_ObstacleFileName[OBSTACLE_TYPE_MAX];
+
 
 	D3DXVECTOR3 m_pos;					//位置
 	D3DXVECTOR3 m_size;					//サイズ
@@ -128,5 +141,6 @@ private:
 	int m_nIdxModelpalent;				//親のインデックス
 	int m_nIdx;							//モデルのインデックス
 	int m_nParentIdx;					//親番号
+	bool m_bDieFlag;					// 死亡フラグ
 };
 #endif
