@@ -25,12 +25,12 @@ BULLET_PARAM	CBullet::m_BulletParam[CGun::GUNTYPE_MAX] = {};
 // =====================================================================================================================================================================
 char *CBullet::m_BulletFileName[CGun::GUNTYPE_MAX] =
 {
-	{ "data/Load/HandGun.txt" },				// ハンドガン
-	{ "data/Load/HeavyMachineGun.txt" },		// ヘビーマシンガン
-	{ "data/Load/ShotGun.txt" },				// ショットガン
-	{ "data/Load/LaserGun.txt" },				// レーザーガン
-	{ "data/Load/RocketLauncher.txt" },			// ロケットランチャー
-	{ "data/Load/FlameShot.txt" },				// フレイムショット
+	{ "data/Load/Gun/HandGun.txt" },				// ハンドガン
+	{ "data/Load/Gun/HeavyMachineGun.txt" },		// ヘビーマシンガン
+	{ "data/Load/Gun/ShotGun.txt" },				// ショットガン
+	{ "data/Load/Gun/LaserGun.txt" },				// レーザーガン
+	{ "data/Load/Gun/RocketLauncher.txt" },			// ロケットランチャー
+	{ "data/Load/Gun/FlameShot.txt" },				// フレイムショット
 };
 
 // =====================================================================================================================================================================

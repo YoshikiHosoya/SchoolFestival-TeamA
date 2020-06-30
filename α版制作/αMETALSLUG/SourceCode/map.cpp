@@ -21,19 +21,19 @@
 // =====================================================================================================================================================================
 char *CMap::m_MapFileName[MAP_MAX] =
 {
-	{ "data/Load/testMap.txt" },
-	{ "data/Load/testMap.txt" },
+	{ "data/Load/Map/testMap.txt" },
+	{ "data/Load/Map/testMap.txt" },
 };
 char *CMap::m_EnemyFileName[MAP_MAX] =
 {
-	{ "data/Load/Enemy_Map01.txt" },
-	{ "data/Load/Enemy.txt" },
+	{ "data/Load/Enemy/Enemy_Map01.txt" },
+	{ "data/Load/Enemy/Enemy_Map01.txt" },
 };
 
 char *CMap::m_ObstacleFileName[MAP_MAX] =
 {
-	{ "data/Load/Obstacle_Box.txt" },
-	{ "data/Load/Obstacle_Box.txt" },
+	{ "data/Load/Map/Obstacle_Box.txt" },
+	{ "data/Load/Map/Obstacle_Box.txt" },
 };
 
 

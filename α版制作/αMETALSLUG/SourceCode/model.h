@@ -13,19 +13,21 @@ class CModel : public CScene
 public:
 	typedef enum
 	{
-		MODEL_PLAYER_HEAD,			//プレイヤーの頭
+		MODEL_PLAYER_WAIST,			//プレイヤーの腰
 		MODEL_PLAYER_BODY,			//プレイヤーの体
+		MODEL_PLAYER_HEAD,			//プレイヤーの頭
+		MODEL_PLAYER_L_SHOLDER,		//プレイヤーの左肩
+		MODEL_PLAYER_R_SHOLDER,		//プレイヤーの右肩
 		MODEL_PLAYER_LARM,			//プレイヤーの左腕
 		MODEL_PLAYER_RARM,			//プレイヤーの右腕
 		MODEL_PLAYER_LHAND,			//プレイヤーの左手
 		MODEL_PLAYER_RHAND,			//プレイヤーの右手
+		MODEL_PLAYER_LKNEE,			//プレイヤーの左膝
+		MODEL_PLAYER_RKNEE,			//プレイヤーの右膝
 		MODEL_PLAYER_LLEG,			//プレイヤーの左脚
 		MODEL_PLAYER_RLEG,			//プレイヤーの右脚
 		MODEL_PLAYER_LFOOT,			//プレイヤーの左足
 		MODEL_PLAYER_RFOOT,			//プレイヤーの右足
-		MODEL_PLAYER_FIRESWORD,		//プレイヤーの武器
-		MODEL_PLAYER_ICESWORD,		//プレイヤーの武器
-		MODEL_PLAYER_THUNDERSWORD,	//プレイヤーの武器
 		MODEL_PLAYER_MAX
 	}CHARA_MODEL;
 	typedef enum

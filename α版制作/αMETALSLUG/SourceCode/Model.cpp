@@ -9,19 +9,21 @@
 CModel::MODEL CModel::m_Model[TYPE_MAX][MAX_ALLMODEL] = {};
 char *CModel::m_PlayerFileName[MODEL_PLAYER_MAX] =
 {
-	{ "data/MODEL/secondchar/Head.x"},
-	{ "data/MODEL/secondchar/Body.x" },
-	{ "data/MODEL/secondchar/L_Sholder.x" },
-	{ "data/MODEL/secondchar/R_Sholder.x" },
-	{ "data/MODEL/secondchar/L_Hand.x" },
-	{ "data/MODEL/secondchar/R_Hand.x" },
-	{ "data/MODEL/secondchar/L_Foot.x" },
-	{ "data/MODEL/secondchar/R_Foot.x" },
-	{ "data/MODEL/secondchar/L_Leg.x" },
-	{ "data/MODEL/secondchar/R_Leg.x" },
-	{ "data/MODEL/secondchar/炎剣.x" },
-	{ "data/MODEL/secondchar/氷剣.x" },
-	{ "data/MODEL/secondchar/雷剣.x" },
+	{ "data/MODEL/character/Player/Waist.x" },
+	{ "data/MODEL/character/Player/Body.x" },
+	{ "data/MODEL/character/Player/Head.x"},
+	{ "data/MODEL/character/Player/L_Sholder.x" },
+	{ "data/MODEL/character/Player/R_Sholder.x" },
+	{ "data/MODEL/character/Player/L_Arm.x" },
+	{ "data/MODEL/character/Player/R_Arm.x" },
+	{ "data/MODEL/character/Player/L_Hand.x" },
+	{ "data/MODEL/character/Player/R_Hand.x" },
+	{ "data/MODEL/character/Player/L_Knee.x" },
+	{ "data/MODEL/character/Player/R_Knee.x" },
+	{ "data/MODEL/character/Player/L_Foot.x" },
+	{ "data/MODEL/character/Player/R_Foot.x" },
+	{ "data/MODEL/character/Player/L_Leg.x" },
+	{ "data/MODEL/character/Player/R_Leg.x" },
 };
 char *CModel::m_MapFileName[MODEL_MAP_MAX] =
 {
@@ -90,6 +92,10 @@ void CModel::LoadModel(void)
 			m_Model[PLAYER_MODEL][nCnt].m_pTexture[nCntmat] = NULL;
 			D3DXCreateTextureFromFile(pDevice, pMat[nCntmat].pTextureFilename, &m_Model[PLAYER_MODEL][nCnt].m_pTexture[nCntmat]);
 		}
+
+		//保存成功
+		std::cout << "PlayerModelLoad >>" << m_PlayerFileName[nCnt] << NEWLINE;
+
 	}
 
 	//マップのモデル読み込み
