@@ -91,7 +91,7 @@ public:
 	void Uninit(void);
 	void Update(void);
 	void Draw(void);
-	virtual void DefaultMotion(void) = 0;
+	virtual bool DefaultMotion(void) = 0;
 
 	void Move(float move, float fdest);
 	void AddDamage(int Damage);
@@ -107,6 +107,7 @@ public:
 	void SetRot(D3DXVECTOR3 rot);
 	void SetRotDest(D3DXVECTOR3 rotDest);
 	void SetLife(int Life);
+	void SetJump(bool bJump);
 	void SetState(CHARACTER_STATE state);
 	void SetMtxWorld(D3DXMATRIX mtxWorld);
 	void SetCharacterType(CHARACTER_TYPE CharaType);
@@ -134,6 +135,7 @@ public:
 	std::vector<CModel*> &GetCharacterModelList();					//キャラクターのモデル取得
 	CHARACTER_DIRECTION GetCharacterDirection(void);				//向きの取得
 	//モーション関連
+	bool &GetMotion();
 	int &GetKeySet(void);											//キーセットの取得
 	int &GetFram(void);												//フレームの取得
 	MOTION *GetCharacterMotion(CHARACTER_MOTION_STATE type);		//キャラクターモーション情報の取得
@@ -174,5 +176,6 @@ private:
 	bool m_bJump;
 	bool m_bGravity;
 	bool m_bDieFlag;												// 死亡フラグ
+	bool m_bMotion;													//モーションするかどうか
 };
 #endif

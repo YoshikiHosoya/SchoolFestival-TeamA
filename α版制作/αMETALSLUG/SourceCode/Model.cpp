@@ -48,6 +48,12 @@ char *CModel::m_GunFileName[MODEL_GUN_MAX] =
 	{ "data/MODEL/map/block02.x" },
 };
 
+char *CModel::m_ObstacleFileName[OBSTACLE_TYPE_MAX] =
+{
+	{ "data/MODEL/Object/Obstacle_Box.x" },				// 箱
+};
+
+
 CModel::CModel(OBJ_TYPE type) : CScene(type)
 {
 }
@@ -162,6 +168,30 @@ void CModel::LoadModel(void)
 		}
 	}
 
+	//障害物箱のモデル読み込み
+	for (int nCnt = 0; nCnt < OBSTACLE_TYPE_MAX; nCnt++)
+	{
+		// Xファイルの読み込み
+		D3DXLoadMeshFromX(
+			m_ObstacleFileName[nCnt],
+			D3DXMESH_SYSTEMMEM,
+			pDevice,
+			NULL,
+			&m_Model[OBSTACLE_MODEL][nCnt].pBuffmat,
+			NULL,
+			&m_Model[OBSTACLE_MODEL][nCnt].nNumMat,
+			&m_Model[OBSTACLE_MODEL][nCnt].pMesh
+		);
+		//テクスチャのメモリ確保
+		m_Model[OBSTACLE_MODEL][nCnt].m_pTexture = new LPDIRECT3DTEXTURE9[(int)m_Model[OBSTACLE_MODEL][nCnt].nNumMat];
+		pMat = (D3DXMATERIAL*)m_Model[OBSTACLE_MODEL][nCnt].pBuffmat->GetBufferPointer();
+
+		for (int nCntmat = 0; nCntmat < (int)m_Model[OBSTACLE_MODEL][nCnt].nNumMat; nCntmat++)
+		{
+			m_Model[OBSTACLE_MODEL][nCnt].m_pTexture[nCntmat] = NULL;
+			D3DXCreateTextureFromFile(pDevice, pMat[nCntmat].pTextureFilename, &m_Model[OBSTACLE_MODEL][nCnt].m_pTexture[nCntmat]);
+		}
+	}
 }
 //====================================================================
 //モデルの開放
@@ -273,6 +303,33 @@ void CModel::UnLoad(void)
 			m_Model[GUN_MODEL][nCnt].m_pTexture = NULL;
 		}
 	}
+
+	for (int nCnt = 0; nCnt < OBSTACLE_TYPE_MAX; nCnt++)
+	{
+		if (m_Model[OBSTACLE_MODEL][nCnt].pBuffmat != NULL)
+		{
+			m_Model[OBSTACLE_MODEL][nCnt].pBuffmat->Release();
+			m_Model[OBSTACLE_MODEL][nCnt].pBuffmat = NULL;
+		}
+		if (m_Model[OBSTACLE_MODEL][nCnt].pMesh != NULL)
+		{
+			m_Model[OBSTACLE_MODEL][nCnt].pMesh->Release();
+			m_Model[OBSTACLE_MODEL][nCnt].pMesh = NULL;
+		}
+		if (m_Model[OBSTACLE_MODEL][nCnt].m_pTexture != NULL)
+		{
+			for (int nCntmat = 0; nCntmat < (int)m_Model[OBSTACLE_MODEL][nCnt].nNumMat; nCntmat++)
+			{
+				if (m_Model[OBSTACLE_MODEL][nCnt].m_pTexture[nCntmat] != NULL)
+				{
+					m_Model[OBSTACLE_MODEL][nCnt].m_pTexture[nCntmat]->Release();
+					m_Model[OBSTACLE_MODEL][nCnt].m_pTexture[nCntmat] = NULL;
+				}
+			}
+			delete[] m_Model[OBSTACLE_MODEL][nCnt].m_pTexture;
+			m_Model[OBSTACLE_MODEL][nCnt].m_pTexture = NULL;
+		}
+	}
 }
 //====================================================================
 //初期化
@@ -285,6 +342,8 @@ HRESULT CModel::Init(void)
 	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_col = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);
 	int nNumVertices;
+	m_bDieFlag = false;
+	m_type = 0;
 	DWORD sizeFVF;
 	BYTE *pVertexBuffer;
 
