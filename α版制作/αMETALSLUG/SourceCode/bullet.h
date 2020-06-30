@@ -30,6 +30,7 @@ typedef struct
 	float				fPower;			// 威力
 	int					nAmmo;			// 弾薬数
 	int					nTrigger;		// 1トリガーで発射される弾数
+	int					nInterval;		// インターバル
 }BULLET_PARAM;
 
 // =====================================================================================================================================================================
@@ -54,6 +55,7 @@ public:
 	virtual void				Uninit();				// 終了
 	virtual void				Update();				// 更新
 	virtual void				Draw();					// 描画
+	virtual void				DeleteBullet();			// 弾を消す処理
 
 	/* 静的メンバ関数 */
 	static	void				BulletLoad();			// 弾のロード

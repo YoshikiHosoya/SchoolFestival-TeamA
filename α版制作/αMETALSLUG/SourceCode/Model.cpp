@@ -25,7 +25,7 @@ char *CModel::m_PlayerFileName[MODEL_PLAYER_MAX] =
 };
 char *CModel::m_MapFileName[MODEL_MAP_MAX] =
 {
-	{ "data/MODEL/map/testMap.x" },
+	{ "data/MODEL/map/alphamap.x" },
 	{ "data/MODEL/map/block02.x" },
 };
 char *CModel::m_EnemyFileName[MODEL_ENEMY_MAX] =

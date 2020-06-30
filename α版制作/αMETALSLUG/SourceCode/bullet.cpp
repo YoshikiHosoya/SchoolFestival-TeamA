@@ -238,6 +238,10 @@ void CBullet::Draw(void)
 {
 	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
 
+	pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);						 // アルファテストを有効にする
+	pDevice->SetRenderState(D3DRS_ALPHAREF, 30);								 // 基準値を指定する
+	pDevice->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);					 // 基準値より大きいと描画する
+
 	// ライティングモード無効
 	pDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
 
@@ -246,6 +250,23 @@ void CBullet::Draw(void)
 
 	// ライティングモード有効
 	pDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
+
+	// アルファテストを無効にする
+	pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
+}
+
+// =====================================================================================================================================================================
+//
+// 弾を消す処理
+//
+// =====================================================================================================================================================================
+void CBullet::DeleteBullet()
+{
+	// 弾の判定の削除
+	m_pCollision->ReleaseCollision(m_pCollision);
+	m_pCollision = nullptr;
+	// 弾の削除
+	Rerease();
 }
 
 // =====================================================================================================================================================================
@@ -325,6 +346,11 @@ void CBullet::BulletLoad()
 							else if (strcmp(cHeadText, "TRIGGER") == 0)
 							{
 								sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_BulletParam[nCnt].nTrigger);			// 比較用テキストにTRIGGERを代入
+							}
+							// INTERVALが来たら
+							else if (strcmp(cHeadText, "INTERVAL") == 0)
+							{
+								sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_BulletParam[nCnt].nInterval);		// 比較用テキストにINTERVALを代入
 							}
 							else if (strcmp(cHeadText, "END_BULLETSET") == 0)
 							{
