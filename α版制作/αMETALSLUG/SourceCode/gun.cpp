@@ -23,8 +23,7 @@
 // =====================================================================================================================================================================
 // マクロ定義
 // =====================================================================================================================================================================
-#define HANDGUN_AMMO				(1)			// ハンドガンの弾薬数
-#define HEAVYMACHINEGUN_AMMO		(200)		// ヘビーマシンガンの弾薬数
+#define HEAVYMACHINEGUN_SHOT_FRAME				(3)			// ヘビーマシンガンの弾の間隔
 
 #define HANDGUN_POS_X				(-10)		// ハンドガンの位置X
 #define HANDGUN_POS_Y				(10)		// ハンドガンの位置Y
@@ -262,8 +261,8 @@ void CGun::MultipleShot()
 
 	if (m_nCntBullet < CBullet::GetBulletParam(m_GunType)->nTrigger)
 	{
-		//if (m_nCntFrame >= 0)
-		//{
+		if (m_nCntFrame >= HEAVYMACHINEGUN_SHOT_FRAME)
+		{
 		// フレームカウント初期化
 		m_nCntFrame = 0;
 
@@ -297,7 +296,7 @@ void CGun::MultipleShot()
 			// 弾のパラメーターの設定
 			pBullet->SetBulletParam(m_GunType);
 		}
-		//}
+		}
 	}
 	else
 	{

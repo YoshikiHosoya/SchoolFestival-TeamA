@@ -212,6 +212,10 @@ void CBullet::Draw(void)
 {
 	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
 
+	pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);						 // アルファテストを有効にする
+	pDevice->SetRenderState(D3DRS_ALPHAREF, 30);								 // 基準値を指定する
+	pDevice->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);					 // 基準値より大きいと描画する
+
 	// ライティングモード無効
 	pDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
 
@@ -220,6 +224,9 @@ void CBullet::Draw(void)
 
 	// ライティングモード有効
 	pDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
+
+	// アルファテストを無効にする
+	pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
 }
 
 // =====================================================================================================================================================================
