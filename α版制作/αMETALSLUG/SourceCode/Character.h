@@ -20,13 +20,15 @@ public:
 		CHARACTER_STATE_INVINCIBLE,
 		CHARACTER_STATE_MAX
 	}CHARACTER_STATE;
+
 	typedef enum
 	{
 		CHARACTER_TYPE_PLAYER,
 		CHARACTER_TYPE_ENEMY,
-		CHARACTER_TYPE_NPC,
+		CHARACTER_TYPE_PRISONER,
 		CHARACTER_TYPE_MAX
 	}CHARACTER_TYPE;
+
 
 	//キー要素
 	typedef struct KEY
@@ -73,6 +75,12 @@ public:
 		ENEMY_MOTION_WALK,					//歩き
 		ENEMY_MOTION_ATTACK01,				//通常攻撃1
 
+		// 捕虜のモーション
+		PRISONER_MOTION_STAY,				//ニュートラル
+		//PRISONER_MOTION_RELEASE,			//開放された時
+		//PRISONER_MOTION_RUN,				//走る
+		//PRISONER_MOTION_SKIP,				//スキップをしながら走る
+
 		CHARACTER_MOTION_MAX				//最大数
 	}CHARACTER_MOTION_STATE;
 
@@ -91,7 +99,7 @@ public:
 	void Uninit(void);
 	void Update(void);
 	void Draw(void);
-	virtual void DefaultMotion(void) = 0;
+	virtual bool DefaultMotion(void) = 0;
 
 	void Move(float move, float fdest);
 	void AddDamage(int Damage);
@@ -135,6 +143,7 @@ public:
 	std::vector<CModel*> &GetCharacterModelList();					//キャラクターのモデル取得
 	CHARACTER_DIRECTION GetCharacterDirection(void);				//向きの取得
 	//モーション関連
+	bool &GetMotion();
 	int &GetKeySet(void);											//キーセットの取得
 	int &GetFram(void);												//フレームの取得
 	MOTION *GetCharacterMotion(CHARACTER_MOTION_STATE type);		//キャラクターモーション情報の取得
@@ -175,5 +184,6 @@ private:
 	bool m_bJump;
 	bool m_bGravity;
 	bool m_bDieFlag;												// 死亡フラグ
+	bool m_bMotion;													//モーションするかどうか
 };
 #endif

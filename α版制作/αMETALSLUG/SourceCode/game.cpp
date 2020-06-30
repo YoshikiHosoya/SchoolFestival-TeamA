@@ -105,4 +105,14 @@ void CGame::ShowDebugInfo(void)
 	{
 		CParticle::Create(m_pPlayer->GetPosition(), 60, 50.0f, RedColor, 20, 5);
 	}
+	//パーティクル テキストのパラメータ参照
+	if (key->GetKeyboardTrigger(DIK_5))
+	{
+		CParticle::CreateFromText(m_pPlayer->GetPosition(), CParticleParam::PARTICLE_DEFAULT);
+	}
+	//パーティクル テキストのパラメータ参照
+	if (key->GetKeyboardTrigger(DIK_5))
+	{
+		CParticle::CreateFromText(m_pPlayer->GetPosition(), CParticleParam::PARTICLE_EXPLOSION);
+	}
 }

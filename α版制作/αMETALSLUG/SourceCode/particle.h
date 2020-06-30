@@ -13,7 +13,9 @@
 //------------------------------------------------------------------------------
 //マクロ
 //------------------------------------------------------------------------------
-#define MAX_PARTICLE (100000)
+#define MAX_PARTICLE (100000)									//パーティクルの最大数
+#define DEFAULT_TEXTURE (CTexture::TEX_EFFECT_PARTICLE)			//デフォルトで使用するテクスチャ
+#define DEFAULT_DAMPING (0.95f)									//デフォルトの減衰値
 //------------------------------------------------------------------------------
 //クラス定義
 //------------------------------------------------------------------------------
@@ -21,6 +23,75 @@
 
 class CParticleParam
 {
+public:
+	//パーティクルの種類
+	enum PARTICLE_TYPE
+	{
+		PARTICLE_DEFAULT = 0,
+		PARTICLE_EXPLOSION,
+		PARTICLE_BLOOD,
+		PARTICLE_MAX,
+	};
+
+	//コンストラクタ
+	CParticleParam()
+	{
+		m_nLife = 50;										//ライフ
+		m_fRadius = 15.0f;									//半径
+		m_col = WhiteColor;									//色
+
+		m_nNumber = 10;										//個数
+		m_fSpeed = 10.0f;									//速度
+
+		m_fRadiusDamping = DEFAULT_DAMPING;					//半径の減衰地
+		m_fAlphaDamping = DEFAULT_DAMPING;					//アルファ値の減衰値
+		m_Textype = CTexture::TEX_EFFECT_PARTICLE;			//テクスチャ
+		m_ParticleType = PARTICLE_DEFAULT;					//パーティクルのタイプ
+
+	}
+	~CParticleParam() {};
+
+	void SetParamater(int nLife, float fRadius, D3DXCOLOR col, float fRadiusDamping = DEFAULT_DAMPING, float fAlphaDamping = DEFAULT_DAMPING,
+						CTexture::TEX_TYPE textype = CTexture::TEX_EFFECT_PARTICLE,int nNumber = 10,float fSpeed = 10.0f);
+	void UpdateParam();
+
+
+	static HRESULT LoadParticleDefaultParam();
+	static HRESULT SaveParticleDefaultParam(CParticleParam *pSaveParam);
+
+	//Get関数
+	int &GetLife()					{ return m_nLife; };				//ライフ
+	float &GetRadius()				{ return m_fRadius; };				//半径
+	D3DXCOLOR &GetCol()				{ return m_col; };					//色
+
+	int &GetNumber()				{ return m_nNumber; };				//個数
+	float &GetSpeed()				{ return m_fSpeed; };				//速度
+
+	float &GetRadiusDamping()		{ return m_fRadiusDamping; };		//半径の減衰地
+	float &GetAlphaDamping()		{ return m_fAlphaDamping; };		//アルファ値の減衰値
+	CTexture::TEX_TYPE &GetTex()	{ return m_Textype; };				//テクスチャ
+	PARTICLE_TYPE &GetType()		{ return m_ParticleType; };			//テクスチャ
+
+	static CParticleParam *GetDefaultParam(CParticleParam::PARTICLE_TYPE type) { return m_pParticleDefaultParamList[type].get(); };
+	static bool ShowParamConboBox(CParticleParam::PARTICLE_TYPE & rType);
+	//オペレータ
+	void *operator = (const CParticleParam *pParam);
+
+private:
+	static std::vector<std::unique_ptr<CParticleParam>> m_pParticleDefaultParamList;	//パーティクルの初期パラメータのリスト
+	static std::vector<std::string> m_aFileNameList;									//読み込むファイルのリスト
+
+	int m_nLife;									//ライフ
+	float m_fRadius;								//半径
+	D3DXCOLOR m_col;								//色
+
+	int m_nNumber;									//個数
+	float m_fSpeed;									//速度
+
+	float m_fRadiusDamping;							//半径の減衰値
+	float m_fAlphaDamping;							//アルファ値の減衰値
+	CTexture::TEX_TYPE m_Textype;					//テクスチャ
+	PARTICLE_TYPE m_ParticleType;					//パーティクルのタイプ
 
 };
 
@@ -74,24 +145,21 @@ public:
 
 	static void Create(D3DXVECTOR3 pos, int nLife, float fRadius, D3DXCOLOR col,int nNumber, float fSpeed);		//生成処理
 	static void DetailsCreate(D3DXVECTOR3 pos, int nLife, float fRadius, D3DXCOLOR col, int nNumber, float fSpeed, float fAlphaDamping, float fRadiusDamping, CTexture::TEX_TYPE textype);
+	static void CreateFromText(D3DXVECTOR3 pos, CParticleParam::PARTICLE_TYPE type);
 
 	bool GetDeleteFlag() { return m_bDeleteFlag; };
 
 private:
-	static LPDIRECT3DVERTEXBUFFER9	m_pVtxBuff;						//頂点バッファへのポインタ
-	static int m_nVertexID;											//頂点ID
-	int m_nLife;													//ライフ
-	int m_nNumber;													//個数
-	float m_fRadius;												//半径
-	float m_fRadiusDamping;											//半径の減衰値
-	float m_fAlphaDamping;											//アルファ値の減衰値
-	CTexture::TEX_TYPE m_Textype;									//テクスチャ
-	D3DXCOLOR m_col;												//色
-	std::vector<std::unique_ptr<COneParticle>> m_pParticleList;		//パーティクルの構造体のリスト
+	static LPDIRECT3DVERTEXBUFFER9	m_pVtxBuff;											//頂点バッファへのポインタ
+	static int m_nVertexID;																//頂点ID
+	std::unique_ptr<CParticleParam> m_pParticleParam;									//パーティクルの現在のパラメータ
 
+	std::vector<std::unique_ptr<COneParticle>> m_pParticleList;		//パーティクルの構造体のリスト
+	CParticleParam::PARTICLE_TYPE m_type;							//パーティクルの種類
 	bool m_bDeleteFlag;												//消去フラグ
 
-	void SetParticle(D3DXVECTOR3 &pos,float fSpeed);				//パーティクル設定
+	void SetParticle(D3DXVECTOR3 &pos,float fSpeed, int nNumber);				//パーティクル設定
+
 };
 
 #endif
