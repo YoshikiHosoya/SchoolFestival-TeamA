@@ -143,13 +143,6 @@ bool CDebug_ViewerCharacter::ShowMotionComboBox(CCharacter::CHARACTER_MOTION_STA
 				motiontype = (CCharacter::CHARACTER_MOTION_STATE)nCnt;
 				bChange = true;
 			}
-
-			////
-			//if (is_selected)
-			//{
-			//	//スクロールの初期位置設定
-			//	ImGui::SetItemDefaultFocus();
-			//}
 		}
 		//combo終了
 		ImGui::EndCombo();
@@ -210,6 +203,7 @@ void CDebug_ViewerCharacter::MotionViewer()
 		SetMotion(NowMotionType);
 		ForcedUpdate();
 		pMotionInfo = CCharacter::GetCharacterMotion(NowMotionType);
+		GetMotion() = true;
 	}
 
 	//Widgetの大きさ設定
@@ -503,11 +497,10 @@ HRESULT CDebug_ViewerCharacter::SaveMotion(CCharacter::CHARACTER_MOTION_STATE mo
 		fputs(COMMENT02, pFile);
 		fputs(COMMENT01, pFile);
 
-		strcpy(cHeadtext, "//Motion\n");
-		fputs(cHeadtext, pFile);
+		fputs("//Motion\n", pFile);
+		fputs("//モーションに関する情報\n", pFile);
+		fputs("//Author:Yoshiki Hosoya\n", pFile);
 
-		strcpy(cHeadtext, "//Author:Yoshiki Hosoya\n");
-		fputs(cHeadtext, pFile);
 
 		fputs(COMMENT01, pFile);
 		fputs(COMMENT02, pFile);

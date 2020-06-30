@@ -58,6 +58,7 @@ HRESULT CCharacter::Init(void)
 	m_bJump = false;
 	m_bGravity = true;
 	m_bDieFlag = false;
+	m_bMotion = true;
 	//マトリックス初期化
 	D3DXMatrixIdentity(&m_mtxWorld);
 	return S_OK;
@@ -631,9 +632,11 @@ void CCharacter::Moation(void)
 				//ループしないとき------------------------------------■■■■■
 				if (m_CharacterMotion[m_MotionType]->nLoop == 0)
 				{
-					m_CntKeySet = 0;
-					DefaultMotion();
-					m_Fram = m_CharacterMotion[m_MotionType]->key_info[m_CntKeySet]->nFram;
+					if (DefaultMotion())
+					{
+						m_CntKeySet = 0;
+						m_Fram = m_CharacterMotion[m_MotionType]->key_info[m_CntKeySet]->nFram;
+					}
 				}
 				//ループするとき--------------------------------------■■■■■
 				else if (m_CharacterMotion[m_MotionType]->nLoop == 1)
@@ -645,7 +648,12 @@ void CCharacter::Moation(void)
 		//フレーム数が規定値と同じではないとき------------------------■■■■■
 		else
 		{
-			m_Fram++;
+			//モーションをするとき
+			if (m_bMotion)
+			{
+				m_Fram++;
+			}
+
 		}
 	}
 	else
@@ -771,6 +779,13 @@ CCharacter::CHARACTER_MOTION_STATE &CCharacter::GetMotionType(void)
 CCharacter::CHARACTER_MOTION_STATE CCharacter::GetMotionOldType(void)
 {
 	return m_MotionOld;
+}
+//====================================================================
+//モーションしてるかどうか取得
+//====================================================================
+bool & CCharacter::GetMotion()
+{
+	return m_bMotion;
 }
 //====================================================================
 //キーセットの取得

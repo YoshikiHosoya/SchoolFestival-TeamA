@@ -30,7 +30,7 @@ public:
 	void Draw();									//描画
 	void DebugInfo();							//デバッグ情報表記
 	static CDebug_ViewerCharacter* Create();		//生成関数
-	void DefaultMotion() { return SetMotion(CCharacter::PLAYER_MOTION_NORMAL); };
+	bool DefaultMotion() { GetMotion() = false; CCharacter::GetKeySet()--; return false; };
 
 	void MotionViewer();							//モーションビューワ
 	void OffsetViewer();							//オフセットビューワ

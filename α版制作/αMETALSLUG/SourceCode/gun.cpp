@@ -258,6 +258,7 @@ void CGun::MultipleShot()
 {
 	CBullet *pBullet = nullptr;
 
+	float pos_y = (float)(rand() % 10 - 5);
 
 	if (m_nCntBullet < CBullet::GetBulletParam(m_GunType)->nTrigger)
 	{
@@ -288,7 +289,7 @@ void CGun::MultipleShot()
 		if (pBullet)
 		{
 			// ˆÊ’u‚ÌÝ’è
-			pBullet->SetPosition(D3DXVECTOR3(m_mtx->_41, m_mtx->_42, m_mtx->_43));
+			pBullet->SetPosition(D3DXVECTOR3(m_mtx->_41, m_mtx->_42 + pos_y, m_mtx->_43));
 
 			// ’e‚ÌŽí—Þ‚ÌÝ’è
 			pBullet->SetBulletType((CBullet::BULLET_TYPE)m_BulletType);

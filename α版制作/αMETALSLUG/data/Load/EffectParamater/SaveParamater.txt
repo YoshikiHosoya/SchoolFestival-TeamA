@@ -1,0 +1,22 @@
+//------------------------------------------------------------
+//
+//ParticleParamater
+//読み込み用のテキストにコピーしてください
+//Author:Yoshiki Hosoya
+//
+//------------------------------------------------------------
+
+SCRIPT
+	PARAMSET
+
+		LIFE = 50				//ライフ
+		RADIUS = 5.0			//半径
+		COLOR = 0.2 0.7 0.8 1.0	//色
+		NUMBER = 3				//個数
+		SPEED = 0.0		//速度
+		RADIUSDAMPING = 1.1		//半径の減衰値
+		ALPHADAMPING = 0.9		//アルファ値の減衰値
+		TEXTURE = 1			//テクスチャ
+
+	END_PARAMSET
+END_SCRIPT
