@@ -52,6 +52,8 @@ HRESULT CDebug_ViewerCharacter::Init()
 
 	CCharacter::LoadOffset(CCharacter::CHARACTER_TYPE_PLAYER);
 
+	SetRotDest(ZeroVector3);
+
 	//成功
 	return S_OK;
 }
@@ -391,7 +393,7 @@ void CDebug_ViewerCharacter::OffsetViewer()
 		aPartsName.erase(aPartsName.begin(), aPartsName.begin() + 11);
 
 		//次の項目の枠の大きさ設定
-		ImGui::SetNextItemWidth(250);
+		ImGui::SetNextItemWidth(200);
 
 		//モデルパーツのポインタ取得
 		pModel = GetCharacterModelList()[nCnt];
@@ -401,11 +403,43 @@ void CDebug_ViewerCharacter::OffsetViewer()
 		{
 
 		}
+
+		ImGui::SameLine();
+
+
+		ImGui::Text("ParentIdx >>");
+
+		//次の項目の枠の大きさ設定
+		ImGui::SetNextItemWidth(20);
+
+		char aId[64];
+		sprintf(aId, "[%d]", vModelList[nCnt]->GetModelCount());
+
+		ImGui::SameLine();
+
+		//親番号
+		if (ImGui::InputInt(aId, &vModelList[nCnt]->GetParentIdx(), -1, vModelList.size()))
+		{
+			vModelList[nCnt]->SetParent(vModelList[vModelList[nCnt]->GetParentIdx()]);
+		}
 	}
 
 	if(ImGui::Button("OffsetSave"))
 	{
 		SaveModelOffset();
+	}
+
+
+	if (ImGui::Button("AllReset"))
+	{
+
+		//モデル数分繰り替えす
+		for (size_t nCnt = 0; nCnt < vModelList.size(); nCnt++)
+		{
+			//０にする
+			GetCharacterModelList()[nCnt]->SetPosition(ZeroVector3);
+
+		}
 	}
 }
 

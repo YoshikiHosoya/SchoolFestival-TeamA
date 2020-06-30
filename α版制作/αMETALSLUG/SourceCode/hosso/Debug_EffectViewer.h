@@ -27,7 +27,7 @@ public:
 
 	CDebug_EffectViewer();
 	~CDebug_EffectViewer();
-	HRESULT Init();			//‰Šú‰»
+	HRESULT Init();						//‰Šú‰»
 	void Uninit();						//I—¹
 	void Update();						//XV
 	void Draw();						//•`‰æ

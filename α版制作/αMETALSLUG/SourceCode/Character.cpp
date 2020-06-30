@@ -14,19 +14,20 @@
 //オフセットの読み込みファイル
 char *CCharacter::m_LoadOffsetFileName[CHARACTER_TYPE_MAX] =
 {
-	{ "data/Load/PlayerOffset.txt"},
-	{"data/Load/EnemyOffset.txt"},
-	{"data/Load/EnemyOffset.txt"}
+	{ "data/Load/Player/PlayerOffset.txt"},
+	{"data/Load/Enemy/EnemyOffset.txt"},
+	{"data/Load/PrisonerOffset.txt"}
 };
 //モーションの読み込みファイル
 char *CCharacter::m_LoadMotionFileName[CHARACTER_MOTION_MAX] =
 {
-	{ "data/Load/PlayerNeutral.txt" },
-	{ "data/Load/PlayerWalk.txt" },
-	{ "data/Load/PlayerAttack.txt" },
-	{ "data/Load/EnemyNeutral.txt" },
-	{ "data/Load/EnemyWalk.txt" },
-	{ "data/Load/EnemyAttack.txt" }
+	{ "data/Load/Player/Motion/PlayerNeutral.txt" },
+	{ "data/Load/Player/Motion/PlayerWalk.txt" },
+	{ "data/Load/Player/Motion/PlayerAttack.txt" },
+	{ "data/Load/Enemy/Motion/EnemyNeutral.txt" },
+	{ "data/Load/Enemy/Motion/EnemyWalk.txt" },
+	{ "data/Load/Enemy/Motion/EnemyAttack.txt" },
+	{ "data/Load/Prisoner/Motion/PrisonerStay.txt" },
 };
 std::vector<CCharacter::MOTION*> CCharacter::m_CharacterMotion = {};
 //====================================================================
@@ -51,7 +52,7 @@ HRESULT CCharacter::Init(void)
 	m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_Life = 50;
-	m_state = CHARACTER_STATE_NORMAL;
+	m_state = CHARACTER_STATE_NONE;
 	m_rotDest.y = -0.5f*  D3DX_PI;
 	m_bJump = false;
 	m_bGravity = true;
@@ -143,7 +144,7 @@ void CCharacter::Update(void)
 	}
 	CDebugProc::Print("move.y:%2f\n",m_move.y);
 
-	Moation();
+	//Moation();
 	RayCollision();
 }
 //====================================================================
@@ -535,12 +536,20 @@ void CCharacter::LoadMotion(void)
 				}
 
 			}
+
+			//debug
+			std::cout << "Motion Load - " << nCnt << m_LoadMotionFileName[nCnt] << NEWLINE;
+
 			//ファイルを閉じる
 			fclose(pFile);
 		}
 		else
 		{
-			MessageBox(NULL, "モデルデータの読み込み失敗", "警告", MB_ICONWARNING);
+			//debug
+			std::cout << "LOAD FAILED!!! MotionFile - " << nCnt << m_LoadMotionFileName[nCnt] << NEWLINE;
+
+			//失敗
+			MessageBox(NULL, "モーション読み込み失敗", m_LoadMotionFileName[nCnt], MB_OK | MB_ICONHAND);
 		}
 	}
 }

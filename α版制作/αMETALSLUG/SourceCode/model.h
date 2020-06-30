@@ -13,21 +13,39 @@ class CModel : public CScene
 public:
 	typedef enum
 	{
-		MODEL_PLAYER_HEAD,			//プレイヤーの頭
+		MODEL_PLAYER_WAIST,			//プレイヤーの腰
 		MODEL_PLAYER_BODY,			//プレイヤーの体
+		MODEL_PLAYER_HEAD,			//プレイヤーの頭
+		MODEL_PLAYER_L_SHOLDER,		//プレイヤーの左肩
+		MODEL_PLAYER_R_SHOLDER,		//プレイヤーの右肩
 		MODEL_PLAYER_LARM,			//プレイヤーの左腕
 		MODEL_PLAYER_RARM,			//プレイヤーの右腕
 		MODEL_PLAYER_LHAND,			//プレイヤーの左手
 		MODEL_PLAYER_RHAND,			//プレイヤーの右手
+		MODEL_PLAYER_LKNEE,			//プレイヤーの左膝
+		MODEL_PLAYER_RKNEE,			//プレイヤーの右膝
 		MODEL_PLAYER_LLEG,			//プレイヤーの左脚
 		MODEL_PLAYER_RLEG,			//プレイヤーの右脚
 		MODEL_PLAYER_LFOOT,			//プレイヤーの左足
 		MODEL_PLAYER_RFOOT,			//プレイヤーの右足
-		MODEL_PLAYER_FIRESWORD,		//プレイヤーの武器
-		MODEL_PLAYER_ICESWORD,		//プレイヤーの武器
-		MODEL_PLAYER_THUNDERSWORD,	//プレイヤーの武器
 		MODEL_PLAYER_MAX
 	}CHARA_MODEL;
+
+	typedef enum
+	{
+		MODEL_PRISONER_HEAD,			//捕虜の頭
+		MODEL_PRISONER_BODY,			//捕虜の体
+		MODEL_PRISONER_LARM,			//捕虜の左腕
+		MODEL_PRISONER_RARM,			//捕虜の右腕
+		MODEL_PRISONER_LHAND,			//捕虜の左手
+		MODEL_PRISONER_RHAND,			//捕虜の右手
+		MODEL_PRISONER_LLEG,			//捕虜の左脚
+		MODEL_PRISONER_RLEG,			//捕虜の右脚
+		MODEL_PRISONER_LFOOT,			//捕虜の左足
+		MODEL_PRISONER_RFOOT,			//捕虜の右足
+		MODEL_PRISONER_MAX
+	}PRISONER_MODEL;
+
 	typedef enum
 	{
 		MODEL_MAP_BLOCK,			//マップの武器
@@ -77,6 +95,7 @@ public:
 		GUN_MODEL,
 		BULLET_MODEL,
 		OBSTACLE_MODEL,
+		PRISONER_MODEL,
 		TYPE_MAX
 	}MODEL_TYPE;
 
@@ -114,8 +133,8 @@ public:
 	void SetModelConut(int nModelCount) { m_modelCount = nModelCount; };	// モデルカウントの設定
 	void SetParentIdx(int nParentIdx)	{ m_nParentIdx = nParentIdx; };		// 親番号設定
 	int GetType()						{ return m_type; };					// モデルタイプの取得
-	int GetModelCount()					{ return m_modelCount; };			// モデルカウントの取得
-	int GetParentIdx()					{ return m_nParentIdx; };			// 親番号取得
+	int &GetModelCount()					{ return m_modelCount; };			// モデルカウントの取得
+	int &GetParentIdx()					{ return m_nParentIdx; };			// 親番号取得
 	LPD3DXMESH GetMesh(void);
 	D3DXMATRIX *GetMatrix(void);
 	static void LoadModel(void);
@@ -139,6 +158,7 @@ private:
 	static char *m_BulletFileName[MODEL_BULLET_MAX];
 	static char *m_MapFileName[MODEL_MAP_MAX];
 	static char *m_ObstacleFileName[OBSTACLE_TYPE_MAX];
+	static char *m_PrisonerFileName[MODEL_PRISONER_MAX];
 
 
 	D3DXVECTOR3 m_pos;					//位置
@@ -153,7 +173,6 @@ private:
 	int m_modelCount;					//モデルの種類
 	int m_type;
 	int m_nIdxModelpalent;				//親のインデックス
-	int m_nIdx;							//モデルのインデックス
 	int m_nParentIdx;					//親番号
 	bool m_bDieFlag;					// 死亡フラグ
 };

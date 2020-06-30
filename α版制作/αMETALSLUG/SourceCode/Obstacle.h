@@ -51,7 +51,7 @@ public:
 	virtual void			DebugInfo();			//デバッグ
 
 	/* 静的メンバ関数 */
-	static	CObstacle		*Create();												// 障害物の生成
+	static	CObstacle		*Create();																// 障害物の生成
 	static	void			ObstacleLoad();															// 障害物のロード
 
 	/* メンバ関数 */

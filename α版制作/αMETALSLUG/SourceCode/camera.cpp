@@ -28,7 +28,7 @@ void CCamera::InitCamera(void)
 	pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	D3DXVECTOR3 diff = (posV-posR);
 	//fDistance = sqrtf(diff.x*diff.x + diff.z*diff.z);
-	fDistance = 500;
+	fDistance = 300;
 	move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	rot = D3DXVECTOR3(0.1f, 0.0f, 0.0f);
 	//rot  = D3DXVECTOR3(atan2f(diff.y, diff.z),atan2f(diff.x, diff.z),atan2f(diff.x,diff.y));

@@ -619,9 +619,9 @@ void CParticle::SetParticle(D3DXVECTOR3 &pos, float fSpeed,int nNumber)
 			fAngleY = CHossoLibrary::Random_PI();
 
 			//移動の方向を設定
-			move = D3DXVECTOR3(sinf(fAngleY) * sinf(fAngleX) * fLength,
-								cosf(fAngleX) * cosf(fAngleY) * fLength,
-								sinf(fAngleY) * cosf(fAngleX) * fLength);
+			move = D3DXVECTOR3( sinf(fAngleY) * sinf(fAngleX) * fLength,
+								sinf(fAngleY) * cosf(fAngleX) * fLength,
+								cosf(fAngleY) * cosf(fAngleX) * fLength);
 		}
 
 		//パーティクル生成
@@ -630,10 +630,10 @@ void CParticle::SetParticle(D3DXVECTOR3 &pos, float fSpeed,int nNumber)
 		//配列に追加
 		m_pParticleList.emplace_back(std::move(pOneParticle));
 
-		//頂点の更新
-		UpdateVertex();
 
 	}
+	//頂点の更新
+	UpdateVertex();
 }
 
 
