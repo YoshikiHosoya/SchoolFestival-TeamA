@@ -31,8 +31,7 @@
 //------------------------------------------------------------------------------
 CDebug_ModelViewer::CDebug_ModelViewer()
 {
-	//ビューワ用のキャラクター作成
-	m_pViewerCharacter = CDebug_ViewerCharacter::Create();
+
 }
 //------------------------------------------------------------------------------
 //デストラクタ
@@ -47,6 +46,9 @@ CDebug_ModelViewer::~CDebug_ModelViewer()
 //------------------------------------------------------------------------------
 HRESULT CDebug_ModelViewer::Init()
 {
+	//ビューワ用のキャラクター作成
+	m_pViewerCharacter = CDebug_ViewerCharacter::Create();
+
 	return S_OK;
 }
 
