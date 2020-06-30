@@ -186,6 +186,11 @@
     <ClCompile Include="SourceCode\main.cpp" />
     <ClCompile Include="SourceCode\manager.cpp" />
     <ClCompile Include="SourceCode\map.cpp" />
+    <ClCompile Include="SourceCode\mesh.cpp" />
+    <ClCompile Include="SourceCode\meshcircle.cpp" />
+    <ClCompile Include="SourceCode\meshcylinder.cpp" />
+    <ClCompile Include="SourceCode\meshfield.cpp" />
+    <ClCompile Include="SourceCode\meshsphere.cpp" />
     <ClCompile Include="SourceCode\Model.cpp" />
     <ClCompile Include="SourceCode\mouse.cpp" />
     <ClCompile Include="SourceCode\Obstacle.cpp" />
@@ -244,6 +249,11 @@
     <ClInclude Include="SourceCode\main.h" />
     <ClInclude Include="SourceCode\manager.h" />
     <ClInclude Include="SourceCode\map.h" />
+    <ClInclude Include="SourceCode\mesh.h" />
+    <ClInclude Include="SourceCode\meshcircle.h" />
+    <ClInclude Include="SourceCode\meshcylinder.h" />
+    <ClInclude Include="SourceCode\meshfield.h" />
+    <ClInclude Include="SourceCode\meshsphere.h" />
     <ClInclude Include="SourceCode\model.h" />
     <ClInclude Include="SourceCode\mouse.h" />
     <ClInclude Include="SourceCode\Obstacle.h" />

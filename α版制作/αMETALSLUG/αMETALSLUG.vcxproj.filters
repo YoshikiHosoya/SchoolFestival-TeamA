@@ -13,6 +13,7 @@
     <ClCompile Include="SourceCode\fade.cpp" />
     <ClCompile Include="SourceCode\flameshot.cpp" />
     <ClCompile Include="SourceCode\game.cpp" />
+    <ClCompile Include="SourceCode\grenade.cpp" />
     <ClCompile Include="SourceCode\gun.cpp" />
     <ClCompile Include="SourceCode\handgun.cpp" />
     <ClCompile Include="SourceCode\heavymachinegun.cpp" />
@@ -39,6 +40,7 @@
     <ClCompile Include="SourceCode\ParticleManager.cpp" />
     <ClCompile Include="SourceCode\pause.cpp" />
     <ClCompile Include="SourceCode\Player.cpp" />
+    <ClCompile Include="SourceCode\prisoner.cpp" />
     <ClCompile Include="SourceCode\renderer.cpp" />
     <ClCompile Include="SourceCode\rocketlauncher.cpp" />
     <ClCompile Include="SourceCode\Scene.cpp" />
@@ -52,7 +54,21 @@
     <ClCompile Include="SourceCode\TexAnimationBase.cpp" />
     <ClCompile Include="SourceCode\texture.cpp" />
     <ClCompile Include="SourceCode\XInputPad.cpp" />
-    <ClCompile Include="SourceCode\prisoner.cpp" />
+    <ClCompile Include="SourceCode\mesh.cpp">
+      <Filter>mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\meshcircle.cpp">
+      <Filter>mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\meshcylinder.cpp">
+      <Filter>mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\meshfield.cpp">
+      <Filter>mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\meshsphere.cpp">
+      <Filter>mesh</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SourceCode\3Dline.h" />
@@ -67,6 +83,7 @@
     <ClInclude Include="SourceCode\fade.h" />
     <ClInclude Include="SourceCode\flameshot.h" />
     <ClInclude Include="SourceCode\game.h" />
+    <ClInclude Include="SourceCode\grenade.h" />
     <ClInclude Include="SourceCode\gun.h" />
     <ClInclude Include="SourceCode\handgun.h" />
     <ClInclude Include="SourceCode\heavymachinegun.h" />
@@ -96,6 +113,7 @@
     <ClInclude Include="SourceCode\ParticleManager.h" />
     <ClInclude Include="SourceCode\pause.h" />
     <ClInclude Include="SourceCode\Player.h" />
+    <ClInclude Include="SourceCode\prisoner.h" />
     <ClInclude Include="SourceCode\renderer.h" />
     <ClInclude Include="SourceCode\rocketlauncher.h" />
     <ClInclude Include="SourceCode\Scene.h" />
@@ -109,178 +127,25 @@
     <ClInclude Include="SourceCode\TexAnimationBase.h" />
     <ClInclude Include="SourceCode\texture.h" />
     <ClInclude Include="SourceCode\XInputPad.h" />
-    <ClInclude Include="SourceCode\prisoner.h" />
-    <ClCompile Include="SourceCode\grenade.cpp">
-      <Filter>Bullet</Filter>
-    </ClCompile>
+    <ClInclude Include="SourceCode\mesh.h">
+      <Filter>mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\meshcircle.h">
+      <Filter>mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\meshcylinder.h">
+      <Filter>mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\meshfield.h">
+      <Filter>mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\meshsphere.h">
+      <Filter>mesh</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="SourceCode\camera.h">
-      <Filter>ソース ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\debugproc.h">
-      <Filter>ソース ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\fade.h">
-      <Filter>ソース ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\item.h">
-      <Filter>ソース ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\light.h">
-      <Filter>ソース ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\main.h">
-      <Filter>ソース ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\manager.h">
-      <Filter>ソース ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\map.h">
-      <Filter>ソース ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\pause.h">
-      <Filter>ソース ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\renderer.h">
-      <Filter>ソース ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\texture.h">
-      <Filter>ソース ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\TexAnimationBase.h">
-      <Filter>Effect\TexAnimation</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\TexAnimation2D.h">
-      <Filter>Effect\TexAnimation</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\TexAnimation3D.h">
-      <Filter>Effect\TexAnimation</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\SceneBase.h">
-      <Filter>Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\Scene.h">
-      <Filter>Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\scene2D.h">
-      <Filter>Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\Scene3D.h">
-      <Filter>Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\SceneX.h">
-      <Filter>Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\BaseMode.h">
-      <Filter>Mode</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\game.h">
-      <Filter>Mode</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\XInputPad.h">
-      <Filter>Input</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\mouse.h">
-      <Filter>Input</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\inputKeyboard.h">
-      <Filter>Input</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\3Dline.h">
-      <Filter>Collision</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\collision.h">
-      <Filter>Collision</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\debugcollision.h">
-      <Filter>Collision</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\Enemy.h">
-      <Filter>Model</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\Player.h">
-      <Filter>Model</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\Character.h">
-      <Filter>Model</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\model.h">
-      <Filter>Model</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\gun.h">
-      <Filter>Bullet</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\bullet.h">
-      <Filter>Bullet</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\heavymachinegun.h">
-      <Filter>Bullet</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\handgun.h">
-      <Filter>Bullet</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\ImGui\imconfig.h">
-      <Filter>ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\ImGui\imgui.h">
-      <Filter>ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\ImGui\imgui_impl_dx9.h">
-      <Filter>ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\ImGui\imgui_impl_win32.h">
-      <Filter>ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\ImGui\imgui_internal.h">
-      <Filter>ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\ImGui\imstb_rectpack.h">
-      <Filter>ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\ImGui\imstb_textedit.h">
-      <Filter>ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\ImGui\imstb_truetype.h">
-      <Filter>ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\hosso\Debug_ModelViewer.h">
-      <Filter>Hosso</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\hosso\Debug_ViewerCharacter.h">
-      <Filter>Hosso</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\hosso\HossoLibrary.h">
-      <Filter>Hosso</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\particle.h">
-      <Filter>Effect</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\ParticleManager.h">
-      <Filter>Effect</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\hosso\Debug_EffectViewer.h">
-      <Filter>Hosso</Filter>
-    </ClInclude>
-<<<<<<< HEAD
-    <ClInclude Include="SourceCode\Obstacle.h">
-      <Filter>Model</Filter>
-=======
-    <ClInclude Include="SourceCode\flameshot.h">
-      <Filter>Bullet</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\lasergun.h">
-      <Filter>Bullet</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\rocketlauncher.h">
-      <Filter>Bullet</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\shotgun.h">
-      <Filter>Bullet</Filter>
->>>>>>> 8c90cc9c5c4b21b19805bf5c88b64e9a469075ac
-    </ClInclude>
-    <ClInclude Include="SourceCode\grenade.h">
-      <Filter>Bullet</Filter>
-    </ClInclude>
+    <Filter Include="mesh">
+      <UniqueIdentifier>{93673758-e55d-42f7-84f1-0900ba051b62}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
-</Project></Project>
+</Project>

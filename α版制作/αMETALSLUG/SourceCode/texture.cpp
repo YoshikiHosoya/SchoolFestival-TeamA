@@ -24,6 +24,9 @@ std::vector<std::string> CTexture::m_aTexFileName =
 	{ "data/TEXTURE/Item/Rocketlauncher.jpg" },				//ロケットランチャーの弾
 	{ "data/TEXTURE/Item/Flameshot.jpg" },					//フレイムショットの弾
 	{ "data/TEXTURE/Item/Bear.png" },						//熊
+	{ "data/TEXTURE/Mesh/Grass.jpg" },						//草
+	{ "data/TEXTURE/Mesh/Block.jpg" },						//ブロック
+	{ "data/TEXTURE/Mesh/Water.jpg" },						//水
 };
 
 

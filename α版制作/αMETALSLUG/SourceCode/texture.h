@@ -35,6 +35,11 @@ public:
 		TEX_ITEM_ROCKETLAUNCHER,				//ロケットランチャー
 		TEX_ITEM_FLAMESHOT,						//フレイムショット
 		TEX_ITEM_BEAR,							//熊-スコアアップ
+
+		TEX_MESH_GRASS,							//草
+		TEX_MESH_BLOCK,							//ブロック
+		TEX_MESH_WATER,							//水
+
 		TEX_MAX									//MAX
 	};
 

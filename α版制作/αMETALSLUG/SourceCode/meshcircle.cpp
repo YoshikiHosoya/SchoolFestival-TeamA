@@ -1,6 +1,6 @@
 //------------------------------------------------------------------------------
 //
-//デバッグ　エフェクトビューワ用の処理  [Debug_EffectViewer.cpp]
+//メッシュフィールド処理  [meshfield.cpp]
 //Author:Yoshiki Hosoya
 //
 //------------------------------------------------------------------------------
@@ -8,124 +8,94 @@
 //------------------------------------------------------------------------------
 //インクルード
 //------------------------------------------------------------------------------
-#include "Debug_ModelViewer.h"
-#include "Debug_ViewerCharacter.h"
-#include "../Scene.h"
-#include "../manager.h"
-#include "../renderer.h"
-#include "../inputKeyboard.h"
-#include "../camera.h"
-#include "../fade.h"
-#include "../meshfield.h"
+#include "renderer.h"
+#include "manager.h"
+#include "meshcircle.h"
+
+//------------------------------------------------------------------------------
+//マクロ
+//------------------------------------------------------------------------------
+
 //------------------------------------------------------------------------------
 //静的メンバ変数の初期化
 //------------------------------------------------------------------------------
 
 //------------------------------------------------------------------------------
-//マクロ
-//------------------------------------------------------------------------------
-#define DEFAULT_PLAYER_POS (ZeroVector3)
-#define DEFAULT_SCORE_POS (D3DXVECTOR3(1150.0f, 50.0f, 0.0f))
-
-//------------------------------------------------------------------------------
 //コンストラクタ
 //------------------------------------------------------------------------------
-CDebug_ModelViewer::CDebug_ModelViewer()
+CMeshCircle::CMeshCircle()
 {
-
+	//初期化
+	m_fRadius = 0.0f;
+	m_fWidth = 0.0f;
 }
+
 //------------------------------------------------------------------------------
 //デストラクタ
 //------------------------------------------------------------------------------
-CDebug_ModelViewer::~CDebug_ModelViewer()
+CMeshCircle::~CMeshCircle()
 {
 
 }
-
 //------------------------------------------------------------------------------
 //初期化処理
 //------------------------------------------------------------------------------
-HRESULT CDebug_ModelViewer::Init()
+HRESULT CMeshCircle::Init()
 {
-	//ビューワ用のキャラクター作成
-	m_pViewerCharacter = CDebug_ViewerCharacter::Create();
-
-	CMeshField::Create(ZeroVector3, D3DXVECTOR3(50.0f, 50.0f, 50.0f), INTEGER2(20, 20));
+	CMesh::Init();
 
 	return S_OK;
-}
 
+}
 //------------------------------------------------------------------------------
 //終了処理
 //------------------------------------------------------------------------------
-void CDebug_ModelViewer::Uninit()
+void CMeshCircle::Uninit()
 {
-
-	//終了処理
-	CScene::RereaseAll();
+	CMesh::Uninit();
 }
-
 //------------------------------------------------------------------------------
 //更新処理
 //------------------------------------------------------------------------------
-void CDebug_ModelViewer::Update()
+void CMeshCircle::Update()
 {
-
+	CMesh::Update();
 }
-
 //------------------------------------------------------------------------------
 //描画処理
 //------------------------------------------------------------------------------
-void CDebug_ModelViewer::Draw()
+void CMeshCircle::Draw()
 {
+	//マトリックス計算
+	CHossoLibrary::CalcMatrix(GetMtx(), GetPos(), GetRot());
 
+	//描画
+	CMesh::Draw();
 }
 //------------------------------------------------------------------------------
 //デバッグ情報表記
 //------------------------------------------------------------------------------
-void CDebug_ModelViewer::ShowDebugInfo()
+void CMeshCircle::DebugInfo()
 {
 #ifdef _DEBUG
 
-	//キャラクター情報情報
-	ImGui::Begin("MotionViewer");
+	CMesh::DebugInfo();
 
-		//Tab
-		if (ImGui::BeginTabBar("Viewer", m_bModel))
-		{
-			//Tab
-			if (ImGui::BeginTabItem("MotionViewer"))
-			{
-				//モーションビューワ
-				m_pViewerCharacter->MotionViewer();
-				ImGui::EndTabItem();
-			}
-			//Tab
-			if (ImGui::BeginTabItem("OffsetViewer"))
-			{
-				//オフセットビューワ
-				m_pViewerCharacter->OffsetViewer();
-				ImGui::EndTabItem();
-			}
-			//TabEnd
-			ImGui::EndTabBar();
-		}
-
-	ImGui::End();
-#endif
-}
-//------------------------------------------------------------------------------
-//デバッグ情報表記
-//------------------------------------------------------------------------------
-CMap * CDebug_ModelViewer::GetMap()
-{
-	return nullptr;
+#endif //DEBUG
 }
 
 //------------------------------------------------------------------------------
-//デバッグ情報表記
+//頂点設定
 //------------------------------------------------------------------------------
-CPlayer * CDebug_ModelViewer::GetPlayer()
+D3DXVECTOR3 CMeshCircle::SetVtx(INTEGER2 nCnt, INTEGER2 BlockNum)
 {
-	return nullptr;
+	//角度を求める
+	float fRot = (D3DX_PI * 2) / BlockNum.x;
+
+	//座標設定
+	return D3DXVECTOR3(sinf(fRot * nCnt.x) * (m_fRadius + m_fWidth * nCnt.y),
+							//m_fWidth * nCnt.y,
+							0.1f,
+							cosf(fRot * nCnt.x) * (m_fRadius + m_fWidth * nCnt.y));
+
 }

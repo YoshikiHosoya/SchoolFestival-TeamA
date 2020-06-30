@@ -131,7 +131,7 @@ CGrenade * CGrenade::Create(D3DXVECTOR3 rot)
 	pGrenade->SetModelConut(MODEL_BULLET_GRENADE);
 
 	// 位置の設定
-	pGrenade->SetPosition(D3DXVECTOR3(m_mtx->_41, m_mtx->_42, m_mtx->_43));
+	//pGrenade->SetPosition(D3DXVECTOR3(m_mtx->_41, m_mtx->_42, m_mtx->_43));
 
 	// 弾のパラメーターの設定
 	pGrenade->SetBulletParam(CGun::GUNTYPE_GRENADE);

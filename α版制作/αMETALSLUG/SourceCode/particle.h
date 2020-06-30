@@ -96,6 +96,10 @@ private:
 
 	int m_nNumber;									//個数
 	float m_fSpeed;									//速度
+	PARTICLE_SHAPE m_shape;							//弾ので出方
+	bool m_bSpeedRandom;							//速度がランダムかどうか
+
+
 
 	float m_fRadiusDamping;							//半径の減衰値
 	float m_fAlphaDamping;							//アルファ値の減衰値
