@@ -195,6 +195,9 @@
     <ClCompile Include="SourceCode\shotgun.cpp">
       <Filter>Bullet</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\grenade.cpp">
+      <Filter>Bullet</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SourceCode\camera.h">
@@ -354,6 +357,9 @@
       <Filter>Bullet</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\shotgun.h">
+      <Filter>Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\grenade.h">
       <Filter>Bullet</Filter>
     </ClInclude>
   </ItemGroup>

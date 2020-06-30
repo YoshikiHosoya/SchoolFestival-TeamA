@@ -166,6 +166,7 @@
     <ClCompile Include="SourceCode\fade.cpp" />
     <ClCompile Include="SourceCode\flameshot.cpp" />
     <ClCompile Include="SourceCode\game.cpp" />
+    <ClCompile Include="SourceCode\grenade.cpp" />
     <ClCompile Include="SourceCode\gun.cpp" />
     <ClCompile Include="SourceCode\handgun.cpp" />
     <ClCompile Include="SourceCode\heavymachinegun.cpp" />
@@ -218,6 +219,7 @@
     <ClInclude Include="SourceCode\fade.h" />
     <ClInclude Include="SourceCode\flameshot.h" />
     <ClInclude Include="SourceCode\game.h" />
+    <ClInclude Include="SourceCode\grenade.h" />
     <ClInclude Include="SourceCode\gun.h" />
     <ClInclude Include="SourceCode\handgun.h" />
     <ClInclude Include="SourceCode\heavymachinegun.h" />
