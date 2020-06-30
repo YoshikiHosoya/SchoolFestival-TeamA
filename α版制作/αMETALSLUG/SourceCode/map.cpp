@@ -10,6 +10,7 @@
 #include "enemy.h"
 #include "model.h"
 #include <stdio.h>
+#include "Obstacle.h"
 
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
@@ -28,6 +29,13 @@ char *CMap::m_EnemyFileName[MAP_MAX] =
 	{ "data/Load/Enemy_Map01.txt" },
 	{ "data/Load/Enemy.txt" },
 };
+
+char *CMap::m_ObstacleFileName[MAP_MAX] =
+{
+	{ "data/Load/Obstacle_Box.txt" },
+	{ "data/Load/Obstacle_Box.txt" },
+};
+
 
 // =====================================================================================================================================================================
 //
@@ -207,6 +215,92 @@ void CMap::EnemyLoad(int nCnt)
 
 // =====================================================================================================================================================================
 //
+// 障害物の配置
+//
+// =====================================================================================================================================================================
+void CMap::ObstacleLoad(int nCnt)
+{
+	// ファイルポイント
+	FILE *pFile;
+	char cReadText[128];			// 文字として読み取る
+	char cHeadText[128];			// 比較用
+	char cDie[128];					// 不要な文字
+	D3DXVECTOR3 pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 位置
+	int nLife = 0;										// 体力
+	int nType = 0;										// 種類
+
+	// ファイルを開く
+	pFile = fopen(m_ObstacleFileName[nCnt], "r");
+
+	// 開いているとき
+	if (pFile != NULL)
+	{
+		// SCRIPTが来るまでループ
+		while (strcmp(cHeadText, "SCRIPT") != 0)
+		{
+			fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
+			sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
+		}
+
+		// SCRIPTが来たら
+		if (strcmp(cHeadText, "SCRIPT") == 0)
+		{
+			// END_SCRIPTが来るまでループ
+			while (strcmp(cHeadText, "END_SCRIPT") != 0)
+			{
+				fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
+				sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
+
+															// ENEMYSETが来たら
+				if (strcmp(cHeadText, "OBSTACLESET") == 0)
+				{
+					// END_ENEMYSETが来るまでループ
+					while (strcmp(cHeadText, "END_OBSTACLESET") != 0)
+					{
+						fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
+						sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
+
+																	// TYPEが来たら
+						if (strcmp(cHeadText, "TYPE") == 0)
+						{
+							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &nType);		// 比較用テキストにTYPEを代入
+						}
+						// POSが来たら
+						else if (strcmp(cHeadText, "POS") == 0)
+						{
+							sscanf(cReadText, "%s %s %f %f %f", &cDie, &cDie, &pos.x, &pos.y, &pos.z);		// 比較用テキストにPOSを代入
+						}
+						// LIFEが来たら
+						else if (strcmp(cHeadText, "LIFE") == 0)
+						{
+							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &nLife);		// 比較用テキストにTYPEを代入
+						}
+						else if (strcmp(cHeadText, "END_OBSTACLESET") == 0)
+						{
+							// オブジェクトの生成
+							m_pObstacle.emplace_back(CObstacle::Create());
+							// タイプの代入
+							m_pObstacle[m_pObstacle.size() - 1]->SetType(nType);
+							// 位置の設定
+							m_pObstacle[m_pObstacle.size() - 1]->SetPosition(pos);
+							// 体力の設定
+							m_pObstacle[m_pObstacle.size() - 1]->SetLife(nLife);
+						}
+					}
+				}
+			}
+		}
+		// ファイルを閉じる
+		fclose(pFile);
+	}
+	else
+	{
+		MessageBox(NULL, "障害物のパラメーター読み込み失敗", "警告", MB_ICONWARNING);
+	}
+}
+
+// =====================================================================================================================================================================
+//
 // マップのデバッグ配置
 //
 // =====================================================================================================================================================================
@@ -365,6 +459,8 @@ CMap *CMap::MapCreate(int nCnt)
 	pMap->ModelLoad(nCnt);
 	// 敵のロード
 	pMap->EnemyLoad(nCnt);
+	// 障害物のロード
+	pMap->ObstacleLoad(nCnt);
 
 	return pMap;
 }
@@ -396,6 +492,21 @@ int CMap::GetMaxEnemy()
 	}
 	return 0;
 }
+
+// =====================================================================================================================================================================
+//
+// 障害物の最大数取得
+//
+// =====================================================================================================================================================================
+int CMap::GetMaxObstacle()
+{
+	if (!m_pObstacle.empty())
+	{
+		return m_pObstacle.size();
+	}
+	return 0;
+}
+
 
 // =====================================================================================================================================================================
 //
@@ -526,6 +637,7 @@ void CMap::EnemySave()
 // =====================================================================================================================================================================
 void CMap::UpdateDieFlag()
 {
+
 	for (size_t nCnt = 0; nCnt < m_pEnemy.size(); nCnt++)
 	{
 		if (m_pEnemy[nCnt]->GetDieFlag())
@@ -533,6 +645,16 @@ void CMap::UpdateDieFlag()
 			m_pEnemy[nCnt]->Rerease();
 			m_pEnemy[nCnt] = nullptr;
 			m_pEnemy.erase(m_pEnemy.begin() + nCnt);
+		}
+	}
+
+	for (size_t nCnt = 0; nCnt < m_pObstacle.size(); nCnt++)
+	{
+		if (m_pObstacle[nCnt]->GetDieFlag())
+		{
+			m_pObstacle[nCnt]->Rerease();
+			m_pObstacle[nCnt] = nullptr;
+			m_pObstacle.erase(m_pObstacle.begin() + nCnt);
 		}
 	}
 }

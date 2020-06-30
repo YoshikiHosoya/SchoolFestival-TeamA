@@ -122,7 +122,7 @@ void CEnemy::DefaultMotion(void)
 void CEnemy::DeleteCollision(void)
 {
 	m_pCollision->ReleaseCollision(m_pCollision);
-	m_pCollision = NULL;
+	m_pCollision = nullptr;
 }
 //====================================================================
 //ˆÚ“®

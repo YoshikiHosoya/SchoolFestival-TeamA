@@ -43,6 +43,7 @@ public:
 		OBJTYPE_PLAYER,						// プレイヤー
 		OBJTYPE_ENEMY,						// エネミー
 		OBJTYPE_ITEM,						// アイテム
+		OBJTYPE_OBSTACLE,					// 障害物
 		OBJTYPE_OTHER,						// その他
 		OBJTYPE_MAX
 	} OBJTYPE;
@@ -50,9 +51,12 @@ public:
 	// 当たり判定の主な種類
 	typedef enum
 	{
+		// 範囲判定
 		COLLISIONTYPE_NORMAL = 0,			// 中心点を原点にする判定
 		COLLISIONTYPE_CHARACTER,			// 足元を原点にする判定
 		COLLISIONTYPE_OTHER,				// 中心点を原点とするオブジェクトと足元を原点にするオブジェクトで判定
+		// ブロック判定
+		COLLISIONTYPE_BLOCK,				// 中心点を原点とするブロックと足元が原点のオブジェクトで判定
 		COLLISIONTYPE_MAX
 	} COLLISIONTYPE;
 
@@ -79,7 +83,8 @@ public:
 	bool Collision(OBJTYPE objtype);					// 箱型の当たり判定
 	bool Collision2D(CCollision *pCollision);			// 板型の当たり判定
 	bool CharCollision2D(CCollision *pCollision);		// キャラクター用板型の当たり判定
-	bool OtherCollision2D(CCollision *pCollision);			// 板型の当たり判定
+	bool OtherCollision2D(CCollision *pCollision);		// 板型の当たり判定
+	bool BlockCollision2D(CCollision *pCollision);		// 板型ブロックの当たり判定
 	OBJTYPE GetObjtype() {return m_objtype;};			// 誰の当たり判定なのかを返す
 	void DeCollisionCreate(COLLISIONTYPE collisiontype);// デバッグ用当たり判定の生成
 

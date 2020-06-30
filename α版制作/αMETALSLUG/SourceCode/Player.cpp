@@ -15,8 +15,9 @@
 #include "manager.h"
 #include "enemy.h"
 #include "map.h"
-#include"XInputPad.h"
+#include "XInputPad.h"
 #include "item.h"
+#include "Obstacle.h"
 //====================================================================
 //マクロ定義
 //====================================================================
@@ -189,6 +190,25 @@ void CPlayer::Update(void)
 				else
 				{
 					CDebugProc::Print("\n時機が敵に当たってないよ！ \n");
+				}
+			}
+		}
+
+		//相手が障害物だったら
+		// 障害物のの総数分
+		for (int nCntObst = 0; nCntObst < CManager::GetBaseMode()->GetMap()->GetMaxObstacle(); nCntObst++)
+		{
+			CObstacle *pObstacle = CManager::GetBaseMode()->GetMap()->GetObstacle(nCntObst);
+			if (pObstacle != nullptr)
+			{
+				if (m_pCollision->BlockCollision2D(pObstacle->GetCollision()))
+				{
+					CCharacter::SetJump(true);
+					CDebugProc::Print("\n時機が障害物に当たったよ！\n");
+				}
+				else
+				{
+					CDebugProc::Print("\n時機が障害物に当たってないよ！ \n");
 				}
 			}
 		}

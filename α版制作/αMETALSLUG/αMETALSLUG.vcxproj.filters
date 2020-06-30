@@ -183,6 +183,9 @@
     <ClCompile Include="SourceCode\hosso\Debug_EffectViewer.cpp">
       <Filter>Hosso</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\Obstacle.cpp">
+      <Filter>Model</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SourceCode\camera.h">
@@ -331,6 +334,9 @@
     </ClInclude>
     <ClInclude Include="SourceCode\hosso\Debug_EffectViewer.h">
       <Filter>Hosso</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Obstacle.h">
+      <Filter>Model</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

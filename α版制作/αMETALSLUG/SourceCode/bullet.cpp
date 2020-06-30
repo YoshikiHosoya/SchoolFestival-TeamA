@@ -14,6 +14,7 @@
 #include "Player.h"
 #include "Enemy.h"
 #include "map.h"
+#include "Obstacle.h"
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
 // =====================================================================================================================================================================
@@ -101,11 +102,6 @@ void CBullet::Uninit(void)
 // =====================================================================================================================================================================
 void CBullet::Update(void)
 {
-	// プレイヤーの情報取得
-	//CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
-	// エネミーの情報取得
-	//CEnemy *pEnemy = CManager::GetBaseMode()->GetEnemy();
-
 	// 位置の取得
 	D3DXVECTOR3 pos		= CScene3D::GetPosition();
 	D3DXVECTOR3 size	= CScene3D::GetSize();
@@ -125,7 +121,6 @@ void CBullet::Update(void)
 			m_pCollision->ReleaseCollision(m_pCollision);
 			m_pCollision = nullptr;
 		}
-
 		Rerease();
 	}
 
@@ -146,7 +141,7 @@ void CBullet::Update(void)
 			for (int nCnt = 0; nCnt < CManager::GetBaseMode()->GetMap()->GetMaxEnemy(); nCnt++)
 			{
 				CEnemy *pEnemy = CManager::GetBaseMode()->GetMap()->GetEnemy(nCnt);
-				if (pEnemy != nullptr)
+				if (pEnemy != nullptr && m_pCollision != nullptr)
 				{
 					if (m_pCollision->OtherCollision2D(pEnemy->GetCollision()))
 					{
@@ -155,9 +150,8 @@ void CBullet::Update(void)
 						if (pEnemy->CCharacter::GetLife() <= 0)
 						{
 							// 敵の当たり判定の削除
-							//pEnemy->GetCollision()->Delete(pEnemy->GetCollision());
 							pEnemy->DeleteCollision();
-							pEnemy = NULL;
+							pEnemy = nullptr;
 						}
 
 						// 弾の判定の削除
@@ -169,6 +163,38 @@ void CBullet::Update(void)
 					else
 					{
 						CDebugProc::Print("\n弾が敵に当たってないよ！ \n");
+					}
+				}
+			}
+
+			// 当たり判定 相手が障害物だったら
+			// 障害物の総数分
+			for (int nCntObst = 0; nCntObst < CManager::GetBaseMode()->GetMap()->GetMaxObstacle(); nCntObst++)
+			{
+				CObstacle *pObstacle = CManager::GetBaseMode()->GetMap()->GetObstacle(nCntObst);
+				if (pObstacle != nullptr && m_pCollision != nullptr)
+				{
+					if (m_pCollision->Collision2D(pObstacle->GetCollision()))
+					{
+						// 障害物のライフ減衰
+						pObstacle->Hit(CObstacle::TYPE_BOX,10);
+
+						if (pObstacle->GetLife() <= 0)
+						{
+							pObstacle->DeleteCollision();
+							pObstacle = nullptr;
+						}
+						// 弾の判定の削除
+						m_pCollision->ReleaseCollision(m_pCollision);
+						// 弾の当たりのポインタをnullにする
+						m_pCollision = nullptr;
+
+						// 弾の削除
+						Rerease();
+					}
+					else
+					{
+						CDebugProc::Print("\n弾が障害物に当たってないよ！ \n");
 					}
 				}
 			}
