@@ -16,7 +16,6 @@ char *CCharacter::m_LoadOffsetFileName[CHARACTER_TYPE_MAX] =
 {
 	{ "data/Load/Player/PlayerOffset.txt"},
 	{"data/Load/Enemy/EnemyOffset.txt"},
-	{"data/Load/Enemy/EnemyOffset.txt"}
 	{"data/Load/PrisonerOffset.txt"}
 };
 //モーションの読み込みファイル
@@ -27,7 +26,7 @@ char *CCharacter::m_LoadMotionFileName[CHARACTER_MOTION_MAX] =
 	{ "data/Load/Player/Motion/PlayerAttack.txt" },
 	{ "data/Load/Enemy/Motion/EnemyNeutral.txt" },
 	{ "data/Load/Enemy/Motion/EnemyWalk.txt" },
-	{ "data/Load/Enemy/Motion/EnemyAttack.txt" }
+	{ "data/Load/Enemy/Motion/EnemyAttack.txt" },
 	{ "data/Load/PrisonerStay.txt" },
 };
 std::vector<CCharacter::MOTION*> CCharacter::m_CharacterMotion = {};

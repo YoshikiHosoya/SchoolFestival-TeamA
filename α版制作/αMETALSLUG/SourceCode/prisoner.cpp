@@ -115,9 +115,10 @@ CPrisoner *CPrisoner::Create()
 //====================================================================
 //捕虜のデフォルトモーション
 //====================================================================
-void CPrisoner::DefaultMotion(void)
+bool CPrisoner::DefaultMotion(void)
 {
 	SetMotion(CCharacter::PRISONER_MOTION_STAY);
+	return false;
 }
 
 //====================================================================

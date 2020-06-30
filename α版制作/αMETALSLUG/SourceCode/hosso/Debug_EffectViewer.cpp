@@ -72,7 +72,7 @@ void CDebug_EffectViewer::Uninit()
 {
 
 	//終了処理
-	//CScene::ReleaseAll();
+	CScene::RereaseAll();
 }
 
 //------------------------------------------------------------------------------
@@ -112,6 +112,7 @@ void CDebug_EffectViewer::ShowDebugInfo()
 	CDebugProc::Print("[Enter] パーティクル発生\n");
 	CDebugProc::Print("[Ctrl] + [Enter] Loop %d \n",m_bLoop);
 
+	//項目の大きさ設定
 	ImGui::PushItemWidth(120);
 
 	//パラメータ設定
@@ -126,6 +127,7 @@ void CDebug_EffectViewer::ShowDebugInfo()
 	//軌跡の色　float型にキャスト
 	float *rCol = m_pParticleParam->GetCol();
 
+	//項目の大きさ設定
 	ImGui::SetNextItemWidth(250);
 
 	//色の設定

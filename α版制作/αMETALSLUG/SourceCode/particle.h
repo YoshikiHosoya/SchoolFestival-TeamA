@@ -33,6 +33,15 @@ public:
 		PARTICLE_MAX,
 	};
 
+	//パーティクルの向き
+	enum PARTICLE_SHAPE
+	{
+		SHAPE_SPHERE = 0 ,
+		SHAPE_CONE,
+		SHAPE_CIRCLE_XY,
+		SHAPE_LINE,
+	};
+
 	//コンストラクタ
 	CParticleParam()
 	{

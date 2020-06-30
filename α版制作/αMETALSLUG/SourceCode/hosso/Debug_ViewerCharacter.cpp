@@ -391,7 +391,7 @@ void CDebug_ViewerCharacter::OffsetViewer()
 		aPartsName.erase(aPartsName.begin(), aPartsName.begin() + 11);
 
 		//次の項目の枠の大きさ設定
-		ImGui::SetNextItemWidth(250);
+		ImGui::SetNextItemWidth(200);
 
 		//モデルパーツのポインタ取得
 		pModel = GetCharacterModelList()[nCnt];
@@ -400,6 +400,25 @@ void CDebug_ViewerCharacter::OffsetViewer()
 		if (ImGui::DragFloat3(aPartsName.data(), pModel->GetPosition(), 0.05f, -100.0f, 100.0f))
 		{
 
+		}
+
+		ImGui::SameLine();
+
+
+		ImGui::Text("ParentIdx >>");
+
+		//次の項目の枠の大きさ設定
+		ImGui::SetNextItemWidth(20);
+
+		char aId[64];
+		sprintf(aId, "[%d]", vModelList[nCnt]->GetModelCount());
+
+		ImGui::SameLine();
+
+		//親番号
+		if (ImGui::InputInt(aId, &vModelList[nCnt]->GetParentIdx(), -1, vModelList.size()))
+		{
+			vModelList[nCnt]->SetParent(vModelList[vModelList[nCnt]->GetParentIdx()]);
 		}
 	}
 

@@ -48,7 +48,7 @@ public:
 
 	/* メンバ関数 */
 	void				DebugInfo(void);					// デバッグ
-	void				DefaultMotion(void);				// デフォルトモーション
+	bool				DefaultMotion(void);				// デフォルトモーション
 
 	PRISONER_STATE		GetPrisonerState()
 	{
