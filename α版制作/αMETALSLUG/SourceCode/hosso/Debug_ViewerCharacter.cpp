@@ -52,6 +52,8 @@ HRESULT CDebug_ViewerCharacter::Init()
 
 	CCharacter::LoadOffset(CCharacter::CHARACTER_TYPE_PLAYER);
 
+	SetRotDest(ZeroVector3);
+
 	//¬Œ÷
 	return S_OK;
 }
@@ -425,6 +427,19 @@ void CDebug_ViewerCharacter::OffsetViewer()
 	if(ImGui::Button("OffsetSave"))
 	{
 		SaveModelOffset();
+	}
+
+
+	if (ImGui::Button("AllReset"))
+	{
+
+		//ƒ‚ƒfƒ‹”•ªŒJ‚è‘Ö‚¦‚·
+		for (size_t nCnt = 0; nCnt < vModelList.size(); nCnt++)
+		{
+			//‚O‚É‚·‚é
+			GetCharacterModelList()[nCnt]->SetPosition(ZeroVector3);
+
+		}
 	}
 }
 

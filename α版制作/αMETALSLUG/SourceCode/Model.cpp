@@ -139,6 +139,9 @@ void CModel::LoadModel(void)
 			m_Model[MAP_MODEL][nCnt].m_pTexture[nCntmat] = NULL;
 			D3DXCreateTextureFromFile(pDevice, pMat[nCntmat].pTextureFilename, &m_Model[MAP_MODEL][nCnt].m_pTexture[nCntmat]);
 		}
+
+		std::cout << "MapModelLoad >>" << m_MapFileName[nCnt] << NEWLINE;
+
 	}
 	//エネミーのモデル読み込み
 	for (int nCnt = 0; nCnt < MODEL_ENEMY_MAX; nCnt++)
@@ -163,6 +166,8 @@ void CModel::LoadModel(void)
 			m_Model[ENEMY_MODEL][nCnt].m_pTexture[nCntmat] = NULL;
 			D3DXCreateTextureFromFile(pDevice, pMat[nCntmat].pTextureFilename, &m_Model[ENEMY_MODEL][nCnt].m_pTexture[nCntmat]);
 		}
+
+		std::cout << "EnemyLoad >>" << m_EnemyFileName[nCnt] << NEWLINE;
 	}
 
 	//捕虜のモデル読み込み
@@ -188,6 +193,9 @@ void CModel::LoadModel(void)
 			m_Model[PRISONER_MODEL][nCnt].m_pTexture[nCntmat] = NULL;
 			D3DXCreateTextureFromFile(pDevice, pMat[nCntmat].pTextureFilename, &m_Model[PRISONER_MODEL][nCnt].m_pTexture[nCntmat]);
 		}
+
+		std::cout << "PrisonerLoad >>" << m_PrisonerFileName[nCnt] << NEWLINE;
+
 	}
 	//銃のモデル読み込み
 	for (int nCnt = 0; nCnt < MODEL_GUN_MAX; nCnt++)
@@ -212,6 +220,9 @@ void CModel::LoadModel(void)
 			m_Model[GUN_MODEL][nCnt].m_pTexture[nCntmat] = NULL;
 			D3DXCreateTextureFromFile(pDevice, pMat[nCntmat].pTextureFilename, &m_Model[GUN_MODEL][nCnt].m_pTexture[nCntmat]);
 		}
+
+		std::cout << "GunModelLoad >>" << m_GunFileName[nCnt] << NEWLINE;
+
 	}
 
 	//障害物箱のモデル読み込み
@@ -237,6 +248,9 @@ void CModel::LoadModel(void)
 			m_Model[OBSTACLE_MODEL][nCnt].m_pTexture[nCntmat] = NULL;
 			D3DXCreateTextureFromFile(pDevice, pMat[nCntmat].pTextureFilename, &m_Model[OBSTACLE_MODEL][nCnt].m_pTexture[nCntmat]);
 		}
+
+		std::cout << "OBSTACLE Load >>" << m_ObstacleFileName[nCnt] << NEWLINE;
+
 	}
 }
 //====================================================================

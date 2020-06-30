@@ -27,7 +27,7 @@ char *CCharacter::m_LoadMotionFileName[CHARACTER_MOTION_MAX] =
 	{ "data/Load/Enemy/Motion/EnemyNeutral.txt" },
 	{ "data/Load/Enemy/Motion/EnemyWalk.txt" },
 	{ "data/Load/Enemy/Motion/EnemyAttack.txt" },
-	{ "data/Load/PrisonerStay.txt" },
+	{ "data/Load/Prisoner/Motion/PrisonerStay.txt" },
 };
 std::vector<CCharacter::MOTION*> CCharacter::m_CharacterMotion = {};
 //====================================================================
@@ -536,12 +536,20 @@ void CCharacter::LoadMotion(void)
 				}
 
 			}
+
+			//debug
+			std::cout << "Motion Load - " << nCnt << m_LoadMotionFileName[nCnt] << NEWLINE;
+
 			//ファイルを閉じる
 			fclose(pFile);
 		}
 		else
 		{
-			MessageBox(NULL, "モデルデータの読み込み失敗", "警告", MB_ICONWARNING);
+			//debug
+			std::cout << "LOAD FAILED!!! MotionFile - " << nCnt << m_LoadMotionFileName[nCnt] << NEWLINE;
+
+			//失敗
+			MessageBox(NULL, "モーション読み込み失敗", m_LoadMotionFileName[nCnt], MB_OK | MB_ICONHAND);
 		}
 	}
 }
