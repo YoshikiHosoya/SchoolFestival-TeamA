@@ -15,6 +15,7 @@
 #include "Enemy.h"
 #include "map.h"
 #include "Obstacle.h"
+#include "prisoner.h"
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
 // =====================================================================================================================================================================
@@ -192,6 +193,39 @@ void CBullet::Update(void)
 					else
 					{
 						CDebugProc::Print("\n弾が障害物に当たってないよ！ \n");
+					}
+				}
+			}
+
+			// 当たり判定 相手が捕虜だったら
+			// 捕虜の総数分
+			for (int nCntPriso = 0; nCntPriso < CManager::GetBaseMode()->GetMap()->GetMaxPrisoner(); nCntPriso++)
+			{
+				CPrisoner *pPrisoner = CManager::GetBaseMode()->GetMap()->GetPrisoner(nCntPriso);
+				if (pPrisoner != nullptr && m_pCollision != nullptr)
+				{
+					if (pPrisoner->GetPrisonerState() == CPrisoner::PRISONER_STATE_STAY)
+					{
+						if (m_pCollision->OtherCollision2D(pPrisoner->GetCollision()))
+						{
+							// 捕虜の状態変化
+							pPrisoner->SetPrisonerState(CPrisoner::PRISONER_STATE_DROPITEM);
+
+							// 捕虜の当たり判定削除
+							pPrisoner->DeleteCollision();
+							pPrisoner = nullptr;
+							// 弾の判定の削除
+							m_pCollision->ReleaseCollision(m_pCollision);
+							// 弾の当たりのポインタをnullにする
+							m_pCollision = nullptr;
+
+							// 弾の削除
+							Rerease();
+						}
+						else
+						{
+							CDebugProc::Print("\n弾が捕虜に当たってないよ！ \n");
+						}
 					}
 				}
 			}
