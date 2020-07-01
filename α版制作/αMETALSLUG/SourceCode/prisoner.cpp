@@ -11,10 +11,12 @@
 #include "manager.h"
 #include "map.h"
 #include "item.h"
+#include "debugproc.h"
 //====================================================================
 //マクロ定義
 //====================================================================
 #define PRISONER_COLLISION_SIZE			(D3DXVECTOR3(50.0f,65.0f,0.0f))			 //捕虜のサイズ
+#define PRISONER_DIETIME				(120)									 //捕虜が消滅するまでの時間
 
 // =====================================================================================================================================================================
 //
@@ -24,7 +26,11 @@
 CPrisoner::CPrisoner(OBJ_TYPE type) :CCharacter(type)
 {
 	// ポインタの初期化
-	m_pCollision = nullptr;
+	m_pCollision		= nullptr;
+	// 捕虜の初期状態
+	m_PrisonerState		= PRISONER_STATE_STAY;
+	// 捕虜が消滅するまでのカウントを初期化
+	m_nDieCount			= 0;
 }
 // =====================================================================================================================================================================
 //
@@ -80,8 +86,45 @@ void CPrisoner::Update(void)
 		m_pCollision->SetPos(&GetPosition());
 	}
 
+	switch (m_PrisonerState)
+	{
+	// 捕虜の状態アイテムを落とす状態になったら
+	case PRISONER_STATE_DROPITEM:
+		{
+			// アイテムを落とすモーション
+			//
+
+			// アイテムの生成
+			CItem::RandCreate(GetPosition());
+			// 捕虜の状態の変更
+			this->SetPrisonerState(PRISONER_STATE_RUN);
+		}
+		break;
+
+	case PRISONER_STATE_RUN:
+	{
+		SetMove(D3DXVECTOR3(-1.0f,0.0f,0.0f));
+		Move(-1.0f, -1.57f);
+
+		// 消滅までのカウントを加算
+		m_nDieCount++;
+		// カウントが一致値を超えたら
+		if (m_nDieCount >= PRISONER_DIETIME)
+		{
+			// 削除
+			Rerease();
+		}
+
+	}
+	default:
+		break;
+	}
+
 	// キャラクターの更新
 	CCharacter::Update();
+
+	// 捕虜の状態
+	CDebugProc::Print("\n 捕虜の状態 %d\n\n", m_PrisonerState);
 }
 //====================================================================
 //描画
@@ -129,4 +172,12 @@ void CPrisoner::Move(float move, float fdest)
 	GetMove().x += sinf(move * -D3DX_PI) * 1.0f;
 	GetMove().z += cosf(move * -D3DX_PI) * 1.0f;
 	GetRotDest().y = fdest *  D3DX_PI;
+}
+//====================================================================
+//当たり判定の削除
+//====================================================================
+void CPrisoner::DeleteCollision(void)
+{
+	m_pCollision->ReleaseCollision(m_pCollision);
+	m_pCollision = nullptr;
 }
