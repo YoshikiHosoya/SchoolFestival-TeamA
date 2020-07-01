@@ -21,9 +21,10 @@ char *CCharacter::m_LoadOffsetFileName[CHARACTER_TYPE_MAX] =
 //モーションの読み込みファイル
 char *CCharacter::m_LoadMotionFileName[CHARACTER_MOTION_MAX] =
 {
-	{ "data/Load/Player/Motion/PlayerNeutral.txt" },
-	{ "data/Load/Player/Motion/PlayerWalk.txt" },
-	{ "data/Load/Player/Motion/PlayerAttack.txt" },
+	{ "data/Load/Player/Motion/Neutral.txt" },
+	{ "data/Load/Player/Motion/Walk.txt" },
+	{ "data/Load/Player/Motion/Attack.txt" },
+	{ "data/Load/Player/Motion/Grenade.txt" },
 	{ "data/Load/Enemy/Motion/EnemyNeutral.txt" },
 	{ "data/Load/Enemy/Motion/EnemyWalk.txt" },
 	{ "data/Load/Enemy/Motion/EnemyAttack.txt" },
