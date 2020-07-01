@@ -1,59 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="SourceCode\3Dline.cpp" />
-    <ClCompile Include="SourceCode\BaseMode.cpp" />
-    <ClCompile Include="SourceCode\bullet.cpp" />
     <ClCompile Include="SourceCode\camera.cpp" />
-    <ClCompile Include="SourceCode\Character.cpp" />
-    <ClCompile Include="SourceCode\collision.cpp" />
-    <ClCompile Include="SourceCode\debugcollision.cpp" />
-    <ClCompile Include="SourceCode\debugproc.cpp" />
-    <ClCompile Include="SourceCode\Enemy.cpp" />
     <ClCompile Include="SourceCode\fade.cpp" />
     <ClCompile Include="SourceCode\flameshot.cpp" />
-    <ClCompile Include="SourceCode\game.cpp" />
-    <ClCompile Include="SourceCode\grenade.cpp" />
-    <ClCompile Include="SourceCode\gun.cpp" />
-    <ClCompile Include="SourceCode\handgun.cpp" />
-    <ClCompile Include="SourceCode\heavymachinegun.cpp" />
-    <ClCompile Include="SourceCode\hosso\Debug_EffectViewer.cpp" />
-    <ClCompile Include="SourceCode\hosso\Debug_ModelViewer.cpp" />
-    <ClCompile Include="SourceCode\hosso\Debug_ViewerCharacter.cpp" />
     <ClCompile Include="SourceCode\hosso\HossoLibrary.cpp" />
-    <ClCompile Include="SourceCode\ImGui\imgui.cpp" />
-    <ClCompile Include="SourceCode\ImGui\imgui_draw.cpp" />
-    <ClCompile Include="SourceCode\ImGui\imgui_impl_dx9.cpp" />
-    <ClCompile Include="SourceCode\ImGui\imgui_impl_win32.cpp" />
-    <ClCompile Include="SourceCode\ImGui\imgui_widgets.cpp" />
-    <ClCompile Include="SourceCode\inputKeyboard.cpp" />
     <ClCompile Include="SourceCode\item.cpp" />
     <ClCompile Include="SourceCode\lasergun.cpp" />
     <ClCompile Include="SourceCode\light.cpp" />
     <ClCompile Include="SourceCode\main.cpp" />
     <ClCompile Include="SourceCode\manager.cpp" />
-    <ClCompile Include="SourceCode\map.cpp" />
-    <ClCompile Include="SourceCode\Model.cpp" />
-    <ClCompile Include="SourceCode\mouse.cpp" />
     <ClCompile Include="SourceCode\Obstacle.cpp" />
     <ClCompile Include="SourceCode\particle.cpp" />
     <ClCompile Include="SourceCode\ParticleManager.cpp" />
-    <ClCompile Include="SourceCode\pause.cpp" />
-    <ClCompile Include="SourceCode\Player.cpp" />
     <ClCompile Include="SourceCode\prisoner.cpp" />
     <ClCompile Include="SourceCode\renderer.cpp" />
-    <ClCompile Include="SourceCode\rocketlauncher.cpp" />
-    <ClCompile Include="SourceCode\Scene.cpp" />
-    <ClCompile Include="SourceCode\Scene2D.cpp" />
-    <ClCompile Include="SourceCode\Scene3D.cpp" />
-    <ClCompile Include="SourceCode\SceneBase.cpp" />
-    <ClCompile Include="SourceCode\SceneX.cpp" />
-    <ClCompile Include="SourceCode\shotgun.cpp" />
-    <ClCompile Include="SourceCode\TexAnimation2D.cpp" />
-    <ClCompile Include="SourceCode\TexAnimation3D.cpp" />
-    <ClCompile Include="SourceCode\TexAnimationBase.cpp" />
-    <ClCompile Include="SourceCode\texture.cpp" />
-    <ClCompile Include="SourceCode\XInputPad.cpp" />
     <ClCompile Include="SourceCode\mesh.cpp">
       <Filter>mesh</Filter>
     </ClCompile>
@@ -69,64 +30,139 @@
     <ClCompile Include="SourceCode\meshsphere.cpp">
       <Filter>mesh</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\Scene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Scene2D.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Scene3D.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\SceneBase.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\SceneX.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\hosso\Debug_EffectViewer.cpp">
+      <Filter>Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\hosso\Debug_ModelViewer.cpp">
+      <Filter>Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\hosso\Debug_ViewerCharacter.cpp">
+      <Filter>Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\debugcollision.cpp">
+      <Filter>Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\debugproc.cpp">
+      <Filter>Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\ImGui\imgui.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\ImGui\imgui_draw.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\ImGui\imgui_impl_dx9.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\ImGui\imgui_impl_win32.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\ImGui\imgui_widgets.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Player.cpp">
+      <Filter>Model</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Enemy.cpp">
+      <Filter>Model</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Character.cpp">
+      <Filter>Model</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Model.cpp">
+      <Filter>Model</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\map.cpp">
+      <Filter>Model</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\bullet.cpp">
+      <Filter>Wepon</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\gun.cpp">
+      <Filter>Wepon</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\heavymachinegun.cpp">
+      <Filter>Wepon</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\shotgun.cpp">
+      <Filter>Wepon</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\rocketlauncher.cpp">
+      <Filter>Wepon</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\handgun.cpp">
+      <Filter>Wepon</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\grenade.cpp">
+      <Filter>Wepon</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\inputKeyboard.cpp">
+      <Filter>input</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\XInputPad.cpp">
+      <Filter>input</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\TexAnimation2D.cpp">
+      <Filter>Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\TexAnimation3D.cpp">
+      <Filter>Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\TexAnimationBase.cpp">
+      <Filter>Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\texture.cpp">
+      <Filter>Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\3Dline.cpp">
+      <Filter>Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\collision.cpp">
+      <Filter>Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\mouse.cpp">
+      <Filter>input</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\BaseMode.cpp">
+      <Filter>Mode</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\game.cpp">
+      <Filter>Mode</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\pause.cpp">
+      <Filter>Mode</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="SourceCode\3Dline.h" />
-    <ClInclude Include="SourceCode\BaseMode.h" />
-    <ClInclude Include="SourceCode\bullet.h" />
     <ClInclude Include="SourceCode\camera.h" />
-    <ClInclude Include="SourceCode\Character.h" />
-    <ClInclude Include="SourceCode\collision.h" />
-    <ClInclude Include="SourceCode\debugcollision.h" />
-    <ClInclude Include="SourceCode\debugproc.h" />
-    <ClInclude Include="SourceCode\Enemy.h" />
     <ClInclude Include="SourceCode\fade.h" />
     <ClInclude Include="SourceCode\flameshot.h" />
-    <ClInclude Include="SourceCode\game.h" />
-    <ClInclude Include="SourceCode\grenade.h" />
-    <ClInclude Include="SourceCode\gun.h" />
-    <ClInclude Include="SourceCode\handgun.h" />
-    <ClInclude Include="SourceCode\heavymachinegun.h" />
-    <ClInclude Include="SourceCode\hosso\Debug_EffectViewer.h" />
-    <ClInclude Include="SourceCode\hosso\Debug_ModelViewer.h" />
-    <ClInclude Include="SourceCode\hosso\Debug_ViewerCharacter.h" />
     <ClInclude Include="SourceCode\hosso\HossoLibrary.h" />
-    <ClInclude Include="SourceCode\ImGui\imconfig.h" />
-    <ClInclude Include="SourceCode\ImGui\imgui.h" />
-    <ClInclude Include="SourceCode\ImGui\imgui_impl_dx9.h" />
-    <ClInclude Include="SourceCode\ImGui\imgui_impl_win32.h" />
-    <ClInclude Include="SourceCode\ImGui\imgui_internal.h" />
-    <ClInclude Include="SourceCode\ImGui\imstb_rectpack.h" />
-    <ClInclude Include="SourceCode\ImGui\imstb_textedit.h" />
-    <ClInclude Include="SourceCode\ImGui\imstb_truetype.h" />
-    <ClInclude Include="SourceCode\inputKeyboard.h" />
     <ClInclude Include="SourceCode\item.h" />
     <ClInclude Include="SourceCode\lasergun.h" />
     <ClInclude Include="SourceCode\light.h" />
     <ClInclude Include="SourceCode\main.h" />
     <ClInclude Include="SourceCode\manager.h" />
-    <ClInclude Include="SourceCode\map.h" />
-    <ClInclude Include="SourceCode\model.h" />
-    <ClInclude Include="SourceCode\mouse.h" />
     <ClInclude Include="SourceCode\Obstacle.h" />
     <ClInclude Include="SourceCode\particle.h" />
     <ClInclude Include="SourceCode\ParticleManager.h" />
-    <ClInclude Include="SourceCode\pause.h" />
-    <ClInclude Include="SourceCode\Player.h" />
     <ClInclude Include="SourceCode\prisoner.h" />
     <ClInclude Include="SourceCode\renderer.h" />
-    <ClInclude Include="SourceCode\rocketlauncher.h" />
-    <ClInclude Include="SourceCode\Scene.h" />
-    <ClInclude Include="SourceCode\scene2D.h" />
-    <ClInclude Include="SourceCode\Scene3D.h" />
-    <ClInclude Include="SourceCode\SceneBase.h" />
-    <ClInclude Include="SourceCode\SceneX.h" />
-    <ClInclude Include="SourceCode\shotgun.h" />
-    <ClInclude Include="SourceCode\TexAnimation2D.h" />
-    <ClInclude Include="SourceCode\TexAnimation3D.h" />
-    <ClInclude Include="SourceCode\TexAnimationBase.h" />
-    <ClInclude Include="SourceCode\texture.h" />
-    <ClInclude Include="SourceCode\XInputPad.h" />
     <ClInclude Include="SourceCode\mesh.h">
       <Filter>mesh</Filter>
     </ClInclude>
@@ -142,10 +178,163 @@
     <ClInclude Include="SourceCode\meshsphere.h">
       <Filter>mesh</Filter>
     </ClInclude>
+    <ClInclude Include="SourceCode\Scene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\scene2D.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Scene3D.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\SceneBase.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\SceneX.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\hosso\Debug_EffectViewer.h">
+      <Filter>Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\hosso\Debug_ModelViewer.h">
+      <Filter>Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\hosso\Debug_ViewerCharacter.h">
+      <Filter>Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\debugcollision.h">
+      <Filter>Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\debugproc.h">
+      <Filter>Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\ImGui\imconfig.h">
+      <Filter>ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\ImGui\imgui.h">
+      <Filter>ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\ImGui\imgui_impl_dx9.h">
+      <Filter>ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\ImGui\imgui_impl_win32.h">
+      <Filter>ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\ImGui\imgui_internal.h">
+      <Filter>ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\ImGui\imstb_rectpack.h">
+      <Filter>ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\ImGui\imstb_textedit.h">
+      <Filter>ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\ImGui\imstb_truetype.h">
+      <Filter>ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Player.h">
+      <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Enemy.h">
+      <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Character.h">
+      <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\model.h">
+      <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\map.h">
+      <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\bullet.h">
+      <Filter>Wepon</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\gun.h">
+      <Filter>Wepon</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\handgun.h">
+      <Filter>Wepon</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\heavymachinegun.h">
+      <Filter>Wepon</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\shotgun.h">
+      <Filter>Wepon</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\rocketlauncher.h">
+      <Filter>Wepon</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\grenade.h">
+      <Filter>Wepon</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\inputKeyboard.h">
+      <Filter>input</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\XInputPad.h">
+      <Filter>input</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\TexAnimation2D.h">
+      <Filter>Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\TexAnimation3D.h">
+      <Filter>Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\TexAnimationBase.h">
+      <Filter>Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\texture.h">
+      <Filter>Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\3Dline.h">
+      <Filter>Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\collision.h">
+      <Filter>Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\mouse.h">
+      <Filter>input</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\BaseMode.h">
+      <Filter>Mode</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\game.h">
+      <Filter>Mode</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\pause.h">
+      <Filter>Mode</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="mesh">
       <UniqueIdentifier>{93673758-e55d-42f7-84f1-0900ba051b62}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene">
+      <UniqueIdentifier>{25066367-5eba-4629-84c7-d38d0581774e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Debug">
+      <UniqueIdentifier>{742c22bf-1c76-42c7-973f-fc47fea4026a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ImGui">
+      <UniqueIdentifier>{728ac86c-d267-4111-81aa-057415a9d7a3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Model">
+      <UniqueIdentifier>{192c4c99-7603-467d-96e4-1fa6289f0536}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Wepon">
+      <UniqueIdentifier>{84ce9944-a042-440d-a79c-6017d3b8ae44}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="input">
+      <UniqueIdentifier>{8460e9a6-9f8a-4191-8f4b-b86b6074fabb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Texture">
+      <UniqueIdentifier>{d09f86f3-8377-4634-bead-31c61469fdbc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Collision">
+      <UniqueIdentifier>{2b9b3843-b195-46cd-af77-b986c0acb3ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Mode">
+      <UniqueIdentifier>{aa4e9822-bd6c-4306-9a3f-fb1937458dbc}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
