@@ -48,7 +48,7 @@ HRESULT CPlayer::Init(void)
 	m_ShotRot = D3DXVECTOR3(0.0f, 0.5f, 0.0f);
 
 	 // 銃の生成
-	m_pGun = CGun::Create(CCharacter::GetMtxWorld());
+	m_pGun = CGun::Create(GetCharacterModelPartsList(CModel::MODEL_PLAYER_RHAND)->GetMatrix());
 	// 銃の弾の種類
 	m_pGun->GetBulletType() = CGun::TYPE_PLAYER;
 
@@ -79,6 +79,7 @@ void CPlayer::Update(void)
 	static bool trigger2 = false;
 	CKeyboard *key;
 	key = CManager::GetInputKeyboard();
+
 	//キーボード処理
 	// 銃を撃つ
 	if (key->GetKeyboardTrigger(DIK_P))
@@ -90,7 +91,7 @@ void CPlayer::Update(void)
 	if (key->GetKeyboardTrigger(DIK_O))
 	{
 		// グレネード生成
-		CGrenade::Create(m_ShotRot);
+		CGrenade::Create(m_ShotRot, GetCharacterModelPartsList(CModel::MODEL_PLAYER_LHAND)->GetMatrix());
 	}
 
 	// Aの処理

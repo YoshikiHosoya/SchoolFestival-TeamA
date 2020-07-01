@@ -31,7 +31,7 @@ char *CBullet::m_BulletFileName[CGun::GUNTYPE_MAX] =
 	{ "data/Load/Gun/LaserGun.txt" },				// レーザーガン
 	{ "data/Load/Gun/RocketLauncher.txt" },			// ロケットランチャー
 	{ "data/Load/Gun/FlameShot.txt" },				// フレイムショット
-	{ "data/Load/Grenade.txt" },				// グレネード
+	{ "data/Load/Gun/Grenade.txt" },				// グレネード
 };
 
 // =====================================================================================================================================================================
@@ -230,16 +230,8 @@ void CBullet::Update(void)
 // =====================================================================================================================================================================
 void CBullet::Draw(void)
 {
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
-
-	//// ライティングモード無効
-	//pDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
-
 	// 描画
 	CModel::Draw();
-
-	//// ライティングモード有効
-	//pDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
 }
 
 // =====================================================================================================================================================================

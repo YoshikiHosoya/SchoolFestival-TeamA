@@ -10,6 +10,7 @@
 #include "game.h"
 #include "debugproc.h"
 #include "texture.h"
+#include "Player.h"
 
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
@@ -69,6 +70,9 @@ void CGrenade::Uninit(void)
 // =====================================================================================================================================================================
 void CGrenade::Update(void)
 {
+
+	GetMove() = D3DXVECTOR3();
+
 	// 更新
 	CBullet::Update();
 }
@@ -107,16 +111,22 @@ void CGrenade::DebugInfo()
 // グレネードの生成
 //
 // =====================================================================================================================================================================
-CGrenade * CGrenade::Create(D3DXVECTOR3 rot)
+CGrenade * CGrenade::Create(D3DXVECTOR3 rot, D3DXMATRIX *mtx)
 {
 	// 変数
 	CGrenade *pGrenade;
+
+	//追従処理
+	CBaseMode *pBaseMode = CManager::GetBaseMode();
+
+	//プレイヤーのポインタ取得
+	CPlayer *pPlayer = pBaseMode->GetPlayer();
 
 	// メモリの確保
 	pGrenade = new CGrenade(OBJTYPE_BULLET);
 
 	// グレネードのパラメーター取得
-	BULLET_PARAM *pBulletParam = pGrenade->GetBulletParam(CGun::GUNTYPE_HANDGUN);
+	BULLET_PARAM *pBulletParam = pGrenade->GetBulletParam(CGun::GUNTYPE_GRENADE);
 
 	// 初期化
 	pGrenade->Init();
@@ -130,8 +140,15 @@ CGrenade * CGrenade::Create(D3DXVECTOR3 rot)
 	// モデルカウントの設定
 	pGrenade->SetModelConut(MODEL_BULLET_GRENADE);
 
+	// 投てき位置
+	D3DXVECTOR3 pos = D3DXVECTOR3(0.0f, 0.0, 0.0f);
+	D3DXVec3TransformCoord(&pos, &D3DXVECTOR3(0.0f, 0.0f, 0.0f), mtx);
+
 	// 位置の設定
-	//pGrenade->SetPosition(D3DXVECTOR3(m_mtx->_41, m_mtx->_42, m_mtx->_43));
+	pGrenade->SetPosition(pos);
+
+	pGrenade->m_fAngle = atan2f(20.0f, 20.0f);					// 角度
+	pGrenade->m_fLength = sqrtf(20.0f * 20.0f + 20.0f * 20.0f);	// 長さ
 
 	// 弾のパラメーターの設定
 	pGrenade->SetBulletParam(CGun::GUNTYPE_GRENADE);

@@ -141,6 +141,7 @@ public:
 	bool GetGravity(void);
 	CHARACTER_TYPE GetCharacterType();								//キャラクターの種類取得
 	std::vector<CModel*> &GetCharacterModelList();					//キャラクターのモデル取得
+	CModel* GetCharacterModelPartsList(int nCnt);					//キャラクターのモデルパーツ取得
 	CHARACTER_DIRECTION GetCharacterDirection(void);				//向きの取得
 	//モーション関連
 	bool &GetMotion();

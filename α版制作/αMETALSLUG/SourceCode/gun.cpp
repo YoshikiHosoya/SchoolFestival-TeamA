@@ -15,6 +15,7 @@
 #include "lasergun.h"
 #include "rocketlauncher.h"
 #include "flameshot.h"
+#include "Character.h"
 
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
@@ -25,9 +26,7 @@
 // =====================================================================================================================================================================
 #define HEAVYMACHINEGUN_SHOT_FRAME				(3)			// ヘビーマシンガンの弾の間隔
 
-#define HANDGUN_POS_X				(-10)		// ハンドガンの位置X
-#define HANDGUN_POS_Y				(10)		// ハンドガンの位置Y
-#define HANDGUN_POS_Z				(0)			// ハンドガンの位置Z
+#define SHOT_BULLET_POS_Z						(20.0f)		// 弾の発射位置Z
 
 // =====================================================================================================================================================================
 //
@@ -60,7 +59,7 @@ HRESULT CGun::Init()
 	m_nCntBullet	= 0;											// 弾のカウント
 	m_nAmmo			= CBullet::GetBulletParam(m_GunType)->nAmmo;	// 残弾数
 	m_nInterval		= 0;											// 次に撃つためのインターバル
-
+	m_ShotPos		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);				// 発射位置
 	// 初期化
 	CModel::Init();
 
@@ -146,14 +145,9 @@ CGun * CGun::Create(D3DXMATRIX *mtx)
 
 	// 初期化
 	pGun->Init();
-
+	
 	// マトリックス代入
 	pGun->m_mtx = mtx;
-
-	D3DXVECTOR3	pos = D3DXVECTOR3(HANDGUN_POS_X, HANDGUN_POS_Y, HANDGUN_POS_Z);
-
-	// 位置の設定
-	pGun->SetPosition(pos);
 
 	// モデルタイプの設定
 	pGun->SetType(GUN_MODEL);
@@ -241,8 +235,10 @@ void CGun::Shot(D3DXVECTOR3 rot)
 		}
 		if (pBullet)
 		{
+			D3DXVec3TransformCoord(&m_ShotPos, &D3DXVECTOR3(0.0f, 0.0f, -SHOT_BULLET_POS_Z), GetMatrix());
+
 			// 位置の設定
-			pBullet->SetPosition(D3DXVECTOR3(m_mtx->_41, m_mtx->_42, m_mtx->_43));
+			pBullet->SetPosition(m_ShotPos);
 
 			// 弾の種類の設定
 			pBullet->SetBulletType((CBullet::BULLET_TYPE)m_BulletType);
@@ -292,8 +288,10 @@ void CGun::MultipleShot()
 
 		if (pBullet)
 		{
+			D3DXVec3TransformCoord(&m_ShotPos, &D3DXVECTOR3(0.0f, 0.0f, -SHOT_BULLET_POS_Z), GetMatrix());
+
 			// 位置の設定
-			pBullet->SetPosition(D3DXVECTOR3(m_mtx->_41, m_mtx->_42 + randPos_y, m_mtx->_43));
+			pBullet->SetPosition(D3DXVECTOR3(m_ShotPos.x, m_ShotPos.y + randPos_y, m_ShotPos.z));
 
 			// 弾の種類の設定
 			pBullet->SetBulletType((CBullet::BULLET_TYPE)m_BulletType);
