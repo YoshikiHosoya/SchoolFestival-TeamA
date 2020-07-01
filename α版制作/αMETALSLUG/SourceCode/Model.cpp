@@ -61,6 +61,7 @@ char *CModel::m_EnemyFileName[MODEL_ENEMY_MAX] =
 };
 char *CModel::m_GunFileName[MODEL_GUN_MAX] =
 {
+	{ "data/MODEL/Gun/Knife.x" },					// ナイフ
 	{ "data/MODEL/Gun/HandGun.x" },					// ハンドガン
 	{ "data/MODEL/Gun/HandGun.x" },					// ヘビーマシンガン
 	{ "data/MODEL/Gun/HandGun.x" },					// ショットガン
