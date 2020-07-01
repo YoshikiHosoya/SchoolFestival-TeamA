@@ -45,8 +45,6 @@ HRESULT CPlayer::Init(void)
 	SetCharacterType(CCharacter::CHARACTER_TYPE_PLAYER);
 	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
 	m_Attack = false;
-	m_ShotRot = D3DXVECTOR3(0.0f, 0.5f, 0.0f);
-
 	 // 銃の生成
 	m_pGun = CGun::Create(CCharacter::GetMtxWorld());
 	// 銃の弾の種類
@@ -84,59 +82,37 @@ void CPlayer::Update(void)
 	if (key->GetKeyboardTrigger(DIK_P))
 	{
 		// 銃発射処理
-		m_pGun->Shot(m_ShotRot);
+		m_pGun->Shot(GetShotDirection());
 	}
 	// グレネードを投げる
 	if (key->GetKeyboardTrigger(DIK_O))
 	{
 		// グレネード生成
-		CGrenade::Create(m_ShotRot);
+		CGrenade::Create(GetShotDirection());
 	}
 
 	// Aの処理
 	if (key->GetKeyboardPress(DIK_A))
 	{
 		CPlayer::Move(0.5f, 0.5f);
-		m_ShotRot.x = 0.0f;
-		m_ShotRot.y = 0.5f * D3DX_PI;
 		SetCharacterDirection(CHARACTER_LEFT);
 	}
 	// Dの処理
 	else if (key->GetKeyboardPress(DIK_D))
 	{
 		CPlayer::Move(-0.5f, -0.5f);
-		m_ShotRot.x = 0.0f;
-		m_ShotRot.y = -0.5f * D3DX_PI;
 		SetCharacterDirection(CHARACTER_RIGHT);
 	}
 
 	else if (key->GetKeyboardPress(DIK_W))
 	{
 		SetCharacterDirection(CHARACTER_UP);
-		m_ShotRot.y = 0.0f;
-		m_ShotRot.x = 0.5f * D3DX_PI;
 	}
+
 	//ジャンプしたときの下向発射
 	if (key->GetKeyboardPress(DIK_S) && GetJump() == false)
 	{
 		SetCharacterDirection(CHARACTER_DOWN);
-		m_ShotRot.y = 0.0f;
-		m_ShotRot.x = -0.5f * D3DX_PI;
-	}
-	if (GetCharacterDirection() == CHARACTER_DOWN && GetJump() == true)
-	{
-		if (GetRot().y > 1.5f)
-		{
-			m_ShotRot.x = 0.0f;
-			m_ShotRot.y = 0.5f * D3DX_PI;
-			SetCharacterDirection(CHARACTER_LEFT);
-		}
-		else if (GetRot().y < -1.5f)
-		{
-			m_ShotRot.x = 0.0f;
-			m_ShotRot.y = -0.5f * D3DX_PI;
-			SetCharacterDirection(CHARACTER_RIGHT);
-		}
 	}
 
 	//デバッグモードの切り替え
@@ -256,6 +232,7 @@ void CPlayer::Update(void)
 //====================================================================
 void CPlayer::Draw(void)
 {
+
 	CCharacter::Draw();
 }
 //====================================================================

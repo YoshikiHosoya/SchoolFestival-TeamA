@@ -42,7 +42,6 @@ private:
 		float m_Angle;
 		WORD Oldstate;									//コントローラーの1frame前のステート
 		CGun	*m_pGun;								// ガンクラスのポインタ
-		D3DXVECTOR3 m_ShotRot;							//撃つ向き
 		CCollision					*m_pCollision;		// 当たり判定情報
 };
 #endif

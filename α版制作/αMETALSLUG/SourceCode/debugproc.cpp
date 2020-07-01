@@ -45,13 +45,11 @@ void CDebugProc::Init(void)
 //==========================================================
 void CDebugProc::Uninit(void)
 {
-
 	if (m_pFont != NULL)
 	{
 		m_pFont->Release();
 		m_pFont = NULL;
 	}
-
 }
 //==========================================================
 // ï\é¶ä÷êî

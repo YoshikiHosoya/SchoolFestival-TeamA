@@ -112,4 +112,5 @@ void CBaseMode::BaseUnload(void)
 {
 	CModel::UnLoad();
 	CTexture::TexUnload();
+	CCharacter::CharacterUnLoad();
 }

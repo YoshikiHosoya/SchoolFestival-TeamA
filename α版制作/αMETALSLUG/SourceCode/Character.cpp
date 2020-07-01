@@ -51,6 +51,7 @@ HRESULT CCharacter::Init(void)
 	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_AddRot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_Life = 50;
 	m_state = CHARACTER_STATE_NONE;
 	m_rotDest.y = -0.5f*  D3DX_PI;
@@ -58,6 +59,8 @@ HRESULT CCharacter::Init(void)
 	m_bGravity = true;
 	m_bDieFlag = false;
 	m_bMotion = true;
+	m_ShotRot = D3DXVECTOR3(0.0f, 0.5f, 0.0f);
+
 	//マトリックス初期化
 	D3DXMatrixIdentity(&m_mtxWorld);
 	return S_OK;
@@ -85,16 +88,12 @@ void CCharacter::Update(void)
 	{
 	m_move.y -= 0.5f;
 	}
-
 	m_pos += m_move;
-
-
 	if (m_pos.y < 0)
 	{
 		m_move.y = 0;
 		m_pos.y = 0;
 	}
-
 	//目標点と現在の差分（回転）
 	float diffRot = m_rotDest.y - m_rot.y;
 	//3.14の超過分の初期化（回転）
@@ -137,6 +136,48 @@ void CCharacter::Update(void)
 		}
 		break;
 	}
+	//撃つ向き
+	if (m_CharacterDirection == CHARACTER_LEFT)
+	{
+		m_ShotRot.x = 0.0f;
+		m_ShotRot.y = 0.5f * D3DX_PI;
+		m_AddRot.x = 0.0f;
+	}
+	else if (m_CharacterDirection == CHARACTER_RIGHT)
+	{
+		m_ShotRot.x = 0.0f;
+		m_ShotRot.y = -0.5f * D3DX_PI;
+		m_AddRot.x = 0.0f;
+	}
+	else if (m_CharacterDirection == CHARACTER_UP)
+	{
+		m_ShotRot.x = 0.5f * D3DX_PI;
+		m_ShotRot.y = 0.0f;
+		m_AddRot.x = 0.75f;
+	}
+	else if (m_CharacterDirection == CHARACTER_DOWN)
+	{
+		m_ShotRot.x = -0.5f * D3DX_PI;
+		m_ShotRot.y = 0.0f;
+		m_AddRot.x = -0.75f;
+	}
+
+
+	//下向きながら着地したとき
+	if (m_CharacterDirection == CHARACTER_DOWN && GetJump() == true)
+	{
+		if (GetRot().y > 1.5f)
+		{
+			m_ShotRot.x = 0.0f;
+			SetCharacterDirection(CHARACTER_LEFT);
+		}
+		else if (GetRot().y < -1.5f)
+		{
+			m_ShotRot.x = 0.0f;
+			m_ShotRot.y = -0.5f * D3DX_PI;
+			SetCharacterDirection(CHARACTER_RIGHT);
+		}
+	}
 	//死んだとき
 	if (m_Life <= 0)
 	{
@@ -152,6 +193,7 @@ void CCharacter::Update(void)
 //====================================================================
 void CCharacter::Draw(void)
 {
+
 	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
 	D3DXMATRIX mtxRot, mtxTrans;
 	// ワールドマトリックスの初期化
@@ -174,11 +216,47 @@ void CCharacter::Draw(void)
 		&m_mtxWorld,
 		&mtxTrans);
 
+	//目標点と現在の差分（回転）
+	D3DXVECTOR3 diffRot = m_AddRot - m_vModelList[2]->GetRot();
+	//3.14の超過分の初期化（回転）
+	if (m_vModelList[2]->GetRot().x > D3DX_PI)
+	{
+		m_vModelList[2]->GetRot().x -= D3DX_PI * 2;
+	}
+	else if (m_vModelList[2]->GetRot().x < -D3DX_PI)
+	{
+		m_vModelList[2]->GetRot().x += D3DX_PI * 2;
+	}
+	if (diffRot.x > D3DX_PI)
+	{
+		diffRot.x -= D3DX_PI * 2;
+	}
+	else if (diffRot.x < -D3DX_PI)
+	{
+		diffRot.x += D3DX_PI * 2;
+	}
+	//求めた差分だけ追従する計算
+	m_vModelList[2]->GetRot().x += diffRot.x * 0.1f;
+
 	//モデルの描画
 	for (unsigned int nCnt = 0; nCnt < m_vModelList.size(); nCnt++)
 	{
+		if (nCnt == 2)
+		{
+			m_vModelList[nCnt]->SetRot(m_vModelList[2]->GetRot());
+			CDebugProc::Print("ShotRot : %.1f, %.1f %.1f\n", m_ShotRot.x, m_ShotRot.y, m_ShotRot.z);
+
+			CDebugProc::Print("HeadRot : %.1f, %.1f %.1f\n", m_vModelList[2]->GetRot().x, m_vModelList[2]->GetRot().y, m_vModelList[2]->GetRot().z);
+		}
+
 		m_vModelList[nCnt]->Draw(m_mtxWorld);
+
+		if (nCnt == 2)
+		{ 
+			m_vModelList[nCnt]->SetRot(m_vModelList[2]->GetRot());
+		}
 	}
+
 }
 //====================================================================
 //モデルのムーヴ
@@ -343,6 +421,13 @@ bool CCharacter::GetGravity(void)
 D3DXMATRIX *CCharacter::GetMtxWorld(void)
 {
 	return &m_mtxWorld;
+}
+//====================================================================
+//撃つ向きの取得
+//====================================================================
+D3DXVECTOR3 CCharacter::GetShotDirection(void)
+{
+	return m_ShotRot;
 }
 //====================================================================
 //モーション情報の取得
@@ -774,6 +859,38 @@ void CCharacter::ForcedUpdate()
 	}
 }
 //====================================================================
+//開放
+//====================================================================
+void CCharacter::CharacterUnLoad(void)
+{
+	if (!m_CharacterMotion.empty())
+	{
+		for (size_t nCnt = 0; nCnt < m_CharacterMotion.size(); nCnt++)
+		{
+			if (!m_CharacterMotion[nCnt]->key_info.empty())
+			{
+				for (size_t nCntinfo = 0; nCntinfo < m_CharacterMotion[nCnt]->key_info.size(); nCntinfo++)
+				{
+					if (!m_CharacterMotion[nCnt]->key_info[nCntinfo]->key.empty())
+					{
+						for (size_t nCntkey = 0; nCntkey < m_CharacterMotion[nCnt]->key_info[nCntinfo]->key.size(); nCntkey++)
+						{
+							delete m_CharacterMotion[nCnt]->key_info[nCntinfo]->key[nCntkey];
+							m_CharacterMotion[nCnt]->key_info[nCntinfo]->key[nCntkey] = nullptr;
+						}
+					}
+					delete m_CharacterMotion[nCnt]->key_info[nCntinfo];
+					m_CharacterMotion[nCnt]->key_info[nCntinfo] = nullptr;
+
+				}
+			}
+			delete m_CharacterMotion[nCnt];
+			m_CharacterMotion[nCnt] = nullptr;
+		}
+	}
+	m_CharacterMotion.clear();
+}
+//====================================================================
 //モーションタイプの取得
 //====================================================================
 CCharacter::CHARACTER_MOTION_STATE &CCharacter::GetMotionType(void)
@@ -863,8 +980,17 @@ void CCharacter::SetGravity(bool gravity)
 {
 	m_bGravity = gravity;
 }
-
+//====================================================================
+//キャラクターの向き
+//====================================================================
 void CCharacter::SetCharacterDirection(CHARACTER_DIRECTION direction)
 {
 	m_CharacterDirection = direction;
+}
+//====================================================================
+//撃つ向きの設定
+//====================================================================
+void CCharacter::SetShotDirection(D3DXVECTOR3 direction)
+{
+	m_ShotRot = direction;
 }
