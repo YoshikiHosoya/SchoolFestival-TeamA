@@ -92,12 +92,14 @@ void CPlayer::Update(void)
 		else
 		{// 近接攻撃
 			// 捕虜の状態変化
-
 			m_pPrisoner->SetPrisonerState(CPrisoner::PRISONER_STATE_DROPITEM);
 
 			// 捕虜の当たり判定削除
-			m_pPrisoner->DeleteCollision();
-			m_pPrisoner = nullptr;
+			if (m_pPrisoner->GetCollision() != nullptr)
+			{
+				m_pPrisoner->DeleteCollision();
+				m_pPrisoner = nullptr;
+			}
 		}
 	}
 	// グレネードを投げる

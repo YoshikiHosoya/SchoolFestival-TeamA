@@ -210,10 +210,12 @@ void CBullet::Update(void)
 						{
 							// •ß—¸‚Ìó‘Ô•Ï‰»
 							pPrisoner->SetPrisonerState(CPrisoner::PRISONER_STATE_DROPITEM);
-
-							// •ß—¸‚Ì“–‚½‚è”»’èíœ
-							pPrisoner->DeleteCollision();
-							pPrisoner = nullptr;
+							if (pPrisoner->GetCollision() != nullptr)
+							{
+								// •ß—¸‚Ì“–‚½‚è”»’èíœ
+								pPrisoner->DeleteCollision();
+								pPrisoner = nullptr;
+							}
 							// ’e‚Ì”»’è‚Ìíœ
 							m_pCollision->ReleaseCollision(m_pCollision);
 							// ’e‚Ì“–‚½‚è‚Ìƒ|ƒCƒ“ƒ^‚ðnull‚É‚·‚é
