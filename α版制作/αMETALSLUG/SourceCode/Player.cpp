@@ -19,7 +19,7 @@
 #include "item.h"
 #include "Obstacle.h"
 #include "grenade.h"
-
+#include "prisoner.h"
 //====================================================================
 //マクロ定義
 //====================================================================
@@ -29,6 +29,8 @@ CPlayer::CPlayer(OBJ_TYPE type) :CCharacter(type)
 {
 	SetObjType(OBJTYPE_PLAYER);
 	m_pCollision = nullptr;
+	m_bCloseRangeAttack = false;
+	m_pPrisoner = nullptr;
 }
 
 CPlayer::~CPlayer()
@@ -81,6 +83,20 @@ void CPlayer::Update(void)
 	// 銃を撃つ
 	if (key->GetKeyboardTrigger(DIK_P))
 	{
+		if (m_bCloseRangeAttack != true)
+		{// 銃発射処理
+			m_pGun->Shot(m_ShotRot);
+		}
+		else
+		{// 近接攻撃
+			// 捕虜の状態変化
+
+			m_pPrisoner->SetPrisonerState(CPrisoner::PRISONER_STATE_DROPITEM);
+
+			// 捕虜の当たり判定削除
+			m_pPrisoner->DeleteCollision();
+			m_pPrisoner = nullptr;
+		}
 		// 銃発射処理
 		m_pGun->Shot(GetShotDirection());
 	}
@@ -193,6 +209,30 @@ void CPlayer::Update(void)
 				else
 				{
 					CDebugProc::Print("\n時機が障害物に当たってないよ！ \n");
+				}
+			}
+		}
+
+		// 相手が捕虜だったら
+		// 捕虜の総数分
+		for (int nCntPriso = 0; nCntPriso < CManager::GetBaseMode()->GetMap()->GetMaxPrisoner(); nCntPriso++)
+		{
+			CPrisoner *pPrisoner = CManager::GetBaseMode()->GetMap()->GetPrisoner(nCntPriso);
+			if (pPrisoner != nullptr)
+			{
+				if (m_pCollision->CharCollision2D(pPrisoner->GetCollision()))
+				{
+					// 対象のポインタを保存
+					m_pPrisoner = pPrisoner;
+					// 攻撃方法が近接攻撃になる
+					m_bCloseRangeAttack = true;
+					CDebugProc::Print("\n時機が捕虜に当たったよ！\n");
+				}
+				else
+				{
+					// 近接攻撃が無効になる
+					m_bCloseRangeAttack = false;
+					CDebugProc::Print("\n時機が捕虜に当たってないよ！ \n");
 				}
 			}
 		}
