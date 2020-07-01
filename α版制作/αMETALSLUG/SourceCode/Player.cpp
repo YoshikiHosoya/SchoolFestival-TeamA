@@ -85,7 +85,7 @@ void CPlayer::Update(void)
 	{
 		if (m_bCloseRangeAttack != true)
 		{// e”­Ëˆ—
-			m_pGun->Shot(m_ShotRot);
+			m_pGun->Shot(GetShotDirection());
 		}
 		else
 		{// ‹ßÚUŒ‚

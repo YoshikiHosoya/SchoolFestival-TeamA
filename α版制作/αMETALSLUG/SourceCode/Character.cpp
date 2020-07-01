@@ -158,7 +158,7 @@ void CCharacter::Update(void)
 	else if (m_CharacterDirection == CHARACTER_DOWN)
 	{
 		m_ShotRot.x = -0.5f * D3DX_PI;
-		m_ShotRot.y = 0.0f;
+		m_ShotRot.y = 0.5f * D3DX_PI;
 		m_AddRot.x = -0.75f;
 	}
 
