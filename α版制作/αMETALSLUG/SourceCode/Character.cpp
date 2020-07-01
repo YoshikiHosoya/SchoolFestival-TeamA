@@ -144,7 +144,7 @@ void CCharacter::Update(void)
 	}
 	CDebugProc::Print("move.y:%2f\n",m_move.y);
 
-	//Moation();
+	Moation();
 	RayCollision();
 }
 //====================================================================
