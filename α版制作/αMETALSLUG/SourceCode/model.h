@@ -71,6 +71,7 @@ public:
 	/*--- 銃のモデル ---*/
 	typedef enum
 	{
+		MODEL_KNIFE,					//ナイフ
 		MODEL_GUN_HANDGUN,				// ハンドガン
 		MODEL_GUN_HEAVYMACHINEGUN,		// ヘビーマシンガン
 		MODEL_GUN_SHOTGUN,				// ショットガン

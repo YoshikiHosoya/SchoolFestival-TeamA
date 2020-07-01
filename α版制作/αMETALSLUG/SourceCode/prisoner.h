@@ -18,6 +18,7 @@
 // =====================================================================================================================================================================
 class CModel;
 class CCollision;
+class CItem;
 // =====================================================================================================================================================================
 // 捕虜クラス
 // =====================================================================================================================================================================
@@ -27,11 +28,11 @@ public:
 	// 捕虜の状態
 	typedef enum
 	{
-		PRISONER_STATE_NORMAL = 0,							//
-		PRISONER_STATE_DROPITEM,							//
-		PRISONER_STATE_RUN,									//
-		PRISONER_STATE_SKIP,								//
-		PRISONER_STATE_MAX									//最大数
+		PRISONER_STATE_STAY = 0,							// 縛られている初期状態
+		PRISONER_STATE_DROPITEM,							// アイテムを落とす
+		PRISONER_STATE_RUN,									// 走って消える
+		PRISONER_STATE_SKIP,								// スキップする
+		PRISONER_STATE_MAX									// 最大数
 	}PRISONER_STATE;
 
 	CPrisoner(OBJ_TYPE type);								// コンストラクタ
@@ -49,15 +50,28 @@ public:
 	/* メンバ関数 */
 	void				DebugInfo(void);					// デバッグ
 	bool				DefaultMotion(void);				// デフォルトモーション
+	void				DeleteCollision(void);				// 当たり判定の削除
 
 	PRISONER_STATE		GetPrisonerState()
 	{
 		return m_PrisonerState;
 	};														// 捕虜の状態の取得
+
+	void					SetPrisonerState(PRISONER_STATE state)
+	{
+		m_PrisonerState = state;
+	};														// 捕虜の状態の設定
+
+	CCollision			*GetCollision()
+	{
+		return m_pCollision;
+	};														// 当たり判定
+
 private:
 	/* メンバ変数 */
 	PRISONER_STATE		m_PrisonerState;					// デバッグのステータス
 	void				Move(float move, float fdest);		// 捕虜の移動
 	CCollision			*m_pCollision;						// 当たり判定情報
+	int					m_nDieCount;						// 捕虜が消滅するまでのカウント
 };
 #endif

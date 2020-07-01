@@ -32,8 +32,8 @@ char *CMap::m_EnemyFileName[MAP_MAX] =
 };
 char *CMap::m_PrisonerFileName[MAP_MAX] =
 {
-	{ "data/Load/Prisoner_Map00.txt" },
-	{ "data/Load/Prisoner_Map01.txt" },
+	{ "data/Load/Prisoner/Prisoner_Map00.txt" },
+	{ "data/Load/Prisoner/Prisoner_Map01.txt" },
 };
 
 char *CMap::m_ObstacleFileName[MAP_MAX] =
