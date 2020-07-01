@@ -90,12 +90,14 @@ void CPlayer::Update(void)
 		else
 		{// ‹ßÚUŒ‚
 			// •ß—¸‚Ìó‘Ô•Ï‰»
-
 			m_pPrisoner->SetPrisonerState(CPrisoner::PRISONER_STATE_DROPITEM);
 
 			// •ß—¸‚Ì“–‚½‚è”»’èíœ
-			m_pPrisoner->DeleteCollision();
-			m_pPrisoner = nullptr;
+			if (m_pPrisoner->GetCollision() != nullptr)
+			{
+				m_pPrisoner->DeleteCollision();
+				m_pPrisoner = nullptr;
+			}
 		}
 		// e”­ŽËˆ—
 		m_pGun->Shot(GetShotDirection());

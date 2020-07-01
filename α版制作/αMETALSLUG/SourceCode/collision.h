@@ -45,6 +45,7 @@ public:
 		OBJTYPE_PRISONER,					// ïﬂó∏
 		OBJTYPE_ITEM,						// ÉAÉCÉeÉÄ
 		OBJTYPE_OBSTACLE,					// è·äQï®
+		OBJTYPE_VEHICLE,					// èÊÇËï®
 		OBJTYPE_OTHER,						// ÇªÇÃëº
 		OBJTYPE_MAX
 	} OBJTYPE;
