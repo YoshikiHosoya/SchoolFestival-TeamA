@@ -11,8 +11,6 @@
     <ClCompile Include="SourceCode\main.cpp" />
     <ClCompile Include="SourceCode\manager.cpp" />
     <ClCompile Include="SourceCode\Obstacle.cpp" />
-    <ClCompile Include="SourceCode\particle.cpp" />
-    <ClCompile Include="SourceCode\ParticleManager.cpp" />
     <ClCompile Include="SourceCode\prisoner.cpp" />
     <ClCompile Include="SourceCode\renderer.cpp" />
     <ClCompile Include="SourceCode\mesh.cpp">
@@ -117,15 +115,6 @@
     <ClCompile Include="SourceCode\XInputPad.cpp">
       <Filter>input</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\TexAnimation2D.cpp">
-      <Filter>Texture</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\TexAnimation3D.cpp">
-      <Filter>Texture</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\TexAnimationBase.cpp">
-      <Filter>Texture</Filter>
-    </ClCompile>
     <ClCompile Include="SourceCode\texture.cpp">
       <Filter>Texture</Filter>
     </ClCompile>
@@ -147,6 +136,27 @@
     <ClCompile Include="SourceCode\pause.cpp">
       <Filter>Mode</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\particle.cpp">
+      <Filter>Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\ParticleManager.cpp">
+      <Filter>Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\TexAnimationBase.cpp">
+      <Filter>Effect\TexAnimation</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\TexAnimation2D.cpp">
+      <Filter>Effect\TexAnimation</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\TexAnimation3D.cpp">
+      <Filter>Effect\TexAnimation</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\orbit.cpp">
+      <Filter>Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Knife.cpp">
+      <Filter>Wepon</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SourceCode\camera.h" />
@@ -159,8 +169,6 @@
     <ClInclude Include="SourceCode\main.h" />
     <ClInclude Include="SourceCode\manager.h" />
     <ClInclude Include="SourceCode\Obstacle.h" />
-    <ClInclude Include="SourceCode\particle.h" />
-    <ClInclude Include="SourceCode\ParticleManager.h" />
     <ClInclude Include="SourceCode\prisoner.h" />
     <ClInclude Include="SourceCode\renderer.h" />
     <ClInclude Include="SourceCode\mesh.h">
@@ -274,15 +282,6 @@
     <ClInclude Include="SourceCode\XInputPad.h">
       <Filter>input</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\TexAnimation2D.h">
-      <Filter>Texture</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\TexAnimation3D.h">
-      <Filter>Texture</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\TexAnimationBase.h">
-      <Filter>Texture</Filter>
-    </ClInclude>
     <ClInclude Include="SourceCode\texture.h">
       <Filter>Texture</Filter>
     </ClInclude>
@@ -303,6 +302,27 @@
     </ClInclude>
     <ClInclude Include="SourceCode\pause.h">
       <Filter>Mode</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\ParticleManager.h">
+      <Filter>Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\particle.h">
+      <Filter>Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\TexAnimationBase.h">
+      <Filter>Effect\TexAnimation</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\TexAnimation2D.h">
+      <Filter>Effect\TexAnimation</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\TexAnimation3D.h">
+      <Filter>Effect\TexAnimation</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\orbit.h">
+      <Filter>Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Knife.h">
+      <Filter>Wepon</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -335,6 +355,12 @@
     </Filter>
     <Filter Include="Mode">
       <UniqueIdentifier>{aa4e9822-bd6c-4306-9a3f-fb1937458dbc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Effect">
+      <UniqueIdentifier>{d15c5941-a851-441c-9226-d985098b446b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Effect\TexAnimation">
+      <UniqueIdentifier>{aaed9983-fd8b-4902-b8f9-48778c393474}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

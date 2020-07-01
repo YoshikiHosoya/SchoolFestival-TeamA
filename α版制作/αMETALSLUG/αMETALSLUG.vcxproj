@@ -181,6 +181,7 @@
     <ClCompile Include="SourceCode\ImGui\imgui_widgets.cpp" />
     <ClCompile Include="SourceCode\inputKeyboard.cpp" />
     <ClCompile Include="SourceCode\item.cpp" />
+    <ClCompile Include="SourceCode\Knife.cpp" />
     <ClCompile Include="SourceCode\lasergun.cpp" />
     <ClCompile Include="SourceCode\light.cpp" />
     <ClCompile Include="SourceCode\main.cpp" />
@@ -194,6 +195,7 @@
     <ClCompile Include="SourceCode\Model.cpp" />
     <ClCompile Include="SourceCode\mouse.cpp" />
     <ClCompile Include="SourceCode\Obstacle.cpp" />
+    <ClCompile Include="SourceCode\orbit.cpp" />
     <ClCompile Include="SourceCode\particle.cpp" />
     <ClCompile Include="SourceCode\ParticleManager.cpp" />
     <ClCompile Include="SourceCode\pause.cpp" />
@@ -244,6 +246,7 @@
     <ClInclude Include="SourceCode\ImGui\imstb_truetype.h" />
     <ClInclude Include="SourceCode\inputKeyboard.h" />
     <ClInclude Include="SourceCode\item.h" />
+    <ClInclude Include="SourceCode\Knife.h" />
     <ClInclude Include="SourceCode\lasergun.h" />
     <ClInclude Include="SourceCode\light.h" />
     <ClInclude Include="SourceCode\main.h" />
@@ -257,6 +260,7 @@
     <ClInclude Include="SourceCode\model.h" />
     <ClInclude Include="SourceCode\mouse.h" />
     <ClInclude Include="SourceCode\Obstacle.h" />
+    <ClInclude Include="SourceCode\orbit.h" />
     <ClInclude Include="SourceCode\particle.h" />
     <ClInclude Include="SourceCode\ParticleManager.h" />
     <ClInclude Include="SourceCode\pause.h" />

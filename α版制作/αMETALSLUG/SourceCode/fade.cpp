@@ -58,7 +58,7 @@ void CFADE::UpdateFade(void)
 	m_pVtxBuffFade->Lock(0, 0, (void**)&pVtx, 0);
 	if (m_fadeState == FADE_IN)
 	{
-			m_colorFade.a -= 0.01f;
+			m_colorFade.a -= 0.05f;
 			if (m_colorFade.a <= 0.0f)
 			{
 				m_colorFade.a = 0.0f;

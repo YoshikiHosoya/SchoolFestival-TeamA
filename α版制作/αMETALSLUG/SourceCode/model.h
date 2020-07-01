@@ -145,6 +145,7 @@ public:
 	D3DXVECTOR3 GetvtxMin(int nCnt);
 	static CModel *Create(int type, int modelCount);
 	static CModel *CreateSceneManagement(int type, int modelCount);
+	D3DXVECTOR3 *GetPosptr() { return &m_pos; };
 
 	static char* GetModelFileName(int nType, int nModelCount);
 	bool GetDieFlag() { return m_bDieFlag; };							// Ž€–Sƒtƒ‰ƒO‚ÌŽæ“¾
