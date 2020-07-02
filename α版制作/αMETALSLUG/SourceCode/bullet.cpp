@@ -216,6 +216,7 @@ void CBullet::Update(void)
 								pPrisoner->DeleteCollision();
 								pPrisoner = nullptr;
 							}
+
 							// ’e‚Ì”»’è‚Ìíœ
 							m_pCollision->ReleaseCollision(m_pCollision);
 							// ’e‚Ì“–‚½‚è‚Ìƒ|ƒCƒ“ƒ^‚ðnull‚É‚·‚é
