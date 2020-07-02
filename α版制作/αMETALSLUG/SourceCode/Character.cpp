@@ -25,6 +25,8 @@ char *CCharacter::m_LoadMotionFileName[CHARACTER_MOTION_MAX] =
 	{ "data/Load/Player/Motion/Walk.txt" },
 	{ "data/Load/Player/Motion/Attack.txt" },
 	{ "data/Load/Player/Motion/Grenade.txt" },
+	{ "data/Load/Player/Motion/Jumpshoot.txt" },
+	{ "data/Load/Player/Motion/Jump.txt" },
 	{ "data/Load/Enemy/Motion/EnemyNeutral.txt" },
 	{ "data/Load/Enemy/Motion/EnemyWalk.txt" },
 	{ "data/Load/Enemy/Motion/EnemyAttack.txt" },
