@@ -107,7 +107,7 @@ void CPlayer::Update(void)
 	if (key->GetKeyboardTrigger(DIK_O))
 	{
 		// グレネード生成
-		CGrenade::Create(m_ShotRot, GetCharacterModelPartsList(CModel::MODEL_PLAYER_LHAND)->GetMatrix());
+		CGrenade::Create(GetShotDirection() , GetCharacterModelPartsList(CModel::MODEL_PLAYER_LHAND)->GetMatrix());
 	}
 
 	// Aの処理
