@@ -26,7 +26,8 @@
 // =====================================================================================================================================================================
 #define HEAVYMACHINEGUN_SHOT_FRAME				(3)			// ƒwƒr[ƒ}ƒVƒ“ƒKƒ“‚Ì’e‚ÌŠÔŠu
 
-#define SHOT_BULLET_POS_Z						(20.0f)		// ’e‚Ì”­ŽËˆÊ’uZ
+#define SHOT_BULLET_POS_X						(-15.0f)	// ’e‚Ì”­ŽËˆÊ’uX
+#define SHOT_BULLET_POS_Z						(5.0f)		// ’e‚Ì”­ŽËˆÊ’uZ
 
 // =====================================================================================================================================================================
 //
@@ -235,7 +236,7 @@ void CGun::Shot(D3DXVECTOR3 rot)
 		}
 		if (pBullet)
 		{
-			D3DXVec3TransformCoord(&m_ShotPos, &D3DXVECTOR3(0.0f, 0.0f, -SHOT_BULLET_POS_Z), GetMatrix());
+			D3DXVec3TransformCoord(&m_ShotPos, &D3DXVECTOR3(SHOT_BULLET_POS_X, 0.0f, -SHOT_BULLET_POS_Z), GetMatrix());
 
 			// ˆÊ’u‚ÌÝ’è
 			pBullet->SetPosition(m_ShotPos);
@@ -288,7 +289,7 @@ void CGun::MultipleShot()
 
 		if (pBullet)
 		{
-			D3DXVec3TransformCoord(&m_ShotPos, &D3DXVECTOR3(0.0f, 0.0f, -SHOT_BULLET_POS_Z), GetMatrix());
+			D3DXVec3TransformCoord(&m_ShotPos, &D3DXVECTOR3(SHOT_BULLET_POS_X, 0.0f, -SHOT_BULLET_POS_Z), GetMatrix());
 
 			// ˆÊ’u‚ÌÝ’è
 			pBullet->SetPosition(D3DXVECTOR3(m_ShotPos.x, m_ShotPos.y + randPos_y, m_ShotPos.z));
