@@ -207,10 +207,12 @@ void CPlayer::Update(void)
 				if (m_pCollision->CharCollision2D(pEnemy->GetCollision()))
 				{
 					CDebugProc::Print("\n時機が敵に当たったよ！\n");
+					m_bCloseRangeAttack = true;
 				}
 				else
 				{
 					CDebugProc::Print("\n時機が敵に当たってないよ！ \n");
+					m_bCloseRangeAttack = false;
 				}
 			}
 		}
@@ -224,8 +226,9 @@ void CPlayer::Update(void)
 			{
 				if (m_pCollision->BlockCollision2D(pObstacle->GetCollision()))
 				{
-					CCharacter::SetJump(true);
+					CCharacter::SetJump(false);
 					CDebugProc::Print("\n時機が障害物に当たったよ！\n");
+
 				}
 				else
 				{
@@ -301,7 +304,14 @@ void CPlayer::Draw(void)
 //====================================================================
 void CPlayer::DebugInfo(void)
 {
-	CDebugProc::Print("プレイヤーのモーションタイプ%d\n", GetMotionType());
+	if (m_bCloseRangeAttack == true)
+	{
+		CDebugProc::Print("近接攻撃：可能\n");
+	}
+	else
+	{
+		CDebugProc::Print("近接攻撃：不可能\n");
+	}
 }
 //====================================================================
 //モデルのクリエイト
