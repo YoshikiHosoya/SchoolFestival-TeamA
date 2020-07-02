@@ -257,10 +257,10 @@ void CMap::PrisonerLoad(int nCnt)
 				fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
 				sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
 
-															// ENEMYSETが来たら
+				// PRISONERSETが来たら
 				if (strcmp(cHeadText, "PRISONERSET") == 0)
 				{
-					// END_ENEMYSETが来るまでループ
+					// END_PRISONERSETが来るまでループ
 					while (strcmp(cHeadText, "END_PRISONERSET") != 0)
 					{
 						fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
@@ -325,16 +325,16 @@ void CMap::ObstacleLoad(int nCnt)
 				fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
 				sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
 
-															// ENEMYSETが来たら
+				// OBSTACLESETが来たら
 				if (strcmp(cHeadText, "OBSTACLESET") == 0)
 				{
-					// END_ENEMYSETが来るまでループ
+					// END_OBSTACLESETが来るまでループ
 					while (strcmp(cHeadText, "END_OBSTACLESET") != 0)
 					{
 						fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
 						sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
 
-																	// TYPEが来たら
+						// TYPEが来たら
 						if (strcmp(cHeadText, "TYPE") == 0)
 						{
 							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &nType);		// 比較用テキストにTYPEを代入
@@ -571,7 +571,7 @@ int CMap::GetMaxEnemy()
 
 // =====================================================================================================================================================================
 //
-// 敵の最大数取得
+// 捕虜の最大数取得
 //
 // =====================================================================================================================================================================
 int CMap::GetMaxPrisoner()
