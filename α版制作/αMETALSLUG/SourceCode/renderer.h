@@ -41,6 +41,7 @@ public:
 	CCamera *GetCamera();
 
 	void SetRendererCommand(RENDERER_COMMAND Command);		//レンダラー設定 ショートカット
+	void ResetRenderer();
 #ifdef _DEBUG
 	void DrawFPS(void);
 #endif

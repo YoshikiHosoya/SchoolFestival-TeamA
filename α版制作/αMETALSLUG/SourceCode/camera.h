@@ -23,21 +23,23 @@ public:
 	void DebugCommand();						//デバッグ用のコマンド
 	void CharacterFollowingMoveCamera();		//キャラクター追従カメラ
 	void MouseMoveCamera();						//マウス操作カメラ
+
+	void ResetCamera();
+	void SetCameraPos(D3DXVECTOR3 posR, D3DXVECTOR3 posV);
 private:
-	D3DXVECTOR3 posV;			//視点
-	D3DXVECTOR3 posVDest;		//視点の目的地
-	D3DXVECTOR3 posR;			//注視点
-	D3DXVECTOR3 posRDest;		//注視点の目的地
-	D3DXVECTOR3 rot;			//向き
-	D3DXVECTOR3 rotDest;		//向きたい方向
-	D3DXVECTOR3 move;			//移動視点
-	D3DXVECTOR3 vecV;			//上方向ベクトル
-	D3DXMATRIX mtxProjection;	//プロジェクションマトリックス
-	D3DXMATRIX mtxView;			//ビューマトリックス
-	float fDistance;			//距離
-	int nCountTimer;			//追従のタイマー
-	int nCnt;
-	D3DXVECTOR3 pos;			//ポジション
+	D3DXVECTOR3 m_posV;			//視点
+	D3DXVECTOR3 m_posVDest;		//視点の目的地
+	D3DXVECTOR3 m_posR;			//注視点
+	D3DXVECTOR3 m_posRDest;		//注視点の目的地
+	D3DXVECTOR3 m_rot;			//向き
+	D3DXVECTOR3 m_rotDest;		//向きたい方向
+	D3DXVECTOR3 m_move;			//移動視点
+	D3DXVECTOR3 m_vecV;			//上方向ベクトル
+	D3DXMATRIX m_mtxProjection;	//プロジェクションマトリックス
+	D3DXMATRIX m_mtxView;			//ビューマトリックス
+	float m_fDistance;			//距離
+	int m_nCountTimer;			//追従のタイマー
+	int m_nCnt;
 
 	bool m_bCameraMode;		//デバッグカメラかどうか
 };
