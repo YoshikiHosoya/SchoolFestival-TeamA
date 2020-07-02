@@ -26,6 +26,9 @@
 //
 //=============================================================================
 class CDebugcollision;
+class CMap;
+class CPrisoner;
+class CEnemy;
 
 //=============================================================================
 //
@@ -62,8 +65,6 @@ public:
 		COLLISIONTYPE_MAX
 	} COLLISIONTYPE;
 
-
-
 	/* メンバ関数 */
 	CCollision();
 	~CCollision();
@@ -85,6 +86,9 @@ public:
 	bool CharCollision2D(CCollision *pCollision);		// キャラクター用板型の当たり判定
 	bool OtherCollision2D(CCollision *pCollision);		// 板型の当たり判定
 	bool BlockCollision2D(CCollision *pCollision);		// 板型ブロックの当たり判定
+	bool RayBlockCollision(CMap *pMap);					// Rayの判定 キャラクター
+	bool RayCollision(CMap *pMap);						// Rayの判定 弾など
+
 	COLLISION GetObjtype() {return m_objtype;};			// 誰の当たり判定なのかを返す
 	void DeCollisionCreate(COLLISIONTYPE collisiontype);// デバッグ用当たり判定の生成
 	bool ForPlayerBulletCollision(int nEnemyDamage,
@@ -101,6 +105,9 @@ public:
 	bool ForPlayer_PrisonerCollision(bool Penetration);	// プレイヤーと捕虜が行う判定 ダメージ量 貫通するかどうか
 
 	bool ForPlayer_ItemCollision();						// プレイヤーと捕虜が行う判定 ダメージ量 貫通するかどうか
+
+	CPrisoner	*ForPlayer_PrisonerCollision();			// プレイヤーと捕虜の接触判定 捕虜の状態変更
+	CEnemy		*ForPlayer_EnemyCollision();			// プレイヤーとエネミーの接触判定 捕虜の状態変更
 
 protected:
 private:

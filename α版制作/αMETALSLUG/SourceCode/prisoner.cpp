@@ -25,8 +25,6 @@
 // =====================================================================================================================================================================
 CPrisoner::CPrisoner(OBJ_TYPE type) :CCharacter(type)
 {
-	// ポインタの初期化
-	m_pCollision		= nullptr;
 	// 捕虜の初期状態
 	m_PrisonerState		= PRISONER_STATE_STAY;
 	// 捕虜が消滅するまでのカウントを初期化
@@ -39,16 +37,6 @@ CPrisoner::CPrisoner(OBJ_TYPE type) :CCharacter(type)
 // =====================================================================================================================================================================
 CPrisoner::~CPrisoner()
 {
-#ifdef _DEBUG
-
-	// 当たり判定の削除
-	if (m_pCollision != nullptr)
-	{
-		delete m_pCollision;
-		m_pCollision = nullptr;
-	}
-#endif // _DEBUG
-
 }
 
 // =====================================================================================================================================================================
@@ -68,12 +56,11 @@ HRESULT CPrisoner::Init(void)
 	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
 
 	// 当たり判定生成
-	m_pCollision = CCollision::Create();
-	m_pCollision->SetPos(&GetPosition());
-	m_pCollision->SetSize2D(PRISONER_COLLISION_SIZE);
-	m_pCollision->SetMove(&GetMove());
-	m_pCollision->SetType(CCollision::COLLISION_PRISONER);
-	m_pCollision->DeCollisionCreate(CCollision::COLLISIONTYPE_CHARACTER);
+	GetCollision()->SetPos(&GetPosition());
+	GetCollision()->SetSize2D(PRISONER_COLLISION_SIZE);
+	GetCollision()->SetMove(&GetMove());
+	GetCollision()->SetType(CCollision::COLLISION_PRISONER);
+	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_CHARACTER);
 
 	return S_OK;
 }
@@ -90,13 +77,30 @@ void CPrisoner::Uninit(void)
 void CPrisoner::Update(void)
 {
 	// 当たり判定
-	if (m_pCollision != nullptr)
+	if (GetCollision() != nullptr)
 	{
 		// 座標の更新 pos
-		m_pCollision->SetPos(&GetPosition());
+		GetCollision()->SetPos(&GetPosition());
 	}
 
+	// 捕虜の状態別処理
 	this->PrisonerState();
+
+	// マップのポインタ取得
+	CMap *pMap;
+	pMap = CManager::GetBaseMode()->GetMap();
+
+	// マップモデルが存在した時
+	if (pMap != nullptr)
+	{
+		// レイの判定
+		if (GetCollision()->RayBlockCollision(pMap))
+		{
+		}
+		else
+		{
+		}
+	}
 
 	// キャラクターの更新
 	CCharacter::Update();

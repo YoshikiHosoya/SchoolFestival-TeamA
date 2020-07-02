@@ -12,7 +12,6 @@ class CMeshOrbit;
 class CParticle;
 class CUI;
 class CGun;
-class CCollision;
 class CPrisoner;
 class CKnife;
 //レンダリングクラス
@@ -37,17 +36,16 @@ public:
 	DEBUG_STATE GetDebugState(void);
 	static CPlayer *Create(void);
 	bool DefaultMotion(void);
-	CCollision	*GetCollision() { return m_pCollision; };	// 当たり判定
-	CGun		*GetGun() { return  m_pGun; };				// 銃のポインタ取得
+	CGun		*GetGun() { return  m_pGun; };			// 銃のポインタ取得
 private:
 	void Move(float move, float fdest);
 		DEBUG_STATE m_DebugState;						//デバッグのステータス
-		bool m_Attack;									//攻撃時
+		bool m_bAttack_Enemy;							//攻撃時
+		bool m_bAttack_Prisoner;						//攻撃時
+
 		float m_Angle;
 		WORD Oldstate;									//コントローラーの1frame前のステート
 		CGun	*m_pGun;								// ガンクラスのポインタ
-		CCollision					*m_pCollision;		// 当たり判定情報
-		bool						m_bCloseRangeAttack;// 近接攻撃フラグ
 		CPrisoner					*m_pPrisoner;		// 捕虜のポインタを保存する変数
 		CKnife *m_pKnife;
 };

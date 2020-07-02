@@ -19,21 +19,10 @@
 CEnemy::CEnemy(OBJ_TYPE type) :CCharacter(type)
 {
 	SetObjType(OBJTYPE_ENEMY);
-	m_pCollision = NULL;
 }
 
 CEnemy::~CEnemy()
 {
-#ifdef _DEBUG
-
-	// 当たり判定の削除
-	if (m_pCollision != nullptr)
-	{
-		delete m_pCollision;
-		m_pCollision = nullptr;
-	}
-#endif // _DEBUG
-
 }
 //====================================================================
 //初期化
@@ -48,13 +37,12 @@ HRESULT CEnemy::Init(void)
 	m_Attack = false;
 
 	// 当たり判定生成
-	m_pCollision = CCollision::Create();
-	m_pCollision->SetPos(&GetPosition());
-	m_pCollision->SetPosOld(&GetPositionOld());
-	m_pCollision->SetSize2D(ENEMY_SIZE);
-	m_pCollision->SetMove(&GetMove());
-	m_pCollision->SetType(CCollision::COLLISION_ENEMY);
-	m_pCollision->DeCollisionCreate(CCollision::COLLISIONTYPE_CHARACTER);
+	GetCollision()->SetPos(&GetPosition());
+	GetCollision()->SetPosOld(&GetPositionOld());
+	GetCollision()->SetSize2D(ENEMY_SIZE);
+	GetCollision()->SetMove(&GetMove());
+	GetCollision()->SetType(CCollision::COLLISION_ENEMY);
+	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_CHARACTER);
 
 	CCharacter::SetLife(50);
 	return S_OK;
@@ -83,10 +71,26 @@ void CEnemy::Update(void)
 		SetMotion(CCharacter::ENEMY_MOTION_WALK);
 	}
 
-	if (m_pCollision != nullptr)
+	if (GetCollision() != nullptr)
 	{
 		 //座標の更新
-		m_pCollision->SetPos(&GetPosition());
+		GetCollision()->SetPos(&GetPosition());
+	}
+
+	// マップのポインタ取得
+	CMap *pMap;
+	pMap = CManager::GetBaseMode()->GetMap();
+
+	// マップモデルが存在した時
+	if (pMap != nullptr)
+	{
+		// レイの判定
+		if (GetCollision()->RayBlockCollision(pMap))
+		{
+		}
+		else
+		{
+		}
 	}
 
 	//体力が0以下になった時

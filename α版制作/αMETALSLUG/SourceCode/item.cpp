@@ -102,7 +102,23 @@ void CItem::Update(void)
 		m_pCollision->SetPos(&GetPosition());
 	}
 
-	CDebugProc::Print("アイテムのサイズ %f,%f\n",GetSize().x, GetSize().y);
+	// マップのポインタ取得
+	CMap *pMap;
+	pMap = CManager::GetBaseMode()->GetMap();
+
+	// マップモデルが存在した時
+	if (pMap != nullptr)
+	{
+		// レイの判定
+		if (m_pCollision->RayCollision(pMap))
+		{
+			// 弾の削除
+			Rerease();
+		}
+		else
+		{
+		}
+	}
 
 	// 更新
 	CScene3D::Update();

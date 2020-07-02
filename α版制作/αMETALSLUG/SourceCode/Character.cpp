@@ -8,9 +8,8 @@
 #include "fade.h"
 #include "map.h"
 #include "Xinput.h"
+#include "collision.h"
 
-#define MAX_RAY_LENGTH (40)		//Rayの最大の長さ
-#define RAY_FIRST_POINT (30.0f)	//Rayの始点
 //オフセットの読み込みファイル
 char *CCharacter::m_LoadOffsetFileName[CHARACTER_TYPE_MAX] =
 {
@@ -36,12 +35,20 @@ std::vector<CCharacter::MOTION*> CCharacter::m_CharacterMotion = {};
 //====================================================================
 CCharacter::CCharacter(OBJ_TYPE type) :CScene(type)
 {
+	// 当たり判定のポインタをnullにする
+	m_pCollision = nullptr;
 }
 //====================================================================
 //デストラクタ
 //====================================================================
 CCharacter::~CCharacter()
 {
+	// 当たり判定の削除
+	if (m_pCollision != nullptr)
+	{
+		delete m_pCollision;
+		m_pCollision = nullptr;
+	}
 }
 //====================================================================
 //初期化
@@ -61,7 +68,8 @@ HRESULT CCharacter::Init(void)
 	m_bDieFlag = false;
 	m_bMotion = true;
 	m_ShotRot = D3DXVECTOR3(0.0f, 0.5f, 0.0f);
-
+	// 当たり判定生成
+	m_pCollision = CCollision::Create();
 	//マトリックス初期化
 	D3DXMatrixIdentity(&m_mtxWorld);
 	return S_OK;
@@ -187,7 +195,6 @@ void CCharacter::Update(void)
 	CDebugProc::Print("move.y:%2f\n",m_move.y);
 
 	Moation();
-	RayCollision();
 }
 //====================================================================
 //描画
@@ -437,87 +444,6 @@ D3DXVECTOR3 CCharacter::GetShotDirection(void)
 CCharacter::MOTION *CCharacter::GetCharacterMotion(CHARACTER_MOTION_STATE type)
 {
 	return m_CharacterMotion[type];
-}
-//====================================================================
-//当たり判定
-//====================================================================
-void CCharacter::RayCollision(void)
-{
-	CMap *pMap;
-	pMap = CManager::GetBaseMode()->GetMap();
-
-	//nullcheck
-	if (!pMap)
-	{
-		//nullだったら処理しない
-		return;
-	}
-	// 地形判定
-	BOOL  bIsHit = false;
-	float fLandDistance = 0;
-	DWORD dwHitIndex = -1;
-	float fHitU = 0;
-	float fHitV = 0;
-	D3DXMATRIX invmat;		//	逆行列を格納する変数
-	D3DXVECTOR3 m_posAfter;	//	逆行列で出した終点情報を格納する
-	D3DXVECTOR3 m_posBefore;//	終点情報を格納する
-	D3DXVECTOR3 direction;	//	変換後の位置、方向を格納する変数：
-	std::vector<float> vDistance;//長さの配列保存
-	float fData = 0.0f;
-	for (int nCnt = 0; nCnt < pMap->GetMaxModel(); nCnt++)
-	{
-		D3DXMatrixInverse(&invmat, NULL, pMap->GetModel(nCnt)->GetMatrix());	//	逆行列の取得
-		//	逆行列を使用し、レイ始点情報を変換　位置と向きで変換する関数が異なるので要注意
-		D3DXVec3TransformCoord(&m_posBefore, &D3DXVECTOR3(m_pos.x, m_pos.y + RAY_FIRST_POINT, m_pos.z), &invmat);
-		//	レイ終点情報を変換
-		D3DXVec3TransformCoord(&m_posAfter, &D3DXVECTOR3(m_pos.x, m_pos.y, m_pos.z), &invmat);
-		//	レイ方向情報を変換
-		D3DXVec3Normalize(&direction, &(m_posAfter - m_posBefore));
-		//Rayを飛ばす
-		D3DXIntersect(pMap->GetMesh(nCnt), &m_posBefore, &direction, &bIsHit, &dwHitIndex, &fHitU, &fHitV, &fLandDistance, NULL, NULL);
-		if (bIsHit == TRUE)
-		{
-			CDebugProc::Print("当たってるよ\n");
-			vDistance.emplace_back(fLandDistance); //長さの保存追加
-		}
-		else
-		{
-			CDebugProc::Print("当たって無いよ\n");
-		}
-	}
-	//Rayのヒットした物があったとき
-	if (!vDistance.empty())
-	{
-		//最初の比較対象
-		fData = vDistance[0];
-		for (unsigned int nCnt = 0; vDistance.size() > nCnt; nCnt++)
-		{
-			if (vDistance[nCnt] < fData)
-			{
-				//比較対象が小さかったら代入
-				fData = vDistance[nCnt];
-			}
-		}
-		if (fData < MAX_RAY_LENGTH)//Rayの長さの指定条件
-		{
-			m_pos.y = m_pos.y - fData + MAX_RAY_LENGTH;
-			m_bJump = true;
-			CDebugProc::Print("ジャンプできるよ\n");
-		}
-		//Rayの判定圏内じゃなかったらジャンプできない
-		else
-		{
-			m_bJump = false;
-			CDebugProc::Print("ジャンプ出来無いよ\n");
-		}
-	}
-	//Rayに判定がなかったらジャンプできない
-	else
-	{
-		m_bJump = false;
-		CDebugProc::Print("ジャンプ出来無いよ\n");
-	}
-
 }
 //====================================================================
 //オフセットのファイル取得

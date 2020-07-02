@@ -33,6 +33,8 @@
 // マクロ定義
 //
 //======================================================================================================================
+#define MAX_RAY_LENGTH  (40)		//Rayの最大の長さ
+#define RAY_FIRST_POINT (30.0f)		//Rayの始点
 
 //======================================================================================================================
 //
@@ -65,7 +67,6 @@ CCollision::~CCollision()
 	if (m_Debugcollision != nullptr)
 	{
 		m_Debugcollision->DeleteDeCollision();
-		//delete m_Debugcollision;
 		m_Debugcollision = nullptr;
 	}
 
@@ -380,6 +381,63 @@ bool CCollision::ForPlayer_PrisonerCollision(bool Penetration)
 }
 
 //======================================================================================================================
+// プレイヤーと捕虜で行う判定 プレイヤーの接触判定
+//======================================================================================================================
+CPrisoner *CCollision::ForPlayer_PrisonerCollision()
+{
+	CPrisoner *pPrisoner = nullptr;
+	// 捕虜の総数分
+	for (int nCntPriso = 0; nCntPriso < CManager::GetBaseMode()->GetMap()->GetMaxPrisoner(); nCntPriso++)
+	{
+		pPrisoner = CManager::GetBaseMode()->GetMap()->GetPrisoner(nCntPriso);
+		if (pPrisoner != nullptr)
+		{
+			if (this->CharCollision2D(pPrisoner->GetCollision()))
+			{
+				if (pPrisoner->GetPrisonerState() == CPrisoner::PRISONER_STATE_STAY)
+				{
+					pPrisoner->SetPrisonerState(CPrisoner::PRISONER_STATE_DROPITEM);
+				}
+
+			}
+		}
+
+		else if (pPrisoner == nullptr)
+		{
+			return nullptr;
+		}
+	}
+
+	return pPrisoner;
+}
+
+//======================================================================================================================
+// プレイヤーとエネミーで行う判定 プレイヤーの接触判定
+//======================================================================================================================
+CEnemy * CCollision::ForPlayer_EnemyCollision()
+{
+	CEnemy *pEnemy = nullptr;
+	// 捕虜の総数分
+	for (int nCntEnemy = 0; nCntEnemy < CManager::GetBaseMode()->GetMap()->GetMaxEnemy(); nCntEnemy++)
+	{
+		pEnemy = CManager::GetBaseMode()->GetMap()->GetEnemy(nCntEnemy);
+		if (pEnemy != nullptr)
+		{
+			if (this->CharCollision2D(pEnemy->GetCollision()))
+			{
+			}
+		}
+
+		else if (pEnemy == nullptr)
+		{
+			return nullptr;
+		}
+	}
+
+	return pEnemy;
+}
+
+//======================================================================================================================
 // プレイヤーとアイテムで行う判定 プレイヤーの接触判定
 //======================================================================================================================
 bool CCollision::ForPlayer_ItemCollision()
@@ -631,4 +689,154 @@ bool CCollision::BlockCollision2D(CCollision * pCollision)
 
 	// 当たっているかいないかを返す
 	return bHitFlag;
+}
+
+//======================================================================================================================
+// レイの判定
+//======================================================================================================================
+bool CCollision::RayBlockCollision(CMap *pMap)
+{
+	// 地形判定 変数宣言
+	BOOL				bHitFlag			= false;	// 判定が出たかのフラグ
+	bool				bLand				= false;	// 判定が出たかのフラグ
+	float				fLandDistance		= 0;		// 距離
+	DWORD				dwHitIndex			= -1;		// インデックス
+	float				fHitU				= 0;		// U
+	float				fHitV				= 0;		// V
+	D3DXMATRIX			invmat;							// 逆行列を格納する変数
+	D3DXVECTOR3			m_posAfter;						// 逆行列で出した終点情報を格納する
+	D3DXVECTOR3			m_posBefore;					// 終点情報を格納する
+	D3DXVECTOR3			direction;						// 変換後の位置、方向を格納する変数：
+	std::vector<float>	vDistance;						// 長さの配列保存
+	float				fData				= 0.0f;		// データ
+
+	// マップモデルの最大数分繰り返す
+	for (int nCnt = 0; nCnt < pMap->GetMaxModel(); nCnt++)
+	{
+		//	逆行列の取得
+		D3DXMatrixInverse(&invmat, NULL, pMap->GetModel(nCnt)->GetMatrix());
+		//	逆行列を使用し、レイ始点情報を変換　位置と向きで変換する関数が異なるので要注意
+		D3DXVec3TransformCoord(&m_posBefore, &D3DXVECTOR3(this->m_ppos->x, this->m_ppos->y + RAY_FIRST_POINT, this->m_ppos->z), &invmat);
+		//	レイ終点情報を変換
+		D3DXVec3TransformCoord(&m_posAfter, &D3DXVECTOR3(this->m_ppos->x, this->m_ppos->y, this->m_ppos->z), &invmat);
+		//	レイ方向情報を変換
+		D3DXVec3Normalize(&direction, &(m_posAfter - m_posBefore));
+		//Rayを飛ばす
+		D3DXIntersect(pMap->GetMesh(nCnt), &m_posBefore, &direction, &bHitFlag, &dwHitIndex, &fHitU, &fHitV, &fLandDistance, NULL, NULL);
+		if (bHitFlag == TRUE)
+		{
+			//長さの保存追加
+			vDistance.emplace_back(fLandDistance);
+		}
+		else
+		{
+		}
+	}
+	//Rayのヒットした物があったとき
+	if (!vDistance.empty())
+	{
+		//最初の比較対象
+		fData = vDistance[0];
+		for (unsigned int nCnt = 0; vDistance.size() > nCnt; nCnt++)
+		{
+			if (vDistance[nCnt] < fData)
+			{
+				//比較対象が小さかったら代入
+				fData = vDistance[nCnt];
+			}
+		}
+		if (fData < MAX_RAY_LENGTH)//Rayの長さの指定条件
+		{
+			this->m_ppos->y = this->m_ppos->y - fData + MAX_RAY_LENGTH;
+			bLand = true;
+		}
+		//Rayの判定圏内じゃなかったらジャンプできない
+		else
+		{
+			bLand = false;
+		}
+	}
+	//Rayに判定がなかったらジャンプできない
+	else
+	{
+		bLand = false;
+	}
+
+	// 判定フラグを返す
+	return bLand;
+}
+
+//======================================================================================================================
+// レイの判定
+//======================================================================================================================
+bool CCollision::RayCollision(CMap * pMap)
+{
+	// 地形判定 変数宣言
+	BOOL				bHitFlag = false;			// 判定が出たかのフラグ
+	bool				bJudg = false;				// 判定が出たかのフラグ
+	float				fLandDistance = 0;			// 距離
+	DWORD				dwHitIndex = -1;			// インデックス
+	float				fHitU = 0;					// U
+	float				fHitV = 0;					// V
+	D3DXMATRIX			invmat;						// 逆行列を格納する変数
+	D3DXVECTOR3			m_posAfter;					// 逆行列で出した終点情報を格納する
+	D3DXVECTOR3			m_posBefore;				// 終点情報を格納する
+	D3DXVECTOR3			direction;					// 変換後の位置、方向を格納する変数：
+	std::vector<float>	vDistance;					// 長さの配列保存
+	float				fData = 0.0f;				// データ
+
+													// マップモデルの最大数分繰り返す
+	for (int nCnt = 0; nCnt < pMap->GetMaxModel(); nCnt++)
+	{
+		//	逆行列の取得
+		D3DXMatrixInverse(&invmat, NULL, pMap->GetModel(nCnt)->GetMatrix());
+		//	逆行列を使用し、レイ始点情報を変換　位置と向きで変換する関数が異なるので要注意
+		D3DXVec3TransformCoord(&m_posBefore, &D3DXVECTOR3(this->m_ppos->x, this->m_ppos->y + RAY_FIRST_POINT, this->m_ppos->z), &invmat);
+		//	レイ終点情報を変換
+		D3DXVec3TransformCoord(&m_posAfter, &D3DXVECTOR3(this->m_ppos->x, this->m_ppos->y, this->m_ppos->z), &invmat);
+		//	レイ方向情報を変換
+		D3DXVec3Normalize(&direction, &(m_posAfter - m_posBefore));
+		//Rayを飛ばす
+		D3DXIntersect(pMap->GetMesh(nCnt), &m_posBefore, &direction, &bHitFlag, &dwHitIndex, &fHitU, &fHitV, &fLandDistance, NULL, NULL);
+		if (bHitFlag == TRUE)
+		{
+			//長さの保存追加
+			vDistance.emplace_back(fLandDistance);
+		}
+		else
+		{
+		}
+	}
+	//Rayのヒットした物があったとき
+	if (!vDistance.empty())
+	{
+		//最初の比較対象
+		fData = vDistance[0];
+		for (unsigned int nCnt = 0; vDistance.size() > nCnt; nCnt++)
+		{
+			if (vDistance[nCnt] < fData)
+			{
+				//比較対象が小さかったら代入
+				fData = vDistance[nCnt];
+			}
+		}
+		if (fData < MAX_RAY_LENGTH)//Rayの長さの指定条件
+		{
+			//this->m_ppos->y = this->m_ppos->y - fData + MAX_RAY_LENGTH;
+			bJudg = true;
+		}
+		//Rayの判定圏内じゃなかったらジャンプできない
+		else
+		{
+			bJudg = false;
+		}
+	}
+	//Rayに判定がなかったらジャンプできない
+	else
+	{
+		bJudg = false;
+	}
+
+	// 判定フラグを返す
+	return bJudg;
 }

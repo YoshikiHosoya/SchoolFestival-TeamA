@@ -7,6 +7,10 @@
 #include "Scene.h"
 
 #define MAX_ALLMODEL (100)
+// =====================================================================================================================================================================
+// 前方宣言
+// =====================================================================================================================================================================
+class CCollision;
 //レンダリングクラス
 class CModel : public CScene
 {
@@ -151,6 +155,8 @@ public:
 	static char* GetModelFileName(int nType, int nModelCount);
 	bool GetDieFlag() { return m_bDieFlag; };							// 死亡フラグの取得
 	void SetDieFlag(bool DieFlag) { m_bDieFlag = DieFlag; };			// 死亡フラグの設定
+
+	CCollision *GetCollision() { return m_pCollision; };				// 当たり判定のポインタ取得
 private:
 
 	static MODEL m_Model[TYPE_MAX][MAX_ALLMODEL];
@@ -177,5 +183,6 @@ private:
 	int m_nIdxModelpalent;				//親のインデックス
 	int m_nParentIdx;					//親番号
 	bool m_bDieFlag;					// 死亡フラグ
+	CCollision				*m_pCollision;			// 当たり判定情報
 };
 #endif

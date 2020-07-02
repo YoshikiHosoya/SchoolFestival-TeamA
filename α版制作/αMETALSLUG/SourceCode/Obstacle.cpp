@@ -31,7 +31,6 @@ CObstacle::CObstacle(OBJ_TYPE type) :CModel(type)
 	// 変数初期化
 	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// 移動値
 	m_nLife = 0;								// 体力
-	m_pCollision = nullptr;						// 当たり判定のポインタ
 }
 
 // =====================================================================================================================================================================
@@ -41,16 +40,6 @@ CObstacle::CObstacle(OBJ_TYPE type) :CModel(type)
 // =====================================================================================================================================================================
 CObstacle::~CObstacle()
 {
-#ifdef _DEBUG
-
-	// 当たり判定の削除
-	if (m_pCollision != nullptr)
-	{
-		delete m_pCollision;
-		m_pCollision = nullptr;
-	}
-#endif // _DEBUG
-
 }
 
 // =====================================================================================================================================================================
@@ -70,12 +59,11 @@ HRESULT CObstacle::Init()
 	SetObstacleParam(TYPE_BOX);
 
 	// 当たり判定生成
-	m_pCollision = CCollision::Create();
-	m_pCollision->SetPos(&GetPosition());
-	m_pCollision->SetSize2D(OBSTACLE_BOX_COLLISION);
-	m_pCollision->SetMove(nullptr);
-	m_pCollision->SetType(CCollision::COLLISION_OBSTACLE);
-	m_pCollision->DeCollisionCreate(CCollision::COLLISIONTYPE_NORMAL);
+	GetCollision()->SetPos(&GetPosition());
+	GetCollision()->SetSize2D(OBSTACLE_BOX_COLLISION);
+	GetCollision()->SetMove(nullptr);
+	GetCollision()->SetType(CCollision::COLLISION_OBSTACLE);
+	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_NORMAL);
 
 	return S_OK;
 }
@@ -98,15 +86,13 @@ void CObstacle::Uninit(void)
 // =====================================================================================================================================================================
 void CObstacle::Update(void)
 {
-	if (m_pCollision != nullptr)
+	if (GetCollision() != nullptr)
 	{
 		//座標の更新
-		m_pCollision->SetPos(&GetPosition());
+		GetCollision()->SetPos(&GetPosition());
 	}
 	// 更新
 	CModel::Update();
-	CDebugProc::Print("\n 障害物　Pos %.1f, %.1f, %.1f\n", GetPosition().x, GetPosition().y, GetPosition().z);
-	CDebugProc::Print(" 障害物　life %d \n", m_nLife);
 }
 
 // =====================================================================================================================================================================

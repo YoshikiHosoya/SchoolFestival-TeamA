@@ -8,6 +8,7 @@
 
 #define MAX_MODEL (20)			//モデルのパーツ数
 class CModel;
+class CCollision;
 //レンダリングクラス
 class CCharacter :public CScene
 {
@@ -153,14 +154,13 @@ public:
 	CHARACTER_MOTION_STATE &GetMotionType(void);					//モーションタイプの取得
 	CHARACTER_MOTION_STATE GetMotionOldType(void);					//前のモーションタイプ取得
 
-	//Rayの判定
-	void RayCollision(void);
-
 	char* GetOffsetFileName(CHARACTER_TYPE type);
 	char* GetMotionFileName(CHARACTER_MOTION_STATE motionstate);
 
-	bool GetDieFlag(){return m_bDieFlag; };								// 死亡フラグの取得
-	void SetDieFlag(bool DieFlag) { m_bDieFlag = DieFlag; };			// 死亡フラグの設定
+	bool GetDieFlag(){return m_bDieFlag; };							// 死亡フラグの取得
+	void SetDieFlag(bool DieFlag) { m_bDieFlag = DieFlag; };		// 死亡フラグの設定
+
+	CCollision *GetCollision() { return m_pCollision; };			// 当たり判定のポインタ取得
 
 private:
 	static char *m_LoadOffsetFileName[CHARACTER_TYPE_MAX];			//読み込むファイル名
@@ -190,5 +190,6 @@ private:
 	bool m_bGravity;
 	bool m_bDieFlag;												// 死亡フラグ
 	bool m_bMotion;													//モーションするかどうか
+	CCollision				*m_pCollision;							//当たり判定のポインタ
 };
 #endif

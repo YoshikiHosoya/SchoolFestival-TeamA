@@ -6,6 +6,8 @@
 #include "Player.h"
 #include "scene.h"
 #include "debugproc.h"
+#include "collision.h"
+
 CModel::MODEL CModel::m_Model[TYPE_MAX][MAX_ALLMODEL] = {};
 char *CModel::m_PlayerFileName[MODEL_PLAYER_MAX] =
 {
@@ -84,10 +86,17 @@ char *CModel::m_ObstacleFileName[OBSTACLE_TYPE_MAX] =
 
 CModel::CModel(OBJ_TYPE type) : CScene(type)
 {
+	m_pCollision = nullptr;									// 当たり判定のポインタ
 }
 
 CModel::~CModel()
 {
+	// 当たり判定の削除
+	if (m_pCollision != nullptr)
+	{
+		delete m_pCollision;
+		m_pCollision = nullptr;
+	}
 }
 //====================================================================
 //モデルのロード
@@ -500,6 +509,8 @@ HRESULT CModel::Init(void)
 	m_type = 0;
 	DWORD sizeFVF;
 	BYTE *pVertexBuffer;
+															// 当たり判定生成
+	m_pCollision = CCollision::Create();
 
 	for (int nCnt = 0; nCnt < MODEL_MAP_MAX; nCnt++)
 	{

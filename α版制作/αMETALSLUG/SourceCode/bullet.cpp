@@ -64,17 +64,6 @@ CBullet::CBullet(OBJ_TYPE type) :CModel(type)
 // =====================================================================================================================================================================
 CBullet::~CBullet()
 {
-#ifdef _DEBUG
-
-	// 当たり判定の削除
-	if (m_pCollision != nullptr)
-	{
-		delete m_pCollision;
-		m_pCollision = nullptr;
-	}
-
-#endif // _DEBUG
-
 }
 
 // =====================================================================================================================================================================
@@ -86,19 +75,17 @@ HRESULT CBullet::Init()
 {
 	// 変数初期化
 	m_move			= D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// 移動値
-	m_pCollision	= nullptr;									// 当たり判定のポインタ
 	m_nLife			= 0;				// 体力
 
 	// 初期化
 	CModel::Init();
 
 	// 当たり判定生成
-	m_pCollision = CCollision::Create();
-	m_pCollision->SetPos(&GetPosition());
-	m_pCollision->SetSize2D(D3DXVECTOR3(40.0f, 40.0f, 0.0f));
-	m_pCollision->SetMove(&m_move);
-	m_pCollision->SetType(CCollision::COLLISION_PLAYERBULLET);
-	m_pCollision->DeCollisionCreate(CCollision::COLLISIONTYPE_NORMAL);
+	GetCollision()->SetPos(&GetPosition());
+	GetCollision()->SetSize2D(D3DXVECTOR3(40.0f, 40.0f, 0.0f));
+	GetCollision()->SetMove(&m_move);
+	GetCollision()->SetType(CCollision::COLLISION_PLAYERBULLET);
+	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_NORMAL);
 
 	return S_OK;
 }
@@ -139,16 +126,16 @@ void CBullet::Update(void)
 	CModel::SetPosition(pos);
 
 	// ------------- 当たり判定 ------------- //
-	if (m_pCollision != nullptr)
+	if (GetCollision() != nullptr)
 	{
 		// 判定の座標を更新
-		m_pCollision->SetPos(&GetPosition());
+		GetCollision()->SetPos(&GetPosition());
 
 		// プレイヤーの弾だった時
 		if (m_type == TYPE_PLAYER)
 		{
 			// プレイヤーの弾の判定
-			if (m_pCollision->ForPlayerBulletCollision(BULLET_DAMAGE_ENEMY, BULLET_DAMAGE_OBSTACLE, BULLET_PENETRATION))
+			if (GetCollision()->ForPlayerBulletCollision(BULLET_DAMAGE_ENEMY, BULLET_DAMAGE_OBSTACLE, BULLET_PENETRATION))
 			{
 				// 弾の削除
 				Rerease();
@@ -159,11 +146,29 @@ void CBullet::Update(void)
 		else if (m_type == TYPE_ENEMY)
 		{
 			// エネミーの弾の判定
-			if (m_pCollision->ForEnemyCollision(BULLET_DAMAGE_PLAYER, BULLET_PENETRATION))
+			if (GetCollision()->ForEnemyCollision(BULLET_DAMAGE_PLAYER, BULLET_PENETRATION))
 			{
 				// 弾の削除
 				Rerease();
 			}
+		}
+	}
+
+	// マップのポインタ取得
+	CMap *pMap;
+	pMap = CManager::GetBaseMode()->GetMap();
+
+	// マップモデルが存在した時
+	if (pMap != nullptr)
+	{
+		// レイの判定
+		if (GetCollision()->RayCollision(pMap))
+		{
+			// 弾の削除
+			Rerease();
+		}
+		else
+		{
 		}
 	}
 

@@ -8,7 +8,6 @@
 #include "Scene.h"
 #include "Character.h"
 class CModel;
-class CCollision;
 //レンダリングクラス
 class CEnemy :public CCharacter
 {
@@ -22,12 +21,10 @@ public:
 	void DebugInfo(void);
 	static CEnemy *Create(void);
 	bool DefaultMotion(void);
-	CCollision *GetCollision() { return m_pCollision; }; // 当たり判定
 
 private:
 	void Move(float move, float fdest);
 	bool m_Attack;									//攻撃時
 	float m_Angle;
-	CCollision					*m_pCollision;		// 当たり判定情報
 };
 #endif

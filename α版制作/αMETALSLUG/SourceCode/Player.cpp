@@ -27,28 +27,16 @@
 #define PLAYER_SIZE			(D3DXVECTOR3(50.0f,65.0f,0.0f)) //敵のサイズ
 // 貫通させるかのフラグ
 #define ATTACK_PENETRATION		(true)			// プレイヤーの判定が貫通するかどうか
-
+#define ATTACK_DAMAGE_ENEMY		(50)			// エネミーへのダメージ
 
 CPlayer::CPlayer(OBJ_TYPE type) :CCharacter(type)
 {
 	SetObjType(OBJTYPE_PLAYER);
-	m_pCollision = nullptr;
-	m_bCloseRangeAttack = false;
 	m_pPrisoner = nullptr;
 }
 
 CPlayer::~CPlayer()
 {
-#ifdef _DEBUG
-
-	// 当たり判定の削除
-	if (m_pCollision != nullptr)
-	{
-		delete m_pCollision;
-		m_pCollision = nullptr;
-	}
-#endif // _DEBUG
-
 }
 //====================================================================
 //初期化
@@ -60,7 +48,8 @@ HRESULT CPlayer::Init(void)
 	LoadOffset(CCharacter::CHARACTER_TYPE_PLAYER);
 	SetCharacterType(CCharacter::CHARACTER_TYPE_PLAYER);
 	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
-	m_Attack = false;
+	m_bAttack_Enemy = false;
+	m_bAttack_Prisoner = false;
 	 // 銃の生成
 	m_pGun = CGun::Create(GetCharacterModelPartsList(CModel::MODEL_PLAYER_RHAND)->GetMatrix());
 	// 銃の弾の種類
@@ -69,12 +58,11 @@ HRESULT CPlayer::Init(void)
 	m_pKnife = CKnife::Create(GetCharacterModelPartsList(CModel::MODEL_PLAYER_LHAND)->GetMatrix());
 
 	// 当たり判定生成
-	m_pCollision = CCollision::Create();
-	m_pCollision->SetPos(&GetPosition());
-	m_pCollision->SetSize2D(PLAYER_SIZE);
-	m_pCollision->SetMove(&GetMove());
-	m_pCollision->SetType(CCollision::COLLISION_PLAYER);
-	m_pCollision->DeCollisionCreate(CCollision::COLLISIONTYPE_CHARACTER);
+	GetCollision()->SetPos(&GetPosition());
+	GetCollision()->SetSize2D(PLAYER_SIZE);
+	GetCollision()->SetMove(&GetMove());
+	GetCollision()->SetType(CCollision::COLLISION_PLAYER);
+	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_CHARACTER);
 
 	return S_OK;
 }
@@ -97,33 +85,46 @@ void CPlayer::Update(void)
 	key = CManager::GetInputKeyboard();
 
 	//キーボード処理
-	// 銃を撃つ
+	// 銃を撃つ or 近接攻撃
 	if (key->GetKeyboardTrigger(DIK_P))
 	{
-		if (m_bCloseRangeAttack != true)
+		// 銃を撃てる状態だった時
+		if (m_bAttack_Enemy == false)
 		{// 銃発射処理
 			m_pGun->Shot(GetShotDirection());
 		}
-		else
-		{// 近接攻撃
-			// 捕虜の状態変化
-			//if (m_pPrisoner->GetPrisonerState() == CPrisoner::PRISONER_STATE_STAY)
-			//{
-			//	m_pPrisoner->SetPrisonerState(CPrisoner::PRISONER_STATE_DROPITEM);
-			//}
 
-			//// 捕虜の当たり判定削除
-			//if (m_pPrisoner->GetCollision() != nullptr)
-			//{
-			//}
+		// 近接攻撃をする状態だった時
+		else if (m_bAttack_Enemy == true)
+		{// 近接攻撃
+		 // エネミーとの接触判定 捕虜の状態を変える
+			CEnemy		*pEnemy		= GetCollision()->ForPlayer_EnemyCollision();
+			// 近接攻撃
 			SetMotion(CCharacter::PLAYER_MOTION_ATTACK01);
 			m_pKnife->StartMeleeAttack();
-			m_Attack = true;
 
+			if (pEnemy != nullptr)
+			{
+				// エネミーへダメージ
+				pEnemy->AddDamage(ATTACK_DAMAGE_ENEMY);
+			}
 		}
-		//// 銃発射処理
-		//m_pGun->Shot(GetShotDirection());
+
+		if (m_bAttack_Prisoner == false)
+		{// 銃発射処理
+			m_pGun->Shot(GetShotDirection());
+		}
+
+		else if (m_bAttack_Prisoner == true)
+		{// 近接攻撃
+		 // 捕虜との接触判定 捕虜の状態を変える
+			CPrisoner	*pPrisoner = GetCollision()->ForPlayer_PrisonerCollision();
+			// 近接攻撃
+			SetMotion(CCharacter::PLAYER_MOTION_ATTACK01);
+			m_pKnife->StartMeleeAttack();
+		}
 	}
+
 	// グレネードを投げる
 	if (key->GetKeyboardTrigger(DIK_O))
 	{
@@ -159,7 +160,7 @@ void CPlayer::Update(void)
 		}
 		else
 		{
-		SetCharacterDirection(CHARACTER_RIGHT);
+			SetCharacterDirection(CHARACTER_RIGHT);
 		}
 	}
 
@@ -209,40 +210,75 @@ void CPlayer::Update(void)
 	}
 
 	// 当たり判定
-	if (m_pCollision != nullptr)
+	if (GetCollision() != nullptr)
 	{
 		// 座標の更新 posとposold
-		m_pCollision->SetPos(&GetPosition());
-		m_pCollision->SetPosOld(&GetPositionOld());
+		GetCollision()->SetPos(&GetPosition());
+		GetCollision()->SetPosOld(&GetPositionOld());
 
-		// エネミーとの判定
-		if (m_pCollision->ForPlayer_EnemyCollision(ATTACK_PENETRATION) || m_pCollision->ForPlayer_PrisonerCollision(ATTACK_PENETRATION))
+		// エネミーととの判定
+		if (GetCollision()->ForPlayer_EnemyCollision(ATTACK_PENETRATION))
 		{
 			// 近接攻撃可能にする
-			m_bCloseRangeAttack = true;
+			m_bAttack_Enemy = true;
 		}
 		else
 		{
 			// 近接攻撃が無効になる
-			m_bCloseRangeAttack = false;
+			m_bAttack_Enemy = false;
 		}
 
+		// 捕虜との判定
+		if (GetCollision()->ForPlayer_PrisonerCollision(ATTACK_PENETRATION))
+		{
+			// 近接攻撃可能にする
+			m_bAttack_Prisoner = true;
+		}
+		else
+		{
+			// 近接攻撃が無効になる
+			m_bAttack_Prisoner = false;
+		}
+
+
+
 		// 障害物との判定
-		if (m_pCollision->ForPlayer_ObstacleCollision())
+		if (GetCollision()->ForPlayer_ObstacleCollision())
 		{
 			// ジャンプフラグを可能にする
 			CCharacter::SetJump(true);
 		}
 
 		// アイテムとの判定
-		if (m_pCollision->ForPlayer_ItemCollision())
+		if (GetCollision()->ForPlayer_ItemCollision())
 		{
 		}
 	}
+
+	// マップのポインタ取得
+	CMap *pMap;
+	pMap = CManager::GetBaseMode()->GetMap();
+
+	// マップモデルが存在した時
+	if (pMap != nullptr)
+	{
+		// レイの判定
+		if (GetCollision()->RayBlockCollision(pMap))
+		{
+			// ジャンプすることを承認する
+			SetJump(true);
+		}
+		else
+		{
+			// ジャンプすることを承認しない
+			SetJump(false);
+		}
+	}
+
+
 	if (GetMotionType() != CCharacter::PLAYER_MOTION_ATTACK01)
 	{
-		m_Attack = false;
-		if (m_Attack == false)
+		if (m_bAttack_Enemy == false || m_bAttack_Prisoner == false)
 		{
 			m_pKnife->EndMeleeAttack();
 		}
@@ -266,22 +302,6 @@ void CPlayer::Draw(void)
 //====================================================================
 void CPlayer::DebugInfo(void)
 {
-	if (m_bCloseRangeAttack == true)
-	{
-		CDebugProc::Print("近接攻撃：可能\n");
-	}
-	else
-	{
-		CDebugProc::Print("近接攻撃：不可能\n");
-	}
-	if (m_Attack == true)
-	{
-		CDebugProc::Print("攻撃中\n");
-	}
-	else
-	{
-		CDebugProc::Print("攻撃してない\n");
-	}
 }
 //====================================================================
 //モデルのクリエイト
