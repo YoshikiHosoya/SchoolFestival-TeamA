@@ -756,9 +756,6 @@ void CCharacter::Moation(void)
 		m_Fram = 0;
 		m_CntKeySet = 0;
 	}
-	CDebugProc::Print("モーションタイプ: %d \n", m_MotionType);
-	CDebugProc::Print("カウントキーセット: %d \n", m_CntKeySet);
-	CDebugProc::Print("フレーム: %d \n", m_Fram);
 }
 //====================================================================
 //オフセットの読み込み
