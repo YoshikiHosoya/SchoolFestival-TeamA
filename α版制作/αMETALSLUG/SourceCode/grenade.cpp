@@ -19,6 +19,8 @@
 // =====================================================================================================================================================================
 // マクロ定義
 // =====================================================================================================================================================================
+#define GRENADE_GRAVITY				(0.8f)			// グレネードの重力
+#define ROT_DIVISION_Z				(7)				// 回転の分割数	( 縦 )
 
 // =====================================================================================================================================================================
 //
@@ -46,6 +48,9 @@ CGrenade::~CGrenade()
 // =====================================================================================================================================================================
 HRESULT CGrenade::Init()
 {
+	m_move	= D3DXVECTOR3(8.0f, 10.0f, 0.0f);		// 移動値
+	m_rot	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// 回転
+
 	// 初期化
 	CBullet::Init();
 
@@ -70,8 +75,14 @@ void CGrenade::Uninit(void)
 // =====================================================================================================================================================================
 void CGrenade::Update(void)
 {
+	// 重力
+	GetMove().y -= GRENADE_GRAVITY;
 
-	GetMove() = D3DXVECTOR3();
+	// 縦回転
+	m_rot.z += (D3DX_PI / ROT_DIVISION_Z);
+
+	// 回転の設定
+	SetRot(m_rot);
 
 	// 更新
 	CBullet::Update();
@@ -116,12 +127,6 @@ CGrenade * CGrenade::Create(D3DXVECTOR3 rot, D3DXMATRIX *mtx)
 	// 変数
 	CGrenade *pGrenade;
 
-	//追従処理
-	CBaseMode *pBaseMode = CManager::GetBaseMode();
-
-	//プレイヤーのポインタ取得
-	CPlayer *pPlayer = pBaseMode->GetPlayer();
-
 	// メモリの確保
 	pGrenade = new CGrenade(OBJTYPE_BULLET);
 
@@ -132,7 +137,7 @@ CGrenade * CGrenade::Create(D3DXVECTOR3 rot, D3DXMATRIX *mtx)
 	pGrenade->Init();
 
 	// プレイヤーの向きに合わせる
-	pGrenade->GetMove() = D3DXVECTOR3(-sinf(rot.y) * cosf(rot.x) * pBulletParam->fBulletSpeed, sinf(rot.x) * pBulletParam->fBulletSpeed, -cosf(rot.y) * cosf(rot.x) * pBulletParam->fBulletSpeed);
+	pGrenade->GetMove() = D3DXVECTOR3(-sinf(rot.y) * cosf(rot.x) * pGrenade->m_move.x, pGrenade->m_move.y, 0.0f);
 
 	// モデルタイプの設定
 	pGrenade->SetType(BULLET_MODEL);
@@ -146,9 +151,6 @@ CGrenade * CGrenade::Create(D3DXVECTOR3 rot, D3DXMATRIX *mtx)
 
 	// 位置の設定
 	pGrenade->SetPosition(pos);
-
-	pGrenade->m_fAngle = atan2f(20.0f, 20.0f);					// 角度
-	pGrenade->m_fLength = sqrtf(20.0f * 20.0f + 20.0f * 20.0f);	// 長さ
 
 	// 弾のパラメーターの設定
 	pGrenade->SetBulletParam(CGun::GUNTYPE_GRENADE);

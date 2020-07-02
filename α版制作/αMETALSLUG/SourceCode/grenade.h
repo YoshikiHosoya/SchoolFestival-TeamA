@@ -38,6 +38,8 @@ private:
 	/* ƒƒ“ƒo•Ï” */
 	float						m_fLength;					// ’·‚³
 	float						m_fAngle;					// Šp“x
+	D3DXVECTOR3					m_move;						// ˆÚ“®’l
+	D3DXVECTOR3					m_rot;						// ‰ñ“]
 
 };
 #endif
