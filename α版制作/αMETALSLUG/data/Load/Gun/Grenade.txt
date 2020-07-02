@@ -4,7 +4,7 @@
 SCRIPT
 
 BULLETSET									# 0
-	SPEED		= 5
+	SPEED		= 0
 	LIFE		= 50
 	POWER		= 1
 	AMMO		= 10
