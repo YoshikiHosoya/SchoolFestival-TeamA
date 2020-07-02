@@ -39,6 +39,11 @@ CTexAnimation3D_Collision::CTexAnimation3D_Collision(OBJ_TYPE obj) : CTexAnimati
 //------------------------------------------------------------------------------
 CTexAnimation3D_Collision::~CTexAnimation3D_Collision()
 {
+	if(m_pCollision)
+	{
+		delete m_pCollision;
+		m_pCollision = nullptr;
+	}
 }
 //------------------------------------------------------------------------------
 //初期化処理
@@ -67,6 +72,8 @@ void CTexAnimation3D_Collision::Update()
 {
 	//更新処理
 	CTexAnimation3D::Update();
+
+	Collision();
 }
 //------------------------------------------------------------------------------
 //描画処理
@@ -123,7 +130,16 @@ void CTexAnimation3D_Collision::Create(D3DXVECTOR3 pos, D3DXVECTOR3 size, D3DXVE
 //------------------------------------------------------------------------------
 bool CTexAnimation3D_Collision::Collision()
 {
-
+	//nullcheck
+	if (m_pCollision)
+	{
+		//プレイヤーの攻撃だった場合
+		if (m_bPlayer)
+		{
+			//当たり判定
+			m_pCollision->ForPlayerBulletCollision(1, 1, true);
+		}
+	}
 
 
 

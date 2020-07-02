@@ -6,10 +6,9 @@
 #include "fade.h"
 #include "map.h"
 #include "pause.h"
-#include "TexAnimation3D.h"
-#include "TexAnimation2D.h"
-#include "particleManager.h"
-#include "particle.h"
+#include "ParticleManager.h"
+#include "TexAnimation3D_Collision.h"
+
 #define _CRT_SECURE_NO_WARNINGS // 警告除去
 int			CGame::m_Counter	= 0;
 CPlayer		*CGame::m_pPlayer	= NULL;
@@ -94,4 +93,10 @@ void CGame::ShowDebugInfo(void)
 
 	// マップの更新
 	m_pMap->MapUpdate();
+
+	if (key->GetKeyboardTrigger(DIK_R))
+	{
+		CTexAnimation3D_Collision::Create(m_pPlayer->GetPosition(), D3DXVECTOR3(50.0f, 50.0f, 0.0f), ZeroVector3,
+			CTexture::SEPARATE_TEX_EFFECT_EXPLOSION01, 1, CScene::OBJTYPE_EXPROSION, true);
+	}
 }

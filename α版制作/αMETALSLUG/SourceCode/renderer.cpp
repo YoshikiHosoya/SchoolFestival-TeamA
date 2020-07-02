@@ -12,6 +12,7 @@ LPD3DXFONT			g_pFont = NULL;	 // フォントへのポインタ
 //=============================================================================
 CRenderer::CRenderer()
 {
+	m_bShowDebug = true;
 }
 
 CRenderer::~CRenderer()
@@ -249,12 +250,20 @@ void CRenderer::Draw(void)
 		m_pFade->DrawFade();
 #ifdef _DEBUG
 
-		m_pDebug->Draw();
-		DrawFPS();
+		//デバッグ見るかどうか
+		if (m_bShowDebug)
+		{
+			//デバッグ表記
+			m_pDebug->Draw();
+			DrawFPS();
 
-		//ImGui描画
-		ImGui::Render();
-		ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
+			//ImGui描画
+			ImGui::Render();
+			ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
+		}
+
+		//文字列初期化
+		m_pDebug->ResetStr();
 
 #endif // _DEBUG
 

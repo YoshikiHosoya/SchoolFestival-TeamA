@@ -10,6 +10,7 @@
 #include "game.h"
 #include "debugproc.h"
 #include "texture.h"
+#include "TexAnimation3D_Collision.h"
 
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
@@ -91,6 +92,8 @@ void CShotgun::Draw(void)
 // =====================================================================================================================================================================
 void CShotgun::DeleteBullet()
 {
+	CBullet::DeleteBullet();
+
 }
 
 // =====================================================================================================================================================================
@@ -123,7 +126,7 @@ CShotgun * CShotgun::Create(D3DXVECTOR3 rot)
 
 	// プレイヤーの向きに合わせる
 	pShotGun->GetMove() = D3DXVECTOR3(-sinf(rot.y) * cosf(rot.x) * pBulletParam->fBulletSpeed, sinf(rot.x) * pBulletParam->fBulletSpeed, -cosf(rot.y) * cosf(rot.x) * pBulletParam->fBulletSpeed);
-	
+
 	// モデルタイプの設定
 	pShotGun->SetType(BULLET_MODEL);
 

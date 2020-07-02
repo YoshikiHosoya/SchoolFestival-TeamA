@@ -39,8 +39,11 @@ std::vector<CTexture::SEPARATE_TEX_INFO> CTexture::m_apSeparateTexInfoList =
 	{ nullptr, "data/TEXTURE/Effect/Explosion01.png",		CTexture::SEPARATE_TEX_EFFECT_EXPLOSION01,		D3DXVECTOR2(5,3),	ZeroVector2 },		//爆発
 	{ nullptr, "data/TEXTURE/Effect/ShotFlash.png",			CTexture::SEPARATE_TEX_EFFECT_SHOTFLASH,		D3DXVECTOR2(5,2),	ZeroVector2 },		//発砲時の光
 	{ nullptr, "data/TEXTURE/Effect/Spark.png",				CTexture::SEPARATE_TEX_EFFECT_SPARK,			D3DXVECTOR2(5,2),	ZeroVector2 },		//電撃
-	{ nullptr, "data/TEXTURE/Effect/hit.png",				CTexture::SEPARATE_TEX_EFFECT_HITEFFECT,		D3DXVECTOR2(7,1),	ZeroVector2 },		//着弾エフェクト
+	{ nullptr, "data/TEXTURE/Effect/HitEffect.png",			CTexture::SEPARATE_TEX_EFFECT_HITEFFECT,		D3DXVECTOR2(14,1),	ZeroVector2 },		//着弾エフェクト
 	{ nullptr, "data/TEXTURE/Effect/Smoke.png",				CTexture::SEPARATE_TEX_EFFECT_SMOKE,			D3DXVECTOR2(10,1),	ZeroVector2 },		//煙
+	{ nullptr, "data/TEXTURE/Effect/ShotGun.png",			CTexture::SEPARATE_TEX_EFFECT_SHOTGUN,			D3DXVECTOR2(5,3),	ZeroVector2 },		//ショットガン
+	{ nullptr, "data/TEXTURE/Effect/Impact00.png",			CTexture::SEPARATE_TEX_EFFECT_IMPACT00,			D3DXVECTOR2(2,5),	ZeroVector2 },		//インパクト
+	{ nullptr, "data/TEXTURE/Effect/Impact01.png",			CTexture::SEPARATE_TEX_EFFECT_IMPACT01,			D3DXVECTOR2(2,6),	ZeroVector2 },		//インパクト
 
 };
 

@@ -17,6 +17,7 @@
 #define MAX_LENGTH (-100) //カメラの距離
 #define CAMERA_MOVE_SPEED (10.0f)
 #define CAMERA_ROTATION_SPEED (0.05f)
+#define CAMETA_POSR_OFFSET (D3DXVECTOR3(0.0f,50.0f,0.0f))
 
 #define DEFAULT_DISTANCE (400.0f)
 #define DEFAULT_CAMERA_ROTATION (D3DXVECTOR3(0.2f,0.0f,0.0f))
@@ -188,7 +189,7 @@ void CCamera::CharacterFollowingMoveCamera()
 		{
 			//座標取得
 			//カメラ最終目的地
-			m_posRDest = pPlayer->GetPosition();
+			m_posRDest = pPlayer->GetPosition() + CAMETA_POSR_OFFSET;
 		}
 	}
 

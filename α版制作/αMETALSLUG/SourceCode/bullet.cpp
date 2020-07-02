@@ -16,6 +16,7 @@
 #include "map.h"
 #include "Obstacle.h"
 #include "prisoner.h"
+#include "TexAnimation3D.h"
 // =====================================================================================================================================================================
 // ê√ìIÉÅÉìÉoïœêîÇÃèâä˙âª
 // =====================================================================================================================================================================
@@ -138,7 +139,7 @@ void CBullet::Update(void)
 			if (GetCollision()->ForPlayerBulletCollision(BULLET_DAMAGE_ENEMY, BULLET_DAMAGE_OBSTACLE, BULLET_PENETRATION))
 			{
 				// íeÇÃçÌèú
-				Rerease();
+				DeleteBullet();
 			}
 		}
 
@@ -149,7 +150,7 @@ void CBullet::Update(void)
 			if (GetCollision()->ForEnemyCollision(BULLET_DAMAGE_PLAYER, BULLET_PENETRATION))
 			{
 				// íeÇÃçÌèú
-				Rerease();
+				DeleteBullet();
 			}
 		}
 	}
@@ -164,8 +165,7 @@ void CBullet::Update(void)
 		// ÉåÉCÇÃîªíË
 		if (GetCollision()->RayCollision(pMap))
 		{
-			// íeÇÃçÌèú
-			Rerease();
+			DeleteBullet();
 		}
 		else
 		{
@@ -185,6 +185,19 @@ void CBullet::Draw(void)
 {
 	// ï`âÊ
 	CModel::Draw();
+}
+
+// =====================================================================================================================================================================
+//
+// íeè¡ãé
+//
+// =====================================================================================================================================================================
+void CBullet::DeleteBullet()
+{
+	CTexAnimation3D::Create(GetPosition(), D3DXVECTOR3(15.0f, 15.0f, 0.0f), ZeroVector3, CTexture::SEPARATE_TEX_EFFECT_HITEFFECT, 1, OBJTYPE_EFFECT);
+
+	// íeÇÃçÌèú
+	Rerease();
 }
 
 // =====================================================================================================================================================================

@@ -16,7 +16,7 @@
 #include "rocketlauncher.h"
 #include "flameshot.h"
 #include "Character.h"
-
+#include "TexAnimation3D.h"
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
 // =====================================================================================================================================================================
@@ -145,7 +145,7 @@ CGun * CGun::Create(D3DXMATRIX *mtx)
 
 	// 初期化
 	pGun->Init();
-	
+
 	// マトリックス代入
 	pGun->m_mtx = mtx;
 
@@ -245,8 +245,14 @@ void CGun::Shot(D3DXVECTOR3 rot)
 
 			// 弾のパラメーターの設定
 			pBullet->SetBulletParam(m_GunType);
+
+			//ノズルフラッシュ
+			CTexAnimation3D::Create(m_ShotPos, D3DXVECTOR3(30.0f, 30.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),
+				CTexture::SEPARATE_TEX_EFFECT_SHOTFLASH, 1, CScene::OBJTYPE_EFFECT);
 		}
 	}
+
+
 }
 
 // =====================================================================================================================================================================
@@ -264,41 +270,46 @@ void CGun::MultipleShot()
 	{
 		if (m_nCntFrame >= HEAVYMACHINEGUN_SHOT_FRAME)
 		{
-		// フレームカウント初期化
-		m_nCntFrame = 0;
+			// フレームカウント初期化
+			m_nCntFrame = 0;
 
-		// ヘビーマシンガンのとき
-		if (m_GunType == GUNTYPE_HEAVYMACHINEGUN)
-		{
-			// 弾の生成
-			pBullet = CHeavyMachinegun::Create(m_rot);
-		}
-		// フレイムショットのとき
-		if (m_GunType == GUNTYPE_FLAMESHOT)
-		{
-			// 弾の生成
-			pBullet = CFlameshot::Create(m_rot);
-		}
+			// ヘビーマシンガンのとき
+			if (m_GunType == GUNTYPE_HEAVYMACHINEGUN)
+			{
+				// 弾の生成
+				pBullet = CHeavyMachinegun::Create(m_rot);
+			}
+			// フレイムショットのとき
+			if (m_GunType == GUNTYPE_FLAMESHOT)
+			{
+				// 弾の生成
+				pBullet = CFlameshot::Create(m_rot);
+			}
 
-		// 残弾数を減らす
-		m_nAmmo--;
+			// 残弾数を減らす
+			m_nAmmo--;
 
-		// 弾のカウントアップ
-		m_nCntBullet++;
+			// 弾のカウントアップ
+			m_nCntBullet++;
 
-		if (pBullet)
-		{
-			D3DXVec3TransformCoord(&m_ShotPos, &D3DXVECTOR3(SHOT_BULLET_POS_X, 0.0f, -SHOT_BULLET_POS_Z), GetMatrix());
+			if (pBullet)
+			{
+				D3DXVec3TransformCoord(&m_ShotPos, &D3DXVECTOR3(SHOT_BULLET_POS_X, 0.0f, -SHOT_BULLET_POS_Z), GetMatrix());
 
-			// 位置の設定
-			pBullet->SetPosition(D3DXVECTOR3(m_ShotPos.x, m_ShotPos.y + randPos_y, m_ShotPos.z));
+				// 位置の設定
+				pBullet->SetPosition(D3DXVECTOR3(m_ShotPos.x, m_ShotPos.y + randPos_y, m_ShotPos.z));
 
-			// 弾の種類の設定
-			pBullet->SetBulletType((CBullet::BULLET_TYPE)m_BulletType);
+				// 弾の種類の設定
+				pBullet->SetBulletType((CBullet::BULLET_TYPE)m_BulletType);
 
-			// 弾のパラメーターの設定
-			pBullet->SetBulletParam(m_GunType);
-		}
+				// 弾のパラメーターの設定
+				pBullet->SetBulletParam(m_GunType);
+
+				//ノズルフラッシュ
+				CTexAnimation3D::Create(m_ShotPos, D3DXVECTOR3(30.0f, 30.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),
+					CTexture::SEPARATE_TEX_EFFECT_SHOTFLASH, 1, CScene::OBJTYPE_EFFECT);
+
+			}
 		}
 	}
 	else

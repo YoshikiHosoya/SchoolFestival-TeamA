@@ -14,6 +14,7 @@ public:
 	void Uninit(void);
 	static void Print(char*fmt, ...);
 	static void Draw(void);
+	static void ResetStr() { m_aStr[0] = '\0'; };
 private:
 	static LPD3DXFONT m_pFont;
 	static char m_aStr[10000];
