@@ -23,7 +23,7 @@ void CBaseMode::DebugCommand(void)
 
 	//使い方説明
 	CDebugProc::Print("---------Debug Command----------\n");
-
+	CDebugProc::Print("[F2] : デバッグ表記on/off\n");
 	CDebugProc::Print("[F3] : 一時停止\n");
 	CDebugProc::Print("[F4] : 一時停止中に1Fだけ更新n");
 
@@ -33,8 +33,6 @@ void CBaseMode::DebugCommand(void)
 	CDebugProc::Print("[Ctrl] + テンキー [3] : Resultに遷移\n");
 	CDebugProc::Print("[Ctrl] + テンキー [8] : EffectViewerに遷移\n");
 	CDebugProc::Print("[Ctrl] + テンキー [9] : MotionViewerに遷移\n");
-
-
 
 	//一時停止
 	if (key->GetKeyboardTrigger(DIK_F3))
@@ -46,6 +44,12 @@ void CBaseMode::DebugCommand(void)
 	if (key->GetKeyboardTrigger(DIK_F4))
 	{
 		CScene::Set1FUpdate();
+	}
+
+	//デバッグ表記on/off
+	if (key->GetKeyboardTrigger(DIK_F5))
+	{
+		CManager::GetRenderer()->SetShowDebug();
 	}
 
 	//Ctrl押しながら

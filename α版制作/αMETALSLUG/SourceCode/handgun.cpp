@@ -91,6 +91,7 @@ void CHandgun::Draw(void)
 // =====================================================================================================================================================================
 void CHandgun::DeleteBullet()
 {
+	CBullet::DeleteBullet();
 }
 
 // =====================================================================================================================================================================
@@ -123,7 +124,7 @@ CHandgun * CHandgun::Create(D3DXVECTOR3 rot)
 
 	// プレイヤーの向きに合わせる
 	pHandgun->GetMove() = D3DXVECTOR3(-sinf(rot.y) * cosf(rot.x) * pBulletParam->fBulletSpeed, sinf(rot.x) * pBulletParam->fBulletSpeed, -cosf(rot.y) * cosf(rot.x) * pBulletParam->fBulletSpeed);
-	
+
 	// モデルタイプの設定
 	pHandgun->SetType(BULLET_MODEL);
 

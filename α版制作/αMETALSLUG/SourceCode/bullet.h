@@ -53,6 +53,7 @@ public:
 	virtual void				Uninit();				// 終了
 	virtual void				Update();				// 更新
 	virtual void				Draw();					// 描画
+	virtual void				DeleteBullet();			// 弾消去
 
 	/* 静的メンバ関数 */
 	static	void				BulletLoad();			// 弾のロード

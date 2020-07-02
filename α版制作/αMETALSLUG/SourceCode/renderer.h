@@ -39,6 +39,7 @@ public:
 	LPDIRECT3DDEVICE9 GetDevice(void);
 	CFADE *GetFade(void);
 	CCamera *GetCamera();
+	void SetShowDebug() { m_bShowDebug ^= 1; };
 
 	void SetRendererCommand(RENDERER_COMMAND Command);		//レンダラー設定 ショートカット
 	void ResetRenderer();
@@ -54,6 +55,8 @@ private:
 	CCamera *m_pCamera;
 	CDebugProc *m_pDebug;
 	CFADE *m_pFade;
+	bool m_bShowDebug;
+
 	void ResetDevice();		//デバイスリセット
 };
 #endif
