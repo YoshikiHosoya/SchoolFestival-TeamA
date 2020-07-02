@@ -14,6 +14,9 @@
 //------------------------------------------------------------------------------
 //クラス定義
 //------------------------------------------------------------------------------
+class CGun;
+class CKnife;
+
 class CModelCharacter;
 
 class CDebug_ViewerCharacter : public CCharacter
@@ -43,5 +46,8 @@ private:
 	void CopyMotionPaste(CCharacter::CHARACTER_MOTION_STATE CopyMotionType, int nCopyKey, CCharacter::CHARACTER_MOTION_STATE NowMotion, int nNowKey);
 	HRESULT SaveMotion(CCharacter::CHARACTER_MOTION_STATE motiontype);
 	HRESULT SaveModelOffset();
+
+	CGun *m_pGun;				//ナイフ銃ポインタ
+	CKnife *m_pKnife;			//ナイフのポインタ
 };
 #endif

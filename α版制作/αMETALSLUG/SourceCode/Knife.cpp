@@ -135,7 +135,7 @@ void CKnife::StartMeleeAttack()
 
 	////ƒRƒŠƒWƒ‡ƒ“¶¬
 	//m_pCollision = CCollision::Create();
-	m_pCollision->SetPos(GetPosptr());
+	//m_pCollision->SetPos(GetPosptr());
 
 
 	//UŒ‚I—¹
