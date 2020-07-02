@@ -20,10 +20,14 @@
 #include "Obstacle.h"
 #include "grenade.h"
 #include "prisoner.h"
+#include "Knife.h"
 //====================================================================
 //マクロ定義
 //====================================================================
 #define PLAYER_SIZE			(D3DXVECTOR3(50.0f,65.0f,0.0f)) //敵のサイズ
+// 貫通させるかのフラグ
+#define ATTACK_PENETRATION		(true)			// プレイヤーの判定が貫通するかどうか
+
 
 CPlayer::CPlayer(OBJ_TYPE type) :CCharacter(type)
 {
@@ -35,6 +39,16 @@ CPlayer::CPlayer(OBJ_TYPE type) :CCharacter(type)
 
 CPlayer::~CPlayer()
 {
+#ifdef _DEBUG
+
+	// 当たり判定の削除
+	if (m_pCollision != nullptr)
+	{
+		delete m_pCollision;
+		m_pCollision = nullptr;
+	}
+#endif // _DEBUG
+
 }
 //====================================================================
 //初期化
@@ -51,13 +65,15 @@ HRESULT CPlayer::Init(void)
 	m_pGun = CGun::Create(GetCharacterModelPartsList(CModel::MODEL_PLAYER_RHAND)->GetMatrix());
 	// 銃の弾の種類
 	m_pGun->GetBulletType() = CGun::TYPE_PLAYER;
+	// ナイフの生成
+	m_pKnife = CKnife::Create(GetCharacterModelPartsList(CModel::MODEL_PLAYER_LHAND)->GetMatrix());
 
 	// 当たり判定生成
 	m_pCollision = CCollision::Create();
 	m_pCollision->SetPos(&GetPosition());
 	m_pCollision->SetSize2D(PLAYER_SIZE);
 	m_pCollision->SetMove(&GetMove());
-	m_pCollision->SetType(CCollision::OBJTYPE_PLAYER);
+	m_pCollision->SetType(CCollision::COLLISION_PLAYER);
 	m_pCollision->DeCollisionCreate(CCollision::COLLISIONTYPE_CHARACTER);
 
 	return S_OK;
@@ -99,37 +115,54 @@ void CPlayer::Update(void)
 			//// 捕虜の当たり判定削除
 			//if (m_pPrisoner->GetCollision() != nullptr)
 			//{
-			//	m_pPrisoner->DeleteCollision();
-			//	m_pPrisoner = nullptr;
 			//}
+			SetMotion(CCharacter::PLAYER_MOTION_ATTACK01);
+			m_pKnife->StartMeleeAttack();
+			m_Attack = true;
+
 		}
-		// 銃発射処理
-		m_pGun->Shot(GetShotDirection());
+		//// 銃発射処理
+		//m_pGun->Shot(GetShotDirection());
 	}
 	// グレネードを投げる
 	if (key->GetKeyboardTrigger(DIK_O))
 	{
 		// グレネード生成
 		CGrenade::Create(GetShotDirection() , GetCharacterModelPartsList(CModel::MODEL_PLAYER_LHAND)->GetMatrix());
+		SetMotion(CCharacter::PLAYER_MOTION_GRENADE);
+	}
+	if (key->GetKeyboardPress(DIK_W))
+	{
+		SetCharacterDirection(CHARACTER_UP);
 	}
 
 	// Aの処理
 	if (key->GetKeyboardPress(DIK_A))
 	{
 		CPlayer::Move(0.5f, 0.5f);
+		if (key->GetKeyboardPress(DIK_W))
+		{
+			SetCharacterDirection(CHARACTER_UP);
+		}
+		else
+		{
 		SetCharacterDirection(CHARACTER_LEFT);
+		}
 	}
 	// Dの処理
 	else if (key->GetKeyboardPress(DIK_D))
 	{
 		CPlayer::Move(-0.5f, -0.5f);
+		if (key->GetKeyboardPress(DIK_W))
+		{
+			SetCharacterDirection(CHARACTER_UP);
+		}
+		else
+		{
 		SetCharacterDirection(CHARACTER_RIGHT);
+		}
 	}
 
-	else if (key->GetKeyboardPress(DIK_W))
-	{
-		SetCharacterDirection(CHARACTER_UP);
-	}
 
 	//ジャンプしたときの下向発射
 	if (key->GetKeyboardPress(DIK_S) && GetJump() == false)
@@ -182,89 +215,36 @@ void CPlayer::Update(void)
 		m_pCollision->SetPos(&GetPosition());
 		m_pCollision->SetPosOld(&GetPositionOld());
 
-		//相手がエネミーだったら
-		// 敵の総数分
-		for (int nCnt = 0; nCnt < CManager::GetBaseMode()->GetMap()->GetMaxEnemy(); nCnt++)
+		// エネミーとの判定
+		if (m_pCollision->ForPlayer_EnemyCollision(ATTACK_PENETRATION) || m_pCollision->ForPlayer_PrisonerCollision(ATTACK_PENETRATION))
 		{
-			CEnemy *pEnemy = CManager::GetBaseMode()->GetMap()->GetEnemy(nCnt);
-			if (pEnemy != nullptr)
-			{
-				if (m_pCollision->CharCollision2D(pEnemy->GetCollision()))
-				{
-					CDebugProc::Print("\n時機が敵に当たったよ！\n");
-				}
-				else
-				{
-					CDebugProc::Print("\n時機が敵に当たってないよ！ \n");
-				}
-			}
+			// 近接攻撃可能にする
+			m_bCloseRangeAttack = true;
+		}
+		else
+		{
+			// 近接攻撃が無効になる
+			m_bCloseRangeAttack = false;
 		}
 
-		//相手が障害物だったら
-		// 障害物のの総数分
-		for (int nCntObst = 0; nCntObst < CManager::GetBaseMode()->GetMap()->GetMaxObstacle(); nCntObst++)
+		// 障害物との判定
+		if (m_pCollision->ForPlayer_ObstacleCollision())
 		{
-			CObstacle *pObstacle = CManager::GetBaseMode()->GetMap()->GetObstacle(nCntObst);
-			if (pObstacle != nullptr)
-			{
-				if (m_pCollision->BlockCollision2D(pObstacle->GetCollision()))
-				{
-					CCharacter::SetJump(true);
-					CDebugProc::Print("\n時機が障害物に当たったよ！\n");
-				}
-				else
-				{
-					CDebugProc::Print("\n時機が障害物に当たってないよ！ \n");
-				}
-			}
+			// ジャンプフラグを可能にする
+			CCharacter::SetJump(true);
 		}
 
-		// 相手が捕虜だったら
-		// 捕虜の総数分
-		for (int nCntPriso = 0; nCntPriso < CManager::GetBaseMode()->GetMap()->GetMaxPrisoner(); nCntPriso++)
+		// アイテムとの判定
+		if (m_pCollision->ForPlayer_ItemCollision())
 		{
-			CPrisoner *pPrisoner = CManager::GetBaseMode()->GetMap()->GetPrisoner(nCntPriso);
-			if (pPrisoner != nullptr)
-			{
-				if (m_pCollision->CharCollision2D(pPrisoner->GetCollision()))
-				{
-					// 対象のポインタを保存
-					m_pPrisoner = pPrisoner;
-					// 攻撃方法が近接攻撃になる
-					m_bCloseRangeAttack = true;
-					CDebugProc::Print("\n時機が捕虜に当たったよ！\n");
-				}
-				else
-				{
-					// 近接攻撃が無効になる
-					m_bCloseRangeAttack = false;
-					CDebugProc::Print("\n時機が捕虜に当たってないよ！ \n");
-				}
-			}
 		}
-
-		//相手がアイテムだったら
-		// ベクター型の変数
-		std::vector<CScene*> SceneList;
-
-		// 指定したオブジェクトのポインタを取得
-		CScene::GetSceneList(OBJTYPE_ITEM, SceneList);
-
-		//アイテムの総数分
-		for (size_t nCnt = 0; nCnt < SceneList.size(); nCnt++)
+	}
+	if (GetMotionType() != CCharacter::PLAYER_MOTION_ATTACK01)
+	{
+		m_Attack = false;
+		if (m_Attack == false)
 		{
-			CItem *pItem = (CItem*)SceneList[nCnt];
-			if (pItem != nullptr)
-			{
-				if (m_pCollision->OtherCollision2D(pItem->GetCollision()))
-				{
-					// アイテムごとの処理を通す
-					pItem->HitItem(pItem->GetItemType());
-					pItem->DeleteCollision();
-					pItem = nullptr;
-				}
-			}
-
+			m_pKnife->EndMeleeAttack();
 		}
 	}
 	if (CHossoLibrary::PressAnyButton())
@@ -286,7 +266,22 @@ void CPlayer::Draw(void)
 //====================================================================
 void CPlayer::DebugInfo(void)
 {
-	CDebugProc::Print("プレイヤーの向き%2f", GetRot().y);
+	if (m_bCloseRangeAttack == true)
+	{
+		CDebugProc::Print("近接攻撃：可能\n");
+	}
+	else
+	{
+		CDebugProc::Print("近接攻撃：不可能\n");
+	}
+	if (m_Attack == true)
+	{
+		CDebugProc::Print("攻撃中\n");
+	}
+	else
+	{
+		CDebugProc::Print("攻撃してない\n");
+	}
 }
 //====================================================================
 //モデルのクリエイト
@@ -322,4 +317,5 @@ void CPlayer::Move(float move, float fdest)
 	GetMove().x += sinf(move * -D3DX_PI) * 1.0f;
 	GetMove().z += cosf(move * -D3DX_PI) * 1.0f;
 	GetRotDest().y = fdest *  D3DX_PI;
+	SetMotion(PLAYER_MOTION_WALK);
 }

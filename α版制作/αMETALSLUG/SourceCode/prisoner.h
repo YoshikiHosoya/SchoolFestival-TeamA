@@ -50,7 +50,6 @@ public:
 	/* メンバ関数 */
 	void				DebugInfo(void);					// デバッグ
 	bool				DefaultMotion(void);				// デフォルトモーション
-	void				DeleteCollision(void);				// 当たり判定の削除
 
 	PRISONER_STATE		GetPrisonerState()
 	{

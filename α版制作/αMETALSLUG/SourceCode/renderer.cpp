@@ -396,6 +396,23 @@ void CRenderer::SetRendererCommand(RENDERER_COMMAND Command)
 	}
 }
 //=============================================================================
+//画面遷移したときにレンダラーに関する情報をリセットする
+//=============================================================================
+void CRenderer::ResetRenderer()
+{
+	//カメラの情報リセット 初期情報入れる場合はMode側でやって
+	m_pCamera->ResetCamera();
+
+	//レンダラー設定
+	SetRendererCommand(CRenderer::RENDERER_LIGHTING_ON);
+	SetRendererCommand(CRenderer::RENDERER_CULLING_CCW);
+	SetRendererCommand(CRenderer::RENDERER_ZTEST_DEFAULT);
+	SetRendererCommand(CRenderer::REDNERER_ALPHABLEND_DEFAULT);
+	SetRendererCommand(CRenderer::RENDERER_WIRE_OFF);
+
+
+}
+//=============================================================================
 //デバイスリセット imGui用の処理含む
 //=============================================================================
 void CRenderer::ResetDevice()

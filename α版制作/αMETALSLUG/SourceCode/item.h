@@ -31,7 +31,6 @@ public:
 	// タイプ
 	typedef enum
 	{
-		ITEMTYPE_NONE = 0,
 		ITEMTYPE_HEAVYMACHINEGUN,	//ヘビーマシンガン
 		ITEMTYPE_SHOTGUN,			//ショットガン
 		ITEMTYPE_LASERGUN,			//レーザーガン
@@ -55,7 +54,6 @@ public:
 	void						HitItem(ITEMTYPE type);							// アイテム取得時の種類別処理
 	ITEMTYPE					GetItemType() { return m_Type; };				// アイテムタイプの取得
 	CCollision					*GetCollision() { return m_pCollision; };		// 当たり判定
-	void						DeleteCollision(void);
 	/* 静的メンバ関数 */
 	static	CItem				*Create(D3DXVECTOR3 pos, ITEMTYPE type);		// アイテムの生成
 	static	CItem				*RandCreate(const D3DXVECTOR3 pos);					// 捕虜用アイテムの生成

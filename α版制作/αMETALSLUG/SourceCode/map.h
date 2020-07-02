@@ -56,6 +56,7 @@ public:
 	CEnemy			*GetEnemy(int nCnt) { return m_pEnemy[nCnt]; };			// “G‚Ìæ“¾
 	CPrisoner		*GetPrisoner(int nCnt) { return m_pPrisoner[nCnt]; };	// •ß—¸‚Ìæ“¾
 	CObstacle		*GetObstacle(int nCnt) { return m_pObstacle[nCnt]; };	// áŠQ•¨‚Ìæ“¾
+
 	void			UpdateDieFlag();										// €–Sƒtƒ‰ƒOŠm”FŠÖ”
 
 private:

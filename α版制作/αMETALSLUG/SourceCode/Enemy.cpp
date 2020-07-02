@@ -24,6 +24,16 @@ CEnemy::CEnemy(OBJ_TYPE type) :CCharacter(type)
 
 CEnemy::~CEnemy()
 {
+#ifdef _DEBUG
+
+	// “–‚½‚è”»’è‚Ìíœ
+	if (m_pCollision != nullptr)
+	{
+		delete m_pCollision;
+		m_pCollision = nullptr;
+	}
+#endif // _DEBUG
+
 }
 //====================================================================
 //‰Šú‰»
@@ -43,7 +53,7 @@ HRESULT CEnemy::Init(void)
 	m_pCollision->SetPosOld(&GetPositionOld());
 	m_pCollision->SetSize2D(ENEMY_SIZE);
 	m_pCollision->SetMove(&GetMove());
-	m_pCollision->SetType(CCollision::OBJTYPE_ENEMY);
+	m_pCollision->SetType(CCollision::COLLISION_ENEMY);
 	m_pCollision->DeCollisionCreate(CCollision::COLLISIONTYPE_CHARACTER);
 
 	CCharacter::SetLife(50);
@@ -116,14 +126,6 @@ bool CEnemy::DefaultMotion(void)
 {
 	SetMotion(CCharacter::ENEMY_MOTION_NORMAL);
 	return true;
-}
-//====================================================================
-//“–‚½‚è”»’è‚Ìíœ
-//====================================================================
-void CEnemy::DeleteCollision(void)
-{
-	m_pCollision->ReleaseCollision(m_pCollision);
-	m_pCollision = nullptr;
 }
 //====================================================================
 //ˆÚ“®

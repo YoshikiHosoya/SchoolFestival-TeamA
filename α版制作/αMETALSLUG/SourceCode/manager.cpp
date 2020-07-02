@@ -96,34 +96,54 @@ void CManager::Draw(void)
 //===========================================
 void CManager::SetGameMode(GAME_MODE mode)
 {
+	//nullcheck
 	if (m_pBaseMode)
 	{
+		//終了処理
 		CScene::RereaseAll();
 		m_pBaseMode->Uninit();
 		delete m_pBaseMode;
 		m_pBaseMode = nullptr;
 	}
+
+	//モード切替
 	m_mode = mode;
+
+	//レンダラーリセット
+	m_pRenderer->ResetRenderer();
 
 	switch (mode)
 	{
+		//Title
 	case MODE_TITLE:
 		break;
+
+		//Game
 	case MODE_GAME:
 		m_pBaseMode = new CGame;
 		m_pBaseMode->Init();
 		break;
+
+		//Result
 	case MODE_RESULT:
 		break;
+
+		//Tutorial
 	case MODE_TUTORIAL:
 		break;
+
+		//Clear?
 	case MODE_CLEAR:
 		break;
+
+		//MotionViewer
 	case MODE_DEBUG_MODELVIEWER:
 		m_pBaseMode = new CDebug_ModelViewer;
 		m_pBaseMode->Init();
 
 		break;
+
+		//EffectViewer
 	case MODE_DEBUG_EFFECTVIEWER:
 		m_pBaseMode = new CDebug_EffectViewer;
 		m_pBaseMode->Init();
@@ -182,7 +202,7 @@ CXInputPad * CManager::GetPad(void)
 {
 	if (m_pPad)
 	{
-	return m_pPad;
+		return m_pPad;
 	}
 	return nullptr;
 }

@@ -271,7 +271,7 @@ void COrbit::DeleteOrbit()
 COrbit *COrbit::Create(D3DXMATRIX *pMtx)
 {
 	//•Ï”éŒ¾
-	COrbit *pOrbit = new COrbit;
+	COrbit *pOrbit = new COrbit(OBJTYPE_ORBIT);
 
 	if (pOrbit)
 	{

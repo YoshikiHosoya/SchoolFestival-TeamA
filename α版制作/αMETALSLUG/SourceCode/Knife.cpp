@@ -16,6 +16,7 @@
 // =====================================================================================================================================================================
 // マクロ定義
 // =====================================================================================================================================================================
+#define KNIFE_ORBIT_OFFSET (D3DXVECTOR3(0.0,0.0,-30.0f))
 
 // =====================================================================================================================================================================
 // コンストラクタ
@@ -133,9 +134,21 @@ void CKnife::StartMeleeAttack()
 	//軌跡作成
 	m_pOrbit = COrbit::Create(GetMatrix());
 
-	////コリジョン生成
-	//m_pCollision = CCollision::Create();
-	//m_pCollision->SetPos(GetPosptr());
+	//nullcheck
+	if (m_pOrbit)
+	{
+		m_pOrbit->SetCol(RedColor);
+		m_pOrbit->SetPosOffset(KNIFE_ORBIT_OFFSET);
+	}
+
+	//コリジョン生成
+	m_pCollision = CCollision::Create();
+	if (m_pCollision)
+	{
+		m_pCollision->SetPos(GetPosptr());
+		//m_pCollision->SetSize(D3DXVECTOR3())
+	}
+
 
 
 	//攻撃終了
@@ -153,6 +166,15 @@ void CKnife::EndMeleeAttack()
 	{
 		//軌跡削除
 		m_pOrbit->DeleteOrbit();
+		m_pOrbit = nullptr;
+	}
+
+	//nullcheck
+	if (m_pCollision)
+	{
+		//軌跡削除
+		delete m_pCollision;
+		m_pCollision = nullptr;
 	}
 
 	//攻撃状態終了

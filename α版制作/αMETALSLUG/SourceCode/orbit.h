@@ -50,7 +50,6 @@ private:
 
 	int m_nLife;											//フラグがたってからのライフ
 	bool m_bDeleteFlag;										//消えるかどうか
-	float m_fLength;										//軌跡の長さ
 	D3DXCOLOR m_coldefault;									//最初の色
 	D3DXCOLOR m_col[MAX_ORBIT_LENGTH];						//色
 	D3DXVECTOR3 m_posVertex[MAX_ORBIT_LENGTH];				//各頂点の座標

@@ -14,7 +14,7 @@ class CUI;
 class CGun;
 class CCollision;
 class CPrisoner;
-
+class CKnife;
 //レンダリングクラス
 class CPlayer :public CCharacter
 {
@@ -37,6 +37,8 @@ public:
 	DEBUG_STATE GetDebugState(void);
 	static CPlayer *Create(void);
 	bool DefaultMotion(void);
+	CCollision	*GetCollision() { return m_pCollision; };	// 当たり判定
+	CGun		*GetGun() { return  m_pGun; };				// 銃のポインタ取得
 private:
 	void Move(float move, float fdest);
 		DEBUG_STATE m_DebugState;						//デバッグのステータス
@@ -47,6 +49,6 @@ private:
 		CCollision					*m_pCollision;		// 当たり判定情報
 		bool						m_bCloseRangeAttack;// 近接攻撃フラグ
 		CPrisoner					*m_pPrisoner;		// 捕虜のポインタを保存する変数
-
+		CKnife *m_pKnife;
 };
 #endif
