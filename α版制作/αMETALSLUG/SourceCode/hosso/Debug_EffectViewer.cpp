@@ -17,6 +17,8 @@
 #include "../fade.h"
 #include "../particle.h"
 #include "../ParticleManager.h"
+#include "../MeshField.h"
+
 //------------------------------------------------------------------------------
 //Ã“Iƒƒ“ƒo•Ï”‚Ì‰Šú‰»
 //------------------------------------------------------------------------------
@@ -56,6 +58,8 @@ HRESULT CDebug_EffectViewer::Init()
 	//CManager::GetRenderer()->GetCamera()->SetCameraRot(D3DXVECTOR3( 0.4f, 0.0f, 0.0f));
 
 	//CMeshField::Create(ZeroVector3, D3DXVECTOR3(100.0f, 0.0f, 100.0f), INTEGER2(5, 5));
+
+	CMeshField::Create(ZeroVector3, D3DXVECTOR3(50.0f, 50.0f, 50.0f), INTEGER2(20, 20));
 
 	CParticleManager::Create();
 

@@ -71,11 +71,20 @@ char *CModel::m_GunFileName[MODEL_GUN_MAX] =
 	{ "data/MODEL/Gun/Gun.x" },					// ロケットランチャー
 	{ "data/MODEL/Gun/Gun.x" },					// フレイムショット
 };
+
 char *CModel::m_BulletFileName[MODEL_BULLET_MAX] =
 {
 	{ "data/MODEL/Bullet/Sphere.x" },				// 丸
 	{ "data/MODEL/Bullet/Rocketlauncher.x" },		// ロケットランチャー
 	{ "data/MODEL/Bullet/Grenade.x" },				// グレネード
+};
+
+char *CModel::m_TankFileName[MODEL_TANK_MAX] =
+{
+	{ "data/MODEL/Tank/Tankbody.x" },				// 戦車の頭
+	{ "data/MODEL/Tank/Tankhead.x" },				// 戦車の体
+	{ "data/MODEL/Tank/Tankwheel.x" },				// 戦車のタイヤ
+	{ "data/MODEL/Tank/Tankgun.x" },				// 戦車の銃
 };
 
 char *CModel::m_ObstacleFileName[OBSTACLE_TYPE_MAX] =
@@ -296,6 +305,34 @@ void CModel::LoadModel(void)
 		std::cout << "OBSTACLE Load >>" << m_ObstacleFileName[nCnt] << NEWLINE;
 
 	}
+	//障害物箱のモデル読み込み
+	for (int nCnt = 0; nCnt < MODEL_TANK_MAX; nCnt++)
+	{
+		// Xファイルの読み込み
+		D3DXLoadMeshFromX(
+			m_TankFileName[nCnt],
+			D3DXMESH_SYSTEMMEM,
+			pDevice,
+			NULL,
+			&m_Model[TANK_MODEL][nCnt].pBuffmat,
+			NULL,
+			&m_Model[TANK_MODEL][nCnt].nNumMat,
+			&m_Model[TANK_MODEL][nCnt].pMesh
+		);
+		//テクスチャのメモリ確保
+		m_Model[TANK_MODEL][nCnt].m_pTexture = new LPDIRECT3DTEXTURE9[(int)m_Model[TANK_MODEL][nCnt].nNumMat];
+		pMat = (D3DXMATERIAL*)m_Model[TANK_MODEL][nCnt].pBuffmat->GetBufferPointer();
+
+		for (int nCntmat = 0; nCntmat < (int)m_Model[TANK_MODEL][nCnt].nNumMat; nCntmat++)
+		{
+			m_Model[TANK_MODEL][nCnt].m_pTexture[nCntmat] = NULL;
+			D3DXCreateTextureFromFile(pDevice, pMat[nCntmat].pTextureFilename, &m_Model[TANK_MODEL][nCnt].m_pTexture[nCntmat]);
+		}
+
+		std::cout << "TANKMODEL Load >>" << m_TankFileName[nCnt] << NEWLINE;
+
+	}
+
 }
 //====================================================================
 //モデルの開放
@@ -493,6 +530,34 @@ void CModel::UnLoad(void)
 			m_Model[OBSTACLE_MODEL][nCnt].m_pTexture = NULL;
 		}
 	}
+	//タンク
+	for (int nCnt = 0; nCnt < MODEL_TANK_MAX; nCnt++)
+	{
+		if (m_Model[TANK_MODEL][nCnt].pBuffmat != NULL)
+		{
+			m_Model[TANK_MODEL][nCnt].pBuffmat->Release();
+			m_Model[TANK_MODEL][nCnt].pBuffmat = NULL;
+		}
+		if (m_Model[TANK_MODEL][nCnt].pMesh != NULL)
+		{
+			m_Model[TANK_MODEL][nCnt].pMesh->Release();
+			m_Model[TANK_MODEL][nCnt].pMesh = NULL;
+		}
+		if (m_Model[TANK_MODEL][nCnt].m_pTexture != NULL)
+		{
+			for (int nCntmat = 0; nCntmat < (int)m_Model[TANK_MODEL][nCnt].nNumMat; nCntmat++)
+			{
+				if (m_Model[TANK_MODEL][nCnt].m_pTexture[nCntmat] != NULL)
+				{
+					m_Model[TANK_MODEL][nCnt].m_pTexture[nCntmat]->Release();
+					m_Model[TANK_MODEL][nCnt].m_pTexture[nCntmat] = NULL;
+				}
+			}
+			delete[] m_Model[OBSTACLE_MODEL][nCnt].m_pTexture;
+			m_Model[TANK_MODEL][nCnt].m_pTexture = NULL;
+		}
+	}
+
 }
 //====================================================================
 //初期化

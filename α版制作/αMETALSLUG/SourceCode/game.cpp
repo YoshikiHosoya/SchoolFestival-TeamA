@@ -32,7 +32,8 @@ CGame::~CGame()
 //==========================================================
 HRESULT CGame::Init(void)
 {
-	m_pMap		= CMap::MapCreate(0);	// マップの生成
+
+	m_pMap		= CMap::MapCreate(CMap::MAP_1);	// マップの生成
 	m_pPlayer	= CPlayer::Create();
 	m_pPlayer->SetLife(50);
 	m_pPlayer->SetPosition(D3DXVECTOR3(50.0f, 100.0f, 0.0f));
@@ -90,4 +91,7 @@ void CGame::ShowDebugInfo(void)
 {
 	//キーボード情報取得
 	CKeyboard *key = CManager::GetInputKeyboard();;
+
+	// マップの更新
+	m_pMap->MapUpdate();
 }
