@@ -726,15 +726,17 @@ void CCharacter::Moation(void)
 				//ループしないとき------------------------------------■■■■■
 				if (m_CharacterMotion[m_MotionType]->nLoop == 0)
 				{
-					DefaultMotion();
+					if (DefaultMotion())
+					{
 					m_CntKeySet = 0;
 					m_Fram = m_CharacterMotion[m_MotionType]->key_info[m_CntKeySet]->nFram;
+					}
 				}
 				//ループするとき--------------------------------------■■■■■
 				else if (m_CharacterMotion[m_MotionType]->nLoop == 1)
 				{
-					m_CntKeySet = 0;
 					DefaultMotion();
+					m_CntKeySet = 0;
 				}
 			}
 		}
