@@ -183,16 +183,10 @@ void CDebug_ViewerCharacter::MotionViewer()
 	//攻撃系の情報が変わったかどうか
 	bool bChangeAttackInfo = false;
 	bool bChangeNowKey = false;
-	bool rMotionStop = CScene::GetStopFlag();
 
 	//コピペ用のキー
 	static CCharacter::CHARACTER_MOTION_STATE CopyMotionType = CHARACTER_MOTION_STATE_NONE;
 	static int nCopyKey = -1;
-
-	if (pKeyboard->GetKeyboardTrigger(DIK_F5))
-	{
-		CScene::StopUpdate();
-	}
 
 	////プレイヤー座標リセット
 	//if (ImGui::Button("PlayerPosReset"))
