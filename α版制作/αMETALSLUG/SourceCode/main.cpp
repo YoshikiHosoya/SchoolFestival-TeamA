@@ -28,7 +28,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hInstancePrev, LPSTR IpCmdLine
 	_CrtSetReportMode(_CRT_ERROR, _CRTDBG_MODE_DEBUG);
 
 	//メモリ番号でブレークポイント設定
-	//_CrtSetBreakAlloc(982);
+	_CrtSetBreakAlloc(1147);
 
 	WNDCLASSEX wcex =
 	{
