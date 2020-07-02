@@ -32,10 +32,12 @@ public:
 	void						DebugInfo();				//デバッグ
 
 	/* 静的メンバ関数 */
-	static	CGrenade			*Create(D3DXVECTOR3 rot);	// グレネードの生成
+	static	CGrenade			*Create(D3DXVECTOR3 rot, D3DXMATRIX *mtx);	// グレネードの生成
 
 private:
-	/* 静的メンバ変数 */
+	/* メンバ変数 */
+	float						m_fLength;					// 長さ
+	float						m_fAngle;					// 角度
 
 };
 #endif

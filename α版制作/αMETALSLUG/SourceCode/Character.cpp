@@ -936,12 +936,20 @@ CCharacter::CHARACTER_TYPE CCharacter::GetCharacterType()
 }
 
 //====================================================================
-//モデルのリストを返す　参照渡し
+//モデルのリストを返す	参照渡し
 //====================================================================
 std::vector<CModel*>& CCharacter::GetCharacterModelList()
 {
 	return m_vModelList;
 }
+//====================================================================
+//モデルパーツのリストを返す	参照渡し
+//====================================================================
+CModel* CCharacter::GetCharacterModelPartsList(int nCnt)
+{
+	return m_vModelList[nCnt];
+}
+
 CCharacter::CHARACTER_DIRECTION CCharacter::GetCharacterDirection(void)
 {
 	return m_CharacterDirection;

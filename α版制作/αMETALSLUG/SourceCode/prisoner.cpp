@@ -16,7 +16,7 @@
 //マクロ定義
 //====================================================================
 #define PRISONER_COLLISION_SIZE			(D3DXVECTOR3(50.0f,65.0f,0.0f))			 //捕虜のサイズ
-#define PRISONER_DIETIME				(120)									 //捕虜が消滅するまでの時間
+#define PRISONER_DIETIME				(180)									 //捕虜が消滅するまでの時間
 
 // =====================================================================================================================================================================
 //
@@ -86,39 +86,7 @@ void CPrisoner::Update(void)
 		m_pCollision->SetPos(&GetPosition());
 	}
 
-	switch (m_PrisonerState)
-	{
-	// 捕虜の状態アイテムを落とす状態になったら
-	case PRISONER_STATE_DROPITEM:
-		{
-			// アイテムを落とすモーション
-			//
-
-			// アイテムの生成
-			CItem::RandCreate(GetPosition());
-			// 捕虜の状態の変更
-			this->SetPrisonerState(PRISONER_STATE_RUN);
-		}
-		break;
-
-	case PRISONER_STATE_RUN:
-	{
-		SetMove(D3DXVECTOR3(-1.0f,0.0f,0.0f));
-		Move(-1.0f, -1.57f);
-
-		// 消滅までのカウントを加算
-		m_nDieCount++;
-		// カウントが一致値を超えたら
-		if (m_nDieCount >= PRISONER_DIETIME)
-		{
-			// 削除
-			Rerease();
-		}
-
-	}
-	default:
-		break;
-	}
+	this->PrisonerState();
 
 	// キャラクターの更新
 	CCharacter::Update();
@@ -162,6 +130,47 @@ bool CPrisoner::DefaultMotion(void)
 {
 	SetMotion(CCharacter::PRISONER_MOTION_STAY);
 	return false;
+}
+
+//====================================================================
+//捕虜の状態別処理
+//====================================================================
+void CPrisoner::PrisonerState()
+{
+	switch (m_PrisonerState)
+	{
+		// 捕虜の状態アイテムを落とす状態になったら
+	case PRISONER_STATE_DROPITEM:
+	{
+		// アイテムを落とすモーション
+		//
+
+		// アイテムの生成
+		CItem::RandCreate(GetPosition());
+		// 捕虜の状態の変更
+		this->SetPrisonerState(PRISONER_STATE_RUN);
+	}
+	break;
+
+	case PRISONER_STATE_RUN:
+	{
+		// 横に歩く
+		SetMove(D3DXVECTOR3(-1.0f, 0.0f, 1.0f));
+		Move(-1.0f, -1.57f);
+
+		// 消滅までのカウントを加算
+		m_nDieCount++;
+		// カウントが一致値を超えたら
+		if (m_nDieCount >= PRISONER_DIETIME)
+		{
+			// 削除
+			Rerease();
+		}
+
+	}
+	default:
+		break;
+	}
 }
 
 //====================================================================

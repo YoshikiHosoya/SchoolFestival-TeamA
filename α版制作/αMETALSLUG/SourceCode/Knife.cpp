@@ -120,7 +120,7 @@ CKnife * CKnife::Create(D3DXMATRIX *mtx)
 	pKnife->SetType(GUN_MODEL);
 
 	// モデルカウントの設定
-	pKnife->SetModelConut(MODEL_GUN_HANDGUN);
+	pKnife->SetModelConut(MODEL_KNIFE);
 
 	return pKnife;
 }
@@ -136,6 +136,7 @@ void CKnife::StartMeleeAttack()
 	////コリジョン生成
 	//m_pCollision = CCollision::Create();
 	m_pCollision->SetPos(GetPosptr());
+
 
 	//攻撃終了
 	m_bAttack = true;
@@ -156,4 +157,11 @@ void CKnife::EndMeleeAttack()
 
 	//攻撃状態終了
 	m_bAttack = true;
+}
+
+// =====================================================================================================================================================================
+// ナイフの攻撃判定処理
+// =====================================================================================================================================================================
+void CKnife::CollisionKnife()
+{
 }

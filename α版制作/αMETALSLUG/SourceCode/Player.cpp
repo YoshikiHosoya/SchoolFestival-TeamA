@@ -48,7 +48,7 @@ HRESULT CPlayer::Init(void)
 	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
 	m_Attack = false;
 	 // 銃の生成
-	m_pGun = CGun::Create(CCharacter::GetMtxWorld());
+	m_pGun = CGun::Create(GetCharacterModelPartsList(CModel::MODEL_PLAYER_RHAND)->GetMatrix());
 	// 銃の弾の種類
 	m_pGun->GetBulletType() = CGun::TYPE_PLAYER;
 
@@ -79,6 +79,7 @@ void CPlayer::Update(void)
 	static bool trigger2 = false;
 	CKeyboard *key;
 	key = CManager::GetInputKeyboard();
+
 	//キーボード処理
 	// 銃を撃つ
 	if (key->GetKeyboardTrigger(DIK_P))
@@ -90,12 +91,14 @@ void CPlayer::Update(void)
 		else
 		{// 近接攻撃
 			// 捕虜の状態変化
-
 			m_pPrisoner->SetPrisonerState(CPrisoner::PRISONER_STATE_DROPITEM);
 
 			// 捕虜の当たり判定削除
-			m_pPrisoner->DeleteCollision();
-			m_pPrisoner = nullptr;
+			if (m_pPrisoner->GetCollision() != nullptr)
+			{
+				m_pPrisoner->DeleteCollision();
+				m_pPrisoner = nullptr;
+			}
 		}
 		// 銃発射処理
 		m_pGun->Shot(GetShotDirection());
@@ -104,7 +107,7 @@ void CPlayer::Update(void)
 	if (key->GetKeyboardTrigger(DIK_O))
 	{
 		// グレネード生成
-		CGrenade::Create(GetShotDirection());
+		CGrenade::Create(m_ShotRot, GetCharacterModelPartsList(CModel::MODEL_PLAYER_LHAND)->GetMatrix());
 	}
 
 	// Aの処理

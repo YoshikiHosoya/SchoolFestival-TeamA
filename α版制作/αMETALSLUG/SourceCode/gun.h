@@ -73,6 +73,7 @@ private:
 	D3DXMATRIX				*m_mtx;					// マトリックス
 	bool					m_bMultiple;			// 複数撃つフラグ
 	D3DXVECTOR3				m_rot;					// 回転
+	D3DXVECTOR3				m_ShotPos;				// 発射位置
 	int						m_nCntFrame;			// フレームカウント
 	int						m_nCntBullet;			// 弾のカウント
 };

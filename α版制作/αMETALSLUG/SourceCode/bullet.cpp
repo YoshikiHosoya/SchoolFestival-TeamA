@@ -32,7 +32,7 @@ char *CBullet::m_BulletFileName[CGun::GUNTYPE_MAX] =
 	{ "data/Load/Gun/LaserGun.txt" },				// レーザーガン
 	{ "data/Load/Gun/RocketLauncher.txt" },			// ロケットランチャー
 	{ "data/Load/Gun/FlameShot.txt" },				// フレイムショット
-	{ "data/Load/Grenade.txt" },				// グレネード
+	{ "data/Load/Gun/Grenade.txt" },				// グレネード
 };
 
 // =====================================================================================================================================================================
@@ -210,10 +210,12 @@ void CBullet::Update(void)
 						{
 							// 捕虜の状態変化
 							pPrisoner->SetPrisonerState(CPrisoner::PRISONER_STATE_DROPITEM);
-
-							// 捕虜の当たり判定削除
-							pPrisoner->DeleteCollision();
-							pPrisoner = nullptr;
+							if (pPrisoner->GetCollision() != nullptr)
+							{
+								// 捕虜の当たり判定削除
+								pPrisoner->DeleteCollision();
+								pPrisoner = nullptr;
+							}
 							// 弾の判定の削除
 							m_pCollision->ReleaseCollision(m_pCollision);
 							// 弾の当たりのポインタをnullにする
@@ -264,16 +266,8 @@ void CBullet::Update(void)
 // =====================================================================================================================================================================
 void CBullet::Draw(void)
 {
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
-
-	//// ライティングモード無効
-	//pDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
-
 	// 描画
 	CModel::Draw();
-
-	//// ライティングモード有効
-	//pDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
 }
 
 // =====================================================================================================================================================================

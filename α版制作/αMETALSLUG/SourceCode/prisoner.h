@@ -68,6 +68,8 @@ public:
 	};														// 当たり判定
 
 private:
+	/* メンバ関数 */
+	void				PrisonerState();					// 捕虜の状態別処理
 	/* メンバ変数 */
 	PRISONER_STATE		m_PrisonerState;					// デバッグのステータス
 	void				Move(float move, float fdest);		// 捕虜の移動

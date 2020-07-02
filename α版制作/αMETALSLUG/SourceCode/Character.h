@@ -23,9 +23,11 @@ public:
 
 	typedef enum
 	{
-		CHARACTER_TYPE_PLAYER,
-		CHARACTER_TYPE_ENEMY,
-		CHARACTER_TYPE_PRISONER,
+		CHARACTER_TYPE_PLAYER,			// プレイヤー
+		CHARACTER_TYPE_ENEMY,			// エネミー
+		CHARACTER_TYPE_PRISONER,		// 捕虜
+		CHARACTER_TYPE_PLAYER_VEHICLE,	// プレイヤー用乗り物
+		CHARACTER_TYPE_ENEMY_VEHICLE,	// エネミー用乗り物
 		CHARACTER_TYPE_MAX
 	}CHARACTER_TYPE;
 
@@ -143,6 +145,7 @@ public:
 	bool GetGravity(void);
 	CHARACTER_TYPE GetCharacterType();								//キャラクターの種類取得
 	std::vector<CModel*> &GetCharacterModelList();					//キャラクターのモデル取得
+	CModel* GetCharacterModelPartsList(int nCnt);					//キャラクターのモデルパーツ取得
 	CHARACTER_DIRECTION GetCharacterDirection(void);				//向きの取得
 	//モーション関連
 	bool &GetMotion();
