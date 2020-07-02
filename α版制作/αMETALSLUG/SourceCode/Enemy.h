@@ -8,6 +8,8 @@
 #include "Scene.h"
 #include "Character.h"
 class CModel;
+class CGun;
+class CEnemyAI;
 //レンダリングクラス
 class CEnemy :public CCharacter
 {
@@ -26,5 +28,7 @@ private:
 	void Move(float move, float fdest);
 	bool m_Attack;									//攻撃時
 	float m_Angle;
+	CGun	*m_pGun;								// ガンクラスのポインタ
+	CEnemyAI *m_pAI;
 };
 #endif

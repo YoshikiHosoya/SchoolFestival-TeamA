@@ -10,6 +10,8 @@
 #include "collision.h"
 #include "debugproc.h"
 #include "item.h"
+#include "EnemyAI.h"
+#include "gun.h"
 //====================================================================
 //マクロ定義
 //====================================================================
@@ -36,6 +38,11 @@ HRESULT CEnemy::Init(void)
 	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
 	m_Attack = false;
 
+	// 銃の生成
+	m_pGun = CGun::Create(GetCharacterModelPartsList(CModel::MODEL_ENEMY_RHAND_01)->GetMatrix());
+	// 銃の弾の種類
+	m_pGun->GetBulletType() = CGun::TYPE_ENEMY;
+
 	// 当たり判定生成
 	GetCollision()->SetPos(&GetPosition());
 	GetCollision()->SetPosOld(&GetPositionOld());
@@ -43,6 +50,8 @@ HRESULT CEnemy::Init(void)
 	GetCollision()->SetMove(&GetMove());
 	GetCollision()->SetType(CCollision::COLLISION_ENEMY);
 	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_CHARACTER);
+
+	m_pAI = CEnemyAI::CreateAI();
 
 	CCharacter::SetLife(50);
 	return S_OK;
@@ -53,6 +62,7 @@ HRESULT CEnemy::Init(void)
 void CEnemy::Uninit(void)
 {
 	CCharacter::Uninit();
+	m_pAI->Uninit();
 }
 //====================================================================
 //更新
@@ -70,7 +80,6 @@ void CEnemy::Update(void)
 	{
 		SetMotion(CCharacter::ENEMY_MOTION_WALK);
 	}
-
 	if (GetCollision() != nullptr)
 	{
 		 //座標の更新
@@ -98,9 +107,15 @@ void CEnemy::Update(void)
 	{//アイテムを生成
 		CItem::Create(this->GetPosition(), CItem::ITEMTYPE_HEAVYMACHINEGUN);
 	}
+	//AI関連処理
+	if (m_pAI->GetAIType() == m_pAI->AI_SHOT)
+	{
+		m_pGun->Shot(D3DXVECTOR3(0.0f, 0.5f*D3DX_PI, 0.0f));
+	}
 
 	CDebugProc::Print("\n敵のライフ %d\n", CCharacter::GetLife());
 	CCharacter::Update();
+	m_pAI->Update();
 }
 //====================================================================
 //描画

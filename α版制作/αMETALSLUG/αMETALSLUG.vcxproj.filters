@@ -1,17 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="SourceCode\camera.cpp" />
-    <ClCompile Include="SourceCode\fade.cpp" />
-    <ClCompile Include="SourceCode\flameshot.cpp" />
-    <ClCompile Include="SourceCode\hosso\HossoLibrary.cpp" />
-    <ClCompile Include="SourceCode\item.cpp" />
-    <ClCompile Include="SourceCode\lasergun.cpp" />
-    <ClCompile Include="SourceCode\light.cpp" />
-    <ClCompile Include="SourceCode\main.cpp" />
-    <ClCompile Include="SourceCode\manager.cpp" />
-    <ClCompile Include="SourceCode\Obstacle.cpp" />
-    <ClCompile Include="SourceCode\renderer.cpp" />
     <ClCompile Include="SourceCode\mesh.cpp">
       <Filter>mesh</Filter>
     </ClCompile>
@@ -165,19 +154,44 @@
     <ClCompile Include="SourceCode\TexAnimation3D_Collision.cpp">
       <Filter>Effect\TexAnimation</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\lasergun.cpp">
+      <Filter>Wepon</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\flameshot.cpp">
+      <Filter>Wepon</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\main.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\manager.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\renderer.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Obstacle.cpp">
+      <Filter>Model</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\camera.cpp">
+      <Filter>Option</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\fade.cpp">
+      <Filter>Option</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\light.cpp">
+      <Filter>Option</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\hosso\HossoLibrary.cpp">
+      <Filter>Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\item.cpp">
+      <Filter>Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\EnemyAI.cpp">
+      <Filter>Etc</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="SourceCode\camera.h" />
-    <ClInclude Include="SourceCode\fade.h" />
-    <ClInclude Include="SourceCode\flameshot.h" />
-    <ClInclude Include="SourceCode\hosso\HossoLibrary.h" />
-    <ClInclude Include="SourceCode\item.h" />
-    <ClInclude Include="SourceCode\lasergun.h" />
-    <ClInclude Include="SourceCode\light.h" />
-    <ClInclude Include="SourceCode\main.h" />
-    <ClInclude Include="SourceCode\manager.h" />
-    <ClInclude Include="SourceCode\Obstacle.h" />
-    <ClInclude Include="SourceCode\renderer.h" />
     <ClInclude Include="SourceCode\mesh.h">
       <Filter>mesh</Filter>
     </ClInclude>
@@ -340,6 +354,42 @@
     <ClInclude Include="SourceCode\TexAnimation3D_Collision.h">
       <Filter>Effect\TexAnimation</Filter>
     </ClInclude>
+    <ClInclude Include="SourceCode\lasergun.h">
+      <Filter>Wepon</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\flameshot.h">
+      <Filter>Wepon</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\main.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\manager.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\renderer.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Obstacle.h">
+      <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\camera.h">
+      <Filter>Option</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\fade.h">
+      <Filter>Option</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\light.h">
+      <Filter>Option</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\hosso\HossoLibrary.h">
+      <Filter>Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\item.h">
+      <Filter>Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\EnemyAI.h">
+      <Filter>Etc</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="mesh">
@@ -377,6 +427,15 @@
     </Filter>
     <Filter Include="Effect\TexAnimation">
       <UniqueIdentifier>{aaed9983-fd8b-4902-b8f9-48778c393474}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source">
+      <UniqueIdentifier>{cba565b2-be0b-41e1-acd1-44056d119b47}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Option">
+      <UniqueIdentifier>{a4773f13-a302-4e14-a4f5-41111cd64989}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Etc">
+      <UniqueIdentifier>{3d1ac954-c89e-47a5-9aa8-c3caf5ae476d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
