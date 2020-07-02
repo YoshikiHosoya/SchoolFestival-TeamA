@@ -386,25 +386,34 @@ bool CCollision::ForPlayer_PrisonerCollision(bool Penetration)
 CPrisoner *CCollision::ForPlayer_PrisonerCollision()
 {
 	CPrisoner *pPrisoner = nullptr;
+	CPrisoner *pSavePointer = nullptr;
 	// •ß—¸‚Ì‘”•ª
 	for (int nCntPriso = 0; nCntPriso < CManager::GetBaseMode()->GetMap()->GetMaxPrisoner(); nCntPriso++)
 	{
 		pPrisoner = CManager::GetBaseMode()->GetMap()->GetPrisoner(nCntPriso);
-		if (pPrisoner != nullptr)
+
+		if (pPrisoner != pSavePointer)
 		{
-			if (this->CharCollision2D(pPrisoner->GetCollision()))
+			if (pPrisoner != nullptr)
 			{
-				if (pPrisoner->GetPrisonerState() == CPrisoner::PRISONER_STATE_STAY)
+				if (this->CharCollision2D(pPrisoner->GetCollision()))
 				{
-					pPrisoner->SetPrisonerState(CPrisoner::PRISONER_STATE_DROPITEM);
+					if (pPrisoner->GetPrisonerState() == CPrisoner::PRISONER_STATE_STAY)
+					{
+						pPrisoner->SetPrisonerState(CPrisoner::PRISONER_STATE_DROPITEM);
+						// ‚±‚Ì•ß—¸‚Ìƒ|ƒCƒ“ƒ^‚Íæ“¾‚Å‚«‚È‚¢‚æ‚¤‚É‚·‚é
+						pSavePointer = pPrisoner;
+
+						return pPrisoner;
+					}
+
 				}
-
 			}
-		}
 
-		else if (pPrisoner == nullptr)
-		{
-			return nullptr;
+			else if (pPrisoner == nullptr)
+			{
+				return nullptr;
+			}
 		}
 	}
 

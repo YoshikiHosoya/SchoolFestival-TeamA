@@ -231,8 +231,11 @@ void CPlayer::Update(void)
 		// 捕虜との判定
 		if (GetCollision()->ForPlayer_PrisonerCollision(ATTACK_PENETRATION))
 		{
-			// 近接攻撃可能にする
-			m_bAttack_Prisoner = true;
+			if (GetCollision()->ForPlayer_PrisonerCollision())
+			{
+				// 近接攻撃可能にする
+				m_bAttack_Prisoner = true;
+			}
 		}
 		else
 		{
@@ -275,7 +278,7 @@ void CPlayer::Update(void)
 		}
 	}
 
-
+	// 攻撃モーションから別のモーションになった時
 	if (GetMotionType() != CCharacter::PLAYER_MOTION_ATTACK01)
 	{
 		if (m_bAttack_Enemy == false || m_bAttack_Prisoner == false)
