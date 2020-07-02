@@ -20,6 +20,7 @@
 #include "Obstacle.h"
 #include "grenade.h"
 #include "prisoner.h"
+#include "Knife.h"
 //====================================================================
 //マクロ定義
 //====================================================================
@@ -50,6 +51,8 @@ HRESULT CPlayer::Init(void)
 	m_pGun = CGun::Create(GetCharacterModelPartsList(CModel::MODEL_PLAYER_RHAND)->GetMatrix());
 	// 銃の弾の種類
 	m_pGun->GetBulletType() = CGun::TYPE_PLAYER;
+	// ナイフの生成
+	m_pKnife = CKnife::Create(GetCharacterModelPartsList(CModel::MODEL_PLAYER_LHAND)->GetMatrix());
 
 	// 当たり判定生成
 	m_pCollision = CCollision::Create();
@@ -102,6 +105,9 @@ void CPlayer::Update(void)
 			//	m_pPrisoner = nullptr;
 			//}
 			SetMotion(CCharacter::PLAYER_MOTION_ATTACK01);
+			m_pKnife->StartMeleeAttack();
+			m_Attack = true;
+
 		}
 		//// 銃発射処理
 		//m_pGun->Shot(GetShotDirection());
@@ -285,6 +291,14 @@ void CPlayer::Update(void)
 
 		}
 	}
+	if (GetMotionType() != CCharacter::PLAYER_MOTION_ATTACK01)
+	{
+		m_Attack = false;
+		if (m_Attack == false)
+		{
+			m_pKnife->EndMeleeAttack();
+		}
+	}
 	if (CHossoLibrary::PressAnyButton())
 	{
 		SetMotion(CCharacter::PLAYER_MOTION_WALK);
@@ -311,6 +325,14 @@ void CPlayer::DebugInfo(void)
 	else
 	{
 		CDebugProc::Print("近接攻撃：不可能\n");
+	}
+	if (m_Attack == true)
+	{
+		CDebugProc::Print("攻撃中\n");
+	}
+	else
+	{
+		CDebugProc::Print("攻撃してない\n");
 	}
 }
 //====================================================================
