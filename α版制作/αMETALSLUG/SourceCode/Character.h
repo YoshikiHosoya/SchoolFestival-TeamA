@@ -23,9 +23,11 @@ public:
 
 	typedef enum
 	{
-		CHARACTER_TYPE_PLAYER,
-		CHARACTER_TYPE_ENEMY,
-		CHARACTER_TYPE_PRISONER,
+		CHARACTER_TYPE_PLAYER,			// プレイヤー
+		CHARACTER_TYPE_ENEMY,			// エネミー
+		CHARACTER_TYPE_PRISONER,		// 捕虜
+		CHARACTER_TYPE_PLAYER_VEHICLE,	// プレイヤー用乗り物
+		CHARACTER_TYPE_ENEMY_VEHICLE,	// エネミー用乗り物
 		CHARACTER_TYPE_MAX
 	}CHARACTER_TYPE;
 
@@ -70,6 +72,7 @@ public:
 		PLAYER_MOTION_NORMAL = 0,			//ニュートラル
 		PLAYER_MOTION_WALK,					//歩き
 		PLAYER_MOTION_ATTACK01,				//通常攻撃1
+		PLAYER_MOTION_GRENADE,				//グレネード
 
 		ENEMY_MOTION_NORMAL,				//ニュートラル
 		ENEMY_MOTION_WALK,					//歩き
@@ -107,7 +110,7 @@ public:
 	static void LoadMotion(void);
 	void LoadOffset(CHARACTER_TYPE nType);
 	void ForcedUpdate();						//強制的にモーションチェンジ
-
+	static void CharacterUnLoad(void);
 	//セッツ
 	void SetPosition(D3DXVECTOR3 pos);
 	void SetPotisionOld(D3DXVECTOR3 posOld);
@@ -121,7 +124,7 @@ public:
 	void SetCharacterType(CHARACTER_TYPE CharaType);
 	void SetGravity(bool gravity);
 	void SetCharacterDirection(CHARACTER_DIRECTION direction);
-
+	void SetShotDirection(D3DXVECTOR3 direction);
 	//モーション関連
 	void SetMotion(CHARACTER_MOTION_STATE type);
 	void SetMotionOldType(CHARACTER_MOTION_STATE type);
@@ -136,6 +139,7 @@ public:
 	D3DXVECTOR3 &GetRotDest(void);				//参照渡し
 	CHARACTER_STATE GetCharacterState(void);
 	D3DXMATRIX *GetMtxWorld(void);
+	D3DXVECTOR3 GetShotDirection(void);
 	int GetLife(void);
 	bool GetJump(void);
 	bool GetGravity(void);
@@ -170,6 +174,8 @@ private:
 	D3DXVECTOR3 m_move;												//移動量
 	D3DXVECTOR3 m_rot;												//回転
 	D3DXVECTOR3 m_rotDest;											//回転する差分
+	D3DXVECTOR3 m_ShotRot;											//撃つ向き
+	D3DXVECTOR3 m_AddRot;
 	D3DXMATRIX  m_mtxWorld;											//マトリックス
 	CHARACTER_STATE m_state;										//
 	CHARACTER_TYPE m_CharaType;										//キャラクターのタイプ

@@ -211,6 +211,7 @@
     <ClCompile Include="SourceCode\TexAnimation3D.cpp" />
     <ClCompile Include="SourceCode\TexAnimationBase.cpp" />
     <ClCompile Include="SourceCode\texture.cpp" />
+    <ClCompile Include="SourceCode\vehicle.cpp" />
     <ClCompile Include="SourceCode\XInputPad.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -274,6 +275,7 @@
     <ClInclude Include="SourceCode\TexAnimation3D.h" />
     <ClInclude Include="SourceCode\TexAnimationBase.h" />
     <ClInclude Include="SourceCode\texture.h" />
+    <ClInclude Include="SourceCode\vehicle.h" />
     <ClInclude Include="SourceCode\XInputPad.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

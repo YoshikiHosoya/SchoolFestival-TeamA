@@ -19,7 +19,7 @@
 #include "item.h"
 #include "Obstacle.h"
 #include "grenade.h"
-
+#include "prisoner.h"
 //====================================================================
 //マクロ定義
 //====================================================================
@@ -29,6 +29,8 @@ CPlayer::CPlayer(OBJ_TYPE type) :CCharacter(type)
 {
 	SetObjType(OBJTYPE_PLAYER);
 	m_pCollision = nullptr;
+	m_bCloseRangeAttack = false;
+	m_pPrisoner = nullptr;
 }
 
 CPlayer::~CPlayer()
@@ -45,8 +47,6 @@ HRESULT CPlayer::Init(void)
 	SetCharacterType(CCharacter::CHARACTER_TYPE_PLAYER);
 	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
 	m_Attack = false;
-	m_ShotRot = D3DXVECTOR3(0.0f, 0.5f, 0.0f);
-
 	 // 銃の生成
 	m_pGun = CGun::Create(GetCharacterModelPartsList(CModel::MODEL_PLAYER_RHAND)->GetMatrix());
 	// 銃の弾の種類
@@ -84,8 +84,24 @@ void CPlayer::Update(void)
 	// 銃を撃つ
 	if (key->GetKeyboardTrigger(DIK_P))
 	{
+		if (m_bCloseRangeAttack != true)
+		{// 銃発射処理
+			m_pGun->Shot(GetShotDirection());
+		}
+		else
+		{// 近接攻撃
+			// 捕虜の状態変化
+			m_pPrisoner->SetPrisonerState(CPrisoner::PRISONER_STATE_DROPITEM);
+
+			// 捕虜の当たり判定削除
+			if (m_pPrisoner->GetCollision() != nullptr)
+			{
+				m_pPrisoner->DeleteCollision();
+				m_pPrisoner = nullptr;
+			}
+		}
 		// 銃発射処理
-		m_pGun->Shot(m_ShotRot);
+		m_pGun->Shot(GetShotDirection());
 	}
 	// グレネードを投げる
 	if (key->GetKeyboardTrigger(DIK_O))
@@ -98,46 +114,24 @@ void CPlayer::Update(void)
 	if (key->GetKeyboardPress(DIK_A))
 	{
 		CPlayer::Move(0.5f, 0.5f);
-		m_ShotRot.x = 0.0f;
-		m_ShotRot.y = 0.5f * D3DX_PI;
 		SetCharacterDirection(CHARACTER_LEFT);
 	}
 	// Dの処理
 	else if (key->GetKeyboardPress(DIK_D))
 	{
 		CPlayer::Move(-0.5f, -0.5f);
-		m_ShotRot.x = 0.0f;
-		m_ShotRot.y = -0.5f * D3DX_PI;
 		SetCharacterDirection(CHARACTER_RIGHT);
 	}
 
 	else if (key->GetKeyboardPress(DIK_W))
 	{
 		SetCharacterDirection(CHARACTER_UP);
-		m_ShotRot.y = 0.0f;
-		m_ShotRot.x = 0.5f * D3DX_PI;
 	}
+
 	//ジャンプしたときの下向発射
 	if (key->GetKeyboardPress(DIK_S) && GetJump() == false)
 	{
 		SetCharacterDirection(CHARACTER_DOWN);
-		m_ShotRot.y = 0.0f;
-		m_ShotRot.x = -0.5f * D3DX_PI;
-	}
-	if (GetCharacterDirection() == CHARACTER_DOWN && GetJump() == true)
-	{
-		if (GetRot().y > 1.5f)
-		{
-			m_ShotRot.x = 0.0f;
-			m_ShotRot.y = 0.5f * D3DX_PI;
-			SetCharacterDirection(CHARACTER_LEFT);
-		}
-		else if (GetRot().y < -1.5f)
-		{
-			m_ShotRot.x = 0.0f;
-			m_ShotRot.y = -0.5f * D3DX_PI;
-			SetCharacterDirection(CHARACTER_RIGHT);
-		}
 	}
 
 	//デバッグモードの切り替え
@@ -222,6 +216,30 @@ void CPlayer::Update(void)
 			}
 		}
 
+		// 相手が捕虜だったら
+		// 捕虜の総数分
+		for (int nCntPriso = 0; nCntPriso < CManager::GetBaseMode()->GetMap()->GetMaxPrisoner(); nCntPriso++)
+		{
+			CPrisoner *pPrisoner = CManager::GetBaseMode()->GetMap()->GetPrisoner(nCntPriso);
+			if (pPrisoner != nullptr)
+			{
+				if (m_pCollision->CharCollision2D(pPrisoner->GetCollision()))
+				{
+					// 対象のポインタを保存
+					m_pPrisoner = pPrisoner;
+					// 攻撃方法が近接攻撃になる
+					m_bCloseRangeAttack = true;
+					CDebugProc::Print("\n時機が捕虜に当たったよ！\n");
+				}
+				else
+				{
+					// 近接攻撃が無効になる
+					m_bCloseRangeAttack = false;
+					CDebugProc::Print("\n時機が捕虜に当たってないよ！ \n");
+				}
+			}
+		}
+
 		//相手がアイテムだったら
 		// ベクター型の変数
 		std::vector<CScene*> SceneList;
@@ -257,6 +275,7 @@ void CPlayer::Update(void)
 //====================================================================
 void CPlayer::Draw(void)
 {
+
 	CCharacter::Draw();
 }
 //====================================================================

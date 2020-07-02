@@ -58,8 +58,9 @@ public:
 	void						DeleteCollision(void);
 	/* 静的メンバ関数 */
 	static	CItem				*Create(D3DXVECTOR3 pos, ITEMTYPE type);		// アイテムの生成
+	static	CItem				*RandCreate(const D3DXVECTOR3 pos);					// 捕虜用アイテムの生成
 	static	void				SwitchTexture(ITEMTYPE type, CItem *pItem);		// 種類別テクスチャ設定
-
+	static	ITEMTYPE			RandDropItem();									// アイテムの種類をランダムに計算
 protected:
 private:
 	/* メンバ変数 */

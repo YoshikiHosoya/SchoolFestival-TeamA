@@ -13,6 +13,8 @@ class CParticle;
 class CUI;
 class CGun;
 class CCollision;
+class CPrisoner;
+
 //レンダリングクラス
 class CPlayer :public CCharacter
 {
@@ -42,7 +44,9 @@ private:
 		float m_Angle;
 		WORD Oldstate;									//コントローラーの1frame前のステート
 		CGun	*m_pGun;								// ガンクラスのポインタ
-		D3DXVECTOR3 m_ShotRot;							//撃つ向き
 		CCollision					*m_pCollision;		// 当たり判定情報
+		bool						m_bCloseRangeAttack;// 近接攻撃フラグ
+		CPrisoner					*m_pPrisoner;		// 捕虜のポインタを保存する変数
+
 };
 #endif

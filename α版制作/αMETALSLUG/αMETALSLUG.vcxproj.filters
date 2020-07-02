@@ -13,7 +13,6 @@
     <ClCompile Include="SourceCode\Obstacle.cpp" />
     <ClCompile Include="SourceCode\particle.cpp" />
     <ClCompile Include="SourceCode\ParticleManager.cpp" />
-    <ClCompile Include="SourceCode\prisoner.cpp" />
     <ClCompile Include="SourceCode\renderer.cpp" />
     <ClCompile Include="SourceCode\mesh.cpp">
       <Filter>mesh</Filter>
@@ -147,6 +146,12 @@
     <ClCompile Include="SourceCode\pause.cpp">
       <Filter>Mode</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\vehicle.cpp">
+      <Filter>Model</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\prisoner.cpp">
+      <Filter>Model</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SourceCode\camera.h" />
@@ -161,7 +166,6 @@
     <ClInclude Include="SourceCode\Obstacle.h" />
     <ClInclude Include="SourceCode\particle.h" />
     <ClInclude Include="SourceCode\ParticleManager.h" />
-    <ClInclude Include="SourceCode\prisoner.h" />
     <ClInclude Include="SourceCode\renderer.h" />
     <ClInclude Include="SourceCode\mesh.h">
       <Filter>mesh</Filter>
@@ -303,6 +307,12 @@
     </ClInclude>
     <ClInclude Include="SourceCode\pause.h">
       <Filter>Mode</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\vehicle.h">
+      <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\prisoner.h">
+      <Filter>Model</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
