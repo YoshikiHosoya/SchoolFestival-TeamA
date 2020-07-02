@@ -88,6 +88,17 @@ public:
 		MODEL_BULLET_GRENADE,			// グレネード
 		MODEL_BULLET_MAX
 	}BULLET_MODEL;
+
+	typedef enum
+	{
+		//===戦車のモデル===
+		MODEL_TANK_TANKHEAD,		//頭
+		MODEL_TANK_TANKBODY,		//体
+		MODEL_TANK_TANKWHEEL,		//タイヤ
+		MODEL_TANK_TANKGUN,			//武器
+		MODEL_TANK_MAX
+	}ENEMY_TANK_PARTS_MODEL;
+
 	typedef enum
 	{
 		PLAYER_MODEL,
@@ -97,6 +108,7 @@ public:
 		BULLET_MODEL,
 		OBSTACLE_MODEL,
 		PRISONER_MODEL,
+		TANK_MODEL,
 		TYPE_MAX
 	}MODEL_TYPE;
 
@@ -161,6 +173,7 @@ private:
 	static char *m_MapFileName[MODEL_MAP_MAX];
 	static char *m_ObstacleFileName[OBSTACLE_TYPE_MAX];
 	static char *m_PrisonerFileName[MODEL_PRISONER_MAX];
+	static char *m_TankFileName[MODEL_TANK_MAX];
 
 
 	D3DXVECTOR3 m_pos;					//位置
