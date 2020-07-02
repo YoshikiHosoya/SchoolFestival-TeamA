@@ -22,7 +22,6 @@ public:
 	void DebugInfo(void);
 	static CEnemy *Create(void);
 	bool DefaultMotion(void);
-	void DeleteCollision(void);
 	CCollision *GetCollision() { return m_pCollision; }; // “–‚½‚è”»’è
 
 private:

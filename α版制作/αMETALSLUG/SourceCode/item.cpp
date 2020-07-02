@@ -38,6 +38,16 @@ CItem::CItem(OBJ_TYPE type) :CScene3D(type)
 // =====================================================================================================================================================================
 CItem::~CItem()
 {
+#ifdef _DEBUG
+
+	// 当たり判定の削除
+	if (m_pCollision != nullptr)
+	{
+		delete m_pCollision;
+		m_pCollision = nullptr;
+	}
+#endif // _DEBUG
+
 }
 
 // =====================================================================================================================================================================
@@ -48,7 +58,7 @@ CItem::~CItem()
 HRESULT CItem::Init()
 {
 	// 変数初期化
-	m_Type = ITEMTYPE_NONE;			// タイプ
+	m_Type = ITEMTYPE_HEAVYMACHINEGUN;			// タイプ
 
 	// 初期化
 	CScene3D::Init();
@@ -58,7 +68,7 @@ HRESULT CItem::Init()
 	m_pCollision->SetPos(&GetPosition());
 	m_pCollision->SetSize2D(ITEM_COLLISION_SIZE_XY);
 	m_pCollision->SetMove(nullptr);
-	m_pCollision->SetType(CCollision::OBJTYPE_ITEM);
+	m_pCollision->SetType(CCollision::COLLISION_ITEM);
 	m_pCollision->DeCollisionCreate(CCollision::COLLISIONTYPE_NORMAL);
 
 	return S_OK;
@@ -315,15 +325,5 @@ void CItem::SwitchTexture(ITEMTYPE type, CItem *pItem)
 // =====================================================================================================================================================================
 CItem::ITEMTYPE CItem::RandDropItem()
 {
-	return ITEMTYPE(rand() % ITEMTYPE_MAX + 1);
-}
-//====================================================================
-//
-//当たり判定の削除
-//
-//====================================================================
-void CItem::DeleteCollision(void)
-{
-	m_pCollision->ReleaseCollision(m_pCollision);
-	m_pCollision = nullptr;
+	return ITEMTYPE(rand() % ITEMTYPE_MAX);
 }

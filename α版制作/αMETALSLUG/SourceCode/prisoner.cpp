@@ -39,6 +39,16 @@ CPrisoner::CPrisoner(OBJ_TYPE type) :CCharacter(type)
 // =====================================================================================================================================================================
 CPrisoner::~CPrisoner()
 {
+#ifdef _DEBUG
+
+	// “–‚½‚è”»’è‚Ìíœ
+	if (m_pCollision != nullptr)
+	{
+		delete m_pCollision;
+		m_pCollision = nullptr;
+	}
+#endif // _DEBUG
+
 }
 
 // =====================================================================================================================================================================
@@ -62,7 +72,7 @@ HRESULT CPrisoner::Init(void)
 	m_pCollision->SetPos(&GetPosition());
 	m_pCollision->SetSize2D(PRISONER_COLLISION_SIZE);
 	m_pCollision->SetMove(&GetMove());
-	m_pCollision->SetType(CCollision::OBJTYPE_PRISONER);
+	m_pCollision->SetType(CCollision::COLLISION_PRISONER);
 	m_pCollision->DeCollisionCreate(CCollision::COLLISIONTYPE_CHARACTER);
 
 	return S_OK;
@@ -181,12 +191,4 @@ void CPrisoner::Move(float move, float fdest)
 	GetMove().x += sinf(move * -D3DX_PI) * 1.0f;
 	GetMove().z += cosf(move * -D3DX_PI) * 1.0f;
 	GetRotDest().y = fdest *  D3DX_PI;
-}
-//====================================================================
-//“–‚½‚è”»’è‚Ìíœ
-//====================================================================
-void CPrisoner::DeleteCollision(void)
-{
-	m_pCollision->ReleaseCollision(m_pCollision);
-	m_pCollision = nullptr;
 }

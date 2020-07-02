@@ -24,6 +24,9 @@
 //マクロ定義
 //====================================================================
 #define PLAYER_SIZE			(D3DXVECTOR3(50.0f,65.0f,0.0f)) //敵のサイズ
+// 貫通させるかのフラグ
+#define ATTACK_PENETRATION		(true)			// プレイヤーの判定が貫通するかどうか
+
 
 CPlayer::CPlayer(OBJ_TYPE type) :CCharacter(type)
 {
@@ -35,6 +38,16 @@ CPlayer::CPlayer(OBJ_TYPE type) :CCharacter(type)
 
 CPlayer::~CPlayer()
 {
+#ifdef _DEBUG
+
+	// 当たり判定の削除
+	if (m_pCollision != nullptr)
+	{
+		delete m_pCollision;
+		m_pCollision = nullptr;
+	}
+#endif // _DEBUG
+
 }
 //====================================================================
 //初期化
@@ -57,7 +70,7 @@ HRESULT CPlayer::Init(void)
 	m_pCollision->SetPos(&GetPosition());
 	m_pCollision->SetSize2D(PLAYER_SIZE);
 	m_pCollision->SetMove(&GetMove());
-	m_pCollision->SetType(CCollision::OBJTYPE_PLAYER);
+	m_pCollision->SetType(CCollision::COLLISION_PLAYER);
 	m_pCollision->DeCollisionCreate(CCollision::COLLISIONTYPE_CHARACTER);
 
 	return S_OK;
@@ -99,8 +112,6 @@ void CPlayer::Update(void)
 			//// 捕虜の当たり判定削除
 			//if (m_pPrisoner->GetCollision() != nullptr)
 			//{
-			//	m_pPrisoner->DeleteCollision();
-			//	m_pPrisoner = nullptr;
 			//}
 		}
 		// 銃発射処理
@@ -182,88 +193,40 @@ void CPlayer::Update(void)
 		m_pCollision->SetPos(&GetPosition());
 		m_pCollision->SetPosOld(&GetPositionOld());
 
-		//相手がエネミーだったら
-		// 敵の総数分
-		for (int nCnt = 0; nCnt < CManager::GetBaseMode()->GetMap()->GetMaxEnemy(); nCnt++)
+		// エネミーとの判定
+		if (m_pCollision->ForPlayer_EnemyCollision(ATTACK_PENETRATION))
 		{
-			CEnemy *pEnemy = CManager::GetBaseMode()->GetMap()->GetEnemy(nCnt);
-			if (pEnemy != nullptr)
-			{
-				if (m_pCollision->CharCollision2D(pEnemy->GetCollision()))
-				{
-					CDebugProc::Print("\n時機が敵に当たったよ！\n");
-				}
-				else
-				{
-					CDebugProc::Print("\n時機が敵に当たってないよ！ \n");
-				}
-			}
+			// 近接攻撃可能にする
+			m_bCloseRangeAttack = true;
+		}
+		else
+		{
+			// 近接攻撃が無効になる
+			m_bCloseRangeAttack = false;
 		}
 
-		//相手が障害物だったら
-		// 障害物のの総数分
-		for (int nCntObst = 0; nCntObst < CManager::GetBaseMode()->GetMap()->GetMaxObstacle(); nCntObst++)
+		// 障害物との判定
+		if (m_pCollision->ForPlayer_ObstacleCollision(false))
 		{
-			CObstacle *pObstacle = CManager::GetBaseMode()->GetMap()->GetObstacle(nCntObst);
-			if (pObstacle != nullptr)
-			{
-				if (m_pCollision->BlockCollision2D(pObstacle->GetCollision()))
-				{
-					CCharacter::SetJump(true);
-					CDebugProc::Print("\n時機が障害物に当たったよ！\n");
-				}
-				else
-				{
-					CDebugProc::Print("\n時機が障害物に当たってないよ！ \n");
-				}
-			}
+			// ジャンプフラグを可能にする
+			CCharacter::SetJump(true);
 		}
 
-		// 相手が捕虜だったら
-		// 捕虜の総数分
-		for (int nCntPriso = 0; nCntPriso < CManager::GetBaseMode()->GetMap()->GetMaxPrisoner(); nCntPriso++)
+		// 捕虜との判定
+		if (m_pCollision->ForPlayer_PrisonerCollision(ATTACK_PENETRATION))
 		{
-			CPrisoner *pPrisoner = CManager::GetBaseMode()->GetMap()->GetPrisoner(nCntPriso);
-			if (pPrisoner != nullptr)
-			{
-				if (m_pCollision->CharCollision2D(pPrisoner->GetCollision()))
-				{
-					// 対象のポインタを保存
-					m_pPrisoner = pPrisoner;
-					// 攻撃方法が近接攻撃になる
-					m_bCloseRangeAttack = true;
-					CDebugProc::Print("\n時機が捕虜に当たったよ！\n");
-				}
-				else
-				{
-					// 近接攻撃が無効になる
-					m_bCloseRangeAttack = false;
-					CDebugProc::Print("\n時機が捕虜に当たってないよ！ \n");
-				}
-			}
+			// 近接攻撃を可能にする
+			m_bCloseRangeAttack = true;
+		}
+		else
+		{
+			// 近接攻撃が無効になる
+			m_bCloseRangeAttack = false;
 		}
 
-		//相手がアイテムだったら
-		// ベクター型の変数
-		std::vector<CScene*> SceneList;
-
-		// 指定したオブジェクトのポインタを取得
-		CScene::GetSceneList(OBJTYPE_ITEM, SceneList);
-
-		//アイテムの総数分
-		for (size_t nCnt = 0; nCnt < SceneList.size(); nCnt++)
+		// アイテムとの判定
+		if (m_pCollision->ForPlayer_ItemCollision(false))
 		{
-			CItem *pItem = (CItem*)SceneList[nCnt];
-			if (pItem != nullptr)
-			{
-				if (m_pCollision->OtherCollision2D(pItem->GetCollision()))
-				{
-					// アイテムごとの処理を通す
-					pItem->HitItem(pItem->GetItemType());
-					pItem->DeleteCollision();
-					pItem = nullptr;
-				}
-			}
 
 		}
 	}

@@ -37,6 +37,7 @@ public:
 	DEBUG_STATE GetDebugState(void);
 	static CPlayer *Create(void);
 	bool DefaultMotion(void);
+	CCollision *GetCollision() { return m_pCollision; }; // 当たり判定
 private:
 	void Move(float move, float fdest);
 		DEBUG_STATE m_DebugState;						//デバッグのステータス

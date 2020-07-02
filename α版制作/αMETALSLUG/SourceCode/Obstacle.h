@@ -68,8 +68,6 @@ public:
 
 	// 弾のパラメーター設定
 	void					Hit(OBSTACLE_TYPE type, int nDamage);									// 障害物が壊されるときの処理
-	// 当たり判定の削除
-	void					DeleteCollision(void);
 
 private:
 	/* メンバ関数*/
