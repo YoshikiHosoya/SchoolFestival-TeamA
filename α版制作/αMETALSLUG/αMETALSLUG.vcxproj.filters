@@ -162,6 +162,9 @@
     <ClCompile Include="SourceCode\Knife.cpp">
       <Filter>Wepon</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\TexAnimation3D_Collision.cpp">
+      <Filter>Effect\TexAnimation</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SourceCode\camera.h" />
@@ -333,6 +336,9 @@
     </ClInclude>
     <ClInclude Include="SourceCode\Knife.h">
       <Filter>Wepon</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\TexAnimation3D_Collision.h">
+      <Filter>Effect\TexAnimation</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

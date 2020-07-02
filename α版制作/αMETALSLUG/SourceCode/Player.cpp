@@ -20,6 +20,7 @@
 #include "Obstacle.h"
 #include "grenade.h"
 #include "prisoner.h"
+#include "Knife.h"
 //====================================================================
 //マクロ定義
 //====================================================================
@@ -64,6 +65,8 @@ HRESULT CPlayer::Init(void)
 	m_pGun = CGun::Create(GetCharacterModelPartsList(CModel::MODEL_PLAYER_RHAND)->GetMatrix());
 	// 銃の弾の種類
 	m_pGun->GetBulletType() = CGun::TYPE_PLAYER;
+	// ナイフの生成
+	m_pKnife = CKnife::Create(GetCharacterModelPartsList(CModel::MODEL_PLAYER_LHAND)->GetMatrix());
 
 	// 当たり判定生成
 	m_pCollision = CCollision::Create();
@@ -113,34 +116,53 @@ void CPlayer::Update(void)
 			//if (m_pPrisoner->GetCollision() != nullptr)
 			//{
 			//}
+			SetMotion(CCharacter::PLAYER_MOTION_ATTACK01);
+			m_pKnife->StartMeleeAttack();
+			m_Attack = true;
+
 		}
-		// 銃発射処理
-		m_pGun->Shot(GetShotDirection());
+		//// 銃発射処理
+		//m_pGun->Shot(GetShotDirection());
 	}
 	// グレネードを投げる
 	if (key->GetKeyboardTrigger(DIK_O))
 	{
 		// グレネード生成
 		CGrenade::Create(GetShotDirection() , GetCharacterModelPartsList(CModel::MODEL_PLAYER_LHAND)->GetMatrix());
+		SetMotion(CCharacter::PLAYER_MOTION_GRENADE);
+	}
+	if (key->GetKeyboardPress(DIK_W))
+	{
+		SetCharacterDirection(CHARACTER_UP);
 	}
 
 	// Aの処理
 	if (key->GetKeyboardPress(DIK_A))
 	{
 		CPlayer::Move(0.5f, 0.5f);
+		if (key->GetKeyboardPress(DIK_W))
+		{
+			SetCharacterDirection(CHARACTER_UP);
+		}
+		else
+		{
 		SetCharacterDirection(CHARACTER_LEFT);
+		}
 	}
 	// Dの処理
 	else if (key->GetKeyboardPress(DIK_D))
 	{
 		CPlayer::Move(-0.5f, -0.5f);
+		if (key->GetKeyboardPress(DIK_W))
+		{
+			SetCharacterDirection(CHARACTER_UP);
+		}
+		else
+		{
 		SetCharacterDirection(CHARACTER_RIGHT);
+		}
 	}
 
-	else if (key->GetKeyboardPress(DIK_W))
-	{
-		SetCharacterDirection(CHARACTER_UP);
-	}
 
 	//ジャンプしたときの下向発射
 	if (key->GetKeyboardPress(DIK_S) && GetJump() == false)
@@ -196,6 +218,21 @@ void CPlayer::Update(void)
 		// エネミーとの判定
 		if (m_pCollision->ForPlayer_EnemyCollision(ATTACK_PENETRATION))
 		{
+			CEnemy *pEnemy = CManager::GetBaseMode()->GetMap()->GetEnemy(nCnt);
+			if (pEnemy != nullptr)
+			{
+				if (m_pCollision->CharCollision2D(pEnemy->GetCollision()))
+				{
+					CDebugProc::Print("\n時機が敵に当たったよ！\n");
+					m_bCloseRangeAttack = true;
+				}
+				else
+				{
+					CDebugProc::Print("\n時機が敵に当たってないよ！ \n");
+					m_bCloseRangeAttack = false;
+				}
+			}
+		}
 			// 近接攻撃可能にする
 			m_bCloseRangeAttack = true;
 		}
@@ -210,6 +247,21 @@ void CPlayer::Update(void)
 		{
 			// ジャンプフラグを可能にする
 			CCharacter::SetJump(true);
+		}
+			CObstacle *pObstacle = CManager::GetBaseMode()->GetMap()->GetObstacle(nCntObst);
+			if (pObstacle != nullptr)
+			{
+				if (m_pCollision->BlockCollision2D(pObstacle->GetCollision()))
+				{
+					CCharacter::SetJump(false);
+					CDebugProc::Print("\n時機が障害物に当たったよ！\n");
+
+				}
+				else
+				{
+					CDebugProc::Print("\n時機が障害物に当たってないよ！ \n");
+				}
+			}
 		}
 
 		// 捕虜との判定
@@ -228,6 +280,14 @@ void CPlayer::Update(void)
 		if (m_pCollision->ForPlayer_ItemCollision(false))
 		{
 
+		}
+	}
+	if (GetMotionType() != CCharacter::PLAYER_MOTION_ATTACK01)
+	{
+		m_Attack = false;
+		if (m_Attack == false)
+		{
+			m_pKnife->EndMeleeAttack();
 		}
 	}
 	if (CHossoLibrary::PressAnyButton())
@@ -249,7 +309,22 @@ void CPlayer::Draw(void)
 //====================================================================
 void CPlayer::DebugInfo(void)
 {
-	CDebugProc::Print("プレイヤーの向き%2f", GetRot().y);
+	if (m_bCloseRangeAttack == true)
+	{
+		CDebugProc::Print("近接攻撃：可能\n");
+	}
+	else
+	{
+		CDebugProc::Print("近接攻撃：不可能\n");
+	}
+	if (m_Attack == true)
+	{
+		CDebugProc::Print("攻撃中\n");
+	}
+	else
+	{
+		CDebugProc::Print("攻撃してない\n");
+	}
 }
 //====================================================================
 //モデルのクリエイト
@@ -285,4 +360,5 @@ void CPlayer::Move(float move, float fdest)
 	GetMove().x += sinf(move * -D3DX_PI) * 1.0f;
 	GetMove().z += cosf(move * -D3DX_PI) * 1.0f;
 	GetRotDest().y = fdest *  D3DX_PI;
+	SetMotion(PLAYER_MOTION_WALK);
 }
