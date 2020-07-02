@@ -38,7 +38,15 @@ char *CBullet::m_BulletFileName[CGun::GUNTYPE_MAX] =
 // =====================================================================================================================================================================
 // マクロ定義
 // =====================================================================================================================================================================
-#define BULLET_LIFE			(100)			// 弾の体力
+#define BULLET_LIFE				(100)			// 弾の体力
+
+// 弾のダメージ
+#define BULLET_DAMAGE_ENEMY		(10)			// エネミーへのダメージ
+#define BULLET_DAMAGE_OBSTACLE	(10)			// 障害物へのダメージ
+#define BULLET_DAMAGE_PLAYER	(10)			// プレイヤーへのダメージ
+
+// 貫通させるかのフラグ
+#define BULLET_PENETRATION		(false)			// 弾の判定が貫通するかどうか
 
 // =====================================================================================================================================================================
 //
@@ -56,6 +64,17 @@ CBullet::CBullet(OBJ_TYPE type) :CModel(type)
 // =====================================================================================================================================================================
 CBullet::~CBullet()
 {
+#ifdef _DEBUG
+
+	// 当たり判定の削除
+	if (m_pCollision != nullptr)
+	{
+		delete m_pCollision;
+		m_pCollision = nullptr;
+	}
+
+#endif // _DEBUG
+
 }
 
 // =====================================================================================================================================================================
@@ -67,7 +86,7 @@ HRESULT CBullet::Init()
 {
 	// 変数初期化
 	m_move			= D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// 移動値
-	m_pCollision	= NULL;									// 当たり判定のポインタ
+	m_pCollision	= nullptr;									// 当たり判定のポインタ
 	m_nLife			= 0;				// 体力
 
 	// 初期化
@@ -78,7 +97,7 @@ HRESULT CBullet::Init()
 	m_pCollision->SetPos(&GetPosition());
 	m_pCollision->SetSize2D(D3DXVECTOR3(40.0f, 40.0f, 0.0f));
 	m_pCollision->SetMove(&m_move);
-	m_pCollision->SetType(CCollision::OBJTYPE_PLAYERBULLET);
+	m_pCollision->SetType(CCollision::COLLISION_PLAYERBULLET);
 	m_pCollision->DeCollisionCreate(CCollision::COLLISIONTYPE_NORMAL);
 
 	return S_OK;
@@ -113,12 +132,6 @@ void CBullet::Update(void)
 	// 体力が0になったら									配列の[ 0 ]のところには銃の種類が入る
 	if (m_nLife <= 0)
 	{
-		if (m_pCollision != nullptr)
-		{
-			// 判定の削除
-			m_pCollision->ReleaseCollision(m_pCollision);
-			m_pCollision = nullptr;
-		}
 		Rerease();
 	}
 
@@ -131,133 +144,31 @@ void CBullet::Update(void)
 		// 判定の座標を更新
 		m_pCollision->SetPos(&GetPosition());
 
-		// プレイヤーの弾だったら
-		if (m_pCollision->GetObjtype() == CCollision::OBJTYPE_PLAYERBULLET)
+		// プレイヤーの弾だった時
+		if (m_type == TYPE_PLAYER)
 		{
-			// 当たり判定 相手がエネミーだったら
-			// 敵の総数分
-			for (int nCnt = 0; nCnt < CManager::GetBaseMode()->GetMap()->GetMaxEnemy(); nCnt++)
+			// プレイヤーの弾の判定
+			if (m_pCollision->ForPlayerBulletCollision(BULLET_DAMAGE_ENEMY, BULLET_DAMAGE_OBSTACLE, BULLET_PENETRATION))
 			{
-				CEnemy *pEnemy = CManager::GetBaseMode()->GetMap()->GetEnemy(nCnt);
-				if (pEnemy != nullptr && m_pCollision != nullptr)
-				{
-					if (m_pCollision->OtherCollision2D(pEnemy->GetCollision()))
-					{
-						// 敵のライフ減衰
-						pEnemy->CCharacter::AddDamage(10);
-						if (pEnemy->CCharacter::GetLife() <= 0)
-						{
-							// 敵の当たり判定の削除
-							pEnemy->DeleteCollision();
-							pEnemy = nullptr;
-						}
-
-						// 弾の判定の削除
-						m_pCollision->ReleaseCollision(m_pCollision);
-						m_pCollision = nullptr;
-						// 弾の削除
-						Rerease();
-					}
-					else
-					{
-						CDebugProc::Print("\n弾が敵に当たってないよ！ \n");
-					}
-				}
-			}
-
-			// 当たり判定 相手が障害物だったら
-			// 障害物の総数分
-			for (int nCntObst = 0; nCntObst < CManager::GetBaseMode()->GetMap()->GetMaxObstacle(); nCntObst++)
-			{
-				CObstacle *pObstacle = CManager::GetBaseMode()->GetMap()->GetObstacle(nCntObst);
-				if (pObstacle != nullptr && m_pCollision != nullptr)
-				{
-					if (m_pCollision->Collision2D(pObstacle->GetCollision()))
-					{
-						// 障害物のライフ減衰
-						pObstacle->Hit(CObstacle::TYPE_BOX,10);
-
-						if (pObstacle->GetLife() <= 0)
-						{
-							pObstacle->DeleteCollision();
-							pObstacle = nullptr;
-						}
-						// 弾の判定の削除
-						m_pCollision->ReleaseCollision(m_pCollision);
-						// 弾の当たりのポインタをnullにする
-						m_pCollision = nullptr;
-
-						// 弾の削除
-						Rerease();
-					}
-					else
-					{
-						CDebugProc::Print("\n弾が障害物に当たってないよ！ \n");
-					}
-				}
-			}
-
-			// 当たり判定 相手が捕虜だったら
-			// 捕虜の総数分
-			for (int nCntPriso = 0; nCntPriso < CManager::GetBaseMode()->GetMap()->GetMaxPrisoner(); nCntPriso++)
-			{
-				CPrisoner *pPrisoner = CManager::GetBaseMode()->GetMap()->GetPrisoner(nCntPriso);
-				if (pPrisoner != nullptr && m_pCollision != nullptr)
-				{
-					if (pPrisoner->GetPrisonerState() == CPrisoner::PRISONER_STATE_STAY)
-					{
-						if (m_pCollision->OtherCollision2D(pPrisoner->GetCollision()))
-						{
-							// 捕虜の状態変化
-							pPrisoner->SetPrisonerState(CPrisoner::PRISONER_STATE_DROPITEM);
-							if (pPrisoner->GetCollision() != nullptr)
-							{
-								// 捕虜の当たり判定削除
-								pPrisoner->DeleteCollision();
-								pPrisoner = nullptr;
-							}
-
-							// 弾の判定の削除
-							m_pCollision->ReleaseCollision(m_pCollision);
-							// 弾の当たりのポインタをnullにする
-							m_pCollision = nullptr;
-
-							// 弾の削除
-							Rerease();
-						}
-						else
-						{
-							CDebugProc::Print("\n弾が捕虜に当たってないよ！ \n");
-						}
-					}
-				}
+				// 弾の削除
+				Rerease();
 			}
 		}
 
-		// エネミーの弾だったら
-		//else if (m_pCollision->GetObjtype() == CCollision::OBJTYPE_ENEMYBULLET)
-		//{
-		//	// 当たり判定 相手がプレイヤーだったら
-		//	if (m_pCollision->Collision2D(CCollision::OBJTYPE_PLAYER))
-		//	{
-		//		// 判定の削除
-		//		m_pCollision->Delete(m_pCollision);
-		//		m_pCollision = NULL;
-		//		// 弾の削除
-		//		Rerease();
-		//		// プレイヤーのライフ減衰
-		//		//pPlayer->CCharacter::SetLife(-10);
-		//	}
-		//}
+		// エネミーの弾だった時
+		else if (m_type == TYPE_ENEMY)
+		{
+			// エネミーの弾の判定
+			if (m_pCollision->ForEnemyCollision(BULLET_DAMAGE_PLAYER, BULLET_PENETRATION))
+			{
+				// 弾の削除
+				Rerease();
+			}
+		}
 	}
 
 	// 更新
 	CModel::Update();
-
-#ifdef _DEBUG
-	// デバッグ表示
-	CDebugProc::Print("\n\nbullet_type %d\n\n", m_type);		// 弾の種類(自分か敵か）
-#endif // DEBUG
 }
 
 // =====================================================================================================================================================================
@@ -269,20 +180,6 @@ void CBullet::Draw(void)
 {
 	// 描画
 	CModel::Draw();
-}
-
-// =====================================================================================================================================================================
-//
-// 弾を消す処理
-//
-// =====================================================================================================================================================================
-void CBullet::DeleteBullet()
-{
-	// 弾の判定の削除
-	m_pCollision->ReleaseCollision(m_pCollision);
-	m_pCollision = nullptr;
-	// 弾の削除
-	Rerease();
 }
 
 // =====================================================================================================================================================================

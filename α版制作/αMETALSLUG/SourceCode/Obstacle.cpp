@@ -41,6 +41,16 @@ CObstacle::CObstacle(OBJ_TYPE type) :CModel(type)
 // =====================================================================================================================================================================
 CObstacle::~CObstacle()
 {
+#ifdef _DEBUG
+
+	// “–‚½‚è”»’è‚Ìíœ
+	if (m_pCollision != nullptr)
+	{
+		delete m_pCollision;
+		m_pCollision = nullptr;
+	}
+#endif // _DEBUG
+
 }
 
 // =====================================================================================================================================================================
@@ -64,7 +74,7 @@ HRESULT CObstacle::Init()
 	m_pCollision->SetPos(&GetPosition());
 	m_pCollision->SetSize2D(OBSTACLE_BOX_COLLISION);
 	m_pCollision->SetMove(nullptr);
-	m_pCollision->SetType(CCollision::OBJTYPE_OBSTACLE);
+	m_pCollision->SetType(CCollision::COLLISION_OBSTACLE);
 	m_pCollision->DeCollisionCreate(CCollision::COLLISIONTYPE_NORMAL);
 
 	return S_OK;
@@ -166,8 +176,7 @@ void CObstacle::CheckDie()
 {
 	if (this->m_nLife <= 0)
 	{
-		/*m_pCollision->ReleaseCollision(m_pCollision);
-		m_pCollision = nullptr;*/
+		//m_pCollision = nullptr;
 		// ‘Ì—Í‚ª0ˆÈ‰º‚È‚çíœ‚·‚é
 		Rerease();
 	}
@@ -179,14 +188,4 @@ void CObstacle::AddDamage(int nDamage)
 {
 	this->m_nLife -= nDamage;
 	this->SetLife(m_nLife);
-}
-// =====================================================================================================================================================================
-//
-//“–‚½‚è”»’è‚Ìíœ
-//
-// =====================================================================================================================================================================
-void CObstacle::DeleteCollision(void)
-{
-	m_pCollision->ReleaseCollision(m_pCollision);
-	m_pCollision = nullptr;
 }

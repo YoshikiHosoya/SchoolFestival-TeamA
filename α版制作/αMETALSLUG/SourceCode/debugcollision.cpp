@@ -381,17 +381,21 @@ void CDebugcollision::SetSize(D3DXVECTOR3 * size)
 // ----------------------------------------
 // ラインの削除
 // ----------------------------------------
-void CDebugcollision::DeleteDeCollision(CDebugcollision * pDebugcollision)
+
+void CDebugcollision::DeleteDeCollision()
 {
-	if (pDebugcollision != NULL)
+
+	if (this != nullptr)
 	{
 		// 座標のポインタをlineの座標に設定
 		for (int nCnt = 0; nCnt < MAX_VERTEX2D; nCnt++)
 		{
-			if (pDebugcollision->m_p2DLine[nCnt] != NULL)
+
+			if (this->m_p2DLine[nCnt] != nullptr)
 			{
-				pDebugcollision->m_p2DLine[nCnt]->Rerease();
-				pDebugcollision->m_p2DLine[nCnt] = NULL;
+
+				this->m_p2DLine[nCnt]->Rerease();
+				this->m_p2DLine[nCnt] = nullptr;
 			}
 		}
 	}

@@ -43,12 +43,8 @@ public:
 	~CMap();																// デストラクタ
 
 	/* 静的メンバ関数 */
-	void			ModelLoad(int nCnt);									// モデルのロード
-	void			EnemyLoad(int nCnt);									// 敵のロード
-	void			PrisonerLoad(int nCnt);									// 捕虜のロード
-	void			ObstacleLoad(int nCnt);									// 障害物のロード
-	void			DebugMap();												// マップのデバッグ配置
-	static	CMap	*MapCreate(int nCnt);									// マップの生成
+	static	CMap	*MapCreate(MAP MapNum);									// マップの生成
+	void	MapUpdate();											// マップの更新
 
 	/* メンバ関数 */
 	int				GetMaxModel();											// モデルの最大数取得
@@ -60,18 +56,31 @@ public:
 	CEnemy			*GetEnemy(int nCnt) { return m_pEnemy[nCnt]; };			// 敵の取得
 	CPrisoner		*GetPrisoner(int nCnt) { return m_pPrisoner[nCnt]; };	// 捕虜の取得
 	CObstacle		*GetObstacle(int nCnt) { return m_pObstacle[nCnt]; };	// 障害物の取得
+
 	void			UpdateDieFlag();										// 死亡フラグ確認関数
 
 private:
 	/* 静的メンバ関数 */
-	void	ModelSave();													// モデルのセーブ
-	void	EnemySave();													// 敵のセーブ
+	void			ModelLoad(MAP MapNum);									// モデルのロード
+	void			EnemyLoad(MAP MapNum);									// 敵のロード
+	void			PrisonerLoad(MAP MapNum);								// 捕虜のロード
+	void			ObstacleLoad(MAP MapNum);								// 障害物のロード
+	void			ModelSave(MAP MapNum);									// モデルのセーブ
+	void			EnemySave(MAP MapNum);									// 敵のセーブ
+	void			PrisonerSave(MAP MapNum);								// 捕虜のセーブ
+	void			ObstacleSave(MAP MapNum);								// 障害物のセーブ
+
+	void			MapModelTab();											// マップに配置するモデルのタブ
+	void			MapModelSet();											// マップに配置するモデルの設置
+	void			ObstacleSet();											// 障害物の設置
+	bool			ObstacleComboBox(int &nType);							// 障害物のコンボボックス
 
 	/* 静的メンバ変数 */
 	static char					*m_MapFileName[MAP_MAX];					// マップファイル名
 	static char					*m_EnemyFileName[MAP_MAX];					// 敵ファイル名
 	static char					*m_PrisonerFileName[MAP_MAX];				// 捕虜ファイル名
 	static char					*m_ObstacleFileName[MAP_MAX];				// 障害物ファイル名
+	static MAP					m_MapNum;									// マップ番号
 
 	/* メンバ変数 */
 	std::vector<CModel*>		m_pModel;									// 可変長配列 設置するモデル
