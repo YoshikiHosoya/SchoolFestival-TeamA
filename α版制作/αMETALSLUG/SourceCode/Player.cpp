@@ -216,23 +216,8 @@ void CPlayer::Update(void)
 		m_pCollision->SetPosOld(&GetPositionOld());
 
 		// エネミーとの判定
-		if (m_pCollision->ForPlayer_EnemyCollision(ATTACK_PENETRATION))
+		if (m_pCollision->ForPlayer_EnemyCollision(ATTACK_PENETRATION) || m_pCollision->ForPlayer_PrisonerCollision(ATTACK_PENETRATION))
 		{
-			CEnemy *pEnemy = CManager::GetBaseMode()->GetMap()->GetEnemy(nCnt);
-			if (pEnemy != nullptr)
-			{
-				if (m_pCollision->CharCollision2D(pEnemy->GetCollision()))
-				{
-					CDebugProc::Print("\n時機が敵に当たったよ！\n");
-					m_bCloseRangeAttack = true;
-				}
-				else
-				{
-					CDebugProc::Print("\n時機が敵に当たってないよ！ \n");
-					m_bCloseRangeAttack = false;
-				}
-			}
-		}
 			// 近接攻撃可能にする
 			m_bCloseRangeAttack = true;
 		}
@@ -243,43 +228,15 @@ void CPlayer::Update(void)
 		}
 
 		// 障害物との判定
-		if (m_pCollision->ForPlayer_ObstacleCollision(false))
+		if (m_pCollision->ForPlayer_ObstacleCollision())
 		{
 			// ジャンプフラグを可能にする
 			CCharacter::SetJump(true);
 		}
-			CObstacle *pObstacle = CManager::GetBaseMode()->GetMap()->GetObstacle(nCntObst);
-			if (pObstacle != nullptr)
-			{
-				if (m_pCollision->BlockCollision2D(pObstacle->GetCollision()))
-				{
-					CCharacter::SetJump(false);
-					CDebugProc::Print("\n時機が障害物に当たったよ！\n");
-
-				}
-				else
-				{
-					CDebugProc::Print("\n時機が障害物に当たってないよ！ \n");
-				}
-			}
-		}
-
-		// 捕虜との判定
-		if (m_pCollision->ForPlayer_PrisonerCollision(ATTACK_PENETRATION))
-		{
-			// 近接攻撃を可能にする
-			m_bCloseRangeAttack = true;
-		}
-		else
-		{
-			// 近接攻撃が無効になる
-			m_bCloseRangeAttack = false;
-		}
 
 		// アイテムとの判定
-		if (m_pCollision->ForPlayer_ItemCollision(false))
+		if (m_pCollision->ForPlayer_ItemCollision())
 		{
-
 		}
 	}
 	if (GetMotionType() != CCharacter::PLAYER_MOTION_ATTACK01)

@@ -173,14 +173,18 @@ bool CCollision::ForPlayerBulletCollision(int nEnemyDamage, int nObstacleDamage,
 
 				// 当たり範囲フラグをtrueにする
 				bHitFlag = true;
+
+				if (Penetration == false)
+				{
+					return bHitFlag;
+				}
 			}
 			else
 			{
 				// 当たり範囲フラグをfalseにする
 				bHitFlag = false;
-
-				CDebugProc::Print("\n弾が敵に当たってないよ！ \n");
 			}
+
 		}
 	}
 
@@ -205,13 +209,16 @@ bool CCollision::ForPlayerBulletCollision(int nEnemyDamage, int nObstacleDamage,
 
 				// 当たり範囲フラグをtrueにする
 				bHitFlag = true;
+
+				if (Penetration == false)
+				{
+					return bHitFlag;
+				}
 			}
 			else
 			{
 				// 当たり範囲フラグをfalseにする
 				bHitFlag = false;
-
-				CDebugProc::Print("\n弾が障害物に当たってないよ！ \n");
 			}
 		}
 	}
@@ -233,13 +240,15 @@ bool CCollision::ForPlayerBulletCollision(int nEnemyDamage, int nObstacleDamage,
 					pPrisoner = nullptr;
 					// 当たり範囲フラグをtrueにする
 					bHitFlag = true;
+					if (Penetration == false)
+					{
+						return bHitFlag;
+					}
 				}
 				else
 				{
 					// 当たり範囲フラグをfalseにする
-					bHitFlag = false;;
-
-					CDebugProc::Print("\n弾が捕虜に当たってないよ！ \n");
+					bHitFlag = false;
 				}
 			}
 		}
@@ -281,8 +290,6 @@ bool CCollision::ForEnemyCollision(int nPlayerDamage, bool Penetration)
 			{
 				// 当たり範囲フラグをfalseにする
 				bHitFlag = false;
-
-				CDebugProc::Print("\n弾が敵に当たってないよ！ \n");
 			}
 		}
 
@@ -307,12 +314,10 @@ bool CCollision::ForPlayer_EnemyCollision(bool Penetration)
 			if (this->CharCollision2D(pEnemy->GetCollision()))
 			{
 				bHitFlag = true;
-				CDebugProc::Print("\n時機が敵に当たったよ！\n");
 			}
 			else
 			{
 				bHitFlag = false;
-				CDebugProc::Print("\n時機が敵に当たってないよ！ \n");
 			}
 		}
 	}
@@ -323,7 +328,7 @@ bool CCollision::ForPlayer_EnemyCollision(bool Penetration)
 //======================================================================================================================
 // プレイヤーと障害物で行う判定 プレイヤーの接触判定
 //======================================================================================================================
-bool CCollision::ForPlayer_ObstacleCollision(bool Penetration)
+bool CCollision::ForPlayer_ObstacleCollision()
 {
 	// 判定を確認するフラグ
 	bool bHitFlag = false;
@@ -337,12 +342,10 @@ bool CCollision::ForPlayer_ObstacleCollision(bool Penetration)
 			if (this->BlockCollision2D(pObstacle->GetCollision()))
 			{
 				bHitFlag = true;
-				CDebugProc::Print("\n時機が障害物に当たったよ！\n");
 			}
 			else
 			{
 				bHitFlag = false;
-				CDebugProc::Print("\n時機が障害物に当たってないよ！ \n");
 			}
 		}
 	}
@@ -366,12 +369,10 @@ bool CCollision::ForPlayer_PrisonerCollision(bool Penetration)
 			if (this->CharCollision2D(pPrisoner->GetCollision()))
 			{
 				bHitFlag = true;
-				CDebugProc::Print("\n時機が捕虜に当たったよ！\n");
 			}
 			else
 			{
 				bHitFlag = false;
-				CDebugProc::Print("\n時機が捕虜に当たってないよ！ \n");
 			}
 		}
 	}
@@ -381,7 +382,7 @@ bool CCollision::ForPlayer_PrisonerCollision(bool Penetration)
 //======================================================================================================================
 // プレイヤーとアイテムで行う判定 プレイヤーの接触判定
 //======================================================================================================================
-bool CCollision::ForPlayer_ItemCollision(bool Penetration)
+bool CCollision::ForPlayer_ItemCollision()
 {
 	// 判定を確認するフラグ
 	bool bHitFlag = false;

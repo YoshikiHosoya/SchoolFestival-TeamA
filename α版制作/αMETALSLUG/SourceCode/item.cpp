@@ -11,6 +11,9 @@
 #include "texture.h"
 #include "collision.h"
 #include "debugproc.h"
+#include "player.h"
+#include "gun.h"
+
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
 // =====================================================================================================================================================================
@@ -154,30 +157,38 @@ void CItem::Draw(void)
 // =====================================================================================================================================================================
 void CItem::ItemType(ITEMTYPE type)
 {
+	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
+
 	switch (type)
 	{
 		//ヘビーマシンガン
 	case (ITEMTYPE_HEAVYMACHINEGUN): {
+		pPlayer->GetGun()->SetGunType(CGun::GUNTYPE_HEAVYMACHINEGUN);
 	}break;
 
 		//ショットガン
 	case (ITEMTYPE_SHOTGUN): {
+		pPlayer->GetGun()->SetGunType(CGun::GUNTYPE_SHOTGUN);
 	}break;
 
 		//レーザーガン
 	case (ITEMTYPE_LASERGUN): {
+		pPlayer->GetGun()->SetGunType(CGun::GUNTYPE_LASERGUN);
 	}break;
 
 		//ロケットランチャー
 	case (ITEMTYPE_ROCKETLAUNCHER): {
+		pPlayer->GetGun()->SetGunType(CGun::GUNTYPE_ROCKETLAUNCHER);
 	}break;
 
 		//フレイムショット
 	case (ITEMTYPE_FLAMESHOT): {
+		pPlayer->GetGun()->SetGunType(CGun::GUNTYPE_FLAMESHOT);
 	}break;
 
 		//熊
 	case (ITEMTYPE_BEAR): {
+		// スコアアップ
 	}break;
 
 	default:

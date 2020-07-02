@@ -40,13 +40,13 @@ public:
 	{
 		COLLISION_PLAYERBULLET = 0,			// プレイヤー弾
 		COLLISION_ENEMYBULLET,				// 敵弾
-		COLLISION_PLAYER,						// プレイヤー
-		COLLISION_ENEMY,						// エネミー
+		COLLISION_PLAYER,					// プレイヤー
+		COLLISION_ENEMY,					// エネミー
 		COLLISION_PRISONER,					// 捕虜
 		COLLISION_ITEM,						// アイテム
 		COLLISION_OBSTACLE,					// 障害物
 		COLLISION_VEHICLE,					// 乗り物
-		COLLISION_OTHER,						// その他
+		COLLISION_OTHER,					// その他
 		COLLISION_MAX
 	} COLLISION;
 
@@ -80,7 +80,7 @@ public:
 	void SetSize(D3DXVECTOR3 size);						// サイズの設定
 	void SetSize2D(D3DXVECTOR3 size);					// 2D用サイズの設定
 	void SetMove(D3DXVECTOR3 *move);					// 移動量の設定
-	void SetType(COLLISION type);							// タイプの設定
+	void SetType(COLLISION type);						// タイプの設定
 	bool Collision2D(CCollision *pCollision);			// 板型の当たり判定
 	bool CharCollision2D(CCollision *pCollision);		// キャラクター用板型の当たり判定
 	bool OtherCollision2D(CCollision *pCollision);		// 板型の当たり判定
@@ -96,11 +96,11 @@ public:
 
 	bool ForPlayer_EnemyCollision(bool Penetration);	// プレイヤーとエネミーが行う判定 ダメージ量 貫通するかどうか
 
-	bool ForPlayer_ObstacleCollision(bool Penetration);	// プレイヤーと障害物が行う判定 ダメージ量 貫通するかどうか
+	bool ForPlayer_ObstacleCollision();					// プレイヤーと障害物が行う判定 ダメージ量 貫通するかどうか
 
 	bool ForPlayer_PrisonerCollision(bool Penetration);	// プレイヤーと捕虜が行う判定 ダメージ量 貫通するかどうか
 
-	bool ForPlayer_ItemCollision(bool Penetration);	// プレイヤーと捕虜が行う判定 ダメージ量 貫通するかどうか
+	bool ForPlayer_ItemCollision();						// プレイヤーと捕虜が行う判定 ダメージ量 貫通するかどうか
 
 protected:
 private:
