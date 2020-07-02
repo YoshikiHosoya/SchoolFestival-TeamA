@@ -90,29 +90,4 @@ void CGame::ShowDebugInfo(void)
 {
 	//キーボード情報取得
 	CKeyboard *key = CManager::GetInputKeyboard();;
-	//2Dエフェクト
-	if (key->GetKeyboardTrigger(DIK_2))
-	{
-		CTexAnimation2D::Create(SCREEN_CENTER_POS, D3DXVECTOR3(150.0f, 150.0f, 0.0f), ZeroVector3, CTexture::SEPARATE_TEX_EFFECT_EXPLOSION01, 3, CScene::OBJTYPE_EXPROSION);
-	}
-	//3Dエフェクト
-	if (key->GetKeyboardTrigger(DIK_3))
-	{
-		CTexAnimation3D::Create(m_pPlayer->GetPosition(), D3DXVECTOR3(150.0f, 150.0f, 0.0f), ZeroVector3, CTexture::SEPARATE_TEX_EFFECT_EXPLOSION01, 3, CScene::OBJTYPE_EXPROSION);
-	}
-	//パーティクル
-	if (key->GetKeyboardTrigger(DIK_4))
-	{
-		CParticle::Create(m_pPlayer->GetPosition(), 60, 50.0f, RedColor, 20, 5);
-	}
-	//パーティクル テキストのパラメータ参照
-	if (key->GetKeyboardTrigger(DIK_5))
-	{
-		CParticle::CreateFromText(m_pPlayer->GetPosition(), CParticleParam::PARTICLE_DEFAULT);
-	}
-	//パーティクル テキストのパラメータ参照
-	if (key->GetKeyboardTrigger(DIK_5))
-	{
-		CParticle::CreateFromText(m_pPlayer->GetPosition(), CParticleParam::PARTICLE_EXPLOSION);
-	}
 }
