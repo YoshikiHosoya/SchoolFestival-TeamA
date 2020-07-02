@@ -23,8 +23,7 @@
 //====================================================================
 //マクロ定義
 //====================================================================
-#define PLAYER_SIZE			(D3DXVECTOR3(50.0f,65.0f,0.0f)) //敵のサイズ
-
+#define PLAYER_SIZE						(D3DXVECTOR3(50.0f,65.0f,0.0f)) //敵のサイズ
 CPlayer::CPlayer(OBJ_TYPE type) :CCharacter(type)
 {
 	SetObjType(OBJTYPE_PLAYER);
@@ -102,34 +101,50 @@ void CPlayer::Update(void)
 			//	m_pPrisoner->DeleteCollision();
 			//	m_pPrisoner = nullptr;
 			//}
+			SetMotion(CCharacter::PLAYER_MOTION_ATTACK01);
 		}
-		// 銃発射処理
-		m_pGun->Shot(GetShotDirection());
+		//// 銃発射処理
+		//m_pGun->Shot(GetShotDirection());
 	}
 	// グレネードを投げる
 	if (key->GetKeyboardTrigger(DIK_O))
 	{
 		// グレネード生成
 		CGrenade::Create(GetShotDirection() , GetCharacterModelPartsList(CModel::MODEL_PLAYER_LHAND)->GetMatrix());
+		SetMotion(CCharacter::PLAYER_MOTION_GRENADE);
+	}
+	if (key->GetKeyboardPress(DIK_W))
+	{
+		SetCharacterDirection(CHARACTER_UP);
 	}
 
 	// Aの処理
 	if (key->GetKeyboardPress(DIK_A))
 	{
 		CPlayer::Move(0.5f, 0.5f);
+		if (key->GetKeyboardPress(DIK_W))
+		{
+			SetCharacterDirection(CHARACTER_UP);
+		}
+		else
+		{
 		SetCharacterDirection(CHARACTER_LEFT);
+		}
 	}
 	// Dの処理
 	else if (key->GetKeyboardPress(DIK_D))
 	{
 		CPlayer::Move(-0.5f, -0.5f);
+		if (key->GetKeyboardPress(DIK_W))
+		{
+			SetCharacterDirection(CHARACTER_UP);
+		}
+		else
+		{
 		SetCharacterDirection(CHARACTER_RIGHT);
+		}
 	}
 
-	else if (key->GetKeyboardPress(DIK_W))
-	{
-		SetCharacterDirection(CHARACTER_UP);
-	}
 
 	//ジャンプしたときの下向発射
 	if (key->GetKeyboardPress(DIK_S) && GetJump() == false)
@@ -286,7 +301,7 @@ void CPlayer::Draw(void)
 //====================================================================
 void CPlayer::DebugInfo(void)
 {
-	CDebugProc::Print("プレイヤーの向き%2f", GetRot().y);
+	CDebugProc::Print("プレイヤーのモーションタイプ%d\n", GetMotionType());
 }
 //====================================================================
 //モデルのクリエイト
@@ -322,4 +337,5 @@ void CPlayer::Move(float move, float fdest)
 	GetMove().x += sinf(move * -D3DX_PI) * 1.0f;
 	GetMove().z += cosf(move * -D3DX_PI) * 1.0f;
 	GetRotDest().y = fdest *  D3DX_PI;
+	SetMotion(PLAYER_MOTION_WALK);
 }
