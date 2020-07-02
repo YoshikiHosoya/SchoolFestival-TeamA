@@ -34,6 +34,8 @@ public:
 	LPDIRECT3DTEXTURE9 GetTexture(void);
 	LPDIRECT3DVERTEXBUFFER9 GetVtxBuff(void);
 	D3DXMATRIX *GetMtxWorld(void);
+
+	D3DXVECTOR3 *GetPosPtr() { return &m_pos; };
 protected:
 
 private:

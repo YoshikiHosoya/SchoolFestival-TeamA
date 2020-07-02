@@ -219,44 +219,45 @@ void CCharacter::Draw(void)
 		&m_mtxWorld,
 		&mtxTrans);
 
-	//目標点と現在の差分（回転）
-	D3DXVECTOR3 diffRot = m_AddRot - m_vModelList[2]->GetRot();
-	//3.14の超過分の初期化（回転）
-	if (m_vModelList[2]->GetRot().x > D3DX_PI)
-	{
-		m_vModelList[2]->GetRot().x -= D3DX_PI * 2;
-	}
-	else if (m_vModelList[2]->GetRot().x < -D3DX_PI)
-	{
-		m_vModelList[2]->GetRot().x += D3DX_PI * 2;
-	}
-	if (diffRot.x > D3DX_PI)
-	{
-		diffRot.x -= D3DX_PI * 2;
-	}
-	else if (diffRot.x < -D3DX_PI)
-	{
-		diffRot.x += D3DX_PI * 2;
-	}
-	//求めた差分だけ追従する計算
-	m_vModelList[2]->GetRot().x += diffRot.x * 0.1f;
 
 	//モデルの描画
 	for (unsigned int nCnt = 0; nCnt < m_vModelList.size(); nCnt++)
 	{
-		if (nCnt == 2)
+		if (nCnt == 2 || nCnt == 3 || nCnt == 4)
 		{
-			m_vModelList[nCnt]->SetRot(m_vModelList[2]->GetRot());
+			//目標点と現在の差分（回転）
+			D3DXVECTOR3 diffRot = m_AddRot - m_vModelList[nCnt]->GetRot();
+			//3.14の超過分の初期化（回転）
+			if (m_vModelList[nCnt]->GetRot().x > D3DX_PI)
+			{
+				m_vModelList[nCnt]->GetRot().x -= D3DX_PI * 2;
+			}
+			else if (m_vModelList[nCnt]->GetRot().x < -D3DX_PI)
+			{
+				m_vModelList[nCnt]->GetRot().x += D3DX_PI * 2;
+			}
+			if (diffRot.x > D3DX_PI)
+			{
+				diffRot.x -= D3DX_PI * 2;
+			}
+			else if (diffRot.x < -D3DX_PI)
+			{
+				diffRot.x += D3DX_PI * 2;
+			}
+			//求めた差分だけ追従する計算
+			m_vModelList[nCnt]->GetRot().x += diffRot.x * 0.1f;
+
+			m_vModelList[nCnt]->SetRot(m_vModelList[nCnt]->GetRot());
 			CDebugProc::Print("ShotRot : %.1f, %.1f %.1f\n", m_ShotRot.x, m_ShotRot.y, m_ShotRot.z);
 
-			CDebugProc::Print("HeadRot : %.1f, %.1f %.1f\n", m_vModelList[2]->GetRot().x, m_vModelList[2]->GetRot().y, m_vModelList[2]->GetRot().z);
+			CDebugProc::Print("HeadRot : %.1f, %.1f %.1f\n", m_vModelList[nCnt]->GetRot().x, m_vModelList[nCnt]->GetRot().y, m_vModelList[nCnt]->GetRot().z);
 		}
 
 		m_vModelList[nCnt]->Draw(m_mtxWorld);
 
-		if (nCnt == 2)
-		{ 
-			m_vModelList[nCnt]->SetRot(m_vModelList[2]->GetRot());
+		if (nCnt == 2 || nCnt == 3 || nCnt == 4)
+		{
+			m_vModelList[nCnt]->SetRot(m_vModelList[nCnt]->GetRot());
 		}
 	}
 
@@ -729,13 +730,14 @@ void CCharacter::Moation(void)
 				{
 					if (DefaultMotion())
 					{
-						m_CntKeySet = 0;
-						m_Fram = m_CharacterMotion[m_MotionType]->key_info[m_CntKeySet]->nFram;
+					m_CntKeySet = 0;
+					m_Fram = m_CharacterMotion[m_MotionType]->key_info[m_CntKeySet]->nFram;
 					}
 				}
 				//ループするとき--------------------------------------■■■■■
 				else if (m_CharacterMotion[m_MotionType]->nLoop == 1)
 				{
+					DefaultMotion();
 					m_CntKeySet = 0;
 				}
 			}
@@ -756,9 +758,6 @@ void CCharacter::Moation(void)
 		m_Fram = 0;
 		m_CntKeySet = 0;
 	}
-	CDebugProc::Print("モーションタイプ: %d \n", m_MotionType);
-	CDebugProc::Print("カウントキーセット: %d \n", m_CntKeySet);
-	CDebugProc::Print("フレーム: %d \n", m_Fram);
 }
 //====================================================================
 //オフセットの読み込み

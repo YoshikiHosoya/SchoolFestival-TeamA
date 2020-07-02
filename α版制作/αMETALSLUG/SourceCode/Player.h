@@ -14,7 +14,7 @@ class CUI;
 class CGun;
 class CCollision;
 class CPrisoner;
-
+class CKnife;
 //レンダリングクラス
 class CPlayer :public CCharacter
 {
@@ -47,6 +47,6 @@ private:
 		CCollision					*m_pCollision;		// 当たり判定情報
 		bool						m_bCloseRangeAttack;// 近接攻撃フラグ
 		CPrisoner					*m_pPrisoner;		// 捕虜のポインタを保存する変数
-
+		CKnife *m_pKnife;
 };
 #endif

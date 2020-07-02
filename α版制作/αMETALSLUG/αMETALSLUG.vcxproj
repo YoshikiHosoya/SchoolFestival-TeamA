@@ -211,6 +211,7 @@
     <ClCompile Include="SourceCode\shotgun.cpp" />
     <ClCompile Include="SourceCode\TexAnimation2D.cpp" />
     <ClCompile Include="SourceCode\TexAnimation3D.cpp" />
+    <ClCompile Include="SourceCode\TexAnimation3D_Collision.cpp" />
     <ClCompile Include="SourceCode\TexAnimationBase.cpp" />
     <ClCompile Include="SourceCode\texture.cpp" />
     <ClCompile Include="SourceCode\vehicle.cpp" />
@@ -277,6 +278,7 @@
     <ClInclude Include="SourceCode\shotgun.h" />
     <ClInclude Include="SourceCode\TexAnimation2D.h" />
     <ClInclude Include="SourceCode\TexAnimation3D.h" />
+    <ClInclude Include="SourceCode\TexAnimation3D_Collision.h" />
     <ClInclude Include="SourceCode\TexAnimationBase.h" />
     <ClInclude Include="SourceCode\texture.h" />
     <ClInclude Include="SourceCode\vehicle.h" />
