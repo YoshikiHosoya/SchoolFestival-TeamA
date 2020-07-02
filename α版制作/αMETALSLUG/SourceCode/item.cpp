@@ -315,7 +315,7 @@ void CItem::SwitchTexture(ITEMTYPE type, CItem *pItem)
 // =====================================================================================================================================================================
 CItem::ITEMTYPE CItem::RandDropItem()
 {
-	return ITEMTYPE(rand() % ITEMTYPE_SHOTGUN + 1);
+	return ITEMTYPE(rand() % ITEMTYPE_MAX + 1);
 }
 //====================================================================
 //
@@ -325,5 +325,5 @@ CItem::ITEMTYPE CItem::RandDropItem()
 void CItem::DeleteCollision(void)
 {
 	m_pCollision->ReleaseCollision(m_pCollision);
-	m_pCollision = NULL;
+	m_pCollision = nullptr;
 }

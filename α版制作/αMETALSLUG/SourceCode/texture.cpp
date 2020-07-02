@@ -20,9 +20,9 @@ std::vector<std::string> CTexture::m_aTexFileName =
 	{ "data/TEXTURE/Bullet/bullet00.png" },					//ハンドガンの弾
 	{ "data/TEXTURE/Item/Heavymachinegun.png" },			//ヘビーマシンガンの弾
 	{ "data/TEXTURE/Item/Shotgun.png" },					//ショットガンの弾
-	{ "data/TEXTURE/Item/Lasergun.jpg" },					//レーザーガンの弾
-	{ "data/TEXTURE/Item/Rocketlauncher.jpg" },				//ロケットランチャーの弾
-	{ "data/TEXTURE/Item/Flameshot.jpg" },					//フレイムショットの弾
+	{ "data/TEXTURE/Item/Lasergun.png" },					//レーザーガンの弾
+	{ "data/TEXTURE/Item/Rocketlauncher.png" },				//ロケットランチャーの弾
+	{ "data/TEXTURE/Item/Flameshot.png" },					//フレイムショットの弾
 	{ "data/TEXTURE/Item/Bear.png" },						//熊
 	{ "data/TEXTURE/Mesh/Grass.jpg" },						//草
 	{ "data/TEXTURE/Mesh/Block.jpg" },						//ブロック

@@ -15,6 +15,9 @@
 #include "../camera.h"
 #include "../inputKeyboard.h"
 #include "../model.h"
+#include "../gun.h"
+#include "../knife.h"
+
 //------------------------------------------------------------------------------
 //静的メンバ変数の初期化
 //------------------------------------------------------------------------------
@@ -54,6 +57,14 @@ HRESULT CDebug_ViewerCharacter::Init()
 
 	SetRotDest(ZeroVector3);
 
+	//銃の生成
+	m_pGun = CGun::Create(GetCharacterModelPartsList(CModel::MODEL_PLAYER_RHAND)->GetMatrix());
+
+	//ナイフの生成
+	m_pKnife = CKnife::Create(GetCharacterModelPartsList(CModel::MODEL_PLAYER_LHAND)->GetMatrix());
+	m_pKnife->SetPosition(D3DXVECTOR3(6.0f, 0.0f, 0.0f));
+
+	m_pKnife->StartMeleeAttack();
 	//成功
 	return S_OK;
 }
