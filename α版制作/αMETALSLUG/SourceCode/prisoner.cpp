@@ -29,6 +29,8 @@ CPrisoner::CPrisoner(OBJ_TYPE type) :CCharacter(type)
 	m_PrisonerState		= PRISONER_STATE_STAY;
 	// 捕虜が消滅するまでのカウントを初期化
 	m_nDieCount			= 0;
+	// ポインタを検索する際使えるかどうか
+	m_bUse				= false;
 }
 // =====================================================================================================================================================================
 //
@@ -59,7 +61,6 @@ HRESULT CPrisoner::Init(void)
 	GetCollision()->SetPos(&GetPosition());
 	GetCollision()->SetSize2D(PRISONER_COLLISION_SIZE);
 	GetCollision()->SetMove(&GetMove());
-	GetCollision()->SetType(CCollision::COLLISION_PRISONER);
 	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_CHARACTER);
 
 	return S_OK;

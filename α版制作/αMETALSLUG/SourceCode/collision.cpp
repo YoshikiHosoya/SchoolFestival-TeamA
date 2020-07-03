@@ -47,13 +47,13 @@
 //======================================================================================================================
 CCollision::CCollision()
 {
-	m_objtype			= COLLISION_PLAYERBULLET;				// タイプの初期化
 	m_Collisiontype		= COLLISIONTYPE_NORMAL;				// 当たり判定の種類
 	m_ppos				= nullptr;							// 位置情報
 	m_posOld			= nullptr;							// 前回の位置情報
 	m_size				= D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// サイズ情報
 	m_pmove				= nullptr;							// 移動情報
 	m_Debugcollision	= nullptr;							// デバッグ用当たり判定のポインタ
+	m_nCollisionTime	= 0;								// 当たり判定が持続する時間
 }
 
 //======================================================================================================================
@@ -93,12 +93,12 @@ void CCollision::Uninit(void)
 //======================================================================================================================
 void CCollision::Update(void)
 {
-//#ifdef _DEBUG
-//	if (m_Debugcollision != nullptr)
-//	{
-//		m_Debugcollision->SetPos(m_ppos);
-//	}
-//#endif // _DEBUG
+#ifdef _DEBUG
+	if (m_Debugcollision != nullptr)
+	{
+		m_Debugcollision->SetPos(m_ppos);
+	}
+#endif // _DEBUG
 }
 
 //======================================================================================================================
@@ -278,11 +278,11 @@ bool CCollision::ForEnemyCollision(int nPlayerDamage, bool Penetration)
 				pPlayer->CCharacter::AddDamage(nPlayerDamage);
 
 				// プレイヤーのライフが0以下になった時
-				if (pPlayer->CCharacter::GetLife() <= 0)
-				{
-					// ポインタをnullにする
-					pPlayer = nullptr;
-				}
+				//if (pPlayer->CCharacter::GetLife() <= 0)
+				//{
+				//	// ポインタをnullにする
+				//	pPlayer = nullptr;
+				//}
 
 				// 当たり範囲フラグをtrueにする
 				bHitFlag = true;
@@ -315,10 +315,6 @@ bool CCollision::ForPlayer_EnemyCollision(bool Penetration)
 			if (this->CharCollision2D(pEnemy->GetCollision()))
 			{
 				bHitFlag = true;
-			}
-			else
-			{
-				bHitFlag = false;
 			}
 		}
 	}
@@ -371,10 +367,6 @@ bool CCollision::ForPlayer_PrisonerCollision(bool Penetration)
 			{
 				bHitFlag = true;
 			}
-			else
-			{
-				bHitFlag = false;
-			}
 		}
 	}
 	return bHitFlag;
@@ -386,37 +378,32 @@ bool CCollision::ForPlayer_PrisonerCollision(bool Penetration)
 CPrisoner *CCollision::ForPlayer_PrisonerCollision()
 {
 	CPrisoner *pPrisoner = nullptr;
-	CPrisoner *pSavePointer = nullptr;
 	// 捕虜の総数分
 	for (int nCntPriso = 0; nCntPriso < CManager::GetBaseMode()->GetMap()->GetMaxPrisoner(); nCntPriso++)
 	{
+		// 捕虜のポインタを取得
 		pPrisoner = CManager::GetBaseMode()->GetMap()->GetPrisoner(nCntPriso);
 
-		if (pPrisoner != pSavePointer)
+		if (pPrisoner != nullptr)
 		{
-			if (pPrisoner != nullptr)
+			if (this->CharCollision2D(pPrisoner->GetCollision()))
 			{
-				if (this->CharCollision2D(pPrisoner->GetCollision()))
+				if (pPrisoner->GetPrisonerState() == CPrisoner::PRISONER_STATE_STAY)
 				{
-					if (pPrisoner->GetPrisonerState() == CPrisoner::PRISONER_STATE_STAY)
-					{
-						pPrisoner->SetPrisonerState(CPrisoner::PRISONER_STATE_DROPITEM);
-						// この捕虜のポインタは取得できないようにする
-						pSavePointer = pPrisoner;
-
-						return pPrisoner;
-					}
-
+					// 処理を行った捕虜のポインタを返す
+					return pPrisoner;
 				}
 			}
+		}
 
-			else if (pPrisoner == nullptr)
-			{
-				return nullptr;
-			}
+		// nullだったらnullを返す
+		else if (pPrisoner == nullptr)
+		{
+			return nullptr;
 		}
 	}
 
+	// ポインタを返す
 	return pPrisoner;
 }
 
@@ -430,10 +417,13 @@ CEnemy * CCollision::ForPlayer_EnemyCollision()
 	for (int nCntEnemy = 0; nCntEnemy < CManager::GetBaseMode()->GetMap()->GetMaxEnemy(); nCntEnemy++)
 	{
 		pEnemy = CManager::GetBaseMode()->GetMap()->GetEnemy(nCntEnemy);
+
 		if (pEnemy != nullptr)
 		{
 			if (this->CharCollision2D(pEnemy->GetCollision()))
 			{
+				// 処理を行った捕虜のポインタを返す
+				return pEnemy;
 			}
 		}
 
@@ -529,14 +519,6 @@ void CCollision::SetSize2D(D3DXVECTOR3 size)
 void CCollision::SetMove(D3DXVECTOR3 * move)
 {
 	m_pmove = move;
-}
-
-//======================================================================================================================
-// タイプ設定処理
-//======================================================================================================================
-void CCollision::SetType(COLLISION type)
-{
-	m_objtype = type;
 }
 
 //======================================================================================================================

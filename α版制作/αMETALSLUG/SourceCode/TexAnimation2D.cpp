@@ -117,23 +117,23 @@ void CTexAnimation2D::ShowDebugInfo()
 void CTexAnimation2D::Create(D3DXVECTOR3 pos, D3DXVECTOR3 size, D3DXVECTOR3 rot, CTexture::SEPARATE_TEX_TYPE type, int nCntSwitch, CScene::OBJ_TYPE objtype)
 {
 	//ƒƒ‚ƒŠŠm•Û
-	CTexAnimation2D *pEffectAnimation = new CTexAnimation2D(objtype);
+	CTexAnimation2D *pTexAnimation = new CTexAnimation2D(objtype);
 
 	//nullcheck
-	if (pEffectAnimation)
+	if (pTexAnimation)
 	{
 		//‰Šú‰»
-		pEffectAnimation->Init();
+		pTexAnimation->Init();
 
 		//î•ñ‚ð‚¢‚ê‚é@Scene‘¤
-		pEffectAnimation->SetPosition(pos);
-		pEffectAnimation->SetSize(size);
-		pEffectAnimation->SetRot(rot);
-		pEffectAnimation->BindTexture(CTexture::GetSeparateTexture(type));
-		pEffectAnimation->SetAnimation(ZeroVector2, CTexture::GetSparateTex_UVSize(type));
+		pTexAnimation->SetPosition(pos);
+		pTexAnimation->SetSize(size);
+		pTexAnimation->SetRot(rot);
+		pTexAnimation->BindTexture(CTexture::GetSeparateTexture(type));
+		pTexAnimation->SetAnimation(ZeroVector2, CTexture::GetSparateTex_UVSize(type));
 
 		//î•ñ‚ð‚¢‚ê‚é@TexAnimation‘¤
-		pEffectAnimation->SetTex(type);
-		pEffectAnimation->SetCntSwitch(nCntSwitch);
+		pTexAnimation->SetTex(type);
+		pTexAnimation->SetCntSwitch(nCntSwitch);
 	}
 }

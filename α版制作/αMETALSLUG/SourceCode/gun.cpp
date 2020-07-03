@@ -240,8 +240,8 @@ void CGun::Shot(D3DXVECTOR3 rot)
 			// 位置の設定
 			pBullet->SetPosition(m_ShotPos);
 
-			// 弾の種類の設定
-			pBullet->SetBulletType((CBullet::BULLET_TYPE)m_BulletType);
+			// タグの設定
+			pBullet->SetTag(m_Tag);
 
 			// 弾のパラメーターの設定
 			pBullet->SetBulletParam(m_GunType);
@@ -300,7 +300,7 @@ void CGun::MultipleShot()
 				pBullet->SetPosition(D3DXVECTOR3(m_ShotPos.x, m_ShotPos.y + randPos_y, m_ShotPos.z));
 
 				// 弾の種類の設定
-				pBullet->SetBulletType((CBullet::BULLET_TYPE)m_BulletType);
+				pBullet->SetTag(m_Tag);
 
 				// 弾のパラメーターの設定
 				pBullet->SetBulletParam(m_GunType);

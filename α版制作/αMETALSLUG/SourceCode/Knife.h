@@ -37,13 +37,15 @@ public:
 	void					StartMeleeAttack();				//近接攻撃開始
 	void					EndMeleeAttack();				//近接攻撃終了
 
+	D3DXMATRIX				*GetHandMtx() { return m_HandMatrix;};					//手のマトリックス取得
+
 private:
-	COrbit *m_pOrbit;						//軌跡のポインタ
-	CCollision *m_pCollision;				//当たり判定のポインタ
-	D3DXMATRIX *m_HandMatrix;				//ナイフを持つ手のマトリックスのポインタ
-	bool m_bAttack;							//攻撃中かどうか
+	COrbit		*m_pOrbit;					//軌跡のポインタ
+	CCollision	*m_pCollision;				//当たり判定のポインタ
+	D3DXMATRIX	*m_HandMatrix;				//ナイフを持つ手のマトリックスのポインタ
+	bool		m_bAttack;					//攻撃中かどうか
 
-	void CollisionKnife();					//ナイフの当たり判定処理
-
+	D3DXVECTOR3 m_worldpos;					//ワールド座標　当たり判定用
+	void		CollisionKnife();			//ナイフの当たり判定処理
 };
 #endif

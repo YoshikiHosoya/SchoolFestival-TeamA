@@ -37,14 +37,6 @@ typedef struct
 class CBullet : public CModel
 {
 public:
-	// 弾の種類
-	enum BULLET_TYPE
-	{
-		TYPE_PLAYER = 0,
-		TYPE_ENEMY,
-		TYPE_MAX,
-	};
-
 	CBullet(OBJ_TYPE type);								// コンストラクタ
 	~CBullet();											// デストラクタ
 
@@ -61,15 +53,15 @@ public:
 	/* メンバ関数 */
 	D3DXVECTOR3					&GetMove()						{ return m_move; };					// 移動値の取得
 	void						SetMove(D3DXVECTOR3 move)		{ m_move = move; };					// 移動値の設定
-	BULLET_TYPE					&GetBulletType()				{ return m_type; };					// 弾の種類の取得
-	void						SetBulletType(BULLET_TYPE type) { m_type = type; };					// 弾の種類の設定
+	TAG							&GetTag()						{ return m_Tag; };					// タグの取得
+	void						SetTag(TAG type)				{ m_Tag = type; };					// タグの設定
 	static	BULLET_PARAM		*GetBulletParam(int nCnt)		{ return &m_BulletParam[nCnt]; };	// 弾のパラメーターの構造体の取得
 	void						SetBulletParam(CGun::GUN_TYPE type);								// 弾のパラメーター設定
 
 private:
 	/* メンバ変数 */
 	D3DXVECTOR3					m_move;					// 移動値
-	BULLET_TYPE					m_type;					// 弾の種類
+	TAG							m_Tag;					// タグ
 	int							m_nLife;				// 体力
 	/* 静的メンバ変数 */
 	static char					*m_BulletFileName[CGun::GUNTYPE_MAX];	// 弾のファイル名

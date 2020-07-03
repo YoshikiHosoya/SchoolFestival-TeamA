@@ -62,7 +62,6 @@ HRESULT CObstacle::Init()
 	GetCollision()->SetPos(&GetPosition());
 	GetCollision()->SetSize2D(OBSTACLE_BOX_COLLISION);
 	GetCollision()->SetMove(nullptr);
-	GetCollision()->SetType(CCollision::COLLISION_OBSTACLE);
 	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_NORMAL);
 
 	return S_OK;
@@ -129,6 +128,9 @@ CObstacle * CObstacle::Create()
 
 	// 初期化
 	pObstacle->Init();
+
+	// モデルタイプの設定
+	pObstacle->SetType(OBSTACLE_MODEL);
 
 	return pObstacle;
 }

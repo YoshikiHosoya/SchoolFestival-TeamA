@@ -71,7 +71,6 @@ HRESULT CItem::Init()
 	m_pCollision->SetPos(&GetPosition());
 	m_pCollision->SetSize2D(ITEM_COLLISION_SIZE_XY);
 	m_pCollision->SetMove(nullptr);
-	m_pCollision->SetType(CCollision::COLLISION_ITEM);
 	m_pCollision->DeCollisionCreate(CCollision::COLLISIONTYPE_NORMAL);
 
 	return S_OK;

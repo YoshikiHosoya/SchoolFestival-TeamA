@@ -75,13 +75,13 @@ public:
 	/*--- 銃のモデル ---*/
 	typedef enum
 	{
-		MODEL_KNIFE,					//ナイフ
 		MODEL_GUN_HANDGUN,				// ハンドガン
 		MODEL_GUN_HEAVYMACHINEGUN,		// ヘビーマシンガン
 		MODEL_GUN_SHOTGUN,				// ショットガン
 		MODEL_GUN_LASERGUN,				// レーザーガン
 		MODEL_GUN_ROCKETLAUNCHER,		// ロケットランチャー
 		MODEL_GUN_FLAMESHOT,			// フレイムショット
+		MODEL_KNIFE,					// ナイフ
 		MODEL_GUN_MAX
 	}GUN_MODEL;
 	/*--- 弾のモデル ---*/
@@ -120,6 +120,7 @@ public:
 	typedef enum
 	{
 		OBSTACLE_TYPE_BOX = 0,								// ハコ
+		OBSTACLE_TYPE_TEST,									// 確認用モデル
 		OBSTACLE_TYPE_MAX,
 	}OBSTACLE_TYPE;
 

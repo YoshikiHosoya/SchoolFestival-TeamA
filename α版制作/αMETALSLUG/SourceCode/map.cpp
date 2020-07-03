@@ -28,19 +28,19 @@ char *CMap::m_MapFileName[MAP_MAX] =
 };
 char *CMap::m_EnemyFileName[MAP_MAX] =
 {
-	{ "data/Load/Enemy/Enemy_Map01.txt" },
-	{ "data/Load/Enemy/Enemy_Map01.txt" },
+	{ "data/Load/Enemy/Enemy_Map_01.txt" },
+	{ "data/Load/Enemy/Enemy_Map_02.txt" },
 };
 char *CMap::m_PrisonerFileName[MAP_MAX] =
 {
-	{ "data/Load/Prisoner/Prisoner_Map00.txt" },
-	{ "data/Load/Prisoner/Prisoner_Map01.txt" },
+	{ "data/Load/Prisoner/Prisoner_Map_01.txt" },
+	{ "data/Load/Prisoner/Prisoner_Map_02.txt" },
 };
 
 char *CMap::m_ObstacleFileName[MAP_MAX] =
 {
-	{ "data/Load/Map/Obstacle_Box.txt" },
-	{ "data/Load/Map/Obstacle_Box.txt" },
+	{ "data/Load/Map/Obstacle_Map_01.txt" },
+	{ "data/Load/Map/Obstacle_Map_02.txt" },
 };
 
 
@@ -274,7 +274,7 @@ void CMap::PrisonerLoad(MAP MapNum)
 						}
 						else if (strcmp(cHeadText, "END_PRISONERSET") == 0)
 						{
-							// オブジェクトの生成
+							// 捕虜の生成
 							m_pPrisoner.emplace_back(CPrisoner::Create());
 							// 位置の設定
 							m_pPrisoner[m_pPrisoner.size() - 1]->SetPosition(pos);
@@ -353,13 +353,13 @@ void CMap::ObstacleLoad(MAP MapNum)
 						else if (strcmp(cHeadText, "END_OBSTACLESET") == 0)
 						{
 							// オブジェクトの生成
-							m_pObstacle.emplace_back(CObstacle::Create());
+							//m_pObstacle.emplace_back(CObstacle::Create());
 							// タイプの代入
-							m_pObstacle[m_pObstacle.size() - 1]->SetType(nType);
+							//m_pObstacle[m_pObstacle.size() - 1]->SetModelConut(nType);
 							// 位置の設定
-							m_pObstacle[m_pObstacle.size() - 1]->SetPosition(pos);
+							//m_pObstacle[m_pObstacle.size() - 1]->SetPosition(pos);
 							// 体力の設定
-							m_pObstacle[m_pObstacle.size() - 1]->SetLife(nLife);
+							//m_pObstacle[m_pObstacle.size() - 1]->SetLife(nLife);
 						}
 					}
 				}
@@ -420,6 +420,11 @@ void CMap::MapUpdate()
 	if (nNowMapSelect <= 0)
 	{
 		nNowMapSelect = 0;
+	}
+	else if (nNowMapSelect >= MAP_MAX)
+	{
+		// 最後の番号にする
+		nNowMapSelect = MAP_MAX - 1;
 	}
 
 	// 選択したマップ番号代入
@@ -587,7 +592,7 @@ void CMap::EnemySave(MAP MapNum)
 		for (unsigned int nCntEnemy = 0; nCntEnemy < m_pEnemy.size(); nCntEnemy++)
 		{
 			// NULLチェック
-			if (!m_pEnemy[nCntEnemy])
+			if (m_pEnemy[nCntEnemy])
 			{
 				D3DXVECTOR3 EnemyPos = m_pEnemy[nCntEnemy]->GetPosition();	// モデルの位置取得
 
@@ -599,6 +604,9 @@ void CMap::EnemySave(MAP MapNum)
 			}
 		}
 		fprintf(pFile, "END_SCRIPT\n");
+
+		// メッセージウィンドウで表示
+		MessageBox(NULL, "敵の配置データをセーブしました", "結果", MB_OK | MB_ICONINFORMATION);
 
 		// ファイルを閉じる
 		fclose(pFile);
@@ -641,7 +649,7 @@ void CMap::PrisonerSave(MAP MapNum)
 		for (unsigned int nCntPrisoner = 0; nCntPrisoner < m_pPrisoner.size(); nCntPrisoner++)
 		{
 			// NULLチェック
-			if (!m_pPrisoner[nCntPrisoner])
+			if (m_pPrisoner[nCntPrisoner])
 			{
 				D3DXVECTOR3 PrisonerPos = m_pPrisoner[nCntPrisoner]->GetPosition();	// モデルの位置取得
 
@@ -651,6 +659,9 @@ void CMap::PrisonerSave(MAP MapNum)
 			}
 		}
 		fprintf(pFile, "END_SCRIPT\n");
+
+		// メッセージウィンドウで表示
+		MessageBox(NULL, "捕虜の配置データをセーブしました", "結果", MB_OK | MB_ICONINFORMATION);
 
 		// ファイルを閉じる
 		fclose(pFile);
@@ -698,14 +709,14 @@ void CMap::ObstacleSave(MAP MapNum)
 				D3DXVECTOR3 ObstaclePos = m_pObstacle[nCntObstacle]->GetPosition();	// モデルの位置取得
 
 				fprintf(pFile, "OBSTACLESET									# %d\n", nCntObstacle);
-				fprintf(pFile, "	TYPE	= %d\n", m_pObstacle[nCntObstacle]->GetType());
+				fprintf(pFile, "	TYPE	= %d\n", m_pObstacle[nCntObstacle]->GetModelCount());
 				fprintf(pFile, "	POS		= %.0f %.0f %.0f\n", ObstaclePos.x, ObstaclePos.y, ObstaclePos.z);
 				fprintf(pFile, "	LIFE	= %d\n", m_pObstacle[nCntObstacle]->GetLife());
 				fprintf(pFile, "END_OBSTACLESET\n\n");
 			}
 		}
-		// メッセージウィンドウで警告
-		MessageBox(NULL, "セーブしました", "結果", MB_OK | MB_ICONINFORMATION);
+		// メッセージウィンドウで表示
+		MessageBox(NULL, "障害物の配置データをセーブしました", "結果", MB_OK | MB_ICONINFORMATION);
 
 		fprintf(pFile, "END_SCRIPT\n");
 
@@ -716,6 +727,28 @@ void CMap::ObstacleSave(MAP MapNum)
 	{
 		// メッセージウィンドウで警告
 		MessageBox(NULL, "ファイルが読み込めません", "警告", MB_OK | MB_ICONWARNING);
+	}
+}
+
+// =====================================================================================================================================================================
+//
+// 配置したモデルを全てセーブするボタン
+//
+// =====================================================================================================================================================================
+void CMap::AllSaveButton()
+{
+	// 改行キャンセル
+	ImGui::SameLine();
+
+	// セーブ
+	if (ImGui::Button("AllSave"))
+	{
+		// 障害物のセーブ
+		ObstacleSave(m_MapNum);
+		// 捕虜のセーブ
+		PrisonerSave(m_MapNum);
+		// 敵のセーブ
+		EnemySave(m_MapNum);
 	}
 }
 
@@ -740,14 +773,14 @@ void CMap::MapModelTab()
 		if (ImGui::BeginTabItem("Prisoner"))
 		{
 			// 捕虜の設置
-			ObstacleSet();
+			PrisonerSet();
 			ImGui::EndTabItem();
 		}
 		// 敵
 		if (ImGui::BeginTabItem("Enemy"))
 		{
 			// 敵の設置
-			ObstacleSet();
+			EnemySet();
 			ImGui::EndTabItem();
 		}
 
@@ -773,29 +806,9 @@ void CMap::MapModelSet()
 void CMap::ObstacleSet()
 {
 #ifdef _DEBUG
-	
+
 	static int nObstacleType = 0;		// 障害物の種類
 	static int nNowSelect = -1;			// 現在選択している番号
-
-	// コンボボックス
-	//if (ObstacleComboBox(nObstacleType))
-	//{
-		//// NULLチェック
-		//if (m_pObstacle[nNowSelect])
-		//{
-		//	// 障害物の種類の取得
-		//	CObstacle::OBSTACLE_TYPE ObstacleType = m_pObstacle[nNowSelect]->GetModelCount();
-
-		//	// 前回と違うとき
-		//	if (ObstacleType != nObstacleType)
-		//	{
-		//		ObstacleType = (CObstacle::OBSTACLE_TYPE)nObstacleType;	// 種類代入
-
-		//		// 2Dオブジェクトタイプの設定
-		//		m_pObstacle[nNowSelect]->SetType(ObstacleType);
-		//	}
-		//}
-	//}
 
 	// オブジェクト番号の選択
 	ImGui::InputInt("nowSelect", &nNowSelect, 1, 20, 0);
@@ -809,8 +822,29 @@ void CMap::ObstacleSet()
 	{
 		nNowSelect = (int)m_pObstacle.size();
 	}
+	// 選択しているモデルが生成されているとき
 	else if (nNowSelect >= 0 || nNowSelect <= (int)m_pObstacle.size())
 	{
+		// コンボボックス
+		if (ObstacleComboBox(nObstacleType))
+		{
+			// NULLチェック
+			if (m_pObstacle[nNowSelect])
+			{
+				// 障害物の種類の取得
+				CModel::OBSTACLE_TYPE ObstacleType = (CModel::OBSTACLE_TYPE)m_pObstacle[nNowSelect]->GetModelCount();
+
+				// 前回と違うとき
+				if (ObstacleType != nObstacleType)
+				{
+					// 種類代入
+					ObstacleType = (CModel::OBSTACLE_TYPE)nObstacleType;
+					// 障害物のタイプの設定
+					m_pObstacle[nNowSelect]->SetModelConut(ObstacleType);
+				}
+			}
+		}
+
 		// NULLチェック
 		if (m_pObstacle[nNowSelect])
 		{
@@ -849,6 +883,191 @@ void CMap::ObstacleSet()
 		ObstacleSave(m_MapNum);
 	}
 
+	// 全てセーブ
+	AllSaveButton();
+
+#endif
+}
+
+// =====================================================================================================================================================================
+//
+// 捕虜の設置
+//
+// =====================================================================================================================================================================
+void CMap::PrisonerSet()
+{
+#ifdef _DEBUG
+
+	static int nPrisonerType = 0;		// 捕虜の種類
+	static int nNowSelect = -1;			// 現在選択している番号
+
+	// オブジェクト番号の選択
+	ImGui::InputInt("nowSelect", &nNowSelect, 1, 20, 0);
+
+	// 範囲制限
+	if (nNowSelect <= -1)
+	{
+		nNowSelect = -1;
+	}
+	else if (nNowSelect >= (int)m_pPrisoner.size())
+	{
+		nNowSelect = (int)m_pPrisoner.size();
+	}
+	// 選択しているモデルが生成されているとき
+	else if (nNowSelect >= 0 || nNowSelect <= (int)m_pPrisoner.size())
+	{
+		//// コンボボックス
+		//if (PrisonerComboBox(nPrisonerType))
+		//{
+		//	// NULLチェック
+		//	if (m_pPrisoner[nNowSelect])
+		//	{
+		//		// 捕虜の種類の取得
+		//		CModel::PRISONER_TYPE PrisonerType = (CModel::OBSTACLE_TYPE)m_pPrisoner[nNowSelect]->GetModelCount();
+
+		//		// 前回と違うとき
+		//		if (PrisonerType != nPrisonerType)
+		//		{
+		//			// 種類代入
+		//			PrisonerType = (CModel::PRISONER_TYPE)nPrisonerType;
+		//			// 敵のタイプの設定
+		//			m_pPrisoner[nNowSelect]->SetModelConut(PrisonerType);
+		//		}
+		//	}
+		//}
+
+		// NULLチェック
+		if (m_pPrisoner[nNowSelect])
+		{
+			// 現在地
+			int x = (int)m_pPrisoner[nNowSelect]->GetPosition().x,
+				y = (int)m_pPrisoner[nNowSelect]->GetPosition().y,
+				z = (int)m_pPrisoner[nNowSelect]->GetPosition().z;
+
+			// オブジェクトの移動
+			ImGui::DragInt("X", &x);
+			ImGui::DragInt("Y", &y);
+			ImGui::DragInt("Z", &z);
+
+			// オブジェクトの位置の設定
+			m_pPrisoner[nNowSelect]->SetPosition(D3DXVECTOR3((float)x, (float)y, (float)z));
+		}
+	}
+
+	// 改行
+	ImGui::Separator();
+
+	// 生成
+	if (ImGui::Button("Crate"))
+	{
+		// オブジェクトの生成
+		m_pPrisoner.emplace_back(CPrisoner::Create());
+	}
+
+	// 改行キャンセル
+	ImGui::SameLine();
+
+	// セーブ
+	if (ImGui::Button("Save"))
+	{
+		// 捕虜のセーブ
+		PrisonerSave(m_MapNum);
+	}
+
+	// 全てセーブ
+	AllSaveButton();
+
+#endif
+}
+
+// =====================================================================================================================================================================
+//
+// 敵の設置
+//
+// =====================================================================================================================================================================
+void CMap::EnemySet()
+{
+#ifdef _DEBUG
+
+	static int nEnemyType = 0;			// 敵の種類
+	static int nNowSelect = -1;			// 現在選択している番号
+
+	// オブジェクト番号の選択
+	ImGui::InputInt("nowSelect", &nNowSelect, 1, 20, 0);
+
+	// 範囲制限
+	if (nNowSelect <= -1)
+	{
+		nNowSelect = -1;
+	}
+	else if (nNowSelect >= (int)m_pEnemy.size())
+	{
+		nNowSelect = (int)m_pEnemy.size();
+	}
+	// 選択しているモデルが生成されているとき
+	else if (nNowSelect >= 0 || nNowSelect <= (int)m_pEnemy.size())
+	{
+		//// コンボボックス
+		//if (EnemyComboBox(nEnemyType))
+		//{
+		//	// NULLチェック
+		//	if (m_pEnemy[nNowSelect])
+		//	{
+		//		// 敵の種類の取得
+		//		CModel::ENEMY_TYPE EnemyType = (CModel::OBSTACLE_TYPE)m_pEnemy[nNowSelect]->GetModelCount();
+
+		//		// 前回と違うとき
+		//		if (EnemyType != nEnemyType)
+		//		{
+		//			// 種類代入
+		//			EnemyType = (CModel::ENEMY_TYPE)nEnemyType;
+		//			// 敵のタイプの設定
+		//			m_pEnemy[nNowSelect]->SetModelConut(EnemyType);
+		//		}
+		//	}
+		//}
+
+		// NULLチェック
+		if (m_pEnemy[nNowSelect])
+		{
+			// 現在地
+			int x = (int)m_pEnemy[nNowSelect]->GetPosition().x,
+				y = (int)m_pEnemy[nNowSelect]->GetPosition().y,
+				z = (int)m_pEnemy[nNowSelect]->GetPosition().z;
+
+			// オブジェクトの移動
+			ImGui::DragInt("X", &x);
+			ImGui::DragInt("Y", &y);
+			ImGui::DragInt("Z", &z);
+
+			// オブジェクトの位置の設定
+			m_pEnemy[nNowSelect]->SetPosition(D3DXVECTOR3((float)x, (float)y, (float)z));
+		}
+	}
+
+	// 改行
+	ImGui::Separator();
+
+	// 生成
+	if (ImGui::Button("Crate"))
+	{
+		// オブジェクトの生成
+		m_pEnemy.emplace_back(CEnemy::Create());
+	}
+
+	// 改行キャンセル
+	ImGui::SameLine();
+
+	// セーブ
+	if (ImGui::Button("Save"))
+	{
+		// 敵のセーブ
+		EnemySave(m_MapNum);
+	}
+
+	// 全てセーブ
+	AllSaveButton();
+
 #endif
 }
 
@@ -863,19 +1082,28 @@ bool CMap::ObstacleComboBox(int &nType)
 
 #ifdef _DEBUG
 
-	//const char* aFileName = CModel::GetModelFileName(CModel::MODEL_TYPE::OBSTACLE_MODEL, nType);
+							// ファイル名格納用
+	std::vector<std::string > aFileName = {};
 
-	const char* items[] = { "Floor", "Wall" };
+	//for
+	for (int nCnt = 0; nCnt < CModel::OBSTACLE_TYPE_MAX; nCnt++)
+	{
+		//配列に追加
+		aFileName.emplace_back(CModel::GetModelFileName(CModel::MODEL_TYPE::OBSTACLE_MODEL, nCnt));
+	}
 
 	// コンボボックス
-	if (ImGui::BeginCombo("Type", items[nType]))
+	if (ImGui::BeginCombo("Type", aFileName[nType].data()))
 	{
-		for (int nCnt = 0; nCnt < IM_ARRAYSIZE(items); nCnt++)
+		for (size_t nCnt = 0; nCnt < aFileName.size(); nCnt++)
 		{
-			bool is_selected = (items[nType] == items[nCnt]);
+			//選択番号があってるかどうか
+			bool is_selected = (aFileName[nType] == aFileName[nCnt]);
 
-			if (ImGui::Selectable(items[nCnt], is_selected))
+			//選択された時の処理
+			if (ImGui::Selectable(aFileName[nCnt].data(), is_selected))
 			{
+				//現在の選択項目設定
 				nType = nCnt;
 				bSelect = true;
 			}
@@ -889,6 +1117,99 @@ bool CMap::ObstacleComboBox(int &nType)
 #endif
 	return bSelect;
 }
+
+// =====================================================================================================================================================================
+//
+// 敵のコンボボックス
+//
+// =====================================================================================================================================================================
+bool CMap::EnemyComboBox(int & nType)
+{
+	bool bSelect = false;	// 選択
+
+#ifdef _DEBUG
+
+	//// ファイル名格納用
+	//std::vector<std::string > aFileName = {};
+
+	////for
+	//for (int nCnt = 0; nCnt < CModel::ENEMY_TYPE_MAX; nCnt++)
+	//{
+	//	//配列に追加
+	//	aFileName.emplace_back(CModel::GetModelFileName(CModel::MODEL_TYPE::ENEMY_MODEL, nCnt));
+	//}
+
+	//// コンボボックス
+	//if (ImGui::BeginCombo("Type", aFileName[nType].data()))
+	//{
+	//	for (size_t nCnt = 0; nCnt < aFileName.size(); nCnt++)
+	//	{
+	//		//選択番号があってるかどうか
+	//		bool is_selected = (aFileName[nType] == aFileName[nCnt]);
+
+	//		//選択された時の処理
+	//		if (ImGui::Selectable(aFileName[nCnt].data(), is_selected))
+	//		{
+	//			//現在の選択項目設定
+	//			nType = nCnt;
+	//			bSelect = true;
+	//		}
+	//		if (is_selected)
+	//		{
+	//			ImGui::SetItemDefaultFocus();
+	//		}
+	//	}
+	//	ImGui::EndCombo();
+	//}
+#endif
+	return bSelect;
+}
+
+// =====================================================================================================================================================================
+//
+// 捕虜のコンボボックス
+//
+// =====================================================================================================================================================================
+bool CMap::PrisonerComboBox(int & nType)
+{
+	bool bSelect = false;	// 選択
+
+#ifdef _DEBUG
+
+							//// ファイル名格納用
+							//std::vector<std::string > aFileName = {};
+
+							////for
+							//for (int nCnt = 0; nCnt < CModel::ENEMY_TYPE_MAX; nCnt++)
+							//{
+							//	//配列に追加
+							//	aFileName.emplace_back(CModel::GetModelFileName(CModel::MODEL_TYPE::ENEMY_MODEL, nCnt));
+							//}
+
+							//// コンボボックス
+							//if (ImGui::BeginCombo("Type", aFileName[nType].data()))
+							//{
+							//	for (size_t nCnt = 0; nCnt < aFileName.size(); nCnt++)
+							//	{
+							//		//選択番号があってるかどうか
+							//		bool is_selected = (aFileName[nType] == aFileName[nCnt]);
+
+							//		//選択された時の処理
+							//		if (ImGui::Selectable(aFileName[nCnt].data(), is_selected))
+							//		{
+							//			//現在の選択項目設定
+							//			nType = nCnt;
+							//			bSelect = true;
+							//		}
+							//		if (is_selected)
+							//		{
+							//			ImGui::SetItemDefaultFocus();
+							//		}
+							//	}
+							//	ImGui::EndCombo();
+							//}
+#endif
+	return bSelect;}
 
 // =====================================================================================================================================================================
 //
@@ -926,4 +1247,6 @@ void CMap::UpdateDieFlag()
 			m_pPrisoner.erase(m_pPrisoner.begin() + nCnt);
 		}
 	}
+
+
 }

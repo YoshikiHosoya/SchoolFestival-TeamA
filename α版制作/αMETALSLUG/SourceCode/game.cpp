@@ -57,6 +57,12 @@ void CGame::Uninit(void)
 void CGame::Update(void)
 {
 	m_pMap->UpdateDieFlag();
+
+	if (m_pPlayer != nullptr && m_pPlayer->GetLife() <= 0)
+	{
+		m_pPlayer->Rerease();
+		m_pPlayer = nullptr;
+	}
  }
 //==========================================================
 // プレイヤー取得
@@ -94,9 +100,5 @@ void CGame::ShowDebugInfo(void)
 	// マップの更新
 	m_pMap->MapUpdate();
 
-	if (key->GetKeyboardTrigger(DIK_R))
-	{
-		CTexAnimation3D_Collision::Create(m_pPlayer->GetPosition(), D3DXVECTOR3(50.0f, 50.0f, 0.0f), ZeroVector3,
-			CTexture::SEPARATE_TEX_EFFECT_EXPLOSION01, 1, CScene::OBJTYPE_EXPROSION, true);
-	}
+
 }

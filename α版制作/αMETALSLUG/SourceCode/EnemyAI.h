@@ -38,7 +38,7 @@ public:
 	void Update(void);
 	void Draw(void);
 	void DebugInfo(void);
-	static CEnemyAI* CreateAI(void);
+	static CEnemyAI* CreateAI(CEnemy *pEnemy);
 	AI_STATE GetAIType(void);
 private:
 	CEnemy *pEnemyPass;			//“G‚Ìî•ñ‚ÌŠi”[—pH

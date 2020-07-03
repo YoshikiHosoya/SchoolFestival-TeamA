@@ -412,6 +412,9 @@ void CRenderer::ResetRenderer()
 	//カメラの情報リセット 初期情報入れる場合はMode側でやって
 	m_pCamera->ResetCamera();
 
+	//シーンの一時停止とか解除
+	CScene::Reset();
+
 	//レンダラー設定
 	SetRendererCommand(CRenderer::RENDERER_LIGHTING_ON);
 	SetRendererCommand(CRenderer::RENDERER_CULLING_CCW);
