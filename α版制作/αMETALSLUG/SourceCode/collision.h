@@ -38,22 +38,6 @@ class CEnemy;
 class CCollision
 {
 public:
-	// オブジェクトの種類
-	typedef enum
-	{
-		COLLISION_PLAYERBULLET = 0,			// プレイヤー弾
-		COLLISION_ENEMYBULLET,				// 敵弾
-		COLLISION_PLAYER,					// プレイヤー
-		COLLISION_ENEMY,					// エネミー
-		COLLISION_PRISONER,					// 捕虜
-		COLLISION_ITEM,						// アイテム
-		COLLISION_OBSTACLE,					// 障害物
-		COLLISION_VEHICLE,					// 乗り物
-		COLLISION_PLAYERATTACK,				// 近接攻撃を
-		COLLISION_OTHER,					// その他
-		COLLISION_MAX
-	} COLLISION;
-
 	// 当たり判定の主な種類
 	typedef enum
 	{
@@ -82,7 +66,6 @@ public:
 	void SetSize(D3DXVECTOR3 size);						// サイズの設定
 	void SetSize2D(D3DXVECTOR3 size);					// 2D用サイズの設定
 	void SetMove(D3DXVECTOR3 *move);					// 移動量の設定
-	void SetType(COLLISION type);						// タイプの設定
 	void SetTime(int nTime) { m_nCollisionTime = nTime; };	// 継続時間の設定
 	int	 GetTime() { return m_nCollisionTime; };		// 継続時間の設定
 
@@ -94,7 +77,6 @@ public:
 	bool RayBlockCollision(CMap *pMap);					// Rayの判定 キャラクター
 	bool RayCollision(CMap *pMap);						// Rayの判定 弾など
 
-	COLLISION GetObjtype() {return m_objtype;};			// 誰の当たり判定なのかを返す
 	void DeCollisionCreate(COLLISIONTYPE collisiontype);// デバッグ用当たり判定の生成
 	bool ForPlayerBulletCollision(int nEnemyDamage,
 							int nObstacleDamage,
@@ -119,7 +101,6 @@ public:
 protected:
 private:
 	/* メンバ変数 */
-	COLLISION			m_objtype;						// タイプ
 	COLLISIONTYPE		m_Collisiontype;				// 当たり判定のタイプ
 	D3DXVECTOR3			*m_ppos;						// 位置情報のポインタ
 	D3DXVECTOR3			*m_posOld;						// 前回の位置情報

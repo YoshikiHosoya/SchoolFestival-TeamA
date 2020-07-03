@@ -9,6 +9,10 @@
 #include "renderer.h"
 #include "orbit.h"
 #include "collision.h"
+#include "enemy.h"
+#include "map.h"
+#include "basemode.h"
+
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
 // =====================================================================================================================================================================
@@ -83,7 +87,6 @@ void CKnife::Update(void)
 			m_pCollision = nullptr;
 		}
 	}
-
 
 }
 
@@ -228,7 +231,31 @@ void CKnife::CollisionKnife()
 		{
 			//当たり判定
 			//敵、捕虜、オブジェクトに対して判定
-			m_pCollision->ForPlayerBulletCollision(50, 50, true);
+			//m_pCollision->ForPlayerBulletCollision(50, 50, true);
+
+
+			// 当たり判定 相手がエネミーだったら
+			// 敵の総数分
+			for (int nCnt = 0; nCnt < CManager::GetBaseMode()->GetMap()->GetMaxEnemy(); nCnt++)
+			{
+				// エネミーのポインタ取得
+				CEnemy *pEnemy = CManager::GetBaseMode()->GetMap()->GetEnemy(nCnt);
+				if (pEnemy != nullptr)
+				{
+					// 判定関数
+					if (m_pCollision->OtherCollision2D(pEnemy->GetCollision()))
+					{
+						// 敵のライフ減衰
+						pEnemy->CCharacter::AddDamage(50);
+
+						// 敵のライフが0以下になった時
+						if (pEnemy->CCharacter::GetLife() <= 0)
+						{
+							pEnemy = nullptr;
+						}
+					}
+				}
+			}
 		}
 	}
 }

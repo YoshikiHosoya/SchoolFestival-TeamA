@@ -60,7 +60,6 @@ HRESULT CPlayer::Init(void)
 	GetCollision()->SetPos(&GetPosition());
 	GetCollision()->SetSize2D(PLAYER_SIZE);
 	GetCollision()->SetMove(&GetMove());
-	GetCollision()->SetType(CCollision::COLLISION_PLAYER);
 	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_CHARACTER);
 
 	return S_OK;

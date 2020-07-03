@@ -61,7 +61,6 @@ HRESULT CPrisoner::Init(void)
 	GetCollision()->SetPos(&GetPosition());
 	GetCollision()->SetSize2D(PRISONER_COLLISION_SIZE);
 	GetCollision()->SetMove(&GetMove());
-	GetCollision()->SetType(CCollision::COLLISION_PRISONER);
 	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_CHARACTER);
 
 	return S_OK;

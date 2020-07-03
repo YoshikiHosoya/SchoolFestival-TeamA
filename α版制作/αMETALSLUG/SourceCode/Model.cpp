@@ -71,6 +71,7 @@ char *CModel::m_GunFileName[MODEL_GUN_MAX] =
 	{ "data/MODEL/Gun/Gun.x" },					// フレイムショット
 	{ "data/MODEL/Gun/Knife.x" },				// ナイフ};
 
+};
 char *CModel::m_BulletFileName[MODEL_BULLET_MAX] =
 {
 	{ "data/MODEL/Bullet/Sphere.x" },				// 丸
