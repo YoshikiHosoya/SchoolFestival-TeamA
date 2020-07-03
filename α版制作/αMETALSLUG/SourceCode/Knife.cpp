@@ -42,6 +42,7 @@ HRESULT CKnife::Init()
 
 	m_bAttack = false;
 	m_pOrbit = nullptr;
+	m_worldpos = ZeroVector3;
 
 	return S_OK;
 }
@@ -66,6 +67,7 @@ void CKnife::Update(void)
 	if (m_bAttack)
 	{
 		//当たり判定処理
+		CollisionKnife();
 	}
 }
 
@@ -145,8 +147,10 @@ void CKnife::StartMeleeAttack()
 	m_pCollision = CCollision::Create();
 	if (m_pCollision)
 	{
-		m_pCollision->SetPos(GetPosptr());
-		//m_pCollision->SetSize(D3DXVECTOR3())
+		m_pCollision->SetPos(&D3DXVECTOR3(m_HandMatrix->_41, m_HandMatrix->_42, m_HandMatrix->_43));
+		m_pCollision->SetSize(D3DXVECTOR3(80.0f, 60.0f, 0.0f));
+		m_pCollision->DeCollisionCreate(CCollision::COLLISIONTYPE_NORMAL);
+
 	}
 
 
@@ -186,4 +190,14 @@ void CKnife::EndMeleeAttack()
 // =====================================================================================================================================================================
 void CKnife::CollisionKnife()
 {
+	if (CManager::GetGameState() == CManager::MODE_GAME)
+	{
+
+		if (m_pCollision)
+		{
+			//当たり判定
+			//敵、捕虜、オブジェクトに対して判定
+			m_pCollision->ForPlayerBulletCollision(10, 10, true);
+		}
+	}
 }
