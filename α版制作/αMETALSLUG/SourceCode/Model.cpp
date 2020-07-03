@@ -63,13 +63,13 @@ char *CModel::m_EnemyFileName[MODEL_ENEMY_MAX] =
 };
 char *CModel::m_GunFileName[MODEL_GUN_MAX] =
 {
-	{ "data/MODEL/Gun/Knife.x" },					// ナイフ
 	{ "data/MODEL/Gun/Gun.x" },					// ハンドガン
 	{ "data/MODEL/Gun/Gun.x" },					// ヘビーマシンガン
 	{ "data/MODEL/Gun/Gun.x" },					// ショットガン
 	{ "data/MODEL/Gun/Gun.x" },					// レーザーガン
 	{ "data/MODEL/Gun/Gun.x" },					// ロケットランチャー
 	{ "data/MODEL/Gun/Gun.x" },					// フレイムショット
+	{ "data/MODEL/Gun/Knife.x" },				// ナイフ
 };
 
 char *CModel::m_BulletFileName[MODEL_BULLET_MAX] =

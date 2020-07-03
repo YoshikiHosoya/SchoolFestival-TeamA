@@ -732,6 +732,28 @@ void CMap::ObstacleSave(MAP MapNum)
 
 // =====================================================================================================================================================================
 //
+// 配置したモデルを全てセーブするボタン
+//
+// =====================================================================================================================================================================
+void CMap::AllSaveButton()
+{
+	// 改行キャンセル
+	ImGui::SameLine();
+
+	// セーブ
+	if (ImGui::Button("AllSave"))
+	{
+		// 障害物のセーブ
+		ObstacleSave(m_MapNum);
+		// 捕虜のセーブ
+		PrisonerSave(m_MapNum);
+		// 敵のセーブ
+		EnemySave(m_MapNum);
+	}
+}
+
+// =====================================================================================================================================================================
+//
 // マップに配置するモデルのタブ
 //
 // =====================================================================================================================================================================
@@ -751,7 +773,7 @@ void CMap::MapModelTab()
 		if (ImGui::BeginTabItem("Prisoner"))
 		{
 			// 捕虜の設置
-			ObstacleSet();
+			PrisonerSet();
 			ImGui::EndTabItem();
 		}
 		// 敵
@@ -861,54 +883,101 @@ void CMap::ObstacleSet()
 		ObstacleSave(m_MapNum);
 	}
 
+	// 全てセーブ
+	AllSaveButton();
+
 #endif
 }
 
 // =====================================================================================================================================================================
 //
-// 障害物のコンボボックス
+// 捕虜の設置
 //
 // =====================================================================================================================================================================
-bool CMap::ObstacleComboBox(int &nType)
+void CMap::PrisonerSet()
 {
-	bool bSelect = false;	// 選択
-
 #ifdef _DEBUG
 
-	// ファイル名格納用
-	std::vector<std::string > aFileName = {};
+	static int nPrisonerType = 0;		// 捕虜の種類
+	static int nNowSelect = -1;			// 現在選択している番号
 
-	//for
-	for (int nCnt = 0; nCnt < CModel::OBSTACLE_TYPE_MAX; nCnt++)
+	// オブジェクト番号の選択
+	ImGui::InputInt("nowSelect", &nNowSelect, 1, 20, 0);
+
+	// 範囲制限
+	if (nNowSelect <= -1)
 	{
-		//配列に追加
-		aFileName.emplace_back(CModel::GetModelFileName(CModel::MODEL_TYPE::OBSTACLE_MODEL, nCnt));
+		nNowSelect = -1;
 	}
-
-	// コンボボックス
-	if (ImGui::BeginCombo("Type", aFileName[nType].data()))
+	else if (nNowSelect >= (int)m_pPrisoner.size())
 	{
-		for (size_t nCnt = 0; nCnt < aFileName.size(); nCnt++)
+		nNowSelect = (int)m_pPrisoner.size();
+	}
+	// 選択しているモデルが生成されているとき
+	else if (nNowSelect >= 0 || nNowSelect <= (int)m_pPrisoner.size())
+	{
+		//// コンボボックス
+		//if (PrisonerComboBox(nPrisonerType))
+		//{
+		//	// NULLチェック
+		//	if (m_pPrisoner[nNowSelect])
+		//	{
+		//		// 捕虜の種類の取得
+		//		CModel::PRISONER_TYPE PrisonerType = (CModel::OBSTACLE_TYPE)m_pPrisoner[nNowSelect]->GetModelCount();
+
+		//		// 前回と違うとき
+		//		if (PrisonerType != nPrisonerType)
+		//		{
+		//			// 種類代入
+		//			PrisonerType = (CModel::PRISONER_TYPE)nPrisonerType;
+		//			// 敵のタイプの設定
+		//			m_pPrisoner[nNowSelect]->SetModelConut(PrisonerType);
+		//		}
+		//	}
+		//}
+
+		// NULLチェック
+		if (m_pPrisoner[nNowSelect])
 		{
-			//選択番号があってるかどうか
-			bool is_selected = (aFileName[nType] == aFileName[nCnt]);
+			// 現在地
+			int x = (int)m_pPrisoner[nNowSelect]->GetPosition().x,
+				y = (int)m_pPrisoner[nNowSelect]->GetPosition().y,
+				z = (int)m_pPrisoner[nNowSelect]->GetPosition().z;
 
-			//選択された時の処理
-			if (ImGui::Selectable(aFileName[nCnt].data(), is_selected))
-			{
-				//現在の選択項目設定
-				nType = nCnt;
-				bSelect = true;
-			}
-			if (is_selected)
-			{
-				ImGui::SetItemDefaultFocus();
-			}
+			// オブジェクトの移動
+			ImGui::DragInt("X", &x);
+			ImGui::DragInt("Y", &y);
+			ImGui::DragInt("Z", &z);
+
+			// オブジェクトの位置の設定
+			m_pPrisoner[nNowSelect]->SetPosition(D3DXVECTOR3((float)x, (float)y, (float)z));
 		}
-		ImGui::EndCombo();
 	}
+
+	// 改行
+	ImGui::Separator();
+
+	// 生成
+	if (ImGui::Button("Crate"))
+	{
+		// オブジェクトの生成
+		m_pPrisoner.emplace_back(CPrisoner::Create());
+	}
+
+	// 改行キャンセル
+	ImGui::SameLine();
+
+	// セーブ
+	if (ImGui::Button("Save"))
+	{
+		// 捕虜のセーブ
+		PrisonerSave(m_MapNum);
+	}
+
+	// 全てセーブ
+	AllSaveButton();
+
 #endif
-	return bSelect;
 }
 
 // =====================================================================================================================================================================
@@ -945,15 +1014,15 @@ void CMap::EnemySet()
 		//	if (m_pEnemy[nNowSelect])
 		//	{
 		//		// 敵の種類の取得
-		//		CModel::OBSTACLE_TYPE ObstacleType = (CModel::OBSTACLE_TYPE)m_pEnemy[nNowSelect]->GetModelCount();
+		//		CModel::ENEMY_TYPE EnemyType = (CModel::OBSTACLE_TYPE)m_pEnemy[nNowSelect]->GetModelCount();
 
 		//		// 前回と違うとき
-		//		if (ObstacleType != nEnemyType)
+		//		if (EnemyType != nEnemyType)
 		//		{
 		//			// 種類代入
-		//			ObstacleType = (CModel::OBSTACLE_TYPE)nEnemyType;
+		//			EnemyType = (CModel::ENEMY_TYPE)nEnemyType;
 		//			// 敵のタイプの設定
-		//			m_pEnemy[nNowSelect]->SetModelConut(ObstacleType);
+		//			m_pEnemy[nNowSelect]->SetModelConut(EnemyType);
 		//		}
 		//	}
 		//}
@@ -996,55 +1065,151 @@ void CMap::EnemySet()
 		EnemySave(m_MapNum);
 	}
 
+	// 全てセーブ
+	AllSaveButton();
+
 #endif
 }
 
-//// =====================================================================================================================================================================
-////
-//// 敵のコンボボックス
-////
-//// =====================================================================================================================================================================
-//bool CMap::EnemyComboBox(int & nType)
-//{
-//	bool bSelect = false;	// 選択
+// =====================================================================================================================================================================
 //
-//#ifdef _DEBUG
+// 障害物のコンボボックス
 //
-//	// ファイル名格納用
-//	std::vector<std::string > aFileName = {};
+// =====================================================================================================================================================================
+bool CMap::ObstacleComboBox(int &nType)
+{
+	bool bSelect = false;	// 選択
+
+#ifdef _DEBUG
+
+							// ファイル名格納用
+	std::vector<std::string > aFileName = {};
+
+	//for
+	for (int nCnt = 0; nCnt < CModel::OBSTACLE_TYPE_MAX; nCnt++)
+	{
+		//配列に追加
+		aFileName.emplace_back(CModel::GetModelFileName(CModel::MODEL_TYPE::OBSTACLE_MODEL, nCnt));
+	}
+
+	// コンボボックス
+	if (ImGui::BeginCombo("Type", aFileName[nType].data()))
+	{
+		for (size_t nCnt = 0; nCnt < aFileName.size(); nCnt++)
+		{
+			//選択番号があってるかどうか
+			bool is_selected = (aFileName[nType] == aFileName[nCnt]);
+
+			//選択された時の処理
+			if (ImGui::Selectable(aFileName[nCnt].data(), is_selected))
+			{
+				//現在の選択項目設定
+				nType = nCnt;
+				bSelect = true;
+			}
+			if (is_selected)
+			{
+				ImGui::SetItemDefaultFocus();
+			}
+		}
+		ImGui::EndCombo();
+	}
+#endif
+	return bSelect;
+}
+
+// =====================================================================================================================================================================
 //
-//	//for
-//	for (int nCnt = 0; nCnt < CModel::ENEMY_TYPE_MAX; nCnt++)
-//	{
-//		//配列に追加
-//		aFileName.emplace_back(CModel::GetModelFileName(CModel::MODEL_TYPE::ENEMY_MODEL, nCnt));
-//	}
+// 敵のコンボボックス
 //
-//	// コンボボックス
-//	if (ImGui::BeginCombo("Type", aFileName[nType].data()))
-//	{
-//		for (size_t nCnt = 0; nCnt < aFileName.size(); nCnt++)
-//		{
-//			//選択番号があってるかどうか
-//			bool is_selected = (aFileName[nType] == aFileName[nCnt]);
+// =====================================================================================================================================================================
+bool CMap::EnemyComboBox(int & nType)
+{
+	bool bSelect = false;	// 選択
+
+#ifdef _DEBUG
+
+	//// ファイル名格納用
+	//std::vector<std::string > aFileName = {};
+
+	////for
+	//for (int nCnt = 0; nCnt < CModel::ENEMY_TYPE_MAX; nCnt++)
+	//{
+	//	//配列に追加
+	//	aFileName.emplace_back(CModel::GetModelFileName(CModel::MODEL_TYPE::ENEMY_MODEL, nCnt));
+	//}
+
+	//// コンボボックス
+	//if (ImGui::BeginCombo("Type", aFileName[nType].data()))
+	//{
+	//	for (size_t nCnt = 0; nCnt < aFileName.size(); nCnt++)
+	//	{
+	//		//選択番号があってるかどうか
+	//		bool is_selected = (aFileName[nType] == aFileName[nCnt]);
+
+	//		//選択された時の処理
+	//		if (ImGui::Selectable(aFileName[nCnt].data(), is_selected))
+	//		{
+	//			//現在の選択項目設定
+	//			nType = nCnt;
+	//			bSelect = true;
+	//		}
+	//		if (is_selected)
+	//		{
+	//			ImGui::SetItemDefaultFocus();
+	//		}
+	//	}
+	//	ImGui::EndCombo();
+	//}
+#endif
+	return bSelect;
+}
+
+// =====================================================================================================================================================================
 //
-//			//選択された時の処理
-//			if (ImGui::Selectable(aFileName[nCnt].data(), is_selected))
-//			{
-//				//現在の選択項目設定
-//				nType = nCnt;
-//				bSelect = true;
-//			}
-//			if (is_selected)
-//			{
-//				ImGui::SetItemDefaultFocus();
-//			}
-//		}
-//		ImGui::EndCombo();
-//	}
-//#endif
-//	return bSelect;
-//}
+// 捕虜のコンボボックス
+//
+// =====================================================================================================================================================================
+bool CMap::PrisonerComboBox(int & nType)
+{
+	bool bSelect = false;	// 選択
+
+#ifdef _DEBUG
+
+							//// ファイル名格納用
+							//std::vector<std::string > aFileName = {};
+
+							////for
+							//for (int nCnt = 0; nCnt < CModel::ENEMY_TYPE_MAX; nCnt++)
+							//{
+							//	//配列に追加
+							//	aFileName.emplace_back(CModel::GetModelFileName(CModel::MODEL_TYPE::ENEMY_MODEL, nCnt));
+							//}
+
+							//// コンボボックス
+							//if (ImGui::BeginCombo("Type", aFileName[nType].data()))
+							//{
+							//	for (size_t nCnt = 0; nCnt < aFileName.size(); nCnt++)
+							//	{
+							//		//選択番号があってるかどうか
+							//		bool is_selected = (aFileName[nType] == aFileName[nCnt]);
+
+							//		//選択された時の処理
+							//		if (ImGui::Selectable(aFileName[nCnt].data(), is_selected))
+							//		{
+							//			//現在の選択項目設定
+							//			nType = nCnt;
+							//			bSelect = true;
+							//		}
+							//		if (is_selected)
+							//		{
+							//			ImGui::SetItemDefaultFocus();
+							//		}
+							//	}
+							//	ImGui::EndCombo();
+							//}
+#endif
+	return bSelect;}
 
 // =====================================================================================================================================================================
 //
