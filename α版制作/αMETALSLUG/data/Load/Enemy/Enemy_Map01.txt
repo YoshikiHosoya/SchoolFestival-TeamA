@@ -11,7 +11,7 @@ SCRIPT
 
 ENEMYSET									# 0
 	TYPE	= 0
-	POS		= 0 100 0
+	POS		= 0 0 0
 	LIFE	= 50
 END_ENEMYSET
 

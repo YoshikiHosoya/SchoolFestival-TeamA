@@ -55,10 +55,20 @@ public:
 		return m_PrisonerState;
 	};														// 捕虜の状態の取得
 
-	void					SetPrisonerState(PRISONER_STATE state)
+	void				SetPrisonerState(PRISONER_STATE state)
 	{
 		m_PrisonerState = state;
 	};														// 捕虜の状態の設定
+
+	bool				GetPrisonerUseFlag()				// ポインタの取得
+	{
+		return m_bUse;
+	}
+
+	void				SetPrisonerUseFlag(bool bUse)
+	{
+		m_bUse = bUse;
+	};														// フラグの設定
 
 private:
 	/* メンバ関数 */
@@ -67,5 +77,6 @@ private:
 	PRISONER_STATE		m_PrisonerState;					// デバッグのステータス
 	void				Move(float move, float fdest);		// 捕虜の移動
 	int					m_nDieCount;						// 捕虜が消滅するまでのカウント
+	bool				m_bUse;								// ポインタを使用できるかどうか
 };
 #endif
