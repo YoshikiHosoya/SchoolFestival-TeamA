@@ -188,6 +188,8 @@ void CDebug_ViewerCharacter::MotionViewer()
 	static CCharacter::CHARACTER_MOTION_STATE CopyMotionType = CHARACTER_MOTION_STATE_NONE;
 	static int nCopyKey = -1;
 
+	int *pLoop = &pMotionInfo->nLoop;
+
 	////プレイヤー座標リセット
 	//if (ImGui::Button("PlayerPosReset"))
 	//{
@@ -223,10 +225,10 @@ void CDebug_ViewerCharacter::MotionViewer()
 	//}
 
 	//ループ
-	//if (ImGui::Checkbox("bLoop", (bool*)pMotionInfo->nLoop))
-	//{
+	if (ImGui::Checkbox("bLoop", (bool*)pLoop))
+	{
 
-	//}
+	}
 
 	//改行
 	ImGui::Separator();

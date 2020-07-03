@@ -43,6 +43,8 @@ private:
 	D3DXMATRIX *m_HandMatrix;				//ナイフを持つ手のマトリックスのポインタ
 	bool m_bAttack;							//攻撃中かどうか
 
+	D3DXVECTOR3 m_worldpos;					//ワールド座標　当たり判定用
+
 	void CollisionKnife();					//ナイフの当たり判定処理
 
 };
