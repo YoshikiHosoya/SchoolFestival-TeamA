@@ -82,6 +82,13 @@ typedef struct INTEGER3
 	};
 }INTEGER3;
 
+// タグ
+enum TAG
+{
+	TAG_PLAYER = 0,
+	TAG_ENEMY,
+	TAG_MAX,
+};
 
 //------------------------------------------------------------------------------
 //クラス定義

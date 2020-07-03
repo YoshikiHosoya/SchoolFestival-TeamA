@@ -75,7 +75,8 @@ public:
 
 	int &GetNumber()				{ return m_nNumber; };				//個数
 	float &GetSpeed()				{ return m_fSpeed; };				//速度
-	PARTICLE_SHAPE GetShape()		{ return m_shape; };
+	PARTICLE_SHAPE &GetShape()		{ return m_shape; };				//パーティクルの方向
+	bool&GetSpeedRandom()			{ return m_bSpeedRandom; };			//パーティクルの速度がランダムかどうか
 
 	float &GetRadiusDamping()		{ return m_fRadiusDamping; };		//半径の減衰地
 	float &GetAlphaDamping()		{ return m_fAlphaDamping; };		//アルファ値の減衰値
@@ -172,7 +173,7 @@ private:
 	CParticleParam::PARTICLE_TYPE m_type;							//パーティクルの種類
 	bool m_bDeleteFlag;												//消去フラグ
 
-	void SetParticle(D3DXVECTOR3 &pos, CParticleParam::PARTICLE_SHAPE &shape);				//パーティクル設定
+	void SetParticle(D3DXVECTOR3 &pos, CParticleParam *pShape);				//パーティクル設定
 
 };
 

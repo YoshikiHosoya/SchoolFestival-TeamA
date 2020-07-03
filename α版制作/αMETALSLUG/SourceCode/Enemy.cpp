@@ -17,7 +17,6 @@
 //====================================================================
 #define ENEMY_SIZE			(D3DXVECTOR3(50.0f,75.0f,0.0f)) //“G‚ÌƒTƒCƒY
 
-
 CEnemy::CEnemy(OBJ_TYPE type) :CCharacter(type)
 {
 	SetObjType(OBJTYPE_ENEMY);
@@ -25,6 +24,11 @@ CEnemy::CEnemy(OBJ_TYPE type) :CCharacter(type)
 
 CEnemy::~CEnemy()
 {
+	if (m_pAI != nullptr)
+	{
+		delete m_pAI;
+		m_pAI = nullptr;
+	}
 }
 //====================================================================
 //‰Šú‰»
@@ -41,7 +45,7 @@ HRESULT CEnemy::Init(void)
 	// e‚Ì¶¬
 	m_pGun = CGun::Create(GetCharacterModelPartsList(CModel::MODEL_ENEMY_RHAND_01)->GetMatrix());
 	// e‚Ì’e‚ÌŽí—Þ
-	m_pGun->GetBulletType() = CGun::TYPE_ENEMY;
+	m_pGun->GetTag() = TAG_ENEMY;
 
 	// “–‚½‚è”»’è¶¬
 	GetCollision()->SetPos(&GetPosition());
@@ -50,9 +54,6 @@ HRESULT CEnemy::Init(void)
 	GetCollision()->SetMove(&GetMove());
 	GetCollision()->SetType(CCollision::COLLISION_ENEMY);
 	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_CHARACTER);
-
-	m_pAI = CEnemyAI::CreateAI();
-
 	CCharacter::SetLife(50);
 	return S_OK;
 }
@@ -62,7 +63,6 @@ HRESULT CEnemy::Init(void)
 void CEnemy::Uninit(void)
 {
 	CCharacter::Uninit();
-	m_pAI->Uninit();
 }
 //====================================================================
 //XV
@@ -106,16 +106,22 @@ void CEnemy::Update(void)
 	if (this->GetLife() <= 0)
 	{//ƒAƒCƒeƒ€‚ð¶¬
 		CItem::Create(this->GetPosition(), CItem::ITEMTYPE_HEAVYMACHINEGUN);
+		m_pGun->Rerease();
+		m_pGun = nullptr;
 	}
+
 	//AIŠÖ˜Aˆ—
-	if (m_pAI->GetAIType() == m_pAI->AI_SHOT)
+	if (m_pAI != nullptr)
 	{
-		m_pGun->Shot(D3DXVECTOR3(0.0f, 0.5f*D3DX_PI, 0.0f));
+		if (m_pAI->GetAIType() == m_pAI->AI_SHOT)
+		{
+			m_pGun->Shot(D3DXVECTOR3(0.0f, 0.5f*D3DX_PI, 0.0f));
+		}
+		m_pAI->Update();
 	}
 
 	CDebugProc::Print("\n“G‚Ìƒ‰ƒCƒt %d\n", CCharacter::GetLife());
 	CCharacter::Update();
-	m_pAI->Update();
 }
 //====================================================================
 //•`‰æ
@@ -139,6 +145,7 @@ CEnemy *CEnemy::Create(void)
 	CEnemy*pEnemy;
 	pEnemy = new CEnemy(OBJTYPE_ENEMY);
 	pEnemy->Init();
+	pEnemy->m_pAI = CEnemyAI::CreateAI(pEnemy);
 	return pEnemy;
 }
 bool CEnemy::DefaultMotion(void)

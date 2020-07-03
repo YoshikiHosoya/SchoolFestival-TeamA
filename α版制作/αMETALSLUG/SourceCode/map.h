@@ -60,7 +60,7 @@ public:
 	void			UpdateDieFlag();										// 死亡フラグ確認関数
 
 private:
-	/* 静的メンバ関数 */
+	/* メンバ関数 */
 	void			ModelLoad(MAP MapNum);									// モデルのロード
 	void			EnemyLoad(MAP MapNum);									// 敵のロード
 	void			PrisonerLoad(MAP MapNum);								// 捕虜のロード
@@ -69,13 +69,15 @@ private:
 	void			EnemySave(MAP MapNum);									// 敵のセーブ
 	void			PrisonerSave(MAP MapNum);								// 捕虜のセーブ
 	void			ObstacleSave(MAP MapNum);								// 障害物のセーブ
-
+	void			AllSaveButton();										// 配置したモデルを全てセーブするボタン
 	void			MapModelTab();											// マップに配置するモデルのタブ
 	void			MapModelSet();											// マップに配置するモデルの設置
 	void			ObstacleSet();											// 障害物の設置
-	bool			ObstacleComboBox(int &nType);							// 障害物のコンボボックス
 	void			EnemySet();												// 敵の設置
+	bool			ObstacleComboBox(int &nType);							// 障害物のコンボボックス
+	void			PrisonerSet();											// 捕虜の設置
 	bool			EnemyComboBox(int &nType);								// 敵のコンボボックス
+	bool			PrisonerComboBox(int &nType);							// 捕虜のコンボボックス
 
 	/* 静的メンバ変数 */
 	static char					*m_MapFileName[MAP_MAX];					// マップファイル名

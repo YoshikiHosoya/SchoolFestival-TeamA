@@ -20,14 +20,6 @@ class CGun : public CModel
 {
 public:
 
-	// 弾の種類
-	enum BULLET_TYPE
-	{
-		TYPE_PLAYER = 0,
-		TYPE_ENEMY,
-		TYPE_MAX,
-	};
-
 	// 銃の種類
 	enum GUN_TYPE
 	{
@@ -57,8 +49,8 @@ public:
 	/* メンバ関数 */
 	GUN_TYPE				&GetGunType() { return m_GunType; };				// 銃の種類の取得
 	void					SetGunType(GUN_TYPE type);							// 銃の種類の設定
-	BULLET_TYPE				&GetBulletType() { return m_BulletType; };				// 弾の種類の取得
-	void					SetBulletType(BULLET_TYPE type) { m_BulletType = type; };	// 弾の種類の設定
+	TAG						&GetTag() { return m_Tag; };						// タグの取得
+	void					SetTag(TAG type) { m_Tag = type; };					// タグの設定
 
 	void					Shot(D3DXVECTOR3 rot);								// 銃の発射
 
@@ -67,7 +59,7 @@ private:
 	void					MultipleShot();			// 複数発撃つ処理
 	/* メンバ変数 */
 	GUN_TYPE				m_GunType;				// ガンの種類
-	BULLET_TYPE				m_BulletType;			// 弾の種類
+	TAG						m_Tag;					// タグ
 	int						m_nAmmo;				// 弾薬数
 	int						m_nInterval;			// インターバル
 	D3DXMATRIX				*m_mtx;					// マトリックス
