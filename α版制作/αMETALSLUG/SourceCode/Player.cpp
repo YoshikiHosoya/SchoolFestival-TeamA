@@ -88,40 +88,67 @@ void CPlayer::Update(void)
 	// 銃を撃つ or 近接攻撃
 	if (key->GetKeyboardTrigger(DIK_P))
 	{
-		// 銃を撃てる状態だった時
-		if (m_bAttack_Enemy == false)
-		{// 銃発射処理
+
+		CPrisoner	*pPrisoner = GetCollision()->ForPlayer_PrisonerCollision();
+
+		// ポインタがnullじゃなかった時
+		if (pPrisoner != nullptr)
+		{
+			// 銃を撃てる状態だった時
+			if (m_bAttack_Enemy == false && m_bAttack_Prisoner == false)
+			{// 銃発射処理
+				m_pGun->Shot(GetShotDirection());
+			}
+			// 捕虜が判定可能な状態だった時
+			else if (pPrisoner->GetPrisonerState() != CPrisoner::PRISONER_STATE_STAY)
+			{
+				m_pGun->Shot(GetShotDirection());
+			}
+		}
+		// 捕虜がいない時は通常通り弾を撃つ
+		else
+		{
 			m_pGun->Shot(GetShotDirection());
 		}
 
 		// 近接攻撃をする状態だった時
-		else if (m_bAttack_Enemy == true)
+		if (m_bAttack_Enemy == true)
 		{// 近接攻撃
 		 // エネミーとの接触判定 捕虜の状態を変える
 			CEnemy		*pEnemy		= GetCollision()->ForPlayer_EnemyCollision();
-			// 近接攻撃
-			SetMotion(CCharacter::PLAYER_MOTION_ATTACK01);
-			m_pKnife->StartMeleeAttack();
 
 			if (pEnemy != nullptr)
 			{
+				// 近接攻撃
+				SetMotion(CCharacter::PLAYER_MOTION_ATTACK01);
+				m_pKnife->StartMeleeAttack();
 				// エネミーへダメージ
 				pEnemy->AddDamage(ATTACK_DAMAGE_ENEMY);
 			}
 		}
 
-		if (m_bAttack_Prisoner == false)
-		{// 銃発射処理
-			m_pGun->Shot(GetShotDirection());
-		}
-
-		else if (m_bAttack_Prisoner == true)
+		// 近接判定が出ている時は近接攻撃をする
+		if (m_bAttack_Prisoner == true)
 		{// 近接攻撃
 		 // 捕虜との接触判定 捕虜の状態を変える
 			CPrisoner	*pPrisoner = GetCollision()->ForPlayer_PrisonerCollision();
-			// 近接攻撃
-			SetMotion(CCharacter::PLAYER_MOTION_ATTACK01);
-			m_pKnife->StartMeleeAttack();
+
+			// ポインタがnullじゃなかった時
+			if (pPrisoner != nullptr)
+			{
+				// 捕虜が判定可能な状態だった時
+				if (pPrisoner->GetPrisonerState() == CPrisoner::PRISONER_STATE_STAY)
+				{
+					// 近接攻撃
+					SetMotion(CCharacter::PLAYER_MOTION_ATTACK01);
+					// ナイフ処理
+					m_pKnife->StartMeleeAttack();
+					// 捕虜の状態をアイテムを落とす状態にする
+					pPrisoner->SetPrisonerState(CPrisoner::PRISONER_STATE_DROPITEM);
+					// この捕虜のポインタは取得できないようにする
+					pPrisoner->SetPrisonerUseFlag(true);
+				}
+			}
 		}
 	}
 
@@ -229,13 +256,10 @@ void CPlayer::Update(void)
 		}
 
 		// 捕虜との判定
-		if (GetCollision()->ForPlayer_PrisonerCollision(ATTACK_PENETRATION))
+		if (GetCollision()->ForPlayer_PrisonerCollision(ATTACK_PENETRATION) == true)
 		{
-			if (GetCollision()->ForPlayer_PrisonerCollision())
-			{
-				// 近接攻撃可能にする
-				m_bAttack_Prisoner = true;
-			}
+			// 近接攻撃可能にする
+			m_bAttack_Prisoner = true;
 		}
 		else
 		{
@@ -281,11 +305,13 @@ void CPlayer::Update(void)
 	// 攻撃モーションから別のモーションになった時
 	if (GetMotionType() != CCharacter::PLAYER_MOTION_ATTACK01)
 	{
-		if (m_bAttack_Enemy == false || m_bAttack_Prisoner == false)
+		if (m_bAttack_Enemy == false && m_bAttack_Prisoner == false)
 		{
 			m_pKnife->EndMeleeAttack();
 		}
 	}
+
+	// 特定のボタンを押した時に歩きモーションに変更
 	if (CHossoLibrary::PressAnyButton())
 	{
 		SetMotion(CCharacter::PLAYER_MOTION_WALK);

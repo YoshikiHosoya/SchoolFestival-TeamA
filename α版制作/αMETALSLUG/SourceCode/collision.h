@@ -120,6 +120,7 @@ private:
 	D3DXVECTOR3			*m_pmove;						// 移動情報のポインタ
 	CDebugcollision		*m_Debugcollision;				// デバッグ用当たり判定のポインタ
 	bool				m_bDeadFlag;					// 死亡フラグ
+	bool				m_bUse;
 };
 
 #endif

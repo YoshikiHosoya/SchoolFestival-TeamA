@@ -353,13 +353,15 @@ void CMap::ObstacleLoad(MAP MapNum)
 						else if (strcmp(cHeadText, "END_OBSTACLESET") == 0)
 						{
 							// オブジェクトの生成
-							m_pObstacle.emplace_back(CObstacle::Create());
+
 							// タイプの代入
+
 							m_pObstacle[m_pObstacle.size() - 1]->SetModelConut(nType);
+
 							// 位置の設定
-							m_pObstacle[m_pObstacle.size() - 1]->SetPosition(pos);
+
 							// 体力の設定
-							m_pObstacle[m_pObstacle.size() - 1]->SetLife(nLife);
+
 						}
 					}
 				}

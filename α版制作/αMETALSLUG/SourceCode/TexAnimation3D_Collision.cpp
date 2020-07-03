@@ -98,30 +98,31 @@ void CTexAnimation3D_Collision::ShowDebugInfo()
 void CTexAnimation3D_Collision::Create(D3DXVECTOR3 pos, D3DXVECTOR3 size, D3DXVECTOR3 rot, CTexture::SEPARATE_TEX_TYPE type, int nCntSwitch, CScene::OBJ_TYPE objtype, bool bPlayer)
 {
 	//ƒƒ‚ƒŠŠm•Û
-	CTexAnimation3D_Collision *pEffectAnimation = new CTexAnimation3D_Collision(objtype);
+	CTexAnimation3D_Collision *pTexAnimation = new CTexAnimation3D_Collision(objtype);
 
 	//nullcheck
-	if (pEffectAnimation)
+	if (pTexAnimation)
 	{
 		//‰Šú‰»
-		pEffectAnimation->Init();
+		pTexAnimation->Init();
 
 		//î•ñ‚ð‚¢‚ê‚é@Scene‘¤
-		pEffectAnimation->SetPosition(pos);
-		pEffectAnimation->SetSize(size);
-		pEffectAnimation->SetRot(rot);
-		pEffectAnimation->BindTexture(CTexture::GetSeparateTexture(type));
-		pEffectAnimation->SetAnimation(ZeroVector2, CTexture::GetSparateTex_UVSize(type));
-		pEffectAnimation->m_bPlayer = bPlayer;
+		pTexAnimation->SetPosition(pos);
+		pTexAnimation->SetSize(size);
+		pTexAnimation->SetRot(rot);
+		pTexAnimation->BindTexture(CTexture::GetSeparateTexture(type));
+		pTexAnimation->SetAnimation(ZeroVector2, CTexture::GetSparateTex_UVSize(type));
+		pTexAnimation->m_bPlayer = bPlayer;
 
 		//î•ñ‚ð‚¢‚ê‚é@TexAnimation‘¤
-		pEffectAnimation->SetTex(type);
-		pEffectAnimation->SetCntSwitch(nCntSwitch);
+		pTexAnimation->SetTex(type);
+		pTexAnimation->SetCntSwitch(nCntSwitch);
 
-		pEffectAnimation->m_pCollision = CCollision::Create();
-		pEffectAnimation->m_pCollision->SetPos(pEffectAnimation->GetPosPtr());
-		pEffectAnimation->m_pCollision->SetSize(size);
-		pEffectAnimation->m_pCollision->DeCollisionCreate(CCollision::COLLISIONTYPE_BLOCK);
+		//“–‚½‚è”»’è‚ÌÝ’è
+		pTexAnimation->m_pCollision = CCollision::Create();
+		pTexAnimation->m_pCollision->SetPos(pTexAnimation->GetPosPtr());
+		pTexAnimation->m_pCollision->SetSize(size);
+		pTexAnimation->m_pCollision->DeCollisionCreate(CCollision::COLLISIONTYPE_NORMAL);
 	}
 }
 
@@ -140,8 +141,6 @@ bool CTexAnimation3D_Collision::Collision()
 			m_pCollision->ForPlayerBulletCollision(1, 1, true);
 		}
 	}
-
-
 
 	return false;
 }

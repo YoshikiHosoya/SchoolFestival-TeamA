@@ -54,6 +54,7 @@ CCollision::CCollision()
 	m_size				= D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// サイズ情報
 	m_pmove				= nullptr;							// 移動情報
 	m_Debugcollision	= nullptr;							// デバッグ用当たり判定のポインタ
+	m_bUse				= false;
 }
 
 //======================================================================================================================
@@ -371,10 +372,6 @@ bool CCollision::ForPlayer_PrisonerCollision(bool Penetration)
 			{
 				bHitFlag = true;
 			}
-			else
-			{
-				bHitFlag = false;
-			}
 		}
 	}
 	return bHitFlag;
@@ -386,13 +383,14 @@ bool CCollision::ForPlayer_PrisonerCollision(bool Penetration)
 CPrisoner *CCollision::ForPlayer_PrisonerCollision()
 {
 	CPrisoner *pPrisoner = nullptr;
-	CPrisoner *pSavePointer = nullptr;
 	// 捕虜の総数分
 	for (int nCntPriso = 0; nCntPriso < CManager::GetBaseMode()->GetMap()->GetMaxPrisoner(); nCntPriso++)
 	{
+		// 捕虜のポインタを取得
 		pPrisoner = CManager::GetBaseMode()->GetMap()->GetPrisoner(nCntPriso);
 
-		if (pPrisoner != pSavePointer)
+		// ポインタが検索可能なら処理を通す
+		if (pPrisoner->GetPrisonerUseFlag() == false)
 		{
 			if (pPrisoner != nullptr)
 			{
@@ -400,23 +398,27 @@ CPrisoner *CCollision::ForPlayer_PrisonerCollision()
 				{
 					if (pPrisoner->GetPrisonerState() == CPrisoner::PRISONER_STATE_STAY)
 					{
-						pPrisoner->SetPrisonerState(CPrisoner::PRISONER_STATE_DROPITEM);
-						// この捕虜のポインタは取得できないようにする
-						pSavePointer = pPrisoner;
-
+						// 処理を行った捕虜のポインタを返す
 						return pPrisoner;
 					}
-
 				}
 			}
 
+			// nullだったらnullを返す
 			else if (pPrisoner == nullptr)
 			{
 				return nullptr;
 			}
 		}
+
+		// 検索が許可されていないなら処理を飛ばす
+		/*else
+		{
+			continue;
+		}*/
 	}
 
+	// ポインタを返す
 	return pPrisoner;
 }
 
