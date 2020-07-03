@@ -133,6 +133,13 @@ CKnife * CKnife::Create(D3DXMATRIX *mtx)
 // =====================================================================================================================================================================
 void CKnife::StartMeleeAttack()
 {
+	//マトリックス計算
+	//軌跡の初期座標用
+	CHossoLibrary::CalcMatrix(GetMatrix(), GetPosition(), GetRot());
+
+	//手のマトリックス計算
+	D3DXMatrixMultiply(GetMatrix(),GetMatrix(), GetHandMtx());
+
 	//軌跡作成
 	m_pOrbit = COrbit::Create(GetMatrix());
 
@@ -152,8 +159,6 @@ void CKnife::StartMeleeAttack()
 		m_pCollision->DeCollisionCreate(CCollision::COLLISIONTYPE_NORMAL);
 
 	}
-
-
 
 	//攻撃終了
 	m_bAttack = true;
@@ -182,7 +187,7 @@ void CKnife::EndMeleeAttack()
 	}
 
 	//攻撃状態終了
-	m_bAttack = true;
+	m_bAttack = false;
 }
 
 // =====================================================================================================================================================================

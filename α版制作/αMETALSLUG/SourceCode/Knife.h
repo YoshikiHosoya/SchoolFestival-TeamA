@@ -37,6 +37,8 @@ public:
 	void					StartMeleeAttack();				//近接攻撃開始
 	void					EndMeleeAttack();				//近接攻撃終了
 
+	D3DXMATRIX				*GetHandMtx() { return m_HandMatrix;};					//手のマトリックス取得
+
 private:
 	COrbit *m_pOrbit;						//軌跡のポインタ
 	CCollision *m_pCollision;				//当たり判定のポインタ

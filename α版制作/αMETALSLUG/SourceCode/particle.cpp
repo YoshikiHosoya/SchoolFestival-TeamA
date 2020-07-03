@@ -594,69 +594,68 @@ void CParticle::ResetVertex()
 //------------------------------------------------------------------------------
 //パーティクル設定
 //------------------------------------------------------------------------------
-void CParticle::SetParticle(D3DXVECTOR3 &pos, CParticleParam::PARTICLE_SHAPE &shape)
+void CParticle::SetParticle(D3DXVECTOR3 &pos, CParticleParam *pParam)
 {
-	////変数宣言
-	//float fAngleX, fAngleY;
-	//D3DXVECTOR3 move;
-	//float fLength;
+	//変数宣言
+	float fAngleX, fAngleY;
+	D3DXVECTOR3 move;
+	float fLength;
 
-	////生成する個数分
-	//for (int nCnt = 0; nCnt < rParam.GetNumber(); nCnt++)
-	//{
-	//	//0除算防止
-	//	if(fSpeed <= 0)
-	//	{
-	//		move = ZeroVector3;
-	//	}
-	//	else
-	//	{
-	//		//パーティクルの飛ぶ距離をランダム生成
-	//		b
+	//生成する個数分
+	for (int nCnt = 0; nCnt < pParam->GetNumber(); nCnt++)
+	{
+		//0除算防止
+		if (pParam->GetSpeed() <= 0)
+		{
+			move = ZeroVector3;
+		}
+		else
+		{
+			pParam->GetSpeedRandom() ?
+				fLength = pParam->GetSpeed() :
+				fLength = pParam->GetSpeed();
 
-	//		switch (shape)
-	//		{
-	//		case CParticleParam::SHAPE_SPHERE:
+			//パーティクルの飛ぶ距離をランダム生成
+			switch (pParam->GetShape())
+			{
+			case CParticleParam::SHAPE_SPHERE:
 
-	//			//360度ランダム 3.14 - 3.14
-	//			fAngleX = CHossoLibrary::Random_PI();
-	//			fAngleY = CHossoLibrary::Random_PI();
+				//360度ランダム 3.14 - 3.14
+				fAngleX = CHossoLibrary::Random_PI();
+				fAngleY = CHossoLibrary::Random_PI();
 
-	//			//移動の方向を設定
-	//			move = D3DXVECTOR3(sinf(fAngleY) * sinf(fAngleX) * fLength,
-	//				sinf(fAngleY) * cosf(fAngleX) * fLength,
-	//				cosf(fAngleY) * cosf(fAngleX) * fLength);
-	//			break;
-	//		case CParticleParam::SHAPE_CONE:
+				//移動の方向を設定
+				move = D3DXVECTOR3(sinf(fAngleY) * sinf(fAngleX) * fLength,
+					sinf(fAngleY) * cosf(fAngleX) * fLength,
+					cosf(fAngleY) * cosf(fAngleX) * fLength);
+				break;
+			case CParticleParam::SHAPE_CONE:
 
-	//			break;
-	//		case CParticleParam::SHAPE_CIRCLE_XY:
-	//			//移動の方向を設定
-	//			move = D3DXVECTOR3(sinf(fAngleY) * sinf(fAngleX) * fLength,
-	//				sinf(fAngleY) * cosf(fAngleX) * fLength,
-	//				cosf(fAngleY) * cosf(fAngleX) * fLength);
-	//			break;
-	//		case CParticleParam::SHAPE_LINE:
+				break;
+			case CParticleParam::SHAPE_CIRCLE_XY:
+				//移動の方向を設定
+				move = D3DXVECTOR3(sinf(fAngleY) * sinf(fAngleX) * fLength,
+					sinf(fAngleY) * cosf(fAngleX) * fLength,
+					cosf(fAngleY) * cosf(fAngleX) * fLength);
+				break;
+			case CParticleParam::SHAPE_LINE:
 
-	//			break;
-	//		default:
-	//			break;
-	//		}
-	//	}
-	//}
-
-
-
-	//	//パーティクル生成
-	//	std::unique_ptr<COneParticle>pOneParticle = COneParticle::Create(pos, move, ZeroVector3);
-
-	//	//配列に追加
-	//	m_pParticleList.emplace_back(std::move(pOneParticle));
+				break;
+			default:
+				break;
+			}
+		}
 
 
-	//}
-	////頂点の更新
-	//UpdateVertex();
+		//パーティクル生成
+		std::unique_ptr<COneParticle>pOneParticle = COneParticle::Create(pos, move, ZeroVector3);
+
+		//配列に追加
+		m_pParticleList.emplace_back(std::move(pOneParticle));
+
+	}
+	//頂点の更新
+	UpdateVertex();
 }
 
 
