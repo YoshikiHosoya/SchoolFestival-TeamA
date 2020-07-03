@@ -274,7 +274,7 @@ void CMap::PrisonerLoad(MAP MapNum)
 						}
 						else if (strcmp(cHeadText, "END_PRISONERSET") == 0)
 						{
-							// オブジェクトの生成
+							// 捕虜の生成
 							m_pPrisoner.emplace_back(CPrisoner::Create());
 							// 位置の設定
 							m_pPrisoner[m_pPrisoner.size() - 1]->SetPosition(pos);
@@ -353,13 +353,13 @@ void CMap::ObstacleLoad(MAP MapNum)
 						else if (strcmp(cHeadText, "END_OBSTACLESET") == 0)
 						{
 							// オブジェクトの生成
-							m_pObstacle.emplace_back(CObstacle::Create());
+							//m_pObstacle.emplace_back(CObstacle::Create());
 							// タイプの代入
-							m_pObstacle[m_pObstacle.size() - 1]->SetModelConut(nType);
+							//m_pObstacle[m_pObstacle.size() - 1]->SetModelConut(nType);
 							// 位置の設定
-							m_pObstacle[m_pObstacle.size() - 1]->SetPosition(pos);
+							//m_pObstacle[m_pObstacle.size() - 1]->SetPosition(pos);
 							// 体力の設定
-							m_pObstacle[m_pObstacle.size() - 1]->SetLife(nLife);
+							//m_pObstacle[m_pObstacle.size() - 1]->SetLife(nLife);
 						}
 					}
 				}
@@ -784,7 +784,7 @@ void CMap::MapModelSet()
 void CMap::ObstacleSet()
 {
 #ifdef _DEBUG
-	
+
 	static int nObstacleType = 0;		// 障害物の種類
 	static int nNowSelect = -1;			// 現在選択している番号
 
@@ -1082,4 +1082,6 @@ void CMap::UpdateDieFlag()
 			m_pPrisoner.erase(m_pPrisoner.begin() + nCnt);
 		}
 	}
+
+
 }

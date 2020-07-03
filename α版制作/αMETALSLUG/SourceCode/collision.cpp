@@ -54,7 +54,7 @@ CCollision::CCollision()
 	m_size				= D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// サイズ情報
 	m_pmove				= nullptr;							// 移動情報
 	m_Debugcollision	= nullptr;							// デバッグ用当たり判定のポインタ
-	m_bUse				= false;
+	m_nCollisionTime	= 0;								// 当たり判定が持続する時間
 }
 
 //======================================================================================================================
@@ -94,12 +94,12 @@ void CCollision::Uninit(void)
 //======================================================================================================================
 void CCollision::Update(void)
 {
-//#ifdef _DEBUG
-//	if (m_Debugcollision != nullptr)
-//	{
-//		m_Debugcollision->SetPos(m_ppos);
-//	}
-//#endif // _DEBUG
+#ifdef _DEBUG
+	if (m_Debugcollision != nullptr)
+	{
+		m_Debugcollision->SetPos(m_ppos);
+	}
+#endif // _DEBUG
 }
 
 //======================================================================================================================
@@ -279,11 +279,11 @@ bool CCollision::ForEnemyCollision(int nPlayerDamage, bool Penetration)
 				pPlayer->CCharacter::AddDamage(nPlayerDamage);
 
 				// プレイヤーのライフが0以下になった時
-				if (pPlayer->CCharacter::GetLife() <= 0)
-				{
-					// ポインタをnullにする
-					pPlayer = nullptr;
-				}
+				//if (pPlayer->CCharacter::GetLife() <= 0)
+				//{
+				//	// ポインタをnullにする
+				//	pPlayer = nullptr;
+				//}
 
 				// 当たり範囲フラグをtrueにする
 				bHitFlag = true;
@@ -316,10 +316,6 @@ bool CCollision::ForPlayer_EnemyCollision(bool Penetration)
 			if (this->CharCollision2D(pEnemy->GetCollision()))
 			{
 				bHitFlag = true;
-			}
-			else
-			{
-				bHitFlag = false;
 			}
 		}
 	}
@@ -389,33 +385,23 @@ CPrisoner *CCollision::ForPlayer_PrisonerCollision()
 		// 捕虜のポインタを取得
 		pPrisoner = CManager::GetBaseMode()->GetMap()->GetPrisoner(nCntPriso);
 
-		// ポインタが検索可能なら処理を通す
-		if (pPrisoner->GetPrisonerUseFlag() == false)
+		if (pPrisoner != nullptr)
 		{
-			if (pPrisoner != nullptr)
+			if (this->CharCollision2D(pPrisoner->GetCollision()))
 			{
-				if (this->CharCollision2D(pPrisoner->GetCollision()))
+				if (pPrisoner->GetPrisonerState() == CPrisoner::PRISONER_STATE_STAY)
 				{
-					if (pPrisoner->GetPrisonerState() == CPrisoner::PRISONER_STATE_STAY)
-					{
-						// 処理を行った捕虜のポインタを返す
-						return pPrisoner;
-					}
+					// 処理を行った捕虜のポインタを返す
+					return pPrisoner;
 				}
-			}
-
-			// nullだったらnullを返す
-			else if (pPrisoner == nullptr)
-			{
-				return nullptr;
 			}
 		}
 
-		// 検索が許可されていないなら処理を飛ばす
-		/*else
+		// nullだったらnullを返す
+		else if (pPrisoner == nullptr)
 		{
-			continue;
-		}*/
+			return nullptr;
+		}
 	}
 
 	// ポインタを返す
@@ -432,10 +418,13 @@ CEnemy * CCollision::ForPlayer_EnemyCollision()
 	for (int nCntEnemy = 0; nCntEnemy < CManager::GetBaseMode()->GetMap()->GetMaxEnemy(); nCntEnemy++)
 	{
 		pEnemy = CManager::GetBaseMode()->GetMap()->GetEnemy(nCntEnemy);
+
 		if (pEnemy != nullptr)
 		{
 			if (this->CharCollision2D(pEnemy->GetCollision()))
 			{
+				// 処理を行った捕虜のポインタを返す
+				return pEnemy;
 			}
 		}
 

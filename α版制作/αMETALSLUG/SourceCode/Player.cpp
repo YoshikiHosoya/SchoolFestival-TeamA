@@ -32,7 +32,6 @@
 CPlayer::CPlayer(OBJ_TYPE type) :CCharacter(type)
 {
 	SetObjType(OBJTYPE_PLAYER);
-	m_pPrisoner = nullptr;
 }
 
 CPlayer::~CPlayer()
@@ -88,7 +87,7 @@ void CPlayer::Update(void)
 	// 銃を撃つ or 近接攻撃
 	if (key->GetKeyboardTrigger(DIK_P))
 	{
-
+		// 捕虜のポインタを取得
 		CPrisoner	*pPrisoner = GetCollision()->ForPlayer_PrisonerCollision();
 
 		// ポインタがnullじゃなかった時
@@ -116,14 +115,11 @@ void CPlayer::Update(void)
 		{// 近接攻撃
 		 // エネミーとの接触判定 捕虜の状態を変える
 			CEnemy		*pEnemy		= GetCollision()->ForPlayer_EnemyCollision();
-
 			if (pEnemy != nullptr)
 			{
 				// 近接攻撃
 				SetMotion(CCharacter::PLAYER_MOTION_ATTACK01);
 				m_pKnife->StartMeleeAttack();
-				// エネミーへダメージ
-				pEnemy->AddDamage(ATTACK_DAMAGE_ENEMY);
 			}
 		}
 
@@ -145,8 +141,6 @@ void CPlayer::Update(void)
 					m_pKnife->StartMeleeAttack();
 					// 捕虜の状態をアイテムを落とす状態にする
 					pPrisoner->SetPrisonerState(CPrisoner::PRISONER_STATE_DROPITEM);
-					// この捕虜のポインタは取得できないようにする
-					pPrisoner->SetPrisonerUseFlag(true);
 				}
 			}
 		}
@@ -190,7 +184,6 @@ void CPlayer::Update(void)
 			SetCharacterDirection(CHARACTER_RIGHT);
 		}
 	}
-
 
 	//ジャンプしたときの下向発射
 	if (key->GetKeyboardPress(DIK_S) && GetJump() == false)
@@ -244,7 +237,7 @@ void CPlayer::Update(void)
 		GetCollision()->SetPosOld(&GetPositionOld());
 
 		// エネミーととの判定
-		if (GetCollision()->ForPlayer_EnemyCollision(ATTACK_PENETRATION))
+		if (GetCollision()->ForPlayer_EnemyCollision(ATTACK_PENETRATION) == true)
 		{
 			// 近接攻撃可能にする
 			m_bAttack_Enemy = true;
@@ -266,8 +259,6 @@ void CPlayer::Update(void)
 			// 近接攻撃が無効になる
 			m_bAttack_Prisoner = false;
 		}
-
-
 
 		// 障害物との判定
 		if (GetCollision()->ForPlayer_ObstacleCollision())

@@ -60,16 +60,6 @@ public:
 		m_PrisonerState = state;
 	};														// 捕虜の状態の設定
 
-	bool				GetPrisonerUseFlag()				// ポインタの取得
-	{
-		return m_bUse;
-	}
-
-	void				SetPrisonerUseFlag(bool bUse)
-	{
-		m_bUse = bUse;
-	};														// フラグの設定
-
 private:
 	/* メンバ関数 */
 	void				PrisonerState();					// 捕虜の状態別処理
