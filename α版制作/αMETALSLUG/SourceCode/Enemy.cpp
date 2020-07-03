@@ -41,7 +41,7 @@ HRESULT CEnemy::Init(void)
 	// e‚Ì¶¬
 	m_pGun = CGun::Create(GetCharacterModelPartsList(CModel::MODEL_ENEMY_RHAND_01)->GetMatrix());
 	// e‚Ì’e‚ÌŽí—Þ
-	m_pGun->GetBulletType() = CGun::TYPE_ENEMY;
+	m_pGun->GetTag() = TAG_ENEMY;
 
 	// “–‚½‚è”»’è¶¬
 	GetCollision()->SetPos(&GetPosition());

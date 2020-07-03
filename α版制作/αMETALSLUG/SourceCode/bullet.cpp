@@ -133,7 +133,7 @@ void CBullet::Update(void)
 		GetCollision()->SetPos(&GetPosition());
 
 		// プレイヤーの弾だった時
-		if (m_type == TYPE_PLAYER)
+		if (m_Tag == TAG_PLAYER)
 		{
 			// プレイヤーの弾の判定
 			if (GetCollision()->ForPlayerBulletCollision(BULLET_DAMAGE_ENEMY, BULLET_DAMAGE_OBSTACLE, BULLET_PENETRATION))
@@ -144,7 +144,7 @@ void CBullet::Update(void)
 		}
 
 		// エネミーの弾だった時
-		else if (m_type == TYPE_ENEMY)
+		else if (m_Tag == TAG_ENEMY)
 		{
 			// エネミーの弾の判定
 			if (GetCollision()->ForEnemyCollision(BULLET_DAMAGE_PLAYER, BULLET_PENETRATION))
