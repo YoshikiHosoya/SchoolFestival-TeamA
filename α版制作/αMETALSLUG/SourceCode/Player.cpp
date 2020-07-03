@@ -53,7 +53,7 @@ HRESULT CPlayer::Init(void)
 	 // e‚Ì¶¬
 	m_pGun = CGun::Create(GetCharacterModelPartsList(CModel::MODEL_PLAYER_RHAND)->GetMatrix());
 	// e‚Ì’e‚ÌŽí—Þ
-	m_pGun->GetBulletType() = CGun::TYPE_PLAYER;
+	m_pGun->GetTag() = TAG_PLAYER;
 	// ƒiƒCƒt‚Ì¶¬
 	m_pKnife = CKnife::Create(GetCharacterModelPartsList(CModel::MODEL_PLAYER_LHAND)->GetMatrix());
 
