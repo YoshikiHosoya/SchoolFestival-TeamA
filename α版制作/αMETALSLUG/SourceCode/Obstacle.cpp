@@ -130,6 +130,9 @@ CObstacle * CObstacle::Create()
 	// 初期化
 	pObstacle->Init();
 
+	// モデルタイプの設定
+	pObstacle->SetType(OBSTACLE_MODEL);
+
 	return pObstacle;
 }
 

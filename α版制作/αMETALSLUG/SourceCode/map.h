@@ -74,6 +74,8 @@ private:
 	void			MapModelSet();											// マップに配置するモデルの設置
 	void			ObstacleSet();											// 障害物の設置
 	bool			ObstacleComboBox(int &nType);							// 障害物のコンボボックス
+	void			EnemySet();												// 敵の設置
+	bool			EnemyComboBox(int &nType);								// 敵のコンボボックス
 
 	/* 静的メンバ変数 */
 	static char					*m_MapFileName[MAP_MAX];					// マップファイル名

@@ -90,6 +90,7 @@ char *CModel::m_TankFileName[MODEL_TANK_MAX] =
 char *CModel::m_ObstacleFileName[OBSTACLE_TYPE_MAX] =
 {
 	{ "data/MODEL/Object/Obstacle_Box.x" },				// 箱
+	{ "data/MODEL/Object/testmodel.x" },				// 確認用モデル
 };
 
 
@@ -773,20 +774,23 @@ char * CModel::GetModelFileName(int nType, int nModelCount)
 	switch (nType)
 	{
 		//プレイヤー
-	case 0:
+	case PLAYER_MODEL:
 		return m_PlayerFileName[nModelCount];
 		break;
-		//マップ
-	case 1:
-		return m_MapFileName[nModelCount];
-		break;
 		//敵
-	case 2:
+	case ENEMY_MODEL:
 		return m_EnemyFileName[nModelCount];
 		break;
-
+		//マップ
+	case MAP_MODEL:
+		return m_MapFileName[nModelCount];
+		break;
+		//障害物
+	case OBSTACLE_MODEL:
+		return m_ObstacleFileName[nModelCount];
+		break;
 		//捕虜
-	case 3:
+	case PRISONER_MODEL:
 		return m_PrisonerFileName[nModelCount];
 		break;
 	}
