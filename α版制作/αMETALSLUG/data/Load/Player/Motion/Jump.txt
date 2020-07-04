@@ -12,7 +12,7 @@ SCRIPT
 	NUM_KEY = 5		//キー数
 
 	KEYSET		//---< KEY : 0 / 5 >---
-		FRAME = 10		//フレーム数
+		FRAME = 3		//フレーム数
 
 		KEY [0] = -0.080 0.000 0.000
 		KEY [1] = 0.000 0.000 0.000
@@ -32,7 +32,7 @@ SCRIPT
 	END_KEYSET
 
 	KEYSET		//---< KEY : 1 / 5 >---
-		FRAME = 20		//フレーム数
+		FRAME = 3		//フレーム数
 
 		KEY [0] = 0.050 0.000 0.000
 		KEY [1] = 0.000 0.000 0.000
@@ -52,7 +52,7 @@ SCRIPT
 	END_KEYSET
 
 	KEYSET		//---< KEY : 2 / 5 >---
-		FRAME = 20		//フレーム数
+		FRAME = 3		//フレーム数
 
 		KEY [0] = 0.050 0.000 0.000
 		KEY [1] = 0.000 0.000 0.000
@@ -72,7 +72,7 @@ SCRIPT
 	END_KEYSET
 
 	KEYSET		//---< KEY : 3 / 5 >---
-		FRAME = 20		//フレーム数
+		FRAME = 3		//フレーム数
 
 		KEY [0] = 0.050 0.000 0.000
 		KEY [1] = 0.000 0.000 0.000
@@ -92,7 +92,7 @@ SCRIPT
 	END_KEYSET
 
 	KEYSET		//---< KEY : 4 / 5 >---
-		FRAME = 20		//フレーム数
+		FRAME = 3		//フレーム数
 
 		KEY [0] = 0.000 0.000 0.000
 		KEY [1] = 0.000 0.000 0.000
