@@ -98,14 +98,14 @@ void CGun::Update(void)
 		MultipleShot();
 	}
 
-	//// ’e–ò‚ª–³‚­‚È‚Á‚½‚Æ‚«
-	//if (m_nAmmo <= 0)
-	//{
-	//	// ’e–ò”‚ð0‚É‚·‚é
-	//	m_nAmmo = 0;
-	//	// ƒnƒ“ƒhƒKƒ“‚É–ß‚·
-	//	m_GunType = GUN_TYPE::GUNTYPE_HANDGUN;
-	//}
+	// ’e–ò‚ª–³‚­‚È‚Á‚½‚Æ‚«
+	if (m_nAmmo <= 0)
+	{
+		// ’e–ò”‚ð0‚É‚·‚é
+		m_nAmmo = 0;
+		// ƒnƒ“ƒhƒKƒ“‚É–ß‚·
+		m_GunType = GUN_TYPE::GUNTYPE_HANDGUN;
+	}
 
 	// XV
 	CModel::Update();
@@ -287,7 +287,7 @@ void CGun::MultipleShot()
 			}
 
 			// Žc’e”‚ðŒ¸‚ç‚·
-			m_nAmmo--;
+			//m_nAmmo--;
 
 			// ’e‚ÌƒJƒEƒ“ƒgƒAƒbƒv
 			m_nCntBullet++;
