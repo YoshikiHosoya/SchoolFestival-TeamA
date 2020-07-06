@@ -202,6 +202,9 @@
     <ClCompile Include="SourceCode\grenadefire.cpp">
       <Filter>Wepon</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\playertank.cpp">
+      <Filter>Model</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SourceCode\mesh.h">
@@ -401,6 +404,9 @@
     </ClInclude>
     <ClInclude Include="SourceCode\EnemyAI.h">
       <Filter>Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\playertank.h">
+      <Filter>Model</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\hosso\Debug_WorldLine.h">
       <Filter>Debug</Filter>
