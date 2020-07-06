@@ -210,13 +210,14 @@ void CParticle::Create(D3DXVECTOR3 pos, int nLife, float fRadius, D3DXCOLOR col,
 			pParticle->m_pParticleParam->SetParamater(nLife, fRadius, col);
 
 			//パーティクルの設定
-			//pParticle->SetParticle(pos, fSpeed, nNumber);
+			pParticle->SetParticle(pos, pParticle->m_pParticleParam.get());
 
 			//オブジェタイプ設定してSceneに所有権を渡す
 			CParticleManager::AddParticleList(std::move(pParticle));
 		}
 	}
 }
+
 //------------------------------------------------------------------------------
 //テクスチャ破棄
 //------------------------------------------------------------------------------
@@ -242,7 +243,8 @@ void CParticle::ResetVertexID()
 //------------------------------------------------------------------------------
 //パーティクル生成　細かい設定有
 //------------------------------------------------------------------------------
-void CParticle::DetailsCreate(D3DXVECTOR3 pos, int nLife, float fRadius, D3DXCOLOR col, int nNumber, float fSpeed, float fAlphaDamping, float fRadiusDamping, CTexture::TEX_TYPE textype)
+void CParticle::DetailsCreate(D3DXVECTOR3 pos, int nLife, float fRadius, D3DXCOLOR col, int nNumber, float fSpeed,
+								float fAlphaDamping, float fRadiusDamping, CTexture::TEX_TYPE textype)
 {
 	//メモリ確保
 	std::unique_ptr<CParticle> pParticle(new CParticle);
@@ -262,7 +264,7 @@ void CParticle::DetailsCreate(D3DXVECTOR3 pos, int nLife, float fRadius, D3DXCOL
 			pParticle->m_pParticleParam->SetParamater(nLife, fRadius, col,fRadiusDamping,fAlphaDamping,textype);
 
 			//パーティクルの設定
-			//pParticle->SetParticle(pos, fSpeed, nNumber);
+			pParticle->SetParticle(pos, pParticle->m_pParticleParam.get());
 
 			//オブジェタイプ設定してSceneに所有権を渡す
 			CParticleManager::AddParticleList(std::move(pParticle));
@@ -298,7 +300,7 @@ void CParticle::CreateFromText(D3DXVECTOR3 pos, CParticleParam::PARTICLE_TYPE ty
 			pParticle->m_pParticleParam.reset(std::move(pParam));
 
 			//パーティクルの設定
-			//pParticle->SetParticle(pos, pParticle->m_pParticleParam->GetSpeed(), pParticle->m_pParticleParam->GetNumber());
+			pParticle->SetParticle(pos, pParam);
 
 			//オブジェタイプ設定してSceneに所有権を渡す
 			CParticleManager::AddParticleList(std::move(pParticle));

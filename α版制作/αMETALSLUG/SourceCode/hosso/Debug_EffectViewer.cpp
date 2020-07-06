@@ -9,6 +9,7 @@
 //インクルード
 //------------------------------------------------------------------------------
 #include "Debug_EffectViewer.h"
+#include "Debug_WorldLine.h"
 #include "../Scene.h"
 #include "../manager.h"
 #include "../renderer.h"
@@ -26,8 +27,7 @@
 //------------------------------------------------------------------------------
 //マクロ
 //------------------------------------------------------------------------------
-#define DEFAULT_PLAYER_POS (ZeroVector3)
-#define DEFAULT_SCORE_POS (D3DXVECTOR3(1150.0f, 50.0f, 0.0f))
+#define EFFECT_CREATE_POS (D3DXVECTOR3(0.0f, 50.0f, 100.0f))
 
 //------------------------------------------------------------------------------
 //コンストラクタ
@@ -52,14 +52,9 @@ CDebug_EffectViewer::~CDebug_EffectViewer()
 //------------------------------------------------------------------------------
 HRESULT CDebug_EffectViewer::Init()
 {
-	////カメラ座標設定
-	//CManager::GetRenderer()->getca()->SetCameraPos(DEFAULT_PLAYER_POS, DEFAULT_PLAYER_POS + D3DXVECTOR3(0.0f, 300.0f, -500.0f));
-	//CManager::GetRenderer()->GetCamera()->SetState(CCamera::CAMERA_DEBUG);
-	//CManager::GetRenderer()->GetCamera()->SetCameraRot(D3DXVECTOR3( 0.4f, 0.0f, 0.0f));
-
-	//CMeshField::Create(ZeroVector3, D3DXVECTOR3(100.0f, 0.0f, 100.0f), INTEGER2(5, 5));
-
 	CMeshField::Create(ZeroVector3, D3DXVECTOR3(50.0f, 50.0f, 50.0f), INTEGER2(20, 20));
+
+	m_pWorldLine = CDebug_WorldLine::Create(ZeroVector3);
 
 	CParticleManager::Create();
 
@@ -164,7 +159,7 @@ void CDebug_EffectViewer::ShowDebugInfo()
 	//[Enter]を押したとき　または　ループする時
 	if (pKeyboard->GetKeyboardTrigger(DIK_RETURN) || (m_bLoop && m_nCnt % m_nLoopInterval == 0))
 	{
-		CParticle::DetailsCreate(D3DXVECTOR3(0.0f, 50.0f, 100.0f),
+		CParticle::DetailsCreate(EFFECT_CREATE_POS,
 			m_pParticleParam->GetLife(), m_pParticleParam->GetRadius(), m_pParticleParam->GetCol(), m_pParticleParam->GetNumber(),
 			m_pParticleParam->GetSpeed(), m_pParticleParam->GetAlphaDamping(), m_pParticleParam->GetRadiusDamping(), m_pParticleParam->GetTex());
 	}

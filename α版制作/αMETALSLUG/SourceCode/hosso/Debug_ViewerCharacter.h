@@ -31,12 +31,11 @@ public:
 	void Uninit();									//終了
 	void Update();									//更新
 	void Draw();									//描画
-	void DebugInfo();							//デバッグ情報表記
+	void DebugInfo();								//デバッグ情報表記
 	static CDebug_ViewerCharacter* Create();		//生成関数
 	bool DefaultMotion() { GetMotion() = false; CCharacter::GetKeySet()--; return false; };
 
 	void MotionViewer();							//モーションビューワ
-	void OffsetViewer();							//オフセットビューワ
 private:
 	bool ShowMotionComboBox(CCharacter::CHARACTER_MOTION_STATE &motiontype);		//モーションのコンボボックス
 
@@ -45,7 +44,6 @@ private:
 	void ResetKey();
 	void CopyMotionPaste(CCharacter::CHARACTER_MOTION_STATE CopyMotionType, int nCopyKey, CCharacter::CHARACTER_MOTION_STATE NowMotion, int nNowKey);
 	HRESULT SaveMotion(CCharacter::CHARACTER_MOTION_STATE motiontype);
-	HRESULT SaveModelOffset();
 
 	CGun *m_pGun;				//ナイフ銃ポインタ
 	CKnife *m_pKnife;			//ナイフのポインタ

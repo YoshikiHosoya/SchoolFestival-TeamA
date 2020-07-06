@@ -190,6 +190,15 @@
     <ClCompile Include="SourceCode\EnemyAI.cpp">
       <Filter>Etc</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\hosso\Debug_WorldLine.cpp">
+      <Filter>Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\multinumber.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\number.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
     <ClCompile Include="SourceCode\grenadefire.cpp">
       <Filter>Wepon</Filter>
     </ClCompile>
@@ -393,6 +402,15 @@
     <ClInclude Include="SourceCode\EnemyAI.h">
       <Filter>Etc</Filter>
     </ClInclude>
+    <ClInclude Include="SourceCode\hosso\Debug_WorldLine.h">
+      <Filter>Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\multinumber.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\number.h">
+      <Filter>UI</Filter>
+    </ClInclude>
     <ClInclude Include="SourceCode\grenadefire.h">
       <Filter>Wepon</Filter>
     </ClInclude>
@@ -442,6 +460,9 @@
     </Filter>
     <Filter Include="Etc">
       <UniqueIdentifier>{3d1ac954-c89e-47a5-9aa8-c3caf5ae476d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI">
+      <UniqueIdentifier>{58a587fd-f96d-4ac4-8079-9134ab65ea8c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
