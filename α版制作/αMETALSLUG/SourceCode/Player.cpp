@@ -22,6 +22,8 @@
 #include "grenade.h"
 #include "prisoner.h"
 #include "Knife.h"
+#include "playerUI.h"
+
 //====================================================================
 //マクロ定義
 //====================================================================
@@ -58,6 +60,8 @@ HRESULT CPlayer::Init(void)
 	m_pGun->GetTag() = TAG_PLAYER;
 	// ナイフの生成
 	m_pKnife = CKnife::Create(GetCharacterModelPartsList(CModel::MODEL_PLAYER_LHAND)->GetMatrix());
+	// プレイヤーUIの生成
+	m_pPlayerUI = CPlayerUI::Create();
 
 	// 当たり判定生成
 	GetCollision()->SetPos(&GetPosition());
@@ -84,6 +88,15 @@ void CPlayer::Uninit(void)
 	{
 		m_pGrenadeFire->Rerease();
 		m_pGrenadeFire = nullptr;
+	}
+
+	// プレイヤUIのポインタ
+	if (m_pPlayerUI)
+	{
+		m_pPlayerUI->Uninit();
+
+		delete m_pPlayerUI;
+		m_pPlayerUI = nullptr;
 	}
 
 	CCharacter::Uninit();
@@ -136,6 +149,8 @@ void CPlayer::Update(void)
 	AttackUpdate();
 	CollisionUpdate();
 
+	m_pPlayerUI->Update();
+
 	CCharacter::Update();
 }
 //====================================================================
@@ -143,6 +158,7 @@ void CPlayer::Update(void)
 //====================================================================
 void CPlayer::Draw(void)
 {
+	m_pPlayerUI->Draw();
 
 	CCharacter::Draw();
 }

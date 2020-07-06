@@ -184,7 +184,7 @@ void CPlayertank::Shot(CKeyboard *key)
 	if (key->GetKeyboardTrigger(DIK_O))
 	{
 		// グレネード生成
-		CGrenade::Create(GetShotDirection(), GetVehicleModelPartsList(CModel::MODEL_PLAYER_LHAND)->GetMatrix());
+		CGrenade::Create(GetShotDirection());
 	}
 }
 

@@ -9,6 +9,7 @@
 #include "debugproc.h"
 #include "bullet.h"
 #include "gun.h"
+#include "multinumber.h"
 
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
@@ -57,15 +58,15 @@ HRESULT CPlayerUI::Init(void)
 			// 残機		( 文字 )
 			case PLAYER_UI::REMAIN_LETTER:
 				// シーン2Dの生成
-				m_apScene2D[nCnt] = CScene2D::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+				m_apScene2D[nCnt] = CScene2D::Create(D3DXVECTOR3(100.0f, 80.0f, 0.0f), D3DXVECTOR3(20.0f, 20.0f, 0.0f));
 				// テクスチャの割り当て
-				m_apScene2D[nCnt]->BindTexture(CTexture::GetTexture(CTexture::TEX_UI_LIFE));
+				m_apScene2D[nCnt]->BindTexture(CTexture::GetTexture(CTexture::TEX_UI_REMAIN));
 				break;
 
 			// 弾の残数 ( 文字 )
 			case PLAYER_UI::BULLET_AMMO_LETTER:
 				// シーン2Dの生成
-				m_apScene2D[nCnt] = CScene2D::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+				m_apScene2D[nCnt] = CScene2D::Create(D3DXVECTOR3(200.0f, 50.0f, 0.0f), D3DXVECTOR3(20.0f, 20.0f, 0.0f));
 				// テクスチャの割り当て
 				m_apScene2D[nCnt]->BindTexture(CTexture::GetTexture(CTexture::TEX_UI_ARMS));
 				break;
@@ -73,7 +74,7 @@ HRESULT CPlayerUI::Init(void)
 			// グレネードの残数 ( 文字 )
 			case PLAYER_UI::GRENADE_AMMO_LETTER:
 				// シーン2Dの生成
-				m_apScene2D[nCnt] = CScene2D::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+				m_apScene2D[nCnt] = CScene2D::Create(D3DXVECTOR3(250.0f, 50.0f, 0.0f), D3DXVECTOR3(20.0f, 20.0f, 0.0f));
 				// テクスチャの割り当て
 				m_apScene2D[nCnt]->BindTexture(CTexture::GetTexture(CTexture::TEX_UI_BOMB));
 				break;
@@ -81,7 +82,7 @@ HRESULT CPlayerUI::Init(void)
 			// 体力アイコン
 			case PLAYER_UI::LIFE_ICON:
 				// シーン2Dの生成
-				m_apScene2D[nCnt] = CScene2D::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+				m_apScene2D[nCnt] = CScene2D::Create(D3DXVECTOR3(100.0f, 650.0f, 0.0f), D3DXVECTOR3(30.0f, 30.0f, 0.0f));
 				// テクスチャの割り当て
 				m_apScene2D[nCnt]->BindTexture(CTexture::GetTexture(CTexture::TEX_UI_LIFE));
 				break;
@@ -159,11 +160,11 @@ CPlayerUI * CPlayerUI::Create()
 	pPlayerUI->Init();
 
 	// スコアの生成
-	pPlayerUI->m_pScore = CMultiNumber::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(5.0f, 5.0f, 0.0f),0, 8, CScene::OBJTYPE_UI);
+	pPlayerUI->m_pScore = CMultiNumber::Create(D3DXVECTOR3(50.0f, 50.0f, 0.0f), D3DXVECTOR3(10.0f, 10.0f, 0.0f),0, 8, CScene::OBJTYPE_UI);
 	// 弾の残数の生成
-	pPlayerUI->m_pBulletAmmo = CMultiNumber::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(5.0f, 5.0f, 0.0f), 0, 3, CScene::OBJTYPE_UI);
+	pPlayerUI->m_pBulletAmmo = CMultiNumber::Create(D3DXVECTOR3(190.0f, 80.0f, 0.0f), D3DXVECTOR3(10.0f, 10.0f, 0.0f), 0, 3, CScene::OBJTYPE_UI);
 	// グレネードの残数の生成
-	pPlayerUI->m_pGrenadeAmmo = CMultiNumber::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(5.0f, 5.0f, 0.0f), 0, 2, CScene::OBJTYPE_UI);
+	pPlayerUI->m_pGrenadeAmmo = CMultiNumber::Create(D3DXVECTOR3(240.0f, 80.0f, 0.0f), D3DXVECTOR3(10.0f, 10.0f, 0.0f), 0, 2, CScene::OBJTYPE_UI);
 
 	return pPlayerUI;
 }
