@@ -25,6 +25,7 @@ char *CCharacter::m_LoadMotionFileName[CHARACTER_MOTION_MAX] =
 	{ "data/Load/Player/Motion/Attack.txt" },
 	{ "data/Load/Player/Motion/Grenade.txt" },
 	{ "data/Load/Player/Motion/Jump.txt" },
+	{ "data/Load/Player/Motion/JumpStop.txt" },
 	{ "data/Load/Player/Motion/Shoot.txt" },
 	{ "data/Load/Player/Motion/Squat.txt" },
 	{ "data/Load/Enemy/Motion/EnemyNeutral.txt" },
@@ -575,11 +576,12 @@ void CCharacter::LoadMotion(void)
 void CCharacter::Moation(void)
 {
 	D3DXVECTOR3 Difrot;
-	if (m_MotionType != m_MotionOld)
-	{
-		m_Fram = 0;
-		m_CntKeySet = 0;
-	}
+
+		if (m_MotionType != m_MotionOld)
+		{
+			m_Fram = 0;
+			m_CntKeySet = 0;
+		}
 	if (m_MotionType != -1)
 	{
 		for (unsigned int nCnt = 0; nCnt < m_vModelList.size(); nCnt++)
@@ -649,6 +651,7 @@ void CCharacter::Moation(void)
 		{
 			m_CntKeySet++;
 			m_Fram = 0;
+
 			//キーセット数が規定値と同じになったら--------------------■■■■■
 			if (m_CntKeySet == m_CharacterMotion[m_MotionType]->nNumKey)
 			{
@@ -657,8 +660,8 @@ void CCharacter::Moation(void)
 				{
 					if (DefaultMotion())
 					{
-					m_CntKeySet = 0;
-					m_Fram = m_CharacterMotion[m_MotionType]->key_info[m_CntKeySet]->nFram;
+						m_CntKeySet = 0;
+						m_Fram = m_CharacterMotion[m_MotionType]->key_info[m_CntKeySet]->nFram;
 					}
 				}
 				//ループするとき--------------------------------------■■■■■
