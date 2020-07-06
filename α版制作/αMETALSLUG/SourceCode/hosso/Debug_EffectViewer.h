@@ -20,6 +20,7 @@
 //クラス定義
 //------------------------------------------------------------------------------
 class CParticleParam;
+class CDebug_WorldLine;
 
 class CDebug_EffectViewer : public CBaseMode
 {
@@ -37,7 +38,7 @@ public:
 	CPlayer* GetPlayer() { return nullptr; };
 
 private:
-
+	CDebug_WorldLine *m_pWorldLine;						//ワールド線
 	std::unique_ptr<CParticleParam> m_pParticleParam;	//パーティクルのパラメータ
 
 	bool m_bLoop;										//ループさせるか

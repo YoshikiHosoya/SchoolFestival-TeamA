@@ -46,7 +46,6 @@ HRESULT CKnife::Init()
 
 	m_bAttack = false;
 	m_pOrbit = nullptr;
-	m_worldpos = ZeroVector3;
 
 	return S_OK;
 }
@@ -67,6 +66,9 @@ void CKnife::Update(void)
 {
 	// 更新
 	CModel::Update();
+
+	//ワールド座標更新
+	m_worldpos = D3DXVECTOR3(m_HandMatrix->_41, m_HandMatrix->_42, m_HandMatrix->_43);
 
 	if (m_bAttack)
 	{
@@ -135,6 +137,9 @@ CKnife * CKnife::Create(D3DXMATRIX *mtx)
 	// マトリックス代入
 	pKnife->m_HandMatrix = mtx;
 
+	//ワールド座標設定
+	pKnife->m_worldpos = D3DXVECTOR3(pKnife->m_HandMatrix->_41, pKnife->m_HandMatrix->_42, pKnife->m_HandMatrix->_43);
+
 	// 位置の設定
 	pKnife->SetPosition(D3DXVECTOR3(ZeroVector3));
 
@@ -185,7 +190,7 @@ void CKnife::StartMeleeAttack()
 	if (m_pCollision)
 	{
 		// 判定の設定
-		m_pCollision->SetPos(&D3DXVECTOR3(m_HandMatrix->_41, m_HandMatrix->_42, m_HandMatrix->_43));
+		m_pCollision->SetPos(&m_worldpos);
 		m_pCollision->SetSize(D3DXVECTOR3(80.0f, 60.0f, 0.0f));
 		m_pCollision->DeCollisionCreate(CCollision::COLLISIONTYPE_NORMAL);
 	}

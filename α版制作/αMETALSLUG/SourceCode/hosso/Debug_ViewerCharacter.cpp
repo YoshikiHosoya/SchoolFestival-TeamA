@@ -25,7 +25,7 @@
 //------------------------------------------------------------------------------
 //マクロ
 //------------------------------------------------------------------------------
-#define OFFSET_TEXT_PASS ("data/Load/SaveOffset.txt")
+
 //------------------------------------------------------------------------------
 //コンストラクタ
 //------------------------------------------------------------------------------
@@ -53,8 +53,10 @@ HRESULT CDebug_ViewerCharacter::Init()
 {
 	CCharacter::Init();
 
+	//オフセット設定
 	CCharacter::LoadOffset(CCharacter::CHARACTER_TYPE_PLAYER);
 
+	//初期化
 	SetRotDest(ZeroVector3);
 
 	//銃の生成
@@ -64,7 +66,9 @@ HRESULT CDebug_ViewerCharacter::Init()
 	m_pKnife = CKnife::Create(GetCharacterModelPartsList(CModel::MODEL_PLAYER_LHAND)->GetMatrix());
 	m_pKnife->SetPosition(D3DXVECTOR3(6.0f, 0.0f, 0.0f));
 
+	//ナイフON状態
 	m_pKnife->StartMeleeAttack();
+
 	//成功
 	return S_OK;
 }
@@ -80,7 +84,6 @@ void CDebug_ViewerCharacter::Uninit()
 //------------------------------------------------------------------------------
 void CDebug_ViewerCharacter::Update()
 {
-
 	CCharacter::Update();
 }
 //------------------------------------------------------------------------------
@@ -130,6 +133,7 @@ bool CDebug_ViewerCharacter::ShowMotionComboBox(CCharacter::CHARACTER_MOTION_STA
 
 #ifdef _DEBUG
 
+	//ファイル名
 	std::vector<std::string > aFileName = {};
 
 	//for
@@ -145,7 +149,6 @@ bool CDebug_ViewerCharacter::ShowMotionComboBox(CCharacter::CHARACTER_MOTION_STA
 		//要素分繰り返す
 		for (size_t nCnt = 0; nCnt < aFileName.size(); nCnt++)
 		{
-
 			//選択番号があってるかどうか
 			bool is_selected = (aFileName[motiontype] == aFileName[nCnt]);
 
@@ -275,9 +278,6 @@ void CDebug_ViewerCharacter::MotionViewer()
 	//	pModelCharacter->ForcedUpdate(NowMotionType, nNowKey);
 	//}
 
-
-
-
 	//キーボードの←→でも現在のキー変えたい
 	if (pKeyboard->GetKeyboardTrigger(DIK_LEFT))
 	{
@@ -340,8 +340,10 @@ void CDebug_ViewerCharacter::MotionViewer()
 		for (size_t nCnt = 0; nCnt < vModelList.size(); nCnt++)
 		{
 			//モデル名取得
-			std::string aPartsName = CModel::GetModelFileName(vModelList[nCnt]->GetType(), nCnt);			//頭の部分の文字列を消す("data/MODEL/)
-			aPartsName.erase(aPartsName.begin(), aPartsName.begin() + 11);
+			std::string aPartsName = CModel::GetModelFileName(vModelList[nCnt]->GetType(), nCnt);
+
+			//頭の部分の文字列を消す("data/MODEL/character/)
+			aPartsName.erase(aPartsName.begin(), aPartsName.begin() + 21);
 
 			//次の項目の枠の大きさ設定
 			ImGui::SetNextItemWidth(250);
@@ -381,75 +383,6 @@ void CDebug_ViewerCharacter::MotionViewer()
 	//Widgetの大きさ調整終了
 	ImGui::PopItemWidth();
 }
-//------------------------------------------------------------------------------
-//オフセットの設定
-//------------------------------------------------------------------------------
-void CDebug_ViewerCharacter::OffsetViewer()
-{
-	CModel * pModel;
-
-	std::vector<CModel*> vModelList = GetCharacterModelList();
-
-	//モデル数分繰り替えす
-	for (size_t nCnt = 0; nCnt < vModelList.size(); nCnt++)
-	{
-		//モデル名取得
-		std::string aPartsName = CModel::GetModelFileName(vModelList[nCnt]->GetType(), nCnt);
-
-		//頭の部分の文字列を消す("data/MODEL/)
-		aPartsName.erase(aPartsName.begin(), aPartsName.begin() + 11);
-
-		//次の項目の枠の大きさ設定
-		ImGui::SetNextItemWidth(200);
-
-		//モデルパーツのポインタ取得
-		pModel = GetCharacterModelList()[nCnt];
-
-		//それぞれのオフセットを調整
-		if (ImGui::DragFloat3(aPartsName.data(), pModel->GetPosition(), 0.05f, -100.0f, 100.0f))
-		{
-
-		}
-
-		ImGui::SameLine();
-
-
-		ImGui::Text("ParentIdx >>");
-
-		//次の項目の枠の大きさ設定
-		ImGui::SetNextItemWidth(20);
-
-		char aId[64];
-		sprintf(aId, "[%d]", vModelList[nCnt]->GetModelCount());
-
-		ImGui::SameLine();
-
-		//親番号
-		if (ImGui::InputInt(aId, &vModelList[nCnt]->GetParentIdx(), -1, vModelList.size()))
-		{
-			vModelList[nCnt]->SetParent(vModelList[vModelList[nCnt]->GetParentIdx()]);
-		}
-	}
-
-	if(ImGui::Button("OffsetSave"))
-	{
-		SaveModelOffset();
-	}
-
-
-	if (ImGui::Button("AllReset"))
-	{
-
-		//モデル数分繰り替えす
-		for (size_t nCnt = 0; nCnt < vModelList.size(); nCnt++)
-		{
-			//０にする
-			GetCharacterModelList()[nCnt]->SetPosition(ZeroVector3);
-
-		}
-	}
-}
-
 
 //------------------------------------------------------------------------------
 //キー追加
@@ -623,104 +556,6 @@ HRESULT CDebug_ViewerCharacter::SaveMotion(CCharacter::CHARACTER_MOTION_STATE mo
 	{
 		//ファイルが開けませんでした
 		std::cout << "Motion Save FAILED!!  Can't Open File. SavePlaceData()" << NEWLINE;
-		return E_FAIL;
-	}
-	return S_OK;
-}
-
-//------------------------------------------------------------------------------
-//モーションの保存
-//------------------------------------------------------------------------------
-HRESULT CDebug_ViewerCharacter::SaveModelOffset()
-{
-	FILE *pFile;
-
-	int nRotNum = 0;
-	char cHeadtext[128];
-	char cWriteText[128];
-
-	//モデル情報取得
-	std::vector<CModel*> vModelList = GetCharacterModelList();
-
-	//ファイル読み込み
-	pFile = fopen(OFFSET_TEXT_PASS, "w");
-
-	//nullcheck
-	if (pFile != nullptr)
-	{
-
-		//ブロックコメント
-		fputs(COMMENT02, pFile);
-		fputs(COMMENT01, pFile);
-
-		strcpy(cHeadtext, "//Offset\n");
-		strcpy(cHeadtext, "//テキストにコピペしてください\n");
-
-		fputs(cHeadtext, pFile);
-
-		strcpy(cHeadtext, "//Author:Yoshiki Hosoya\n");
-		fputs(cHeadtext, pFile);
-
-		fputs(COMMENT01, pFile);
-		fputs(COMMENT02, pFile);
-		fputs(NEWLINE, pFile);
-
-		//ブロックコメント終了//
-		//nullcheck
-		if (!vModelList.empty())
-		{
-			for (size_t nCnt = 0; nCnt < vModelList.size(); nCnt++)
-			{
-
-				//スタート
-				sprintf(cWriteText, "%s %s%d%s", "SET_START", "---------[", nCnt, "]----------");
-				fputs(cWriteText, pFile);
-				fputs(NEWLINE, pFile);
-
-				//モデルの種類
-				sprintf(cWriteText, "	%s %s %d", "MODEL_TYPE", &EQUAL, vModelList[nCnt]->GetType());
-				fputs(cWriteText, pFile);
-				fputs(NEWLINE, pFile);
-
-				//インデックス
-				sprintf(cWriteText, "	%s %s %d", "INDEX", &EQUAL, vModelList[nCnt]->GetModelCount());
-				fputs(cWriteText, pFile);
-				fputs(NEWLINE, pFile);
-
-				//親番号
-				sprintf(cWriteText, "	%s %s %d", "PARENT", &EQUAL, vModelList[nCnt]->GetParentIdx());
-				fputs(cWriteText, pFile);
-				fputs(NEWLINE, pFile);
-
-				//座標
-				sprintf(cWriteText, "	%s %s %.1f %.1f %.1f", "POS", &EQUAL,
-					vModelList[nCnt]->GetPosition().x,
-					vModelList[nCnt]->GetPosition().y,
-					vModelList[nCnt]->GetPosition().z);
-				fputs(cWriteText, pFile);
-				fputs(NEWLINE, pFile);
-
-				//パーツセット終了
-				fputs("SET_END", pFile);
-				fputs(NEWLINE, pFile);
-				fputs(NEWLINE, pFile);
-
-			}
-		}
-
-		//オフセット設定終了
-		fputs("MODEL_OFFSET_END", pFile);
-
-		//保存成功
-		std::cout << "Offset Save Succsess!! >> " << OFFSET_TEXT_PASS << NEWLINE;
-
-		//ファイルを閉じる
-		fclose(pFile);
-	}
-	else
-	{
-		//ファイルが開けませんでした
-		std::cout << "Motion Save FAILED!!  Can't Open File >> "<< OFFSET_TEXT_PASS << NEWLINE;
 		return E_FAIL;
 	}
 	return S_OK;
