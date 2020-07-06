@@ -12,6 +12,7 @@ class CMeshOrbit;
 class CParticle;
 class CUI;
 class CGun;
+class CGrenadeFire;
 class CPrisoner;
 class CKnife;
 //レンダリングクラス
@@ -36,7 +37,9 @@ public:
 	DEBUG_STATE GetDebugState(void);
 	static CPlayer *Create(void);
 	bool DefaultMotion(void);
-	CGun		*GetGun() { return  m_pGun; };			// 銃のポインタ取得
+	CGun			*GetGun() { return  m_pGun; };					// 銃のポインタ取得
+	CGrenadeFire	*GetGrenadeFire() { return  m_pGrenadeFire; };	// グレネード発射位置のポインタ取得
+
 private:
 	void Move(float move, float fdest);
 		DEBUG_STATE m_DebugState;						//デバッグのステータス
@@ -44,8 +47,9 @@ private:
 		bool m_bAttack_Prisoner;						//攻撃時
 
 		float m_Angle;
-		WORD Oldstate;									//コントローラーの1frame前のステート
-		CGun	*m_pGun;								// ガンクラスのポインタ
-		CKnife *m_pKnife;
+		WORD Oldstate;											//コントローラーの1frame前のステート
+		CGun			*m_pGun;								// ガンクラスのポインタ
+		CGrenadeFire	*m_pGrenadeFire;						// グレネード発射クラスのポインタ
+		CKnife			*m_pKnife;
 };
 #endif

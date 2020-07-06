@@ -10,6 +10,7 @@
 #include "handgun.h"
 #include "heavymachinegun.h"
 #include "gun.h"
+#include "grenadefire.h"
 #include "collision.h"
 #include "BaseMode.h"
 #include "manager.h"
@@ -51,6 +52,8 @@ HRESULT CPlayer::Init(void)
 	m_bAttack_Prisoner = false;
 	 // 銃の生成
 	m_pGun = CGun::Create(GetCharacterModelPartsList(CModel::MODEL_PLAYER_RHAND)->GetMatrix());
+	// グレネード放つ位置の生成
+	m_pGrenadeFire = CGrenadeFire::Create(GetCharacterModelPartsList(CModel::MODEL_PLAYER_LHAND)->GetMatrix());
 	// 銃の弾の種類
 	m_pGun->GetTag() = TAG_PLAYER;
 	// ナイフの生成
@@ -69,6 +72,20 @@ HRESULT CPlayer::Init(void)
 //====================================================================
 void CPlayer::Uninit(void)
 {
+	// 銃のポインタ
+	if (m_pGun)
+	{
+		m_pGun->Rerease();
+		m_pGun = nullptr;
+	}
+
+	// グレネード発射位置のポインタ
+	if (m_pGrenadeFire)
+	{
+		m_pGrenadeFire->Rerease();
+		m_pGrenadeFire = nullptr;
+	}
+
 	CCharacter::Uninit();
 }
 //====================================================================
@@ -148,9 +165,13 @@ void CPlayer::Update(void)
 	// グレネードを投げる
 	if (key->GetKeyboardTrigger(DIK_O))
 	{
-		// グレネード生成
-		CGrenade::Create(GetShotDirection() , GetCharacterModelPartsList(CModel::MODEL_PLAYER_LHAND)->GetMatrix());
-		SetMotion(CCharacter::PLAYER_MOTION_GRENADE);
+		// グレネードの弾数が残っているとき
+		if (m_pGrenadeFire->GetGrenadeAmmo() > 0)
+		{
+			// グレネード生成
+			m_pGrenadeFire->Fire(GetShotDirection());
+			SetMotion(CCharacter::PLAYER_MOTION_GRENADE);
+		}
 	}
 	if (key->GetKeyboardPress(DIK_W))
 	{
