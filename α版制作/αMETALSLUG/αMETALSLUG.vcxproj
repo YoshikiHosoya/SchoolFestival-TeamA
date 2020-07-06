@@ -196,6 +196,8 @@
     <ClCompile Include="SourceCode\meshsphere.cpp" />
     <ClCompile Include="SourceCode\Model.cpp" />
     <ClCompile Include="SourceCode\mouse.cpp" />
+    <ClCompile Include="SourceCode\multinumber.cpp" />
+    <ClCompile Include="SourceCode\number.cpp" />
     <ClCompile Include="SourceCode\Obstacle.cpp" />
     <ClCompile Include="SourceCode\orbit.cpp" />
     <ClCompile Include="SourceCode\particle.cpp" />
@@ -265,6 +267,8 @@
     <ClInclude Include="SourceCode\meshsphere.h" />
     <ClInclude Include="SourceCode\model.h" />
     <ClInclude Include="SourceCode\mouse.h" />
+    <ClInclude Include="SourceCode\multinumber.h" />
+    <ClInclude Include="SourceCode\number.h" />
     <ClInclude Include="SourceCode\Obstacle.h" />
     <ClInclude Include="SourceCode\orbit.h" />
     <ClInclude Include="SourceCode\particle.h" />

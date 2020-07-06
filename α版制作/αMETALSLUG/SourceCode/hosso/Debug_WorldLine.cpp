@@ -39,9 +39,11 @@ CDebug_WorldLine *CDebug_WorldLine::Create(D3DXVECTOR3 &pos)
 	{
 		pWorldLine->m_Pos = pos;
 
-		pWorldLine->m_pLine[AXIS_X] = C3DLine::Create(pos, ZeroVector3, AXIS_X_OFFSET, -AXIS_X_OFFSET, RedColor);
-		pWorldLine->m_pLine[AXIS_Y] = C3DLine::Create(pos, ZeroVector3, AXIS_Y_OFFSET, -AXIS_Y_OFFSET, GreenColor);
-		pWorldLine->m_pLine[AXIS_Z] = C3DLine::Create(pos, ZeroVector3, AXIS_Z_OFFSET, -AXIS_Z_OFFSET, BlueColor);
+		pWorldLine->m_pLine[AXIS_X] = C3DLine::Create(pos, ZeroVector3, AXIS_X_OFFSET, -AXIS_X_OFFSET, WhiteColor);
+		pWorldLine->m_pLine[AXIS_Y] = C3DLine::Create(pos, ZeroVector3, AXIS_Y_OFFSET, -AXIS_Y_OFFSET, WhiteColor);
+		pWorldLine->m_pLine[AXIS_Z] = C3DLine::Create(pos, ZeroVector3, AXIS_Z_OFFSET, -AXIS_Z_OFFSET, WhiteColor);
+
+		pWorldLine->SetPosOrigin(pos);
 
 		return pWorldLine;
 	}
