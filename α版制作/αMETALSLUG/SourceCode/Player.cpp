@@ -299,8 +299,8 @@ void CPlayer::Update(void)
 			m_pKnife->EndMeleeAttack();
 		}
 	}
-	if (GetMove().x > 0.2f  && GetJump() == false || 
-		GetMove().x < -0.2f && GetJump() == false)
+	if (GetMove().x > 0.2f  && GetJump() == true || 
+		GetMove().x < -0.2f && GetJump() == true)
 	{
 		SetMotion(PLAYER_MOTION_WALK);
 	}
@@ -308,7 +308,7 @@ void CPlayer::Update(void)
 	{
 		SetMotion(CCharacter::PLAYER_MOTION_NORMAL);
 	}
-	if (GetMove().y > 2 || GetMove().y < -2 && GetJump() == true)
+	if (GetMove().y > 2 || GetMove().y < -2 && GetJump() == false)
 	{
 		SetMotion(PLAYER_MOTION_JUMP);
 	}
