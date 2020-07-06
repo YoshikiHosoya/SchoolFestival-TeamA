@@ -46,7 +46,6 @@ private:
 		float m_Angle;
 		WORD Oldstate;									//コントローラーの1frame前のステート
 		CGun	*m_pGun;								// ガンクラスのポインタ
-		CPrisoner					*m_pPrisoner;		// 捕虜のポインタを保存する変数
 		CKnife *m_pKnife;
 };
 #endif

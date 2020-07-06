@@ -9,6 +9,8 @@
 //=============================================================================
 #include "main.h"
 #include "scene.h"
+
+#define MAX_RECASTTIME (120)
 class CEnemy;
 class CGun;
 
@@ -40,12 +42,15 @@ public:
 	void DebugInfo(void);
 	static CEnemyAI* CreateAI(CEnemy *pEnemy);
 	AI_STATE GetAIType(void);
+	bool GetShot(void);
 private:
 	CEnemy *pEnemyPass;			//敵の情報の格納用？
 	CGun	*m_pGun;			//ガンクラスのポインタ
 	AI_STATE m_AItype;			//行動の種類
-	int m_cast;
+	int m_recast;
+	int m_castcount;
 	bool m_bShot;
+	int m_random;
 };
 
 #endif

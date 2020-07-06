@@ -32,7 +32,6 @@
 CPlayer::CPlayer(OBJ_TYPE type) :CCharacter(type)
 {
 	SetObjType(OBJTYPE_PLAYER);
-	m_pPrisoner = nullptr;
 }
 
 CPlayer::~CPlayer()
@@ -61,7 +60,6 @@ HRESULT CPlayer::Init(void)
 	GetCollision()->SetPos(&GetPosition());
 	GetCollision()->SetSize2D(PLAYER_SIZE);
 	GetCollision()->SetMove(&GetMove());
-	GetCollision()->SetType(CCollision::COLLISION_PLAYER);
 	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_CHARACTER);
 
 	return S_OK;
@@ -88,7 +86,7 @@ void CPlayer::Update(void)
 	// 銃を撃つ or 近接攻撃
 	if (key->GetKeyboardTrigger(DIK_P))
 	{
-
+		// 捕虜のポインタを取得
 		CPrisoner	*pPrisoner = GetCollision()->ForPlayer_PrisonerCollision();
 
 		// ポインタがnullじゃなかった時
@@ -116,14 +114,11 @@ void CPlayer::Update(void)
 		{// 近接攻撃
 		 // エネミーとの接触判定 捕虜の状態を変える
 			CEnemy		*pEnemy		= GetCollision()->ForPlayer_EnemyCollision();
-
 			if (pEnemy != nullptr)
 			{
 				// 近接攻撃
 				SetMotion(CCharacter::PLAYER_MOTION_ATTACK01);
 				m_pKnife->StartMeleeAttack();
-				// エネミーへダメージ
-				pEnemy->AddDamage(ATTACK_DAMAGE_ENEMY);
 			}
 		}
 
@@ -145,8 +140,6 @@ void CPlayer::Update(void)
 					m_pKnife->StartMeleeAttack();
 					// 捕虜の状態をアイテムを落とす状態にする
 					pPrisoner->SetPrisonerState(CPrisoner::PRISONER_STATE_DROPITEM);
-					// この捕虜のポインタは取得できないようにする
-					pPrisoner->SetPrisonerUseFlag(true);
 				}
 			}
 		}
@@ -191,7 +184,6 @@ void CPlayer::Update(void)
 		}
 	}
 
-
 	//ジャンプしたときの下向発射
 	if (key->GetKeyboardPress(DIK_S) && GetJump() == false)
 	{
@@ -233,7 +225,7 @@ void CPlayer::Update(void)
 	}
 	if (key->GetKeyboardTrigger(DIK_2))
 	{
-		SetMotion(CCharacter::PLAYER_MOTION_WALK);
+		SetMotion(PLAYER_MOTION_JUMP);
 	}
 
 	// 当たり判定
@@ -244,7 +236,7 @@ void CPlayer::Update(void)
 		GetCollision()->SetPosOld(&GetPositionOld());
 
 		// エネミーととの判定
-		if (GetCollision()->ForPlayer_EnemyCollision(ATTACK_PENETRATION))
+		if (GetCollision()->ForPlayer_EnemyCollision(ATTACK_PENETRATION) == true)
 		{
 			// 近接攻撃可能にする
 			m_bAttack_Enemy = true;
@@ -266,8 +258,6 @@ void CPlayer::Update(void)
 			// 近接攻撃が無効になる
 			m_bAttack_Prisoner = false;
 		}
-
-
 
 		// 障害物との判定
 		if (GetCollision()->ForPlayer_ObstacleCollision())
@@ -301,7 +291,6 @@ void CPlayer::Update(void)
 			SetJump(false);
 		}
 	}
-
 	// 攻撃モーションから別のモーションになった時
 	if (GetMotionType() != CCharacter::PLAYER_MOTION_ATTACK01)
 	{
@@ -310,12 +299,25 @@ void CPlayer::Update(void)
 			m_pKnife->EndMeleeAttack();
 		}
 	}
-
+	if (GetMove().x > 0.2f  && GetJump() == true || 
+		GetMove().x < -0.2f && GetJump() == true)
+	{
+		SetMotion(PLAYER_MOTION_WALK);
+	}
+	else
+	{
+		SetMotion(CCharacter::PLAYER_MOTION_NORMAL);
+	}
+	if (GetMove().y > 2 || GetMove().y < -2 && GetJump() == false)
+	{
+		SetMotion(PLAYER_MOTION_JUMP);
+	}
 	// 特定のボタンを押した時に歩きモーションに変更
 	if (CHossoLibrary::PressAnyButton())
 	{
 		SetMotion(CCharacter::PLAYER_MOTION_WALK);
 	}
+	CDebugProc::Print("プレイヤーのモーション：%d\n", GetMotionType());
 	CCharacter::Update();
 }
 //====================================================================
@@ -366,5 +368,4 @@ void CPlayer::Move(float move, float fdest)
 	GetMove().x += sinf(move * -D3DX_PI) * 1.0f;
 	GetMove().z += cosf(move * -D3DX_PI) * 1.0f;
 	GetRotDest().y = fdest *  D3DX_PI;
-	SetMotion(PLAYER_MOTION_WALK);
 }

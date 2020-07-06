@@ -72,8 +72,10 @@ public:
 		PLAYER_MOTION_WALK,					//歩き
 		PLAYER_MOTION_ATTACK01,				//通常攻撃1
 		PLAYER_MOTION_GRENADE,				//グレネード
-		PLAYER_MOTION_JUMPSHOOT,			//ジャンプ撃ち
 		PLAYER_MOTION_JUMP,					//ジャンプ
+		PLAYER_MOTION_SHOOT,				//撃つ
+		PLAYER_MOTION_SQUAT,				//しゃがむ
+
 
 		ENEMY_MOTION_NORMAL,				//ニュートラル
 		ENEMY_MOTION_WALK,					//歩き

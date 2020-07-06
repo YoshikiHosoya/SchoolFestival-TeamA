@@ -22,8 +22,10 @@ CEnemyAI::~CEnemyAI()
 //=============================================================================
 HRESULT CEnemyAI::Init(void)
 {
-	m_cast = 0;
+	m_recast = 60;
+	m_castcount = 0;
 	m_bShot = false;
+	m_random = 0;
 	return S_OK;
 }
 
@@ -39,47 +41,70 @@ void CEnemyAI::Uninit(void)
 //=============================================================================
 void CEnemyAI::Update(void)
 {
-	int random = 0;
 	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
-	if ((rand() % 1) % 8 == 0)
-	{
 
-	}
 	if (pEnemyPass != nullptr)
 	{
+		m_castcount++;
+
+		if (m_castcount == m_recast)
+		{
+			m_recast = (rand() % MAX_RECASTTIME) + 30;	//30フレーム分のリキャスト
+			m_random = (rand() % AI_MAX);				//行動のランダム
+			m_AItype = (AI_STATE)m_random;				//ランダムの形式をAI_STATEに変換
+			m_castcount = 0;
+			m_bShot = false;
+		}
+		if (m_castcount % 30 == 0)
+		{
+			m_bShot = true;
+		}
+		else
+		{
+			m_bShot = false;
+		}
 		if (pPlayer != nullptr)
 		{
-			if (m_bShot == true)
-			{
-				CDebugProc::Print("エネミーショット：実行\n");
-				m_cast++;
-				m_AItype = AI_NONE;
-				if (m_cast == 120)
-				{
-					m_cast = 0;
-					m_bShot = false;
-				}
-			}
-			CDebugProc::Print("エネミーショット：静止\n");
-			if (pEnemyPass->GetPosition().x > pPlayer->GetPosition().x)
-			{
-				pEnemyPass->SetRot(D3DXVECTOR3(0.0f, 0.5f*  D3DX_PI, 0.0f));
-				if (m_bShot == false)
-				{
-					m_AItype = AI_SHOT;
-					m_bShot = true;
-				}
-			}
-			else
-			{
-				pEnemyPass->SetRot(D3DXVECTOR3(0.0f, -0.5f*  D3DX_PI, 0.0f));
-				m_AItype = AI_STOP;
-			}
 
+			switch (m_AItype)
+			{
+			case AI_NONE:
+				break;
+			case AI_STOP:
+				break;
+			case AI_STAND:
+				break;
+			case AI_CROUCH:
+				break;
+			case AI_WALK_LEFT:
+				pEnemyPass->GetMove().x -= 0.2f;
+				pEnemyPass->GetRotDest().y = D3DX_PI * 0.5f;
+				break;
+			case AI_WALK_RIGHT:
+				pEnemyPass->GetMove().x += 0.2f;
+				pEnemyPass->GetRotDest().y = D3DX_PI * -0.5f;
+				break;
+			case AI_SHOT:
+				//プレイヤーのいる方向に撃ってくるぞ　気をつけろ！
+				if (pEnemyPass->GetPosition().x > pPlayer->GetPosition().x)
+				{
+					pEnemyPass->GetRotDest().y = D3DX_PI * 0.5f;
+					pEnemyPass->SetCharacterDirection(CCharacter::CHARACTER_LEFT);
+				}
+				else
+				{
+					pEnemyPass->GetRotDest().y = D3DX_PI * -0.5f;
+					pEnemyPass->SetCharacterDirection(CCharacter::CHARACTER_RIGHT);
+				}
+				break;
+			case AI_GRENADE:
+				break;
+			}
 		}
 	}
-
-	CDebugProc::Print("エネミーショットキャストタイム：%d\n", m_cast);
+	CDebugProc::Print("エネミー乱数：%d\n", m_AItype);
+	CDebugProc::Print("エネミーリキャストタイム：%d\n", m_recast);
+	CDebugProc::Print("エネミーキャストタイム：%d\n", m_castcount);
 	CDebugProc::Print("エネミーpositon.x：%2f\n", pEnemyPass->GetPosition().x);
 
 }
@@ -112,4 +137,9 @@ CEnemyAI * CEnemyAI::CreateAI(CEnemy *pEnemy)
 CEnemyAI::AI_STATE CEnemyAI::GetAIType(void)
 {
 	return m_AItype;
+}
+
+bool CEnemyAI::GetShot(void)
+{
+	return m_bShot;
 }

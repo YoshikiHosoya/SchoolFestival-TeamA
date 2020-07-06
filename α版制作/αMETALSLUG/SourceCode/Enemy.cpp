@@ -52,7 +52,6 @@ HRESULT CEnemy::Init(void)
 	GetCollision()->SetPosOld(&GetPositionOld());
 	GetCollision()->SetSize2D(ENEMY_SIZE);
 	GetCollision()->SetMove(&GetMove());
-	GetCollision()->SetType(CCollision::COLLISION_ENEMY);
 	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_CHARACTER);
 	CCharacter::SetLife(50);
 	return S_OK;
@@ -113,9 +112,9 @@ void CEnemy::Update(void)
 	//AIŠÖ˜Aˆ—
 	if (m_pAI != nullptr)
 	{
-		if (m_pAI->GetAIType() == m_pAI->AI_SHOT)
+		if (m_pAI->GetAIType() == m_pAI->AI_SHOT && m_pAI->GetShot() == true)
 		{
-			m_pGun->Shot(D3DXVECTOR3(0.0f, 0.5f*D3DX_PI, 0.0f));
+			m_pGun->Shot(GetShotDirection());
 		}
 		m_pAI->Update();
 	}

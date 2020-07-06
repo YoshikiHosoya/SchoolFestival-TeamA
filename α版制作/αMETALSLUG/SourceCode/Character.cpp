@@ -24,8 +24,9 @@ char *CCharacter::m_LoadMotionFileName[CHARACTER_MOTION_MAX] =
 	{ "data/Load/Player/Motion/Walk.txt" },
 	{ "data/Load/Player/Motion/Attack.txt" },
 	{ "data/Load/Player/Motion/Grenade.txt" },
-	{ "data/Load/Player/Motion/Jumpshoot.txt" },
 	{ "data/Load/Player/Motion/Jump.txt" },
+	{ "data/Load/Player/Motion/Shoot.txt" },
+	{ "data/Load/Player/Motion/Squat.txt" },
 	{ "data/Load/Enemy/Motion/EnemyNeutral.txt" },
 	{ "data/Load/Enemy/Motion/EnemyWalk.txt" },
 	{ "data/Load/Enemy/Motion/EnemyAttack.txt" },
@@ -663,7 +664,6 @@ void CCharacter::Moation(void)
 				//ƒ‹[ƒv‚·‚é‚Æ‚«--------------------------------------¡¡¡¡¡
 				else if (m_CharacterMotion[m_MotionType]->nLoop == 1)
 				{
-					DefaultMotion();
 					m_CntKeySet = 0;
 				}
 			}

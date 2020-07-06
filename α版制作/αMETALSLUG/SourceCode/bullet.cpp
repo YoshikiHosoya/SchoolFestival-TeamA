@@ -85,7 +85,6 @@ HRESULT CBullet::Init()
 	GetCollision()->SetPos(&GetPosition());
 	GetCollision()->SetSize2D(D3DXVECTOR3(40.0f, 40.0f, 0.0f));
 	GetCollision()->SetMove(&m_move);
-	GetCollision()->SetType(CCollision::COLLISION_PLAYERBULLET);
 	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_NORMAL);
 
 	return S_OK;

@@ -47,14 +47,13 @@
 //======================================================================================================================
 CCollision::CCollision()
 {
-	m_objtype			= COLLISION_PLAYERBULLET;				// タイプの初期化
 	m_Collisiontype		= COLLISIONTYPE_NORMAL;				// 当たり判定の種類
 	m_ppos				= nullptr;							// 位置情報
 	m_posOld			= nullptr;							// 前回の位置情報
 	m_size				= D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// サイズ情報
 	m_pmove				= nullptr;							// 移動情報
 	m_Debugcollision	= nullptr;							// デバッグ用当たり判定のポインタ
-	m_bUse				= false;
+	m_nCollisionTime	= 0;								// 当たり判定が持続する時間
 }
 
 //======================================================================================================================
@@ -94,12 +93,12 @@ void CCollision::Uninit(void)
 //======================================================================================================================
 void CCollision::Update(void)
 {
-//#ifdef _DEBUG
-//	if (m_Debugcollision != nullptr)
-//	{
-//		m_Debugcollision->SetPos(m_ppos);
-//	}
-//#endif // _DEBUG
+#ifdef _DEBUG
+	if (m_Debugcollision != nullptr)
+	{
+		m_Debugcollision->SetPos(m_ppos);
+	}
+#endif // _DEBUG
 }
 
 //======================================================================================================================
@@ -279,11 +278,11 @@ bool CCollision::ForEnemyCollision(int nPlayerDamage, bool Penetration)
 				pPlayer->CCharacter::AddDamage(nPlayerDamage);
 
 				// プレイヤーのライフが0以下になった時
-				if (pPlayer->CCharacter::GetLife() <= 0)
-				{
-					// ポインタをnullにする
-					pPlayer = nullptr;
-				}
+				//if (pPlayer->CCharacter::GetLife() <= 0)
+				//{
+				//	// ポインタをnullにする
+				//	pPlayer = nullptr;
+				//}
 
 				// 当たり範囲フラグをtrueにする
 				bHitFlag = true;
@@ -316,10 +315,6 @@ bool CCollision::ForPlayer_EnemyCollision(bool Penetration)
 			if (this->CharCollision2D(pEnemy->GetCollision()))
 			{
 				bHitFlag = true;
-			}
-			else
-			{
-				bHitFlag = false;
 			}
 		}
 	}
@@ -389,33 +384,23 @@ CPrisoner *CCollision::ForPlayer_PrisonerCollision()
 		// 捕虜のポインタを取得
 		pPrisoner = CManager::GetBaseMode()->GetMap()->GetPrisoner(nCntPriso);
 
-		// ポインタが検索可能なら処理を通す
-		if (pPrisoner->GetPrisonerUseFlag() == false)
+		if (pPrisoner != nullptr)
 		{
-			if (pPrisoner != nullptr)
+			if (this->CharCollision2D(pPrisoner->GetCollision()))
 			{
-				if (this->CharCollision2D(pPrisoner->GetCollision()))
+				if (pPrisoner->GetPrisonerState() == CPrisoner::PRISONER_STATE_STAY)
 				{
-					if (pPrisoner->GetPrisonerState() == CPrisoner::PRISONER_STATE_STAY)
-					{
-						// 処理を行った捕虜のポインタを返す
-						return pPrisoner;
-					}
+					// 処理を行った捕虜のポインタを返す
+					return pPrisoner;
 				}
-			}
-
-			// nullだったらnullを返す
-			else if (pPrisoner == nullptr)
-			{
-				return nullptr;
 			}
 		}
 
-		// 検索が許可されていないなら処理を飛ばす
-		/*else
+		// nullだったらnullを返す
+		else if (pPrisoner == nullptr)
 		{
-			continue;
-		}*/
+			return nullptr;
+		}
 	}
 
 	// ポインタを返す
@@ -432,10 +417,13 @@ CEnemy * CCollision::ForPlayer_EnemyCollision()
 	for (int nCntEnemy = 0; nCntEnemy < CManager::GetBaseMode()->GetMap()->GetMaxEnemy(); nCntEnemy++)
 	{
 		pEnemy = CManager::GetBaseMode()->GetMap()->GetEnemy(nCntEnemy);
+
 		if (pEnemy != nullptr)
 		{
 			if (this->CharCollision2D(pEnemy->GetCollision()))
 			{
+				// 処理を行った捕虜のポインタを返す
+				return pEnemy;
 			}
 		}
 
@@ -446,6 +434,37 @@ CEnemy * CCollision::ForPlayer_EnemyCollision()
 	}
 
 	return pEnemy;
+}
+
+//======================================================================================================================
+// ナイフとキャラクターの判定
+//======================================================================================================================
+bool CCollision::KnifeCollision(D3DXVECTOR3 Knifepos, CCollision *pCollision)
+{
+	// 弾を消すときに使うフラグ
+	bool bHitFlag = false;
+
+	if (pCollision != nullptr)
+	{
+		// X Yの範囲
+		if (Knifepos.y + this->m_size.y * 0.5f >= pCollision->m_ppos->y&&
+			Knifepos.y - this->m_size.y * 0.5f <= pCollision->m_ppos->y + pCollision->m_size.y&&
+			Knifepos.x + this->m_size.x * 0.5f > pCollision->m_ppos->x - pCollision->m_size.x * 0.5f&&
+			Knifepos.x - this->m_size.x * 0.5f < pCollision->m_ppos->x + pCollision->m_size.x * 0.5f)
+
+		{
+			// オブジェクトに当たったフラグ
+			bHitFlag = true;
+		}
+
+		else
+		{
+			bHitFlag = false;
+		}
+	}
+
+	// 当たっているかいないかを返す
+	return bHitFlag;
 }
 
 //======================================================================================================================
@@ -531,14 +550,6 @@ void CCollision::SetSize2D(D3DXVECTOR3 size)
 void CCollision::SetMove(D3DXVECTOR3 * move)
 {
 	m_pmove = move;
-}
-
-//======================================================================================================================
-// タイプ設定処理
-//======================================================================================================================
-void CCollision::SetType(COLLISION type)
-{
-	m_objtype = type;
 }
 
 //======================================================================================================================
