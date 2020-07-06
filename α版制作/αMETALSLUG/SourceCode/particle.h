@@ -55,6 +55,7 @@ public:
 		m_fRadiusDamping = DEFAULT_DAMPING;					//半径の減衰地
 		m_fAlphaDamping = DEFAULT_DAMPING;					//アルファ値の減衰値
 		m_Textype = CTexture::TEX_EFFECT_PARTICLE;			//テクスチャ
+		m_shape = SHAPE_SPHERE;
 		m_ParticleType = PARTICLE_DEFAULT;					//パーティクルのタイプ
 
 	}
@@ -100,8 +101,6 @@ private:
 	float m_fSpeed;									//速度
 	PARTICLE_SHAPE m_shape;							//パーティクルの出方
 	bool m_bSpeedRandom;							//速度がランダムかどうか
-
-
 
 	float m_fRadiusDamping;							//半径の減衰値
 	float m_fAlphaDamping;							//アルファ値の減衰値
@@ -159,7 +158,9 @@ public:
 	static void ResetVertexID();					//頂点IDリセット　画面が停止してもパーティクルの処理を行う為
 
 	static void Create(D3DXVECTOR3 pos, int nLife, float fRadius, D3DXCOLOR col,int nNumber, float fSpeed);		//生成処理
-	static void DetailsCreate(D3DXVECTOR3 pos, int nLife, float fRadius, D3DXCOLOR col, int nNumber, float fSpeed, float fAlphaDamping, float fRadiusDamping, CTexture::TEX_TYPE textype);
+	static void DetailsCreate(D3DXVECTOR3 pos, int nLife, float fRadius, D3DXCOLOR col, int nNumber,
+							float fSpeed, float fAlphaDamping, float fRadiusDamping, CTexture::TEX_TYPE textype);
+
 	static void CreateFromText(D3DXVECTOR3 pos, CParticleParam::PARTICLE_TYPE type);
 
 	bool GetDeleteFlag() { return m_bDeleteFlag; };

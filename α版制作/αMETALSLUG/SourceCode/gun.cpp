@@ -195,7 +195,7 @@ void CGun::Shot(D3DXVECTOR3 rot)
 		m_nAmmo--;
 	}
 
-	// インターバルが0のとき
+	// インターバルが経過したとき
 	if (m_nInterval >= CBullet::GetBulletParam(m_GunType)->nInterval)
 	{
 		m_nInterval = 0;
@@ -251,8 +251,6 @@ void CGun::Shot(D3DXVECTOR3 rot)
 				CTexture::SEPARATE_TEX_EFFECT_SHOTFLASH, 1, CScene::OBJTYPE_EFFECT);
 		}
 	}
-
-
 }
 
 // =====================================================================================================================================================================
@@ -304,6 +302,9 @@ void CGun::MultipleShot()
 
 				// 弾のパラメーターの設定
 				pBullet->SetBulletParam(m_GunType);
+
+				// 弾の反応
+				pBullet->BulletReaction(m_rot);
 
 				//ノズルフラッシュ
 				CTexAnimation3D::Create(m_ShotPos, D3DXVECTOR3(30.0f, 30.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),
