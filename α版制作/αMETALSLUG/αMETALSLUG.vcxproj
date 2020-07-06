@@ -168,12 +168,14 @@
     <ClCompile Include="SourceCode\flameshot.cpp" />
     <ClCompile Include="SourceCode\game.cpp" />
     <ClCompile Include="SourceCode\grenade.cpp" />
+    <ClCompile Include="SourceCode\grenadefire.cpp" />
     <ClCompile Include="SourceCode\gun.cpp" />
     <ClCompile Include="SourceCode\handgun.cpp" />
     <ClCompile Include="SourceCode\heavymachinegun.cpp" />
     <ClCompile Include="SourceCode\hosso\Debug_EffectViewer.cpp" />
     <ClCompile Include="SourceCode\hosso\Debug_ModelViewer.cpp" />
     <ClCompile Include="SourceCode\hosso\Debug_ViewerCharacter.cpp" />
+    <ClCompile Include="SourceCode\hosso\Debug_WorldLine.cpp" />
     <ClCompile Include="SourceCode\hosso\HossoLibrary.cpp" />
     <ClCompile Include="SourceCode\ImGui\imgui.cpp" />
     <ClCompile Include="SourceCode\ImGui\imgui_draw.cpp" />
@@ -195,6 +197,8 @@
     <ClCompile Include="SourceCode\meshsphere.cpp" />
     <ClCompile Include="SourceCode\Model.cpp" />
     <ClCompile Include="SourceCode\mouse.cpp" />
+    <ClCompile Include="SourceCode\multinumber.cpp" />
+    <ClCompile Include="SourceCode\number.cpp" />
     <ClCompile Include="SourceCode\Obstacle.cpp" />
     <ClCompile Include="SourceCode\orbit.cpp" />
     <ClCompile Include="SourceCode\particle.cpp" />
@@ -233,12 +237,14 @@
     <ClInclude Include="SourceCode\flameshot.h" />
     <ClInclude Include="SourceCode\game.h" />
     <ClInclude Include="SourceCode\grenade.h" />
+    <ClInclude Include="SourceCode\grenadefire.h" />
     <ClInclude Include="SourceCode\gun.h" />
     <ClInclude Include="SourceCode\handgun.h" />
     <ClInclude Include="SourceCode\heavymachinegun.h" />
     <ClInclude Include="SourceCode\hosso\Debug_EffectViewer.h" />
     <ClInclude Include="SourceCode\hosso\Debug_ModelViewer.h" />
     <ClInclude Include="SourceCode\hosso\Debug_ViewerCharacter.h" />
+    <ClInclude Include="SourceCode\hosso\Debug_WorldLine.h" />
     <ClInclude Include="SourceCode\hosso\HossoLibrary.h" />
     <ClInclude Include="SourceCode\ImGui\imconfig.h" />
     <ClInclude Include="SourceCode\ImGui\imgui.h" />
@@ -263,6 +269,8 @@
     <ClInclude Include="SourceCode\meshsphere.h" />
     <ClInclude Include="SourceCode\model.h" />
     <ClInclude Include="SourceCode\mouse.h" />
+    <ClInclude Include="SourceCode\multinumber.h" />
+    <ClInclude Include="SourceCode\number.h" />
     <ClInclude Include="SourceCode\Obstacle.h" />
     <ClInclude Include="SourceCode\orbit.h" />
     <ClInclude Include="SourceCode\particle.h" />

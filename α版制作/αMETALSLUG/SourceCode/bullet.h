@@ -37,15 +37,16 @@ typedef struct
 class CBullet : public CModel
 {
 public:
-	CBullet(OBJ_TYPE type);								// コンストラクタ
-	~CBullet();											// デストラクタ
+	CBullet(OBJ_TYPE type);			// コンストラクタ
+	~CBullet();						// デストラクタ
 
 	/* メンバ関数 */
-	virtual HRESULT				Init();					// 初期化
-	virtual void				Uninit();				// 終了
-	virtual void				Update();				// 更新
-	virtual void				Draw();					// 描画
-	virtual void				DeleteBullet();			// 弾消去
+	virtual HRESULT				Init();								// 初期化
+	virtual void				Uninit();							// 終了
+	virtual void				Update();							// 更新
+	virtual void				Draw();								// 描画
+	virtual void				DeleteBullet();						// 弾消去
+	virtual void				BulletReaction(D3DXVECTOR3 rot);	// 弾の反応
 
 	/* 静的メンバ関数 */
 	static	void				BulletLoad();			// 弾のロード
