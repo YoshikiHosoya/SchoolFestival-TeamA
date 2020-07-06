@@ -190,6 +190,9 @@
     <ClCompile Include="SourceCode\EnemyAI.cpp">
       <Filter>Etc</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\grenadefire.cpp">
+      <Filter>Wepon</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SourceCode\mesh.h">
@@ -389,6 +392,9 @@
     </ClInclude>
     <ClInclude Include="SourceCode\EnemyAI.h">
       <Filter>Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\grenadefire.h">
+      <Filter>Wepon</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

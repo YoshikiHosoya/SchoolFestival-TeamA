@@ -29,17 +29,13 @@ public:
 	void						Update();					// 更新
 	void						Draw();						// 描画
 	void						DeleteBullet();				// 弾を消す処理
-	void						DebugInfo();				//デバッグ
 
 	/* 静的メンバ関数 */
-	static	CGrenade			*Create(D3DXVECTOR3 rot, D3DXMATRIX *mtx);	// グレネードの生成
+	static	CGrenade			*Create(D3DXVECTOR3 rot);					// グレネードの生成
 
 private:
 	/* メンバ変数 */
 	D3DXVECTOR3					m_move;						// 移動値
 	D3DXVECTOR3					m_rot;						// 回転
-
-	/* 静的メンバ変数 */
-	static	int					m_nAmmo;					// 残弾数
 };
 #endif
