@@ -27,6 +27,10 @@ std::vector<std::string> CTexture::m_aTexFileName =
 	{ "data/TEXTURE/Mesh/Grass.jpg" },						//草
 	{ "data/TEXTURE/Mesh/Block.jpg" },						//ブロック
 	{ "data/TEXTURE/Mesh/Water.jpg" },						//水
+	{ "data/TEXTURE/UI/life.png" },							//体力のUI
+	{ "data/TEXTURE/UI/remain.png" },						//残機のUI
+	{ "data/TEXTURE/UI/arms.png" },							//弾の残数のUI
+	{ "data/TEXTURE/UI/bomb.png" },							//グレネードの残数のUI
 };
 
 
@@ -44,6 +48,7 @@ std::vector<CTexture::SEPARATE_TEX_INFO> CTexture::m_apSeparateTexInfoList =
 	{ nullptr, "data/TEXTURE/Effect/ShotGun.png",			CTexture::SEPARATE_TEX_EFFECT_SHOTGUN,			D3DXVECTOR2(5,3),	ZeroVector2 },		//ショットガン
 	{ nullptr, "data/TEXTURE/Effect/Impact00.png",			CTexture::SEPARATE_TEX_EFFECT_IMPACT00,			D3DXVECTOR2(2,5),	ZeroVector2 },		//インパクト
 	{ nullptr, "data/TEXTURE/Effect/Impact01.png",			CTexture::SEPARATE_TEX_EFFECT_IMPACT01,			D3DXVECTOR2(2,6),	ZeroVector2 },		//インパクト
+	{ nullptr, "data/TEXTURE/UI/num.png",					CTexture::SEPARATE_TEX_NUM,						D3DXVECTOR2(10,1),	ZeroVector2 },		//ナンバー
 
 };
 

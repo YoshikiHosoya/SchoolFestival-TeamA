@@ -15,6 +15,8 @@ class CGun;
 class CGrenadeFire;
 class CPrisoner;
 class CKnife;
+class CPlayerUI;
+
 //レンダリングクラス
 class CPlayer :public CCharacter
 {
@@ -42,6 +44,7 @@ public:
 	bool DefaultMotion(void);
 	CGun			*GetGun() { return  m_pGun; };					// 銃のポインタ取得
 	CGrenadeFire	*GetGrenadeFire() { return  m_pGrenadeFire; };	// グレネード発射位置のポインタ取得
+	CPlayerUI		*GetPlayerUI() { return  m_pPlayerUI; };		// プレイヤーUIのポインタ取得
 
 private:
 	void Move(float move, float fdest);
@@ -52,6 +55,7 @@ private:
 		WORD Oldstate;											//コントローラーの1frame前のステート
 		CGun			*m_pGun;								// ガンクラスのポインタ
 		CGrenadeFire	*m_pGrenadeFire;						// グレネード発射クラスのポインタ
+		CPlayerUI		*m_pPlayerUI;							// プレイヤーUIのポインタ
 		CKnife			*m_pKnife;
 };
 #endif

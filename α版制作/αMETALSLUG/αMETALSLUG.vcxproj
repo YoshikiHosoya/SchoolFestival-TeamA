@@ -206,6 +206,7 @@
     <ClCompile Include="SourceCode\pause.cpp" />
     <ClCompile Include="SourceCode\Player.cpp" />
     <ClCompile Include="SourceCode\playertank.cpp" />
+    <ClCompile Include="SourceCode\playerUI.cpp" />
     <ClCompile Include="SourceCode\prisoner.cpp" />
     <ClCompile Include="SourceCode\renderer.cpp" />
     <ClCompile Include="SourceCode\rocketlauncher.cpp" />
@@ -279,6 +280,7 @@
     <ClInclude Include="SourceCode\pause.h" />
     <ClInclude Include="SourceCode\Player.h" />
     <ClInclude Include="SourceCode\playertank.h" />
+    <ClInclude Include="SourceCode\playerUI.h" />
     <ClInclude Include="SourceCode\prisoner.h" />
     <ClInclude Include="SourceCode\renderer.h" />
     <ClInclude Include="SourceCode\rocketlauncher.h" />
