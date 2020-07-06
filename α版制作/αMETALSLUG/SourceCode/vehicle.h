@@ -44,14 +44,6 @@ public:
 		VEHICLE_USE_TYPE_TYPE_MAX							// 乗り物を使うキャラクターの最大数
 	}VEHICLE_USE_TYPE;
 
-	/* 乗り物の種類 */
-	typedef enum
-	{
-		VEHICLE_TYPE_TYPE_TANK,								// 戦車
-		VEHICLE_TYPE_TYPE_UNKNOWN,							// 不明
-		VEHICLE_TYPE_TYPE_MAX
-	}VEHICLE_TYPE;
-
 	/* 乗り物のキー要素 */
 	typedef struct KEY
 	{
