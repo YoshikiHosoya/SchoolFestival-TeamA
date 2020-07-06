@@ -160,13 +160,6 @@ void CPlayer::DebugInfo(void)
 	}
 	else
 	{
-		// グレネードの弾数が残っているとき
-		if (m_pGrenadeFire->GetGrenadeAmmo() > 0)
-		{
-			// グレネード生成
-			m_pGrenadeFire->Fire(GetShotDirection());
-			SetMotion(CCharacter::PLAYER_MOTION_GRENADE);
-		}
 	}
 }
 //====================================================================
@@ -400,9 +393,13 @@ void CPlayer::AttackUpdate(void)
 	// グレネードを投げる
 	if (key->GetKeyboardTrigger(DIK_O))
 	{
-		// グレネード生成
-		CGrenade::Create(GetShotDirection(), GetCharacterModelPartsList(CModel::MODEL_PLAYER_LHAND)->GetMatrix());
-		SetMotion(CCharacter::PLAYER_MOTION_GRENADE);
+		// グレネードの弾数が残っているとき
+		if (m_pGrenadeFire->GetGrenadeAmmo() > 0)
+		{
+			// グレネード生成
+			m_pGrenadeFire->Fire(GetShotDirection());
+			SetMotion(CCharacter::PLAYER_MOTION_GRENADE);
+		}
 	}
 
 	// 攻撃モーションから別のモーションになった時
