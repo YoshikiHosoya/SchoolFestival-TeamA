@@ -15,6 +15,7 @@
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
 // =====================================================================================================================================================================
+int		CGrenade::m_nAmmo = CBullet::GetBulletParam(CGun::GUNTYPE_GRENADE)->nAmmo;	// 残弾数
 
 // =====================================================================================================================================================================
 // マクロ定義
@@ -48,8 +49,8 @@ CGrenade::~CGrenade()
 // =====================================================================================================================================================================
 HRESULT CGrenade::Init()
 {
-	m_move	= D3DXVECTOR3(8.0f, 10.0f, 0.0f);		// 移動値
-	m_rot	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// 回転
+	m_move		= D3DXVECTOR3(8.0f, 10.0f, 0.0f);							// 移動値
+	m_rot		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);							// 回転
 
 	// 初期化
 	CBullet::Init();
@@ -107,10 +108,9 @@ void CGrenade::Draw(void)
 void CGrenade::DeleteBullet()
 {
 	CTexAnimation3D_Collision::Create(GetPosition(), D3DXVECTOR3(50.0f, 70.0f, 0.0f), ZeroVector3,
-										CTexture::SEPARATE_TEX_EFFECT_EXPLOSION01, 2, OBJTYPE_EXPROSION, true);
+	CTexture::SEPARATE_TEX_EFFECT_EXPLOSION01, 2, OBJTYPE_EXPROSION, true);
 
 	CBullet::DeleteBullet();
-
 }
 
 // =====================================================================================================================================================================
@@ -159,6 +159,9 @@ CGrenade * CGrenade::Create(D3DXVECTOR3 rot, D3DXMATRIX *mtx)
 
 	// 弾のパラメーターの設定
 	pGrenade->SetBulletParam(CGun::GUNTYPE_GRENADE);
+
+	//残弾数を減らす
+	pGrenade->m_nAmmo--;
 
 	return pGrenade;
 }

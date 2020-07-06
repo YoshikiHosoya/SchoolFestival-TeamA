@@ -36,10 +36,10 @@ public:
 
 private:
 	/* メンバ変数 */
-	float						m_fLength;					// 長さ
-	float						m_fAngle;					// 角度
 	D3DXVECTOR3					m_move;						// 移動値
 	D3DXVECTOR3					m_rot;						// 回転
 
+	/* 静的メンバ変数 */
+	static	int					m_nAmmo;					// 残弾数
 };
 #endif
