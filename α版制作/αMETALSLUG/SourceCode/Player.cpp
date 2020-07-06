@@ -225,7 +225,7 @@ void CPlayer::Update(void)
 	}
 	if (key->GetKeyboardTrigger(DIK_2))
 	{
-		SetMotion(CCharacter::PLAYER_MOTION_WALK);
+		SetMotion(PLAYER_MOTION_JUMP);
 	}
 
 	// 当たり判定
@@ -291,7 +291,6 @@ void CPlayer::Update(void)
 			SetJump(false);
 		}
 	}
-
 	// 攻撃モーションから別のモーションになった時
 	if (GetMotionType() != CCharacter::PLAYER_MOTION_ATTACK01)
 	{
@@ -300,12 +299,25 @@ void CPlayer::Update(void)
 			m_pKnife->EndMeleeAttack();
 		}
 	}
-
+	if (GetMove().x > 0.2f  && GetJump() == true || 
+		GetMove().x < -0.2f && GetJump() == true)
+	{
+		SetMotion(PLAYER_MOTION_WALK);
+	}
+	else
+	{
+		SetMotion(CCharacter::PLAYER_MOTION_NORMAL);
+	}
+	if (GetMove().y > 2 || GetMove().y < -2 && GetJump() == false)
+	{
+		SetMotion(PLAYER_MOTION_JUMP);
+	}
 	// 特定のボタンを押した時に歩きモーションに変更
 	if (CHossoLibrary::PressAnyButton())
 	{
 		SetMotion(CCharacter::PLAYER_MOTION_WALK);
 	}
+	CDebugProc::Print("プレイヤーのモーション：%d\n", GetMotionType());
 	CCharacter::Update();
 }
 //====================================================================
@@ -356,5 +368,4 @@ void CPlayer::Move(float move, float fdest)
 	GetMove().x += sinf(move * -D3DX_PI) * 1.0f;
 	GetMove().z += cosf(move * -D3DX_PI) * 1.0f;
 	GetRotDest().y = fdest *  D3DX_PI;
-	SetMotion(PLAYER_MOTION_WALK);
 }

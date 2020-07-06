@@ -437,6 +437,37 @@ CEnemy * CCollision::ForPlayer_EnemyCollision()
 }
 
 //======================================================================================================================
+// ナイフとキャラクターの判定
+//======================================================================================================================
+bool CCollision::KnifeCollision(D3DXVECTOR3 Knifepos, CCollision *pCollision)
+{
+	// 弾を消すときに使うフラグ
+	bool bHitFlag = false;
+
+	if (pCollision != nullptr)
+	{
+		// X Yの範囲
+		if (Knifepos.y + this->m_size.y * 0.5f >= pCollision->m_ppos->y&&
+			Knifepos.y - this->m_size.y * 0.5f <= pCollision->m_ppos->y + pCollision->m_size.y&&
+			Knifepos.x + this->m_size.x * 0.5f > pCollision->m_ppos->x - pCollision->m_size.x * 0.5f&&
+			Knifepos.x - this->m_size.x * 0.5f < pCollision->m_ppos->x + pCollision->m_size.x * 0.5f)
+
+		{
+			// オブジェクトに当たったフラグ
+			bHitFlag = true;
+		}
+
+		else
+		{
+			bHitFlag = false;
+		}
+	}
+
+	// 当たっているかいないかを返す
+	return bHitFlag;
+}
+
+//======================================================================================================================
 // プレイヤーとアイテムで行う判定 プレイヤーの接触判定
 //======================================================================================================================
 bool CCollision::ForPlayer_ItemCollision()
