@@ -169,10 +169,9 @@ void CKnife::StartMeleeAttack()
 		m_pOrbit->SetPosOffset(KNIFE_ORBIT_OFFSET);
 	}
 
-	//コリジョン生成
+	// 既に判定があったら削除する
 	if (m_pCollision)
 	{
-		// 既に判定があったら削除する
 		delete m_pCollision;
 		m_pCollision = nullptr;
 	}
@@ -229,11 +228,6 @@ void CKnife::CollisionKnife()
 	{
 		if (m_pCollision)
 		{
-			//当たり判定
-			//敵、捕虜、オブジェクトに対して判定
-			//m_pCollision->ForPlayerBulletCollision(50, 50, true);
-
-
 			// 当たり判定 相手がエネミーだったら
 			// 敵の総数分
 			for (int nCnt = 0; nCnt < CManager::GetBaseMode()->GetMap()->GetMaxEnemy(); nCnt++)
@@ -243,7 +237,7 @@ void CKnife::CollisionKnife()
 				if (pEnemy != nullptr)
 				{
 					// 判定関数
-					if (m_pCollision->OtherCollision2D(pEnemy->GetCollision()))
+					if (m_pCollision->KnifeCollision(D3DXVECTOR3(m_HandMatrix->_41, m_HandMatrix->_42, m_HandMatrix->_43),pEnemy->GetCollision()))
 					{
 						// 敵のライフ減衰
 						pEnemy->CCharacter::AddDamage(50);
