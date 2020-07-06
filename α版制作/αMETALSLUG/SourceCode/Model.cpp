@@ -83,7 +83,8 @@ char *CModel::m_TankFileName[MODEL_TANK_MAX] =
 {
 	{ "data/MODEL/Tank/Tankbody.x" },				// 戦車の頭
 	{ "data/MODEL/Tank/Tankhead.x" },				// 戦車の体
-	{ "data/MODEL/Tank/Tankwheel.x" },				// 戦車のタイヤ
+	{ "data/MODEL/Tank/Tank_frontwheel.x" },		// 戦車の前タイヤ
+	{ "data/MODEL/Tank/Tank_backwheel.x" },			// 戦車の後タイヤ
 	{ "data/MODEL/Tank/Tankgun.x" },				// 戦車の銃
 };
 
@@ -792,6 +793,10 @@ char * CModel::GetModelFileName(int nType, int nModelCount)
 		//捕虜
 	case PRISONER_MODEL:
 		return m_PrisonerFileName[nModelCount];
+		break;
+		//戦車
+	case TANK_MODEL:
+		return m_TankFileName[nModelCount];
 		break;
 	}
 	return nullptr;

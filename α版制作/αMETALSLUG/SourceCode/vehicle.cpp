@@ -13,13 +13,14 @@
 #include "debugproc.h"
 #include "inputKeyboard.h"
 #include "Xinput.h"
+#include "hosso\/Debug_ModelViewer.h"
 
 //====================================================================
 // モデルのオフセット読み込みファイルの設定
 //====================================================================
 char *CVehicle::m_LoadOffsetFileName[VEHICLE_TYPE_MAX] =
 {
-	{ "data/Load/Vehicle/VehicleOffset.txt" },
+	{ "data/Load/PlayerTank/PlayerTankOffset.txt" },
 };
 
 //====================================================================
@@ -69,7 +70,7 @@ HRESULT CVehicle::Init(void)
 	// 加算する回転量の初期化
 	m_AddRot		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	// 体力の初期化
-	m_nLife			= 0;
+	m_nLife			= 1000;
 	// 状態の初期化
 	m_state			= VEHICLE_STATE_NORMAL;
 	// 回転量の初期化
@@ -98,8 +99,6 @@ HRESULT CVehicle::Init(void)
 	m_VehicleDirection = VEHICLE_LEFT;
 	// ジャンプしているかのフラグを初期化
 	m_bJump = false;
-	// 重力を付けるかのフラグを初期化
-	m_bGravity = false;
 	// 削除するかどうかのフラグを初期化
 	m_bDieFlag = false;
 
@@ -219,6 +218,9 @@ void CVehicle::Draw(void)
 //====================================================================
 void CVehicle::DebugInfo(void)
 {
+	CDebug_ModelViewer::OffsetViewer(m_vModelList);
+
+
 	//CDebugProc::Print("");
 }
 

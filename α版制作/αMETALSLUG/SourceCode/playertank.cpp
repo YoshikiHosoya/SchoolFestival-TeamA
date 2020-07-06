@@ -24,7 +24,7 @@
 //====================================================================
 //マクロ定義
 //====================================================================
-#define PLAYERTANK_SIZE			(D3DXVECTOR3(100.0f,65.0f,0.0f)) // プレイヤーの判定のサイズ
+#define PLAYERTANK_SIZE			(D3DXVECTOR3(70.0f,65.0f,0.0f)) // プレイヤーの判定のサイズ
 #define PLAYERTANK_JUMP			(20.0f)							 // 戦車が飛ぶ移動量
 
 // =====================================================================================================================================================================
@@ -98,7 +98,7 @@ void CPlayertank::Update(void)
 	Shot(key);
 
 	// 戦車を操作する処理
-	Operation(key);
+	//Operation(key);
 
 	// 当たり判定
 	if (GetCollision() != nullptr)
@@ -153,6 +153,7 @@ void CPlayertank::Draw(void)
 //====================================================================
 void CPlayertank::DebugInfo(void)
 {
+	//CVehicle::DebugInfo();
 }
 
 //====================================================================
@@ -184,7 +185,7 @@ void CPlayertank::Shot(CKeyboard *key)
 	if (key->GetKeyboardTrigger(DIK_O))
 	{
 		// グレネード生成
-		CGrenade::Create(GetShotDirection(), GetVehicleModelPartsList(CModel::MODEL_PLAYER_LHAND)->GetMatrix());
+		//CGrenade::Create(GetShotDirection(), GetVehicleModelPartsList(CModel::MODEL_PLAYER_LHAND)->GetMatrix());
 	}
 }
 

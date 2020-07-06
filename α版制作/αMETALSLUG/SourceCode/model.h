@@ -96,10 +96,11 @@ public:
 	typedef enum
 	{
 		//===戦車のモデル===
-		MODEL_TANK_TANKHEAD,		//頭
-		MODEL_TANK_TANKBODY,		//体
-		MODEL_TANK_TANKWHEEL,		//タイヤ
-		MODEL_TANK_TANKGUN,			//武器
+		MODEL_TANK_TANKHEAD,		// 頭
+		MODEL_TANK_TANKBODY,		// 体
+		MODEL_TANK_TANK_FRONTWHEEL,	// 前タイヤ
+		MODEL_TANK_TANK_BACKWHEEL,	// 後タイヤ
+		MODEL_TANK_TANKGUN,			// 武器
 		MODEL_TANK_MAX
 	}TANK_PARTS_MODEL;
 

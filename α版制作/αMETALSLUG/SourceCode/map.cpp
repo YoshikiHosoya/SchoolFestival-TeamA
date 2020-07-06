@@ -12,7 +12,7 @@
 #include <stdio.h>
 #include "Obstacle.h"
 #include "prisoner.h"
-
+#include "playertank.h"
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
 // =====================================================================================================================================================================
@@ -39,8 +39,14 @@ char *CMap::m_PrisonerFileName[MAP_MAX] =
 
 char *CMap::m_ObstacleFileName[MAP_MAX] =
 {
-	{ "data/Load/Map/Obstacle_Map_01.txt" },
-	{ "data/Load/Map/Obstacle_Map_02.txt" },
+	{ "data/Load/Obstacle_Map_01.txt" },
+	{ "data/Load/Obstacle_Map_02.txt" },
+};
+
+char *CMap::m_PlayerTankFileName[MAP_MAX] =
+{
+	{ "data/Load/PlayerTank/PlayerTank_Map_01.txt" },
+	{ "data/Load/PlayerTank/PlayerTank_Map_02.txt" },
 };
 
 
@@ -56,6 +62,7 @@ CMap::CMap()
 	m_pEnemy.clear();
 	m_pPrisoner.clear();
 	m_pObstacle.clear();
+	m_pPlayerTank.clear();
 }
 
 // =====================================================================================================================================================================
@@ -353,13 +360,13 @@ void CMap::ObstacleLoad(MAP MapNum)
 						else if (strcmp(cHeadText, "END_OBSTACLESET") == 0)
 						{
 							// オブジェクトの生成
-							//m_pObstacle.emplace_back(CObstacle::Create());
+							m_pObstacle.emplace_back(CObstacle::Create());
 							// タイプの代入
-							//m_pObstacle[m_pObstacle.size() - 1]->SetModelConut(nType);
+							m_pObstacle[m_pObstacle.size() - 1]->SetModelConut(nType);
 							// 位置の設定
-							//m_pObstacle[m_pObstacle.size() - 1]->SetPosition(pos);
+							m_pObstacle[m_pObstacle.size() - 1]->SetPosition(pos);
 							// 体力の設定
-							//m_pObstacle[m_pObstacle.size() - 1]->SetLife(nLife);
+							m_pObstacle[m_pObstacle.size() - 1]->SetLife(nLife);
 						}
 					}
 				}
@@ -371,6 +378,76 @@ void CMap::ObstacleLoad(MAP MapNum)
 	else
 	{
 		MessageBox(NULL, "障害物のパラメーター読み込み失敗", "警告", MB_ICONWARNING);
+	}
+}
+
+// =====================================================================================================================================================================
+//
+// プレイヤー用の戦車の配置
+//
+// =====================================================================================================================================================================
+void CMap::PlayerTankLoad(MAP MapNum)
+{
+	// ファイルポイント
+	FILE *pFile;
+	char cReadText[128];			// 文字として読み取る
+	char cHeadText[128];			// 比較用
+	char cDie[128];					// 不要な文字
+	D3DXVECTOR3 pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 位置
+
+	// ファイルを開く
+	pFile = fopen(m_PlayerTankFileName[MapNum], "r");
+
+	// 開いているとき
+	if (pFile != NULL)
+	{
+		// SCRIPTが来るまでループ
+		while (strcmp(cHeadText, "SCRIPT") != 0)
+		{
+			fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
+			sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
+		}
+
+		// SCRIPTが来たら
+		if (strcmp(cHeadText, "SCRIPT") == 0)
+		{
+			// END_SCRIPTが来るまでループ
+			while (strcmp(cHeadText, "END_SCRIPT") != 0)
+			{
+				fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
+				sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
+
+															// OBSTACLESETが来たら
+				if (strcmp(cHeadText, "PLAYERTANKSET") == 0)
+				{
+					// END_OBSTACLESETが来るまでループ
+					while (strcmp(cHeadText, "END_PLAYERTANKSET") != 0)
+					{
+						fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
+						sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
+
+						// POSが来たら
+						if (strcmp(cHeadText, "POS") == 0)
+						{
+							sscanf(cReadText, "%s %s %f %f %f", &cDie, &cDie, &pos.x, &pos.y, &pos.z);		// 比較用テキストにPOSを代入
+						}
+						else if (strcmp(cHeadText, "END_PLAYERTANKSET") == 0)
+						{
+							// オブジェクトの生成
+							m_pPlayerTank.emplace_back(CPlayertank::Create());
+							// 位置の設定
+							m_pPlayerTank[m_pPlayerTank.size() - 1]->SetPosition(pos);
+						}
+					}
+				}
+			}
+		}
+		// ファイルを閉じる
+		fclose(pFile);
+	}
+	else
+	{
+		MessageBox(NULL, "プレイヤー戦車のパラメーター読み込み失敗", "警告", MB_ICONWARNING);
 	}
 }
 
@@ -390,11 +467,13 @@ CMap *CMap::MapCreate(MAP MapNum)
 	// モデルのロード
 	pMap->ModelLoad(MapNum);
 	// 敵のロード
-	pMap->EnemyLoad(MapNum);
+	//pMap->EnemyLoad(MapNum);
 	// 捕虜のロード
-	pMap->PrisonerLoad(MapNum);
+	//pMap->PrisonerLoad(MapNum);
 	// 障害物のロード
-	pMap->ObstacleLoad(MapNum);
+	//pMap->ObstacleLoad(MapNum);
+	// プレイヤー戦車のロード
+	pMap->PlayerTankLoad(MapNum);
 
 	return pMap;
 }
@@ -728,6 +807,10 @@ void CMap::ObstacleSave(MAP MapNum)
 		// メッセージウィンドウで警告
 		MessageBox(NULL, "ファイルが読み込めません", "警告", MB_OK | MB_ICONWARNING);
 	}
+}
+
+void CMap::PlayerTankSave(MAP MapNum)
+{
 }
 
 // =====================================================================================================================================================================
@@ -1073,6 +1156,98 @@ void CMap::EnemySet()
 
 // =====================================================================================================================================================================
 //
+// プレイヤーの戦車の設置
+//
+// =====================================================================================================================================================================
+void CMap::PlayerTankSet()
+{
+#ifdef _DEBUG
+
+	static int nPlayerTankType = 0;		// 戦車の種類
+	static int nNowSelect = -1;			// 現在選択している番号
+
+										// オブジェクト番号の選択
+	ImGui::InputInt("nowSelect", &nNowSelect, 1, 20, 0);
+
+	// 範囲制限
+	if (nNowSelect <= -1)
+	{
+		nNowSelect = -1;
+	}
+	else if (nNowSelect >= (int)m_pPlayerTank.size())
+	{
+		nNowSelect = (int)m_pPlayerTank.size();
+	}
+	// 選択しているモデルが生成されているとき
+	else if (nNowSelect >= 0 || nNowSelect <= (int)m_pPlayerTank.size())
+	{
+		//// コンボボックス
+		//if (EnemyComboBox(nPlayerTankType))
+		//{
+		//	// NULLチェック
+		//	if (m_pPlayerTank[nNowSelect])
+		//	{
+		//		// 敵の種類の取得
+		//		CModel::PLAYERTANK_TYPE PlayerTankType = (CModel::OBSTACLE_TYPE)m_pPlayerTank[nNowSelect]->GetModelCount();
+
+		//		// 前回と違うとき
+		//		if (PlayerTankType != nPlayerTankType)
+		//		{
+		//			// 種類代入
+		//			PlayerTankType = (CModel::PLAYERTANK_TYPE)nPlayerTankType;
+		//			// 敵のタイプの設定
+		//			m_pPlayerTank[nNowSelect]->SetModelConut(PlayerTankType);
+		//		}
+		//	}
+		//}
+
+		// NULLチェック
+		if (m_pPlayerTank[nNowSelect])
+		{
+			// 現在地
+			int x = (int)m_pPlayerTank[nNowSelect]->GetPosition().x,
+				y = (int)m_pPlayerTank[nNowSelect]->GetPosition().y,
+				z = (int)m_pPlayerTank[nNowSelect]->GetPosition().z;
+
+			// オブジェクトの移動
+			ImGui::DragInt("X", &x);
+			ImGui::DragInt("Y", &y);
+			ImGui::DragInt("Z", &z);
+
+			// オブジェクトの位置の設定
+			m_pPlayerTank[nNowSelect]->SetPosition(D3DXVECTOR3((float)x, (float)y, (float)z));
+		}
+	}
+
+	// 改行
+	ImGui::Separator();
+
+	// 生成
+	if (ImGui::Button("Crate"))
+	{
+		// オブジェクトの生成
+		m_pPlayerTank.emplace_back(CPlayertank::Create());
+	}
+
+	// 改行キャンセル
+	ImGui::SameLine();
+
+	// セーブ
+	if (ImGui::Button("Save"))
+	{
+		// 敵のセーブ
+		EnemySave(m_MapNum);
+	}
+
+	// 全てセーブ
+	AllSaveButton();
+
+#endif
+
+}
+
+// =====================================================================================================================================================================
+//
 // 障害物のコンボボックス
 //
 // =====================================================================================================================================================================
@@ -1213,6 +1388,16 @@ bool CMap::PrisonerComboBox(int & nType)
 
 // =====================================================================================================================================================================
 //
+// プレイヤーの戦車のコンボボックス
+//
+// =====================================================================================================================================================================
+bool CMap::PlayerTankComboBox(int & nType)
+{
+	return false;
+}
+
+// =====================================================================================================================================================================
+//
 // 死亡フラグ確認関数
 //
 // =====================================================================================================================================================================
@@ -1248,5 +1433,13 @@ void CMap::UpdateDieFlag()
 		}
 	}
 
-
+	for (size_t nCnt = 0; nCnt < m_pPlayerTank.size(); nCnt++)
+	{
+		if (m_pPlayerTank[nCnt]->GetDieFlag())
+		{
+			m_pPlayerTank[nCnt]->Rerease();
+			m_pPlayerTank[nCnt] = nullptr;
+			m_pPlayerTank.erase(m_pPlayerTank.begin() + nCnt);
+		}
+	}
 }
