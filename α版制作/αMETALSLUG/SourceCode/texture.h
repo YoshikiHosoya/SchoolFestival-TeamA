@@ -40,6 +40,11 @@ public:
 		TEX_MESH_BLOCK,							//ブロック
 		TEX_MESH_WATER,							//水
 
+		TEX_UI_LIFE,							//体力のUI
+		TEX_UI_REMAIN,							//残機のUI
+		TEX_UI_ARMS,							//弾の残数のUI
+		TEX_UI_BOMB,							//グレネードの残数のUI
+
 		TEX_MAX									//MAX
 	};
 
@@ -57,6 +62,7 @@ public:
 		SEPARATE_TEX_EFFECT_SHOTGUN,				//ショットガン
 		SEPARATE_TEX_EFFECT_IMPACT00,				//インパクト
 		SEPARATE_TEX_EFFECT_IMPACT01,				//インパクト
+		SEPARATE_TEX_NUM,							//ナンバー
 
 		SEPARATE_TEX_MAX							//MAX
 	};
@@ -66,7 +72,7 @@ public:
 		LPDIRECT3DTEXTURE9 m_apSeparateTexture;		//分割テクスチャへのポインタ
 		std::string m_aSeparateTexFileName;			//分割テクスチャの名前
 		SEPARATE_TEX_TYPE type;						//テクスチャの種類
-		D3DXVECTOR2 m_UVCnt;							//UVの枚数
+		D3DXVECTOR2 m_UVCnt;						//UVの枚数
 		D3DXVECTOR2 m_UVSize;						//UVの大きさ
 
 	}SEPARATE_TEX_INFO;
