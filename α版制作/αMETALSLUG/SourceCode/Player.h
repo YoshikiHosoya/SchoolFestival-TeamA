@@ -34,6 +34,9 @@ public:
 	void Update(void);
 	void Draw(void);
 	void DebugInfo(void);
+	void MoveUpdate(void);
+	void CollisionUpdate(void);
+	void AttackUpdate(void);
 	DEBUG_STATE GetDebugState(void);
 	static CPlayer *Create(void);
 	bool DefaultMotion(void);
@@ -45,7 +48,6 @@ private:
 		DEBUG_STATE m_DebugState;						//デバッグのステータス
 		bool m_bAttack_Enemy;							//攻撃時
 		bool m_bAttack_Prisoner;						//攻撃時
-
 		float m_Angle;
 		WORD Oldstate;											//コントローラーの1frame前のステート
 		CGun			*m_pGun;								// ガンクラスのポインタ
