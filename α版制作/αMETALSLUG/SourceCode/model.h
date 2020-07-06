@@ -101,7 +101,7 @@ public:
 		MODEL_TANK_TANKWHEEL,		//É^ÉCÉÑ
 		MODEL_TANK_TANKGUN,			//ïêäÌ
 		MODEL_TANK_MAX
-	}ENEMY_TANK_PARTS_MODEL;
+	}TANK_PARTS_MODEL;
 
 	typedef enum
 	{

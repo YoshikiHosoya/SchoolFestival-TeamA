@@ -306,7 +306,7 @@ void CModel::LoadModel(void)
 		std::cout << "OBSTACLE Load >>" << m_ObstacleFileName[nCnt] << NEWLINE;
 
 	}
-	//障害物箱のモデル読み込み
+	//戦車のモデル読み込み
 	for (int nCnt = 0; nCnt < MODEL_TANK_MAX; nCnt++)
 	{
 		// Xファイルの読み込み
