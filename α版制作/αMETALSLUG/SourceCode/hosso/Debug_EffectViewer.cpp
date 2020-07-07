@@ -19,7 +19,7 @@
 #include "../particle.h"
 #include "../ParticleManager.h"
 #include "../MeshField.h"
-
+#include "../3Dline.h"
 //------------------------------------------------------------------------------
 //静的メンバ変数の初期化
 //------------------------------------------------------------------------------
@@ -28,6 +28,7 @@
 //マクロ
 //------------------------------------------------------------------------------
 #define EFFECT_CREATE_POS (D3DXVECTOR3(0.0f, 50.0f, 100.0f))
+#define LINE_OFFSET (D3DXVECTOR3(0.0f,500.0f,0.0f))
 
 //------------------------------------------------------------------------------
 //コンストラクタ
@@ -38,6 +39,7 @@ CDebug_EffectViewer::CDebug_EffectViewer()
 	m_nLoopInterval = 60;
 	m_nCnt = 0;
 	m_pParticleParam.reset();
+	m_p3DLine = nullptr;
 }
 //------------------------------------------------------------------------------
 //デストラクタ
@@ -57,6 +59,9 @@ HRESULT CDebug_EffectViewer::Init()
 
 	//基準線
 	m_pWorldLine = CDebug_WorldLine::Create(EFFECT_CREATE_POS);
+
+	//ラインの生成
+	m_p3DLine = C3DLine::Create(EFFECT_CREATE_POS, ZeroVector3, ZeroVector3, LINE_OFFSET, WhiteColor);
 
 	//パーティクルのマネージャ
 	CParticleManager::Create();
@@ -117,7 +122,9 @@ void CDebug_EffectViewer::ShowDebugInfo()
 	CDebugProc::Print("[Ctrl] + [Enter] Loop %d \n",m_bLoop);
 
 	//コンボボックス表示
-	if (CParticleParam::ShowParamConboBox(NowText))
+	if (CHossoLibrary::ImGui_Combobox(CParticleParam::GetFileNameList(), "ParamFileName", (int&)NowText))
+
+
 	{
 		//メモリ確保
 		CParticleParam *pParam = new CParticleParam;

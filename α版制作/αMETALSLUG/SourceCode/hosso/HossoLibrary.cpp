@@ -105,7 +105,7 @@ bool CHossoLibrary::ImGui_Combobox(std::vector<std::string> aItemNameList, std::
 			bool is_selected = (aItemNameList[nValue] == aItemNameList[nCnt]);
 
 			//‘I‘ğ‚³‚ê‚½‚Ìˆ—
-			if (ImGui::Selectable(aItemNameList[nValue].data(), is_selected))
+			if (ImGui::Selectable(aItemNameList[nCnt].data(), is_selected))
 			{
 				//Œ»İ‚Ì‘I‘ğ€–Úİ’è
 				nValue = nCnt;

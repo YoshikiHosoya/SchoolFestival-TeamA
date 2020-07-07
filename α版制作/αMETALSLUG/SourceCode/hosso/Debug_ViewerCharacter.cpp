@@ -269,14 +269,14 @@ void CDebug_ViewerCharacter::MotionViewer()
 		nNowFrame = 0;
 	}
 
-	////改行
-	//ImGui::Separator();
-	////原点の高さ調節
-	//if (ImGui::DragFloat("OriginHeight", &pMotionInfo->pKeyInfoList[nNowKey]->fOriginHeight, 0.05f, -70.0f, 70.0f))
-	//{
-	//	//モーション強制変更
-	//	pModelCharacter->ForcedUpdate(NowMotionType, nNowKey);
-	//}
+	//改行
+	ImGui::Separator();
+	//原点の高さ調節
+	if (ImGui::DragFloat("OriginHeight", &pMotionInfo->key_info[nNowKey]->fHeight, 0.05f, -100.0f, 100.0f))
+	{
+		//モーション強制変更
+		ForcedUpdate();
+	}
 
 	//キーボードの←→でも現在のキー変えたい
 	if (pKeyboard->GetKeyboardTrigger(DIK_LEFT))
@@ -518,10 +518,10 @@ HRESULT CDebug_ViewerCharacter::SaveMotion(CCharacter::CHARACTER_MOTION_STATE mo
 				fputs(cWriteText, pFile);
 				fputs(NEWLINE, pFile);
 
-				////高さ
-				//sprintf(cWriteText, "		%s %s %.2f		%s", "HEIGHT", &EQUAL, pMotionInfo->key_info[nCnt]->fOriginHeight, "//原点の高さ");
-				//fputs(cWriteText, pFile);
-				//fputs(NEWLINE, pFile);
+				//高さ
+				sprintf(cWriteText, "		%s %s %.2f		%s", "HEIGHT", &EQUAL, pMotionInfo->key_info[nCnt]->fHeight, "//原点の高さ");
+				fputs(cWriteText, pFile);
+				fputs(NEWLINE, pFile);
 
 				fputs(NEWLINE, pFile);
 

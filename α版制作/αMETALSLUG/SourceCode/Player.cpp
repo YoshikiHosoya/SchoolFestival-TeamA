@@ -102,9 +102,6 @@ void CPlayer::Uninit(void)
 	// プレイヤUIのポインタ
 	if (m_pPlayerUI)
 	{
-		m_pPlayerUI->Uninit();
-
-		delete m_pPlayerUI;
 		m_pPlayerUI = nullptr;
 	}
 
@@ -522,7 +519,7 @@ void CPlayer::Ride()
 
 		// 戦車に乗っている時にジャンプして戦車から降りる
 		CKeyboard *key = CManager::GetInputKeyboard();
-		if (key->GetKeyboardTrigger(DIK_SPACE) && GetJump() == true)
+		if (key->GetKeyboardTrigger(DIK_SPACE) && GetJump() == false)
 		{
 			m_bRideVehicle = false;
 			GetMove().y += 40;

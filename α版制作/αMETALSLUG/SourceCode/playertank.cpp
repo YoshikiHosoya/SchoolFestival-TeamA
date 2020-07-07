@@ -125,8 +125,15 @@ void CPlayertank::Update(void)
 		// レイの判定
 		if (GetCollision()->RayBlockCollision(pMap,GetMtxWorld()))
 		{
-			// ジャンプすることを承認する
-			SetJump(true);
+			// 戦車が弾を撃つ処理
+			Shot(key);
+
+			//if (GetCollision()->RayBlockCollision(pMap, GetMtxWorld()))
+			//{
+				// 戦車を操作する処理
+				Operation(key);
+			//}
+
 		}
 		else
 		{
@@ -242,7 +249,11 @@ void CPlayertank::Operation(CKeyboard * key)
 	}
 
 	// ジャンプ処理
+<<<<<<< .mine
 	if (key->GetKeyboardPress(DIK_SPACE))
+=======
+	if (key->GetKeyboardTrigger(DIK_W))
+>>>>>>> .theirs
 	{
 		// 1回ジャンプさせる
 		Jump();

@@ -818,6 +818,8 @@ void CCharacter::ForcedUpdate()
 		//ƒ‚[ƒVƒ‡ƒ“‚Ì‰ñ“]‚ÌŒˆ’èæŽæ“¾
 		m_vModelList[nCntKey]->SetRot(m_CharacterMotion[m_MotionType]->key_info[m_CntKeySet]->key[nCntKey]->rot);
 	}
+
+	m_vModelList[0]->GetPosition().y = m_CharacterMotion[m_MotionType]->key_info[m_CntKeySet]->fHeight;
 }
 //====================================================================
 //ŠJ•ú
