@@ -10,6 +10,7 @@
 #include "bullet.h"
 #include "gun.h"
 #include "multinumber.h"
+#include "UIManager.h"
 
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
@@ -160,11 +161,14 @@ CPlayerUI * CPlayerUI::Create()
 	pPlayerUI->Init();
 
 	// スコアの生成
-	pPlayerUI->m_pScore = CMultiNumber::Create(D3DXVECTOR3(50.0f, 50.0f, 0.0f), D3DXVECTOR3(10.0f, 10.0f, 0.0f),0, 8, CScene::OBJTYPE_UI);
+	pPlayerUI->m_pScore = CMultiNumber::Create(D3DXVECTOR3(80.0f, 50.0f, 0.0f), D3DXVECTOR3(10.0f, 10.0f, 0.0f), pPlayerUI->m_nScore, 8, CScene::OBJTYPE_UI);
 	// 弾の残数の生成
-	pPlayerUI->m_pBulletAmmo = CMultiNumber::Create(D3DXVECTOR3(190.0f, 80.0f, 0.0f), D3DXVECTOR3(10.0f, 10.0f, 0.0f), 0, 3, CScene::OBJTYPE_UI);
+	pPlayerUI->m_pBulletAmmo = CMultiNumber::Create(D3DXVECTOR3(200.0f, 80.0f, 0.0f), D3DXVECTOR3(10.0f, 10.0f, 0.0f), pPlayerUI->m_nBulletAmmo, 3, CScene::OBJTYPE_UI);
 	// グレネードの残数の生成
-	pPlayerUI->m_pGrenadeAmmo = CMultiNumber::Create(D3DXVECTOR3(240.0f, 80.0f, 0.0f), D3DXVECTOR3(10.0f, 10.0f, 0.0f), 0, 2, CScene::OBJTYPE_UI);
+	pPlayerUI->m_pGrenadeAmmo = CMultiNumber::Create(D3DXVECTOR3(250.0f, 80.0f, 0.0f), D3DXVECTOR3(10.0f, 10.0f, 0.0f), pPlayerUI->m_nGrenadeAmmo, 2, CScene::OBJTYPE_UI);
+
+	//オブジェタイプ設定してSceneに所有権を渡す
+	CUIManager::AddUIList(std::move(pPlayerUI));
 
 	return pPlayerUI;
 }
@@ -191,7 +195,7 @@ void CPlayerUI::SetScore(int nScore)
 void CPlayerUI::SetBulletAmmo(int nBulletAmmo)
 {
 	// 弾の残数減算
-	m_nBulletAmmo -= nBulletAmmo;
+	m_nBulletAmmo = nBulletAmmo;
 
 	// 弾の残数の設定
 	m_pBulletAmmo->SetMultiNumber(m_nBulletAmmo);
@@ -205,7 +209,7 @@ void CPlayerUI::SetBulletAmmo(int nBulletAmmo)
 void CPlayerUI::SetGrenadeAmmo(int nGrenadeAmmo)
 {
 	// グレネードの残数減算
-	m_nGrenadeAmmo -= nGrenadeAmmo;
+	m_nGrenadeAmmo = nGrenadeAmmo;
 
 	// グレネードの残数の設定
 	m_pGrenadeAmmo->SetMultiNumber(m_nGrenadeAmmo);

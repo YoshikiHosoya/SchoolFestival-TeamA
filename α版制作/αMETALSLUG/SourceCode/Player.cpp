@@ -23,6 +23,7 @@
 #include "prisoner.h"
 #include "Knife.h"
 #include "playerUI.h"
+#include "bullet.h"
 
 //====================================================================
 //マクロ定義
@@ -62,6 +63,11 @@ HRESULT CPlayer::Init(void)
 	m_pKnife = CKnife::Create(GetCharacterModelPartsList(CModel::MODEL_PLAYER_LHAND)->GetMatrix());
 	// プレイヤーUIの生成
 	m_pPlayerUI = CPlayerUI::Create();
+
+	// 弾の残数表示
+	m_pPlayerUI->SetBulletAmmo(m_pGun->GetGunAmmo());
+	// グレネードの残数表示
+	m_pPlayerUI->SetGrenadeAmmo(m_pGrenadeFire->GetGrenadeAmmo());
 
 	// 当たり判定生成
 	GetCollision()->SetPos(&GetPosition());
@@ -149,7 +155,10 @@ void CPlayer::Update(void)
 	AttackUpdate();
 	CollisionUpdate();
 
-	m_pPlayerUI->Update();
+	// 弾の残数表示
+	m_pPlayerUI->SetBulletAmmo(m_pGun->GetGunAmmo());
+	// グレネードの残数表示
+	m_pPlayerUI->SetGrenadeAmmo(m_pGrenadeFire->GetGrenadeAmmo());
 
 	CCharacter::Update();
 }
@@ -158,8 +167,6 @@ void CPlayer::Update(void)
 //====================================================================
 void CPlayer::Draw(void)
 {
-	m_pPlayerUI->Draw();
-
 	CCharacter::Draw();
 }
 //====================================================================
@@ -414,6 +421,7 @@ void CPlayer::AttackUpdate(void)
 		{
 			// グレネード生成
 			m_pGrenadeFire->Fire(GetShotDirection());
+
 			SetMotion(CCharacter::PLAYER_MOTION_GRENADE);
 		}
 	}
