@@ -50,11 +50,12 @@ public:
 	{
 		int nFram;					//フレーム数
 		std::vector<KEY*> key;
-
+		float fHeight;					//高さ
 		//コンストラクタ
 		KEY_INFO()
 		{
 			nFram = 60;
+			fHeight = 0.0f;
 			key = {};
 		}
 	}KEY_INFO;
@@ -151,6 +152,8 @@ public:
 	std::vector<CModel*> &GetCharacterModelList();					//キャラクターのモデル取得
 	CModel* GetCharacterModelPartsList(int nCnt);					//キャラクターのモデルパーツ取得
 	CHARACTER_DIRECTION GetCharacterDirection(void);				//向きの取得
+	D3DXMATRIX *GetPartsMtx(int nCnt);
+
 	//モーション関連
 	bool &GetMotion();
 	int &GetKeySet(void);											//キーセットの取得
@@ -172,6 +175,7 @@ private:
 	static char *m_LoadMotionFileName[CHARACTER_MOTION_MAX];		//読み込むファイル名
 	std::vector<CModel*> m_vModelList;								//可変長配列 設置したモデル
 	D3DXVECTOR3 m_rotBET[MAX_MODEL];
+	float m_HeightBet;
 	D3DXVECTOR3 m_pos;												//位置
 	D3DXVECTOR3 m_posold;											//前の位置
 	D3DXVECTOR3 m_move;												//移動量

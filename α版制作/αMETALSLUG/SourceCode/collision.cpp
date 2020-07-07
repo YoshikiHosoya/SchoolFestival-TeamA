@@ -716,7 +716,7 @@ bool CCollision::BlockCollision2D(CCollision * pCollision)
 //======================================================================================================================
 // レイの判定
 //======================================================================================================================
-bool CCollision::RayBlockCollision(CMap *pMap)
+bool CCollision::RayBlockCollision(CMap *pMap, D3DXMATRIX *pMat)
 {
 	// 地形判定 変数宣言
 	BOOL				bHitFlag			= false;	// 判定が出たかのフラグ
@@ -738,9 +738,9 @@ bool CCollision::RayBlockCollision(CMap *pMap)
 		//	逆行列の取得
 		D3DXMatrixInverse(&invmat, NULL, pMap->GetModel(nCnt)->GetMatrix());
 		//	逆行列を使用し、レイ始点情報を変換　位置と向きで変換する関数が異なるので要注意
-		D3DXVec3TransformCoord(&m_posBefore, &D3DXVECTOR3(this->m_ppos->x, this->m_ppos->y + RAY_FIRST_POINT, this->m_ppos->z), &invmat);
+		D3DXVec3TransformCoord(&m_posBefore, &D3DXVECTOR3(this->m_ppos->x, pMat->_42, this->m_ppos->z), &invmat);
 		//	レイ終点情報を変換
-		D3DXVec3TransformCoord(&m_posAfter, &D3DXVECTOR3(this->m_ppos->x, this->m_ppos->y, this->m_ppos->z), &invmat);
+		D3DXVec3TransformCoord(&m_posAfter, &D3DXVECTOR3(this->m_ppos->x, this->m_ppos->y -1, this->m_ppos->z), &invmat);
 		//	レイ方向情報を変換
 		D3DXVec3Normalize(&direction, &(m_posAfter - m_posBefore));
 		//Rayを飛ばす
@@ -791,7 +791,7 @@ bool CCollision::RayBlockCollision(CMap *pMap)
 //======================================================================================================================
 // レイの判定
 //======================================================================================================================
-bool CCollision::RayCollision(CMap * pMap)
+bool CCollision::RayCollision(CMap *pMap)
 {
 	// 地形判定 変数宣言
 	BOOL				bHitFlag = false;			// 判定が出たかのフラグ

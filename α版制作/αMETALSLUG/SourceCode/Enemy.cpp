@@ -84,23 +84,6 @@ void CEnemy::Update(void)
 		 //座標の更新
 		GetCollision()->SetPos(&GetPosition());
 	}
-
-	// マップのポインタ取得
-	CMap *pMap;
-	pMap = CManager::GetBaseMode()->GetMap();
-
-	// マップモデルが存在した時
-	if (pMap != nullptr)
-	{
-		// レイの判定
-		if (GetCollision()->RayBlockCollision(pMap))
-		{
-		}
-		else
-		{
-		}
-	}
-
 	//体力が0以下になった時
 	if (this->GetLife() <= 0)
 	{//アイテムを生成

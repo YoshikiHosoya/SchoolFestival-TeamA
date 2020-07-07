@@ -123,7 +123,7 @@ void CPlayertank::Update(void)
 	if (pMap != nullptr)
 	{
 		// レイの判定
-		if (GetCollision()->RayBlockCollision(pMap))
+		if (GetCollision()->RayBlockCollision(pMap,GetMtxWorld()))
 		{
 			// ジャンプすることを承認する
 			SetJump(true);
