@@ -30,7 +30,7 @@ public:
 	virtual void Draw();									//描画
 	virtual void ShowDebugInfo();							//デバッグ情報表記
 
-	bool GetDeleteFlag() { return m_bDeleteFlag; };
+	bool GetDeleteFlag() { return m_bDeleteFlag; };			// デリートフラグの取得
 
 private:
 	bool m_bDeleteFlag;										//消去フラグ
