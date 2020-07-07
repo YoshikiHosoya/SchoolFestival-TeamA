@@ -56,6 +56,7 @@ public:
 	void					SetDrawFlag(bool bflag)		{ m_bDraw = bflag; };	// 描画フラグの設定
 
 	void					Shot(D3DXVECTOR3 rot);								// 銃の発射
+	int						GetGunAmmo() { return m_nAmmo; };					// 銃の残弾数取得
 
 private:
 	/* メンバ関数 */

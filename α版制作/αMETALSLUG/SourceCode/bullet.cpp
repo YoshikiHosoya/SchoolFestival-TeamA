@@ -16,6 +16,7 @@
 #include "map.h"
 #include "Obstacle.h"
 #include "prisoner.h"
+#include "particle.h"
 #include "TexAnimation3D.h"
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
@@ -77,7 +78,7 @@ HRESULT CBullet::Init()
 	// 変数初期化
 	m_move			= D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// 移動値
 	m_nLife			= 0;				// 体力
-	
+
 	// 初期化
 	CModel::Init();
 
@@ -173,6 +174,8 @@ void CBullet::Update(void)
 
 	// 更新
 	CModel::Update();
+
+	CParticle::CreateFromText(GetPosition(), CParticleParam::PARTICLE_BULLET_ORBIT);
 }
 
 // =====================================================================================================================================================================

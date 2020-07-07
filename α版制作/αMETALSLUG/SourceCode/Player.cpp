@@ -66,6 +66,11 @@ HRESULT CPlayer::Init(void)
 	// 乗り物に乗り込んでいるかどうかのフラグ
 	m_bRideVehicle = false;
 
+	// 弾の残数表示
+	m_pPlayerUI->SetBulletAmmo(m_pGun->GetGunAmmo());
+	// グレネードの残数表示
+	m_pPlayerUI->SetGrenadeAmmo(m_pGrenadeFire->GetGrenadeAmmo());
+
 	// 当たり判定生成
 	GetCollision()->SetPos(&GetPosition());
 	GetCollision()->SetSize2D(PLAYER_SIZE);
@@ -154,7 +159,10 @@ void CPlayer::Update(void)
 
 	CollisionUpdate();
 
-	m_pPlayerUI->Update();
+	// 弾の残数表示
+	m_pPlayerUI->SetBulletAmmo(m_pGun->GetGunAmmo());
+	// グレネードの残数表示
+	m_pPlayerUI->SetGrenadeAmmo(m_pGrenadeFire->GetGrenadeAmmo());
 
 	CCharacter::Update();
 }
@@ -163,8 +171,6 @@ void CPlayer::Update(void)
 //====================================================================
 void CPlayer::Draw(void)
 {
-	m_pPlayerUI->Draw();
-
 	// 乗り物に乗っていたら描画しない
 	if (m_bRideVehicle == false)
 	{
@@ -442,6 +448,7 @@ void CPlayer::AttackUpdate(void)
 		{
 			// グレネード生成
 			m_pGrenadeFire->Fire(GetShotDirection());
+
 			SetMotion(CCharacter::PLAYER_MOTION_GRENADE);
 		}
 	}
