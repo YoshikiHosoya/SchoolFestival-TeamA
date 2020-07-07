@@ -75,8 +75,6 @@ HRESULT CVehicle::Init(void)
 	m_state			= VEHICLE_STATE_NORMAL;
 	// 回転量の初期化
 	m_rotDest.y		= -0.5f*  D3DX_PI;
-	// ジャンプフラグの初期化
-	m_bJump			= false;
 	// 重力フラグの初期化
 	m_bGravity		= true;
 	// 死亡フラグの初期化
@@ -96,11 +94,9 @@ HRESULT CVehicle::Init(void)
 	// 無敵状態から通常状態に戻るまでのカウント
 	m_nStateCnt = 0;
 	// 向き
-	m_VehicleDirection = VEHICLE_LEFT;
+	m_VehicleDirection = VEHICLE_RIGHT;
 	// ジャンプしているかのフラグを初期化
 	m_bJump = false;
-	// 削除するかどうかのフラグを初期化
-	m_bDieFlag = false;
 
 	return S_OK;
 }
@@ -134,13 +130,14 @@ void CVehicle::Update(void)
 	// 弾を撃つ方向の計算
 	ShotDirection();
 
+	m_pos += m_move;
+
 	// 体力が0以下になった時
 	if (this->m_nLife <= 0)
 	{
 		// 状態を破壊に変更
 		m_state = VEHICLE_STATE_BREAK;
 	}
-
 }
 //====================================================================
 //
@@ -200,7 +197,7 @@ void CVehicle::Draw(void)
 			m_vModelList[nCnt]->GetRot().x += diffRot.x * 0.1f;
 
 			m_vModelList[nCnt]->SetRot(m_vModelList[nCnt]->GetRot());
-			CDebugProc::Print("ShotRot : %.1f, %.1f %.1f\n", m_ShotRot.x, m_ShotRot.y, m_ShotRot.z);
+			CDebugProc::Print("tankShotRot : %.1f, %.1f %.1f\n", m_ShotRot.x, m_ShotRot.y, m_ShotRot.z);
 
 			CDebugProc::Print("HeadRot : %.1f, %.1f %.1f\n", m_vModelList[nCnt]->GetRot().x, m_vModelList[nCnt]->GetRot().y, m_vModelList[nCnt]->GetRot().z);
 		}
@@ -245,8 +242,6 @@ void CVehicle::Gravity()
 		// 重力
 		m_move.y -= VEHICLE_GRAVITY;
 	}
-
-	m_pos += m_move;
 }
 
 //====================================================================

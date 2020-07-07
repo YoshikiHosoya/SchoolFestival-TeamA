@@ -22,9 +22,11 @@ int COneParticle::nNumParticleAll = 0;
 std::vector<std::unique_ptr<CParticleParam>> CParticleParam::m_pParticleDefaultParamList = {};
 std::vector<std::string> CParticleParam::m_aFileNameList =
 {
-	{ "data/Load/EffectParamater/test.txt" },
+	{ "data/Load/EffectParamater/Default.txt" },
+	{ "data/Load/EffectParamater/Explosion.txt" },
+	{ "data/Load/EffectParamater/Blood.txt" },
 	{ "data/Load/EffectParamater/Sumple.txt" },
-	{ "data/Load/EffectParamater/test.txt" },
+	{ "data/Load/EffectParamater/BulletOrbit.txt" },
 
 };
 //------------------------------------------------------------------------------
@@ -163,6 +165,12 @@ void CParticle::UpdateVertex()
 
 	for (size_t nCnt = 0; nCnt < m_pParticleList.size(); nCnt++)
 	{
+		//重力をかける場合
+		if (m_pParticleParam->GetGravity())
+		{
+			//↓方向に力を加算
+			m_pParticleList[nCnt]->m_move.y -= m_pParticleParam->GetGravityPower();
+		}
 		//移動
 		m_pParticleList[nCnt]->m_pos += m_pParticleList[nCnt]->m_move;
 
@@ -207,10 +215,47 @@ void CParticle::Create(D3DXVECTOR3 pos, int nLife, float fRadius, D3DXCOLOR col,
 		if (pParticle->m_pParticleParam)
 		{
 			//情報設定
-			pParticle->m_pParticleParam->SetParamater(nLife, fRadius, col);
+			pParticle->m_pParticleParam->SetParamater(nLife, fRadius, col,nNumber,fSpeed);
 
 			//パーティクルの設定
 			pParticle->SetParticle(pos, pParticle->m_pParticleParam.get());
+
+			//オブジェタイプ設定してSceneに所有権を渡す
+			CParticleManager::AddParticleList(std::move(pParticle));
+		}
+	}
+}
+
+//------------------------------------------------------------------------------
+//生成
+//パーティクルのクラスを用いて生成
+//------------------------------------------------------------------------------
+void CParticle::CreateFromParam(D3DXVECTOR3 pos, CParticleParam *pInputParam)
+{
+	//メモリ確保
+	std::unique_ptr<CParticle> pParticle(new CParticle);
+
+	//nullcheck
+	if (pParticle)
+	{
+		//初期化
+		pParticle->Init();
+
+		//パーティクルのパラメータのメモリ確保
+		CParticleParam *pParam = new CParticleParam;
+
+		//nullcheck
+		if (pParam)
+		{
+			//情報設定
+			//Uniqueptrを使うとオペレータできなかったから普通のポインタ同士でオペレータ
+			*pParam = pInputParam;
+
+			//メンバのポインタに格納
+			pParticle->m_pParticleParam.reset(std::move(pParam));
+
+			//パーティクルの設定
+			pParticle->SetParticle(pos, pParam);
 
 			//オブジェタイプ設定してSceneに所有権を渡す
 			CParticleManager::AddParticleList(std::move(pParticle));
@@ -241,41 +286,9 @@ void CParticle::ResetVertexID()
 }
 
 //------------------------------------------------------------------------------
-//パーティクル生成　細かい設定有
-//------------------------------------------------------------------------------
-void CParticle::DetailsCreate(D3DXVECTOR3 pos, int nLife, float fRadius, D3DXCOLOR col, int nNumber, float fSpeed,
-								float fAlphaDamping, float fRadiusDamping, CTexture::TEX_TYPE textype)
-{
-	//メモリ確保
-	std::unique_ptr<CParticle> pParticle(new CParticle);
-
-	//nullcheck
-	if (pParticle)
-	{
-		//初期化
-		pParticle->Init();
-
-		//パーティクルのパラメータのメモリ確保
-		pParticle->m_pParticleParam.reset(new CParticleParam);
-
-		if (pParticle->m_pParticleParam)
-		{
-			//情報設定
-			pParticle->m_pParticleParam->SetParamater(nLife, fRadius, col,fRadiusDamping,fAlphaDamping,textype);
-
-			//パーティクルの設定
-			pParticle->SetParticle(pos, pParticle->m_pParticleParam.get());
-
-			//オブジェタイプ設定してSceneに所有権を渡す
-			CParticleManager::AddParticleList(std::move(pParticle));
-		}
-	}
-}
-
-//------------------------------------------------------------------------------
 //テキスト情報を元にパーティクル作成
 //------------------------------------------------------------------------------
-void CParticle::CreateFromText(D3DXVECTOR3 pos, CParticleParam::PARTICLE_TYPE type)
+void CParticle::CreateFromText(D3DXVECTOR3 pos, CParticleParam::PARTICLE_TEXT type)
 {
 	//メモリ確保
 	std::unique_ptr<CParticle> pParticle(new CParticle);
@@ -395,7 +408,7 @@ HRESULT CParticleParam::LoadParticleDefaultParam()
 							}
 							if (strcmp(cHeadText, "END_PARAMSET") == 0)
 							{
-								pParam->m_ParticleType = (CParticleParam::PARTICLE_TYPE)nCnt;
+								pParam->m_ParticleType = (CParticleParam::PARTICLE_TEXT)nCnt;
 								m_pParticleDefaultParamList.emplace_back(std::move(pParam));
 							}
 						}
@@ -413,6 +426,7 @@ HRESULT CParticleParam::LoadParticleDefaultParam()
 		//ファイル読み込めなかった場合
 		else
 		{
+			std::cout << "LoadFailed!!  >>" << m_aFileNameList[nCnt].data() << NEWLINE;
 			MessageBox(NULL, "パーティクルのパラメータ読み込み失敗", "警告", MB_ICONWARNING);
 			hResult = E_FAIL;
 		}
@@ -489,12 +503,12 @@ HRESULT CParticleParam::SaveParticleDefaultParam(CParticleParam *pSaveParam)
 		fputs(NEWLINE, pFile);
 
 		//半径の減衰値
-		sprintf(cWriteText, "		%s %s %.1f		%s", "RADIUSDAMPING", &EQUAL, pSaveParam->m_fRadiusDamping, "//半径の減衰値");
+		sprintf(cWriteText, "		%s %s %.2f		%s", "RADIUSDAMPING", &EQUAL, pSaveParam->m_fRadiusDamping, "//半径の減衰値");
 		fputs(cWriteText, pFile);
 		fputs(NEWLINE, pFile);
 
 		//アルファ値の減衰値
-		sprintf(cWriteText, "		%s %s %.1f		%s", "ALPHADAMPING", &EQUAL, pSaveParam->m_fAlphaDamping, "//アルファ値の減衰値");
+		sprintf(cWriteText, "		%s %s %.2f		%s", "ALPHADAMPING", &EQUAL, pSaveParam->m_fAlphaDamping, "//アルファ値の減衰値");
 		fputs(cWriteText, pFile);
 		fputs(NEWLINE, pFile);
 
@@ -633,6 +647,7 @@ void CParticle::SetParticle(D3DXVECTOR3 &pos, CParticleParam *pParam)
 				break;
 			case CParticleParam::SHAPE_CONE:
 
+
 				break;
 			case CParticleParam::SHAPE_CIRCLE_XY:
 				//移動の方向を設定
@@ -664,7 +679,7 @@ void CParticle::SetParticle(D3DXVECTOR3 &pos, CParticleParam *pParam)
 //------------------------------------------------------------------------------
 //コンボボックス
 //------------------------------------------------------------------------------
-bool CParticleParam::ShowParamConboBox(CParticleParam::PARTICLE_TYPE &rType)
+bool CParticleParam::ShowParamConboBox(CParticleParam::PARTICLE_TEXT &rType)
 {
 	bool bChange = false;
 
@@ -683,7 +698,7 @@ bool CParticleParam::ShowParamConboBox(CParticleParam::PARTICLE_TYPE &rType)
 			if (ImGui::Selectable(m_aFileNameList[nCnt].data(), is_selected))
 			{
 				//現在の選択項目設定
-				rType = (CParticleParam::PARTICLE_TYPE)nCnt;
+				rType = (CParticleParam::PARTICLE_TEXT)nCnt;
 				bChange = true;
 			}
 		}
@@ -697,14 +712,11 @@ bool CParticleParam::ShowParamConboBox(CParticleParam::PARTICLE_TYPE &rType)
 //------------------------------------------------------------------------------
 //パラメータ設定
 //------------------------------------------------------------------------------
-void CParticleParam::SetParamater(int nLife, float fRadius, D3DXCOLOR col, float fRadiusDamping, float fAlphaDamping, CTexture::TEX_TYPE textype, int nNumber, float fSpeed)
+void CParticleParam::SetParamater(int nLife, float fRadius, D3DXCOLOR col, int nNumber, float fSpeed)
 {
 	m_nLife = nLife;
 	m_fRadius = fRadius;
 	m_col = col;
-	m_fRadiusDamping = fRadiusDamping;
-	m_fAlphaDamping = fAlphaDamping;
-	m_Textype = textype;
 
 	m_nNumber = nNumber;
 	m_fSpeed = fSpeed;
@@ -729,15 +741,17 @@ void CParticleParam::UpdateParam()
 //------------------------------------------------------------------------------
 void * CParticleParam::operator=(const CParticleParam * pParam)
 {
-	m_nLife = pParam->m_nLife;
-	m_fRadius = pParam->m_fRadius;
-	m_col = pParam->m_col;
-	m_nNumber = pParam->m_nNumber;
-	m_fSpeed = pParam->m_fSpeed;
-	m_fRadiusDamping = pParam->m_fRadiusDamping;
-	m_fAlphaDamping = pParam->m_fAlphaDamping;
-	m_Textype = pParam->m_Textype;
-	m_ParticleType = pParam->m_ParticleType;
-
+	m_nLife					= pParam->m_nLife;
+	m_fRadius				= pParam->m_fRadius;
+	m_col					= pParam->m_col;
+	m_nNumber				= pParam->m_nNumber;
+	m_fSpeed				= pParam->m_fSpeed;
+	m_fRadiusDamping		= pParam->m_fRadiusDamping;
+	m_fAlphaDamping			= pParam->m_fAlphaDamping;
+	m_Textype				= pParam->m_Textype;
+	m_ParticleType			= pParam->m_ParticleType;
+	m_shape					= pParam->m_shape;
+	m_bGravity				= pParam->m_bGravity;
+	m_nGravityPower			= pParam->m_nGravityPower;
 	return this;
 }

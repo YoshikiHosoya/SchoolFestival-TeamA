@@ -52,7 +52,11 @@ public:
 	TAG						&GetTag() { return m_Tag; };						// タグの取得
 	void					SetTag(TAG type) { m_Tag = type; };					// タグの設定
 
+	bool					GetDrawFlag()				{ return m_bDraw; };	// 描画フラグの取得
+	void					SetDrawFlag(bool bflag)		{ m_bDraw = bflag; };	// 描画フラグの設定
+
 	void					Shot(D3DXVECTOR3 rot);								// 銃の発射
+	int						GetGunAmmo() { return m_nAmmo; };					// 銃の残弾数取得
 
 private:
 	/* メンバ関数 */
@@ -68,5 +72,6 @@ private:
 	D3DXVECTOR3				m_ShotPos;				// 発射位置
 	int						m_nCntFrame;			// フレームカウント
 	int						m_nCntBullet;			// 弾のカウント
+	bool					m_bDraw;				// モデルの表示非表示
 };
 #endif

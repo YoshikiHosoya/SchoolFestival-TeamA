@@ -7,7 +7,7 @@ BULLETSET									# 0
 	SPEED		= 20
 	LIFE		= 50
 	POWER		= 1
-	AMMO		= 1
+	AMMO		= 999
 	TRIGGER		= 1
 	INTERVAL	= 3
 END_BULLETSET

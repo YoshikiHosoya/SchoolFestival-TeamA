@@ -61,6 +61,7 @@ HRESULT CGun::Init()
 	m_nAmmo			= CBullet::GetBulletParam(m_GunType)->nAmmo;	// 残弾数
 	m_nInterval		= 0;											// 次に撃つためのインターバル
 	m_ShotPos		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);				// 発射位置
+	m_bDraw			= false;										// 描画フラグ
 	// 初期化
 	CModel::Init();
 
@@ -118,8 +119,12 @@ void CGun::Update(void)
 // =====================================================================================================================================================================
 void CGun::Draw(void)
 {
-	// 描画
-	CModel::Draw(*m_mtx);
+	// 乗り物に乗っていたら描画しない
+	if (m_bDraw == false)
+	{
+		// 描画
+		CModel::Draw(*m_mtx);
+	}
 }
 // =====================================================================================================================================================================
 //
@@ -245,6 +250,9 @@ void CGun::Shot(D3DXVECTOR3 rot)
 
 			// 弾のパラメーターの設定
 			pBullet->SetBulletParam(m_GunType);
+
+			// 弾発砲時のリアクション
+			pBullet->BulletReaction(rot);
 
 			//ノズルフラッシュ
 			CTexAnimation3D::Create(m_ShotPos, D3DXVECTOR3(30.0f, 30.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),

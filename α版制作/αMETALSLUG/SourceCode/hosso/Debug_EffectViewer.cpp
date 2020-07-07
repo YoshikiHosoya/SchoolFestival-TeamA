@@ -52,10 +52,13 @@ CDebug_EffectViewer::~CDebug_EffectViewer()
 //------------------------------------------------------------------------------
 HRESULT CDebug_EffectViewer::Init()
 {
+	//床
 	CMeshField::Create(ZeroVector3, D3DXVECTOR3(50.0f, 50.0f, 50.0f), INTEGER2(20, 20));
 
-	m_pWorldLine = CDebug_WorldLine::Create(ZeroVector3);
+	//基準線
+	m_pWorldLine = CDebug_WorldLine::Create(EFFECT_CREATE_POS);
 
+	//パーティクルのマネージャ
 	CParticleManager::Create();
 
 	//パーティクルのパラメータのメモリ確保
@@ -96,8 +99,10 @@ void CDebug_EffectViewer::ShowDebugInfo()
 {
 #ifdef _DEBUG
 
-	//CParticleParam::PARTICLE_TYPE type = ;
+	//読み込むテキストの番号
+	static CParticleParam::PARTICLE_TEXT NowText = CParticleParam::PARTICLE_TEXT::PARTICLE_DEFAULT;
 
+	//止まってるかどうか
 	if (!CScene::GetStopFlag())
 	{
 		//カウンタ++
@@ -111,6 +116,20 @@ void CDebug_EffectViewer::ShowDebugInfo()
 	CDebugProc::Print("[Enter] パーティクル発生\n");
 	CDebugProc::Print("[Ctrl] + [Enter] Loop %d \n",m_bLoop);
 
+	//コンボボックス表示
+	if (CParticleParam::ShowParamConboBox(NowText))
+	{
+		//メモリ確保
+		CParticleParam *pParam = new CParticleParam;
+
+		//パラメータをコピー
+		//unique_ptrだと代入できない
+		*pParam = *CParticleParam::GetDefaultParam(NowText);
+
+		//メモリ確保しなおし
+		m_pParticleParam.reset(std::move(pParam));
+	}
+
 	//項目の大きさ設定
 	ImGui::PushItemWidth(120);
 
@@ -122,6 +141,17 @@ void CDebug_EffectViewer::ShowDebugInfo()
 	ImGui::DragFloat("RadiusDamping", &m_pParticleParam->GetRadiusDamping(), 0.001f, 0.5f, 1.0f);
 	ImGui::DragFloat("AlphaDamping", &m_pParticleParam->GetAlphaDamping(), 0.001f, 0.5f, 1.0f);
 
+	ImGui::Checkbox("bGravity", &m_pParticleParam->GetGravity());
+
+	//重力がONの時
+	if (m_pParticleParam->GetGravity())
+	{
+		//同じ行
+		ImGui::SameLine();
+
+		//重力の大きさ
+		ImGui::DragFloat("GravityPower", &m_pParticleParam->GetGravityPower(), 0.005f, 0.1f, 2.0f);
+	}
 
 	//軌跡の色　float型にキャスト
 	float *rCol = m_pParticleParam->GetCol();
@@ -139,16 +169,6 @@ void CDebug_EffectViewer::ShowDebugInfo()
 		CParticleParam::SaveParticleDefaultParam(m_pParticleParam.get());
 	}
 
-	////コンボボックス表示
-	//if (CParticleParam::ShowParamConboBox(m_pParticleParam->GetType()))
-	//{
-	//	CParticleParam *pParam = new CParticleParam;
-
-	//	//情報設定
-	//	//Uniqueptrを使うとオペレータできなかったから普通のポインタ同士でオペレータ
-	//	*pParam = *CParticleParam::GetDefaultParam(type);
-	//}
-
 	//[Ctrl] + [Enter]
 	if ((pKeyboard->GetKeyboardPress(DIK_LCONTROL) && pKeyboard->GetKeyboardTrigger(DIK_RETURN)))
 	{
@@ -159,9 +179,7 @@ void CDebug_EffectViewer::ShowDebugInfo()
 	//[Enter]を押したとき　または　ループする時
 	if (pKeyboard->GetKeyboardTrigger(DIK_RETURN) || (m_bLoop && m_nCnt % m_nLoopInterval == 0))
 	{
-		CParticle::DetailsCreate(EFFECT_CREATE_POS,
-			m_pParticleParam->GetLife(), m_pParticleParam->GetRadius(), m_pParticleParam->GetCol(), m_pParticleParam->GetNumber(),
-			m_pParticleParam->GetSpeed(), m_pParticleParam->GetAlphaDamping(), m_pParticleParam->GetRadiusDamping(), m_pParticleParam->GetTex());
+		CParticle::CreateFromParam(EFFECT_CREATE_POS, m_pParticleParam.get());
 	}
 
 #endif

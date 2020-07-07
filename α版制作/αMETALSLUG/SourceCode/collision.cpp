@@ -27,6 +27,7 @@
 #include "Obstacle.h"
 #include "prisoner.h"
 #include "item.h"
+#include "playertank.h"
 
 //======================================================================================================================
 //
@@ -437,6 +438,29 @@ CEnemy * CCollision::ForPlayer_EnemyCollision()
 }
 
 //======================================================================================================================
+// プレイヤーが乗り物に乗る時の判定
+//======================================================================================================================
+bool CCollision::ForPlayer_VehicleCollision()
+{
+	// 判定を確認するフラグ
+	bool bHitFlag = false;
+
+	// 戦車の総数分
+	for (int nCntVehicle = 0; nCntVehicle < CManager::GetBaseMode()->GetMap()->GetMaxPlayerTank(); nCntVehicle++)
+	{
+		CPlayertank *pPlayertank = CManager::GetBaseMode()->GetMap()->GetPlayertank(nCntVehicle);
+		if (pPlayertank != nullptr)
+		{
+			if (this->VehicleCollision(pPlayertank->GetCollision()))
+			{
+				bHitFlag = true;
+			}
+		}
+	}
+	return bHitFlag;
+}
+
+//======================================================================================================================
 // ナイフとキャラクターの判定
 //======================================================================================================================
 bool CCollision::KnifeCollision(D3DXVECTOR3 Knifepos, CCollision *pCollision)
@@ -460,6 +484,35 @@ bool CCollision::KnifeCollision(D3DXVECTOR3 Knifepos, CCollision *pCollision)
 		else
 		{
 			bHitFlag = false;
+		}
+	}
+
+	// 当たっているかいないかを返す
+	return bHitFlag;
+}
+
+//======================================================================================================================
+// プレイヤーが乗り物に乗る時の判定
+//======================================================================================================================
+bool CCollision::VehicleCollision(CCollision * pCollision)
+{
+	// 変数宣言
+	bool bHitFlag = false;
+
+	// 素材のX範囲
+	if (this->m_ppos->x + this->m_size.x * 0.5f > pCollision->m_ppos->x - pCollision->m_size.x * 0.5f &&
+		this->m_ppos->x - this->m_size.x * 0.5f < pCollision->m_ppos->x + pCollision->m_size.x * 0.5f)
+	{
+		// 当たり判定(上)
+		if (this->m_ppos->y < pCollision->m_ppos->y + pCollision->m_size.y * 0.5f &&
+			this->m_posOld->y >= pCollision->m_ppos->y + pCollision->m_size.y * 0.5f)
+		{
+			// 素材状の上に
+			this->m_ppos->y = this->m_posOld->y;
+			// 移動量の初期化
+			//this->m_pmove->y = 0.0f;
+			// オブジェクトに当たったフラグ
+			bHitFlag = true;
 		}
 	}
 
