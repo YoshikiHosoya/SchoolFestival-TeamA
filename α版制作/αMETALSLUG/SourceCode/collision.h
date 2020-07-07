@@ -96,8 +96,12 @@ public:
 	CPrisoner	*ForPlayer_PrisonerCollision();			// プレイヤーと捕虜の接触判定 捕虜の状態変更
 	CEnemy		*ForPlayer_EnemyCollision();			// プレイヤーとエネミーの接触判定 捕虜の状態変更
 
+	bool ForPlayer_VehicleCollision();					// プレイヤーと乗り物が行う判定
+
 	bool KnifeCollision(D3DXVECTOR3 Knifepos,
 		CCollision *pCollision);						// ナイフとキャラクターの判定
+
+	bool VehicleCollision(CCollision *pCollision);		// プレイヤーが乗り物に乗る時の判定
 
 protected:
 private:

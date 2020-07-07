@@ -46,8 +46,13 @@ public:
 	CGrenadeFire	*GetGrenadeFire() { return  m_pGrenadeFire; };	// グレネード発射位置のポインタ取得
 	CPlayerUI		*GetPlayerUI() { return  m_pPlayerUI; };		// プレイヤーUIのポインタ取得
 
+	void			SetRideFlag(bool bRide)			{ m_bRideVehicle = bRide; };	// ライドフラグの設定
+	bool			GetRideFlag()					{ return m_bRideVehicle; };		// ライドフラグの取得
+
 private:
 	void Move(float move, float fdest);
+	void Ride();
+
 		DEBUG_STATE m_DebugState;						//デバッグのステータス
 		bool m_bAttack_Enemy;							//攻撃時
 		bool m_bAttack_Prisoner;						//攻撃時
@@ -56,6 +61,7 @@ private:
 		CGun			*m_pGun;								// ガンクラスのポインタ
 		CGrenadeFire	*m_pGrenadeFire;						// グレネード発射クラスのポインタ
 		CPlayerUI		*m_pPlayerUI;							// プレイヤーUIのポインタ
-		CKnife			*m_pKnife;
+		CKnife			*m_pKnife;								// ナイフのポインタ
+		bool			m_bRideVehicle;							// 乗り物に乗り込んでいるかどうかのフラグ
 };
 #endif

@@ -52,6 +52,7 @@ public:
 	int				GetMaxEnemy();												// “G‚ÌÅ‘å”æ“¾
 	int				GetMaxPrisoner();											// •ß—¸‚ÌÅ‘å”æ“¾
 	int				GetMaxObstacle();											// áŠQ•¨‚ÌÅ‘å”æ“¾
+	int				GetMaxPlayerTank();											// íÔ‚ÌÅ‘å”æ“¾
 	LPD3DXMESH		GetMesh(int nCnt);											// ƒƒbƒVƒ…‚Ìæ“¾
 	CModel			*GetModel(int nCnt) { return m_pModel[nCnt]; };				// ƒ‚ƒfƒ‹‚Ìæ“¾
 	CEnemy			*GetEnemy(int nCnt) { return m_pEnemy[nCnt]; };				// “G‚Ìæ“¾
