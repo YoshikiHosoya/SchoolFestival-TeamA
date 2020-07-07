@@ -296,22 +296,6 @@ void CPlayer::CollisionUpdate(void)
 	CMap *pMap;
 	pMap = CManager::GetBaseMode()->GetMap();
 
-	// マップモデルが存在した時
-	if (pMap != nullptr)
-	{
-		// レイの判定
-		if (GetCollision()->RayBlockCollision(pMap))
-		{
-			// ジャンプすることを承認する
-			SetJump(true);
-		}
-		else
-		{
-			// ジャンプすることを承認しない
-			SetJump(false);
-		}
-	}
-
 	// 当たり判定
 	if (GetCollision() != nullptr)
 	{

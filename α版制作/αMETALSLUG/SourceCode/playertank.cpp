@@ -96,6 +96,8 @@ void CPlayertank::Update(void)
 {
 	// キー情報の取得
 	CKeyboard *key = CManager::GetInputKeyboard();
+	CMap *pMap;
+	pMap = CManager::GetBaseMode()->GetMap();
 
 	// 当たり判定処理
 	Collision();
@@ -275,7 +277,7 @@ void CPlayertank::Collision()
 	if (pMap != nullptr)
 	{
 		// レイの判定
-		if (GetCollision()->RayBlockCollision(pMap))
+		if (GetCollision()->RayBlockCollision(pMap,GetMtxWorld()))
 		{
 			// ジャンプすることを承認する
 			SetJump(true);
