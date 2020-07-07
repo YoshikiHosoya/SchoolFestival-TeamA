@@ -21,6 +21,7 @@
 //------------------------------------------------------------------------------
 class CParticleParam;
 class CDebug_WorldLine;
+class C3DLine;
 
 class CDebug_EffectViewer : public CBaseMode
 {
@@ -45,6 +46,7 @@ private:
 	int m_nLoopInterval;								//ループのインターバル
 	int m_nCnt;											//カウント
 
+	C3DLine *m_p3DLine;									//3Dの線 Shapeとかrotを視覚化する為
 
 };
 

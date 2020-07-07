@@ -76,6 +76,8 @@ public:
 	static HRESULT SaveParticleDefaultParam(CParticleParam *pSaveParam);
 
 	//Get関数
+	static std::vector<std::string> &GetFileNameList() {	return m_aFileNameList;};
+
 	int &GetLife()					{ return m_nLife; };				//ライフ
 	float &GetRadius()				{ return m_fRadius; };				//半径
 	D3DXCOLOR &GetCol()				{ return m_col; };					//色
@@ -96,6 +98,7 @@ public:
 
 	static CParticleParam *GetDefaultParam(CParticleParam::PARTICLE_TEXT type) { return m_pParticleDefaultParamList[type].get(); };
 	static bool ShowParamConboBox(CParticleParam::PARTICLE_TEXT & rType);
+
 	//オペレータ
 	void *operator = (const CParticleParam *pParam);
 
