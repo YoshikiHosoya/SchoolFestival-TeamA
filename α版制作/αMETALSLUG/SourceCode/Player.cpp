@@ -23,7 +23,6 @@
 #include "prisoner.h"
 #include "Knife.h"
 #include "playerUI.h"
-#include "bullet.h"
 
 //====================================================================
 //É}ÉNÉçíËã`
