@@ -208,6 +208,12 @@
     <ClCompile Include="SourceCode\playerUI.cpp">
       <Filter>UI</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\UI.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\UIManager.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SourceCode\mesh.h">
@@ -424,6 +430,12 @@
       <Filter>Wepon</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\playerUI.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\UI.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\UIManager.h">
       <Filter>UI</Filter>
     </ClInclude>
   </ItemGroup>

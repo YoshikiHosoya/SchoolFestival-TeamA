@@ -8,6 +8,7 @@
 #include "pause.h"
 #include "ParticleManager.h"
 #include "TexAnimation3D_Collision.h"
+#include "UIManager.h"
 
 #define _CRT_SECURE_NO_WARNINGS // 警告除去
 int			CGame::m_Counter	= 0;
@@ -41,6 +42,8 @@ HRESULT CGame::Init(void)
 
 	//パーティクル生成
 	CParticleManager::Create();
+	// UI生成
+	CUIManager::Create();
 
 	return S_OK;
 

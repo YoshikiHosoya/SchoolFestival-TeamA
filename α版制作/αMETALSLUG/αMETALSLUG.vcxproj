@@ -221,6 +221,8 @@
     <ClCompile Include="SourceCode\TexAnimation3D_Collision.cpp" />
     <ClCompile Include="SourceCode\TexAnimationBase.cpp" />
     <ClCompile Include="SourceCode\texture.cpp" />
+    <ClCompile Include="SourceCode\UI.cpp" />
+    <ClCompile Include="SourceCode\UIManager.cpp" />
     <ClCompile Include="SourceCode\vehicle.cpp" />
     <ClCompile Include="SourceCode\XInputPad.cpp" />
   </ItemGroup>
@@ -295,6 +297,8 @@
     <ClInclude Include="SourceCode\TexAnimation3D_Collision.h" />
     <ClInclude Include="SourceCode\TexAnimationBase.h" />
     <ClInclude Include="SourceCode\texture.h" />
+    <ClInclude Include="SourceCode\UI.h" />
+    <ClInclude Include="SourceCode\UIManager.h" />
     <ClInclude Include="SourceCode\vehicle.h" />
     <ClInclude Include="SourceCode\XInputPad.h" />
   </ItemGroup>
