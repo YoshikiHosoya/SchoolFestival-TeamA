@@ -28,13 +28,13 @@
 #include "prisoner.h"
 #include "item.h"
 #include "playertank.h"
-
+#include "Character.h"
 //======================================================================================================================
 //
 // マクロ定義
 //
 //======================================================================================================================
-#define MAX_RAY_LENGTH  (40)		//Rayの最大の長さ
+#define MAX_RAY_LENGTH  (60)		//Rayの最大の長さ
 #define RAY_FIRST_POINT (30.0f)		//Rayの始点
 
 //======================================================================================================================
@@ -820,7 +820,7 @@ bool CCollision::RayBlockCollision(CMap *pMap, D3DXMATRIX *pMat)
 				fData = vDistance[nCnt];
 			}
 		}
-		if (fData < MAX_RAY_LENGTH)//Rayの長さの指定条件
+		if (fData <MAX_RAY_LENGTH)//Rayの長さの指定条件
 		{
 			this->m_ppos->y = this->m_ppos->y - fData + MAX_RAY_LENGTH;
 			bLand = true;
@@ -830,6 +830,10 @@ bool CCollision::RayBlockCollision(CMap *pMap, D3DXMATRIX *pMat)
 		{
 			bLand = false;
 		}
+		CDebugProc::Print("Rayのヒット時の長さ:%2f\n",fData);
+		CDebugProc::Print("腰の値:%2f\n", pMat->_42);
+
+	
 	}
 	//Rayに判定がなかったらジャンプできない
 	else

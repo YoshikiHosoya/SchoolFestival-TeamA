@@ -29,7 +29,6 @@ class CDebugcollision;
 class CMap;
 class CPrisoner;
 class CEnemy;
-
 //=============================================================================
 //
 // ƒNƒ‰ƒX

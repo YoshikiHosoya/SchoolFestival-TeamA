@@ -914,10 +914,6 @@ CCharacter::CHARACTER_DIRECTION CCharacter::GetCharacterDirection(void)
 {
 	return m_CharacterDirection;
 }
-D3DXMATRIX * CCharacter::GetPartsMtx(int nCnt)
-{
-	return m_vModelList[nCnt]->GetMatrix();
-}
 //====================================================================
 //前のモーションタイプの設定
 //====================================================================

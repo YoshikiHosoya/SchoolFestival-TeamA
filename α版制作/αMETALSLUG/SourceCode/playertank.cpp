@@ -20,12 +20,11 @@
 #include "Obstacle.h"
 #include "prisoner.h"
 #include "grenade.h"
-#include "grenadefire.h"
 
 //====================================================================
 //マクロ定義
 //====================================================================
-#define PLAYERTANK_SIZE			(D3DXVECTOR3(70.0f,65.0f,0.0f)) // プレイヤーの判定のサイズ
+#define PLAYERTANK_SIZE			(D3DXVECTOR3(100.0f,65.0f,0.0f)) // プレイヤーの判定のサイズ
 #define PLAYERTANK_JUMP			(20.0f)							 // 戦車が飛ぶ移動量
 
 // =====================================================================================================================================================================
@@ -63,8 +62,6 @@ HRESULT CPlayertank::Init(void)
 	SetVehicleType(CVehicle::VEHICLE_TYPE_TANK);
 	// 銃の生成
 	m_pGun = CGun::Create(GetVehicleModelPartsList(CModel::MODEL_TANK_TANKHEAD)->GetMatrix());
-	// グレネード放つ位置の生成
-	m_pGrenadeFire = CGrenadeFire::Create(GetVehicleModelPartsList(CModel::MODEL_TANK_TANKHEAD)->GetMatrix());
 	// 銃の弾の種類
 	m_pGun->GetTag() = TAG_PLAYER;
 
@@ -96,24 +93,45 @@ void CPlayertank::Update(void)
 {
 	// キー情報の取得
 	CKeyboard *key = CManager::GetInputKeyboard();
+
+	// 戦車が弾を撃つ処理
+	Shot(key);
+
+	// 戦車を操作する処理
+	Operation(key);
+
+	// 当たり判定
+	if (GetCollision() != nullptr)
+	{
+		// 座標の更新 posとposold
+		GetCollision()->SetPos(&GetPosition());
+		GetCollision()->SetPosOld(&GetPositionOld());
+
+		// 障害物との判定
+		//if (GetCollision()->ForPlayer_ObstacleCollision())
+		//{
+		//	// ジャンプフラグを可能にする
+		//	CVehicle::SetJump(true);
+		//}
+	}
+
+	// マップのポインタ取得
 	CMap *pMap;
 	pMap = CManager::GetBaseMode()->GetMap();
 
-	// 当たり判定処理
-	Collision();
-
-	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
-	if (pPlayer != nullptr)
+	// マップモデルが存在した時
+	if (pMap != nullptr)
 	{
-		// 戦車に乗っていた時
-		if (pPlayer->GetRideFlag())
-		{
-			// 戦車が弾を撃つ処理
-			Shot(key);
-
+		// レイの判定
 		if (GetCollision()->RayBlockCollision(pMap,GetMtxWorld()))
-			// 戦車を操作する処理
-			Operation(key);
+		{
+			// ジャンプすることを承認する
+			SetJump(true);
+		}
+		else
+		{
+			// ジャンプすることを承認しない
+			SetJump(false);
 		}
 	}
 
@@ -135,7 +153,6 @@ void CPlayertank::Draw(void)
 //====================================================================
 void CPlayertank::DebugInfo(void)
 {
-	//CVehicle::DebugInfo();
 }
 
 //====================================================================
@@ -166,12 +183,9 @@ void CPlayertank::Shot(CKeyboard *key)
 	// グレネードを撃つ
 	if (key->GetKeyboardTrigger(DIK_O))
 	{
-		// グレネードの弾数が残っているとき
-		if (m_pGrenadeFire->GetGrenadeAmmo() > 0)
-		{
-			// グレネード生成
-			m_pGrenadeFire->Fire(GetShotDirection());
-		}
+		// グレネード生成
+	//	CGrenade::Create(GetShotDirection(), GetVehicleModelPartsList(CModel::MODEL_PLAYER_LHAND)->GetMatrix());
+
 	}
 }
 
@@ -228,10 +242,12 @@ void CPlayertank::Operation(CKeyboard * key)
 	}
 
 	// ジャンプ処理
-	if (key->GetKeyboardPress(DIK_W))
+	if (key->GetKeyboardPress(DIK_SPACE))
 	{
 		// 1回ジャンプさせる
 		Jump();
+		// ジャンプフラグをtrueにしジャンプできなくする
+		SetJump(true);
 	}
 }
 
@@ -240,52 +256,8 @@ void CPlayertank::Operation(CKeyboard * key)
 //====================================================================
 void CPlayertank::Jump()
 {
-	// 1回分ジャンプする
-	if (GetJump() == true)
+	if (GetJump() == false)
 	{
 		GetMove().y += PLAYERTANK_JUMP;
-	}
-	// ジャンプフラグをtrueにしジャンプできなくする
-	SetJump(false);
-}
-
-//====================================================================
-// 当たり判定処理
-//====================================================================
-void CPlayertank::Collision()
-{
-	// 当たり判定
-	if (GetCollision() != nullptr)
-	{
-		// 座標の更新 posとposold
-		GetCollision()->SetPos(&GetPosition());
-		GetCollision()->SetPosOld(&GetPositionOld());
-
-		// 障害物との判定
-		//if (GetCollision()->ForPlayer_ObstacleCollision())
-		//{
-		//	// ジャンプフラグを可能にする
-		//	CVehicle::SetJump(true);
-		//}
-	}
-
-	// マップのポインタ取得
-	CMap *pMap;
-	pMap = CManager::GetBaseMode()->GetMap();
-
-	// マップモデルが存在した時
-	if (pMap != nullptr)
-	{
-		// レイの判定
-		if (GetCollision()->RayBlockCollision(pMap,GetMtxWorld()))
-		{
-			// ジャンプすることを承認する
-			SetJump(true);
-		}
-		else
-		{
-			// ジャンプすることを承認しない
-			SetJump(false);
-		}
 	}
 }
