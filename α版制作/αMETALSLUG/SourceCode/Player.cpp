@@ -522,7 +522,7 @@ void CPlayer::Ride()
 
 		// íŽÔ‚Éæ‚Á‚Ä‚¢‚éŽž‚ÉƒWƒƒƒ“ƒv‚µ‚ÄíŽÔ‚©‚ç~‚è‚é
 		CKeyboard *key = CManager::GetInputKeyboard();
-		if (key->GetKeyboardTrigger(DIK_SPACE) && GetJump() == true)
+		if (key->GetKeyboardTrigger(DIK_SPACE) && GetJump() == false)
 		{
 			m_bRideVehicle = false;
 			GetMove().y += 40;

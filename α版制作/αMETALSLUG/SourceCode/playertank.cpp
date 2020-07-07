@@ -111,9 +111,12 @@ void CPlayertank::Update(void)
 			// 戦車が弾を撃つ処理
 			Shot(key);
 
-		if (GetCollision()->RayBlockCollision(pMap,GetMtxWorld()))
-			// 戦車を操作する処理
-			Operation(key);
+			//if (GetCollision()->RayBlockCollision(pMap, GetMtxWorld()))
+			//{
+				// 戦車を操作する処理
+				Operation(key);
+			//}
+
 		}
 	}
 
@@ -228,7 +231,7 @@ void CPlayertank::Operation(CKeyboard * key)
 	}
 
 	// ジャンプ処理
-	if (key->GetKeyboardPress(DIK_W))
+	if (key->GetKeyboardTrigger(DIK_W))
 	{
 		// 1回ジャンプさせる
 		Jump();
