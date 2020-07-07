@@ -467,7 +467,7 @@ CMap *CMap::MapCreate(MAP MapNum)
 	// モデルのロード
 	pMap->ModelLoad(MapNum);
 	// 敵のロード
-	//pMap->EnemyLoad(MapNum);
+	pMap->EnemyLoad(MapNum);
 	// 捕虜のロード
 	//pMap->PrisonerLoad(MapNum);
 	// 障害物のロード
@@ -568,6 +568,20 @@ int CMap::GetMaxObstacle()
 	if (!m_pObstacle.empty())
 	{
 		return m_pObstacle.size();
+	}
+	return 0;
+}
+
+// =====================================================================================================================================================================
+//
+// 戦車の最大数取得
+//
+// =====================================================================================================================================================================
+int CMap::GetMaxPlayerTank()
+{
+	if (!m_pPlayerTank.empty())
+	{
+		return m_pPlayerTank.size();
 	}
 	return 0;
 }

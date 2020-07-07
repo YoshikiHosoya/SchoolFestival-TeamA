@@ -23,6 +23,7 @@
 #include "prisoner.h"
 #include "Knife.h"
 #include "playerUI.h"
+#include "playertank.h"
 
 //====================================================================
 //マクロ定義
@@ -62,6 +63,8 @@ HRESULT CPlayer::Init(void)
 	m_pKnife = CKnife::Create(GetCharacterModelPartsList(CModel::MODEL_PLAYER_LHAND)->GetMatrix());
 	// プレイヤーUIの生成
 	m_pPlayerUI = CPlayerUI::Create();
+	// 乗り物に乗り込んでいるかどうかのフラグ
+	m_bRideVehicle = false;
 
 	// 弾の残数表示
 	m_pPlayerUI->SetBulletAmmo(m_pGun->GetGunAmmo());
@@ -150,8 +153,10 @@ void CPlayer::Update(void)
 	{
 		//SetMotion(CCharacter::PLAYER_MOTION_WALK);
 	}
-	MoveUpdate();
-	AttackUpdate();
+
+	// 乗り物に乗っていない時といない時の判定
+	Ride();
+
 	CollisionUpdate();
 
 	// 弾の残数表示
@@ -166,7 +171,11 @@ void CPlayer::Update(void)
 //====================================================================
 void CPlayer::Draw(void)
 {
-	CCharacter::Draw();
+	// 乗り物に乗っていたら描画しない
+	if (m_bRideVehicle == false)
+	{
+		CCharacter::Draw();
+	}
 }
 //====================================================================
 //デバッグ
@@ -274,7 +283,6 @@ void CPlayer::MoveUpdate(void)
 //====================================================================
 void CPlayer::CollisionUpdate(void)
 {
-
 	// マップのポインタ取得
 	CMap *pMap;
 	pMap = CManager::GetBaseMode()->GetMap();
@@ -292,7 +300,6 @@ void CPlayer::CollisionUpdate(void)
 		{
 			// ジャンプすることを承認しない
 			SetJump(false);
-			//空中にいるか
 		}
 	}
 
@@ -303,44 +310,65 @@ void CPlayer::CollisionUpdate(void)
 		GetCollision()->SetPos(&GetPosition());
 		GetCollision()->SetPosOld(&GetPositionOld());
 
-		// エネミーととの判定
-		if (GetCollision()->ForPlayer_EnemyCollision(ATTACK_PENETRATION) == true)
+		// 乗り物に乗っている時に乗り物以外の判定をしない
+		if (m_bRideVehicle == false)
 		{
-			// 近接攻撃可能にする
-			m_bAttack_Enemy = true;
-		}
-		else
-		{
-			// 近接攻撃が無効になる
-			m_bAttack_Enemy = false;
+			// エネミーととの判定
+			if (GetCollision()->ForPlayer_EnemyCollision(ATTACK_PENETRATION) == true)
+			{
+				// 近接攻撃可能にする
+				m_bAttack_Enemy = true;
+			}
+			else
+			{
+				// 近接攻撃が無効になる
+				m_bAttack_Enemy = false;
+			}
+
+			// 捕虜との判定
+			if (GetCollision()->ForPlayer_PrisonerCollision(ATTACK_PENETRATION) == true)
+			{
+				// 近接攻撃可能にする
+				m_bAttack_Prisoner = true;
+			}
+			else
+			{
+				// 近接攻撃が無効になる
+				m_bAttack_Prisoner = false;
+			}
+
+			// 障害物との判定
+			if (GetCollision()->ForPlayer_ObstacleCollision())
+			{
+				// ジャンプフラグを可能にする
+				CCharacter::SetJump(true);
+			}
+
+			// アイテムとの判定
+			if (GetCollision()->ForPlayer_ItemCollision())
+			{
+			}
 		}
 
-		// 捕虜との判定
-		if (GetCollision()->ForPlayer_PrisonerCollision(ATTACK_PENETRATION) == true)
+		//
+		if (m_bRideVehicle == false)
 		{
-			// 近接攻撃可能にする
-			m_bAttack_Prisoner = true;
-		}
-		else
-		{
-			// 近接攻撃が無効になる
-			m_bAttack_Prisoner = false;
-		}
-
-		// 障害物との判定
-		if (GetCollision()->ForPlayer_ObstacleCollision())
-		{
-			// ジャンプフラグを可能にする
-			CCharacter::SetJump(true);
-		}
-
-		// アイテムとの判定
-		if (GetCollision()->ForPlayer_ItemCollision())
-		{
+			// 乗り物との判定
+			if (GetCollision()->ForPlayer_VehicleCollision())
+			{
+				// 乗り込んだ時
+				m_bRideVehicle = true;
+			}
+			else
+			{
+				// 乗っていないとき
+				m_bRideVehicle = false;
+			}
 		}
 	}
 
-
+	// 銃の描画フラグの設定
+	m_pGun->SetDrawFlag(m_bRideVehicle);
 }
 //====================================================================
 //攻撃関連
@@ -471,4 +499,43 @@ void CPlayer::Move(float move, float fdest)
 	GetMove().x += sinf(move * -D3DX_PI) * 1.0f;
 	GetMove().z += cosf(move * -D3DX_PI) * 1.0f;
 	GetRotDest().y = fdest *  D3DX_PI;
+}
+
+//====================================================================
+// 乗り物に乗っている時
+//====================================================================
+void CPlayer::Ride()
+{
+	// 乗り物に乗っていない時に更新する
+	if (m_bRideVehicle == false)
+	{
+		MoveUpdate();
+		AttackUpdate();
+	}
+	else
+	{
+		// 戦車の総数分
+		for (int nCntVehicle = 0; nCntVehicle < CManager::GetBaseMode()->GetMap()->GetMaxPlayerTank(); nCntVehicle++)
+		{
+			// 乗り物のポインタ取得
+			CPlayertank *pPlayertank = CManager::GetBaseMode()->GetMap()->GetPlayertank(nCntVehicle);
+			// 戦車が存在した時
+			if (pPlayertank != nullptr)
+			{
+				// プレイヤーの座標を戦車の座標に合わせる
+				this->SetPosition(pPlayertank->GetPosition());
+			}
+		}
+
+		// 戦車に乗っている時にジャンプして戦車から降りる
+		CKeyboard *key = CManager::GetInputKeyboard();
+		if (key->GetKeyboardTrigger(DIK_SPACE) && GetJump() == true)
+		{
+			m_bRideVehicle = false;
+			GetMove().y += 40;
+			SetMotion(PLAYER_MOTION_JUMP);
+
+			// 無敵判定
+		}
+	}
 }
