@@ -74,7 +74,7 @@ public:
 	bool CharCollision2D(CCollision *pCollision);		// キャラクター用板型の当たり判定
 	bool OtherCollision2D(CCollision *pCollision);		// 板型の当たり判定
 	bool BlockCollision2D(CCollision *pCollision);		// 板型ブロックの当たり判定
-	bool RayBlockCollision(CMap *pMap);					// Rayの判定 キャラクター
+	bool RayBlockCollision(CMap *pMap, D3DXMATRIX *pMat);// Rayの判定 キャラクター
 	bool RayCollision(CMap *pMap);						// Rayの判定 弾など
 
 	void DeCollisionCreate(COLLISIONTYPE collisiontype);// デバッグ用当たり判定の生成

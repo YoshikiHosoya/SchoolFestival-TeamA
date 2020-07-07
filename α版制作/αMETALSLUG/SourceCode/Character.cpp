@@ -72,6 +72,7 @@ HRESULT CCharacter::Init(void)
 	m_bDieFlag = false;
 	m_bMotion = true;
 	m_ShotRot = D3DXVECTOR3(0.0f, 0.5f, 0.0f);
+	m_HeightBet = 0.0f;
 	// 当たり判定生成
 	m_pCollision = CCollision::Create();
 	//マトリックス初期化
@@ -166,13 +167,13 @@ void CCharacter::Update(void)
 	{
 		m_ShotRot.x = 0.5f * D3DX_PI;
 		m_ShotRot.y = 0.0f;
-		m_AddRot.x = 0.75f;
+		m_AddRot.x = 1.0f;
 	}
 	else if (m_CharacterDirection == CHARACTER_DOWN)
 	{
 		m_ShotRot.x = -0.5f * D3DX_PI;
 		m_ShotRot.y = 0.5f * D3DX_PI;
-		m_AddRot.x = -0.75f;
+		m_AddRot.x = -1.0f;
 	}
 
 
@@ -196,8 +197,26 @@ void CCharacter::Update(void)
 	{
 		Rerease();
 	}
-	CDebugProc::Print("move.y:%2f\n",m_move.y);
+	// マップのポインタ取得
+	CMap *pMap;
+	pMap = CManager::GetBaseMode()->GetMap();
 
+	// マップモデルが存在した時
+	if (pMap != nullptr)
+	{
+		// レイの判定
+		if (GetCollision()->RayBlockCollision(pMap,m_vModelList[0]->GetMatrix()))
+		{
+			// ジャンプすることを承認する
+			SetJump(true);
+		}
+		else
+		{
+			// ジャンプすることを承認しない
+			SetJump(false);
+			//空中にいるか
+		}
+	}
 	Moation();
 }
 //====================================================================
@@ -254,7 +273,7 @@ void CCharacter::Draw(void)
 				diffRot.x += D3DX_PI * 2;
 			}
 			//求めた差分だけ追従する計算
-			m_vModelList[nCnt]->GetRot().x += diffRot.x * 0.1f;
+			m_vModelList[nCnt]->GetRot().x += diffRot.x * 0.2f;
 
 			m_vModelList[nCnt]->SetRot(m_vModelList[nCnt]->GetRot());
 			CDebugProc::Print("ShotRot : %.1f, %.1f %.1f\n", m_ShotRot.x, m_ShotRot.y, m_ShotRot.z);
@@ -269,7 +288,7 @@ void CCharacter::Draw(void)
 			m_vModelList[nCnt]->SetRot(m_vModelList[nCnt]->GetRot());
 		}
 	}
-
+	CDebugProc::Print("腰の高さ%2f\n", m_vModelList[0]->GetPosition().y);
 }
 //====================================================================
 //モデルのムーヴ
@@ -530,6 +549,11 @@ void CCharacter::LoadMotion(void)
 							{
 								sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_CharacterMotion[nCnt]->key_info[nCntKeySet]->nFram);
 							}
+							//高さ
+							else if (strcmp(cHeadText, "HEIGHT") == 0)
+							{
+								sscanf(cReadText, "%s %s %f", &cDie, &cDie, &m_CharacterMotion[nCnt]->key_info[nCntKeySet]->fHeight);
+							}
 							//キーだったら
 							else if (strcmp(cHeadText, "KEY") == 0)
 							{
@@ -576,7 +600,7 @@ void CCharacter::LoadMotion(void)
 void CCharacter::Moation(void)
 {
 	D3DXVECTOR3 Difrot;
-
+	float Difpos;
 		if (m_MotionType != m_MotionOld)
 		{
 			m_Fram = 0;
@@ -592,7 +616,7 @@ void CCharacter::Moation(void)
 				{
 					//移動量ROTの計算-------------------------------------■■■■■
 					Difrot = (m_CharacterMotion[m_MotionType]->key_info[m_CntKeySet]->key[nCnt]->rot - m_vModelList[nCnt]->GetRot());
-
+					Difpos = m_CharacterMotion[m_MotionType]->key_info[m_CntKeySet]->fHeight - m_vModelList[0]->GetPosition().y;
 					if (Difrot.y > D3DX_PI)
 					{
 						Difrot.y -= D3DX_PI * 2;
@@ -612,6 +636,8 @@ void CCharacter::Moation(void)
 					}
 
 					m_rotBET[nCnt] = Difrot / (float)m_CharacterMotion[m_MotionType]->key_info[m_CntKeySet]->nFram;
+
+					m_HeightBet = Difpos / (float)m_CharacterMotion[m_MotionType]->key_info[m_CntKeySet]->nFram;
 					//----------------------------------------------------■■■■■
 				}
 				else
@@ -622,12 +648,16 @@ void CCharacter::Moation(void)
 					//rotBET[nCnt] = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 				}
 			}
-
 			//フレーム移動--------------------------------------------■■■■■
 			if (m_Fram <= m_CharacterMotion[m_MotionType]->key_info[m_CntKeySet]->nFram)
 			{
 				//	m_vModelList[nCnt]->SetPosition(m_vModelList[nCnt]->GetPosition() + posBET[nCnt]);
 				m_vModelList[nCnt]->SetRot(m_vModelList[nCnt]->GetRot() + m_rotBET[nCnt]);
+				if (nCnt == 0)
+				{
+				m_vModelList[0]->GetPosition().y += m_HeightBet;
+				}
+
 				if (m_vModelList[nCnt]->GetRot().y > D3DX_PI)
 				{
 					m_vModelList[nCnt]->SetRot(m_vModelList[nCnt]->GetRot() - D3DXVECTOR3(0.0f, D3DX_PI * 2.0f, 0.0f));
@@ -883,6 +913,10 @@ CModel* CCharacter::GetCharacterModelPartsList(int nCnt)
 CCharacter::CHARACTER_DIRECTION CCharacter::GetCharacterDirection(void)
 {
 	return m_CharacterDirection;
+}
+D3DXMATRIX * CCharacter::GetPartsMtx(int nCnt)
+{
+	return m_vModelList[nCnt]->GetMatrix();
 }
 //====================================================================
 //前のモーションタイプの設定

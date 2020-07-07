@@ -53,6 +53,7 @@ HRESULT CPlayer::Init(void)
 	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
 	m_bAttack_Enemy = false;
 	m_bAttack_Prisoner = false;
+	m_bCruch = false;
 	 // 銃の生成
 	m_pGun = CGun::Create(GetCharacterModelPartsList(CModel::MODEL_PLAYER_RHAND)->GetMatrix());
 	// グレネード放つ位置の生成
@@ -145,7 +146,7 @@ void CPlayer::Update(void)
 	}
 	if (key->GetKeyboardTrigger(DIK_2))
 	{
-		SetMotion(PLAYER_MOTION_JUMP);
+		SetMotion(PLAYER_MOTION_SQUAT);
 	}
 
 	// 特定のボタンを押した時に歩きモーションに変更
@@ -254,12 +255,12 @@ void CPlayer::MoveUpdate(void)
 			{
 				SetMotion(PLAYER_MOTION_WALK);
 			}
-			else
+			else if (m_bCruch == false)
 			{
 				SetMotion(PLAYER_MOTION_NORMAL);
 			}
 		}
-		else if (GetJump() == true)
+		else if (GetJump() == true && m_bCruch == false)
 		{
 			SetMotion(PLAYER_MOTION_NORMAL);
 		}
@@ -271,7 +272,15 @@ void CPlayer::MoveUpdate(void)
 			SetMotion(PLAYER_MOTION_JUMPSTOP);
 		}
 	}
-
+	if (key->GetKeyboardPress(DIK_S) && GetJump() == true)
+	{
+		SetMotion(PLAYER_MOTION_SQUAT);
+		m_bCruch = true;
+	}
+	else
+	{
+		m_bCruch = false;
+	}
 	//ジャンプしたときの下向発射
 	if (key->GetKeyboardPress(DIK_S) && GetJump() == false)
 	{
@@ -286,22 +295,6 @@ void CPlayer::CollisionUpdate(void)
 	// マップのポインタ取得
 	CMap *pMap;
 	pMap = CManager::GetBaseMode()->GetMap();
-
-	// マップモデルが存在した時
-	if (pMap != nullptr)
-	{
-		// レイの判定
-		if (GetCollision()->RayBlockCollision(pMap))
-		{
-			// ジャンプすることを承認する
-			SetJump(true);
-		}
-		else
-		{
-			// ジャンプすることを承認しない
-			SetJump(false);
-		}
-	}
 
 	// 当たり判定
 	if (GetCollision() != nullptr)
@@ -529,7 +522,7 @@ void CPlayer::Ride()
 
 		// 戦車に乗っている時にジャンプして戦車から降りる
 		CKeyboard *key = CManager::GetInputKeyboard();
-		if (key->GetKeyboardTrigger(DIK_SPACE) && GetJump() == true)
+		if (key->GetKeyboardTrigger(DIK_SPACE) && GetJump() == false)
 		{
 			m_bRideVehicle = false;
 			GetMove().y += 40;

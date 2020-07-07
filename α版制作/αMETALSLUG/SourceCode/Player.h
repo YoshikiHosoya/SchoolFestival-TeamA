@@ -57,6 +57,7 @@ private:
 		bool m_bAttack_Enemy;							//攻撃時
 		bool m_bAttack_Prisoner;						//攻撃時
 		float m_Angle;
+		bool m_bCruch;
 		WORD Oldstate;											//コントローラーの1frame前のステート
 		CGun			*m_pGun;								// ガンクラスのポインタ
 		CGrenadeFire	*m_pGrenadeFire;						// グレネード発射クラスのポインタ

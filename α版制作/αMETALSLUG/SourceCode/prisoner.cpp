@@ -90,19 +90,6 @@ void CPrisoner::Update(void)
 	// マップのポインタ取得
 	CMap *pMap;
 	pMap = CManager::GetBaseMode()->GetMap();
-
-	// マップモデルが存在した時
-	if (pMap != nullptr)
-	{
-		// レイの判定
-		if (GetCollision()->RayBlockCollision(pMap))
-		{
-		}
-		else
-		{
-		}
-	}
-
 	// キャラクターの更新
 	CCharacter::Update();
 
