@@ -87,6 +87,40 @@ bool CHossoLibrary::PressAnyButton(void)
 }
 
 //------------------------------------------------------------------------------
+//ImGuiのコンボボックス
+//------------------------------------------------------------------------------
+bool CHossoLibrary::ImGui_Combobox(std::vector<std::string> aItemNameList, std::string aTitle, int & nValue)
+{
+	bool bChange = false;
+
+#ifdef _DEBUG
+	//combo開始
+	if (ImGui::BeginCombo(aTitle.data(), aItemNameList[nValue].data()))
+	{
+		//要素分繰り返す
+		for (size_t nCnt = 0; nCnt < aItemNameList.size(); nCnt++)
+		{
+
+			//選択番号があってるかどうか
+			bool is_selected = (aItemNameList[nValue] == aItemNameList[nCnt]);
+
+			//選択された時の処理
+			if (ImGui::Selectable(aItemNameList[nValue].data(), is_selected))
+			{
+				//現在の選択項目設定
+				nValue = nCnt;
+				bChange = true;
+			}
+		}
+		//combo終了
+		ImGui::EndCombo();
+
+	}
+#endif //DEBUG
+	return bChange;
+}
+
+//------------------------------------------------------------------------------
 //ビルボード設定 XとZのみ
 //------------------------------------------------------------------------------
 void CHossoLibrary::SetBillboard_XZ_Only(D3DXMATRIX * pMtx)

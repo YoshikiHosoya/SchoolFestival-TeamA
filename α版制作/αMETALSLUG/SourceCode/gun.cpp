@@ -246,6 +246,9 @@ void CGun::Shot(D3DXVECTOR3 rot)
 			// 弾のパラメーターの設定
 			pBullet->SetBulletParam(m_GunType);
 
+			// 弾発砲時のリアクション
+			pBullet->BulletReaction(rot);
+
 			//ノズルフラッシュ
 			CTexAnimation3D::Create(m_ShotPos, D3DXVECTOR3(30.0f, 30.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),
 				CTexture::SEPARATE_TEX_EFFECT_SHOTFLASH, 1, CScene::OBJTYPE_EFFECT);

@@ -9,13 +9,13 @@
 SCRIPT
 	PARAMSET
 
-		LIFE = 5				//ライフ
-		RADIUS = 12.0			//半径
-		COLOR = 0.7 0.5 0.0 1.0	//色
-		NUMBER = 1				//個数
-		SPEED = 0.0				//速度
-		RADIUSDAMPING = 0.91		//半径の減衰値
-		ALPHADAMPING = 0.56		//アルファ値の減衰値
+		LIFE = 150				//ライフ
+		RADIUS = 60.5			//半径
+		COLOR = 1.0 0.0 0.0 1.0	//色
+		NUMBER = 17				//個数
+		SPEED = 9.0				//速度
+		RADIUSDAMPING = 0.96		//半径の減衰値
+		ALPHADAMPING = 1.00		//アルファ値の減衰値
 		TEXTURE = 1				//テクスチャ
 
 	END_PARAMSET

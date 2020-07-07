@@ -16,6 +16,7 @@
 #define MAX_PARTICLE (100000)									//パーティクルの最大数
 #define DEFAULT_TEXTURE (CTexture::TEX_EFFECT_PARTICLE)			//デフォルトで使用するテクスチャ
 #define DEFAULT_DAMPING (0.95f)									//デフォルトの減衰値
+#define DEFAULT_GRAVITY_POWER (0.8f)							//デフォルトの重力の大きさ
 //------------------------------------------------------------------------------
 //クラス定義
 //------------------------------------------------------------------------------
@@ -24,12 +25,14 @@
 class CParticleParam
 {
 public:
-	//パーティクルの種類
-	enum PARTICLE_TYPE
+	//パーティクルのテキスト
+	enum PARTICLE_TEXT
 	{
 		PARTICLE_DEFAULT = 0,
 		PARTICLE_EXPLOSION,
 		PARTICLE_BLOOD,
+		PARTICLE_SUMPLE,
+		PARTICLE_BULLET_ORBIT,
 		PARTICLE_MAX,
 	};
 
@@ -51,18 +54,21 @@ public:
 
 		m_nNumber = 10;										//個数
 		m_fSpeed = 10.0f;									//速度
+		m_bSpeedRandom = false;								//速度がランダムかどうか
+		m_shape = SHAPE_SPHERE;								//パーティクルの方向
+		m_rot = ZeroVector3;								//角度
+		m_fRange = 0.0f;									//範囲
 
 		m_fRadiusDamping = DEFAULT_DAMPING;					//半径の減衰地
 		m_fAlphaDamping = DEFAULT_DAMPING;					//アルファ値の減衰値
 		m_Textype = CTexture::TEX_EFFECT_PARTICLE;			//テクスチャ
-		m_shape = SHAPE_SPHERE;
 		m_ParticleType = PARTICLE_DEFAULT;					//パーティクルのタイプ
-
+		m_bGravity = false;									//重力
+		m_nGravityPower = DEFAULT_GRAVITY_POWER;			//重力の大きさ
 	}
 	~CParticleParam() {};
 
-	void SetParamater(int nLife, float fRadius, D3DXCOLOR col, float fRadiusDamping = DEFAULT_DAMPING, float fAlphaDamping = DEFAULT_DAMPING,
-						CTexture::TEX_TYPE textype = CTexture::TEX_EFFECT_PARTICLE,int nNumber = 10,float fSpeed = 10.0f);
+	void SetParamater(int nLife, float fRadius, D3DXCOLOR col,int nNumber,float fSpeed);
 	void UpdateParam();
 
 
@@ -78,14 +84,18 @@ public:
 	float &GetSpeed()				{ return m_fSpeed; };				//速度
 	PARTICLE_SHAPE &GetShape()		{ return m_shape; };				//パーティクルの方向
 	bool&GetSpeedRandom()			{ return m_bSpeedRandom; };			//パーティクルの速度がランダムかどうか
+	D3DXVECTOR3 &GetRot()			{ return m_rot;};					//角度
+	float &GetRange()				{ return m_fRange; };					//角度
 
 	float &GetRadiusDamping()		{ return m_fRadiusDamping; };		//半径の減衰地
 	float &GetAlphaDamping()		{ return m_fAlphaDamping; };		//アルファ値の減衰値
 	CTexture::TEX_TYPE &GetTex()	{ return m_Textype; };				//テクスチャ
-	PARTICLE_TYPE &GetType()		{ return m_ParticleType; };			//テクスチャ
+	PARTICLE_TEXT &GetType()		{ return m_ParticleType; };			//パーティクルのタイプ
+	bool &GetGravity()				{ return m_bGravity; };				//重力
+	float &GetGravityPower()		{ return m_nGravityPower; };		//重力の大きさ
 
-	static CParticleParam *GetDefaultParam(CParticleParam::PARTICLE_TYPE type) { return m_pParticleDefaultParamList[type].get(); };
-	static bool ShowParamConboBox(CParticleParam::PARTICLE_TYPE & rType);
+	static CParticleParam *GetDefaultParam(CParticleParam::PARTICLE_TEXT type) { return m_pParticleDefaultParamList[type].get(); };
+	static bool ShowParamConboBox(CParticleParam::PARTICLE_TEXT & rType);
 	//オペレータ
 	void *operator = (const CParticleParam *pParam);
 
@@ -99,13 +109,17 @@ private:
 
 	int m_nNumber;									//個数
 	float m_fSpeed;									//速度
-	PARTICLE_SHAPE m_shape;							//パーティクルの出方
 	bool m_bSpeedRandom;							//速度がランダムかどうか
+	PARTICLE_SHAPE m_shape;							//パーティクルの出方
+	D3DXVECTOR3 m_rot;								//角度
+	float m_fRange;									//範囲
 
 	float m_fRadiusDamping;							//半径の減衰値
 	float m_fAlphaDamping;							//アルファ値の減衰値
 	CTexture::TEX_TYPE m_Textype;					//テクスチャ
-	PARTICLE_TYPE m_ParticleType;					//パーティクルのタイプ
+	PARTICLE_TEXT m_ParticleType;					//パーティクルのタイプ
+	bool m_bGravity;								//重力をかけるか
+	float m_nGravityPower;							//重力の大きさ
 
 };
 
@@ -158,10 +172,9 @@ public:
 	static void ResetVertexID();					//頂点IDリセット　画面が停止してもパーティクルの処理を行う為
 
 	static void Create(D3DXVECTOR3 pos, int nLife, float fRadius, D3DXCOLOR col,int nNumber, float fSpeed);		//生成処理
-	static void DetailsCreate(D3DXVECTOR3 pos, int nLife, float fRadius, D3DXCOLOR col, int nNumber,
-							float fSpeed, float fAlphaDamping, float fRadiusDamping, CTexture::TEX_TYPE textype);
+	static void CreateFromParam(D3DXVECTOR3 pos, CParticleParam *pInputParam);
 
-	static void CreateFromText(D3DXVECTOR3 pos, CParticleParam::PARTICLE_TYPE type);
+	static void CreateFromText(D3DXVECTOR3 pos, CParticleParam::PARTICLE_TEXT type);
 
 	bool GetDeleteFlag() { return m_bDeleteFlag; };
 
@@ -171,7 +184,6 @@ private:
 	std::unique_ptr<CParticleParam> m_pParticleParam;									//パーティクルの現在のパラメータ
 
 	std::vector<std::unique_ptr<COneParticle>> m_pParticleList;		//パーティクルの構造体のリスト
-	CParticleParam::PARTICLE_TYPE m_type;							//パーティクルの種類
 	bool m_bDeleteFlag;												//消去フラグ
 
 	void SetParticle(D3DXVECTOR3 &pos, CParticleParam *pShape);				//パーティクル設定
