@@ -159,7 +159,7 @@ void CPlayertank::Shot(CKeyboard *key)
 	if (key->GetKeyboardTrigger(DIK_O))
 	{
 		// グレネード生成
-	//	CGrenade::Create(GetShotDirection(), GetVehicleModelPartsList(CModel::MODEL_PLAYER_LHAND)->GetMatrix());
+		//CGrenade::Create(GetShotDirection(), GetVehicleModelPartsList(CModel::MODEL_PLAYER_LHAND)->GetMatrix());
 
 	}
 }
@@ -183,7 +183,7 @@ void CPlayertank::Operation(CKeyboard * key)
 	// 左に動かせる
 	if (key->GetKeyboardPress(DIK_A))
 	{
-		CVehicle::Move(0.5f, 0.5f);
+		CVehicle::Move(0.5f, -0.5f);
 
 		// 上を向く
 		if (key->GetKeyboardPress(DIK_W))
