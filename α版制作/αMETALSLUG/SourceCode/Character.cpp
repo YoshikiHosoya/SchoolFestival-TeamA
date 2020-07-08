@@ -204,6 +204,7 @@ void CCharacter::Update(void)
 	// マップモデルが存在した時
 	if (pMap != nullptr)
 	{
+		GetCollision()->SetHeight(m_vModelList[0]->GetPosition().y);
 		// レイの判定
 		if (GetCollision()->RayBlockCollision(pMap,m_vModelList[0]->GetMatrix()))
 		{
@@ -216,7 +217,9 @@ void CCharacter::Update(void)
 			SetJump(false);
 			//空中にいるか
 		}
+		CDebugProc::Print("たかさああああああ%2f\n", m_vModelList[0]->GetPosition().y);
 	}
+
 	Moation();
 }
 //====================================================================
@@ -709,7 +712,6 @@ void CCharacter::Moation(void)
 			{
 				m_Fram++;
 			}
-
 		}
 	}
 	else
@@ -915,6 +917,13 @@ CModel* CCharacter::GetCharacterModelPartsList(int nCnt)
 CCharacter::CHARACTER_DIRECTION CCharacter::GetCharacterDirection(void)
 {
 	return m_CharacterDirection;
+}
+//====================================================================
+//腰の高さの取得
+//====================================================================
+float CCharacter::GetHeightBet(void)
+{
+	return m_HeightBet;
 }
 //====================================================================
 //前のモーションタイプの設定

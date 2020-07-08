@@ -152,8 +152,7 @@ public:
 	std::vector<CModel*> &GetCharacterModelList();					//キャラクターのモデル取得
 	CModel* GetCharacterModelPartsList(int nCnt);					//キャラクターのモデルパーツ取得
 	CHARACTER_DIRECTION GetCharacterDirection(void);				//向きの取得
-	D3DXMATRIX *GetPartsMtx(int nCnt);
-
+	float GetHeightBet(void);
 	//モーション関連
 	bool &GetMotion();
 	int &GetKeySet(void);											//キーセットの取得
