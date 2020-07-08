@@ -39,8 +39,8 @@ char *CMap::m_PrisonerFileName[MAP_MAX] =
 
 char *CMap::m_ObstacleFileName[MAP_MAX] =
 {
-	{ "data/Load/Obstacle_Map_01.txt" },
-	{ "data/Load/Obstacle_Map_02.txt" },
+	{ "data/Load/Obstacle/Obstacle_Map_01.txt" },
+	{ "data/Load/Obstacle/Obstacle_Map_02.txt" },
 };
 
 char *CMap::m_PlayerTankFileName[MAP_MAX] =
