@@ -157,6 +157,9 @@ void CPlayer::Update(void)
 
 	CollisionUpdate();
 
+	// ‘Ì—ÍUI‚ÌÝ’è
+	m_pPlayerUI->SetLifeUI(GetLife());
+
 	CCharacter::Update();
 }
 //====================================================================
