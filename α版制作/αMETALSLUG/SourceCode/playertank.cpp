@@ -174,13 +174,12 @@ void CPlayertank::Shot(CKeyboard *key)
 	// グレネードを撃つ
 	if (key->GetKeyboardTrigger(DIK_O))
 	{
-		// グレネードの弾数が残っているとき
+// グレネードの弾数が残っているとき
 		if (m_pGrenadeFire->GetGrenadeAmmo() > 0)
 		{
 			// グレネード生成
 			m_pGrenadeFire->Fire(GetShotDirection());
-		}
-	}
+		}	}
 }
 
 //====================================================================
@@ -202,7 +201,7 @@ void CPlayertank::Operation(CKeyboard * key)
 	// 左に動かせる
 	if (key->GetKeyboardPress(DIK_A))
 	{
-		CVehicle::Move(0.5f, 0.5f);
+		CVehicle::Move(0.5f, -0.5f);
 
 		// 上を向く
 		if (key->GetKeyboardPress(DIK_W))

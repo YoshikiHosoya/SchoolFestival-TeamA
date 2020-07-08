@@ -290,6 +290,7 @@ void CVehicle::State()
 		m_state = VEHICLE_STATE_NORMAL;
 		break;
 
+		// –³“GŽžŠÔ
 	case VEHICLE_STATE_INVINCIBLE:
 		m_nStateCnt++;
 		if (m_nStateCnt % 30 == 0)
