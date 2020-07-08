@@ -130,6 +130,7 @@ void CVehicle::Update(void)
 	// 弾を撃つ方向の計算
 	ShotDirection();
 
+	// 座標の更新
 	m_pos += m_move;
 
 	// 体力が0以下になった時

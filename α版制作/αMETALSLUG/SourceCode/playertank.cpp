@@ -94,53 +94,21 @@ void CPlayertank::Update(void)
 	// キー情報の取得
 	CKeyboard *key = CManager::GetInputKeyboard();
 
-	// 戦車が弾を撃つ処理
-	Shot(key);
-
-	// 戦車を操作する処理
-	Operation(key);
-
-	// 当たり判定
-	if (GetCollision() != nullptr)
+	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
+	if (pPlayer != nullptr)
 	{
-		// 座標の更新 posとposold
-		GetCollision()->SetPos(&GetPosition());
-		GetCollision()->SetPosOld(&GetPositionOld());
-
-		// 障害物との判定
-		//if (GetCollision()->ForPlayer_ObstacleCollision())
-		//{
-		//	// ジャンプフラグを可能にする
-		//	CVehicle::SetJump(true);
-		//}
-	}
-
-	// マップのポインタ取得
-	CMap *pMap;
-	pMap = CManager::GetBaseMode()->GetMap();
-
-	// マップモデルが存在した時
-	if (pMap != nullptr)
-	{
-		// レイの判定
-		if (GetCollision()->RayBlockCollision(pMap,GetMtxWorld()))
+		if (pPlayer->GetRideFlag())
 		{
 			// 戦車が弾を撃つ処理
 			Shot(key);
 
-			//if (GetCollision()->RayBlockCollision(pMap, GetMtxWorld()))
-			//{
-				// 戦車を操作する処理
-				Operation(key);
-			//}
-
-		}
-		else
-		{
-			// ジャンプすることを承認しない
-			SetJump(false);
+			// 戦車を操作する処理
+			Operation(key);
 		}
 	}
+
+	// 判定をまとめて行う
+	Collision();
 
 	// 乗り物クラスの更新
 	CVehicle::Update();
@@ -249,11 +217,7 @@ void CPlayertank::Operation(CKeyboard * key)
 	}
 
 	// ジャンプ処理
-<<<<<<< .mine
-	if (key->GetKeyboardPress(DIK_SPACE))
-=======
 	if (key->GetKeyboardTrigger(DIK_W))
->>>>>>> .theirs
 	{
 		// 1回ジャンプさせる
 		Jump();
@@ -270,5 +234,46 @@ void CPlayertank::Jump()
 	if (GetJump() == false)
 	{
 		GetMove().y += PLAYERTANK_JUMP;
+	}
+}
+
+//====================================================================
+// 当たり判定
+//====================================================================
+void CPlayertank::Collision()
+{
+	// 当たり判定
+	if (GetCollision() != nullptr)
+	{
+		// 座標の更新 posとposold
+		GetCollision()->SetPos(&GetPosition());
+		GetCollision()->SetPosOld(&GetPositionOld());
+
+		// 障害物との判定
+		//if (GetCollision()->ForPlayer_ObstacleCollision())
+		//{
+		//	// ジャンプフラグを可能にする
+		//	CVehicle::SetJump(true);
+		//}
+	}
+
+	// マップのポインタ取得
+	CMap *pMap;
+	pMap = CManager::GetBaseMode()->GetMap();
+
+	// マップモデルが存在した時
+	if (pMap != nullptr)
+	{
+		// レイの判定
+		if (GetCollision()->RayBlockCollision(pMap, GetMtxWorld()))
+		{
+			// ジャンプすることを承認しない
+			SetJump(false);
+		}
+		else
+		{
+			// ジャンプすることを承認しない
+			SetJump(true);
+		}
 	}
 }
