@@ -290,3 +290,20 @@ void CMultiNumber::SetSize(D3DXVECTOR3 size)
 	}
 	SetPos(GetPos());
 }
+
+//------------------------------------------------------------------------------
+//表示・非表示の設定
+//------------------------------------------------------------------------------
+void CMultiNumber::SetDisp(bool bDisp)
+{
+	//桁数分繰り返す
+	for (size_t nCnt = 0; nCnt < m_pNumberList.size(); nCnt++)
+	{
+		//nullcheck
+		if (m_pNumberList[nCnt])
+		{
+			//座標設定
+			m_pNumberList[nCnt]->SetDisp(bDisp);
+		}
+	}
+}

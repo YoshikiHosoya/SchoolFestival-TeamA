@@ -31,6 +31,7 @@ std::vector<std::string> CTexture::m_aTexFileName =
 	{ "data/TEXTURE/UI/remain.png" },						//残機のUI
 	{ "data/TEXTURE/UI/arms.png" },							//弾の残数のUI
 	{ "data/TEXTURE/UI/bomb.png" },							//グレネードの残数のUI
+	{ "data/TEXTURE/UI/infinity.png" },						//弾数無限のUI
 };
 
 

@@ -52,6 +52,7 @@ public:
 	void SetPos(D3DXVECTOR3 pos);									//座標設定
 	void SetSize(D3DXVECTOR3 size);									//サイズ設定
 	void Settype(CMultiNumber::TYPE type) { m_type = type; };		//種類設定
+	void SetDisp(bool bDisp);										// 表示・非表示の設定
 
 	D3DXVECTOR3 GetPos() { return m_pos; };							//座標取得
 	D3DXVECTOR3 GetSize() { return m_onesize; };					//サイズ取得
@@ -63,7 +64,7 @@ private:
 	int m_nValue;											//値
 	int m_nCnt;												//点滅カウント
 	TYPE m_type;											//種類
-
+	bool m_bDisp;											//表示・非表示するフラグ
 };
 
 #endif

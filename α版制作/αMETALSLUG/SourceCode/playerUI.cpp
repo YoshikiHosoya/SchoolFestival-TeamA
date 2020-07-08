@@ -87,6 +87,14 @@ HRESULT CPlayerUI::Init(void)
 				// ƒeƒNƒXƒ`ƒƒ‚ÌŠ„‚è“–‚Ä
 				m_apScene2D[nCnt]->BindTexture(CTexture::GetTexture(CTexture::TEX_UI_LIFE));
 				break;
+
+				// ’e”–³ŒÀ
+			case PLAYER_UI::INFINITY_AMMO:
+				// ƒV[ƒ“2D‚Ì¶¬
+				m_apScene2D[nCnt] = CScene2D::Create(D3DXVECTOR3(200.0f, 80.0f, 0.0f), D3DXVECTOR3(30.0f, 30.0f, 0.0f));
+				// ƒeƒNƒXƒ`ƒƒ‚ÌŠ„‚è“–‚Ä
+				m_apScene2D[nCnt]->BindTexture(CTexture::GetTexture(CTexture::TEX_UI_INFINITY));
+				break;
 			}
 		}
 	}
@@ -192,13 +200,28 @@ void CPlayerUI::SetScore(int nScore)
 // ’e‚ÌŽc”‚ÌÝ’è
 //
 // =====================================================================================================================================================================
-void CPlayerUI::SetBulletAmmo(int nBulletAmmo)
+void CPlayerUI::SetBulletAmmo(int nBulletAmmo, CGun::GUN_TYPE GunType)
 {
-	// ’e‚ÌŽc”Œ¸ŽZ
-	m_nBulletAmmo = nBulletAmmo;
-
-	// ’e‚ÌŽc”‚ÌÝ’è
-	m_pBulletAmmo->SetMultiNumber(m_nBulletAmmo);
+	// ƒnƒ“ƒhƒKƒ“ˆÈŠO‚Ì‚Æ‚«
+	if (CGun::GUN_TYPE::GUNTYPE_HANDGUN != GunType)
+	{
+		// ’e”–³ŒÀ‚ÌUI”ñ•\Ž¦
+		m_apScene2D[INFINITY_AMMO]->SetDisp(false);
+		// ’e‚ÌŽc”‚Ì•\Ž¦
+		m_pBulletAmmo->SetDisp(true);
+		// ’e‚ÌŽc”Œ¸ŽZ
+		m_nBulletAmmo = nBulletAmmo;
+		// ’e‚ÌŽc”‚ÌÝ’è
+		m_pBulletAmmo->SetMultiNumber(m_nBulletAmmo);
+	}
+	// ƒnƒ“ƒhƒKƒ“‚Ì‚Æ‚«
+	else
+	{
+		// ’e‚ÌŽc”‚Ì”ñ•\Ž¦
+		m_pBulletAmmo->SetDisp(false);
+		// ’e”–³ŒÀ‚ÌUI•\Ž¦
+		m_apScene2D[INFINITY_AMMO]->SetDisp(true);
+	}
 }
 
 // =====================================================================================================================================================================

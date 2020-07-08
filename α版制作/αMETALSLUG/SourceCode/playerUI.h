@@ -12,6 +12,7 @@
 // =====================================================================================================================================================================
 #include "main.h"
 #include "UI.h"
+#include "gun.h"
 
 // =====================================================================================================================================================================
 // 前方宣言
@@ -32,6 +33,7 @@ public:
 		BULLET_AMMO_LETTER,			// 弾の残数 ( 文字 )
 		GRENADE_AMMO_LETTER,		// グレネードの残数 ( 文字 )
 		LIFE_ICON,					// 体力アイコン
+		INFINITY_AMMO,				// 弾数無限
 		PLAYER_UI_MAX
 	};
 
@@ -49,7 +51,7 @@ public:
 
 	/* メンバ関数 */
 	void				SetScore(int nScore);				// スコアの設定
-	void				SetBulletAmmo(int nBulletAmmo);		// 弾の残数の設定
+	void				SetBulletAmmo(int nBulletAmmo, CGun::GUN_TYPE GunType);		// 弾の残数の設定
 	void				SetGrenadeAmmo(int nGrenadeAmmo);	// グレネードの残数の設定
 	int					GetScore() { return m_nScore; };	// スコアの取得
 
@@ -60,7 +62,7 @@ private:
 
 	/* メンバ変数 */
 	CScene2D					*m_apScene2D[PLAYER_UI_MAX];	// シーン2Dのポインタ
-	CMultiNumber				*m_pScore;						// マルチナンバーのポインタ
+	CMultiNumber				*m_pScore;						// スコアのポインタ
 	CMultiNumber				*m_pBulletAmmo;					// 弾の残数のポインタ
 	CMultiNumber				*m_pGrenadeAmmo;				// グレネードの残数のポインタ
 
