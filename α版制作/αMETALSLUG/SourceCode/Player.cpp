@@ -157,11 +157,6 @@ void CPlayer::Update(void)
 
 	CollisionUpdate();
 
-	// 弾の残数表示
-	m_pPlayerUI->SetBulletAmmo(m_pGun->GetGunAmmo());
-	// グレネードの残数表示
-	m_pPlayerUI->SetGrenadeAmmo(m_pGrenadeFire->GetGrenadeAmmo());
-
 	CCharacter::Update();
 }
 //====================================================================
@@ -501,6 +496,11 @@ void CPlayer::Ride()
 	{
 		MoveUpdate();
 		AttackUpdate();
+
+		// 弾の残数表示
+		m_pPlayerUI->SetBulletAmmo(m_pGun->GetGunAmmo());
+		// グレネードの残数表示
+		m_pPlayerUI->SetGrenadeAmmo(m_pGrenadeFire->GetGrenadeAmmo());
 	}
 	else
 	{
@@ -514,6 +514,11 @@ void CPlayer::Ride()
 			{
 				// プレイヤーの座標を戦車の座標に合わせる
 				this->SetPosition(pPlayertank->GetPosition());
+
+				// 弾の残数表示
+				m_pPlayerUI->SetBulletAmmo(pPlayertank->GetGun()->GetGunAmmo());
+				// グレネードの残数表示
+				m_pPlayerUI->SetGrenadeAmmo(pPlayertank->GetGrenadeFire()->GetGrenadeAmmo());
 			}
 		}
 

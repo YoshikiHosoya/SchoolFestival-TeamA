@@ -19,7 +19,7 @@
 #include "XInputPad.h"
 #include "Obstacle.h"
 #include "prisoner.h"
-#include "grenade.h"
+#include "grenadefire.h"
 
 //====================================================================
 //マクロ定義
@@ -62,6 +62,8 @@ HRESULT CPlayertank::Init(void)
 	SetVehicleType(CVehicle::VEHICLE_TYPE_TANK);
 	// 銃の生成
 	m_pGun = CGun::Create(GetVehicleModelPartsList(CModel::MODEL_TANK_TANKHEAD)->GetMatrix());
+	// グレネード放つ位置の生成
+	m_pGrenadeFire = CGrenadeFire::Create(GetVehicleModelPartsList(CModel::MODEL_TANK_TANKHEAD)->GetMatrix());
 	// 銃の弾の種類
 	m_pGun->GetTag() = TAG_PLAYER;
 
@@ -82,6 +84,20 @@ HRESULT CPlayertank::Init(void)
 //====================================================================
 void CPlayertank::Uninit(void)
 {
+	// 銃のポインタ
+	if (m_pGun)
+	{
+		m_pGun->Rerease();
+		m_pGun = nullptr;
+	}
+
+	// グレネード発射位置のポインタ
+	if (m_pGrenadeFire)
+	{
+		m_pGrenadeFire->Rerease();
+		m_pGrenadeFire = nullptr;
+	}
+
 	CVehicle::Uninit();
 }
 //====================================================================
@@ -158,9 +174,12 @@ void CPlayertank::Shot(CKeyboard *key)
 	// グレネードを撃つ
 	if (key->GetKeyboardTrigger(DIK_O))
 	{
-		// グレネード生成
-	//	CGrenade::Create(GetShotDirection(), GetVehicleModelPartsList(CModel::MODEL_PLAYER_LHAND)->GetMatrix());
-
+		// グレネードの弾数が残っているとき
+		if (m_pGrenadeFire->GetGrenadeAmmo() > 0)
+		{
+			// グレネード生成
+			m_pGrenadeFire->Fire(GetShotDirection());
+		}
 	}
 }
 
