@@ -29,6 +29,9 @@ CScene2D::~CScene2D()
 //==========================================================
 HRESULT CScene2D::Init(void)
 {
+	// 変数初期化
+	m_bDisp = true;
+
 	CSceneBase::Init();
 	MakeVertex();
 	return S_OK;
@@ -67,15 +70,19 @@ void CScene2D::Update(void)
 void CScene2D::Draw(void)
 {
 	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
-	// 頂点フォーマットの設定
-	pDevice->SetFVF(FVF_VERTEX_2D);
-	pDevice->SetTexture(0, GetTexture());
+	// 表示する
+	if (m_bDisp)
+	{
+		// 頂点フォーマットの設定
+		pDevice->SetFVF(FVF_VERTEX_2D);
+		pDevice->SetTexture(0, GetTexture());
 
-	// 頂点バッファをデバイスのデータストリームにバインド
-	pDevice->SetStreamSource(0, GetVtxBuff(), 0, sizeof(VERTEX_2D));
+		// 頂点バッファをデバイスのデータストリームにバインド
+		pDevice->SetStreamSource(0, GetVtxBuff(), 0, sizeof(VERTEX_2D));
 
-	// ポリゴンの描画
-	pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP, 0, 2);
+		// ポリゴンの描画
+		pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP, 0, 2);
+	}
 }
 //==========================================================
 // デバッグ

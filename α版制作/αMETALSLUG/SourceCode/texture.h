@@ -40,10 +40,11 @@ public:
 		TEX_MESH_BLOCK,							//ブロック
 		TEX_MESH_WATER,							//水
 
-		TEX_UI_LIFE,							//体力のUI
 		TEX_UI_REMAIN,							//残機のUI
 		TEX_UI_ARMS,							//弾の残数のUI
 		TEX_UI_BOMB,							//グレネードの残数のUI
+		TEX_UI_INFINITY,						//弾数無限のUI
+		TEX_UI_FRAME,							//枠のUI
 
 		TEX_MAX									//MAX
 	};
@@ -62,7 +63,10 @@ public:
 		SEPARATE_TEX_EFFECT_SHOTGUN,				//ショットガン
 		SEPARATE_TEX_EFFECT_IMPACT00,				//インパクト
 		SEPARATE_TEX_EFFECT_IMPACT01,				//インパクト
+
 		SEPARATE_TEX_NUM,							//ナンバー
+
+		SEPARATE_TEX_UI_LIFE,						//体力のUI
 
 		SEPARATE_TEX_MAX							//MAX
 	};

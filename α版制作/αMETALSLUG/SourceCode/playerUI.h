@@ -12,6 +12,7 @@
 // =====================================================================================================================================================================
 #include "main.h"
 #include "UI.h"
+#include "gun.h"
 
 // =====================================================================================================================================================================
 // 前方宣言
@@ -28,10 +29,12 @@ public:
 	// プレイヤーUIの種類
 	enum PLAYER_UI
 	{
+		FRAME,						// 枠
 		REMAIN_LETTER,				// 残機		( 文字 )
 		BULLET_AMMO_LETTER,			// 弾の残数 ( 文字 )
 		GRENADE_AMMO_LETTER,		// グレネードの残数 ( 文字 )
 		LIFE_ICON,					// 体力アイコン
+		INFINITY_AMMO,				// 弾数無限
 		PLAYER_UI_MAX
 	};
 
@@ -49,8 +52,9 @@ public:
 
 	/* メンバ関数 */
 	void				SetScore(int nScore);				// スコアの設定
-	void				SetBulletAmmo(int nBulletAmmo);		// 弾の残数の設定
+	void				SetBulletAmmo(int nBulletAmmo, CGun::GUN_TYPE GunType);		// 弾の残数の設定
 	void				SetGrenadeAmmo(int nGrenadeAmmo);	// グレネードの残数の設定
+	void				SetLifeUI(int nLife);				// 体力UIの設定
 	int					GetScore() { return m_nScore; };	// スコアの取得
 
 private:
@@ -60,12 +64,14 @@ private:
 
 	/* メンバ変数 */
 	CScene2D					*m_apScene2D[PLAYER_UI_MAX];	// シーン2Dのポインタ
-	CMultiNumber				*m_pScore;						// マルチナンバーのポインタ
+	CMultiNumber				*m_pScore;						// スコアのポインタ
 	CMultiNumber				*m_pBulletAmmo;					// 弾の残数のポインタ
 	CMultiNumber				*m_pGrenadeAmmo;				// グレネードの残数のポインタ
+	CMultiNumber				*m_pLife;						// 体力の残数のポインタ
 
 	int							m_nScore;						// スコア
 	int							m_nBulletAmmo;					// 弾の残数
 	int							m_nGrenadeAmmo;					// グレネードの残数
+	int							m_nLife;						// 体力
 };
 #endif

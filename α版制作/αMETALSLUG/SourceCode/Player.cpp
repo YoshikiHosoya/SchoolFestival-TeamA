@@ -68,7 +68,7 @@ HRESULT CPlayer::Init(void)
 	m_bRideVehicle = false;
 
 	// 弾の残数表示
-	m_pPlayerUI->SetBulletAmmo(m_pGun->GetGunAmmo());
+	m_pPlayerUI->SetBulletAmmo(m_pGun->GetGunAmmo(), m_pGun->GetGunType());
 	// グレネードの残数表示
 	m_pPlayerUI->SetGrenadeAmmo(m_pGrenadeFire->GetGrenadeAmmo());
 
@@ -156,6 +156,9 @@ void CPlayer::Update(void)
 	Ride();
 
 	CollisionUpdate();
+
+	// 体力UIの設定
+	m_pPlayerUI->SetLifeUI(GetLife());
 
 	CCharacter::Update();
 }
@@ -498,7 +501,7 @@ void CPlayer::Ride()
 		AttackUpdate();
 
 		// 弾の残数表示
-		m_pPlayerUI->SetBulletAmmo(m_pGun->GetGunAmmo());
+		m_pPlayerUI->SetBulletAmmo(m_pGun->GetGunAmmo(), m_pGun->GetGunType());
 		// グレネードの残数表示
 		m_pPlayerUI->SetGrenadeAmmo(m_pGrenadeFire->GetGrenadeAmmo());
 	}
@@ -516,7 +519,7 @@ void CPlayer::Ride()
 				this->SetPosition(pPlayertank->GetPosition());
 
 				// 弾の残数表示
-				m_pPlayerUI->SetBulletAmmo(pPlayertank->GetGun()->GetGunAmmo());
+				m_pPlayerUI->SetBulletAmmo(pPlayertank->GetGun()->GetGunAmmo(), pPlayertank->GetGun()->GetGunType());
 				// グレネードの残数表示
 				m_pPlayerUI->SetGrenadeAmmo(pPlayertank->GetGrenadeFire()->GetGrenadeAmmo());
 			}
