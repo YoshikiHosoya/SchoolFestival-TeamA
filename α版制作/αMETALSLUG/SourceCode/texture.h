@@ -45,6 +45,7 @@ public:
 		TEX_UI_ARMS,							//弾の残数のUI
 		TEX_UI_BOMB,							//グレネードの残数のUI
 		TEX_UI_INFINITY,						//弾数無限のUI
+		TEX_UI_FRAME,							//枠のUI
 
 		TEX_MAX									//MAX
 	};
