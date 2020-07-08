@@ -28,6 +28,7 @@ char *CCharacter::m_LoadMotionFileName[CHARACTER_MOTION_MAX] =
 	{ "data/Load/Player/Motion/JumpStop.txt" },
 	{ "data/Load/Player/Motion/Shoot.txt" },
 	{ "data/Load/Player/Motion/Squat.txt" },
+	{ "data/Load/Player/Motion/SquatStop.txt" },
 	{ "data/Load/Enemy/Motion/EnemyNeutral.txt" },
 	{ "data/Load/Enemy/Motion/EnemyWalk.txt" },
 	{ "data/Load/Enemy/Motion/EnemyAttack.txt" },
@@ -251,42 +252,42 @@ void CCharacter::Draw(void)
 	//ƒ‚ƒfƒ‹‚Ì•`‰æ
 	for (unsigned int nCnt = 0; nCnt < m_vModelList.size(); nCnt++)
 	{
-		if (nCnt == 2 || nCnt == 3 || nCnt == 4)
-		{
-			//–Ú•W“_‚ÆŒ»Ý‚Ì·•ªi‰ñ“]j
-			D3DXVECTOR3 diffRot = m_AddRot - m_vModelList[nCnt]->GetRot();
-			//3.14‚Ì’´‰ß•ª‚Ì‰Šú‰»i‰ñ“]j
-			if (m_vModelList[nCnt]->GetRot().x > D3DX_PI)
-			{
-				m_vModelList[nCnt]->GetRot().x -= D3DX_PI * 2;
-			}
-			else if (m_vModelList[nCnt]->GetRot().x < -D3DX_PI)
-			{
-				m_vModelList[nCnt]->GetRot().x += D3DX_PI * 2;
-			}
-			if (diffRot.x > D3DX_PI)
-			{
-				diffRot.x -= D3DX_PI * 2;
-			}
-			else if (diffRot.x < -D3DX_PI)
-			{
-				diffRot.x += D3DX_PI * 2;
-			}
-			//‹‚ß‚½·•ª‚¾‚¯’Ç]‚·‚éŒvŽZ
-			m_vModelList[nCnt]->GetRot().x += diffRot.x * 0.2f;
+		//if (nCnt == 2 || nCnt == 3 || nCnt == 4)
+		//{
+		//	//–Ú•W“_‚ÆŒ»Ý‚Ì·•ªi‰ñ“]j
+		//	D3DXVECTOR3 diffRot = m_AddRot - m_vModelList[nCnt]->GetRot();
+		//	//3.14‚Ì’´‰ß•ª‚Ì‰Šú‰»i‰ñ“]j
+		//	if (m_vModelList[nCnt]->GetRot().x > D3DX_PI)
+		//	{
+		//		m_vModelList[nCnt]->GetRot().x -= D3DX_PI * 2;
+		//	}
+		//	else if (m_vModelList[nCnt]->GetRot().x < -D3DX_PI)
+		//	{
+		//		m_vModelList[nCnt]->GetRot().x += D3DX_PI * 2;
+		//	}
+		//	if (diffRot.x > D3DX_PI)
+		//	{
+		//		diffRot.x -= D3DX_PI * 2;
+		//	}
+		//	else if (diffRot.x < -D3DX_PI)
+		//	{
+		//		diffRot.x += D3DX_PI * 2;
+		//	}
+		//	//‹‚ß‚½·•ª‚¾‚¯’Ç]‚·‚éŒvŽZ
+		//	m_vModelList[nCnt]->GetRot().x += diffRot.x * 0.2f;
 
-			m_vModelList[nCnt]->SetRot(m_vModelList[nCnt]->GetRot());
-			CDebugProc::Print("ShotRot : %.1f, %.1f %.1f\n", m_ShotRot.x, m_ShotRot.y, m_ShotRot.z);
+		//	m_vModelList[nCnt]->SetRot(m_vModelList[nCnt]->GetRot());
+		//	CDebugProc::Print("ShotRot : %.1f, %.1f %.1f\n", m_ShotRot.x, m_ShotRot.y, m_ShotRot.z);
 
-			CDebugProc::Print("HeadRot : %.1f, %.1f %.1f\n", m_vModelList[nCnt]->GetRot().x, m_vModelList[nCnt]->GetRot().y, m_vModelList[nCnt]->GetRot().z);
-		}
+		//	CDebugProc::Print("HeadRot : %.1f, %.1f %.1f\n", m_vModelList[nCnt]->GetRot().x, m_vModelList[nCnt]->GetRot().y, m_vModelList[nCnt]->GetRot().z);
+		//}
 
 		m_vModelList[nCnt]->Draw(m_mtxWorld);
 
-		if (nCnt == 2 || nCnt == 3 || nCnt == 4)
-		{
-			m_vModelList[nCnt]->SetRot(m_vModelList[nCnt]->GetRot());
-		}
+		//if (nCnt == 2 || nCnt == 3 || nCnt == 4)
+		//{
+		//	m_vModelList[nCnt]->SetRot(m_vModelList[nCnt]->GetRot());
+		//}
 	}
 	CDebugProc::Print("˜‚Ì‚‚³%2f\n", m_vModelList[0]->GetPosition().y);
 }

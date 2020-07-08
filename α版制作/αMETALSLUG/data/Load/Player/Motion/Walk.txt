@@ -12,7 +12,7 @@ SCRIPT
 	NUM_KEY = 6		//キー数
 
 	KEYSET		//---< KEY : 0 / 6 >---
-		FRAME = 2		//フレーム数
+		FRAME = 3		//フレーム数
 		HEIGHT = 44.00		//原点の高さ
 
 		KEY [0] = -0.160 0.000 0.000
@@ -33,7 +33,7 @@ SCRIPT
 	END_KEYSET
 
 	KEYSET		//---< KEY : 1 / 6 >---
-		FRAME = 2		//フレーム数
+		FRAME = 3		//フレーム数
 		HEIGHT = 44.00		//原点の高さ
 
 		KEY [0] = -0.240 0.000 0.000
@@ -54,7 +54,7 @@ SCRIPT
 	END_KEYSET
 
 	KEYSET		//---< KEY : 2 / 6 >---
-		FRAME = 2		//フレーム数
+		FRAME = 3		//フレーム数
 		HEIGHT = 44.00		//原点の高さ
 
 		KEY [0] = -0.160 0.000 0.000
@@ -75,7 +75,7 @@ SCRIPT
 	END_KEYSET
 
 	KEYSET		//---< KEY : 3 / 6 >---
-		FRAME = 2		//フレーム数
+		FRAME = 3		//フレーム数
 		HEIGHT = 44.00		//原点の高さ
 
 		KEY [0] = -0.160 0.000 0.000
@@ -96,7 +96,7 @@ SCRIPT
 	END_KEYSET
 
 	KEYSET		//---< KEY : 4 / 6 >---
-		FRAME = 2		//フレーム数
+		FRAME = 3		//フレーム数
 		HEIGHT = 44.00		//原点の高さ
 
 		KEY [0] = -0.240 0.000 0.000
@@ -117,7 +117,7 @@ SCRIPT
 	END_KEYSET
 
 	KEYSET		//---< KEY : 5 / 6 >---
-		FRAME = 2		//フレーム数
+		FRAME = 3		//フレーム数
 		HEIGHT = 44.00		//原点の高さ
 
 		KEY [0] = -0.160 0.000 0.000
