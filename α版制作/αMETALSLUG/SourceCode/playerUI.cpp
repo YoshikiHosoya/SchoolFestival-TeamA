@@ -56,6 +56,14 @@ HRESULT CPlayerUI::Init(void)
 		{
 			switch (nCnt)
 			{
+			// 枠
+			case PLAYER_UI::FRAME:
+				// シーン2Dの生成
+				m_apScene2D[nCnt] = CScene2D::Create(D3DXVECTOR3(225.0f, 65.0f, 0.0f), D3DXVECTOR3(70.0f, 35.0f, 0.0f));
+				// テクスチャの割り当て
+				m_apScene2D[nCnt]->BindTexture(CTexture::GetTexture(CTexture::TEX_UI_FRAME));
+				break;
+
 			// 残機		( 文字 )
 			case PLAYER_UI::REMAIN_LETTER:
 				// シーン2Dの生成
@@ -83,7 +91,7 @@ HRESULT CPlayerUI::Init(void)
 			// 体力アイコン
 			case PLAYER_UI::LIFE_ICON:
 				// シーン2Dの生成
-				m_apScene2D[nCnt] = CScene2D::Create(D3DXVECTOR3(100.0f, 650.0f, 0.0f), D3DXVECTOR3(30.0f, 30.0f, 0.0f));
+				m_apScene2D[nCnt] = CScene2D::Create(D3DXVECTOR3(100.0f, 650.0f, 0.0f), D3DXVECTOR3(20.0f, 20.0f, 0.0f));
 				// テクスチャの割り当て
 				m_apScene2D[nCnt]->BindTexture(CTexture::GetTexture(CTexture::TEX_UI_LIFE));
 				break;

@@ -29,6 +29,7 @@ public:
 	// プレイヤーUIの種類
 	enum PLAYER_UI
 	{
+		FRAME,						// 枠
 		REMAIN_LETTER,				// 残機		( 文字 )
 		BULLET_AMMO_LETTER,			// 弾の残数 ( 文字 )
 		GRENADE_AMMO_LETTER,		// グレネードの残数 ( 文字 )
