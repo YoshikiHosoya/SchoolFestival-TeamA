@@ -85,6 +85,15 @@ public:
 		VEHICLE_DOWN,										//下向き
 	}VEHICLE_DIRECTION;
 
+	/* モデルパーツの回転種類 */
+	typedef enum
+	{
+		MODEL_ROT_TYPE_NONE = 0,							// 無回転
+		MODEL_ROT_TYPE_ALWAYS,								// 条件無しで常に回転している
+		MODEL_ROT_TYPE_MOVING,								// 移動している時のみ
+		MODEL_ROT_TYPE_OPERATION,							// 銃口を操作している時のみ
+	}PARTS_ROT_TYPE;
+
 	/* メンバ関数 */
 	CVehicle(OBJ_TYPE type);								// コンストラクタ
 	~CVehicle();											// デストラクタ
@@ -95,6 +104,9 @@ public:
 
 	void AddDamage			(int Damage);					// ダメージ計算
 	void Move				(float move, float fdest);		// 移動
+	void					VehiclePartsRotCondition(
+							CModel *pModel,
+							PARTS_ROT_TYPE type);			// パーツを回転させるための条件
 
 	/* オフセット読み込み関数 */
 	void LoadOffset			(VEHICLE_TYPE nType);			// オフセットの読み込み
@@ -141,6 +153,8 @@ public:
 	/* メンバ関数 */
 	void					DebugInfo(void);						// デバッグ用関数
 
+protected:
+
 private:
 	/* メンバ関数 */
 	virtual void			Inertia();								// 慣性処理
@@ -148,6 +162,15 @@ private:
 	void					Rot();									// 回転量計算
 	void					State();								// 状態別処理
 	void					ShotDirection();						// 弾を撃つ方向の計算
+	void					WheelRot(CModel *pModel);				// 車輪モデルの回転処理
+	void					GunRot(CModel *pModel);					// 銃モデルの回転処理
+	void					VehiclePartsRot(
+											CModel *pModel,
+											float fRot);			// 種類や条件ごとのパーツの回転処理
+	void					VehiclePartsRotLimit(
+												CModel *pModel,
+												float fRot);		// 種類や条件ごとのパーツの回転処理 回転上限
+
 
 	/* 静的メンバ変数 */
 	static char *m_LoadOffsetFileName[VEHICLE_TYPE_MAX];			// 読み込むオフセットファイル名
@@ -169,6 +192,7 @@ private:
 	int						m_nLife;								// 体力
 	int						m_nStateCnt;							// 状態のカウント
 	VEHICLE_DIRECTION		m_VehicleDirection;						// キャラクターの向き
+	PARTS_ROT_TYPE			m_RotType;								// パーツが回転する種類
 	bool					m_bJump;								// ジャンプフラグ
 	bool					m_bGravity;								// 重力をかけるかのフラグ
 	bool					m_bDieFlag;								// 死亡フラグ
