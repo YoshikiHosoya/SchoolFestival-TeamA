@@ -54,6 +54,7 @@ public:
 	void				SetScore(int nScore);				// スコアの設定
 	void				SetBulletAmmo(int nBulletAmmo, CGun::GUN_TYPE GunType);		// 弾の残数の設定
 	void				SetGrenadeAmmo(int nGrenadeAmmo);	// グレネードの残数の設定
+	void				SetLifeUI(int nLife);				// 体力UIの設定
 	int					GetScore() { return m_nScore; };	// スコアの取得
 
 private:
@@ -66,9 +67,11 @@ private:
 	CMultiNumber				*m_pScore;						// スコアのポインタ
 	CMultiNumber				*m_pBulletAmmo;					// 弾の残数のポインタ
 	CMultiNumber				*m_pGrenadeAmmo;				// グレネードの残数のポインタ
+	CMultiNumber				*m_pLife;						// 体力の残数のポインタ
 
 	int							m_nScore;						// スコア
 	int							m_nBulletAmmo;					// 弾の残数
 	int							m_nGrenadeAmmo;					// グレネードの残数
+	int							m_nLife;						// 体力
 };
 #endif
