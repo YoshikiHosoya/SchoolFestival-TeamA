@@ -109,14 +109,7 @@ void CItem::Update(void)
 	if (pMap != nullptr)
 	{
 		// ƒŒƒC‚Ì”»’è
-		if (m_pCollision->RayCollision(pMap))
-		{
-			// ’e‚Ìíœ
-			Rerease();
-		}
-		else
-		{
-		}
+		m_pCollision->RayCollision(pMap);
 	}
 
 	// XV

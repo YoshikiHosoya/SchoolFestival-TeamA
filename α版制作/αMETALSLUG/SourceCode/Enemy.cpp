@@ -29,6 +29,8 @@ CEnemy::~CEnemy()
 		delete m_pAI;
 		m_pAI = nullptr;
 	}
+
+	CItem::Create(this->GetPosition(), CItem::ITEMTYPE_HEAVYMACHINEGUN);
 }
 //====================================================================
 //初期化
@@ -87,9 +89,9 @@ void CEnemy::Update(void)
 	//体力が0以下になった時
 	if (this->GetLife() <= 0)
 	{//アイテムを生成
-		CItem::Create(this->GetPosition(), CItem::ITEMTYPE_HEAVYMACHINEGUN);
 		m_pGun->Rerease();
 		m_pGun = nullptr;
+		//CItem::Create(this->GetPosition(), CItem::ITEMTYPE_HEAVYMACHINEGUN);
 	}
 
 	//AI関連処理

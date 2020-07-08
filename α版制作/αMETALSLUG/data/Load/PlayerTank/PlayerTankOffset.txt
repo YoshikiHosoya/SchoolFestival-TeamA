@@ -37,7 +37,7 @@ SET_START ---------[4]----------
 	MODEL_TYPE = 7
 	INDEX = 4
 	PARENT = 0
-	POS = -0.6 7.8 20.8
+	POS = -40.8 17.1 7.1
 SET_END
 
 MODEL_OFFSET_END
