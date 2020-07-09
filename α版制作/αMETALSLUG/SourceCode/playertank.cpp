@@ -182,8 +182,8 @@ void CPlayertank::Shot(CKeyboard *key)
 
 		// ガンのモデルの発射口から弾を生成
 		m_pGun->Shot(D3DXVECTOR3(GetVehicleModelPartsList(CModel::MODEL_TANK_TANKGUN)->GetRot().x,
-							  	 0.0f,
-								 0.0f));
+								 GetVehicleModelPartsList(CModel::MODEL_TANK_TANKGUN)->GetRot().y,
+								 GetVehicleModelPartsList(CModel::MODEL_TANK_TANKGUN)->GetRot().z));
 	}
 
 	// グレネードを撃つ

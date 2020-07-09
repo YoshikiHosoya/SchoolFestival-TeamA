@@ -132,7 +132,13 @@ CTankTurret * CTankTurret::Create(D3DXVECTOR3 rot)
 	pTankTurret->Init();
 
 	// プレイヤーの向きに合わせる
-	pTankTurret->GetMove() = D3DXVECTOR3(-sinf(rot.y) * cosf(rot.x) * pBulletParam->fBulletSpeed, sinf(rot.x) * pBulletParam->fBulletSpeed, -cosf(rot.y) * cosf(rot.x) * pBulletParam->fBulletSpeed);
+	/*pTankTurret->GetMove() = D3DXVECTOR3(-sinf(rot.x) * pBulletParam->fBulletSpeed,
+										 -sinf(rot.y) * cosf(rot.x) * pBulletParam->fBulletSpeed,
+										 -cosf(rot.y) * cosf(rot.x) * pBulletParam->fBulletSpeed);*/
+
+	pTankTurret->GetMove() = D3DXVECTOR3(-sinf(rot.x) * pBulletParam->fBulletSpeed,
+									  	 -sinf(rot.y) * cosf(rot.y) * pBulletParam->fBulletSpeed,
+										 -cosf(rot.y) * cosf(rot.x) * pBulletParam->fBulletSpeed);
 
 	// モデルタイプの設定
 	pTankTurret->SetType(BULLET_MODEL);
