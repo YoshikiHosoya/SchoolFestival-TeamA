@@ -67,7 +67,7 @@ public:
 	void SetMove(D3DXVECTOR3 *move);					// 移動量の設定
 	void SetTime(int nTime) { m_nCollisionTime = nTime; };	// 継続時間の設定
 	int	 GetTime() { return m_nCollisionTime; };		// 継続時間の設定
-
+	void SetHeight(float height);
 
 	bool Collision2D(CCollision *pCollision);			// 板型の当たり判定
 	bool CharCollision2D(CCollision *pCollision);		// キャラクター用板型の当たり判定
@@ -113,6 +113,7 @@ private:
 	CDebugcollision		*m_Debugcollision;				// デバッグ用当たり判定のポインタ
 	bool				m_bDeadFlag;					// 死亡フラグ
 	int					m_nCollisionTime;				// 当たり判定が持続する時間
+	float				m_fHeight;
 };
 
 #endif
