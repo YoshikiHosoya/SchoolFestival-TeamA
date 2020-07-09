@@ -131,7 +131,7 @@ CGrenade * CGrenade::Create(D3DXVECTOR3 rot)
 	// 初期化
 	pGrenade->Init();
 
-	// プレイヤーの向きに合わせる
+	// 放つ方向に合わせる
 	pGrenade->GetMove() = D3DXVECTOR3(-sinf(rot.y) * cosf(rot.x) * pGrenade->m_move.x, pGrenade->m_move.y, 0.0f);
 
 	// モデルタイプの設定

@@ -131,7 +131,7 @@ CHandgun * CHandgun::Create(D3DXVECTOR3 rot)
 	// 初期化
 	pHandgun->Init();
 
-	// プレイヤーの向きに合わせる
+	// 撃つ方向に合わせる
 	pHandgun->GetMove() = D3DXVECTOR3(-sinf(rot.y) * cosf(rot.x) * pBulletParam->fBulletSpeed, sinf(rot.x) * pBulletParam->fBulletSpeed, -cosf(rot.y) * cosf(rot.x) * pBulletParam->fBulletSpeed);
 
 	// モデルタイプの設定
