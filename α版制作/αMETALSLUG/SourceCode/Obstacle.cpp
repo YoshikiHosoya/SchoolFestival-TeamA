@@ -29,8 +29,10 @@ OBSTACLE_PARAM	CObstacle::m_ObstacleParam[CObstacle::TYPE_MAX] = {};
 CObstacle::CObstacle(OBJ_TYPE type) :CModel(type)
 {
 	// 変数初期化
-	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// 移動値
-	m_nLife = 0;								// 体力
+	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);				// 移動値
+	m_nLife = 0;										// 体力
+	m_CollisionSize = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 移動値
+	m_ObstacleType = TYPE_BOX;							// タイプの初期化
 }
 
 // =====================================================================================================================================================================
@@ -49,9 +51,6 @@ CObstacle::~CObstacle()
 // =====================================================================================================================================================================
 HRESULT CObstacle::Init()
 {
-	// タイプの初期化
-	m_ObstacleType = TYPE_BOX;
-
 	// 初期化
 	CModel::Init();
 
@@ -60,7 +59,10 @@ HRESULT CObstacle::Init()
 
 	// 当たり判定生成
 	GetCollision()->SetPos(&GetPosition());
-	GetCollision()->SetSize2D(OBSTACLE_BOX_COLLISION);
+
+	// 種類別に当たり判定の大きさを設定
+	Size((OBSTACLE_TYPE)GetModelCount());
+
 	GetCollision()->SetMove(nullptr);
 	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_NORMAL);
 
@@ -184,10 +186,35 @@ void CObstacle::Hit(OBSTACLE_TYPE type,int nDamage)
 	}
 }
 
+//====================================================================
+// 種類別に当たり判定の大きさを設定
+//====================================================================
+void CObstacle::Size(OBSTACLE_TYPE Type)
+{
+	switch (Type)
+	{
+	case CObstacle::TYPE_BOX:
+		GetCollision()->SetSize2D(m_CollisionSize);
+		break;
+	case CObstacle::TYPE_BARREL:
+		GetCollision()->SetSize2D(m_CollisionSize);
+		break;
+	case CObstacle::TYPE_TREE:
+		GetCollision()->SetSize2D(m_CollisionSize);
+		break;
+	case CObstacle::TYPE_CHEST:
+		GetCollision()->SetSize2D(m_CollisionSize);
+		break;
+	case CObstacle::TYPE_SANDBAGS:
+		GetCollision()->SetSize2D(m_CollisionSize);
+		break;
+	default:
+		break;
+	}
+}
+
 // =====================================================================================================================================================================
-//
 // 障害物を破壊するか決める処理
-//
 // =====================================================================================================================================================================
 void CObstacle::CheckDie()
 {

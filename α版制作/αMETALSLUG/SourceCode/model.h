@@ -163,6 +163,7 @@ public:
 	static void UnLoad(void);
 	D3DXVECTOR3 &GetPosition(void);
 	D3DXVECTOR3 &GetRot(void);
+	D3DXVECTOR3 &GetSize(void);
 	D3DXVECTOR3 GetvtxMax(int nCnt);
 	D3DXVECTOR3 GetvtxMin(int nCnt);
 	static CModel *Create(int type, int modelCount);
