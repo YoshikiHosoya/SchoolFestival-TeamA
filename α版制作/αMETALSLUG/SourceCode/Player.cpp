@@ -32,6 +32,8 @@
 // 貫通させるかのフラグ
 #define ATTACK_PENETRATION		(true)			// プレイヤーの判定が貫通するかどうか
 #define ATTACK_DAMAGE_ENEMY		(50)			// エネミーへのダメージ
+#define SHOT_BULLET_POS_X		(-15.0f)		// 弾の発射位置X
+#define SHOT_BULLET_POS_Z		(5.0f)			// 弾の発射位置Z
 
 CPlayer::CPlayer(OBJ_TYPE type) :CCharacter(type)
 {
@@ -60,6 +62,9 @@ HRESULT CPlayer::Init(void)
 	m_pGrenadeFire = CGrenadeFire::Create(GetCharacterModelPartsList(CModel::MODEL_PLAYER_LHAND)->GetMatrix());
 	// 銃の弾の種類
 	m_pGun->GetTag() = TAG_PLAYER;
+	// 発射位置のオフセットの設定
+	m_pGun->SetShotOffsetPos(D3DXVECTOR3(SHOT_BULLET_POS_X, 0.0f, SHOT_BULLET_POS_Z));
+
 	// ナイフの生成
 	m_pKnife = CKnife::Create(GetCharacterModelPartsList(CModel::MODEL_PLAYER_LHAND)->GetMatrix());
 	// プレイヤーUIの生成
@@ -378,18 +383,18 @@ void CPlayer::AttackUpdate(void)
 			// 銃を撃てる状態だった時
 			if (m_bAttack_Enemy == false && m_bAttack_Prisoner == false)
 			{// 銃発射処理
-				m_pGun->Shot(GetShotDirection());
+				m_pGun->Shot();
 			}
 			// 捕虜が判定可能な状態だった時
 			else if (pPrisoner->GetPrisonerState() != CPrisoner::PRISONER_STATE_STAY)
-			{
-				m_pGun->Shot(GetShotDirection());
+			{// 銃発射処理
+				m_pGun->Shot();
 			}
 		}
 		// 捕虜がいない時は通常通り弾を撃つ
 		else
-		{
-			m_pGun->Shot(GetShotDirection());
+		{// 銃発射処理
+			m_pGun->Shot();
 		}
 
 		// 近接攻撃をする状態だった時
@@ -500,6 +505,8 @@ void CPlayer::Ride()
 		MoveUpdate();
 		AttackUpdate();
 
+		// 弾を撃つ方向を設定
+		m_pGun->SetShotRot(GetShotDirection());
 		// 弾の残数表示
 		m_pPlayerUI->SetBulletAmmo(m_pGun->GetGunAmmo(), m_pGun->GetGunType());
 		// グレネードの残数表示

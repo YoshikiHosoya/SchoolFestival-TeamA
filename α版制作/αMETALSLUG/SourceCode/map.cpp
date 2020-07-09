@@ -13,6 +13,9 @@
 #include "Obstacle.h"
 #include "prisoner.h"
 #include "playertank.h"
+#include "Player.h"
+#include "BaseMode.h"
+
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
 // =====================================================================================================================================================================
@@ -478,7 +481,7 @@ CMap *CMap::MapCreate(MAP MapNum)
 	// 敵のロード
 	pMap->EnemyLoad(MapNum);
 	// 捕虜のロード
-	//pMap->PrisonerLoad(MapNum);
+	pMap->PrisonerLoad(MapNum);
 	// 障害物のロード
 	pMap->ObstacleLoad(MapNum);
 	// プレイヤー戦車のロード
@@ -983,6 +986,11 @@ void CMap::ObstacleSet()
 	{
 		// オブジェクトの生成
 		m_pObstacle.emplace_back(CObstacle::Create());
+
+		//// プレイヤーの位置に合わせる
+		//CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
+		//// オブジェクトの位置の設定
+		//m_pObstacle[nNowSelect]->SetPosition(pPlayer->GetPosition());
 	}
 
 	// 改行キャンセル

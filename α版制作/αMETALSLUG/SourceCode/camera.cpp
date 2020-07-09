@@ -19,7 +19,7 @@
 #define CAMERA_ROTATION_SPEED (0.05f)
 #define CAMETA_POSR_OFFSET (D3DXVECTOR3(0.0f,50.0f,0.0f))
 
-#define DEFAULT_DISTANCE (400.0f)
+#define DEFAULT_DISTANCE (1000.0f)
 #define DEFAULT_CAMERA_ROTATION (D3DXVECTOR3(0.2f,0.0f,0.0f))
 //=============================================================================
 // ÉJÉÅÉâÇÃèâä˙âªèàóù

@@ -45,7 +45,7 @@ HRESULT CEnemy::Init(void)
 	m_Attack = false;
 
 	// e‚Ì¶¬
-	m_pGun = CGun::Create(GetCharacterModelPartsList(CModel::MODEL_ENEMY_RHAND_01)->GetMatrix());
+	m_pGun = CGun::Create(GetCharacterModelPartsList(CModel::MODEL_ENEMY_RHAND)->GetMatrix());
 	// e‚Ì’e‚ÌŽí—Þ
 	m_pGun->GetTag() = TAG_ENEMY;
 
@@ -93,15 +93,19 @@ void CEnemy::Update(void)
 		m_pGun = nullptr;
 		//CItem::Create(this->GetPosition(), CItem::ITEMTYPE_HEAVYMACHINEGUN);
 	}
-
+	else
+	{
+		// ’e‚ðŒ‚‚Â•ûŒü‚ðÝ’è
+		m_pGun->SetShotRot(GetShotDirection());
+	}
 	//AIŠÖ˜Aˆ—
 	if (m_pAI != nullptr)
 	{
 		if (m_pAI->GetAIType() == m_pAI->AI_SHOT && m_pAI->GetShot() == true)
 		{
-			m_pGun->Shot(GetShotDirection());
+			m_pGun->Shot();
 		}
-		m_pAI->Update();
+		//m_pAI->Update();
 	}
 
 	CDebugProc::Print("\n“G‚Ìƒ‰ƒCƒt %d\n", CCharacter::GetLife());
