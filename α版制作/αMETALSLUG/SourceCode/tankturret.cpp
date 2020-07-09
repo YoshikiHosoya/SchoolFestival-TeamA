@@ -131,7 +131,7 @@ CTankTurret * CTankTurret::Create(D3DXVECTOR3 rot)
 	// ‰Šú‰»
 	pTankTurret->Init();
 
-	// ƒvƒŒƒCƒ„[‚ÌŒü‚«‚É‡‚í‚¹‚é
+	// Œ‚‚Â•ûŒü‚É‡‚í‚¹‚é
 	/*pTankTurret->GetMove() = D3DXVECTOR3(-sinf(rot.x) * pBulletParam->fBulletSpeed,
 										 -sinf(rot.y) * cosf(rot.x) * pBulletParam->fBulletSpeed,
 										 -cosf(rot.y) * cosf(rot.x) * pBulletParam->fBulletSpeed);*/
