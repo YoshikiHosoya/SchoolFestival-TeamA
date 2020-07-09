@@ -94,7 +94,7 @@ void CPrisoner::Update(void)
 	CCharacter::Update();
 
 	// •ß—¸‚Ìó‘Ô
-	CDebugProc::Print("\n •ß—¸‚Ìó‘Ô %d\n\n", m_PrisonerState);
+	//CDebugProc::Print("\n •ß—¸‚Ìó‘Ô %d\n\n", m_PrisonerState);
 }
 //====================================================================
 //•`‰æ

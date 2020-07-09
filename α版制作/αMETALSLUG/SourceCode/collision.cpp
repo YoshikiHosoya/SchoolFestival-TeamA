@@ -837,6 +837,8 @@ bool CCollision::RayBlockCollision(CMap *pMap, D3DXMATRIX *pMat)
 		{
 			bLand = false;
 		}
+
+
 	}
 	//Ray‚É”»’è‚ª‚È‚©‚Á‚½‚çƒWƒƒƒ“ƒv‚Å‚«‚È‚¢
 	else

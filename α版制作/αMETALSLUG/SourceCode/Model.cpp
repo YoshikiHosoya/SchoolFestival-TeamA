@@ -49,17 +49,21 @@ char *CModel::m_MapFileName[MODEL_MAP_MAX] =
 };
 char *CModel::m_EnemyFileName[MODEL_ENEMY_MAX] =
 {
-	{ "data/MODEL/EnemyFire/EnemyHead01.x" },		//1  ==‰Š==
-	{ "data/MODEL/EnemyFire/EnemyBody01.x" },		//2
-	{ "data/MODEL/EnemyFire/EnemySholder_L01.x" },	//3
-	{ "data/MODEL/EnemyFire/EnemySholder_R01.x" },	//4
-	{ "data/MODEL/EnemyFire/EnemyHand_L01.x" },		//5
-	{ "data/MODEL/EnemyFire/EnemyHand_R01.x" },		//6
-	{ "data/MODEL/EnemyFire/EnemyFoot_L01.x" },		//9
-	{ "data/MODEL/EnemyFire/EnemyFoot_R01.x" },		//10
-	{ "data/MODEL/EnemyFire/EnemyLeg_L01.x" },		//7
-	{ "data/MODEL/EnemyFire/EnemyLeg_R01.x" },		//8
-	{ "data/MODEL/EnemyFire/Enemy_Wepon01.x" },		//11
+	{ "data/MODEL/Enemy/Waist.x" },
+	{ "data/MODEL/Enemy/Body.x" },	
+	{ "data/MODEL/Enemy/Head.x" },
+	{ "data/MODEL/Enemy/L_Sholder.x" },	
+	{ "data/MODEL/Enemy/R_Sholder.x" },	
+	{ "data/MODEL/Enemy/L_Arm.x" },
+	{ "data/MODEL/Enemy/R_Arm.x" },
+	{ "data/MODEL/Enemy/L_Hand.x" },
+	{ "data/MODEL/Enemy/R_Hand.x" },
+	{ "data/MODEL/Enemy/L_Knee.x" },
+	{ "data/MODEL/Enemy/R_Knee.x" },
+	{ "data/MODEL/Enemy/L_Foot.x" },		
+	{ "data/MODEL/Enemy/R_Foot.x" },		
+	{ "data/MODEL/Enemy/L_Leg.x" },		
+	{ "data/MODEL/Enemy/R_Leg.x" },		
 };
 char *CModel::m_GunFileName[MODEL_GUN_MAX] =
 {
@@ -839,6 +843,14 @@ D3DXVECTOR3 &CModel::GetPosition(void)
 D3DXVECTOR3 &CModel::GetRot(void)
 {
 	return m_rot;
+}
+
+//====================================================================
+//ƒTƒCƒY‚ÌŽæ“¾
+//====================================================================
+D3DXVECTOR3 & CModel::GetSize(void)
+{
+	return m_size;
 }
 
 //====================================================================

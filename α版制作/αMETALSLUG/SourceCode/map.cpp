@@ -313,6 +313,7 @@ void CMap::ObstacleLoad(MAP MapNum)
 	D3DXVECTOR3 pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 位置
 	int nLife = 0;										// 体力
 	int nType = 0;										// 種類
+	D3DXVECTOR3 size = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 大きさ
 
 	// ファイルを開く
 	pFile = fopen(m_ObstacleFileName[MapNum], "r");
@@ -360,6 +361,12 @@ void CMap::ObstacleLoad(MAP MapNum)
 						{
 							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &nLife);		// 比較用テキストにTYPEを代入
 						}
+						// SIZEが来たら
+						else if (strcmp(cHeadText, "SIZE") == 0)
+						{
+							sscanf(cReadText, "%s %s %f %f %f ", &cDie, &cDie, &size.x, &size.y, &size.z);		// 比較用テキストにTYPEを代入
+						}
+
 						else if (strcmp(cHeadText, "END_OBSTACLESET") == 0)
 						{
 							// オブジェクトの生成
@@ -370,6 +377,8 @@ void CMap::ObstacleLoad(MAP MapNum)
 							m_pObstacle[m_pObstacle.size() - 1]->SetPosition(pos);
 							// 体力の設定
 							m_pObstacle[m_pObstacle.size() - 1]->SetLife(nLife);
+							// 当たり判定の大きさの設定
+							m_pObstacle[m_pObstacle.size() - 1]->SetCollisionSize(size);
 						}
 					}
 				}
@@ -472,9 +481,9 @@ CMap *CMap::MapCreate(MAP MapNum)
 	// 敵のロード
 	pMap->EnemyLoad(MapNum);
 	// 捕虜のロード
-	//pMap->PrisonerLoad(MapNum);
+	pMap->PrisonerLoad(MapNum);
 	// 障害物のロード
-	//pMap->ObstacleLoad(MapNum);
+	pMap->ObstacleLoad(MapNum);
 	// プレイヤー戦車のロード
 	pMap->PlayerTankLoad(MapNum);
 
@@ -792,6 +801,11 @@ void CMap::ObstacleSave(MAP MapNum)
 		fprintf(pFile, "# TYPE情報\n");
 		fprintf(pFile, "#\n");
 		fprintf(pFile, "#	[ 0 ]	箱\n");
+		fprintf(pFile, "#	[ 1 ]	樽\n");
+		fprintf(pFile, "#	[ 2 ]	木\n");
+		fprintf(pFile, "#	[ 3 ]	金庫\n");
+		fprintf(pFile, "#	[ 4 ]	土嚢\n");
+
 		fprintf(pFile, "#\n");
 		fprintf(pFile, "#------------------------------------------------------------------------------\n");
 
@@ -808,6 +822,7 @@ void CMap::ObstacleSave(MAP MapNum)
 				fprintf(pFile, "	TYPE	= %d\n", m_pObstacle[nCntObstacle]->GetModelCount());
 				fprintf(pFile, "	POS		= %.0f %.0f %.0f\n", ObstaclePos.x, ObstaclePos.y, ObstaclePos.z);
 				fprintf(pFile, "	LIFE	= %d\n", m_pObstacle[nCntObstacle]->GetLife());
+				fprintf(pFile, "	SIZE	= %.0f %.0f %.0f\n", m_pObstacle[nCntObstacle]->GetSize().x, m_pObstacle[nCntObstacle]->GetSize().y, m_pObstacle[nCntObstacle]->GetSize().z);
 				fprintf(pFile, "END_OBSTACLESET\n\n");
 			}
 		}
