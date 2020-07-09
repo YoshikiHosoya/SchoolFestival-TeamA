@@ -838,8 +838,8 @@ bool CCollision::RayBlockCollision(CMap *pMap, D3DXMATRIX *pMat)
 		{
 			bLand = false;
 		}
-		CDebugProc::Print("Rayのヒット時の長さ:%2f\n",fData);
-		CDebugProc::Print("腰の値:%2f\n", m_fHeight);
+		//CDebugProc::Print("Rayのヒット時の長さ:%2f\n",fData);
+		//CDebugProc::Print("腰の値:%2f\n", m_fHeight);
 	}
 	//Rayに判定がなかったらジャンプできない
 	else

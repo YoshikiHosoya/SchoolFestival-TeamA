@@ -108,7 +108,7 @@ void CEnemy::Update(void)
 		//m_pAI->Update();
 	}
 
-	CDebugProc::Print("\n敵のライフ %d\n", CCharacter::GetLife());
+	//CDebugProc::Print("\n敵のライフ %d\n", CCharacter::GetLife());
 	CCharacter::Update();
 }
 //====================================================================

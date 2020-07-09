@@ -217,7 +217,6 @@ void CCharacter::Update(void)
 			// ジャンプすることを承認しない
 			SetJump(false);
 		}
-		CDebugProc::Print("たかさああああああ%2f\n", m_vModelList[0]->GetPosition().y);
 	}
 
 	Moation();
@@ -291,7 +290,7 @@ void CCharacter::Draw(void)
 		//	m_vModelList[nCnt]->SetRot(m_vModelList[nCnt]->GetRot());
 		//}
 	}
-	CDebugProc::Print("腰の高さ%2f\n", m_vModelList[0]->GetPosition().y);
+	//CDebugProc::Print("腰の高さ%2f\n", m_vModelList[0]->GetPosition().y);
 }
 //====================================================================
 //モデルのムーヴ
