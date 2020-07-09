@@ -215,7 +215,6 @@ void CCharacter::Update(void)
 		{
 			// ƒWƒƒƒ“ƒv‚·‚é‚±‚Æ‚ğ³”F‚µ‚È‚¢
 			SetJump(false);
-			//‹ó’†‚É‚¢‚é‚©
 		}
 	}
 	Moation();

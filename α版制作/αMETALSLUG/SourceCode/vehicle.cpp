@@ -432,22 +432,22 @@ void CVehicle::GunRot(CModel * pModel)
 			if (pPlayertank->GetVehicleDirection() == VEHICLE_LEFT)
 			{
 				// ðŒ‚²‚Æ‰ñ“]‚³‚¹‚é
-				this->VehiclePartsRotLimit(pModel, D3DX_PI);
+				this->VehiclePartsRotLimit(pModel, D3DX_PI * 0.5f);
 			}
 			else if (pPlayertank->GetVehicleDirection() == VEHICLE_RIGHT)
 			{
 				// ðŒ‚²‚Æ‰ñ“]‚³‚¹‚é
-				this->VehiclePartsRotLimit(pModel, 0.0f);
+				this->VehiclePartsRotLimit(pModel, -D3DX_PI * 0.5f);
 			}
 			else if (pPlayertank->GetVehicleDirection() == VEHICLE_UP)
 			{
 				// ðŒ‚²‚Æ‰ñ“]‚³‚¹‚é
-				this->VehiclePartsRotLimit(pModel, D3DX_PI * 0.5f);
+				this->VehiclePartsRotLimit(pModel, D3DX_PI * 0.0f);
 			}
 			else if (pPlayertank->GetVehicleDirection() == VEHICLE_DOWN)
 			{
 				// ðŒ‚²‚Æ‰ñ“]‚³‚¹‚é
-				this->VehiclePartsRotLimit(pModel, -D3DX_PI * 0.5f);
+				this->VehiclePartsRotLimit(pModel, D3DX_PI * 1.0f);
 			}
 		}
 	}
