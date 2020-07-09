@@ -176,7 +176,12 @@ void CPlayertank::Shot(CKeyboard *key)
 	if (key->GetKeyboardTrigger(DIK_P))
 	{
 		// マシンガン発射処理
-		m_pGun->Shot(GetShotDirection());
+		//m_pGun->Shot(GetShotDirection());
+
+		// ガンのモデルの発射口から弾を生成
+		m_pGun->Shot(D3DXVECTOR3(GetVehicleModelPartsList(CModel::MODEL_TANK_TANKGUN)->GetRot().x,
+							  	 0.0f,
+								 0.0f));
 	}
 
 	// グレネードを撃つ
@@ -308,6 +313,9 @@ void CPlayertank::Collision()
 		{
 			// ジャンプすることを承認しない
 			SetJump(false);
+
+			// マップモデルの斜面の角度に車体を傾ける
+
 		}
 		else
 		{
