@@ -45,10 +45,9 @@ HRESULT CEnemy::Init(void)
 	m_Attack = false;
 
 	// e‚Ì¶¬
-
+	m_pGun = CGun::Create(GetCharacterModelPartsList(CModel::MODEL_ENEMY_RHAND)->GetMatrix());
 	// e‚Ì’e‚ÌŽí—Þ
 	m_pGun->GetTag() = TAG_ENEMY;
-
 	// “–‚½‚è”»’è¶¬
 	GetCollision()->SetPos(&GetPosition());
 	GetCollision()->SetPosOld(&GetPositionOld());
@@ -107,7 +106,7 @@ void CEnemy::Update(void)
 			m_pGun->Shot();
 		}
 	
-		//m_pAI->Update();
+		m_pAI->Update();
 	}
 
 	//CDebugProc::Print("\n“G‚Ìƒ‰ƒCƒt %d\n", CCharacter::GetLife());
