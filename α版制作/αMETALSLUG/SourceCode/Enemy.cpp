@@ -93,13 +93,17 @@ void CEnemy::Update(void)
 		m_pGun = nullptr;
 		//CItem::Create(this->GetPosition(), CItem::ITEMTYPE_HEAVYMACHINEGUN);
 	}
-
+	else
+	{
+		// ’e‚ðŒ‚‚Â•ûŒü‚ðÝ’è
+		m_pGun->SetShotRot(GetShotDirection());
+	}
 	//AIŠÖ˜Aˆ—
 	if (m_pAI != nullptr)
 	{
 		if (m_pAI->GetAIType() == m_pAI->AI_SHOT && m_pAI->GetShot() == true)
 		{
-			m_pGun->Shot(GetShotDirection());
+			m_pGun->Shot();
 		}
 		//m_pAI->Update();
 	}

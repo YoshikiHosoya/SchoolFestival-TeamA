@@ -55,6 +55,7 @@ CCollision::CCollision()
 	m_pmove				= nullptr;							// 移動情報
 	m_Debugcollision	= nullptr;							// デバッグ用当たり判定のポインタ
 	m_nCollisionTime	= 0;								// 当たり判定が持続する時間
+	m_fHeight			= 30;								// 腰の高さの初期化
 }
 
 //======================================================================================================================
@@ -604,6 +605,13 @@ void CCollision::SetMove(D3DXVECTOR3 * move)
 {
 	m_pmove = move;
 }
+//======================================================================================================================
+// 腰高さの設定
+//======================================================================================================================
+void CCollision::SetHeight(float height)
+{
+	m_fHeight = height;
+}
 
 //======================================================================================================================
 // 板型の当たり判定処理
@@ -820,9 +828,9 @@ bool CCollision::RayBlockCollision(CMap *pMap, D3DXMATRIX *pMat)
 				fData = vDistance[nCnt];
 			}
 		}
-		if (fData <MAX_RAY_LENGTH)//Rayの長さの指定条件
+		if (fData < m_fHeight)//Rayの長さの指定条件
 		{
-			this->m_ppos->y = this->m_ppos->y - fData + MAX_RAY_LENGTH;
+			this->m_ppos->y = this->m_ppos->y - fData + m_fHeight;
 			bLand = true;
 		}
 		//Rayの判定圏内じゃなかったらジャンプできない
@@ -831,7 +839,7 @@ bool CCollision::RayBlockCollision(CMap *pMap, D3DXMATRIX *pMat)
 			bLand = false;
 		}
 		CDebugProc::Print("Rayのヒット時の長さ:%2f\n",fData);
-		CDebugProc::Print("腰の値:%2f\n", pMat->_42);
+		CDebugProc::Print("腰の値:%2f\n", m_fHeight);
 	}
 	//Rayに判定がなかったらジャンプできない
 	else

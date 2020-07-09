@@ -28,9 +28,6 @@
 // =====================================================================================================================================================================
 #define HEAVYMACHINEGUN_SHOT_FRAME				(3)			// ヘビーマシンガンの弾の間隔
 
-#define SHOT_BULLET_POS_X						(-15.0f)	// 弾の発射位置X
-#define SHOT_BULLET_POS_Z						(5.0f)		// 弾の発射位置Z
-
 // =====================================================================================================================================================================
 //
 // コンストラクタ
@@ -63,7 +60,10 @@ HRESULT CGun::Init()
 	m_nAmmo			= CBullet::GetBulletParam(m_GunType)->nAmmo;	// 残弾数
 	m_nInterval		= 0;											// 次に撃つためのインターバル
 	m_ShotPos		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);				// 発射位置
+	m_ShotOffsetPos	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);				// 発射位置のオフセット
+	m_ShotRot		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);				// 撃つときの回転の向き
 	m_bDraw			= false;										// 描画フラグ
+
 	// 初期化
 	CModel::Init();
 
@@ -189,11 +189,9 @@ void CGun::SetGunType(GUN_TYPE type)
 // 銃の発射
 //
 // =====================================================================================================================================================================
-void CGun::Shot(D3DXVECTOR3 rot)
+void CGun::Shot()
 {
 	CBullet *pBullet = nullptr;
-
-	m_rot = rot;	// 回転情報
 
 	// ハンドガンと戦車砲台以外のとき
 	if (m_GunType != GUNTYPE_HANDGUN && m_GunType != GUNTYPE_TANKTURRET)
@@ -211,45 +209,45 @@ void CGun::Shot(D3DXVECTOR3 rot)
 		{
 		case CGun::GUNTYPE_HANDGUN:
 			// ハンドガンの生成
-			pBullet = CHandgun::Create(rot);
+			pBullet = CHandgun::Create(m_ShotRot);
 			break;
 
 		case CGun::GUNTYPE_HEAVYMACHINEGUN:
 			// ヘビーマシンガンの生成
-			pBullet = CHeavyMachinegun::Create(rot);
+			pBullet = CHeavyMachinegun::Create(m_ShotRot);
 			m_bMultiple = true;		// フラグをオン
 			break;
 
 		case CGun::GUNTYPE_SHOTGUN:
 			// ショットガンの生成
-			pBullet = CShotgun::Create(rot);
+			pBullet = CShotgun::Create(m_ShotRot);
 			break;
 
 		case CGun::GUNTYPE_LASERGUN:
 			// レーザーガンの生成
-			pBullet = CLasergun::Create(rot);
+			pBullet = CLasergun::Create(m_ShotRot);
 			break;
 
 		case CGun::GUNTYPE_ROCKETLAUNCHER:
 			// ロケットランチャーの生成
-			pBullet = CRocketlauncher::Create(rot);
+			pBullet = CRocketlauncher::Create(m_ShotRot);
 			break;
 
 		case CGun::GUNTYPE_FLAMESHOT:
 			// フレイムショットの生成
-			pBullet = CFlameshot::Create(rot);
+			pBullet = CFlameshot::Create(m_ShotRot);
 			m_bMultiple = true;		// フラグをオン
 			break;
 
 		case CGun::GUNTYPE_TANKTURRET:
 			// 戦車砲台の生成
-			pBullet = CTankTurret::Create(rot);
+			pBullet = CTankTurret::Create(m_ShotRot);
 			m_bMultiple = true;		// フラグをオン
 			break;
 		}
 		if (pBullet)
 		{
-			D3DXVec3TransformCoord(&m_ShotPos, &D3DXVECTOR3(SHOT_BULLET_POS_X, 0.0f, -SHOT_BULLET_POS_Z), GetMatrix());
+			D3DXVec3TransformCoord(&m_ShotPos, &m_ShotOffsetPos, GetMatrix());
 
 			// 位置の設定
 			pBullet->SetPosition(m_ShotPos);
@@ -261,7 +259,7 @@ void CGun::Shot(D3DXVECTOR3 rot)
 			pBullet->SetBulletParam(m_GunType);
 
 			// 弾発砲時のリアクション
-			pBullet->BulletReaction(rot);
+			pBullet->BulletReaction(m_ShotRot);
 
 			//ノズルフラッシュ
 			CTexAnimation3D::Create(m_ShotPos, D3DXVECTOR3(30.0f, 30.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),
@@ -292,19 +290,19 @@ void CGun::MultipleShot()
 			if (m_GunType == GUNTYPE_HEAVYMACHINEGUN)
 			{
 				// 弾の生成
-				pBullet = CHeavyMachinegun::Create(m_rot);
+				pBullet = CHeavyMachinegun::Create(m_ShotRot);
 			}
 			// フレイムショットのとき
 			if (m_GunType == GUNTYPE_FLAMESHOT)
 			{
 				// 弾の生成
-				pBullet = CFlameshot::Create(m_rot);
+				pBullet = CFlameshot::Create(m_ShotRot);
 			}
 			// 戦車砲台のとき
 			if (m_GunType == GUNTYPE_TANKTURRET)
 			{
 				// 弾の生成
-				pBullet = CTankTurret::Create(m_rot);
+				pBullet = CTankTurret::Create(m_ShotRot);
 			}
 
 			// 弾のカウントアップ
@@ -312,7 +310,7 @@ void CGun::MultipleShot()
 
 			if (pBullet)
 			{
-				D3DXVec3TransformCoord(&m_ShotPos, &D3DXVECTOR3(SHOT_BULLET_POS_X, 0.0f, -SHOT_BULLET_POS_Z), GetMatrix());
+				D3DXVec3TransformCoord(&m_ShotPos, &m_ShotOffsetPos, GetMatrix());
 
 				// 位置の設定
 				pBullet->SetPosition(D3DXVECTOR3(m_ShotPos.x, m_ShotPos.y + randPos_y, m_ShotPos.z));
@@ -324,7 +322,7 @@ void CGun::MultipleShot()
 				pBullet->SetBulletParam(m_GunType);
 
 				// 弾の反応
-				pBullet->BulletReaction(m_rot);
+				pBullet->BulletReaction(m_ShotRot);
 
 				//ノズルフラッシュ
 				CTexAnimation3D::Create(m_ShotPos, D3DXVECTOR3(30.0f, 30.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),

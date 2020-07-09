@@ -26,6 +26,8 @@
 //====================================================================
 #define PLAYERTANK_SIZE			(D3DXVECTOR3(90.0f,65.0f,0.0f)) // プレイヤーの判定のサイズ
 #define PLAYERTANK_JUMP			(20.0f)							 // 戦車が飛ぶ移動量
+#define SHOT_BULLET_POS_X		(0.0f)		// 弾の発射位置X
+#define SHOT_BULLET_POS_Z		(0.0f)			// 弾の発射位置Z
 
 // =====================================================================================================================================================================
 //
@@ -68,6 +70,8 @@ HRESULT CPlayertank::Init(void)
 	m_pGun->GetTag() = TAG_PLAYER;
 	// 銃の弾の種類
 	m_pGun->SetGunType(CGun::GUNTYPE_TANKTURRET);
+	// 発射位置のオフセットの設定
+	m_pGun->SetShotOffsetPos(D3DXVECTOR3(SHOT_BULLET_POS_X, 0.0f, SHOT_BULLET_POS_Z));
 
 	// 当たり判定生成
 	GetCollision()->SetPos(&GetPosition());
@@ -181,10 +185,10 @@ void CPlayertank::Shot(CKeyboard *key)
 		//m_pGun->Shot(GetShotDirection());
 
 		// ガンのモデルの発射口から弾を生成
-		m_pGun->Shot(D3DXVECTOR3(GetVehicleModelPartsList(CModel::MODEL_TANK_TANKGUN)->GetRot().x,
-								 GetVehicleModelPartsList(CModel::MODEL_TANK_TANKGUN)->GetRot().y,
-								 GetVehicleModelPartsList(CModel::MODEL_TANK_TANKGUN)->GetRot().z));
+		m_pGun->Shot();
 	}
+	// 弾を撃つ方向を設定
+	m_pGun->SetShotRot(GetVehicleModelPartsList(CModel::MODEL_TANK_TANKGUN)->GetRot());
 
 	// グレネードを撃つ
 	if (key->GetKeyboardTrigger(DIK_O))
