@@ -105,7 +105,7 @@ void CEnemy::Update(void)
 		{
 			m_pGun->Shot();
 		}
-		m_pAI->Update();
+		//m_pAI->Update();
 	}
 
 	CDebugProc::Print("\n“G‚Ìƒ‰ƒCƒt %d\n", CCharacter::GetLife());
