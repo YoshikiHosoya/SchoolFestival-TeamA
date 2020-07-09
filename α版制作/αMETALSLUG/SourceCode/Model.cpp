@@ -63,13 +63,13 @@ char *CModel::m_EnemyFileName[MODEL_ENEMY_MAX] =
 };
 char *CModel::m_GunFileName[MODEL_GUN_MAX] =
 {
-	{ "data/MODEL/Gun/Gun.x" },					// ハンドガン
-	{ "data/MODEL/Gun/Gun.x" },					// ヘビーマシンガン
-	{ "data/MODEL/Gun/Gun.x" },					// ショットガン
-	{ "data/MODEL/Gun/Gun.x" },					// レーザーガン
-	{ "data/MODEL/Gun/Gun.x" },					// ロケットランチャー
-	{ "data/MODEL/Gun/Gun.x" },					// フレイムショット
-	{ "data/MODEL/Gun/Knife.x" },				// ナイフ
+	{ "data/MODEL/Gun/Gun.x" },						// ハンドガン
+	{ "data/MODEL/Gun/Gun.x" },						// ヘビーマシンガン
+	{ "data/MODEL/Gun/Gun.x" },						// ショットガン
+	{ "data/MODEL/Gun/Gun.x" },						// レーザーガン
+	{ "data/MODEL/Gun/Gun.x" },						// ロケットランチャー
+	{ "data/MODEL/Gun/Gun.x" },						// フレイムショット
+	{ "data/MODEL/Gun/Knife.x" },					// ナイフ
 
 };
 char *CModel::m_BulletFileName[MODEL_BULLET_MAX] =
@@ -90,14 +90,17 @@ char *CModel::m_TankFileName[MODEL_TANK_MAX] =
 
 char *CModel::m_ObstacleFileName[OBSTACLE_TYPE_MAX] =
 {
-	{ "data/MODEL/Object/Obstacle_Box.x" },				// 箱
-	{ "data/MODEL/Object/testmodel.x" },				// 確認用モデル
+	{ "data/MODEL/Object/Obstacle_Box.x" },			// 箱
+	{ "data/MODEL/Object/Obstacle_Barrel.x" },		// 樽
+	{ "data/MODEL/Object/Obstacle_Tree.x" },		// 木
+	{ "data/MODEL/Object/Obstacle_Chest.x" },		// 金庫
+	{ "data/MODEL/Object/Obstacle_Sandbags.x" },	// 土嚢
 };
 
 
 CModel::CModel(OBJ_TYPE type) : CScene(type)
 {
-	m_pCollision = nullptr;									// 当たり判定のポインタ
+	m_pCollision = nullptr;							// 当たり判定のポインタ
 }
 
 CModel::~CModel()

@@ -121,8 +121,11 @@ public:
 	typedef enum
 	{
 		OBSTACLE_TYPE_BOX = 0,								// ハコ
-		OBSTACLE_TYPE_TEST,									// 確認用モデル
-		OBSTACLE_TYPE_MAX,
+		OBSTACLE_TYPE_BARREL,								// 樽
+		OBSTACLE_TYPE_TREE,									// 木
+		OBSTACLE_TYPE_CHEST,								// 金庫
+		OBSTACLE_TYPE_SANDBAGS,								// 土嚢
+		OBSTACLE_TYPE_MAX,									// 障害物
 	}OBSTACLE_TYPE;
 
 	typedef struct
