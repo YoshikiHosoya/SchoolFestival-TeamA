@@ -45,7 +45,7 @@ HRESULT CEnemy::Init(void)
 	m_Attack = false;
 
 	// e‚Ì¶¬
-	m_pGun = CGun::Create(GetCharacterModelPartsList(CModel::MODEL_ENEMY_RHAND_01)->GetMatrix());
+	m_pGun = CGun::Create(GetCharacterModelPartsList(CModel::MODEL_ENEMY_RHAND)->GetMatrix());
 	// e‚Ì’e‚ÌŽí—Þ
 	m_pGun->GetTag() = TAG_ENEMY;
 
