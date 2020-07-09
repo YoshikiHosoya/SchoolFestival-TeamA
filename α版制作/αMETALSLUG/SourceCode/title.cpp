@@ -1,4 +1,4 @@
-#include "game.h"
+#include "title.h"
 #include "manager.h"
 #include "renderer.h"
 #include "player.h"
@@ -12,34 +12,33 @@
 #include "UIManager.h"
 
 #define _CRT_SECURE_NO_WARNINGS // 警告除去
-int			CGame::m_Counter	= 0;
-CPlayer		*CGame::m_pPlayer	= NULL;
-CMap		*CGame::m_pMap		= NULL;
+int			CTitle::m_Counter = 0;
+CPlayer		*CTitle::m_pPlayer = NULL;
+CMap		*CTitle::m_pMap = NULL;
 
 //==========================================================
 // コンストラクタ
 //==========================================================
-CGame::CGame()
+CTitle::CTitle()
 {
 }
 //==========================================================
 // デストラクタ
 //==========================================================
-CGame::~CGame()
+CTitle::~CTitle()
 {
 }
 //==========================================================
 // 初期化
 //==========================================================
-HRESULT CGame::Init(void)
+HRESULT CTitle::Init(void)
 {
 
-	m_pMap		= CMap::MapCreate(CMap::MAP_1);	// マップの生成
-	m_pPlayer	= CPlayer::Create();
+	m_pMap = CMap::MapCreate(CMap::MAP_1);	// マップの生成
+	m_pPause->CreatePause();
+	m_pPlayer = CPlayer::Create();
 	m_pPlayer->SetLife(500);
 	m_pPlayer->SetPosition(D3DXVECTOR3(50.0f, 100.0f, 0.0f));
-
-	m_pPause->CreatePause();
 
 	//パーティクル生成
 	CParticleManager::Create();
@@ -52,13 +51,13 @@ HRESULT CGame::Init(void)
 //==========================================================
 // 終了
 //==========================================================
-void CGame::Uninit(void)
+void CTitle::Uninit(void)
 {
 }
 //==========================================================
 // 更新
 //==========================================================
-void CGame::Update(void)
+void CTitle::Update(void)
 {
 	m_pMap->UpdateDieFlag();
 
@@ -71,20 +70,20 @@ void CGame::Update(void)
 	CKeyboard *key = CManager::GetInputKeyboard();;
 	if (key->GetKeyboardTrigger(DIK_RETURN))
 	{
-		CManager::GetRenderer()->GetFade()->SetFade(CManager::MODE_RESULT);
+		CManager::GetRenderer()->GetFade()->SetFade(CManager::MODE_GAME);
 	}
- }
+}
 //==========================================================
 // プレイヤー取得
 //==========================================================
-CPlayer * CGame::GetPlayer(void)
+CPlayer * CTitle::GetPlayer(void)
 {
 	return m_pPlayer;
 }
 //==========================================================
 // マップ取得
 //==========================================================
-CMap * CGame::GetMap(void)
+CMap * CTitle::GetMap(void)
 {
 	if (m_pMap)
 	{
@@ -96,23 +95,17 @@ CMap * CGame::GetMap(void)
 //==========================================================
 // 体力の取得
 //==========================================================
-void CGame::Draw(void)
+void CTitle::Draw(void)
 {
 }
 //==========================================================
 // デバッグ情報表記
 //==========================================================
-void CGame::ShowDebugInfo(void)
+void CTitle::ShowDebugInfo(void)
 {
 	//キーボード情報取得
 	CKeyboard *key = CManager::GetInputKeyboard();;
 
 	// マップの更新
 	m_pMap->MapUpdate();
-
-	if (key->GetKeyboardTrigger(DIK_L))
-	{
-
-		CItem::Create(D3DXVECTOR3(150.0f, 80.0f, 00.0f), CItem::ITEMTYPE_SHOTGUN);
-	}
 }

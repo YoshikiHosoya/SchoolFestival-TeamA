@@ -4,6 +4,8 @@
 #include "Player.h"
 #include "model.h"
 #include "game.h"
+#include "title.h"
+#include "result.h"
 #include "texture.h"
 #include "Xinput.h"
 #include "texture.h"
@@ -18,7 +20,7 @@ CKeyboard	*CManager::m_pInputKeyboard	= NULL;
 CParticle	*CManager::m_Particle		= NULL;
 CBaseMode	*CManager::m_pBaseMode		= NULL;
 CMouse		*CManager::m_pMouse			= NULL;
-CManager::GAME_MODE CManager::m_mode = CManager::MODE_GAME;
+CManager::GAME_MODE CManager::m_mode = CManager::MODE_TITLE;
 CXInputPad	*CManager::m_pPad			= NULL;
 CManager::CManager()
 {
@@ -116,6 +118,8 @@ void CManager::SetGameMode(GAME_MODE mode)
 	{
 		//Title
 	case MODE_TITLE:
+		m_pBaseMode = new CTitle;
+		m_pBaseMode->Init();
 		break;
 
 		//Game
@@ -126,6 +130,8 @@ void CManager::SetGameMode(GAME_MODE mode)
 
 		//Result
 	case MODE_RESULT:
+		m_pBaseMode = new CResult;
+		m_pBaseMode->Init();
 		break;
 
 		//Tutorial

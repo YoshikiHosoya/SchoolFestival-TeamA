@@ -8,7 +8,7 @@
 
 SCRIPT
 
-	LOOP = 0		//ループするかどうか
+	LOOP = 1		//ループするかどうか
 	NUM_KEY = 1		//キー数
 
 	KEYSET		//---< KEY : 0 / 1 >---

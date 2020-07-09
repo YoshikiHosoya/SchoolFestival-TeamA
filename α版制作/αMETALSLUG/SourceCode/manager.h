@@ -7,6 +7,8 @@ class CRenderer;
 class CKeyboard;
 class CParticle;
 class CGame;
+class CTitle;
+class CResult;
 class CBaseMode;
 class CMouse;
 class CXInputPad;

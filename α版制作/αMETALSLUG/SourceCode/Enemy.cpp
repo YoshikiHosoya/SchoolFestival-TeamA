@@ -83,7 +83,7 @@ void CEnemy::Update(void)
 	}
 	if (GetCollision() != nullptr)
 	{
-		 //座標の更新
+		//座標の更新
 		GetCollision()->SetPos(&GetPosition());
 	}
 	//体力が0以下になった時
@@ -107,7 +107,6 @@ void CEnemy::Update(void)
 		}
 		m_pAI->Update();
 	}
-
 	CDebugProc::Print("\n敵のライフ %d\n", CCharacter::GetLife());
 	CCharacter::Update();
 }

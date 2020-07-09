@@ -209,6 +209,7 @@
     <ClCompile Include="SourceCode\playerUI.cpp" />
     <ClCompile Include="SourceCode\prisoner.cpp" />
     <ClCompile Include="SourceCode\renderer.cpp" />
+    <ClCompile Include="SourceCode\result.cpp" />
     <ClCompile Include="SourceCode\rocketlauncher.cpp" />
     <ClCompile Include="SourceCode\Scene.cpp" />
     <ClCompile Include="SourceCode\Scene2D.cpp" />
@@ -222,6 +223,7 @@
     <ClCompile Include="SourceCode\TexAnimation3D_Collision.cpp" />
     <ClCompile Include="SourceCode\TexAnimationBase.cpp" />
     <ClCompile Include="SourceCode\texture.cpp" />
+    <ClCompile Include="SourceCode\title.cpp" />
     <ClCompile Include="SourceCode\UI.cpp" />
     <ClCompile Include="SourceCode\UIManager.cpp" />
     <ClCompile Include="SourceCode\vehicle.cpp" />
@@ -286,6 +288,7 @@
     <ClInclude Include="SourceCode\playerUI.h" />
     <ClInclude Include="SourceCode\prisoner.h" />
     <ClInclude Include="SourceCode\renderer.h" />
+    <ClInclude Include="SourceCode\result.h" />
     <ClInclude Include="SourceCode\rocketlauncher.h" />
     <ClInclude Include="SourceCode\Scene.h" />
     <ClInclude Include="SourceCode\scene2D.h" />
@@ -299,6 +302,7 @@
     <ClInclude Include="SourceCode\TexAnimation3D_Collision.h" />
     <ClInclude Include="SourceCode\TexAnimationBase.h" />
     <ClInclude Include="SourceCode\texture.h" />
+    <ClInclude Include="SourceCode\title.h" />
     <ClInclude Include="SourceCode\UI.h" />
     <ClInclude Include="SourceCode\UIManager.h" />
     <ClInclude Include="SourceCode\vehicle.h" />

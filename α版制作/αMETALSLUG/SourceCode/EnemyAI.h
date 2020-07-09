@@ -13,7 +13,7 @@
 #define MAX_RECASTTIME (120)
 class CEnemy;
 class CGun;
-
+class CCollision;
 //=============================================================================
 // プロトタイプ宣言
 //=============================================================================
@@ -43,14 +43,19 @@ public:
 	static CEnemyAI* CreateAI(CEnemy *pEnemy);
 	AI_STATE GetAIType(void);
 	bool GetShot(void);
+	CCollision *GetCollision() { return m_pCollision; };			// 当たり判定のポインタ取得
+
 private:
-	CEnemy *pEnemyPass;			//敵の情報の格納用？
+	CEnemy *pEnemyPass;			//敵の情報の格納用
 	CGun	*m_pGun;			//ガンクラスのポインタ
 	AI_STATE m_AItype;			//行動の種類
+	AI_STATE m_AItypeOld;		//前の行動の格納
 	int m_recast;
 	int m_castcount;
 	bool m_bShot;
+	bool m_bReStartFlag;
 	int m_random;
+	CCollision				*m_pCollision;							//当たり判定のポインタ
 };
 
 #endif

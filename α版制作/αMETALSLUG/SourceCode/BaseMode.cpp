@@ -63,7 +63,7 @@ void CBaseMode::DebugCommand(void)
 		//タイトル
 		if (key->GetKeyboardTrigger(DIK_NUMPAD1))
 		{
-			//CManager::GetRenderer()->GetFade()->SetFade(CManager::MODE_TITLE);
+			CManager::GetRenderer()->GetFade()->SetFade(CManager::MODE_TITLE);
 		}
 		//ゲーム
 		if (key->GetKeyboardTrigger(DIK_NUMPAD2))

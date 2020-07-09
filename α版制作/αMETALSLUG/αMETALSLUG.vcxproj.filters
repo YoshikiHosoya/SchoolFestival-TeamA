@@ -217,6 +217,12 @@
     <ClCompile Include="SourceCode\tankturret.cpp">
       <Filter>Wepon</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\title.cpp">
+      <Filter>Mode</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\result.cpp">
+      <Filter>Mode</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SourceCode\mesh.h">
@@ -443,6 +449,12 @@
     </ClInclude>
     <ClInclude Include="SourceCode\tankturret.h">
       <Filter>Wepon</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\title.h">
+      <Filter>Mode</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\result.h">
+      <Filter>Mode</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

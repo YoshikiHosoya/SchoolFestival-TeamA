@@ -67,14 +67,14 @@ public:
 	void SetMove(D3DXVECTOR3 *move);					// 移動量の設定
 	void SetTime(int nTime) { m_nCollisionTime = nTime; };	// 継続時間の設定
 	int	 GetTime() { return m_nCollisionTime; };		// 継続時間の設定
-	void SetHeight(float height);
-
+	void SetHeight(float height);						// Rayの高さ設定
 	bool Collision2D(CCollision *pCollision);			// 板型の当たり判定
 	bool CharCollision2D(CCollision *pCollision);		// キャラクター用板型の当たり判定
 	bool OtherCollision2D(CCollision *pCollision);		// 板型の当たり判定
 	bool BlockCollision2D(CCollision *pCollision);		// 板型ブロックの当たり判定
 	bool RayBlockCollision(CMap *pMap, D3DXMATRIX *pMat);// Rayの判定 キャラクター
 	bool RayCollision(CMap *pMap);						// Rayの判定 弾など
+	bool RayFloorCollision(CMap *pMap, D3DXMATRIX *pMat,D3DXVECTOR3 pdirection,D3DXVECTOR3 ppos);// Rayの判定 前方の床
 
 	void DeCollisionCreate(COLLISIONTYPE collisiontype);// デバッグ用当たり判定の生成
 	bool ForPlayerBulletCollision(int nEnemyDamage,
