@@ -326,11 +326,11 @@ void CPlayer::CollisionUpdate(void)
 			}
 
 			// 障害物との判定
-			if (GetCollision()->ForPlayer_ObstacleCollision())
-			{
-				// ジャンプフラグを可能にする
-				CCharacter::SetJump(true);
-			}
+			//if (GetCollision()->ForPlayer_ObstacleCollision())
+			//{
+			//	// ジャンプフラグを可能にする
+			//	CCharacter::SetJump(true);
+			//}
 
 			// アイテムとの判定
 			if (GetCollision()->ForPlayer_ItemCollision())

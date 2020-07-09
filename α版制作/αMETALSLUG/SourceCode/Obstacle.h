@@ -35,8 +35,12 @@ public:
 	// 障害物の種類
 	enum OBSTACLE_TYPE
 	{
-		TYPE_BOX = 0,								// ハコ
-		TYPE_MAX,
+		TYPE_BOX = 0,								// 木箱
+		TYPE_BARREL,								// 樽
+		TYPE_TREE,									// 木
+		TYPE_CHEST,									// 金庫
+		TYPE_SANDBAGS,								// 土嚢
+		TYPE_MAX,									// 最大数
 	};
 
 	CObstacle(OBJ_TYPE type);						// コンストラクタ
