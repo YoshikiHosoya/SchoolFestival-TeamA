@@ -14,6 +14,8 @@
 #include "inputKeyboard.h"
 #include "Xinput.h"
 #include "hosso\/Debug_ModelViewer.h"
+#include "playertank.h"
+
 
 //====================================================================
 // モデルのオフセット読み込みファイルの設定
@@ -85,8 +87,6 @@ HRESULT CVehicle::Init(void)
 	m_pCollision	= CCollision::Create();
 	// マトリックス初期化
 	D3DXMatrixIdentity(&m_mtxWorld);
-	// 回転量を初期化
-	m_AddRot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	// 乗り物の行動状態を初期化
 	m_Behaviorstate = VEHICLE_BEHAVIOR_NORMAL;
 	// 種類を初期化
@@ -169,46 +169,11 @@ void CVehicle::Draw(void)
 		&m_mtxWorld,
 		&mtxTrans);
 
-
-	//モデルの描画
+	// 特定のパーツだけを回転させる
 	for (unsigned int nCnt = 0; nCnt < m_vModelList.size(); nCnt++)
 	{
-		if (nCnt == 2 || nCnt == 3 || nCnt == 4)
-		{
-			//目標点と現在の差分（回転）
-			D3DXVECTOR3 diffRot = m_AddRot - m_vModelList[nCnt]->GetRot();
-			//3.14の超過分の初期化（回転）
-			if (m_vModelList[nCnt]->GetRot().x > D3DX_PI)
-			{
-				m_vModelList[nCnt]->GetRot().x -= D3DX_PI * 2;
-			}
-			else if (m_vModelList[nCnt]->GetRot().x < -D3DX_PI)
-			{
-				m_vModelList[nCnt]->GetRot().x += D3DX_PI * 2;
-			}
-			if (diffRot.x > D3DX_PI)
-			{
-				diffRot.x -= D3DX_PI * 2;
-			}
-			else if (diffRot.x < -D3DX_PI)
-			{
-				diffRot.x += D3DX_PI * 2;
-			}
-			//求めた差分だけ追従する計算
-			m_vModelList[nCnt]->GetRot().x += diffRot.x * 0.1f;
-
-			m_vModelList[nCnt]->SetRot(m_vModelList[nCnt]->GetRot());
-			CDebugProc::Print("tankShotRot : %.1f, %.1f %.1f\n", m_ShotRot.x, m_ShotRot.y, m_ShotRot.z);
-
-			CDebugProc::Print("HeadRot : %.1f, %.1f %.1f\n", m_vModelList[nCnt]->GetRot().x, m_vModelList[nCnt]->GetRot().y, m_vModelList[nCnt]->GetRot().z);
-		}
-
+		// 描画処理
 		m_vModelList[nCnt]->Draw(m_mtxWorld);
-
-		if (nCnt == 2 || nCnt == 3 || nCnt == 4)
-		{
-			m_vModelList[nCnt]->SetRot(m_vModelList[nCnt]->GetRot());
-		}
 	}
 }
 //====================================================================
@@ -220,6 +185,90 @@ void CVehicle::DebugInfo(void)
 
 
 	//CDebugProc::Print("");
+}
+
+//====================================================================
+// パーツの回転条件別処理
+//====================================================================
+void CVehicle::VehiclePartsRotCondition(CModel *pModel, PARTS_ROT_TYPE type)
+{
+	switch (type)
+	{
+		// 動かさない
+	case MODEL_ROT_TYPE_NONE:
+		break;
+
+		// 常に回転する
+	case MODEL_ROT_TYPE_ALWAYS:
+		// 条件ごと回転させる
+		this->VehiclePartsRot(pModel, 0.1f);
+		break;
+
+		// 移動している時のみ
+	case MODEL_ROT_TYPE_MOVING:
+		// 車輪の回転処理
+		WheelRot(pModel);
+		break;
+
+		// 操作している時のみ
+	case MODEL_ROT_TYPE_OPERATION:
+		// 銃の回転処理
+		GunRot(pModel);
+		break;
+
+	default:
+		break;
+	}
+}
+
+//====================================================================
+// パーツの回転条件別処理
+//====================================================================
+void CVehicle::VehiclePartsRot(CModel *pModel, float fRot)
+{
+	//3.14の超過分の初期化（回転）
+	CHossoLibrary::CalcRotation(fRot);
+	// モデルの回転
+	pModel->GetRot().x += fRot;
+	// モデルの回転の更新設定
+	pModel->SetRot(pModel->GetRot());
+}
+
+//====================================================================
+// パーツの回転条件別処理 上限付き
+//====================================================================
+void CVehicle::VehiclePartsRotLimit(CModel * pModel, float fRot)
+{
+	//3.14の超過分の回転量の初期化
+	CHossoLibrary::CalcRotation(pModel->GetRot().x);
+	// --- 指定された角度になるまで回転する --- //
+
+	// 目標回転量と現在の回転量の差分を求める
+	float diffRot = fRot - pModel->GetRot().x;
+
+	//3.14の超過分の初期化（回転）
+	if (pModel->GetRot().x > D3DX_PI)
+	{
+		pModel->GetRot().x -= D3DX_PI * 2;
+	}
+	else if (pModel->GetRot().x < -D3DX_PI)
+	{
+		pModel->GetRot().x += D3DX_PI * 2;
+	}
+	if (diffRot > D3DX_PI)
+	{
+		diffRot -= D3DX_PI * 2;
+	}
+	else if (diffRot < -D3DX_PI)
+	{
+		diffRot += D3DX_PI * 2;
+	}
+
+	//求めた差分だけ回転する計算
+	pModel->GetRot().x += diffRot * 0.1f;
+
+	// モデルの回転の更新設定
+	pModel->SetRot(pModel->GetRot());
 }
 
 //====================================================================
@@ -339,6 +388,68 @@ void CVehicle::ShotDirection()
 
 	default:
 		break;
+	}
+}
+
+//====================================================================
+// 車輪の回転車輪
+//====================================================================
+void CVehicle::WheelRot(CModel *pModel)
+{
+	// 左回転
+	if (this->GetMove().x <= -2)
+	{
+		// 条件ごと回転させる
+		this->VehiclePartsRot(pModel, 0.1f);
+	}
+	// 右回転
+	else if (this->GetMove().x >= 2)
+	{
+		// 条件ごと回転させる
+		this->VehiclePartsRot(pModel, -0.1f);
+	}
+	// 無回転
+	else if (this->GetMove().x <= 1.0f && this->GetMove().x >= -1.0f)
+	{
+		// 条件ごと回転させる
+		this->VehiclePartsRot(pModel, 0.0f);
+	}
+}
+
+//====================================================================
+// 銃の回転車輪
+//====================================================================
+void CVehicle::GunRot(CModel * pModel)
+{
+	// 戦車の総数分
+	for (int nCntVehicle = 0; nCntVehicle < CManager::GetBaseMode()->GetMap()->GetMaxPlayerTank(); nCntVehicle++)
+	{
+		// 乗り物のポインタ取得
+		CPlayertank *pPlayertank = CManager::GetBaseMode()->GetMap()->GetPlayertank(nCntVehicle);
+		// 戦車が存在した時
+		if (pPlayertank != nullptr)
+		{
+			if (pPlayertank->GetVehicleDirection() == VEHICLE_LEFT)
+			{
+				// 条件ごと回転させる
+				this->VehiclePartsRotLimit(pModel, D3DX_PI * 0.5f);
+			}
+			else if (pPlayertank->GetVehicleDirection() == VEHICLE_RIGHT)
+			{
+				// 条件ごと回転させる
+				this->VehiclePartsRotLimit(pModel, -D3DX_PI * 0.5f);
+			}
+			else if (pPlayertank->GetVehicleDirection() == VEHICLE_UP)
+			{
+				// 条件ごと回転させる
+				this->VehiclePartsRotLimit(pModel, D3DX_PI * 0.0f);
+			}
+			else if (pPlayertank->GetVehicleDirection() == VEHICLE_DOWN)
+			{
+				// 条件ごと回転させる
+				this->VehiclePartsRotLimit(pModel, D3DX_PI * 1.0f);
+			}
+		}
 	}
 }
 

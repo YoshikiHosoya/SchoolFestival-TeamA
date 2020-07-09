@@ -24,7 +24,7 @@
 //====================================================================
 //マクロ定義
 //====================================================================
-#define PLAYERTANK_SIZE			(D3DXVECTOR3(100.0f,65.0f,0.0f)) // プレイヤーの判定のサイズ
+#define PLAYERTANK_SIZE			(D3DXVECTOR3(90.0f,65.0f,0.0f)) // プレイヤーの判定のサイズ
 #define PLAYERTANK_JUMP			(20.0f)							 // 戦車が飛ぶ移動量
 
 // =====================================================================================================================================================================
@@ -66,6 +66,8 @@ HRESULT CPlayertank::Init(void)
 	m_pGrenadeFire = CGrenadeFire::Create(GetVehicleModelPartsList(CModel::MODEL_TANK_TANKHEAD)->GetMatrix());
 	// 銃の弾の種類
 	m_pGun->GetTag() = TAG_PLAYER;
+	// 銃の弾の種類
+	m_pGun->SetGunType(CGun::GUNTYPE_TANKTURRET);
 
 	// 当たり判定生成
 	GetCollision()->SetPos(&GetPosition());
@@ -110,9 +112,11 @@ void CPlayertank::Update(void)
 	// キー情報の取得
 	CKeyboard *key = CManager::GetInputKeyboard();
 
+	// プレイヤーのポインタを取得
 	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
 	if (pPlayer != nullptr)
 	{
+		// 乗り物に乗っている時
 		if (pPlayer->GetRideFlag())
 		{
 			// 戦車が弾を撃つ処理
@@ -120,6 +124,11 @@ void CPlayertank::Update(void)
 
 			// 戦車を操作する処理
 			Operation(key);
+
+			// パーツの回転処理
+			VehiclePartsRotCondition(GetVehicleModelPartsList(CModel::MODEL_TANK_TANK_FRONTWHEEL), MODEL_ROT_TYPE_MOVING);
+			VehiclePartsRotCondition(GetVehicleModelPartsList(CModel::MODEL_TANK_TANK_BACKWHEEL), MODEL_ROT_TYPE_MOVING);
+			VehiclePartsRotCondition(GetVehicleModelPartsList(CModel::MODEL_TANK_TANKGUN), MODEL_ROT_TYPE_OPERATION);
 		}
 	}
 
@@ -144,6 +153,7 @@ void CPlayertank::Draw(void)
 //====================================================================
 void CPlayertank::DebugInfo(void)
 {
+	CVehicle::DebugInfo();
 }
 
 //====================================================================
@@ -168,18 +178,24 @@ void CPlayertank::Shot(CKeyboard *key)
 	if (key->GetKeyboardTrigger(DIK_P))
 	{
 		// マシンガン発射処理
-		m_pGun->Shot(GetShotDirection());
+		//m_pGun->Shot(GetShotDirection());
+
+		// ガンのモデルの発射口から弾を生成
+		m_pGun->Shot(D3DXVECTOR3(GetVehicleModelPartsList(CModel::MODEL_TANK_TANKGUN)->GetRot().x,
+								 GetVehicleModelPartsList(CModel::MODEL_TANK_TANKGUN)->GetRot().y,
+								 GetVehicleModelPartsList(CModel::MODEL_TANK_TANKGUN)->GetRot().z));
 	}
 
 	// グレネードを撃つ
 	if (key->GetKeyboardTrigger(DIK_O))
 	{
-// グレネードの弾数が残っているとき
+		// グレネードの弾数が残っているとき
 		if (m_pGrenadeFire->GetGrenadeAmmo() > 0)
 		{
 			// グレネード生成
 			m_pGrenadeFire->Fire(GetShotDirection());
-		}	}
+		}
+	}
 }
 
 //====================================================================
@@ -210,6 +226,12 @@ void CPlayertank::Operation(CKeyboard * key)
 		}
 
 		// 下を向く
+		else if (key->GetKeyboardPress(DIK_S))
+		{
+			SetVehicleDirection(VEHICLE_DOWN);
+		}
+
+		// 左を向く
 		else
 		{
 			SetVehicleDirection(VEHICLE_LEFT);
@@ -228,6 +250,12 @@ void CPlayertank::Operation(CKeyboard * key)
 		}
 
 		// 下を向く
+		else if (key->GetKeyboardPress(DIK_S))
+		{
+			SetVehicleDirection(VEHICLE_DOWN);
+		}
+
+		// 右を向く
 		else
 		{
 			SetVehicleDirection(VEHICLE_RIGHT);
@@ -235,7 +263,7 @@ void CPlayertank::Operation(CKeyboard * key)
 	}
 
 	// ジャンプ処理
-	if (key->GetKeyboardTrigger(DIK_W))
+	if (key->GetKeyboardTrigger(DIK_UP))
 	{
 		// 1回ジャンプさせる
 		Jump();
@@ -287,6 +315,9 @@ void CPlayertank::Collision()
 		{
 			// ジャンプすることを承認しない
 			SetJump(false);
+
+			// マップモデルの斜面の角度に車体を傾ける
+
 		}
 		else
 		{

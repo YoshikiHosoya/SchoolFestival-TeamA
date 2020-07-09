@@ -216,7 +216,6 @@ void CCharacter::Update(void)
 		{
 			// ƒWƒƒƒ“ƒv‚·‚é‚±‚Æ‚ð³”F‚µ‚È‚¢
 			SetJump(false);
-			//‹ó’†‚É‚¢‚é‚©
 		}
 		CDebugProc::Print("‚½‚©‚³‚ ‚ ‚ ‚ ‚ ‚ %2f\n", m_vModelList[0]->GetPosition().y);
 	}

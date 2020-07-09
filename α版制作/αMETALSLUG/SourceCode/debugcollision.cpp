@@ -381,10 +381,8 @@ void CDebugcollision::SetSize(D3DXVECTOR3 * size)
 // ----------------------------------------
 // ラインの削除
 // ----------------------------------------
-
 void CDebugcollision::DeleteDeCollision()
 {
-
 	if (this != nullptr)
 	{
 		// 座標のポインタをlineの座標に設定

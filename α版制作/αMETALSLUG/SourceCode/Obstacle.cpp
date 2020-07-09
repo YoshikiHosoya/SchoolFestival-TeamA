@@ -150,6 +150,35 @@ void CObstacle::Hit(OBSTACLE_TYPE type,int nDamage)
 		// íœ‚·‚é
 		this->CheckDie();
 		break;
+
+	case CObstacle::TYPE_BARREL:
+		// ‘Ì—Í‚ðŒ¸ŽZ‚·‚é
+		this->AddDamage(nDamage);
+		// íœ‚·‚é
+		this->CheckDie();
+		break;
+
+	case CObstacle::TYPE_TREE:
+		// ‘Ì—Í‚ðŒ¸ŽZ‚·‚é
+		this->AddDamage(nDamage);
+		// íœ‚·‚é
+		this->CheckDie();
+		break;
+
+	case CObstacle::TYPE_CHEST:
+		// ‘Ì—Í‚ðŒ¸ŽZ‚·‚é
+		this->AddDamage(nDamage);
+		// íœ‚·‚é
+		this->CheckDie();
+		break;
+
+	case CObstacle::TYPE_SANDBAGS:
+		// ‘Ì—Í‚ðŒ¸ŽZ‚·‚é
+		this->AddDamage(nDamage);
+		// íœ‚·‚é
+		this->CheckDie();
+		break;
+
 	default:
 		break;
 	}
@@ -164,7 +193,6 @@ void CObstacle::CheckDie()
 {
 	if (this->m_nLife <= 0)
 	{
-		//m_pCollision = nullptr;
 		// ‘Ì—Í‚ª0ˆÈ‰º‚È‚çíœ‚·‚é
 		Rerease();
 	}
