@@ -218,8 +218,8 @@ void CPlayerUI::SetScore(int nScore)
 // =====================================================================================================================================================================
 void CPlayerUI::SetBulletAmmo(int nBulletAmmo, CGun::GUN_TYPE GunType)
 {
-	// ハンドガン以外のとき
-	if (CGun::GUN_TYPE::GUNTYPE_HANDGUN != GunType)
+	// ハンドガンと戦車砲台以外のとき
+	if (CGun::GUN_TYPE::GUNTYPE_HANDGUN != GunType && CGun::GUN_TYPE::GUNTYPE_TANKTURRET != GunType)
 	{
 		// 弾数無限のUI非表示
 		m_apScene2D[INFINITY_AMMO]->SetDisp(false);
@@ -230,7 +230,7 @@ void CPlayerUI::SetBulletAmmo(int nBulletAmmo, CGun::GUN_TYPE GunType)
 		// 弾の残数の設定
 		m_pBulletAmmo->SetMultiNumber(m_nBulletAmmo);
 	}
-	// ハンドガンのとき
+	// ハンドガンと戦車砲台のとき
 	else
 	{
 		// 弾の残数の非表示

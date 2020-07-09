@@ -216,6 +216,7 @@
     <ClCompile Include="SourceCode\SceneBase.cpp" />
     <ClCompile Include="SourceCode\SceneX.cpp" />
     <ClCompile Include="SourceCode\shotgun.cpp" />
+    <ClCompile Include="SourceCode\tankturret.cpp" />
     <ClCompile Include="SourceCode\TexAnimation2D.cpp" />
     <ClCompile Include="SourceCode\TexAnimation3D.cpp" />
     <ClCompile Include="SourceCode\TexAnimation3D_Collision.cpp" />
@@ -292,6 +293,7 @@
     <ClInclude Include="SourceCode\SceneBase.h" />
     <ClInclude Include="SourceCode\SceneX.h" />
     <ClInclude Include="SourceCode\shotgun.h" />
+    <ClInclude Include="SourceCode\tankturret.h" />
     <ClInclude Include="SourceCode\TexAnimation2D.h" />
     <ClInclude Include="SourceCode\TexAnimation3D.h" />
     <ClInclude Include="SourceCode\TexAnimation3D_Collision.h" />

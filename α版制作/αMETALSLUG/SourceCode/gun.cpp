@@ -15,8 +15,10 @@
 #include "lasergun.h"
 #include "rocketlauncher.h"
 #include "flameshot.h"
+#include "tankturret.h"
 #include "Character.h"
 #include "TexAnimation3D.h"
+
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
 // =====================================================================================================================================================================
@@ -193,8 +195,8 @@ void CGun::Shot(D3DXVECTOR3 rot)
 
 	m_rot = rot;	// 回転情報
 
-	// ハンドガン以外のとき
-	if (m_GunType != GUNTYPE_HANDGUN)
+	// ハンドガンと戦車砲台以外のとき
+	if (m_GunType != GUNTYPE_HANDGUN && m_GunType != GUNTYPE_TANKTURRET)
 	{
 		// 残弾数を減らす
 		m_nAmmo--;
@@ -236,6 +238,13 @@ void CGun::Shot(D3DXVECTOR3 rot)
 		case CGun::GUNTYPE_FLAMESHOT:
 			// フレイムショットの生成
 			pBullet = CFlameshot::Create(rot);
+			m_bMultiple = true;		// フラグをオン
+			break;
+
+		case CGun::GUNTYPE_TANKTURRET:
+			// 戦車砲台の生成
+			pBullet = CTankTurret::Create(rot);
+			m_bMultiple = true;		// フラグをオン
 			break;
 		}
 		if (pBullet)
@@ -291,9 +300,12 @@ void CGun::MultipleShot()
 				// 弾の生成
 				pBullet = CFlameshot::Create(m_rot);
 			}
-
-			// 残弾数を減らす
-			//m_nAmmo--;
+			// 戦車砲台のとき
+			if (m_GunType == GUNTYPE_TANKTURRET)
+			{
+				// 弾の生成
+				pBullet = CTankTurret::Create(m_rot);
+			}
 
 			// 弾のカウントアップ
 			m_nCntBullet++;
