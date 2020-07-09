@@ -66,6 +66,8 @@ HRESULT CPlayertank::Init(void)
 	m_pGrenadeFire = CGrenadeFire::Create(GetVehicleModelPartsList(CModel::MODEL_TANK_TANKHEAD)->GetMatrix());
 	// e‚Ì’e‚ÌŽí—Þ
 	m_pGun->GetTag() = TAG_PLAYER;
+	// e‚Ì’e‚ÌŽí—Þ
+	m_pGun->SetGunType(CGun::GUNTYPE_TANKTURRET);
 
 	// “–‚½‚è”»’è¶¬
 	GetCollision()->SetPos(&GetPosition());

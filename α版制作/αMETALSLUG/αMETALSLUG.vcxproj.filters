@@ -214,6 +214,9 @@
     <ClCompile Include="SourceCode\UIManager.cpp">
       <Filter>UI</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\tankturret.cpp">
+      <Filter>Wepon</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SourceCode\mesh.h">
@@ -437,6 +440,9 @@
     </ClInclude>
     <ClInclude Include="SourceCode\UIManager.h">
       <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\tankturret.h">
+      <Filter>Wepon</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
