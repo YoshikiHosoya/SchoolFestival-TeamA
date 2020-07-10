@@ -49,20 +49,12 @@ HRESULT CResultUI::Init(void)
 		{
 			switch (nCnt)
 			{
-			// タイトルロゴ
-			case TITLE_UI::TITLE_LOGO:
+			// リザルト
+			case RESULT_UI::RESULT:
 				// シーン2Dの生成
 				m_apScene2D[nCnt] = CScene2D::Create(D3DXVECTOR3((SCREEN_WIDTH * 0.5f), 65.0f, 0.0f), D3DXVECTOR3(70.0f, 65.0f, 0.0f));
 				// テクスチャの割り当て
-				m_apScene2D[nCnt]->BindTexture(CTexture::GetTexture(CTexture::TEX_UI_TITLE));
-				break;
-
-			// スタート
-			case TITLE_UI::UI_START:
-				// シーン2Dの生成
-				m_apScene2D[nCnt] = CScene2D::Create(D3DXVECTOR3((SCREEN_WIDTH * 0.5f), 680.0f, 0.0f), D3DXVECTOR3(100.0f, 20.0f, 0.0f));
-				// テクスチャの割り当て
-				m_apScene2D[nCnt]->BindTexture(CTexture::GetTexture(CTexture::TEX_UI_START));
+				m_apScene2D[nCnt]->BindTexture(CTexture::GetTexture(CTexture::TEX_NONE));
 				break;
 			}
 		}
@@ -77,7 +69,7 @@ HRESULT CResultUI::Init(void)
 // =====================================================================================================================================================================
 void CResultUI::Uninit(void)
 {
-	for (int nCnt = 0; nCnt < TITLE_UI::TITLE_UI_MAX; nCnt++)
+	for (int nCnt = 0; nCnt < RESULT_UI::RESULT_UI_MAX; nCnt++)
 	{
 		if (m_apScene2D[nCnt])
 		{
@@ -94,7 +86,7 @@ void CResultUI::Uninit(void)
 // =====================================================================================================================================================================
 void CResultUI::Update(void)
 {
-	for (int nCnt = 0; nCnt < TITLE_UI::TITLE_UI_MAX; nCnt++)
+	for (int nCnt = 0; nCnt < RESULT_UI::RESULT_UI_MAX; nCnt++)
 	{
 		if (m_apScene2D[nCnt])
 		{
@@ -111,7 +103,7 @@ void CResultUI::Update(void)
 // =====================================================================================================================================================================
 void CResultUI::Draw(void)
 {
-	for (int nCnt = 0; nCnt < TITLE_UI::TITLE_UI_MAX; nCnt++)
+	for (int nCnt = 0; nCnt < RESULT_UI::RESULT_UI_MAX; nCnt++)
 	{
 		if (m_apScene2D[nCnt])
 		{
@@ -129,13 +121,13 @@ void CResultUI::Draw(void)
 CResultUI * CResultUI::Create()
 {
 	//メモリの確保
-	CTitleUI *pTitleUI = new CTitleUI();
+	CResultUI *pResultUI = new CResultUI();
 
 	// 初期化
-	pTitleUI->Init();
+	pResultUI->Init();
 
 	//オブジェタイプ設定してSceneに所有権を渡す
-	CUIManager::AddUIList(std::move(pTitleUI));
+	CUIManager::AddUIList(std::move(pResultUI));
 
-	return pTitleUI;
+	return pResultUI;
 }

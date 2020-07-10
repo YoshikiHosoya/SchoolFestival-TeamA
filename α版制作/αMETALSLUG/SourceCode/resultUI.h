@@ -27,8 +27,7 @@ public:
 	// リザルトUIの種類
 	enum RESULT_UI
 	{
-		TITLE_LOGO,				// リザルト
-		UI_START,				// スタート
+		RESULT,				// リザルト
 		RESULT_UI_MAX
 	};
 
