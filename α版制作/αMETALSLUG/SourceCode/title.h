@@ -39,6 +39,9 @@ public:
 	void Draw(void);							// 描画処理
 	void ShowDebugInfo(void);					// デバッグ情報表記
 
+	CPlayer				*GetPlayer(void);					// プレイヤーのポインタ取得
+	CMap				*GetMap(void);						// マップのポインタ取得
+
 private:
 	/* メンバ関数 */
 	CPlayer* GetPlayer() { return nullptr; };

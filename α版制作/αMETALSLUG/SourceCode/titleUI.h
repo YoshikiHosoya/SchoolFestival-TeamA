@@ -1,77 +1,56 @@
 // =====================================================================================================================================================================
 //
-// プレイヤーUIの処理 [playerUI.h]
+// タイトルUIの処理 [titleUI.h]
 // Author : Sato Yoshiki
 //
 // =====================================================================================================================================================================
-#ifndef _PLAYERUI_H_
-#define _PLAYERUI_H_
+#ifndef _TITLEUI_H_
+#define _TITLEUI_H_
 
 // =====================================================================================================================================================================
 // インクルードファイル
 // =====================================================================================================================================================================
 #include "main.h"
 #include "UI.h"
-#include "gun.h"
 
 // =====================================================================================================================================================================
 // 前方宣言
 // =====================================================================================================================================================================
 class CScene2D;
-class CMultiNumber;
 
 // =====================================================================================================================================================================
-// プレイヤーUIクラス
+// タイトルUIクラス
 // =====================================================================================================================================================================
-class CPlayerUI : CUI
+class CTitleUI : CUI
 {
 public:
-	// プレイヤーUIの種類
-	enum PLAYER_UI
+	// タイトルUIの種類
+	enum TITLE_UI
 	{
-		FRAME,						// 枠
-		REMAIN_LETTER,				// 残機		( 文字 )
-		BULLET_AMMO_LETTER,			// 弾の残数 ( 文字 )
-		GRENADE_AMMO_LETTER,		// グレネードの残数 ( 文字 )
-		LIFE_ICON,					// 体力アイコン
-		INFINITY_AMMO,				// 弾数無限
-		PLAYER_UI_MAX
+		TITLE_LOGO,				// タイトルロゴ
+		UI_START,				// スタート
+		TITLE_UI_MAX
 	};
 
-	CPlayerUI();								// コンストラクタ
-	~CPlayerUI();								// デストラクタ
+	CTitleUI();								// コンストラクタ
+	~CTitleUI();							// デストラクタ
 
 	/* メンバ関数 */
-	HRESULT				Init(void);				// 初期化
-	void				Uninit(void);			// 終了
-	void				Update(void);			// 更新
-	void				Draw(void);				// 描画
+	HRESULT					Init(void);		// 初期化
+	void					Uninit(void);	// 終了
+	void					Update(void);	// 更新
+	void					Draw(void);		// 描画
 
 	/* 静的メンバ関数 */
-	static  CPlayerUI	*Create();				// プレイヤーUIの生成
+	static  CTitleUI		*Create();		// タイトルUIの生成
 
 	/* メンバ関数 */
-	void				SetScore(int nScore);				// スコアの設定
-	void				SetBulletAmmo(int nBulletAmmo, CGun::GUN_TYPE GunType);		// 弾の残数の設定
-	void				SetGrenadeAmmo(int nGrenadeAmmo);	// グレネードの残数の設定
-	void				SetLifeUI(int nLife);				// 体力UIの設定
-	int					GetScore() { return m_nScore; };	// スコアの取得
 
 private:
 	/* メンバ関数 */
-
 	/* 静的メンバ変数 */
 
 	/* メンバ変数 */
-	CScene2D					*m_apScene2D[PLAYER_UI_MAX];	// シーン2Dのポインタ
-	CMultiNumber				*m_pScore;						// スコアのポインタ
-	CMultiNumber				*m_pBulletAmmo;					// 弾の残数のポインタ
-	CMultiNumber				*m_pGrenadeAmmo;				// グレネードの残数のポインタ
-	CMultiNumber				*m_pLife;						// 体力の残数のポインタ
-
-	int							m_nScore;						// スコア
-	int							m_nBulletAmmo;					// 弾の残数
-	int							m_nGrenadeAmmo;					// グレネードの残数
-	int							m_nLife;						// 体力
+	CScene2D				*m_apScene2D[TITLE_UI_MAX];		// シーン2Dのポインタ
 };
 #endif

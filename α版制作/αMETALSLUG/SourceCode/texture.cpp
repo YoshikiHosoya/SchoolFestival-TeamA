@@ -32,6 +32,8 @@ std::vector<std::string> CTexture::m_aTexFileName =
 	{ "data/TEXTURE/UI/bomb.png" },							//グレネードの残数のUI
 	{ "data/TEXTURE/UI/infinity.png" },						//弾数無限のUI
 	{ "data/TEXTURE/UI/frame.png" },						//枠のUI
+	{ "data/TEXTURE/UI/title.png" },						//タイトルロゴ
+	{ "data/TEXTURE/UI/start.png" },						//スタート
 };
 
 

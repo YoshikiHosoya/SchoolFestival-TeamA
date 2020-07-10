@@ -543,7 +543,7 @@ bool CCollision::ForPlayer_ItemCollision()
 		CItem *pItem = (CItem*)SceneList[nCnt];
 		if (pItem != nullptr)
 		{
-			if (pItem->GetCollision()->OtherCollision2D(this))
+			if (this->OtherCollision2D(pItem->GetCollision()))
 			{
 				bHitFlag = true;
 				// アイテムごとの処理を通す
@@ -947,9 +947,9 @@ bool CCollision::RayFloorCollision(CMap * pMap, D3DXMATRIX * pMat, D3DXVECTOR3 p
 		//	逆行列の取得
 		D3DXMatrixInverse(&invmat, NULL, pMap->GetModel(nCnt)->GetMatrix());
 		//	逆行列を使用し、レイ始点情報を変換　位置と向きで変換する関数が異なるので要注意
-		D3DXVec3TransformCoord(&m_posBefore, &D3DXVECTOR3(ppos.x, ppos.y + pMat->_42, ppos.z), &invmat);
+		D3DXVec3TransformCoord(&m_posBefore, &D3DXVECTOR3(ppos.x, pMat->_42, ppos.z), &invmat);
 		//	レイ終点情報を変換
-		D3DXVec3TransformCoord(&m_posAfter, &D3DXVECTOR3(ppos.x , ppos.y, ppos.z), &invmat);
+		D3DXVec3TransformCoord(&m_posAfter, &D3DXVECTOR3(ppos.x ,ppos.y+ pdirection.y, ppos.z), &invmat);
 		//	レイ方向情報を変換
 		D3DXVec3Normalize(&direction, &(m_posAfter - m_posBefore));
 		//Rayを飛ばす
@@ -976,20 +976,20 @@ bool CCollision::RayFloorCollision(CMap * pMap, D3DXMATRIX * pMat, D3DXVECTOR3 p
 				fData = vDistance[nCnt];
 			}
 		}
-		if (fData < RAY_FIRST_POINT+40)//Rayの長さの指定条件
+		if (fData < RAY_FIRST_POINT+30)//Rayの長さの指定条件
 		{
-			bJudg = false;
+			bJudg = true;
 		}
 		//Rayの判定圏内じゃなかったらジャンプできない
 		else
 		{
-			bJudg = true;
+			bJudg = false;
 		}
 	}
 	//Rayに判定がなかったらジャンプできない
 	else
 	{
-		bJudg = true;
+		bJudg = false;
 	}
 	// 判定フラグを返す
 	return bJudg;
