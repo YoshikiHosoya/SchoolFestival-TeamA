@@ -54,8 +54,6 @@ HRESULT CPrisoner::Init(void)
 	LoadOffset(CCharacter::CHARACTER_TYPE_PRISONER);
 	// キャラクタータイプの設定
 	SetCharacterType(CCharacter::CHARACTER_TYPE_PRISONER);
-	// デバイスの取得
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
 
 	// 当たり判定生成
 	GetCollision()->SetPos(&GetPosition());
@@ -115,9 +113,6 @@ void CPrisoner::DebugInfo(void)
 //====================================================================
 CPrisoner *CPrisoner::Create()
 {
-	// デバイスの取得
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
-
 	// メモリを確保
 	CPrisoner*pPrisoner = new CPrisoner(OBJTYPE_PRISONER);
 	// 初期化

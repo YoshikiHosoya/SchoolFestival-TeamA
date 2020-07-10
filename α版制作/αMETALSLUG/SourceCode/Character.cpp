@@ -220,7 +220,7 @@ void CCharacter::Update(void)
 	{
 		m_pCollision->SetHeight(m_vModelList[0]->GetPosition().y);
 		// レイの判定
-		if (m_pCollision->RayBlockCollision(pMap,m_vModelList[0]->GetMatrix()))
+		if (m_pCollision->RayBlockCollision(pMap, m_vModelList[0]->GetMatrix()))
 		{
 			// ジャンプすることを承認する
 			SetJump(true);
@@ -764,6 +764,8 @@ void CCharacter::LoadOffset(CHARACTER_TYPE nType)
 	int nCnt = 0;
 	FILE *pFile;
 
+	cReadText[0] = '\0';
+	cHeadText[0] = '\0';
 	D3DXVECTOR3 pos;
 	int nIdxParent;			//親のインデックス
 	int nIdx;				//モデルのインデックス

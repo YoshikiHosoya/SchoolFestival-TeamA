@@ -475,7 +475,6 @@ CMap *CMap::MapCreate(MAP MapNum)
 
 	// メモリの確保
 	pMap = new CMap();
-
 	// モデルのロード
 	pMap->ModelLoad(MapNum);
 	// 敵のロード
