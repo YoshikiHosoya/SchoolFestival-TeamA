@@ -75,6 +75,7 @@ HRESULT CCharacter::Init(void)
 	m_bMotion = true;
 	m_ShotRot = D3DXVECTOR3(0.0f, 0.5f, 0.0f);
 	m_HeightBet = 0.0f;
+	m_bFall = false;
 	// 当たり判定生成
 	m_pCollision = CCollision::Create();
 	//マトリックス初期化
@@ -105,10 +106,16 @@ void CCharacter::Update(void)
 	m_move.y -= 0.5f;
 	}
 	m_pos += m_move;
-	if (m_pos.y < 0)
+	if (m_bFall == false)
 	{
-		m_move.y = 0;
-		m_pos.y = 0;
+		m_posfall = m_pos;
+	}
+	if (m_pos.y <= -500 && m_bFall == true)
+	{
+		m_pos.x = m_posfall.x;
+		m_pos.y = m_posfall.y + 30;
+		m_pos.z = m_posfall.z;
+		m_bFall = false;
 	}
 	//目標点と現在の差分（回転）
 	float diffRot = m_rotDest.y - m_rot.y;
@@ -217,14 +224,15 @@ void CCharacter::Update(void)
 		{
 			// ジャンプすることを承認する
 			SetJump(true);
+			m_bFall = false;
 		}
 		else
 		{
 			// ジャンプすることを承認しない
 			SetJump(false);
+			m_bFall = true;
 		}
 	}
-
 	Moation();
 }
 //====================================================================

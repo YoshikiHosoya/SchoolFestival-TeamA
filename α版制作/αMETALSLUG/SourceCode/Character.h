@@ -176,6 +176,7 @@ private:
 	D3DXVECTOR3 m_rotBET[MAX_MODEL];
 	float m_HeightBet;
 	D3DXVECTOR3 m_pos;												//位置
+	D3DXVECTOR3 m_posfall;											//落ちた位置
 	D3DXVECTOR3 m_posold;											//前の位置
 	D3DXVECTOR3 m_move;												//移動量
 	D3DXVECTOR3 m_rot;												//回転
@@ -199,6 +200,7 @@ private:
 	bool m_bGravity;
 	bool m_bDieFlag;												// 死亡フラグ
 	bool m_bMotion;													//モーションするかどうか
+	bool m_bFall;													//モーションするかどうか
 	CCollision				*m_pCollision;							//当たり判定のポインタ
 };
 #endif
