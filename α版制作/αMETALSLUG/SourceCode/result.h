@@ -37,10 +37,9 @@ public:
 	void Update(void);							// 更新処理
 	void Draw(void);							// 描画処理
 	void ShowDebugInfo(void);					// デバッグ情報表記
-
-private:
 	/* メンバ関数 */
 	CPlayer* GetPlayer() { return nullptr; };
 	CMap* GetMap() { return nullptr; };
+private:
 };
 #endif

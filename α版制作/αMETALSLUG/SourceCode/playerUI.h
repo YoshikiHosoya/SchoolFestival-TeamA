@@ -42,10 +42,10 @@ public:
 	~CPlayerUI();								// デストラクタ
 
 	/* メンバ関数 */
-	HRESULT Init(void);
-	void Uninit(void);
-	void Update(void);
-	void Draw(void);
+	HRESULT				Init(void);				// 初期化
+	void				Uninit(void);			// 終了
+	void				Update(void);			// 更新
+	void				Draw(void);				// 描画
 
 	/* 静的メンバ関数 */
 	static  CPlayerUI	*Create();				// プレイヤーUIの生成

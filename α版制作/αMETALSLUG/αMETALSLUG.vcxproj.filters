@@ -226,6 +226,12 @@
     <ClCompile Include="SourceCode\ranking.cpp">
       <Filter>Mode</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\titleUI.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\resultUI.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SourceCode\mesh.h">
@@ -461,6 +467,12 @@
     </ClInclude>
     <ClInclude Include="SourceCode\ranking.h">
       <Filter>Mode</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\titleUI.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\resultUI.h">
+      <Filter>UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -46,6 +46,9 @@ public:
 		TEX_UI_INFINITY,						//弾数無限のUI
 		TEX_UI_FRAME,							//枠のUI
 
+		TEX_UI_TITLE,							//タイトルロゴ
+		TEX_UI_START,							//スタート
+
 		TEX_MAX									//MAX
 	};
 
