@@ -107,6 +107,7 @@ void CPlayer::Uninit(void)
 	// プレイヤUIのポインタ
 	if (m_pPlayerUI)
 	{
+		m_pPlayerUI->Uninit();
 		m_pPlayerUI = nullptr;
 	}
 

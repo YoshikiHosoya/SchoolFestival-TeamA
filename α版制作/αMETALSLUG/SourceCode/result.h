@@ -18,6 +18,7 @@
 // =====================================================================================================================================================================
 class CRenderer;
 class CKeyboard;
+class CResultUI;
 
 // =====================================================================================================================================================================
 // マクロ定義
@@ -30,16 +31,18 @@ class CResult :public CBaseMode
 {
 public:
 	/* メンバ関数 */
-	CResult();									// コンストラクタ
-	~CResult();									// デストラクタ
-	HRESULT Init(void);							// 初期化処理
-	void Uninit(void);							// 終了処理
-	void Update(void);							// 更新処理
-	void Draw(void);							// 描画処理
-	void ShowDebugInfo(void);					// デバッグ情報表記
+	CResult();					// コンストラクタ
+	~CResult();					// デストラクタ
+	HRESULT				Init(void);							// 初期化処理
+	void				Uninit(void);						// 終了処理
+	void				Update(void);						// 更新処理
+	void				Draw(void);							// 描画処理
+	void				ShowDebugInfo(void);				// デバッグ情報表記
 	/* メンバ関数 */
-	CPlayer* GetPlayer() { return nullptr; };
-	CMap* GetMap() { return nullptr; };
+	CPlayer				*GetPlayer() { return nullptr; };	// プレイヤーのポインタ取得
+	CMap				*GetMap() { return nullptr; };		// マップのポインタ取得
 private:
+	/* メンバ変数 */
+	CResultUI			*m_pResultUI;						// リザルトUIのポインタ
 };
 #endif

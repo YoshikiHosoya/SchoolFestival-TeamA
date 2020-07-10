@@ -18,6 +18,8 @@
 // =====================================================================================================================================================================
 class CRenderer;
 class CKeyboard;
+class CTitleUI;
+class CUIManager;
 
 // =====================================================================================================================================================================
 // マクロ定義
@@ -29,7 +31,6 @@ class CKeyboard;
 class CTitle :public CBaseMode
 {
 public:
-
 	/* メンバ関数 */
 	CTitle();									// コンストラクタ
 	~CTitle();									// デストラクタ
@@ -43,5 +44,7 @@ public:
 	CPlayer* GetPlayer() { return nullptr; };
 	CMap* GetMap() { return nullptr; };
 private:
+	/* メンバ変数 */
+	CTitleUI		*m_pTitleUI;				// タイトルUIのポインタ
 };
 #endif

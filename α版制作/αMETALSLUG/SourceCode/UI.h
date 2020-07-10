@@ -31,7 +31,7 @@ public:
 	virtual void ShowDebugInfo();							//デバッグ情報表記
 
 	bool GetDeleteFlag() { return m_bDeleteFlag; };			// デリートフラグの取得
-
+	void SetDeleteFlag(bool DeleteFlag) { m_bDeleteFlag = DeleteFlag; };		// デリートフラグの設定
 private:
 	bool m_bDeleteFlag;										//消去フラグ
 };

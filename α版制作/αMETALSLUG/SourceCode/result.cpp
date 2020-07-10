@@ -10,11 +10,7 @@
 #include "inputKeyboard.h"
 #include "fade.h"
 #include "UIManager.h"
-
-//==========================================================
-// マクロ定義
-//==========================================================
-#define _CRT_SECURE_NO_WARNINGS // 警告除去
+#include "resultUI.h"
 
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
@@ -42,6 +38,9 @@ HRESULT CResult::Init(void)
 	// UI生成
 	CUIManager::Create();
 
+	// リザルトUIの生成
+	m_pResultUI = CResultUI::Create();
+
 	return S_OK;
 }
 
@@ -50,6 +49,13 @@ HRESULT CResult::Init(void)
 //==========================================================
 void CResult::Uninit(void)
 {
+	// リザルトUIのポインタ
+	if (m_pResultUI)
+	{
+		// 終了
+		m_pResultUI->Uninit();
+		m_pResultUI = nullptr;
+	}
 }
 
 //==========================================================

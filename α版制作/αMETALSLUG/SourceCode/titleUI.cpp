@@ -25,6 +25,11 @@
 // =====================================================================================================================================================================
 CTitleUI::CTitleUI()
 {
+	// 初期化
+	for (int nCnt = 0; nCnt < TITLE_UI::TITLE_UI_MAX; nCnt++)
+	{
+		m_apScene2D[nCnt] = nullptr;
+	}
 }
 
 // =====================================================================================================================================================================
@@ -45,6 +50,7 @@ HRESULT CTitleUI::Init(void)
 {
 	for (int nCnt = 0; nCnt < TITLE_UI::TITLE_UI_MAX; nCnt++)
 	{
+
 		if (!m_apScene2D[nCnt])
 		{
 			switch (nCnt)
@@ -52,7 +58,7 @@ HRESULT CTitleUI::Init(void)
 			// タイトルロゴ
 			case TITLE_UI::TITLE_LOGO:
 				// シーン2Dの生成
-				m_apScene2D[nCnt] = CScene2D::Create(D3DXVECTOR3((SCREEN_WIDTH * 0.5f), 65.0f, 0.0f), D3DXVECTOR3(70.0f, 65.0f, 0.0f));
+				m_apScene2D[nCnt] = CScene2D::Create(D3DXVECTOR3((SCREEN_WIDTH * 0.5f), 200.0f, 0.0f), D3DXVECTOR3(400.0f, 300.0f, 0.0f));
 				// テクスチャの割り当て
 				m_apScene2D[nCnt]->BindTexture(CTexture::GetTexture(CTexture::TEX_UI_TITLE));
 				break;
@@ -83,6 +89,9 @@ void CTitleUI::Uninit(void)
 		{
 			// 終了
 			m_apScene2D[nCnt]->Uninit();
+
+			// デリートフラグを有効にする
+			SetDeleteFlag(true);
 		}
 	}
 }
