@@ -173,11 +173,8 @@ void CPlayerUI::Draw(void)
 // =====================================================================================================================================================================
 CPlayerUI * CPlayerUI::Create()
 {
-	//ƒƒ‚ƒŠŠm•Û
+	//ƒƒ‚ƒŠ‚ÌŠm•Û
 	CPlayerUI *pPlayerUI = new CPlayerUI();
-
-	// ƒƒ‚ƒŠ‚ÌŠm•Û
-	pPlayerUI = new CPlayerUI();
 
 	// ‰Šú‰»
 	pPlayerUI->Init();
