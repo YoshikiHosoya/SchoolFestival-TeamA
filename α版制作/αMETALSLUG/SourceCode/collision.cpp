@@ -543,7 +543,7 @@ bool CCollision::ForPlayer_ItemCollision()
 		CItem *pItem = (CItem*)SceneList[nCnt];
 		if (pItem != nullptr)
 		{
-			if (this->OtherCollision2D(pItem->GetCollision()))
+			if (pItem->GetCollision()->OtherCollision2D(this))
 			{
 				bHitFlag = true;
 				// ƒAƒCƒeƒ€‚²‚Æ‚Ìˆ—‚ğ’Ê‚·

@@ -6,6 +6,7 @@
 #include "game.h"
 #include "title.h"
 #include "result.h"
+#include "ranking.h"
 #include "texture.h"
 #include "Xinput.h"
 #include "texture.h"
@@ -15,13 +16,13 @@
 #include "hosso/Debug_EffectViewer.h"
 #include "XInputPad.h"
 //‘¼‚Ì‚Æ‚±‚Å‚àŽg‚¦‚é‚æ‚¤‚É‚·‚éƒƒ“ƒo
-CRenderer	*CManager::m_pRenderer = NULL;
-CKeyboard	*CManager::m_pInputKeyboard	= NULL;
-CParticle	*CManager::m_Particle		= NULL;
-CBaseMode	*CManager::m_pBaseMode		= NULL;
-CMouse		*CManager::m_pMouse			= NULL;
+CRenderer	*CManager::m_pRenderer		= nullptr;
+CKeyboard	*CManager::m_pInputKeyboard	= nullptr;
+CParticle	*CManager::m_Particle		= nullptr;
+CBaseMode	*CManager::m_pBaseMode		= nullptr;
+CMouse		*CManager::m_pMouse			= nullptr;
 CManager::GAME_MODE CManager::m_mode = CManager::MODE_TITLE;
-CXInputPad	*CManager::m_pPad			= NULL;
+CXInputPad	*CManager::m_pPad			= nullptr;
 CManager::CManager()
 {
 }
@@ -134,13 +135,15 @@ void CManager::SetGameMode(GAME_MODE mode)
 		m_pBaseMode->Init();
 		break;
 
-		//Tutorial
-	case MODE_TUTORIAL:
+		//Ranking
+	case MODE_RANKING:
+		m_pBaseMode = new CRanking;
+		m_pBaseMode->Init();
 		break;
 
-		//Clear?
-	case MODE_CLEAR:
-		break;
+		//Tutorial
+	/*case MODE_TUTORIAL:
+		break;*/
 
 		//MotionViewer
 	case MODE_DEBUG_MODELVIEWER:

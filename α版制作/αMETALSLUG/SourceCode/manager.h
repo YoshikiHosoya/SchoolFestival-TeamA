@@ -9,6 +9,7 @@ class CParticle;
 class CGame;
 class CTitle;
 class CResult;
+class CRanking;
 class CBaseMode;
 class CMouse;
 class CXInputPad;
@@ -21,10 +22,9 @@ public:
 		MODE_TITLE,
 		MODE_GAME,
 		MODE_RESULT,
+		MODE_RANKING,
 		MODE_PAUSE,
-		MODE_CLEAR,
-		MODE_TUTORIAL,
-
+		//MODE_TUTORIAL,
 		MODE_DEBUG_MODELVIEWER,		//デバッグ用モデルビューワ
 		MODE_DEBUG_EFFECTVIEWER,	//デバッグ用エフェクトビューワ
 		MODE_MAX,
