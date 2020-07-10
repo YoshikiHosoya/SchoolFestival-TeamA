@@ -232,6 +232,9 @@
     <ClCompile Include="SourceCode\resultUI.cpp">
       <Filter>UI</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\rankingUI.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SourceCode\mesh.h">
@@ -472,6 +475,9 @@
       <Filter>UI</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\resultUI.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\rankingUI.h">
       <Filter>UI</Filter>
     </ClInclude>
   </ItemGroup>

@@ -49,6 +49,9 @@ public:
 		TEX_UI_TITLE,							//タイトルロゴ
 		TEX_UI_START,							//スタート
 
+		TEX_UI_RESULT,							//リザルト
+		TEX_UI_RANKING,							//ランキング
+
 		TEX_MAX									//MAX
 	};
 

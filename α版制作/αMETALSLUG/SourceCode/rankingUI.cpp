@@ -1,11 +1,11 @@
 // =====================================================================================================================================================================
 //
-// リザルトUIの処理 [resultUI.cpp]
+// ランキングUIの処理 [resultUI.cpp]
 // Author : Sato Yoshiki
 //
 // =====================================================================================================================================================================
 #include "main.h"			// インクルードファイル
-#include "resultUI.h"
+#include "rankingUI.h"
 #include "debugproc.h"
 #include "UIManager.h"
 #include "scene2D.h"
@@ -23,7 +23,7 @@
 // コンストラクタ
 //
 // =====================================================================================================================================================================
-CResultUI::CResultUI()
+CRankingUI::CRankingUI()
 {
 }
 
@@ -32,7 +32,7 @@ CResultUI::CResultUI()
 // デストラクタ
 //
 // =====================================================================================================================================================================
-CResultUI::~CResultUI()
+CRankingUI::~CRankingUI()
 {
 }
 
@@ -41,20 +41,20 @@ CResultUI::~CResultUI()
 // 初期化処理
 //
 // =====================================================================================================================================================================
-HRESULT CResultUI::Init(void)
+HRESULT CRankingUI::Init(void)
 {
-	for (int nCnt = 0; nCnt < RESULT_UI::RESULT_UI_MAX; nCnt++)
+	for (int nCnt = 0; nCnt < RANKING_UI::RANKING_UI_MAX; nCnt++)
 	{
 		if (!m_apScene2D[nCnt])
 		{
 			switch (nCnt)
 			{
-			// リザルト
-			case RESULT_UI::RESULT:
+			// ランキング
+			case RANKING_UI::RANKING:
 				// シーン2Dの生成
 				m_apScene2D[nCnt] = CScene2D::Create(D3DXVECTOR3((SCREEN_WIDTH * 0.5f), 65.0f, 0.0f), D3DXVECTOR3(70.0f, 65.0f, 0.0f));
 				// テクスチャの割り当て
-				m_apScene2D[nCnt]->BindTexture(CTexture::GetTexture(CTexture::TEX_UI_RESULT));
+				m_apScene2D[nCnt]->BindTexture(CTexture::GetTexture(CTexture::TEX_UI_RANKING));
 				break;
 			}
 		}
@@ -67,9 +67,9 @@ HRESULT CResultUI::Init(void)
 // 終了処理
 //
 // =====================================================================================================================================================================
-void CResultUI::Uninit(void)
+void CRankingUI::Uninit(void)
 {
-	for (int nCnt = 0; nCnt < RESULT_UI::RESULT_UI_MAX; nCnt++)
+	for (int nCnt = 0; nCnt < RANKING_UI::RANKING_UI_MAX; nCnt++)
 	{
 		if (m_apScene2D[nCnt])
 		{
@@ -84,9 +84,9 @@ void CResultUI::Uninit(void)
 // 更新処理
 //
 // =====================================================================================================================================================================
-void CResultUI::Update(void)
+void CRankingUI::Update(void)
 {
-	for (int nCnt = 0; nCnt < RESULT_UI::RESULT_UI_MAX; nCnt++)
+	for (int nCnt = 0; nCnt < RANKING_UI::RANKING_UI_MAX; nCnt++)
 	{
 		if (m_apScene2D[nCnt])
 		{
@@ -101,9 +101,9 @@ void CResultUI::Update(void)
 // 描画処理
 //
 // =====================================================================================================================================================================
-void CResultUI::Draw(void)
+void CRankingUI::Draw(void)
 {
-	for (int nCnt = 0; nCnt < RESULT_UI::RESULT_UI_MAX; nCnt++)
+	for (int nCnt = 0; nCnt < RANKING_UI::RANKING_UI_MAX; nCnt++)
 	{
 		if (m_apScene2D[nCnt])
 		{
@@ -118,16 +118,16 @@ void CResultUI::Draw(void)
 // タイトルUIの生成
 //
 // =====================================================================================================================================================================
-CResultUI * CResultUI::Create()
+CRankingUI * CRankingUI::Create()
 {
 	//メモリの確保
-	CResultUI *pResultUI = new CResultUI();
+	CRankingUI *pRankingUI = new CRankingUI();
 
 	// 初期化
-	pResultUI->Init();
+	pRankingUI->Init();
 
 	//オブジェタイプ設定してSceneに所有権を渡す
-	CUIManager::AddUIList(std::move(pResultUI));
+	CUIManager::AddUIList(std::move(pRankingUI));
 
-	return pResultUI;
+	return pRankingUI;
 }

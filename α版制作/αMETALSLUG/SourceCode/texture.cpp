@@ -34,6 +34,8 @@ std::vector<std::string> CTexture::m_aTexFileName =
 	{ "data/TEXTURE/UI/frame.png" },						//枠のUI
 	{ "data/TEXTURE/UI/title.png" },						//タイトルロゴ
 	{ "data/TEXTURE/UI/start.png" },						//スタート
+	{ "data/TEXTURE/UI/result.png" },						//リザルト
+	{ "data/TEXTURE/UI/ranking.png" },						//ランキング
 };
 
 
