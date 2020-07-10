@@ -27,6 +27,8 @@ HRESULT CEnemyAI::Init(void)
 	m_castcount = 0;
 	m_bShot = false;
 	m_random = 0;
+	m_AItype = AI_NONE;
+
 	return S_OK;
 }
 
@@ -46,6 +48,8 @@ void CEnemyAI::Update(void)
 	// マップのポインタ取得
 	CMap *pMap;
 	pMap = CManager::GetBaseMode()->GetMap();
+	CKeyboard *key;
+	key = CManager::GetInputKeyboard();
 
 	if (pEnemyPass != nullptr)
 	{
@@ -76,7 +80,9 @@ void CEnemyAI::Update(void)
 		{
 			if (pEnemyPass->GetCharacterDirection() == CCharacter::CHARACTER_LEFT)
 			{
-				if (GetCollision()->RayFloorCollision(pMap, pEnemyPass->GetCharacterModelPartsList(0)->GetMatrix(), D3DXVECTOR3(-1.0f, -1.0f, 0.0f), pEnemyPass->GetPosition()))
+				if (GetCollision()->RayFloorCollision(pMap, pEnemyPass->GetCharacterModelPartsList(0)->GetMatrix(),
+					D3DXVECTOR3(0.0f, -1.0f, 0.0f),
+					D3DXVECTOR3(pEnemyPass->GetPosition().x-30, pEnemyPass->GetPosition().y, pEnemyPass->GetPosition().z)))
 				{
 					m_bReStartFlag = false;
 				}
@@ -89,7 +95,9 @@ void CEnemyAI::Update(void)
 			}
 			else if (pEnemyPass->GetCharacterDirection() == CCharacter::CHARACTER_RIGHT)
 			{
-				if (GetCollision()->RayFloorCollision(pMap, pEnemyPass->GetCharacterModelPartsList(0)->GetMatrix(), D3DXVECTOR3(1.0f, -1.0f, 0.0f), pEnemyPass->GetPosition()))
+				if (GetCollision()->RayFloorCollision(pMap, pEnemyPass->GetCharacterModelPartsList(0)->GetMatrix(), 
+					D3DXVECTOR3(0.0f, -1.0f, 0.0f),
+					D3DXVECTOR3(pEnemyPass->GetPosition().x+30, pEnemyPass->GetPosition().y, pEnemyPass->GetPosition().z)))
 				{
 					m_bReStartFlag = false;
 				}
@@ -114,24 +122,31 @@ void CEnemyAI::Update(void)
 			switch (m_AItype)
 			{
 			case AI_NONE:
+				pEnemyPass->SetMotion(CCharacter::ENEMY_MOTION_NORMAL);
 				break;
 			case AI_STOP:
+				pEnemyPass->SetMotion(CCharacter::ENEMY_MOTION_NORMAL);
 				break;
 			case AI_STAND:
+				pEnemyPass->SetMotion(CCharacter::ENEMY_MOTION_NORMAL);
 				break;
 			case AI_CROUCH:
+				pEnemyPass->SetMotion(CCharacter::ENEMY_MOTION_SQUAT);
 				break;
 			case AI_WALK_LEFT:
 				pEnemyPass->GetMove().x -= 0.5f;
 				pEnemyPass->GetRotDest().y = D3DX_PI * 0.5f;
 				pEnemyPass->SetCharacterDirection(CCharacter::CHARACTER_LEFT);
+				pEnemyPass->SetMotion(CCharacter::ENEMY_MOTION_WALK);
 				break;
 			case AI_WALK_RIGHT:
 				pEnemyPass->GetMove().x += 0.5f;
 				pEnemyPass->GetRotDest().y = D3DX_PI * -0.5f;
 				pEnemyPass->SetCharacterDirection(CCharacter::CHARACTER_RIGHT);
+				pEnemyPass->SetMotion(CCharacter::ENEMY_MOTION_WALK);
 				break;
 			case AI_SHOT:
+				pEnemyPass->SetMotion(CCharacter::ENEMY_MOTION_NORMAL);
 				//プレイヤーのいる方向に撃ってくるぞ　気をつけろ！
 				if (pEnemyPass->GetPosition().x > pPlayer->GetPosition().x)
 				{
@@ -145,6 +160,7 @@ void CEnemyAI::Update(void)
 				}
 				break;
 			case AI_GRENADE:
+				pEnemyPass->SetMotion(CCharacter::ENEMY_MOTION_NORMAL);
 				break;
 			}
 		}

@@ -216,12 +216,12 @@ void CMap::EnemyLoad(MAP MapNum)
 						}
 						else if (strcmp(cHeadText, "END_ENEMYSET") == 0)
 						{
-							// オブジェクトの生成
-							m_pEnemy.emplace_back(CEnemy::Create());
-							// 位置の設定
-							m_pEnemy[m_pEnemy.size() - 1]->SetPosition(pos);
-							// 体力の設定
-							m_pEnemy[m_pEnemy.size() - 1]->SetLife(nLife);
+								// オブジェクトの生成
+								m_pEnemy.emplace_back(CEnemy::Create());
+								// 位置の設定
+								m_pEnemy[m_pEnemy.size() - 1]->SetPosition(pos);
+								// 体力の設定
+								m_pEnemy[m_pEnemy.size() - 1]->SetLife(nLife);
 						}
 					}
 				}

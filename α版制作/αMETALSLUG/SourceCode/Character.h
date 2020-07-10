@@ -81,7 +81,7 @@ public:
 
 		ENEMY_MOTION_NORMAL,				//ニュートラル
 		ENEMY_MOTION_WALK,					//歩き
-		ENEMY_MOTION_ATTACK01,				//通常攻撃1
+		ENEMY_MOTION_SQUAT,				//通常攻撃1
 
 		// 捕虜のモーション
 		PRISONER_MOTION_STAY,				//ニュートラル
@@ -181,7 +181,8 @@ private:
 	D3DXVECTOR3 m_rot;												//回転
 	D3DXVECTOR3 m_rotDest;											//回転する差分
 	D3DXVECTOR3 m_ShotRot;											//撃つ向き
-	D3DXVECTOR3 m_AddRot;
+	D3DXVECTOR3 m_AddHeadRot;
+	D3DXVECTOR3 m_AddArmRot;
 	D3DXMATRIX  m_mtxWorld;											//マトリックス
 	CHARACTER_STATE m_state;										//
 	CHARACTER_TYPE m_CharaType;										//キャラクターのタイプ
