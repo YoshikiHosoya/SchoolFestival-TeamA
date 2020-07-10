@@ -208,6 +208,7 @@
     <ClCompile Include="SourceCode\playertank.cpp" />
     <ClCompile Include="SourceCode\playerUI.cpp" />
     <ClCompile Include="SourceCode\prisoner.cpp" />
+    <ClCompile Include="SourceCode\ranking.cpp" />
     <ClCompile Include="SourceCode\renderer.cpp" />
     <ClCompile Include="SourceCode\result.cpp" />
     <ClCompile Include="SourceCode\resultUI.cpp" />
@@ -289,6 +290,7 @@
     <ClInclude Include="SourceCode\playertank.h" />
     <ClInclude Include="SourceCode\playerUI.h" />
     <ClInclude Include="SourceCode\prisoner.h" />
+    <ClInclude Include="SourceCode\ranking.h" />
     <ClInclude Include="SourceCode\renderer.h" />
     <ClInclude Include="SourceCode\result.h" />
     <ClInclude Include="SourceCode\resultUI.h" />

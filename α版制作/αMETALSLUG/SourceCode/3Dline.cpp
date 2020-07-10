@@ -61,7 +61,7 @@ HRESULT C3DLine::Init(void)
 		FVF_VERTEX_3D,
 		D3DPOOL_MANAGED,
 		&m_pVtxBuff,
-		NULL);
+		nullptr);
 
 	// 頂点データの範囲をロックし、頂点バッファへのポインタ
 	m_pVtxBuff->Lock(
@@ -92,10 +92,10 @@ HRESULT C3DLine::Init(void)
 void C3DLine::Uninit(void)
 {
 	// 頂点バッファの開放
-	if (m_pVtxBuff != NULL)
+	if (m_pVtxBuff != nullptr)
 	{
 		m_pVtxBuff->Release();
-		m_pVtxBuff = NULL;
+		m_pVtxBuff = nullptr;
 	}
 }
 

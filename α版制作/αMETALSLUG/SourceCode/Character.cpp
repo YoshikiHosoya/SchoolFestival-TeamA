@@ -31,7 +31,7 @@ char *CCharacter::m_LoadMotionFileName[CHARACTER_MOTION_MAX] =
 	{ "data/Load/Player/Motion/SquatStop.txt" },
 	{ "data/Load/Enemy/Motion/EnemyNeutral.txt" },
 	{ "data/Load/Enemy/Motion/EnemyWalk.txt" },
-	{ "data/Load/Enemy/Motion/EnemyAttack.txt" },
+	{ "data/Load/Enemy/Motion/EnemySquatStop.txt" },
 	{ "data/Load/Prisoner/Motion/PrisonerStay.txt" },
 };
 std::vector<CCharacter::MOTION*> CCharacter::m_CharacterMotion = {};
@@ -64,7 +64,8 @@ HRESULT CCharacter::Init(void)
 	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	m_AddRot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_AddArmRot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_AddHeadRot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_Life = 50;
 	m_state = CHARACTER_STATE_NONE;
 	m_rotDest.y = -0.5f*  D3DX_PI;
@@ -156,25 +157,30 @@ void CCharacter::Update(void)
 	{
 		m_ShotRot.x = 0.0f;
 		m_ShotRot.y = 0.5f * D3DX_PI;
-		m_AddRot.x = 0.0f;
+		m_AddHeadRot.x = 0.5f;
+		m_AddArmRot.x = 0.5f* D3DX_PI;
+
 	}
 	else if (m_CharacterDirection == CHARACTER_RIGHT)
 	{
 		m_ShotRot.x = 0.0f;
 		m_ShotRot.y = -0.5f * D3DX_PI;
-		m_AddRot.x = 0.0f;
+		m_AddHeadRot.x = 0.5f;
+		m_AddArmRot.x = 0.5f* D3DX_PI;
 	}
 	else if (m_CharacterDirection == CHARACTER_UP)
 	{
 		m_ShotRot.x = 0.5f * D3DX_PI;
 		m_ShotRot.y = 0.0f;
-		m_AddRot.x = 1.0f;
+		m_AddHeadRot.x = 1.0f;
+		m_AddArmRot.x = 1.0f* D3DX_PI;
 	}
 	else if (m_CharacterDirection == CHARACTER_DOWN)
 	{
 		m_ShotRot.x = -0.5f * D3DX_PI;
 		m_ShotRot.y = 0.5f * D3DX_PI;
-		m_AddRot.x = -1.0f;
+		m_AddHeadRot.x = -0.5f;
+		m_AddArmRot.x = -0.3f* D3DX_PI;
 	}
 
 
@@ -253,42 +259,62 @@ void CCharacter::Draw(void)
 	//ƒ‚ƒfƒ‹‚Ì•`‰æ
 	for (unsigned int nCnt = 0; nCnt < m_vModelList.size(); nCnt++)
 	{
-		//if (nCnt == 2 || nCnt == 3 || nCnt == 4)
-		//{
-		//	//–Ú•W“_‚ÆŒ»Ý‚Ì·•ªi‰ñ“]j
-		//	D3DXVECTOR3 diffRot = m_AddRot - m_vModelList[nCnt]->GetRot();
-		//	//3.14‚Ì’´‰ß•ª‚Ì‰Šú‰»i‰ñ“]j
-		//	if (m_vModelList[nCnt]->GetRot().x > D3DX_PI)
-		//	{
-		//		m_vModelList[nCnt]->GetRot().x -= D3DX_PI * 2;
-		//	}
-		//	else if (m_vModelList[nCnt]->GetRot().x < -D3DX_PI)
-		//	{
-		//		m_vModelList[nCnt]->GetRot().x += D3DX_PI * 2;
-		//	}
-		//	if (diffRot.x > D3DX_PI)
-		//	{
-		//		diffRot.x -= D3DX_PI * 2;
-		//	}
-		//	else if (diffRot.x < -D3DX_PI)
-		//	{
-		//		diffRot.x += D3DX_PI * 2;
-		//	}
-		//	//‹‚ß‚½·•ª‚¾‚¯’Ç]‚·‚éŒvŽZ
-		//	m_vModelList[nCnt]->GetRot().x += diffRot.x * 0.2f;
-
-		//	m_vModelList[nCnt]->SetRot(m_vModelList[nCnt]->GetRot());
-		//	CDebugProc::Print("ShotRot : %.1f, %.1f %.1f\n", m_ShotRot.x, m_ShotRot.y, m_ShotRot.z);
-
-		//	CDebugProc::Print("HeadRot : %.1f, %.1f %.1f\n", m_vModelList[nCnt]->GetRot().x, m_vModelList[nCnt]->GetRot().y, m_vModelList[nCnt]->GetRot().z);
-		//}
-
+		if (nCnt == 2)
+		{
+			//–Ú•W“_‚ÆŒ»Ý‚Ì·•ªi‰ñ“]j
+			D3DXVECTOR3 diffHeadRot = m_AddHeadRot - m_vModelList[nCnt]->GetRot();
+			//3.14‚Ì’´‰ß•ª‚Ì‰Šú‰»i‰ñ“]j
+			if (m_vModelList[nCnt]->GetRot().x > D3DX_PI)
+			{
+				m_vModelList[nCnt]->GetRot().x -= D3DX_PI * 2;
+			}
+			else if (m_vModelList[nCnt]->GetRot().x < -D3DX_PI)
+			{
+				m_vModelList[nCnt]->GetRot().x += D3DX_PI * 2;
+			}
+			if (diffHeadRot.x > D3DX_PI)
+			{
+				diffHeadRot.x -= D3DX_PI * 2;
+			}
+			else if (diffHeadRot.x < -D3DX_PI)
+			{
+				diffHeadRot.x += D3DX_PI * 2;
+			}
+			//‹‚ß‚½·•ª‚¾‚¯’Ç]‚·‚éŒvŽZ
+			m_vModelList[nCnt]->GetRot().x += diffHeadRot.x * 0.2f;
+			m_vModelList[nCnt]->SetRot(m_vModelList[nCnt]->GetRot());
+		}
+		else if (nCnt == 3 || nCnt == 4)
+		{
+			//–Ú•W“_‚ÆŒ»Ý‚Ì·•ªi‰ñ“]j
+			D3DXVECTOR3 diffArmRot = m_AddArmRot - m_vModelList[nCnt]->GetRot();
+			//3.14‚Ì’´‰ß•ª‚Ì‰Šú‰»i‰ñ“]j
+			if (m_vModelList[nCnt]->GetRot().x > D3DX_PI)
+			{
+				m_vModelList[nCnt]->GetRot().x -= D3DX_PI * 2;
+			}
+			else if (m_vModelList[nCnt]->GetRot().x < -D3DX_PI)
+			{
+				m_vModelList[nCnt]->GetRot().x += D3DX_PI * 2;
+			}
+			if (diffArmRot.x > D3DX_PI)
+			{
+				diffArmRot.x -= D3DX_PI * 2;
+			}
+			else if (diffArmRot.x < -D3DX_PI)
+			{
+				diffArmRot.x += D3DX_PI * 2;
+			}
+			//‹‚ß‚½·•ª‚¾‚¯’Ç]‚·‚éŒvŽZ
+			m_vModelList[nCnt]->GetRot().x += diffArmRot.x * 0.2f;
+			m_vModelList[nCnt]->SetRot(m_vModelList[nCnt]->GetRot());
+		}
 		m_vModelList[nCnt]->Draw(m_mtxWorld);
 
-		//if (nCnt == 2 || nCnt == 3 || nCnt == 4)
-		//{
-		//	m_vModelList[nCnt]->SetRot(m_vModelList[nCnt]->GetRot());
-		//}
+		if (nCnt == 2 || nCnt == 3 || nCnt == 4)
+		{
+			m_vModelList[nCnt]->SetRot(m_vModelList[nCnt]->GetRot());
+		}
 	}
 	//CDebugProc::Print("˜‚Ì‚‚³%2f\n", m_vModelList[0]->GetPosition().y);
 }

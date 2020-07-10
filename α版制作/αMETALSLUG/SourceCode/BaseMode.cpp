@@ -31,6 +31,7 @@ void CBaseMode::DebugCommand(void)
 	CDebugProc::Print("[Ctrl] + テンキー [1] : Titleに遷移\n");
 	CDebugProc::Print("[Ctrl] + テンキー [2] : Gameに遷移\n");
 	CDebugProc::Print("[Ctrl] + テンキー [3] : Resultに遷移\n");
+	CDebugProc::Print("[Ctrl] + テンキー [4] : Rankingに遷移\n");
 	CDebugProc::Print("[Ctrl] + テンキー [8] : EffectViewerに遷移\n");
 	CDebugProc::Print("[Ctrl] + テンキー [9] : MotionViewerに遷移\n");
 
@@ -73,7 +74,12 @@ void CBaseMode::DebugCommand(void)
 		//リザルト
 		if (key->GetKeyboardTrigger(DIK_NUMPAD3))
 		{
-			//CManager::GetRenderer()->GetFade()->SetFade(CManager::MODE_RESULT);
+			CManager::GetRenderer()->GetFade()->SetFade(CManager::MODE_RESULT);
+		}
+		//リザルト
+		if (key->GetKeyboardTrigger(DIK_NUMPAD4))
+		{
+			CManager::GetRenderer()->GetFade()->SetFade(CManager::MODE_RANKING);
 		}
 		//エフェクトビューワ
 		if (key->GetKeyboardTrigger(DIK_NUMPAD8))

@@ -182,16 +182,6 @@ void CPlayer::Draw(void)
 //====================================================================
 void CPlayer::DebugInfo(void)
 {
-	CDebugProc::Print("プレイヤーのモーション：%d\n", GetMotionType());
-	CDebugProc::Print("プレイヤーのモーションフレーム：%d\n", GetFram());
-	CDebugProc::Print("プレイヤーのモーションキー：%d\n", GetKeySet());
-	if (GetJump() == false)
-	{
-		CDebugProc::Print("ジャンプできない\n");
-	}
-	else
-	{
-	}
 }
 //====================================================================
 //移動関連
@@ -311,10 +301,6 @@ void CPlayer::MoveUpdate(void)
 //====================================================================
 void CPlayer::CollisionUpdate(void)
 {
-	// マップのポインタ取得
-	CMap *pMap;
-	pMap = CManager::GetBaseMode()->GetMap();
-
 	// 当たり判定
 	if (GetCollision() != nullptr)
 	{

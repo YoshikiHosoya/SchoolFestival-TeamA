@@ -148,7 +148,7 @@ void CPrisoner::PrisonerState()
 		//
 
 		// アイテムの生成
-		CItem::RandCreate(GetPosition());
+		CItem::DropCreate(GetPosition());
 		// 捕虜の状態の変更
 		this->SetPrisonerState(PRISONER_STATE_RUN);
 	}

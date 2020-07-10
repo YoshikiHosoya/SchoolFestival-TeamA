@@ -223,6 +223,9 @@
     <ClCompile Include="SourceCode\result.cpp">
       <Filter>Mode</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\ranking.cpp">
+      <Filter>Mode</Filter>
+    </ClCompile>
     <ClCompile Include="SourceCode\titleUI.cpp">
       <Filter>UI</Filter>
     </ClCompile>
@@ -460,6 +463,9 @@
       <Filter>Mode</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\result.h">
+      <Filter>Mode</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\ranking.h">
       <Filter>Mode</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\titleUI.h">
