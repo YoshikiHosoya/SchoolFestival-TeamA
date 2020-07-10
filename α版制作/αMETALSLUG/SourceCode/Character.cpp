@@ -205,9 +205,9 @@ void CCharacter::Update(void)
 	// マップモデルが存在した時
 	if (pMap != nullptr)
 	{
-		GetCollision()->SetHeight(m_vModelList[0]->GetPosition().y);
+		m_pCollision->SetHeight(m_vModelList[0]->GetPosition().y);
 		// レイの判定
-		if (GetCollision()->RayBlockCollision(pMap,m_vModelList[0]->GetMatrix()))
+		if (m_pCollision->RayBlockCollision(pMap,m_vModelList[0]->GetMatrix()))
 		{
 			// ジャンプすることを承認する
 			SetJump(true);
