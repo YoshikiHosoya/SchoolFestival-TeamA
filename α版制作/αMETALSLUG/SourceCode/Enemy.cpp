@@ -20,6 +20,7 @@
 CEnemy::CEnemy(OBJ_TYPE type) :CCharacter(type)
 {
 	SetObjType(OBJTYPE_ENEMY);
+	m_pGun = nullptr;
 }
 
 CEnemy::~CEnemy()
