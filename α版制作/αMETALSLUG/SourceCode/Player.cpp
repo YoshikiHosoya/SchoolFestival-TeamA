@@ -498,8 +498,8 @@ CPlayer::DEBUG_STATE CPlayer::GetDebugState(void)
 //====================================================================
 void CPlayer::Move(float move, float fdest)
 {
-	GetMove().x += sinf(move * -D3DX_PI) * 1.0f;
-	GetMove().z += cosf(move * -D3DX_PI) * 1.0f;
+	GetMove().x += sinf(move * -D3DX_PI) * 1.3f;
+	GetMove().z += cosf(move * -D3DX_PI) * 1.3f;
 	GetRotDest().y = fdest *  D3DX_PI;
 }
 
