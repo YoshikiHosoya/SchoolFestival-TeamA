@@ -805,7 +805,6 @@ void CMap::ObstacleSave(MAP MapNum)
 		fprintf(pFile, "#	[ 2 ]	–Ø\n");
 		fprintf(pFile, "#	[ 3 ]	‹àŒÉ\n");
 		fprintf(pFile, "#	[ 4 ]	“y”X\n");
-
 		fprintf(pFile, "#\n");
 		fprintf(pFile, "#------------------------------------------------------------------------------\n");
 
@@ -1294,7 +1293,7 @@ bool CMap::ObstacleComboBox(int &nType)
 
 #ifdef _DEBUG
 
-							// ƒtƒ@ƒCƒ‹–¼Ši”[—p
+	// ƒtƒ@ƒCƒ‹–¼Ši”[—p
 	std::vector<std::string > aFileName = {};
 
 	//for

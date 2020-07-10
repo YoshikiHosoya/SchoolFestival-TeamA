@@ -301,10 +301,6 @@ void CPlayer::MoveUpdate(void)
 //====================================================================
 void CPlayer::CollisionUpdate(void)
 {
-	// マップのポインタ取得
-	CMap *pMap;
-	pMap = CManager::GetBaseMode()->GetMap();
-
 	// 当たり判定
 	if (GetCollision() != nullptr)
 	{

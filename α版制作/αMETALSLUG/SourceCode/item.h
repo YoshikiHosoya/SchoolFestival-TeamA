@@ -54,9 +54,11 @@ public:
 	void						HitItem(ITEMTYPE type);							// アイテム取得時の種類別処理
 	ITEMTYPE					GetItemType() { return m_Type; };				// アイテムタイプの取得
 	CCollision					*GetCollision() { return m_pCollision; };		// 当たり判定
+	void						SetDropPos(D3DXVECTOR3 &characterpos);			// アイテムを生成位置を設定
+
 	/* 静的メンバ関数 */
 	static	CItem				*Create(D3DXVECTOR3 pos, ITEMTYPE type);		// アイテムの生成
-	static	CItem				*RandCreate(const D3DXVECTOR3 pos);					// 捕虜用アイテムの生成
+	static	CItem				*DropCreate(D3DXVECTOR3 pos);					// キャラクターがアイテムを落とす時の生成
 	static	void				SwitchTexture(ITEMTYPE type, CItem *pItem);		// 種類別テクスチャ設定
 	static	ITEMTYPE			RandDropItem();									// アイテムの種類をランダムに計算
 protected:
@@ -64,6 +66,6 @@ private:
 	/* メンバ変数 */
 	ITEMTYPE					m_Type;											// アイテムタイプ
 	D3DXMATRIX					m_mtxWorld;										// ワールドマトリックス
-	CCollision					*m_pCollision;
+	CCollision					*m_pCollision;									// 当たり判定
 };
 #endif
