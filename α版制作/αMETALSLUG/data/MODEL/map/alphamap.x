@@ -521,7 +521,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "C:\\Users\\game305\\Desktop\\SchoolFestival-TeamA\\ƒ¿”Å§ì\\ƒ¿METALSLUG\\data\\materialtexture\\OIP.jpg";
+    "data\\materialtexture\\OIP.jpg";
    }
   }
   Material {
@@ -530,7 +530,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "C:\\Users\\game305\\Desktop\\SchoolFestival-TeamA\\ƒ¿”Å§ì\\ƒ¿METALSLUG\\data\\materialtexture\\OIP.jpg";
+    "data\\materialtexture\\OIP.jpg";
    }
   }
   Material {
@@ -539,7 +539,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "C:\\Users\\game305\\Desktop\\SchoolFestival-TeamA\\ƒ¿”Å§ì\\ƒ¿METALSLUG\\data\\materialtexture\\OIP.jpg";
+    "data\\materialtexture\\OIP.jpg";
    }
   }
   Material {

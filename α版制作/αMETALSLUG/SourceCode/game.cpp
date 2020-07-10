@@ -69,7 +69,7 @@ void CGame::Update(void)
 	}
 	//キーボード情報取得
 	CKeyboard *key = CManager::GetInputKeyboard();;
-	if (key->GetKeyboardTrigger(DIK_RETURN))
+	if (key->GetKeyboardTrigger(DIK_RETURN) || m_pPlayer->GetPosition().x >= 10200)
 	{
 		CManager::GetRenderer()->GetFade()->SetFade(CManager::MODE_RESULT);
 	}

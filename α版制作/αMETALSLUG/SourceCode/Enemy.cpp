@@ -109,7 +109,6 @@ void CEnemy::Update(void)
 		m_pAI->Update();
 	}
 
-	//CDebugProc::Print("\n“G‚Ìƒ‰ƒCƒt %d\n", CCharacter::GetLife());
 	CCharacter::Update();
 }
 //====================================================================

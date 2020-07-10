@@ -979,20 +979,17 @@ bool CCollision::RayFloorCollision(CMap * pMap, D3DXMATRIX * pMat, D3DXVECTOR3 p
 		if (fData < RAY_FIRST_POINT+40)//Rayの長さの指定条件
 		{
 			bJudg = false;
-			CDebugProc::Print("判定あり！！！\n");
 		}
 		//Rayの判定圏内じゃなかったらジャンプできない
 		else
 		{
 			bJudg = true;
-			CDebugProc::Print("判定なし！！！\n");
 		}
 	}
 	//Rayに判定がなかったらジャンプできない
 	else
 	{
 		bJudg = true;
-		CDebugProc::Print("判定なし！！！\n");
 	}
 	// 判定フラグを返す
 	return bJudg;

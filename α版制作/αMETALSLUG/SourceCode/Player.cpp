@@ -156,7 +156,6 @@ void CPlayer::Update(void)
 	{
 		//SetMotion(CCharacter::PLAYER_MOTION_WALK);
 	}
-
 	// 乗り物に乗っていない時といない時の判定
 	Ride();
 
@@ -451,6 +450,10 @@ void CPlayer::AttackUpdate(void)
 				}
 			}
 		}
+	}
+	if (key->GetKeyboardPress(DIK_K))
+	{
+		GetPosition().x += 30;
 	}
 
 	// グレネードを投げる

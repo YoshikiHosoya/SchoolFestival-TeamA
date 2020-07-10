@@ -63,6 +63,7 @@ void CEnemyAI::Update(void)
 		{
 			m_random = (rand() % AI_MAX);				//行動のランダム
 			m_AItype = (AI_STATE)m_random;				//ランダムの形式をAI_STATEに変換
+			m_recast = (rand() % MAX_RECASTTIME) + 30;	//30フレーム分のリキャスト
 
 			if (m_AItype != m_AItypeOld)
 			{
@@ -83,6 +84,7 @@ void CEnemyAI::Update(void)
 				{
 					m_AItypeOld = m_AItype;						//前回の行動格納
 					m_bReStartFlag = true;
+					m_castcount = 0;
 				}
 			}
 			else if (pEnemyPass->GetCharacterDirection() == CCharacter::CHARACTER_RIGHT)
@@ -95,6 +97,7 @@ void CEnemyAI::Update(void)
 				{
 					m_AItypeOld = m_AItype;						//前回の行動格納
 					m_bReStartFlag = true;
+					m_castcount = 0;
 				}
 			}
 		}
@@ -119,12 +122,12 @@ void CEnemyAI::Update(void)
 			case AI_CROUCH:
 				break;
 			case AI_WALK_LEFT:
-				pEnemyPass->GetMove().x -= 0.2f;
+				pEnemyPass->GetMove().x -= 0.5f;
 				pEnemyPass->GetRotDest().y = D3DX_PI * 0.5f;
 				pEnemyPass->SetCharacterDirection(CCharacter::CHARACTER_LEFT);
 				break;
 			case AI_WALK_RIGHT:
-				pEnemyPass->GetMove().x += 0.2f;
+				pEnemyPass->GetMove().x += 0.5f;
 				pEnemyPass->GetRotDest().y = D3DX_PI * -0.5f;
 				pEnemyPass->SetCharacterDirection(CCharacter::CHARACTER_RIGHT);
 				break;
@@ -146,19 +149,6 @@ void CEnemyAI::Update(void)
 			}
 		}
 	}
-	if (m_bReStartFlag == true)
-	{
-		CDebugProc::Print("当たり判定あるぽよ\n");
-	}
-	else
-	{
-		CDebugProc::Print("ないンゴｗｗｗｗ\n");
-	}
-	CDebugProc::Print("エネミー乱数：%d\n", m_AItype);
-	CDebugProc::Print("エネミーリキャストタイム：%d\n", m_recast);
-	CDebugProc::Print("エネミーキャストタイム：%d\n", m_castcount);
-	CDebugProc::Print("エネミーpositon.x：%2f\n", pEnemyPass->GetPosition().x);
-
 }
 //=============================================================================
 // タイトル画面

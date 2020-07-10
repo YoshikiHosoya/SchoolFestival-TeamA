@@ -465,7 +465,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "C:\\Users\\game314\\Documents\\Visual Studio 2015\\Projects\\C++3D2nd\\data\\Texture\\•Ç.jpg";
+    "data\\materialtexture\\•Ç.jpg";
    }
   }
   Material {
@@ -474,7 +474,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "C:\\Users\\game314\\Documents\\Visual Studio 2015\\Projects\\C++3D2nd\\data\\Texture\\Marbl24l.jpg";
+    "data\\materialtexture\\Marbl24l.jpg";
    }
   }
  }
