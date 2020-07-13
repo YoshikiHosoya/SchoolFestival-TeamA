@@ -1438,6 +1438,7 @@ bool CMap::PlayerTankComboBox(int & nType)
 // =====================================================================================================================================================================
 void CMap::UpdateDieFlag()
 {
+	// エネミーの削除
 	for (size_t nCnt = 0; nCnt < m_pEnemy.size(); nCnt++)
 	{
 		if (m_pEnemy[nCnt]->GetDieFlag())
@@ -1448,6 +1449,7 @@ void CMap::UpdateDieFlag()
 		}
 	}
 
+	// 障害物の削除
 	for (size_t nCnt = 0; nCnt < m_pObstacle.size(); nCnt++)
 	{
 		if (m_pObstacle[nCnt]->GetDieFlag())
@@ -1458,6 +1460,7 @@ void CMap::UpdateDieFlag()
 		}
 	}
 
+	// 捕虜の削除
 	for (size_t nCnt = 0; nCnt < m_pPrisoner.size(); nCnt++)
 	{
 		if (m_pPrisoner[nCnt]->GetDieFlag())
@@ -1468,6 +1471,7 @@ void CMap::UpdateDieFlag()
 		}
 	}
 
+	// プレイヤー用戦車の削除
 	for (size_t nCnt = 0; nCnt < m_pPlayerTank.size(); nCnt++)
 	{
 		if (m_pPlayerTank[nCnt]->GetDieFlag())

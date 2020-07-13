@@ -61,6 +61,17 @@ HRESULT CEnemy::Init(void)
 //====================================================================
 void CEnemy::Uninit(void)
 {
+	// e‚Ì‰ð•ú
+	if (m_pGun != nullptr)
+	{
+		// e‚Ìíœ
+		m_pGun->Rerease();
+		m_pGun = nullptr;
+	}
+
+	//ƒAƒCƒeƒ€‚ð¶¬
+	CItem::DropCreate(this->GetPosition());
+
 	CCharacter::Uninit();
 }
 //====================================================================
@@ -88,12 +99,6 @@ void CEnemy::Update(void)
 	//‘Ì—Í‚ª0ˆÈ‰º‚É‚È‚Á‚½Žž
 	if (this->GetLife() <= 0)
 	{
-		// e‚Ìíœ
-		m_pGun->Rerease();
-		m_pGun = nullptr;
-
-		//ƒAƒCƒeƒ€‚ð¶¬
-		CItem::DropCreate(this->GetPosition());
 	}
 	else
 	{

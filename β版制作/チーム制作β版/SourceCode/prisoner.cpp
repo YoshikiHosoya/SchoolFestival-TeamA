@@ -160,8 +160,7 @@ void CPrisoner::PrisonerState()
 		// カウントが一致値を超えたら
 		if (m_nDieCount >= PRISONER_DIETIME)
 		{
-			// 削除
-			Rerease();
+			SetDieFlag(true);
 		}
 
 	}

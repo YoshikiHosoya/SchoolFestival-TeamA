@@ -171,6 +171,7 @@ bool CCollision::ForPlayerBulletCollision(int nEnemyDamage, int nObstacleDamage,
 				// 敵のライフが0以下になった時
 				if (pEnemy->CCharacter::GetLife() <= 0)
 				{
+					pEnemy->SetDieFlag(true);
 					pEnemy = nullptr;
 				}
 
@@ -206,6 +207,7 @@ bool CCollision::ForPlayerBulletCollision(int nEnemyDamage, int nObstacleDamage,
 				// 敵のライフが0以下になった時
 				if (pObstacle->GetLife() <= 0)
 				{
+					pObstacle->SetDieFlag(true);
 					// ポインタをnullにする
 					pObstacle = nullptr;
 				}
@@ -280,11 +282,12 @@ bool CCollision::ForEnemyCollision(int nPlayerDamage, bool Penetration)
 				pPlayer->CCharacter::AddDamage(nPlayerDamage);
 
 				// プレイヤーのライフが0以下になった時
-				//if (pPlayer->CCharacter::GetLife() <= 0)
-				//{
-				//	// ポインタをnullにする
-				//	pPlayer = nullptr;
-				//}
+				if (pPlayer->CCharacter::GetLife() <= 0)
+				{
+					//pPlayer->SetDieFlag(true);
+					// ポインタをnullにする
+					pPlayer = nullptr;
+				}
 
 				// 当たり範囲フラグをtrueにする
 				bHitFlag = true;
@@ -300,7 +303,7 @@ bool CCollision::ForEnemyCollision(int nPlayerDamage, bool Penetration)
 }
 
 //======================================================================================================================
-// プレイヤーとエネミーで行う判定 プレイヤーの接触判定
+// プレイヤーとエネミーで行う判定 プレイヤーの接触判定 フラグを返す
 //======================================================================================================================
 bool CCollision::ForPlayer_EnemyCollision(bool Penetration)
 {
@@ -323,6 +326,35 @@ bool CCollision::ForPlayer_EnemyCollision(bool Penetration)
 
 	return bHitFlag;
 }
+//======================================================================================================================
+// プレイヤーとエネミーで行う判定 プレイヤーの接触判定 ポインタを返す
+//======================================================================================================================
+CEnemy * CCollision::ForPlayer_EnemyCollision()
+{
+	CEnemy *pEnemy = nullptr;
+	// 捕虜の総数分
+	for (int nCntEnemy = 0; nCntEnemy < CManager::GetBaseMode()->GetMap()->GetMaxEnemy(); nCntEnemy++)
+	{
+		pEnemy = CManager::GetBaseMode()->GetMap()->GetEnemy(nCntEnemy);
+
+		if (pEnemy != nullptr)
+		{
+			if (this->CharCollision2D(pEnemy->GetCollision()))
+			{
+				// 処理を行った捕虜のポインタを返す
+				return pEnemy;
+			}
+		}
+
+		else if (pEnemy == nullptr)
+		{
+			return nullptr;
+		}
+	}
+
+	return pEnemy;
+}
+
 
 //======================================================================================================================
 // プレイヤーと障害物で行う判定 プレイヤーの接触判定
@@ -407,35 +439,6 @@ CPrisoner *CCollision::ForPlayer_PrisonerCollision()
 
 	// ポインタを返す
 	return pPrisoner;
-}
-
-//======================================================================================================================
-// プレイヤーとエネミーで行う判定 プレイヤーの接触判定
-//======================================================================================================================
-CEnemy * CCollision::ForPlayer_EnemyCollision()
-{
-	CEnemy *pEnemy = nullptr;
-	// 捕虜の総数分
-	for (int nCntEnemy = 0; nCntEnemy < CManager::GetBaseMode()->GetMap()->GetMaxEnemy(); nCntEnemy++)
-	{
-		pEnemy = CManager::GetBaseMode()->GetMap()->GetEnemy(nCntEnemy);
-
-		if (pEnemy != nullptr)
-		{
-			if (this->CharCollision2D(pEnemy->GetCollision()))
-			{
-				// 処理を行った捕虜のポインタを返す
-				return pEnemy;
-			}
-		}
-
-		else if (pEnemy == nullptr)
-		{
-			return nullptr;
-		}
-	}
-
-	return pEnemy;
 }
 
 //======================================================================================================================
