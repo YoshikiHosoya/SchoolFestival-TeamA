@@ -285,7 +285,6 @@ void CCharacter::Draw(void)
 			}
 			//‹‚ß‚½·•ª‚¾‚¯’Ç]‚·‚éŒvŽZ
 			m_vModelList[nCnt]->GetRot().x += diffHeadRot.x * 0.2f;
-			m_vModelList[nCnt]->SetRot(m_vModelList[nCnt]->GetRot());
 		}
 		else if (nCnt == 3 || nCnt == 4)
 		{
@@ -310,7 +309,6 @@ void CCharacter::Draw(void)
 			}
 			//‹‚ß‚½·•ª‚¾‚¯’Ç]‚·‚éŒvŽZ
 			m_vModelList[nCnt]->GetRot().x += diffArmRot.x * 0.2f;
-			m_vModelList[nCnt]->SetRot(m_vModelList[nCnt]->GetRot());
 		}
 		m_vModelList[nCnt]->Draw(m_mtxWorld);
 
