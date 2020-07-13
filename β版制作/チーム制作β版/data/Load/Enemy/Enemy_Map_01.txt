@@ -1,0 +1,378 @@
+#------------------------------------------------------------------------------
+# ìGÇÃîzíuèÓïÒ
+#------------------------------------------------------------------------------
+#------------------------------------------------------------------------------
+# TYPEèÓïÒ
+#
+#	[ 0 ]	ï∫ém
+#
+#------------------------------------------------------------------------------
+SCRIPT
+
+ENEMYSET									# 0
+	TYPE	= 0
+	POS		= -193 75 0
+	LIFE	= 50
+END_ENEMYSET
+
+ENEMYSET									# 1
+	TYPE	= 0
+	POS		= 1493 214 0
+	LIFE	= 50
+END_ENEMYSET
+
+ENEMYSET									# 2
+	TYPE	= 0
+	POS		= 2747 299 0
+	LIFE	= 50
+END_ENEMYSET
+
+ENEMYSET									# 3
+	TYPE	= 0
+	POS		= 2829 299 0
+	LIFE	= 50
+END_ENEMYSET
+
+ENEMYSET									# 4
+	TYPE	= 0
+	POS		= 2910 299 0
+	LIFE	= 50
+END_ENEMYSET
+
+ENEMYSET									# 5
+	TYPE	= 0
+	POS		= 2988 299 0
+	LIFE	= 50
+END_ENEMYSET
+
+ENEMYSET									# 6
+	TYPE	= 0
+	POS		= 3064 299 0
+	LIFE	= 50
+END_ENEMYSET
+
+ENEMYSET									# 7
+	TYPE	= 0
+	POS		= 2822 73 0
+	LIFE	= 50
+END_ENEMYSET
+
+ENEMYSET									# 8
+	TYPE	= 0
+	POS		= 2910 73 0
+	LIFE	= 50
+END_ENEMYSET
+
+ENEMYSET									# 9
+	TYPE	= 0
+	POS		= 2997 72 0
+	LIFE	= 50
+END_ENEMYSET
+
+ENEMYSET									# 10
+	TYPE	= 0
+	POS		= 2738 73 0
+	LIFE	= 50
+END_ENEMYSET
+
+ENEMYSET									# 11
+	TYPE	= 0
+	POS		= 3076 72 0
+	LIFE	= 50
+END_ENEMYSET
+
+ENEMYSET									# 12
+	TYPE	= 0
+	POS		= 3338 72 0
+	LIFE	= 50
+END_ENEMYSET
+
+ENEMYSET									# 13
+	TYPE	= 0
+	POS		= 3254 72 0
+	LIFE	= 50
+END_ENEMYSET
+
+ENEMYSET									# 14
+	TYPE	= 0
+	POS		= 3590 207 0
+	LIFE	= 50
+END_ENEMYSET
+
+ENEMYSET									# 15
+	TYPE	= 0
+	POS		= 3961 299 0
+	LIFE	= 50
+END_ENEMYSET
+
+ENEMYSET									# 16
+	TYPE	= 0
+	POS		= 4030 299 0
+	LIFE	= 50
+END_ENEMYSET
+
+ENEMYSET									# 17
+	TYPE	= 0
+	POS		= 4289 299 0
+	LIFE	= 50
+END_ENEMYSET
+
+ENEMYSET									# 18
+	TYPE	= 0
+	POS		= 3437 207 0
+	LIFE	= 50
+END_ENEMYSET
+
+ENEMYSET									# 19
+	TYPE	= 0
+	POS		= 4219 299 0
+	LIFE	= 50
+END_ENEMYSET
+
+ENEMYSET									# 20
+	TYPE	= 0
+	POS		= 3687 71 0
+	LIFE	= 50
+END_ENEMYSET
+
+ENEMYSET									# 21
+	TYPE	= 0
+	POS		= 3760 71 0
+	LIFE	= 50
+END_ENEMYSET
+
+ENEMYSET									# 22
+	TYPE	= 0
+	POS		= 4965 299 0
+	LIFE	= 50
+END_ENEMYSET
+
+ENEMYSET									# 23
+	TYPE	= 0
+	POS		= 5038 299 0
+	LIFE	= 50
+END_ENEMYSET
+
+ENEMYSET									# 24
+	TYPE	= 0
+	POS		= 5230 299 0
+	LIFE	= 50
+END_ENEMYSET
+
+ENEMYSET									# 25
+	TYPE	= 0
+	POS		= 5298 299 0
+	LIFE	= 50
+END_ENEMYSET
+
+ENEMYSET									# 26
+	TYPE	= 0
+	POS		= 3944 71 0
+	LIFE	= 50
+END_ENEMYSET
+
+ENEMYSET									# 27
+	TYPE	= 0
+	POS		= 4009 71 0
+	LIFE	= 50
+END_ENEMYSET
+
+ENEMYSET									# 28
+	TYPE	= 0
+	POS		= 4212 70 0
+	LIFE	= 50
+END_ENEMYSET
+
+ENEMYSET									# 29
+	TYPE	= 0
+	POS		= 4284 70 0
+	LIFE	= 50
+END_ENEMYSET
+
+ENEMYSET									# 30
+	TYPE	= 0
+	POS		= 4472 70 0
+	LIFE	= 50
+END_ENEMYSET
+
+ENEMYSET									# 31
+	TYPE	= 0
+	POS		= 4788 69 0
+	LIFE	= 50
+END_ENEMYSET
+
+ENEMYSET									# 32
+	TYPE	= 0
+	POS		= 4547 70 0
+	LIFE	= 50
+END_ENEMYSET
+
+ENEMYSET									# 33
+	TYPE	= 0
+	POS		= 4703 70 0
+	LIFE	= 50
+END_ENEMYSET
+
+ENEMYSET									# 34
+	TYPE	= 0
+	POS		= 4951 69 0
+	LIFE	= 50
+END_ENEMYSET
+
+ENEMYSET									# 35
+	TYPE	= 0
+	POS		= 5030 69 0
+	LIFE	= 50
+END_ENEMYSET
+
+ENEMYSET									# 36
+	TYPE	= 0
+	POS		= 5118 69 0
+	LIFE	= 50
+END_ENEMYSET
+
+ENEMYSET									# 37
+	TYPE	= 0
+	POS		= 5207 69 0
+	LIFE	= 50
+END_ENEMYSET
+
+ENEMYSET									# 38
+	TYPE	= 0
+	POS		= 5288 69 0
+	LIFE	= 50
+END_ENEMYSET
+
+ENEMYSET									# 39
+	TYPE	= 0
+	POS		= 6910 252 0
+	LIFE	= 50
+END_ENEMYSET
+
+ENEMYSET									# 40
+	TYPE	= 0
+	POS		= 6988 256 0
+	LIFE	= 50
+END_ENEMYSET
+
+ENEMYSET									# 41
+	TYPE	= 0
+	POS		= 7071 257 0
+	LIFE	= 50
+END_ENEMYSET
+
+ENEMYSET									# 42
+	TYPE	= 0
+	POS		= 7155 258 0
+	LIFE	= 50
+END_ENEMYSET
+
+ENEMYSET									# 43
+	TYPE	= 0
+	POS		= 7237 263 0
+	LIFE	= 50
+END_ENEMYSET
+
+ENEMYSET									# 44
+	TYPE	= 0
+	POS		= 7331 266 0
+	LIFE	= 50
+END_ENEMYSET
+
+ENEMYSET									# 45
+	TYPE	= 0
+	POS		= 7468 247 0
+	LIFE	= 50
+END_ENEMYSET
+
+ENEMYSET									# 46
+	TYPE	= 0
+	POS		= 7665 185 0
+	LIFE	= 50
+END_ENEMYSET
+
+ENEMYSET									# 47
+	TYPE	= 0
+	POS		= 7917 105 0
+	LIFE	= 50
+END_ENEMYSET
+
+ENEMYSET									# 48
+	TYPE	= 0
+	POS		= 9600 69 0
+	LIFE	= 50
+END_ENEMYSET
+
+ENEMYSET									# 49
+	TYPE	= 0
+	POS		= 9686 69 0
+	LIFE	= 50
+END_ENEMYSET
+
+ENEMYSET									# 50
+	TYPE	= 0
+	POS		= 9783 69 0
+	LIFE	= 50
+END_ENEMYSET
+
+ENEMYSET									# 51
+	TYPE	= 0
+	POS		= 9888 69 0
+	LIFE	= 50
+END_ENEMYSET
+
+ENEMYSET									# 52
+	TYPE	= 0
+	POS		= 9992 69 0
+	LIFE	= 50
+END_ENEMYSET
+
+ENEMYSET									# 53
+	TYPE	= 0
+	POS		= 10088 69 0
+	LIFE	= 50
+END_ENEMYSET
+
+ENEMYSET									# 54
+	TYPE	= 0
+	POS		= 10178 69 0
+	LIFE	= 50
+END_ENEMYSET
+
+ENEMYSET									# 55
+	TYPE	= 0
+	POS		= 10271 69 0
+	LIFE	= 50
+END_ENEMYSET
+
+ENEMYSET									# 56
+	TYPE	= 0
+	POS		= 10361 69 0
+	LIFE	= 50
+END_ENEMYSET
+
+ENEMYSET									# 57
+	TYPE	= 0
+	POS		= 10447 69 0
+	LIFE	= 50
+END_ENEMYSET
+
+ENEMYSET									# 58
+	TYPE	= 0
+	POS		= 10530 69 0
+	LIFE	= 50
+END_ENEMYSET
+
+ENEMYSET									# 59
+	TYPE	= 0
+	POS		= 10614 69 0
+	LIFE	= 50
+END_ENEMYSET
+
+ENEMYSET									# 60
+	TYPE	= 0
+	POS		= 10695 69 0
+	LIFE	= 50
+END_ENEMYSET
+
+END_SCRIPT
