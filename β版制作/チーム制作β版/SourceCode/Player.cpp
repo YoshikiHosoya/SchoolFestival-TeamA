@@ -32,8 +32,8 @@
 // 貫通させるかのフラグ
 #define ATTACK_PENETRATION		(true)			// プレイヤーの判定が貫通するかどうか
 #define ATTACK_DAMAGE_ENEMY		(50)			// エネミーへのダメージ
-#define SHOT_BULLET_POS_X		(-15.0f)		// 弾の発射位置X
-#define SHOT_BULLET_POS_Z		(5.0f)			// 弾の発射位置Z
+#define SHOT_BULLET_POS_Y		(-15.0f)		// 弾の発射位置Y
+#define SHOT_BULLET_POS_Z		(-5.0f)			// 弾の発射位置Z
 
 CPlayer::CPlayer(OBJ_TYPE type) :CCharacter(type)
 {
@@ -63,7 +63,7 @@ HRESULT CPlayer::Init(void)
 	// 銃の弾の種類
 	m_pGun->GetTag() = TAG_PLAYER;
 	// 発射位置のオフセットの設定
-	m_pGun->SetShotOffsetPos(D3DXVECTOR3(SHOT_BULLET_POS_X, 0.0f, SHOT_BULLET_POS_Z));
+	m_pGun->SetShotOffsetPos(D3DXVECTOR3(0.0f, SHOT_BULLET_POS_Y, SHOT_BULLET_POS_Z));
 
 	// ナイフの生成
 	m_pKnife = CKnife::Create(GetCharacterModelPartsList(CModel::MODEL_PLAYER_LHAND)->GetMatrix());
