@@ -206,11 +206,7 @@ void CCharacter::Update(void)
 			SetCharacterDirection(CHARACTER_RIGHT);
 		}
 	}
-	//死んだとき
-	if (m_Life <= 0)
-	{
-		Rerease();
-	}
+
 	// マップのポインタ取得
 	CMap *pMap;
 	pMap = CManager::GetBaseMode()->GetMap();
