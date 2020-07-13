@@ -206,7 +206,6 @@ void CCharacter::Update(void)
 			SetCharacterDirection(CHARACTER_RIGHT);
 		}
 	}
-
 	// マップのポインタ取得
 	CMap *pMap;
 	pMap = CManager::GetBaseMode()->GetMap();

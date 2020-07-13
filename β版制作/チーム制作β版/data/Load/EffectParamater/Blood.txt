@@ -9,14 +9,20 @@
 SCRIPT
 	PARAMSET
 
-		LIFE = 150				//ライフ
-		RADIUS = 60.5			//半径
-		COLOR = 1.0 0.0 0.0 1.0	//色
-		NUMBER = 17				//個数
-		SPEED = 9.0				//速度
-		RADIUSDAMPING = 0.96		//半径の減衰値
-		ALPHADAMPING = 1.00		//アルファ値の減衰値
+		SPEEDRANDOM = 1			//速度がランダムかどうか
+		GRAVITY = 1				//重力をつけるか
+		SHAPE = 1				//パーティクルの出し方
 		TEXTURE = 1				//テクスチャ
+		LIFE = 112				//ライフ
+		NUMBER = 23				//個数
+		RADIUS = 40.0			//半径
+		SPEED = 13.5			//速度
+		RANGE = 0.5				//範囲
+		RADIUSDAMPING = 1.00	//半径の減衰値
+		ALPHADAMPING = 0.93		//アルファ値の減衰値
+		GRAVITYPOWER = 0.19		//重力の強さ
+		COLOR = 1.0 0.0 0.0 1.0	//色
+		ROT = 0.81 0.00 0.00 	//回転量
 
 	END_PARAMSET
 END_SCRIPT

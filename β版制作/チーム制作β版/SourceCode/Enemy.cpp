@@ -25,11 +25,8 @@ CEnemy::CEnemy(OBJ_TYPE type) :CCharacter(type)
 
 CEnemy::~CEnemy()
 {
-	if (m_pAI != nullptr)
-	{
-		delete m_pAI;
-		m_pAI = nullptr;
-	}
+
+
 }
 //====================================================================
 //‰Šú‰»
@@ -68,7 +65,11 @@ void CEnemy::Uninit(void)
 		m_pGun->Rerease();
 		m_pGun = nullptr;
 	}
-
+	if (m_pAI != nullptr)
+	{
+		delete m_pAI;
+		m_pAI = nullptr;
+	}
 	//ƒAƒCƒeƒ€‚ð¶¬
 	CItem::DropCreate(this->GetPosition());
 
@@ -115,7 +116,6 @@ void CEnemy::Update(void)
 
 		m_pAI->Update();
 	}
-
 	CCharacter::Update();
 }
 //====================================================================

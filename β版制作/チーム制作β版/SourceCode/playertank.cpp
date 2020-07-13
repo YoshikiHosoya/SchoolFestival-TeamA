@@ -26,8 +26,9 @@
 //====================================================================
 #define PLAYERTANK_SIZE			(D3DXVECTOR3(90.0f,65.0f,0.0f)) // プレイヤーの判定のサイズ
 #define PLAYERTANK_JUMP			(20.0f)							 // 戦車が飛ぶ移動量
-#define SHOT_BULLET_POS_X		(0.0f)		// 弾の発射位置X
-#define SHOT_BULLET_POS_Z		(0.0f)			// 弾の発射位置Z
+#define SHOT_BULLET_POS_X		(-40.0f)			// 弾の発射位置X
+#define SHOT_BULLET_POS_Y		(15.0f)			// 弾の発射位置Y
+#define SHOT_BULLET_POS_Z		(-20.0f)			// 弾の発射位置Z
 
 // =====================================================================================================================================================================
 //
@@ -71,7 +72,7 @@ HRESULT CPlayertank::Init(void)
 	// 銃の弾の種類
 	m_pGun->SetGunType(CGun::GUNTYPE_TANKTURRET);
 	// 発射位置のオフセットの設定
-	m_pGun->SetShotOffsetPos(D3DXVECTOR3(SHOT_BULLET_POS_X, 0.0f, SHOT_BULLET_POS_Z));
+	m_pGun->SetShotOffsetPos(D3DXVECTOR3(SHOT_BULLET_POS_X, SHOT_BULLET_POS_Y, SHOT_BULLET_POS_Z));
 
 	// 当たり判定生成
 	GetCollision()->SetPos(&GetPosition());

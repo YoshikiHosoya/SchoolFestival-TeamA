@@ -75,6 +75,8 @@ void CTexAnimation3D::Update()
 		return;
 	}
 
+	GetRot().z -= 0.01f;
+
 }
 //------------------------------------------------------------------------------
 //描画処理
@@ -84,20 +86,33 @@ void CTexAnimation3D::Draw()
 	//デバイス取得
 	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
 
+	//ライティングOFF
+	CManager::GetRenderer()->SetRendererCommand(CRenderer::RENDERER_LIGHTING_OFF);
+
 	//Zテスト無効でZライティング有効
 	CManager::GetRenderer()->SetRendererCommand(CRenderer::RENDERER_ZTEST_OFF_ZWRITING_ON);
 
 	//加算合成
 	CManager::GetRenderer()->SetRendererCommand(CRenderer::RENDERER_ALPHABLEND_ADD);
 
+	//両面描画
+	CManager::GetRenderer()->SetRendererCommand(CRenderer::RENDERER_CULLING_NONE);
+
 	//描画処理
 	CScene3D::Draw();
+
+	//両面描画
+	CManager::GetRenderer()->SetRendererCommand(CRenderer::RENDERER_CULLING_CCW);
 
 	//Zテスト通常
 	CManager::GetRenderer()->SetRendererCommand(CRenderer::RENDERER_ZTEST_DEFAULT);
 
 	//通常合成
 	CManager::GetRenderer()->SetRendererCommand(CRenderer::REDNERER_ALPHABLEND_DEFAULT);
+
+	//ライティングON
+	CManager::GetRenderer()->SetRendererCommand(CRenderer::RENDERER_LIGHTING_ON);
+
 }
 //------------------------------------------------------------------------------
 //デバッグ情報表示

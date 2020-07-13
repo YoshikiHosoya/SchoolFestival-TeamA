@@ -388,6 +388,26 @@ void CCamera::ResetCamera()
 
 
 }
+//-----------------------------------------------------------------------------
+//カメラ座標設定 角度と距離を基に算出
+//-----------------------------------------------------------------------------
+void CCamera::SetCameraPosfromDistance(D3DXVECTOR3 posR, D3DXVECTOR3 rot, float fDistance)
+{
+	//初期座標へ
+	m_rotDest = m_rot = rot;
+	m_fDistance = fDistance;
+	m_posR = m_posRDest = posR;
+
+	m_posV.x = m_posVDest.x = m_posRDest.x - sinf(m_rot.y) * cosf(m_rot.x) * m_fDistance;
+	m_posV.y = m_posVDest.y = m_posRDest.y + sinf(m_rot.x)	* m_fDistance;
+	m_posV.z = m_posVDest.z = m_posRDest.z - cosf(m_rot.y) * cosf(m_rot.x) * m_fDistance;
+
+	m_vecV = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
+	m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+
+	m_bCameraMode = false;
+
+}
 
 //-----------------------------------------------------------------------------
 //カメラ座標設定
