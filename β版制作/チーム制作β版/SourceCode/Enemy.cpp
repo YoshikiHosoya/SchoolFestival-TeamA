@@ -30,6 +30,11 @@ CEnemy::~CEnemy()
 		delete m_pAI;
 		m_pAI = nullptr;
 	}
+	if (m_pGun != nullptr)
+	{
+		delete m_pGun;
+		m_pGun = nullptr;
+	}
 }
 //====================================================================
 //‰Šú‰»
@@ -88,10 +93,6 @@ void CEnemy::Update(void)
 	//‘Ì—Í‚ª0ˆÈ‰º‚É‚È‚Á‚½Žž
 	if (this->GetLife() <= 0)
 	{
-		// e‚Ìíœ
-		m_pGun->Rerease();
-		m_pGun = nullptr;
-
 		//ƒAƒCƒeƒ€‚ð¶¬
 		CItem::DropCreate(this->GetPosition());
 	}
@@ -110,7 +111,6 @@ void CEnemy::Update(void)
 
 		m_pAI->Update();
 	}
-
 	CCharacter::Update();
 }
 //====================================================================
