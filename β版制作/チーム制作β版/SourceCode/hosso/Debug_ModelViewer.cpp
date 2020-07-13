@@ -27,8 +27,10 @@
 //------------------------------------------------------------------------------
 //マクロ
 //------------------------------------------------------------------------------
-#define DEFAULT_PLAYER_POS (ZeroVector3)
-#define DEFAULT_SCORE_POS (D3DXVECTOR3(1150.0f, 50.0f, 0.0f))
+#define DEFAULT_CAMERA_DISTANCE (200.0f)
+#define DEFAULT_CAMERA_ROT (D3DXVECTOR3(0.2f,0.0f,0.0f))
+#define DEFAULT_CAMERA_POSR (D3DXVECTOR3(30.0f, 50.0f, 0.0f))
+
 #define OFFSET_TEXT_PASS ("data/Load/SaveOffset.txt")
 
 //------------------------------------------------------------------------------
@@ -53,6 +55,8 @@ HRESULT CDebug_ModelViewer::Init()
 {
 	//ビューワ用のキャラクター作成
 	m_pViewerCharacter = CDebug_ViewerCharacter::Create();
+
+	CManager::GetRenderer()->GetCamera()->SetCameraPosfromDistance(DEFAULT_CAMERA_POSR, DEFAULT_CAMERA_ROT, DEFAULT_CAMERA_DISTANCE);
 
 	CMeshField::Create(ZeroVector3, D3DXVECTOR3(50.0f, 50.0f, 50.0f), INTEGER2(20, 20));
 

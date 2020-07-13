@@ -25,6 +25,7 @@ public:
 	void MouseMoveCamera();						//マウス操作カメラ
 
 	void ResetCamera();
+	void SetCameraPosfromDistance(D3DXVECTOR3 posR,D3DXVECTOR3 rot,float fDistance);
 	void SetCameraPos(D3DXVECTOR3 posR, D3DXVECTOR3 posV);
 private:
 	D3DXVECTOR3 m_posV;			//視点

@@ -103,7 +103,7 @@ void CShotgun::DeleteBullet()
 // =====================================================================================================================================================================
 void CShotgun::BulletReaction(D3DXVECTOR3 rot)
 {
-	CTexAnimation3D_Collision::Create(GetPosition(), D3DXVECTOR3(100.0f, 80.0f, 0.0f), D3DXVECTOR3(0.0f,0.0f, rot.y),
+	CTexAnimation3D_Collision::Create(GetPosition(), D3DXVECTOR3(100.0f, 80.0f, 0.0f), D3DXVECTOR3(rot.x,0.0f, rot.y),
 		CTexture::SEPARATE_TEX_EFFECT_SHOTGUN, 2, OBJTYPE_EXPROSION, true);
 
 }

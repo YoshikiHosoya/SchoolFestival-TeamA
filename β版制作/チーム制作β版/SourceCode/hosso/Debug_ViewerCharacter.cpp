@@ -85,6 +85,11 @@ void CDebug_ViewerCharacter::Uninit()
 void CDebug_ViewerCharacter::Update()
 {
 	CCharacter::Update();
+
+	if (GetPosition().y <= 0.0f)
+	{
+		GetPosition().y = 0.0f;
+	}
 }
 //------------------------------------------------------------------------------
 //•`‰æˆ—
