@@ -250,6 +250,7 @@ void CKnife::CollisionKnife()
 						// “G‚Ìƒ‰ƒCƒt‚ª0ˆÈ‰º‚É‚È‚Á‚½Žž
 						if (pEnemy->CCharacter::GetLife() <= 0)
 						{
+							pEnemy->SetDieFlag(true);
 							pEnemy = nullptr;
 						}
 					}
