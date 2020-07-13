@@ -265,39 +265,81 @@ bool CCollision::ForPlayerBulletCollision(int nEnemyDamage, int nObstacleDamage,
 //======================================================================================================================
 // エネミーの弾が行う判定
 //======================================================================================================================
-bool CCollision::ForEnemyCollision(int nPlayerDamage, bool Penetration)
+bool CCollision::ForEnemyCollision(int nPlayerDamage, int nPlayerTankDamage, bool Penetration)
 {
 	// 判定を確認するフラグ
 	bool bHitFlag = false;
 
-		// 当たり判定 相手がプレイヤーだったら
-		// エネミーのポインタ取得
 	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
-		if (pPlayer != nullptr)
+	if (pPlayer != nullptr)
+	{
+		if (pPlayer->GetRideFlag())
 		{
-			// 判定関数
-			if (this->OtherCollision2D(pPlayer->GetCollision()))
+			// 当たり判定 相手がプレイヤー用戦車だったら
+			// プレイヤーのポインタ取得
+			for (int nCntTank = 0; nCntTank < CManager::GetBaseMode()->GetMap()->GetMaxPlayerTank(); nCntTank++)
 			{
-				// プレイヤーのライフ減衰
-				pPlayer->CCharacter::AddDamage(nPlayerDamage);
-
-				// プレイヤーのライフが0以下になった時
-				if (pPlayer->CCharacter::GetLife() <= 0)
+				CPlayertank *pPlayertank = CManager::GetBaseMode()->GetMap()->GetPlayertank(nCntTank);
+				if (pPlayertank != nullptr)
 				{
-					//pPlayer->SetDieFlag(true);
-					// ポインタをnullにする
-					pPlayer = nullptr;
-				}
+					// 判定関数
+					if (this->OtherCollision2D(pPlayertank->GetCollision()))
+					{
+						// プレイヤーのライフ減衰
+						pPlayertank->CVehicle::AddDamage(nPlayerTankDamage);
 
-				// 当たり範囲フラグをtrueにする
-				bHitFlag = true;
-			}
-			else
-			{
-				// 当たり範囲フラグをfalseにする
-				bHitFlag = false;
+						// プレイヤーのライフが0以下になった時
+						if (pPlayertank->CVehicle::GetLife() <= 0)
+						{
+							pPlayertank->SetDieFlag(true);
+							// ポインタをnullにする
+							pPlayertank = nullptr;
+						}
+
+						// 当たり範囲フラグをtrueにする
+						bHitFlag = true;
+					}
+					else
+					{
+						// 当たり範囲フラグをfalseにする
+						bHitFlag = false;
+					}
+				}
 			}
 		}
+		else
+		{
+			// 当たり判定 相手がプレイヤーだったら
+			// プレイヤーのポインタ取得
+			CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
+			if (pPlayer != nullptr)
+			{
+				// 判定関数
+				if (this->OtherCollision2D(pPlayer->GetCollision()))
+				{
+					// プレイヤーのライフ減衰
+					pPlayer->CCharacter::AddDamage(nPlayerDamage);
+
+					// プレイヤーのライフが0以下になった時
+					if (pPlayer->CCharacter::GetLife() <= 0)
+					{
+						//pPlayer->SetDieFlag(true);
+						// ポインタをnullにする
+						pPlayer = nullptr;
+					}
+
+					// 当たり範囲フラグをtrueにする
+					bHitFlag = true;
+				}
+				else
+				{
+					// 当たり範囲フラグをfalseにする
+					bHitFlag = false;
+				}
+			}
+		}
+
+	}
 
 	return bHitFlag;
 }

@@ -104,6 +104,13 @@ void CPlayertank::Uninit(void)
 		m_pGrenadeFire = nullptr;
 	}
 
+	// プレイヤーのポインタを取得
+	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
+	if (pPlayer != nullptr)
+	{
+		pPlayer->SetRideFlag(false);
+	}
+
 	CVehicle::Uninit();
 }
 //====================================================================
