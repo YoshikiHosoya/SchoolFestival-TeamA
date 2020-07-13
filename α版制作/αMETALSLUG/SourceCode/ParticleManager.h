@@ -20,6 +20,23 @@
 //------------------------------------------------------------------------------
 //クラス定義
 //------------------------------------------------------------------------------
+//class CParticleCreateManager
+//{
+//public:
+//	CParticleCreateManager();
+//	~CParticleCreateManager();
+//
+//	static std::unique_ptr<CParticleCreateManager> Create();
+//
+//private:
+//	int m_nCnt;
+
+//	bool m_bLoop;
+//	int m_nLoopNum;
+//	int m_nLoopInterval;
+//	int m_n
+//
+//};
 
 
 //パーティクルのまとまり
@@ -41,6 +58,8 @@ public:
 
 private:
 	static std::vector<std::unique_ptr<CParticle>> m_pParticleList;		//パーティクルの構造体のリスト
+	int m_nCnt;															//カウント
+
 };
 
 #endif

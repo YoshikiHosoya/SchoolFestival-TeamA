@@ -1,11 +1,11 @@
 //------------------------------------------------------------------------------
 //
-//パーティクル処理  [particle.h]
+//パーティクルのパラメータクラス  [particleparamater.h]
 //Author:Yoshiki Hosoya
 //
 //------------------------------------------------------------------------------
-#ifndef _PARTICLE_H_
-#define _PARTICLE_H_
+#ifndef _PARTICLEPARAMATER_H_
+#define _PARTICLEPARAMATER_H_
 //------------------------------------------------------------------------------
 //インクルード
 //------------------------------------------------------------------------------
@@ -13,15 +13,12 @@
 //------------------------------------------------------------------------------
 //マクロ
 //------------------------------------------------------------------------------
-#define MAX_PARTICLE (100000)									//パーティクルの最大数
 #define DEFAULT_TEXTURE (CTexture::TEX_EFFECT_PARTICLE)			//デフォルトで使用するテクスチャ
 #define DEFAULT_DAMPING (0.95f)									//デフォルトの減衰値
 #define DEFAULT_GRAVITY_POWER (0.8f)							//デフォルトの重力の大きさ
 //------------------------------------------------------------------------------
 //クラス定義
 //------------------------------------------------------------------------------
-
-
 class CParticleParam
 {
 public:
@@ -103,7 +100,7 @@ public:
 
 private:
 	static std::vector<std::unique_ptr<CParticleParam>> m_pParticleDefaultParamList;	//パーティクルの初期パラメータのリスト
-	static std::vector<std::string> m_aFileNameList;									//読み込むファイルのリスト
+	static FILENAME_LIST m_aFileNameList;									//読み込むファイルのリスト
 
 	bool m_bSpeedRandom;							//速度がランダムかどうか
 	bool m_bGravity;								//重力をかけるか
@@ -124,71 +121,52 @@ private:
 
 };
 
-//パーティクルの粒子
-class COneParticle
-{
-	public:
-		COneParticle() { nNumParticleAll++; };		//コンストラクタ
-		~COneParticle() { nNumParticleAll--; };		//デストラクタ
 
-	//生成関数
-	static std::unique_ptr<COneParticle> Create(D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXVECTOR3 rot)
-	{
-		//メモリ確保
-		std::unique_ptr<COneParticle> pOneParticle(new COneParticle);
-
-		//情報代入
-		pOneParticle->m_pos = pos;
-		pOneParticle->m_move = move;
-		pOneParticle->m_rot = rot;
-
-		//return
-		return pOneParticle;
-	}
-	static int GetNumAll() {return nNumParticleAll;};		//総数取得
-
-	D3DXVECTOR3 m_pos;				//座標
-	D3DXVECTOR3 m_move;				//移動量
-	D3DXVECTOR3 m_rot;				//回転量
-	D3DXMATRIX m_Mtx;				//マトリックス
-	static int nNumParticleAll;		//総数
-};
-
-//パーティクルのまとまり
-class CParticle
+class CreaterParam
 {
 public:
-	CParticle();									//コンストラクタ
-	~CParticle();									//デストラクタ
-
-	HRESULT Init();									//初期化
-	void Uninit();									//終了
-	void Update();									//更新
-	void Draw();									//描画
-	void ShowDebugInfo();							//デバッグ情報表記
-	void UpdateVertex();							//頂点の更新
-	static void ResetVertex();						//頂点リセット
-	static HRESULT MakeVertex();					//頂点生成
-	static void ReleaseVertex();					//頂点破棄
-	static void ResetVertexID();					//頂点IDリセット　画面が停止してもパーティクルの処理を行う為
-
-	static void Create(D3DXVECTOR3 pos, int nLife, float fRadius, D3DXCOLOR col,int nNumber, float fSpeed);		//生成処理
-	static void CreateFromParam(D3DXVECTOR3 pos, CParticleParam *pInputParam);
-
-	static void CreateFromText(D3DXVECTOR3 pos, CParticleParam::PARTICLE_TEXT type);
-
-	bool GetDeleteFlag() { return m_bDeleteFlag; };
+	//コンストラクタ
+	CreaterParam()
+	{
+		m_bLoop = false;
+		m_nLoopNum = 0;
+		m_nLoopInterval = 0;
+		m_text = CParticleParam::PARTICLE_TEXT::PARTICLE_DEFAULT;
+	}
+	~CreaterParam() {};
 
 private:
-	static LPDIRECT3DVERTEXBUFFER9	m_pVtxBuff;											//頂点バッファへのポインタ
-	static int m_nVertexID;																//頂点ID
-	std::unique_ptr<CParticleParam> m_pParticleParam;									//パーティクルの現在のパラメータ
-
-	std::vector<std::unique_ptr<COneParticle>> m_pParticleList;		//パーティクルの構造体のリスト
-	bool m_bDeleteFlag;												//消去フラグ
-
-	void SetParticle(D3DXVECTOR3 &pos, CParticleParam *pShape);				//パーティクル設定
-
+	bool m_bLoop;								//ループしたかどうか
+	int m_nLoopNum;								//ループの回数
+	int m_nLoopInterval;						//ループのインターバル
+	CParticleParam::PARTICLE_TEXT m_text;		//読み込むテキスト
 };
 
+class CreatorWave
+{
+public:
+	//コンストラクタ
+	CreatorWave() { m_ParamList.clear(); };
+	~CreatorWave() { m_ParamList.clear(); };
+private:
+	std::vector<std::unique_ptr<CreaterParam>> m_ParamList;
+};
+
+
+//パーティクルの生成口
+class CParticleCreators
+{
+public:
+	CParticleCreators() {};				//コンストラクタ
+	~CParticleCreators() {};				//デストラクタ
+
+	static void LoadParticleCreators();			//パーティクル生成口のロード
+	static CParticleCreators *Create();
+private:
+	int m_nCntTime;		//時間計測
+	int m_nCntLoop;		//ループした回数計測
+
+	static std::vector<std::unique_ptr<CreatorWave>> m_pCreatorParamList;
+	static FILENAME_LIST m_aFileNameList;
+};
 #endif

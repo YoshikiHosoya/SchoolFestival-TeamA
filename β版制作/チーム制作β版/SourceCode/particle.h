@@ -10,119 +10,15 @@
 //インクルード
 //------------------------------------------------------------------------------
 #include "main.h"
+#include "ParticleParamater.h"
 //------------------------------------------------------------------------------
 //マクロ
 //------------------------------------------------------------------------------
 #define MAX_PARTICLE (100000)									//パーティクルの最大数
-#define DEFAULT_TEXTURE (CTexture::TEX_EFFECT_PARTICLE)			//デフォルトで使用するテクスチャ
-#define DEFAULT_DAMPING (0.95f)									//デフォルトの減衰値
-#define DEFAULT_GRAVITY_POWER (0.8f)							//デフォルトの重力の大きさ
 //------------------------------------------------------------------------------
 //クラス定義
 //------------------------------------------------------------------------------
-
-
-class CParticleParam
-{
-public:
-	//パーティクルのテキスト
-	enum PARTICLE_TEXT
-	{
-		PARTICLE_DEFAULT = 0,
-		PARTICLE_EXPLOSION,
-		PARTICLE_BLOOD,
-		PARTICLE_SUMPLE,
-		PARTICLE_BULLET_ORBIT,
-		PARTICLE_MAX,
-	};
-
-	//パーティクルの向き
-	enum PARTICLE_SHAPE
-	{
-		SHAPE_SPHERE = 0 ,
-		SHAPE_CONE,
-		SHAPE_CIRCLE_XY,
-		SHAPE_LINE,
-	};
-
-	//コンストラクタ
-	CParticleParam()
-	{
-		m_bGravity = false;									//重力
-		m_bSpeedRandom = false;								//速度がランダムかどうか
-		m_nLife = 50;										//ライフ
-		m_nNumber = 10;										//個数
-		m_fRadius = 15.0f;									//半径
-		m_fSpeed = 10.0f;									//速度
-		m_fRange = 0.5f;									//範囲
-		m_fRadiusDamping = DEFAULT_DAMPING;					//半径の減衰地
-		m_fAlphaDamping = DEFAULT_DAMPING;					//アルファ値の減衰値
-		m_fGravityPower = DEFAULT_GRAVITY_POWER;			//重力の大きさ
-
-		m_col = WhiteColor;									//色
-		m_rot = ZeroVector3;								//角度
-
-		m_Textype = CTexture::TEX_EFFECT_PARTICLE;			//テクスチャ
-		m_shape = SHAPE_SPHERE;								//パーティクルの方向
-		m_ParticleType = PARTICLE_DEFAULT;					//パーティクルのタイプ
-	}
-	~CParticleParam() {};
-
-	void SetParamater(int nLife, float fRadius, D3DXCOLOR col,int nNumber,float fSpeed);
-	void UpdateParam();
-
-
-	static HRESULT LoadParticleDefaultParam();
-	static HRESULT SaveParticleDefaultParam(CParticleParam *pSaveParam);
-
-	//Get関数
-	static std::vector<std::string> &GetFileNameList() {	return m_aFileNameList;};
-
-	bool&GetSpeedRandom()			{ return m_bSpeedRandom; };			//パーティクルの速度がランダムかどうか
-	bool &GetGravity()				{ return m_bGravity; };				//重力
-	int &GetLife()					{ return m_nLife; };				//ライフ
-	int &GetNumber()				{ return m_nNumber; };				//個数
-	float &GetRadius()				{ return m_fRadius; };				//半径
-	float &GetSpeed()				{ return m_fSpeed; };				//速度
-	float &GetRange()				{ return m_fRange; };				//角度
-	float &GetRadiusDamping()		{ return m_fRadiusDamping; };		//半径の減衰地
-	float &GetAlphaDamping()		{ return m_fAlphaDamping; };		//アルファ値の減衰値
-	float &GetGravityPower()		{ return m_fGravityPower; };		//重力の大きさ
-	D3DXCOLOR &GetCol()				{ return m_col; };					//色
-	D3DXVECTOR3 &GetRot()			{ return m_rot;};					//角度
-
-	PARTICLE_SHAPE &GetShape()		{ return m_shape; };				//パーティクルの方向
-	CTexture::TEX_TYPE &GetTex()	{ return m_Textype; };				//テクスチャ
-	PARTICLE_TEXT &GetType()		{ return m_ParticleType; };			//パーティクルのタイプ
-
-	static CParticleParam *GetDefaultParam(CParticleParam::PARTICLE_TEXT type) { return m_pParticleDefaultParamList[type].get(); };
-	static bool ShowParamConboBox(CParticleParam::PARTICLE_TEXT & rType);
-
-	//オペレータ
-	void *operator = (const CParticleParam *pParam);
-
-private:
-	static std::vector<std::unique_ptr<CParticleParam>> m_pParticleDefaultParamList;	//パーティクルの初期パラメータのリスト
-	static std::vector<std::string> m_aFileNameList;									//読み込むファイルのリスト
-
-	bool m_bSpeedRandom;							//速度がランダムかどうか
-	bool m_bGravity;								//重力をかけるか
-	int m_nLife;									//ライフ
-	int m_nNumber;									//個数
-	float m_fRadius;								//半径
-	float m_fSpeed;									//速度
-	float m_fRange;									//範囲
-	float m_fRadiusDamping;							//半径の減衰値
-	float m_fAlphaDamping;							//アルファ値の減衰値
-	float m_fGravityPower;							//重力の大きさ
-	D3DXCOLOR m_col;								//色
-	D3DXVECTOR3 m_rot;								//角度
-
-	PARTICLE_SHAPE m_shape;							//パーティクルの出方
-	CTexture::TEX_TYPE m_Textype;					//テクスチャ
-	PARTICLE_TEXT m_ParticleType;					//パーティクルのタイプ
-
-};
+class CParticleParam;
 
 //パーティクルの粒子
 class COneParticle

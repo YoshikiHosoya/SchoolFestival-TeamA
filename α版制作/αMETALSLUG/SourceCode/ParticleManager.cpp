@@ -25,6 +25,7 @@ std::vector<std::unique_ptr<CParticle>> CParticleManager::m_pParticleList = {};
 //------------------------------------------------------------------------------
 CParticleManager::CParticleManager()
 {
+	m_nCnt = 0;
 }
 //------------------------------------------------------------------------------
 //コンストラクタ
