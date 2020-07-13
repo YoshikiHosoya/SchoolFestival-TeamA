@@ -330,6 +330,7 @@ HRESULT CParticleParam::LoadParticleDefaultParam()
 	char cReadText[128];	//文字として読み取り用
 	char cHeadText[128];	//比較する用
 	char cDie[128];			//不要な文字
+	int n_BoolValue;		//boolに変換するようの格納
 	HRESULT hResult = S_OK;
 
 	CParticleParam *pParam;
@@ -373,26 +374,43 @@ HRESULT CParticleParam::LoadParticleDefaultParam()
 
 
 							//それぞれの項目を読み込み
+							if (strcmp(cHeadText, "SPEEDRANDOM") == 0)
+							{
+								sscanf(cReadText, "%s %s %d", &cDie, &cDie, &n_BoolValue);
+								pParam->m_bSpeedRandom = n_BoolValue ? true : false;
+							}
+							if (strcmp(cHeadText, "GRAVITY") == 0)
+							{
+								sscanf(cReadText, "%s %s %d", &cDie, &cDie, &n_BoolValue);
+								pParam->m_bGravity = n_BoolValue ? true : false;
+							}
+							if (strcmp(cHeadText, "SHAPE") == 0)
+							{
+								sscanf(cReadText, "%s %s %d", &cDie, &cDie, &pParam->m_shape);
+							}
+							if (strcmp(cHeadText, "TEXTURE") == 0)
+							{
+								sscanf(cReadText, "%s %s %d", &cDie, &cDie, &pParam->m_Textype);
+							}
 							if (strcmp(cHeadText, "LIFE") == 0)
 							{
 								sscanf(cReadText, "%s %s %d", &cDie, &cDie, &pParam->m_nLife);
-							}
-							if (strcmp(cHeadText, "RADIUS") == 0)
-							{
-								sscanf(cReadText, "%s %s %f", &cDie, &cDie, &pParam->m_fRadius);
-							}
-							if (strcmp(cHeadText, "COLOR") == 0)
-							{
-								sscanf(cReadText, "%s %s %f %f %f %f", &cDie, &cDie,
-										&pParam->m_col.r, &pParam->m_col.g, &pParam->m_col.b, &pParam->m_col.a);
 							}
 							if (strcmp(cHeadText, "NUMBER") == 0)
 							{
 								sscanf(cReadText, "%s %s %d", &cDie, &cDie, &pParam->m_nNumber);
 							}
+							if (strcmp(cHeadText, "RADIUS") == 0)
+							{
+								sscanf(cReadText, "%s %s %f", &cDie, &cDie, &pParam->m_fRadius);
+							}
 							if (strcmp(cHeadText, "SPEED") == 0)
 							{
 								sscanf(cReadText, "%s %s %f", &cDie, &cDie, &pParam->m_fSpeed);
+							}
+							if (strcmp(cHeadText, "RANGE") == 0)
+							{
+								sscanf(cReadText, "%s %s %f", &cDie, &cDie, &pParam->m_fRange);
 							}
 							if (strcmp(cHeadText, "RADIUSDAMPING") == 0)
 							{
@@ -402,9 +420,19 @@ HRESULT CParticleParam::LoadParticleDefaultParam()
 							{
 								sscanf(cReadText, "%s %s %f", &cDie, &cDie, &pParam->m_fAlphaDamping);
 							}
-							if (strcmp(cHeadText, "TEXTURE") == 0)
+							if (strcmp(cHeadText, "GRAVITYPOWER") == 0)
 							{
-								sscanf(cReadText, "%s %s %d", &cDie, &cDie, &pParam->m_Textype);
+								sscanf(cReadText, "%s %s %f", &cDie, &cDie, &pParam->m_fGravityPower);
+							}
+							if (strcmp(cHeadText, "COLOR") == 0)
+							{
+								sscanf(cReadText, "%s %s %f %f %f %f", &cDie, &cDie,
+										&pParam->m_col.r, &pParam->m_col.g, &pParam->m_col.b, &pParam->m_col.a);
+							}
+							if (strcmp(cHeadText, "ROT") == 0)
+							{
+								sscanf(cReadText, "%s %s %f %f %f", &cDie, &cDie,
+									&pParam->m_rot.x, &pParam->m_rot.y, &pParam->m_rot.z);
 							}
 							if (strcmp(cHeadText, "END_PARAMSET") == 0)
 							{
@@ -476,8 +504,33 @@ HRESULT CParticleParam::SaveParticleDefaultParam(CParticleParam *pSaveParam)
 		//改行
 		fputs(NEWLINE, pFile);
 
+		//速度がランダムかどうか
+		sprintf(cWriteText, "		%s %s %d			%s", "SPEEDRANDOM", &EQUAL, pSaveParam->m_bSpeedRandom, "//速度がランダムかどうか");
+		fputs(cWriteText, pFile);
+		fputs(NEWLINE, pFile);
+
+		//重力つけるか
+		sprintf(cWriteText, "		%s %s %d				%s", "GRAVITY", &EQUAL, pSaveParam->m_bGravity, "//重力をつけるか");
+		fputs(cWriteText, pFile);
+		fputs(NEWLINE, pFile);
+
+		//パーティクルの出し方
+		sprintf(cWriteText, "		%s %s %d				%s", "SHAPE", &EQUAL, pSaveParam->m_shape, "//パーティクルの出し方");
+		fputs(cWriteText, pFile);
+		fputs(NEWLINE, pFile);
+
+		//テクスチャ
+		sprintf(cWriteText, "		%s %s %d				%s", "TEXTURE", &EQUAL, pSaveParam->m_Textype, "//テクスチャ");
+		fputs(cWriteText, pFile);
+		fputs(NEWLINE, pFile);
+
 		//ライフ
 		sprintf(cWriteText, "		%s %s %d				%s", "LIFE", &EQUAL, pSaveParam->m_nLife, "//ライフ");
+		fputs(cWriteText, pFile);
+		fputs(NEWLINE, pFile);
+
+		//個数
+		sprintf(cWriteText, "		%s %s %d				%s", "NUMBER", &EQUAL, pSaveParam->m_nNumber, "//個数");
 		fputs(cWriteText, pFile);
 		fputs(NEWLINE, pFile);
 
@@ -486,24 +539,18 @@ HRESULT CParticleParam::SaveParticleDefaultParam(CParticleParam *pSaveParam)
 		fputs(cWriteText, pFile);
 		fputs(NEWLINE, pFile);
 
-		//色
-		sprintf(cWriteText, "		%s %s %.1f %.1f %.1f %.1f	%s", "COLOR", &EQUAL,
-				pSaveParam->m_col.r, pSaveParam->m_col.g, pSaveParam->m_col.b, pSaveParam->m_col.a, "//色");
-		fputs(cWriteText, pFile);
-		fputs(NEWLINE, pFile);
-
-		//半径
-		sprintf(cWriteText, "		%s %s %d				%s", "NUMBER", &EQUAL, pSaveParam->m_nNumber, "//個数");
-		fputs(cWriteText, pFile);
-		fputs(NEWLINE, pFile);
-
 		//速度
-		sprintf(cWriteText, "		%s %s %.1f				%s", "SPEED", &EQUAL, pSaveParam->m_fSpeed, "//速度");
+		sprintf(cWriteText, "		%s %s %.1f			%s", "SPEED", &EQUAL, pSaveParam->m_fSpeed, "//速度");
+		fputs(cWriteText, pFile);
+		fputs(NEWLINE, pFile);
+
+		//範囲
+		sprintf(cWriteText, "		%s %s %.1f				%s", "RANGE", &EQUAL, pSaveParam->m_fRange, "//範囲");
 		fputs(cWriteText, pFile);
 		fputs(NEWLINE, pFile);
 
 		//半径の減衰値
-		sprintf(cWriteText, "		%s %s %.2f		%s", "RADIUSDAMPING", &EQUAL, pSaveParam->m_fRadiusDamping, "//半径の減衰値");
+		sprintf(cWriteText, "		%s %s %.2f	%s", "RADIUSDAMPING", &EQUAL, pSaveParam->m_fRadiusDamping, "//半径の減衰値");
 		fputs(cWriteText, pFile);
 		fputs(NEWLINE, pFile);
 
@@ -512,8 +559,20 @@ HRESULT CParticleParam::SaveParticleDefaultParam(CParticleParam *pSaveParam)
 		fputs(cWriteText, pFile);
 		fputs(NEWLINE, pFile);
 
-		//速度
-		sprintf(cWriteText, "		%s %s %d				%s", "TEXTURE", &EQUAL, pSaveParam->m_Textype, "//テクスチャ");
+		//重力の強さ
+		sprintf(cWriteText, "		%s %s %.2f		%s", "GRAVITYPOWER", &EQUAL, pSaveParam->m_fGravityPower, "//重力の強さ");
+		fputs(cWriteText, pFile);
+		fputs(NEWLINE, pFile);
+
+		//色
+		sprintf(cWriteText, "		%s %s %.1f %.1f %.1f %.1f	%s", "COLOR", &EQUAL,
+			pSaveParam->m_col.r, pSaveParam->m_col.g, pSaveParam->m_col.b, pSaveParam->m_col.a, "//色");
+		fputs(cWriteText, pFile);
+		fputs(NEWLINE, pFile);
+
+		//回転量
+		sprintf(cWriteText, "		%s %s %.2f %.2f %.2f 	%s", "ROT", &EQUAL,
+				pSaveParam->m_rot.x, pSaveParam->m_rot.y, pSaveParam->m_rot.z, "//回転量");
 		fputs(cWriteText, pFile);
 		fputs(NEWLINE, pFile);
 
@@ -615,7 +674,7 @@ void CParticle::SetParticle(D3DXVECTOR3 &pos, CParticleParam *pParam)
 	//変数宣言
 	float fAngleX, fAngleY;
 	D3DXVECTOR3 move;
-	float fLength;
+	float fSpeed;
 
 	//生成する個数分
 	for (int nCnt = 0; nCnt < pParam->GetNumber(); nCnt++)
@@ -628,8 +687,8 @@ void CParticle::SetParticle(D3DXVECTOR3 &pos, CParticleParam *pParam)
 		else
 		{
 			pParam->GetSpeedRandom() ?
-				fLength = pParam->GetSpeed() :
-				fLength = pParam->GetSpeed();
+				fSpeed = float(rand() % 1000 / 1000.0f) * pParam->GetSpeed() :
+				fSpeed = pParam->GetSpeed();
 
 			//パーティクルの飛ぶ距離をランダム生成
 			switch (pParam->GetShape())
@@ -641,21 +700,41 @@ void CParticle::SetParticle(D3DXVECTOR3 &pos, CParticleParam *pParam)
 				fAngleY = CHossoLibrary::Random_PI();
 
 				//移動の方向を設定
-				move = D3DXVECTOR3(sinf(fAngleY) * sinf(fAngleX) * fLength,
-					sinf(fAngleY) * cosf(fAngleX) * fLength,
-					cosf(fAngleY) * cosf(fAngleX) * fLength);
-				break;
-			case CParticleParam::SHAPE_CONE:
-
-
+				move = D3DXVECTOR3(sinf(fAngleY) * sinf(fAngleX) * fSpeed,
+									sinf(fAngleY) * cosf(fAngleX) * fSpeed,
+									cosf(fAngleY) * cosf(fAngleX) * fSpeed);
 				break;
 			case CParticleParam::SHAPE_CIRCLE_XY:
+				//360度ランダム 3.14 - 3.14
+				fAngleX = CHossoLibrary::Random_PI();
+				fAngleY = CHossoLibrary::Random_PI();
+
 				//移動の方向を設定
-				move = D3DXVECTOR3(sinf(fAngleY) * sinf(fAngleX) * fLength,
-					sinf(fAngleY) * cosf(fAngleX) * fLength,
-					cosf(fAngleY) * cosf(fAngleX) * fLength);
+				move = D3DXVECTOR3(sinf(fAngleX) *  fSpeed,
+									cosf(fAngleX) * fSpeed,
+									0.0f);
+				break;
+
+			case CParticleParam::SHAPE_CONE:
+				//移動の方向を設定
+				//視点の目的地の計算
+				fAngleX = pParam->GetRot().x + CHossoLibrary::Random(pParam->GetRange());
+				fAngleY = pParam->GetRot().y + CHossoLibrary::Random(pParam->GetRange());
+
+				move = D3DXVECTOR3(-sinf(fAngleY) * cosf(fAngleX) * fSpeed,
+									sinf(fAngleX) * fSpeed,
+									-cosf(fAngleY) * cosf(fAngleX) * fSpeed);
+
+
 				break;
 			case CParticleParam::SHAPE_LINE:
+				//移動の方向を設定
+				//視点の目的地の計算
+				fAngleX = pParam->GetRot().x;
+				fAngleY = pParam->GetRot().y;
+				move = D3DXVECTOR3(-sinf(fAngleY) * cosf(fAngleX) * fSpeed,
+									sinf(fAngleX) * fSpeed,
+									-cosf(fAngleY) * cosf(fAngleX) * fSpeed);
 
 				break;
 			default:
@@ -752,6 +831,9 @@ void * CParticleParam::operator=(const CParticleParam * pParam)
 	m_ParticleType			= pParam->m_ParticleType;
 	m_shape					= pParam->m_shape;
 	m_bGravity				= pParam->m_bGravity;
-	m_nGravityPower			= pParam->m_nGravityPower;
+	m_fGravityPower			= pParam->m_fGravityPower;
+	m_bSpeedRandom			= pParam->m_bSpeedRandom;
+	m_rot					= pParam->m_rot;
+	m_fRange				= pParam->m_fRange;
 	return this;
 }
