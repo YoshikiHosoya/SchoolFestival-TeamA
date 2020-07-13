@@ -10,6 +10,7 @@
 #include "TexAnimation3D_Collision.h"
 #include "item.h"
 #include "UIManager.h"
+#include "Scene.h"
 
 #define _CRT_SECURE_NO_WARNINGS // 警告除去
 int			CGame::m_Counter	= 0;
@@ -68,6 +69,7 @@ void CGame::Update(void)
 		m_pPlayer = nullptr;
 	}
 
+
 #ifdef _DEBUG
 	//キーボード情報取得
 	CKeyboard *key = CManager::GetInputKeyboard();
@@ -113,10 +115,4 @@ void CGame::ShowDebugInfo(void)
 
 	// マップの更新
 	m_pMap->MapUpdate();
-
-	if (key->GetKeyboardTrigger(DIK_L))
-	{
-
-		CItem::Create(D3DXVECTOR3(150.0f, 80.0f, 00.0f), CItem::ITEMTYPE_SHOTGUN);
-	}
 }

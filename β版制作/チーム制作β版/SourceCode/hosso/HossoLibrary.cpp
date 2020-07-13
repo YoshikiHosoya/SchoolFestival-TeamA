@@ -217,5 +217,26 @@ bool CHossoLibrary::RangeLimit_Equal_Float(float & nValue, float nMin, float nMa
 //------------------------------------------------------------------------------
 float CHossoLibrary::Random_PI()
 {
-	return float(rand() % 314 / 100.0f) - float(rand() % 314) / 100.0f;
+	return Random(3.14f);
+}
+//------------------------------------------------------------------------------
+//“ü—Í‚³‚ê‚½’l‚Ì+-ƒ‰ƒ“ƒ_ƒ€‚È’l‚Å•Ô‚·
+//------------------------------------------------------------------------------
+float CHossoLibrary::Random(float fInputValue)
+{
+	//0œZ–h~
+	if (fInputValue <= 0.0f)
+	{
+		return 0.0f;
+	}
+
+	int nValue = int(fInputValue * 100);
+
+	float fValue;
+
+	rand() % 2 ?
+		fValue = float(rand() % nValue / 100.0f) :
+		fValue = -float(rand() % nValue / 100.0f);
+
+	return fValue;
 }

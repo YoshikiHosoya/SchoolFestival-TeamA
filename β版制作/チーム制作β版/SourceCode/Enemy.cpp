@@ -25,16 +25,8 @@ CEnemy::CEnemy(OBJ_TYPE type) :CCharacter(type)
 
 CEnemy::~CEnemy()
 {
-	if (m_pAI != nullptr)
-	{
-		delete m_pAI;
-		m_pAI = nullptr;
-	}
-	if (m_pGun != nullptr)
-	{
-		delete m_pGun;
-		m_pGun = nullptr;
-	}
+
+
 }
 //====================================================================
 //初期化
@@ -66,6 +58,21 @@ HRESULT CEnemy::Init(void)
 //====================================================================
 void CEnemy::Uninit(void)
 {
+	// 銃の解放
+	if (m_pGun != nullptr)
+	{
+		// 銃の削除
+		m_pGun->Rerease();
+		m_pGun = nullptr;
+	}
+	if (m_pAI != nullptr)
+	{
+		delete m_pAI;
+		m_pAI = nullptr;
+	}
+	//アイテムを生成
+	CItem::DropCreate(this->GetPosition());
+
 	CCharacter::Uninit();
 }
 //====================================================================
@@ -93,8 +100,6 @@ void CEnemy::Update(void)
 	//体力が0以下になった時
 	if (this->GetLife() <= 0)
 	{
-		//アイテムを生成
-		CItem::DropCreate(this->GetPosition());
 	}
 	else
 	{
