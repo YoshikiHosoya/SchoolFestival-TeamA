@@ -132,7 +132,8 @@ void CPlayerUI::Uninit(void)
 		if (m_apScene2D[nCnt])
 		{
 			// 終了
-			m_apScene2D[nCnt]->Uninit();
+			m_apScene2D[nCnt]->Rerease();
+			m_apScene2D[nCnt] = nullptr;
 
 			// デリートフラグを有効にする
 			SetDeleteFlag(true);
