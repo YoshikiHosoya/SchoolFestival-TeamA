@@ -14,6 +14,7 @@
 #include "3Dline.h"
 #include "manager.h"
 #include "renderer.h"
+
 #ifdef _DEBUG
 #include "debugproc.h"
 #endif // _DEBUG
@@ -33,7 +34,7 @@
 // ----------------------------------------
 // コンストラクタ処理
 // ----------------------------------------
-C3DLine::C3DLine(OBJ_TYPE type) : CScene(type)
+C3DLine::C3DLine(OBJ_TYPE type) : CSceneBase(type)
 {
 }
 
@@ -49,39 +50,8 @@ C3DLine::~C3DLine()
 // ----------------------------------------
 HRESULT C3DLine::Init(void)
 {
-	// 変数宣言
-	VERTEX_3D *pVtx;	// 頂点情報へのポイント
-	LPDIRECT3DDEVICE9 pDevice =		// デバイスの取得
-		CManager::GetRenderer()->GetDevice();
-
-	// 頂点バッファの生成
-	pDevice->CreateVertexBuffer(
-		sizeof(VERTEX_3D) * 4,
-		D3DUSAGE_WRITEONLY,
-		FVF_VERTEX_3D,
-		D3DPOOL_MANAGED,
-		&m_pVtxBuff,
-		nullptr);
-
-	// 頂点データの範囲をロックし、頂点バッファへのポインタ
-	m_pVtxBuff->Lock(
-		0,
-		0,
-		(void **)&pVtx,
-		0);
-
-	pVtx[0].pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	pVtx[1].pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-
-	pVtx[0].nor = D3DXVECTOR3(0.0f,1.0f,0.0f);
-	pVtx[1].nor = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
-
-	pVtx[0].col = D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f);
-	pVtx[1].col = D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f);
-
-	pVtx[0].tex = D3DXVECTOR2(0.0f, 0.0f);
-	pVtx[1].tex = D3DXVECTOR2(1.0f, 1.0f);
-	m_pVtxBuff->Unlock();
+	// 頂点の生成
+	MakeVertex();
 
 	return S_OK;
 }
@@ -91,12 +61,6 @@ HRESULT C3DLine::Init(void)
 // ----------------------------------------
 void C3DLine::Uninit(void)
 {
-	// 頂点バッファの開放
-	if (m_pVtxBuff != nullptr)
-	{
-		m_pVtxBuff->Release();
-		m_pVtxBuff = nullptr;
-	}
 }
 
 // ----------------------------------------
@@ -104,10 +68,6 @@ void C3DLine::Uninit(void)
 // ----------------------------------------
 void C3DLine::Update(void)
 {
-#ifdef _DEBUG
-	//CDebugproc::Print("pos:(%.3f,%.3f,%.3f)\n", m_pos.x, m_pos.y, m_pos.z);
-#endif // _DEBUG
-
 }
 
 // ----------------------------------------
@@ -116,41 +76,39 @@ void C3DLine::Update(void)
 void C3DLine::Draw(void)
 {
 	// 変数宣言
-	LPDIRECT3DDEVICE9 pDevice =		// デバイスの取得
-		CManager::GetRenderer()->GetDevice();
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
 
 	// 回転・位置の計算用変数
 	D3DXMATRIX mtxRot, mtxTrans;
 
 	// ワールドマトリックスの初期化(単位行列にするため)
-	D3DXMatrixIdentity(&m_mtxWorld);
+	D3DXMatrixIdentity(GetMtxWorld());
 
 	// 回転を反映 //
-	// ヨーピッチロールによる回転行列作成(y,x,z)
-	D3DXMatrixRotationYawPitchRoll(&mtxRot,					// 総合の入れ物
-		m_rot.y, m_rot.x, m_rot.z);	// それぞれの回転量
+	// 回転行列作成(y,x,z)
+	D3DXMatrixRotationYawPitchRoll(&mtxRot,
+		m_rot.y, m_rot.x, m_rot.z);
 
-									// 行列の積(1:ワールド行列 = 2:ワールド行列 * 3:回転行列)
-	D3DXMatrixMultiply(&m_mtxWorld,	// 1
-		&m_mtxWorld,					// 2
-		&mtxRot);							// 3
-
+	// 行列の積
+	D3DXMatrixMultiply(GetMtxWorld(),
+		GetMtxWorld(),
+		&mtxRot);
 
 	// 位置を反映 //
-	// 平行移動行列作成(オフセット)
-	D3DXMatrixTranslation(&mtxTrans,						// 総合の入れ物
-		m_pos.x, m_pos.y, m_pos.z);	// それぞれの移動量
+	// 平行移動行列作成
+	D3DXMatrixTranslation(&mtxTrans,
+		m_pos.x, m_pos.y, m_pos.z);
 
-									// 行列の積(1:ワールド行列 = 2:ワールド行列 * 3:移動行列)
-	D3DXMatrixMultiply(&m_mtxWorld,	// 1
-		&m_mtxWorld,					// 2
-		&mtxTrans);							// 3
+	// 行列の積
+	D3DXMatrixMultiply(GetMtxWorld(),
+		GetMtxWorld(),
+		&mtxTrans);
 
-											// ワールドマトリックスの設定
-	pDevice->SetTransform(D3DTS_WORLD, &m_mtxWorld);
+	// ワールドマトリックスの設定
+	pDevice->SetTransform(D3DTS_WORLD, GetMtxWorld());
 
 	// 頂点バッファをデータストリームに設定
-	pDevice->SetStreamSource(0, m_pVtxBuff, 0, sizeof(VERTEX_3D));
+	pDevice->SetStreamSource(0, GetVtxBuff(), 0, sizeof(VERTEX_3D));
 
 	// 頂点フォーマットの設定
 	pDevice->SetFVF(FVF_VERTEX_3D);
@@ -161,12 +119,15 @@ void C3DLine::Draw(void)
 		0,
 		2
 	);
-
 }
 // ----------------------------------------
 // デバッグ
 // ----------------------------------------
 void C3DLine::DebugInfo(void)
+{
+}
+
+void C3DLine::SetAnimation(D3DXVECTOR2 UV, D3DXVECTOR2 UVsize)
 {
 }
 
@@ -179,10 +140,10 @@ void C3DLine::SetPos(
 )
 {
 	// 変数宣言
-	VERTEX_3D *pVtx;	// 頂点情報へのポイント
+	VERTEX_3D *pVtx;
 
-	// 頂点データの範囲をロックし、頂点バッファへのポインタ
-	m_pVtxBuff->Lock(
+	// 頂点データの範囲をロック
+	GetVtxBuff()->Lock(
 		0,
 		0,
 		(void **)&pVtx,
@@ -190,7 +151,7 @@ void C3DLine::SetPos(
 
 	pVtx[0].pos = pos1;
 	pVtx[1].pos = pos2;
-	m_pVtxBuff->Unlock();
+	GetVtxBuff()->Unlock();
 }
 
 // ----------------------------------------
@@ -207,10 +168,10 @@ void C3DLine::SetPosColi(D3DXVECTOR3 & pos1)
 void C3DLine::SetCol(D3DXCOLOR & col)
 {
 	// 変数宣言
-	VERTEX_3D *pVtx;	// 頂点情報へのポイント
+	VERTEX_3D *pVtx;
 
-						// 頂点データの範囲をロックし、頂点バッファへのポインタ
-	m_pVtxBuff->Lock(
+	// 頂点データの範囲をロック
+	GetVtxBuff()->Lock(
 		0,
 		0,
 		(void **)&pVtx,
@@ -218,7 +179,7 @@ void C3DLine::SetCol(D3DXCOLOR & col)
 
 	pVtx[0].col = col;
 	pVtx[1].col = col;
-	m_pVtxBuff->Unlock();
+	GetVtxBuff()->Unlock();
 }
 
 // ----------------------------------------
@@ -234,7 +195,7 @@ C3DLine * C3DLine::Create(
 {
 	// 変数宣言
 	C3DLine * p3DLine;
-	// メモリの生成(初め->基本クラス,後->派生クラス)
+	// メモリの生成
 	p3DLine = new C3DLine(OBJTYPE_DEBUG3DLINE);
 	p3DLine->m_pos = pos;
 	p3DLine->m_rot = rot;
@@ -248,4 +209,39 @@ C3DLine * C3DLine::Create(
 	p3DLine->SetCol(col);
 	// 生成したオブジェクトを返す
 	return p3DLine;
+}
+//==========================================================
+// コンストラクタ
+//==========================================================
+void C3DLine::MakeVertex(void)
+{
+	LPDIRECT3DVERTEXBUFFER9 pVtxBuff;
+
+	CRenderer*pRenderer = CManager::GetRenderer();
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
+	pDevice->CreateVertexBuffer(
+		sizeof(VERTEX_3D) * 4,
+		D3DUSAGE_WRITEONLY,
+		FVF_VERTEX_3D,
+		D3DPOOL_MANAGED,
+		&pVtxBuff,
+		NULL);
+	//頂点情報へのポインタ
+	VERTEX_3D *pVtx;
+	//頂点データの範囲をロックし、頂点バッファへのポインタを取得
+	pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+	// 頂点情報の
+	pVtx[0].pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	pVtx[1].pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+
+	pVtx[0].nor = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
+	pVtx[1].nor = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
+
+	pVtx[0].col = D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f);
+	pVtx[1].col = D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f);
+
+	//頂点データをアンロック
+	pVtxBuff->Unlock();
+
+	CSceneBase::BindVtxBuff(pVtxBuff);
 }

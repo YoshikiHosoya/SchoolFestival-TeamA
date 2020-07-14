@@ -66,10 +66,9 @@ public:
 							m_pos = m_ObstacleParam[type].pos;};									// 障害物の情報設定
 	int						GetLife() { return m_nLife; };											// 体力の取得
 	void					SetLife(int nLife) { m_nLife = nLife; };								// 体力の設定
-	void					SetCollisionSize(D3DXVECTOR3 Size) { m_CollisionSize = Size; };			// 大きさの設定
+	void					SetCollisionSize(D3DXVECTOR3 Size);										// 大きさの設定
 
 	void					Hit(OBSTACLE_TYPE type, int nDamage);									// 障害物が壊されるときの処理
-	void					Size(OBSTACLE_TYPE Type);												// 種類別に当たり判定の大きさを設定
 
 private:
 	/* メンバ関数*/
@@ -81,6 +80,5 @@ private:
 	OBSTACLE_TYPE			m_ObstacleType;															// 障害物の種類
 	D3DXVECTOR3				m_pos;																	// 座標
 	int						m_nLife;																// 体力
-	D3DXVECTOR3				m_CollisionSize;														// 大きさ // 当たり判定に使うサイズ
 };
 #endif

@@ -12,7 +12,8 @@
 // インクルードファイル
 //
 // ----------------------------------------
-#include "scene.h"
+#include "main.h"
+#include "SceneBase.h"
 
 // ----------------------------------------
 //
@@ -31,7 +32,7 @@
 // クラス
 //
 // ------------------------------------------
-class C3DLine : public CScene
+class C3DLine : public CSceneBase
 {
 public:
 	/* メンバ関数 */
@@ -42,6 +43,7 @@ public:
 	virtual void Update(void);
 	virtual void Draw(void);
 	virtual void DebugInfo(void);
+	void SetAnimation(D3DXVECTOR2 UV, D3DXVECTOR2 UVsize);
 	virtual void SetPos(						// 位置設定
 		D3DXVECTOR3 &pos1,
 		D3DXVECTOR3 &pos2
@@ -66,9 +68,10 @@ public:
 protected:
 
 private:
+	/* メンバ関数 */
+	void MakeVertex(void);
+
 	/* メンバ変数 */
-	LPDIRECT3DVERTEXBUFFER9		m_pVtxBuff;		// 頂点バッファへのポインタ
-	D3DXMATRIX					m_mtxWorld;		// ワールドマトリックス
 	D3DXVECTOR3					m_pos;			// 位置
 	D3DXVECTOR3					m_rot;			// 回転
 	D3DXCOLOR					m_col;			// 色
