@@ -289,6 +289,12 @@ void CPlayerUI::SetLifeUI(int nLife)
 	}
 	else
 	{
+		// テクスチャの分割数
+		D3DXVECTOR2 UVsize = D3DXVECTOR2(CTexture::GetSparateTex_UVSize(CTexture::SEPARATE_TEX_UI_LIFE).x * 1, CTexture::GetSparateTex_UVSize(CTexture::SEPARATE_TEX_UI_LIFE).y);
+		// アニメーションの設定
+		m_apScene2D[LIFE_ICON]->SetAnimation(CTexture::GetSparateTex_UVCnt(CTexture::SEPARATE_TEX_UI_LIFE), UVsize);
+		// サイズの設定
+		m_apScene2D[LIFE_ICON]->SetSize(D3DXVECTOR3(20.0f * 1, 20.0f, 0.0f));
 		// 体力の残数の表示
 		m_pLife->SetDisp(true);
 		// 体力の残数の設定

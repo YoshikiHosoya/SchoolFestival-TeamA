@@ -141,8 +141,12 @@ void CPrisoner::PrisonerState()
 		// アイテムを落とすモーション
 		//
 		CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
-		// 体力の加算
-		pPlayer->SetLife(pPlayer->GetLife() + 1);
+		// NULLチェック
+		if (pPlayer)
+		{
+			// 体力の加算
+			pPlayer->SetLife(pPlayer->GetLife() + 1);
+		}
 		// アイテムの生成
 		CItem::DropCreate(GetPosition());
 		// 捕虜の状態の変更
