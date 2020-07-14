@@ -59,8 +59,8 @@ public:
 	void				SetDrawFlag(bool bflag)		{ m_bDraw = bflag; };				// 描画フラグの設定
 	void				SetTag(TAG type)			{ m_Tag = type; };					// タグの設定
 	void				SetShotOffsetPos(D3DXVECTOR3 ShotOffsetPos)	{ m_ShotOffsetPos = ShotOffsetPos; };	// 発射位置のオフセットの設定
-	void				SetShotRot(D3DXVECTOR3 ShotRot)			{ m_ShotRot = ShotRot; };					// 撃つときの回転の向きの設定
-
+	void				SetShotRot(D3DXVECTOR3 ShotRot)				{ m_ShotRot = ShotRot; };				// 撃つときの回転の向きの設定
+	void				SetMtxWorld(D3DXMATRIX *mtx) { m_mtx = mtx; };
 	void				Shot();					// 銃の発射
 
 private:

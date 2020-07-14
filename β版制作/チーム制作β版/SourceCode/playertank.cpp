@@ -73,7 +73,6 @@ HRESULT CPlayertank::Init(void)
 	m_pGun->SetGunType(CGun::GUNTYPE_TANKTURRET);
 	// 発射位置のオフセットの設定
 	m_pGun->SetShotOffsetPos(D3DXVECTOR3(SHOT_BULLET_POS_X, SHOT_BULLET_POS_Y, SHOT_BULLET_POS_Z));
-
 	// 当たり判定生成
 	GetCollision()->SetPos(&GetPosition());
 	GetCollision()->SetPosOld(&GetPositionOld());

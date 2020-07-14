@@ -236,13 +236,13 @@ void CGun::Shot()
 		case CGun::GUNTYPE_FLAMESHOT:
 			// フレイムショットの生成
 			pBullet = CFlameshot::Create(m_ShotRot);
-			m_bMultiple = true;		// フラグをオン
+			m_bMultiple = true;		// 複数発撃つフラグをオン
 			break;
 
 		case CGun::GUNTYPE_TANKTURRET:
 			// 戦車砲台の生成
 			pBullet = CTankTurret::Create(m_ShotRot);
-			m_bMultiple = true;		// フラグをオン
+			m_bMultiple = true;		// 複数発撃つフラグをオン
 			break;
 		}
 		if (pBullet)
