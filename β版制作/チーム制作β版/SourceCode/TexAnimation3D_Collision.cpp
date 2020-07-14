@@ -50,6 +50,8 @@ CTexAnimation3D_Collision::~CTexAnimation3D_Collision()
 //------------------------------------------------------------------------------
 HRESULT CTexAnimation3D_Collision::Init()
 {
+	m_CollisionPosOrigin = ZeroVector3;
+
 	//初期化処理
 	if (FAILED(CTexAnimation3D::Init()))
 	{
@@ -108,7 +110,7 @@ void CTexAnimation3D_Collision::Create(D3DXVECTOR3 pos, D3DXVECTOR3 size, D3DXVE
 
 		//情報をいれる　Scene側
 		pTexAnimation->SetPosition(pos);
-		pTexAnimation->SetSize(size);
+		pTexAnimation->SetSizeOfEdgeOrigin(size);
 		pTexAnimation->SetRot(rot);
 		pTexAnimation->BindTexture(CTexture::GetSeparateTexture(type));
 		pTexAnimation->SetAnimation(ZeroVector2, CTexture::GetSparateTex_UVSize(type));
@@ -118,10 +120,59 @@ void CTexAnimation3D_Collision::Create(D3DXVECTOR3 pos, D3DXVECTOR3 size, D3DXVE
 		pTexAnimation->SetTex(type);
 		pTexAnimation->SetCntSwitch(nCntSwitch);
 
+		//マトリックス計算
+		CHossoLibrary::CalcMatrix(pTexAnimation->GetMtxWorld(), ZeroVector3, rot);
+
+
+		D3DXVECTOR3 VtxPos[4] = {};
+		D3DXVECTOR3 LocalPosOrigin = ZeroVector3;
+
+		//頂点座標算出
+		D3DXVec3TransformCoord(&VtxPos[0], &D3DXVECTOR3(-size.x, +size.y * 2.0f	, 0.0f), pTexAnimation->GetMtxWorld());
+		D3DXVec3TransformCoord(&VtxPos[1], &D3DXVECTOR3(+size.x, +size.y * 2.0f	, 0.0f), pTexAnimation->GetMtxWorld());
+		D3DXVec3TransformCoord(&VtxPos[2], &D3DXVECTOR3(-size.x, 0.0f			, 0.0f), pTexAnimation->GetMtxWorld());
+		D3DXVec3TransformCoord(&VtxPos[3], &D3DXVECTOR3(+size.x, 0.0f			, 0.0f), pTexAnimation->GetMtxWorld());
+
+
+		D3DXVec3TransformCoord(&LocalPosOrigin, &D3DXVECTOR3(0.0f, size.y, 0.0f), pTexAnimation->GetMtxWorld());
+		D3DXVECTOR3 Max = D3DXVECTOR3(-1000.0f, -1000.0f, -0.0f);
+		D3DXVECTOR3 Min = D3DXVECTOR3(1000.0f, 1000.0f, 0.0f);
+		CHossoLibrary::RangeLimit_Equal_Float;
+
+
+		for (int nCnt = 0; nCnt < 4; nCnt++)
+		{
+			//頂点情報を取得
+			D3DXVECTOR3 vtx = VtxPos[nCnt];
+			//最大の頂点座標と最少の頂点座標を比較して出す
+			if (Min.x > vtx.x)
+			{
+				Min.x = vtx.x;
+			}
+			if (Max.x < vtx.x)
+			{
+				Max.x = vtx.x;
+			}
+			if (Min.y > vtx.y)
+			{
+				Min.y = vtx.y;
+			}
+			if (Max.y < vtx.y)
+			{
+				Max.y = vtx.y;
+			}
+		}
+
+
+
+		//マトリックス計算
+		CHossoLibrary::CalcMatrix(pTexAnimation->GetMtxWorld(), pos, rot);
+		D3DXVec3TransformCoord(&pTexAnimation->m_CollisionPosOrigin, &D3DXVECTOR3(0.0f,size.y * 0.5f,0.0f), pTexAnimation->GetMtxWorld());
+
 		//当たり判定の設定
 		pTexAnimation->m_pCollision = CCollision::Create();
-		pTexAnimation->m_pCollision->SetPos(pTexAnimation->GetPosPtr());
-		pTexAnimation->m_pCollision->SetSize(size);
+		pTexAnimation->m_pCollision->SetPos(&pTexAnimation->m_CollisionPosOrigin);
+		pTexAnimation->m_pCollision->SetSize(D3DXVECTOR3(fabsf(LocalPosOrigin.x - Max.x), fabsf(LocalPosOrigin.y - Max.y), 0.0f));
 		pTexAnimation->m_pCollision->DeCollisionCreate(CCollision::COLLISIONTYPE_NORMAL);
 	}
 }

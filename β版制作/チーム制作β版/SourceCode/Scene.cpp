@@ -227,7 +227,7 @@ CScene::OBJ_TYPE CScene::GetObjType(void)
 //==========================================================
 void CScene::Rerease(void)
 {
-	m_bflag = true;
+ 	m_bflag = true;
 }
 
 //==========================================================

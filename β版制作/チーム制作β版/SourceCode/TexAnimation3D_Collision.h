@@ -34,6 +34,7 @@ public:
 private:
 	CCollision *m_pCollision;	//コリジョンのポインタ
 	bool m_bPlayer;
+	D3DXVECTOR3 m_CollisionPosOrigin = ZeroVector3;			//当たり判定用の座標
 
 	bool Collision();
 };

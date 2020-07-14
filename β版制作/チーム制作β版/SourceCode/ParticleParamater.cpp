@@ -413,7 +413,7 @@ void CParticleCreators::LoadParticleCreators()
 	//int n_BoolValue;		//boolに変換するようの格納
 	//HRESULT hResult = S_OK;
 
-	//CParticleParam *pParam;
+	//CParticleCreators *pCreator;
 
 	////ファイル数分
 	//for (size_t nCnt = 0; nCnt < m_aFileNameList.size(); nCnt++)
@@ -443,7 +443,7 @@ void CParticleCreators::LoadParticleCreators()
 	//				if (strcmp(cHeadText, "PARAMSET") == 0)
 	//				{
 	//					//メモリ確保
-	//					pParam = new CParticleParam;
+	//					pCreator = new CParticleCreators;
 
 	//					//エンド来るまでループ
 	//					while (strcmp(cHeadText, "END_PARAMSET") != 0)
@@ -457,16 +457,16 @@ void CParticleCreators::LoadParticleCreators()
 	//						if (strcmp(cHeadText, "SPEEDRANDOM") == 0)
 	//						{
 	//							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &n_BoolValue);
-	//							pParam->m_bLoop = n_BoolValue ? true : false;
+	//							pCreator-> = n_BoolValue ? true : false;
 	//						}
 
 	//						if (strcmp(cHeadText, "SHAPE") == 0)
 	//						{
-	//							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &pParam->m_shape);
+	//							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &pCreator->m_shape);
 	//						}
 	//						if (strcmp(cHeadText, "TEXTURE") == 0)
 	//						{
-	//							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &pParam->m_Textype);
+	//							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &pCreator->m_Textype);
 	//						}
 
 	//					}

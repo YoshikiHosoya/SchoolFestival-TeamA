@@ -132,6 +132,28 @@ void CScene3D::SetSize(D3DXVECTOR3 size)
 	GetVtxBuff()->Unlock();
 }
 //==========================================================
+// 端を原点としたサイズ設定
+//==========================================================
+void CScene3D::SetSizeOfEdgeOrigin(D3DXVECTOR3 size)
+{
+	GetSize() = size;
+
+	//頂点情報へのポインタ
+	VERTEX_3D *pVtx;
+
+	//頂点データの範囲をロックし、頂点バッファへのポインタを取得
+	GetVtxBuff()->Lock(0, 0, (void**)&pVtx, 0);
+
+	// 頂点情報の
+	pVtx[0].pos = D3DXVECTOR3(-GetSize().x, +GetSize().y * 2.0f, +GetSize().z * 2.0f);
+	pVtx[1].pos = D3DXVECTOR3(+GetSize().x, +GetSize().y * 2.0f, +GetSize().z * 2.0f);
+	pVtx[2].pos = D3DXVECTOR3(-GetSize().x, 0.0f, 0.0f);
+	pVtx[3].pos = D3DXVECTOR3(+GetSize().x, 0.0f, 0.0f);
+
+	//頂点データをアンロック
+	GetVtxBuff()->Unlock();
+}
+//==========================================================
 // カラー設定
 //==========================================================
 void CScene3D::SetColor(D3DXCOLOR col)

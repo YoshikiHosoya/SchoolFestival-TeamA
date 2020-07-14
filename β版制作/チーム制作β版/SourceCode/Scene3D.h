@@ -22,6 +22,7 @@ public:
 
 	//set関数　オーバーライド
 	void SetSize(D3DXVECTOR3 size);
+	void SetSizeOfEdgeOrigin(D3DXVECTOR3 size);									//端が原点のpos ↓の中央
 	void SetColor(D3DXCOLOR col);
 	void SetBillboard(bool bBillboard)	{ m_bBillboard = bBillboard; };			// ビルボードの設定
 	bool GetBillboard()					{ return m_bBillboard; };				// ビルボードの取得
