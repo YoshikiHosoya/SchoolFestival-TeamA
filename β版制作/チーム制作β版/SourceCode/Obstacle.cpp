@@ -31,7 +31,6 @@ CObstacle::CObstacle(OBJ_TYPE type) :CModel(type)
 	// 変数初期化
 	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);				// 移動値
 	m_nLife = 0;										// 体力
-	m_CollisionSize = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 移動値
 	m_ObstacleType = TYPE_BOX;							// タイプの初期化
 }
 
@@ -59,9 +58,6 @@ HRESULT CObstacle::Init()
 
 	// 当たり判定生成
 	GetCollision()->SetPos(&GetPosition());
-
-	// 種類別に当たり判定の大きさを設定
-	Size((OBSTACLE_TYPE)GetModelCount());
 
 	GetCollision()->SetMove(nullptr);
 	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_NORMAL);
@@ -186,33 +182,6 @@ void CObstacle::Hit(OBSTACLE_TYPE type,int nDamage)
 	}
 }
 
-//====================================================================
-// 種類別に当たり判定の大きさを設定
-//====================================================================
-void CObstacle::Size(OBSTACLE_TYPE Type)
-{
-	switch (Type)
-	{
-	case CObstacle::TYPE_BOX:
-		GetCollision()->SetSize2D(m_CollisionSize);
-		break;
-	case CObstacle::TYPE_BARREL:
-		GetCollision()->SetSize2D(m_CollisionSize);
-		break;
-	case CObstacle::TYPE_TREE:
-		GetCollision()->SetSize2D(m_CollisionSize);
-		break;
-	case CObstacle::TYPE_CHEST:
-		GetCollision()->SetSize2D(m_CollisionSize);
-		break;
-	case CObstacle::TYPE_SANDBAGS:
-		GetCollision()->SetSize2D(m_CollisionSize);
-		break;
-	default:
-		break;
-	}
-}
-
 // =====================================================================================================================================================================
 // 障害物を破壊するか決める処理
 // =====================================================================================================================================================================
@@ -221,14 +190,24 @@ void CObstacle::CheckDie()
 	if (this->m_nLife <= 0)
 	{
 		// 体力が0以下なら削除する
-		Rerease();
+		this->SetDieFlag(true);
 	}
 }
 //====================================================================
-//ダメージを受けた時の処理
+// ダメージを受けた時の処理
 //====================================================================
 void CObstacle::AddDamage(int nDamage)
 {
 	this->m_nLife -= nDamage;
 	this->SetLife(m_nLife);
 }
+
+//====================================================================
+// サイズの設定
+//====================================================================
+void CObstacle::SetCollisionSize(D3DXVECTOR3 size)
+{
+	// 当たり判定の大きさを設定
+	GetCollision()->SetSize2D(size);
+};
+

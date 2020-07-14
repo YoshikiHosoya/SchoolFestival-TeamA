@@ -84,6 +84,7 @@ public:
 		MODEL_GUN_LASERGUN,				// レーザーガン
 		MODEL_GUN_ROCKETLAUNCHER,		// ロケットランチャー
 		MODEL_GUN_FLAMESHOT,			// フレイムショット
+		MODEL_GUN_TANKGUN,				// 戦車の銃
 		MODEL_KNIFE,					// ナイフ
 		MODEL_GUN_MAX
 	}GUN_MODEL;

@@ -68,17 +68,6 @@ void CGame::Update(void)
 		m_pPlayer->Rerease();
 		m_pPlayer = nullptr;
 	}
-
-
-#ifdef _DEBUG
-	//キーボード情報取得
-	CKeyboard *key = CManager::GetInputKeyboard();
-
-	if (key->GetKeyboardTrigger(DIK_RETURN) )
-		{
-			CManager::GetRenderer()->GetFade()->SetFade(CManager::MODE_RESULT);
-		}
-#endif //_DEBUG
  }
 //==========================================================
 // プレイヤー取得

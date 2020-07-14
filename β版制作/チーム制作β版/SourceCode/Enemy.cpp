@@ -70,8 +70,6 @@ void CEnemy::Uninit(void)
 		delete m_pAI;
 		m_pAI = nullptr;
 	}
-	//アイテムを生成
-	CItem::DropCreate(this->GetPosition());
 
 	CCharacter::Uninit();
 }
@@ -100,6 +98,8 @@ void CEnemy::Update(void)
 	//体力が0以下になった時
 	if (this->GetLife() <= 0)
 	{
+		//アイテムを生成
+		CItem::DropCreate(this->GetPosition());
 	}
 	else
 	{

@@ -214,9 +214,6 @@
     <ClCompile Include="SourceCode\UIManager.cpp">
       <Filter>UI</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\tankturret.cpp">
-      <Filter>Wepon</Filter>
-    </ClCompile>
     <ClCompile Include="SourceCode\title.cpp">
       <Filter>Mode</Filter>
     </ClCompile>
@@ -237,6 +234,9 @@
     </ClCompile>
     <ClCompile Include="SourceCode\ParticleParamater.cpp">
       <Filter>Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\tankgun.cpp">
+      <Filter>Wepon</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -462,9 +462,6 @@
     <ClInclude Include="SourceCode\UIManager.h">
       <Filter>UI</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\tankturret.h">
-      <Filter>Wepon</Filter>
-    </ClInclude>
     <ClInclude Include="SourceCode\title.h">
       <Filter>Mode</Filter>
     </ClInclude>
@@ -485,6 +482,9 @@
     </ClInclude>
     <ClInclude Include="SourceCode\ParticleParamater.h">
       <Filter>Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\tankgun.h">
+      <Filter>Wepon</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

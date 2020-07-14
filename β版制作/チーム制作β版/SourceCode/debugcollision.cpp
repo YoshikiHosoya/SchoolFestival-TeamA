@@ -25,17 +25,17 @@
 // ----------------------------------------
 CDebugcollision::CDebugcollision(OBJ_TYPE type) :CScene(type)
 {
-	m_pos = NULL;										// 座標ポインタの初期化
-	m_size = NULL;										// サイズポインタの初期化
+	m_pos = nullptr;										// 座標ポインタの初期化
+	m_size = nullptr;										// サイズポインタの初期化
 	m_type = COLLISIONTYPE_BOX;							// タイプの初期化
 	for (int nCnt = 0; nCnt < MAX_VERTEX3D; nCnt++)		// lineクラスのポインタ初期化
 	{
-		m_p3DLine[nCnt] = NULL;
+		m_p3DLine[nCnt] = nullptr;
 	}
 
 	for (int nCnt = 0; nCnt < MAX_VERTEX2D; nCnt++)		// lineクラスのポインタ初期化
 	{
-		m_p2DLine[nCnt] = NULL;
+		m_p2DLine[nCnt] = nullptr;
 	}
 }
 
@@ -265,11 +265,11 @@ void CDebugcollision::BoardCharaCollision(void)
 // ----------------------------------------
 void CDebugcollision::Uninit(void)
 {
-	m_pos = NULL;										// 座標ポインタの初期化
-	m_size = NULL;										// サイズポインタの初期化
+	m_pos = nullptr;										// 座標ポインタの初期化
+	m_size = nullptr;										// サイズポインタの初期化
 	for (int nCnt = 0; nCnt < MAX_VERTEX3D; nCnt++)		// lineクラスのポインタ初期化
 	{
-		m_p3DLine[nCnt] = NULL;
+		m_p3DLine[nCnt] = nullptr;
 	}
 }
 
@@ -322,8 +322,8 @@ CDebugcollision * CDebugcollision::Create(
 // ----------------------------------------
 void CDebugcollision::SetPos(D3DXVECTOR3 * pos)
 {
-	// 座標のポインタがNULLじゃなかったら通す
-	if (pos != NULL)
+	// 座標のポインタがnullptrじゃなかったら通す
+	if (pos != nullptr)
 	{
 		// 座標情報を代入
 		m_pos = pos;
@@ -334,7 +334,7 @@ void CDebugcollision::SetPos(D3DXVECTOR3 * pos)
 			// 座標のポインタをlineの座標に設定
 			for (int nCnt = 0; nCnt < MAX_VERTEX3D; nCnt++)
 			{
-				if (m_p3DLine[nCnt] != NULL)
+				if (m_p3DLine[nCnt] != nullptr)
 				{
 					m_p3DLine[nCnt]->SetPosColi(*pos);
 				}
@@ -347,7 +347,7 @@ void CDebugcollision::SetPos(D3DXVECTOR3 * pos)
 			// 座標のポインタをlineの座標に設定
 			for (int nCnt = 0; nCnt < MAX_VERTEX2D; nCnt++)
 			{
-				if (m_p2DLine[nCnt] != NULL)
+				if (m_p2DLine[nCnt] != nullptr)
 				{
 					m_p2DLine[nCnt]->SetPosColi(*pos);
 				}
@@ -360,7 +360,7 @@ void CDebugcollision::SetPos(D3DXVECTOR3 * pos)
 			// 座標のポインタをlineの座標に設定
 			for (int nCnt = 0; nCnt < MAX_VERTEX2D; nCnt++)
 			{
-				if (m_p2DLine[nCnt] != NULL)
+				if (m_p2DLine[nCnt] != nullptr)
 				{
 					m_p2DLine[nCnt]->SetPosColi(*pos);
 				}
