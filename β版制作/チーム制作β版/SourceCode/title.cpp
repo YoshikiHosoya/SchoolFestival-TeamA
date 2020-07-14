@@ -65,11 +65,8 @@ void CTitle::Uninit(void)
 //==========================================================
 void CTitle::Update(void)
 {
-	//キーボード情報取得
-	CKeyboard *key = CManager::GetInputKeyboard();
-
 	// エンターを押したとき
-	if (key->GetKeyboardTrigger(DIK_RETURN))
+	if (CHossoLibrary::PressAnyButton())
 	{
 		// ゲームモードへ状態遷移
 		CManager::GetRenderer()->GetFade()->SetFade(CManager::MODE_GAME);

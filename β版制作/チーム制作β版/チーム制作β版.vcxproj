@@ -203,6 +203,7 @@
     <ClCompile Include="SourceCode\orbit.cpp" />
     <ClCompile Include="SourceCode\particle.cpp" />
     <ClCompile Include="SourceCode\ParticleManager.cpp" />
+    <ClCompile Include="SourceCode\ParticleParamater.cpp" />
     <ClCompile Include="SourceCode\pause.cpp" />
     <ClCompile Include="SourceCode\Player.cpp" />
     <ClCompile Include="SourceCode\playertank.cpp" />
@@ -286,6 +287,7 @@
     <ClInclude Include="SourceCode\orbit.h" />
     <ClInclude Include="SourceCode\particle.h" />
     <ClInclude Include="SourceCode\ParticleManager.h" />
+    <ClInclude Include="SourceCode\ParticleParamater.h" />
     <ClInclude Include="SourceCode\pause.h" />
     <ClInclude Include="SourceCode\Player.h" />
     <ClInclude Include="SourceCode\playertank.h" />

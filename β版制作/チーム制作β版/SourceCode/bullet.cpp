@@ -148,7 +148,7 @@ void CBullet::Update(void)
 		else if (m_Tag == TAG_ENEMY)
 		{
 			// エネミーの弾の判定
-			if (GetCollision()->ForEnemyCollision(BULLET_DAMAGE_PLAYER, BULLET_PENETRATION))
+			if (GetCollision()->ForEnemyCollision(BULLET_DAMAGE_PLAYER, 10,BULLET_PENETRATION))
 			{
 				// 弾の削除
 				DeleteBullet();

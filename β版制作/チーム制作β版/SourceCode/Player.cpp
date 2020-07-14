@@ -76,6 +76,8 @@ HRESULT CPlayer::Init(void)
 	m_pPlayerUI->SetBulletAmmo(m_pGun->GetGunAmmo(), m_pGun->GetGunType());
 	// グレネードの残数表示
 	m_pPlayerUI->SetGrenadeAmmo(m_pGrenadeFire->GetGrenadeAmmo());
+	//初期の向き
+	SetCharacterDirection(CHARACTER_RIGHT);
 
 	// 当たり判定生成
 	GetCollision()->SetPos(&GetPosition());
@@ -124,34 +126,6 @@ void CPlayer::Update(void)
 	CKeyboard *key;
 	key = CManager::GetInputKeyboard();
 
-	//デバッグモードの切り替え
-	if (key->GetKeyboardTrigger(DIK_F2))
-	{
-		trigger ^= 1;
-	}
-	if (trigger == true)
-	{
-		m_DebugState = DEBUG_CREATE_MAP;
-		SetGravity(false);
-	}
-	else
-	{
-		m_DebugState = DEBUG_NORMAL;
-		SetGravity(true);
-	}
-	if (m_DebugState != DEBUG_NORMAL)
-	{
-	}
-
-	if (key->GetKeyboardTrigger(DIK_1))
-	{
-		SetMotion(CCharacter::CHARACTER_MOTION_STATE_NONE);
-	}
-	if (key->GetKeyboardTrigger(DIK_2))
-	{
-		SetMotion(PLAYER_MOTION_SQUAT);
-	}
-
 	// 特定のボタンを押した時に歩きモーションに変更
 	if (CHossoLibrary::PressAnyButton())
 	{
@@ -172,8 +146,8 @@ void CPlayer::Update(void)
 //====================================================================
 void CPlayer::Draw(void)
 {
-	// 乗り物に乗っていたら描画しない
-	if (m_bRideVehicle == false)
+	// 乗り物に乗っていたら描画しない またはライフが0でflagが立ったら
+	if (m_bRideVehicle == false )
 	{
 		CCharacter::Draw();
 	}
@@ -183,6 +157,35 @@ void CPlayer::Draw(void)
 //====================================================================
 void CPlayer::DebugInfo(void)
 {
+	static bool trigger = false;
+	static bool trigger2 = false;
+	CKeyboard *key;
+	key = CManager::GetInputKeyboard();
+
+	//デバッグモードの切り替え
+	if (key->GetKeyboardTrigger(DIK_F2))
+	{
+		trigger ^= 1;
+	}
+	if (trigger == true)
+	{
+		m_DebugState = DEBUG_CREATE_MAP;
+		SetGravity(false);
+	}
+	else
+	{
+		m_DebugState = DEBUG_NORMAL;
+		SetGravity(true);
+	}
+
+	if (m_bCruch == true)
+	{
+		CDebugProc::Print("しゃがんでるでやんす\n");
+	}
+	else
+	{
+		CDebugProc::Print("しゃがんでないでやんす\n");
+	}
 }
 //====================================================================
 //移動関連
@@ -191,183 +194,178 @@ void CPlayer::MoveUpdate(void)
 {
 	CKeyboard *key;
 	key = CManager::GetInputKeyboard();
-	if (key->GetKeyboardPress(DIK_W))
-	{
-		SetCharacterDirection(CHARACTER_UP);
-	}
-
-	// Aの処理
-	if (key->GetKeyboardPress(DIK_A))
-	{
-		CPlayer::Move(0.5f, 0.5f);
 		if (key->GetKeyboardPress(DIK_W))
 		{
 			SetCharacterDirection(CHARACTER_UP);
 		}
-		else
-		{
-			SetCharacterDirection(CHARACTER_LEFT);
-		}
-	}
-	// Dの処理
-	else if (key->GetKeyboardPress(DIK_D))
-	{
-		CPlayer::Move(-0.5f, -0.5f);
-		if (key->GetKeyboardPress(DIK_W))
-		{
-			SetCharacterDirection(CHARACTER_UP);
-		}
-		else
-		{
-			SetCharacterDirection(CHARACTER_RIGHT);
-		}
-	}
 
-	//ジャンプ
-	if (key->GetKeyboardTrigger(DIK_SPACE) && GetJump() == true && m_DebugState == DEBUG_NORMAL)
-	{
-		GetMove().y += 27;
-		SetMotion(PLAYER_MOTION_JUMP);
-	}
-	else if (GetJump() == false && GetMove().y < 0 && GetMotionType() != PLAYER_MOTION_JUMPSTOP)
-	{
-		SetMotion(PLAYER_MOTION_JUMP);
-	}
-	else if (key->GetKeyboardPress(DIK_SPACE) && m_DebugState != DEBUG_NORMAL)
-	{
-		GetMove().y += 2;
-	}
-	//ジャンプモーションじゃない時
-	if (GetMotionType() != PLAYER_MOTION_JUMP)
-	{
-		//ジャンプストップモーションじゃない時
-		if (GetMotionType() != PLAYER_MOTION_JUMPSTOP)
+		// Aの処理
+		if (key->GetKeyboardPress(DIK_A))
 		{
-			//移動したらウォークモーション
-			if (GetMove().x > 0.2f || GetMove().x < -0.2f)
+			CPlayer::Move(0.5f, 0.5f);
+			if (key->GetKeyboardPress(DIK_W))
 			{
-				SetMotion(PLAYER_MOTION_WALK);
-				m_bCruch = false;
-			}
-			//移動してない時かつしゃがみストップじゃない時
-			else if (GetMotionType() != PLAYER_MOTION_SQUATSTOP&& m_bCruch == false)
-			{
-				SetMotion(PLAYER_MOTION_NORMAL);
-				m_bCruch = false;
-			}
-			//Sを押したらしゃがみモーション
-			if (key->GetKeyboardPress(DIK_S) && GetJump() == true)
-			{
-				if (m_bCruch == false && GetMotionType() != PLAYER_MOTION_WALK)
-				{
-					SetMotion(PLAYER_MOTION_SQUAT);
-					m_bCruch = true;
-				}
-				//しゃがんでいてキーセットが2になったら
-				if (GetMotionType() == PLAYER_MOTION_SQUAT && m_bCruch == true && GetKeySet() == 2)
-				{
-					SetMotion(PLAYER_MOTION_SQUATSTOP);
-				}
+				SetCharacterDirection(CHARACTER_UP);
 			}
 			else
 			{
-				m_bCruch = false;
+				SetCharacterDirection(CHARACTER_LEFT);
 			}
 		}
-		//ジャンプ、しゃがみをしてなかったらニュートラル
-		else if (GetJump() == true && m_bCruch == false)
+		// Dの処理
+		else if (key->GetKeyboardPress(DIK_D))
 		{
-			SetMotion(PLAYER_MOTION_NORMAL);
+			CPlayer::Move(-0.5f, -0.5f);
+			if (key->GetKeyboardPress(DIK_W))
+			{
+				SetCharacterDirection(CHARACTER_UP);
+			}
+			else
+			{
+				SetCharacterDirection(CHARACTER_RIGHT);
+			}
 		}
-	}
-	//ジャンプしたとき
-	else if (GetMotionType() == PLAYER_MOTION_JUMP)
-	{
-		m_bCruch = false;
-		//キーセットが３になったらストップモーションへ
-		if (GetKeySet() == 3)
-		{
-			SetMotion(PLAYER_MOTION_JUMPSTOP);
-		}
-	}
 
-	//ジャンプしたときの下向発射
-	if (key->GetKeyboardPress(DIK_S) && GetJump() == false)
-	{
-		SetCharacterDirection(CHARACTER_DOWN);
-	}
+		//ジャンプ
+		if (key->GetKeyboardTrigger(DIK_SPACE) && GetJump() == true && m_DebugState == DEBUG_NORMAL)
+		{
+			GetMove().y += 27;
+			SetMotion(PLAYER_MOTION_JUMP);
+		}
+		else if (GetJump() == false && GetMove().y < 0 && GetMotionType() != PLAYER_MOTION_JUMPSTOP)
+		{
+			SetMotion(PLAYER_MOTION_JUMP);
+		}
+		else if (key->GetKeyboardPress(DIK_SPACE) && m_DebugState != DEBUG_NORMAL)
+		{
+			GetMove().y += 2;
+		}
+		//ジャンプモーションじゃない時
+		if (GetMotionType() != PLAYER_MOTION_JUMP)
+		{
+			//ジャンプストップモーションじゃない時
+			if (GetMotionType() != PLAYER_MOTION_JUMPSTOP)
+			{
+				//移動したらウォークモーション
+				if (GetMove().x > 0.2f || GetMove().x < -0.2f)
+				{
+					SetMotion(PLAYER_MOTION_WALK);
+					m_bCruch = false;
+				}
+				//移動してない時かつしゃがみストップじゃない時
+				else if (GetMotionType() != PLAYER_MOTION_SQUATSTOP&& m_bCruch == false)
+				{
+					SetMotion(PLAYER_MOTION_NORMAL);
+				}
+				//Sを押したらしゃがみモーション
+				if (key->GetKeyboardPress(DIK_S) && GetJump() == true)
+				{
+					if (m_bCruch == false && GetMotionType() != PLAYER_MOTION_WALK)
+					{
+						SetMotion(PLAYER_MOTION_SQUATSTOP);
+						m_bCruch = true;
+					}
+				}
+				else if (GetJump() == true && GetMotionType() != PLAYER_MOTION_WALK)
+				{
+					m_bCruch = false;
+					SetMotion(PLAYER_MOTION_NORMAL);
+				}
+			}
+			//ジャンプ、しゃがみをしてなかったらニュートラル
+			else if (GetJump() == true && m_bCruch == false)
+			{
+				SetMotion(PLAYER_MOTION_NORMAL);
+			}
+		}
+		//ジャンプしたとき
+		else if (GetMotionType() == PLAYER_MOTION_JUMP)
+		{
+			m_bCruch = false;
+			//キーセットが３になったらストップモーションへ
+			if (GetKeySet() == 3)
+			{
+				SetMotion(PLAYER_MOTION_JUMPSTOP);
+			}
+		}
+
+		//ジャンプしたときの下向発射
+		if (key->GetKeyboardPress(DIK_S) && GetJump() == false)
+		{
+			SetCharacterDirection(CHARACTER_DOWN);
+		}
 }
 //====================================================================
 //当たり判定関連
 //====================================================================
 void CPlayer::CollisionUpdate(void)
 {
-	// 当たり判定
-	if (GetCollision() != nullptr)
-	{
-		// 座標の更新 posとposold
-		GetCollision()->SetPos(&GetPosition());
-		GetCollision()->SetPosOld(&GetPositionOld());
-
-		// 乗り物に乗っている時に乗り物以外の判定をしない
-		if (m_bRideVehicle == false)
+		// 当たり判定
+		if (GetCollision() != nullptr)
 		{
-			// エネミーととの判定
-			if (GetCollision()->ForPlayer_EnemyCollision(ATTACK_PENETRATION) == true)
+			// 座標の更新 posとposold
+			GetCollision()->SetPos(&GetPosition());
+			GetCollision()->SetPosOld(&GetPositionOld());
+
+			// 乗り物に乗っている時に乗り物以外の判定をしない
+			if (m_bRideVehicle == false)
 			{
-				// 近接攻撃可能にする
-				m_bAttack_Enemy = true;
-			}
-			else
-			{
-				// 近接攻撃が無効になる
-				m_bAttack_Enemy = false;
+				// エネミーととの判定
+				if (GetCollision()->ForPlayer_EnemyCollision(ATTACK_PENETRATION) == true)
+				{
+					// 近接攻撃可能にする
+					m_bAttack_Enemy = true;
+				}
+				else
+				{
+					// 近接攻撃が無効になる
+					m_bAttack_Enemy = false;
+				}
+
+				// 捕虜との判定
+				if (GetCollision()->ForPlayer_PrisonerCollision(ATTACK_PENETRATION) == true)
+				{
+					// 近接攻撃可能にする
+					m_bAttack_Prisoner = true;
+				}
+				else
+				{
+					// 近接攻撃が無効になる
+					m_bAttack_Prisoner = false;
+				}
+
+				// 障害物との判定
+				//if (GetCollision()->ForPlayer_ObstacleCollision())
+				//{
+				//	// ジャンプフラグを可能にする
+				//	CCharacter::SetJump(true);
+				//}
+
+				// アイテムとの判定
+				if (GetCollision()->ForPlayer_ItemCollision())
+				{
+				}
 			}
 
-			// 捕虜との判定
-			if (GetCollision()->ForPlayer_PrisonerCollision(ATTACK_PENETRATION) == true)
+			//
+			if (m_bRideVehicle == false)
 			{
-				// 近接攻撃可能にする
-				m_bAttack_Prisoner = true;
-			}
-			else
-			{
-				// 近接攻撃が無効になる
-				m_bAttack_Prisoner = false;
-			}
-
-			// 障害物との判定
-			//if (GetCollision()->ForPlayer_ObstacleCollision())
-			//{
-			//	// ジャンプフラグを可能にする
-			//	CCharacter::SetJump(true);
-			//}
-
-			// アイテムとの判定
-			if (GetCollision()->ForPlayer_ItemCollision())
-			{
+				// 乗り物との判定
+				if (GetCollision()->ForPlayer_VehicleCollision())
+				{
+					// 乗り込んだ時
+					m_bRideVehicle = true;
+				}
+				else
+				{
+					// 乗っていないとき
+					m_bRideVehicle = false;
+				}
 			}
 		}
 
-		//
-		if (m_bRideVehicle == false)
-		{
-			// 乗り物との判定
-			if (GetCollision()->ForPlayer_VehicleCollision())
-			{
-				// 乗り込んだ時
-				m_bRideVehicle = true;
-			}
-			else
-			{
-				// 乗っていないとき
-				m_bRideVehicle = false;
-			}
-		}
-	}
-
-	// 銃の描画フラグの設定
-	m_pGun->SetDrawFlag(m_bRideVehicle);
+		// 銃の描画フラグの設定
+		m_pGun->SetDrawFlag(m_bRideVehicle);
 }
 //====================================================================
 //攻撃関連
@@ -376,94 +374,88 @@ void CPlayer::AttackUpdate(void)
 {
 	CKeyboard *key;
 	key = CManager::GetInputKeyboard();
-
-	// 銃を撃つ or 近接攻撃
-	if (key->GetKeyboardTrigger(DIK_P))
-	{
-		// 捕虜のポインタを取得
-		CPrisoner	*pPrisoner = GetCollision()->ForPlayer_PrisonerCollision();
-
-		// ポインタがnullじゃなかった時
-		if (pPrisoner != nullptr)
+		// 銃を撃つ or 近接攻撃
+		if (key->GetKeyboardTrigger(DIK_P))
 		{
-			// 銃を撃てる状態だった時
-			if (m_bAttack_Enemy == false && m_bAttack_Prisoner == false)
-			{// 銃発射処理
-				m_pGun->Shot();
-			}
-			// 捕虜が判定可能な状態だった時
-			else if (pPrisoner->GetPrisonerState() != CPrisoner::PRISONER_STATE_STAY)
-			{// 銃発射処理
-				m_pGun->Shot();
-			}
-		}
-		// 捕虜がいない時は通常通り弾を撃つ
-		else
-		{// 銃発射処理
-			m_pGun->Shot();
-		}
-
-		// 近接攻撃をする状態だった時
-		if (m_bAttack_Enemy == true)
-		{// 近接攻撃
-		 // エネミーとの接触判定 捕虜の状態を変える
-			CEnemy		*pEnemy = GetCollision()->ForPlayer_EnemyCollision();
-			if (pEnemy != nullptr)
-			{
-				// 近接攻撃
-				SetMotion(CCharacter::PLAYER_MOTION_ATTACK01);
-				m_pKnife->StartMeleeAttack();
-			}
-		}
-
-		// 近接判定が出ている時は近接攻撃をする
-		if (m_bAttack_Prisoner == true)
-		{// 近接攻撃
-		 // 捕虜との接触判定 捕虜の状態を変える
+			// 捕虜のポインタを取得
 			CPrisoner	*pPrisoner = GetCollision()->ForPlayer_PrisonerCollision();
 
 			// ポインタがnullじゃなかった時
 			if (pPrisoner != nullptr)
 			{
+				// 銃を撃てる状態だった時
+				if (m_bAttack_Enemy == false && m_bAttack_Prisoner == false)
+				{// 銃発射処理
+					m_pGun->Shot();
+				}
 				// 捕虜が判定可能な状態だった時
-				if (pPrisoner->GetPrisonerState() == CPrisoner::PRISONER_STATE_STAY)
+				else if (pPrisoner->GetPrisonerState() != CPrisoner::PRISONER_STATE_STAY)
+				{// 銃発射処理
+					m_pGun->Shot();
+				}
+			}
+			// 捕虜がいない時は通常通り弾を撃つ
+			else
+			{// 銃発射処理
+				m_pGun->Shot();
+			}
+
+			// 近接攻撃をする状態だった時
+			if (m_bAttack_Enemy == true)
+			{// 近接攻撃
+			 // エネミーとの接触判定 捕虜の状態を変える
+				CEnemy		*pEnemy = GetCollision()->ForPlayer_EnemyCollision();
+				if (pEnemy != nullptr)
 				{
 					// 近接攻撃
 					SetMotion(CCharacter::PLAYER_MOTION_ATTACK01);
-					// ナイフ処理
 					m_pKnife->StartMeleeAttack();
-					// 捕虜の状態をアイテムを落とす状態にする
-					pPrisoner->SetPrisonerState(CPrisoner::PRISONER_STATE_DROPITEM);
+				}
+			}
+
+			// 近接判定が出ている時は近接攻撃をする
+			if (m_bAttack_Prisoner == true)
+			{// 近接攻撃
+			 // 捕虜との接触判定 捕虜の状態を変える
+				CPrisoner	*pPrisoner = GetCollision()->ForPlayer_PrisonerCollision();
+
+				// ポインタがnullじゃなかった時
+				if (pPrisoner != nullptr)
+				{
+					// 捕虜が判定可能な状態だった時
+					if (pPrisoner->GetPrisonerState() == CPrisoner::PRISONER_STATE_STAY)
+					{
+						// 近接攻撃
+						SetMotion(CCharacter::PLAYER_MOTION_ATTACK01);
+						// ナイフ処理
+						m_pKnife->StartMeleeAttack();
+						// 捕虜の状態をアイテムを落とす状態にする
+						pPrisoner->SetPrisonerState(CPrisoner::PRISONER_STATE_DROPITEM);
+					}
 				}
 			}
 		}
-	}
-	if (key->GetKeyboardPress(DIK_K))
-	{
-		GetPosition().x += 30;
-	}
-
-	// グレネードを投げる
-	if (key->GetKeyboardTrigger(DIK_O))
-	{
-		// グレネードの弾数が残っているとき
-		if (m_pGrenadeFire->GetGrenadeAmmo() > 0)
+		// グレネードを投げる
+		if (key->GetKeyboardTrigger(DIK_O))
 		{
-			// グレネード生成
-			m_pGrenadeFire->Fire(GetShotDirection());
+			// グレネードの弾数が残っているとき
+			if (m_pGrenadeFire->GetGrenadeAmmo() > 0)
+			{
+				// グレネード生成
+				m_pGrenadeFire->Fire(GetShotDirection());
 
-			SetMotion(CCharacter::PLAYER_MOTION_GRENADE);
+				SetMotion(CCharacter::PLAYER_MOTION_GRENADE);
+			}
 		}
-	}
 
-	// 攻撃モーションから別のモーションになった時
-	if (GetMotionType() != CCharacter::PLAYER_MOTION_ATTACK01)
-	{
-		if (m_bAttack_Enemy == false && m_bAttack_Prisoner == false)
+		// 攻撃モーションから別のモーションになった時
+		if (GetMotionType() != CCharacter::PLAYER_MOTION_ATTACK01)
 		{
-			m_pKnife->EndMeleeAttack();
+			if (m_bAttack_Enemy == false && m_bAttack_Prisoner == false)
+			{
+				m_pKnife->EndMeleeAttack();
+			}
 		}
-	}
 }
 //====================================================================
 //モデルのクリエイト

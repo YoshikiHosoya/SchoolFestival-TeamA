@@ -106,6 +106,7 @@ void CDebug_EffectViewer::ShowDebugInfo()
 
 	//読み込むテキストの番号
 	static CParticleParam::PARTICLE_TEXT NowText = CParticleParam::PARTICLE_TEXT::PARTICLE_DEFAULT;
+	static std::vector<std::string> aShapeName = { "Sphere","Cone","Circle_XY","Line" };
 
 	//止まってるかどうか
 	if (!CScene::GetStopFlag())
@@ -123,8 +124,6 @@ void CDebug_EffectViewer::ShowDebugInfo()
 
 	//コンボボックス表示
 	if (CHossoLibrary::ImGui_Combobox(CParticleParam::GetFileNameList(), "ParamFileName", (int&)NowText))
-
-
 	{
 		//メモリ確保
 		CParticleParam *pParam = new CParticleParam;
@@ -137,6 +136,17 @@ void CDebug_EffectViewer::ShowDebugInfo()
 		m_pParticleParam.reset(std::move(pParam));
 	}
 
+	//コンボボックス表示
+	if (CHossoLibrary::ImGui_Combobox(aShapeName, "Shape", (int&)m_pParticleParam->GetShape()))
+	{
+	}
+
+	//それぞれのオフセットを調整
+	ImGui::DragFloat3("rot", m_pParticleParam->GetRot(), 0.005f, -D3DX_PI, D3DX_PI);
+	ImGui::DragFloat("fRange", &m_pParticleParam->GetRange(), 0.01f, -D3DX_PI, D3DX_PI);
+
+
+
 	//項目の大きさ設定
 	ImGui::PushItemWidth(120);
 
@@ -148,8 +158,8 @@ void CDebug_EffectViewer::ShowDebugInfo()
 	ImGui::DragFloat("RadiusDamping", &m_pParticleParam->GetRadiusDamping(), 0.001f, 0.5f, 1.0f);
 	ImGui::DragFloat("AlphaDamping", &m_pParticleParam->GetAlphaDamping(), 0.001f, 0.5f, 1.0f);
 
+	ImGui::Checkbox("bSpeedRandom", &m_pParticleParam->GetSpeedRandom());
 	ImGui::Checkbox("bGravity", &m_pParticleParam->GetGravity());
-
 	//重力がONの時
 	if (m_pParticleParam->GetGravity())
 	{

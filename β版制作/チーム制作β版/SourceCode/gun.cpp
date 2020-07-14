@@ -248,7 +248,7 @@ void CGun::Shot()
 		if (pBullet)
 		{
 			D3DXVec3TransformCoord(&m_ShotPos, &m_ShotOffsetPos, GetMatrix());
-			
+
 			// ˆÊ’u‚ÌÝ’è
 			pBullet->SetPosition(m_ShotPos);
 

@@ -91,6 +91,12 @@ enum TAG
 };
 
 //------------------------------------------------------------------------------
+//エイリアス宣言
+//------------------------------------------------------------------------------
+using FILENAME_LIST = std::vector<std::string>;		//ファイル名のリスト
+
+
+//------------------------------------------------------------------------------
 //クラス定義
 //------------------------------------------------------------------------------
 class CKeyboard;
@@ -98,6 +104,7 @@ class CXInputPad;
 class CHossoLibrary
 {
 public:
+
 	static float Vec2Cross(D3DXVECTOR2 const &rVecA, D3DXVECTOR2 const &rVecB);					//2D 外積計算
 	static void CalcMatrix(D3DXMATRIX *pMtx,D3DXVECTOR3 const &rPos, D3DXVECTOR3 const &rRot);	//ワールドマトリックス計算
 	static void SetBillboard(D3DXMATRIX *pMtx);													//ビルボード設定
