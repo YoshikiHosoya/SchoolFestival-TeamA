@@ -140,6 +140,8 @@ void CPlayer::Update(void)
 	m_pPlayerUI->SetLifeUI(GetLife());
 
 	CCharacter::Update();
+
+	CDebugProc::Print("時機のライフ %d\n",GetLife());
 }
 //====================================================================
 //描画
@@ -431,9 +433,6 @@ void CPlayer::AttackUpdate(void)
 						m_pKnife->StartMeleeAttack();
 						// 捕虜の状態をアイテムを落とす状態にする
 						pPrisoner->SetPrisonerState(CPrisoner::PRISONER_STATE_DROPITEM);
-						// 残機アップ
-						CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
-						pPlayer->GetPlayerUI()->SetLifeUI(1);
 					}
 				}
 			}

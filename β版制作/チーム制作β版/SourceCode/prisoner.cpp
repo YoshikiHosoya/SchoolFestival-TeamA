@@ -12,6 +12,8 @@
 #include "map.h"
 #include "item.h"
 #include "debugproc.h"
+#include "player.h"
+
 //====================================================================
 //マクロ定義
 //====================================================================
@@ -85,9 +87,6 @@ void CPrisoner::Update(void)
 	// 捕虜の状態別処理
 	this->PrisonerState();
 
-	// マップのポインタ取得
-	CMap *pMap;
-	pMap = CManager::GetBaseMode()->GetMap();
 	// キャラクターの更新
 	CCharacter::Update();
 
@@ -141,7 +140,9 @@ void CPrisoner::PrisonerState()
 	{
 		// アイテムを落とすモーション
 		//
-
+		CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
+		// 体力の加算
+		pPlayer->SetLife(pPlayer->GetLife() + 1);
 		// アイテムの生成
 		CItem::DropCreate(GetPosition());
 		// 捕虜の状態の変更
