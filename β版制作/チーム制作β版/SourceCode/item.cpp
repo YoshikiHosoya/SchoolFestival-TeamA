@@ -12,6 +12,7 @@
 #include "collision.h"
 #include "debugproc.h"
 #include "player.h"
+#include "playerui.h"
 #include "gun.h"
 
 // =====================================================================================================================================================================
@@ -186,6 +187,8 @@ void CItem::ItemType(ITEMTYPE type)
 		//熊
 	case (ITEMTYPE_BEAR): {
 		// スコアアップ
+		CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
+		pPlayer->GetPlayerUI()->SetScore(100);
 	}break;
 
 	default:

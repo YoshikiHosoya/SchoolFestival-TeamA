@@ -46,7 +46,7 @@ char *CBullet::m_BulletFileName[CGun::GUNTYPE_MAX] =
 // 弾のダメージ
 #define BULLET_DAMAGE_ENEMY		(10)			// エネミーへのダメージ
 #define BULLET_DAMAGE_OBSTACLE	(10)			// 障害物へのダメージ
-#define BULLET_DAMAGE_PLAYER	(10)			// プレイヤーへのダメージ
+#define BULLET_DAMAGE_PLAYER	(1)				// プレイヤーへのダメージ
 
 // 貫通させるかのフラグ
 #define BULLET_PENETRATION		(false)			// 弾の判定が貫通するかどうか
