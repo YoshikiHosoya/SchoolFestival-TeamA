@@ -55,6 +55,7 @@ public:
 	void				SetBulletAmmo(int nBulletAmmo, CGun::GUN_TYPE GunType);		// 弾の残数の設定
 	void				SetGrenadeAmmo(int nGrenadeAmmo);	// グレネードの残数の設定
 	void				SetLifeUI(int nLife);				// 体力UIの設定
+	void				AddLifeUI(int nLife);				// 体力UIの加算
 	int					GetScore() { return m_nScore; };	// スコアの取得
 
 private:
