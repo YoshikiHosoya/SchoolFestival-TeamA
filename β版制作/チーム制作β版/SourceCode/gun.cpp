@@ -15,7 +15,7 @@
 #include "lasergun.h"
 #include "rocketlauncher.h"
 #include "flameshot.h"
-#include "tankturret.h"
+#include "tankgun.h"
 #include "Character.h"
 #include "TexAnimation3D.h"
 
@@ -193,8 +193,8 @@ void CGun::Shot()
 {
 	CBullet *pBullet = nullptr;
 
-	// ハンドガンと戦車砲台以外のとき
-	if (m_GunType != GUNTYPE_HANDGUN && m_GunType != GUNTYPE_TANKTURRET)
+	// ハンドガンと戦車の銃以外のとき
+	if (m_GunType != GUNTYPE_HANDGUN && m_GunType != GUNTYPE_TANKGUN)
 	{
 		// 残弾数を減らす
 		m_nAmmo--;
@@ -239,9 +239,9 @@ void CGun::Shot()
 			m_bMultiple = true;		// 複数発撃つフラグをオン
 			break;
 
-		case CGun::GUNTYPE_TANKTURRET:
-			// 戦車砲台の生成
-			pBullet = CTankTurret::Create(m_ShotRot);
+		case CGun::GUNTYPE_TANKGUN:
+			// 戦車の銃の生成
+			pBullet = CTankGun::Create(m_ShotRot);
 			m_bMultiple = true;		// 複数発撃つフラグをオン
 			break;
 		}
@@ -298,11 +298,11 @@ void CGun::MultipleShot()
 				// 弾の生成
 				pBullet = CFlameshot::Create(m_ShotRot);
 			}
-			// 戦車砲台のとき
-			if (m_GunType == GUNTYPE_TANKTURRET)
+			// 戦車の銃のとき
+			if (m_GunType == GUNTYPE_TANKGUN)
 			{
 				// 弾の生成
-				pBullet = CTankTurret::Create(m_ShotRot);
+				pBullet = CTankGun::Create(m_ShotRot);
 			}
 
 			// 弾のカウントアップ

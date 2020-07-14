@@ -1,10 +1,10 @@
 // =====================================================================================================================================================================
 //
-// 戦車砲台の処理 [tankturret.cpp]
+// 戦車の銃の処理 [tankgun.cpp]
 // Author : Sato Yoshiki
 //
 // =====================================================================================================================================================================
-#include "tankturret.h"			// インクルードファイル
+#include "tankgun.h"			// インクルードファイル
 #include "manager.h"
 #include "renderer.h"
 #include "game.h"
@@ -24,7 +24,7 @@
 // コンストラクタ
 //
 // =====================================================================================================================================================================
-CTankTurret::CTankTurret(OBJ_TYPE type) :CBullet(type)
+CTankGun::CTankGun(OBJ_TYPE type) :CBullet(type)
 {
 	SetObjType(OBJTYPE_BULLET);
 }
@@ -34,7 +34,7 @@ CTankTurret::CTankTurret(OBJ_TYPE type) :CBullet(type)
 // デストラクタ
 //
 // =====================================================================================================================================================================
-CTankTurret::~CTankTurret()
+CTankGun::~CTankGun()
 {
 }
 
@@ -43,7 +43,7 @@ CTankTurret::~CTankTurret()
 // 初期化処理
 //
 // =====================================================================================================================================================================
-HRESULT CTankTurret::Init()
+HRESULT CTankGun::Init()
 {
 	// 初期化
 	CBullet::Init();
@@ -56,7 +56,7 @@ HRESULT CTankTurret::Init()
 // 終了処理
 //
 // =====================================================================================================================================================================
-void CTankTurret::Uninit(void)
+void CTankGun::Uninit(void)
 {
 	// 終了
 	CBullet::Uninit();
@@ -67,7 +67,7 @@ void CTankTurret::Uninit(void)
 // 更新処理
 //
 // =====================================================================================================================================================================
-void CTankTurret::Update(void)
+void CTankGun::Update(void)
 {
 	// 更新
 	CBullet::Update();
@@ -78,7 +78,7 @@ void CTankTurret::Update(void)
 // 描画処理
 //
 // =====================================================================================================================================================================
-void CTankTurret::Draw(void)
+void CTankGun::Draw(void)
 {
 	// 描画
 	CBullet::Draw();
@@ -89,7 +89,7 @@ void CTankTurret::Draw(void)
 // 弾を消す処理
 //
 // =====================================================================================================================================================================
-void CTankTurret::DeleteBullet()
+void CTankGun::DeleteBullet()
 {
 	CBullet::DeleteBullet();
 }
@@ -99,7 +99,7 @@ void CTankTurret::DeleteBullet()
 // 弾の反応
 //
 // =====================================================================================================================================================================
-void CTankTurret::BulletReaction(D3DXVECTOR3 rot)
+void CTankGun::BulletReaction(D3DXVECTOR3 rot)
 {
 }
 
@@ -108,39 +108,39 @@ void CTankTurret::BulletReaction(D3DXVECTOR3 rot)
 // デバッグ
 //
 // =====================================================================================================================================================================
-void CTankTurret::DebugInfo()
+void CTankGun::DebugInfo()
 {
 }
 
 // =====================================================================================================================================================================
 //
-// 戦車砲台の生成
+// 戦車の銃の生成
 //
 // =====================================================================================================================================================================
-CTankTurret * CTankTurret::Create(D3DXVECTOR3 rot)
+CTankGun * CTankGun::Create(D3DXVECTOR3 rot)
 {
 	// 変数
-	CTankTurret *pTankTurret;
+	CTankGun *pTankGun;
 
 	// メモリの確保
-	pTankTurret = new CTankTurret(OBJTYPE_BULLET);
+	pTankGun = new CTankGun(OBJTYPE_BULLET);
 
-	// 戦車砲台のパラメーター取得
-	BULLET_PARAM *pBulletParam = pTankTurret->GetBulletParam(CGun::GUNTYPE_TANKTURRET);
+	// 戦車の銃のパラメーター取得
+	BULLET_PARAM *pBulletParam = pTankGun->GetBulletParam(CGun::GUNTYPE_TANKGUN);
 
 	// 初期化
-	pTankTurret->Init();
+	pTankGun->Init();
 
 	// 撃つ方向に合わせる
-	pTankTurret->GetMove() = D3DXVECTOR3(-sinf(rot.x) * pBulletParam->fBulletSpeed,
+	pTankGun->GetMove() = D3DXVECTOR3(-sinf(rot.x) * pBulletParam->fBulletSpeed,
 										cosf(rot.x) * cosf(rot.y) * pBulletParam->fBulletSpeed,
 										sinf(rot.y) * cosf(rot.x) * pBulletParam->fBulletSpeed);
 
 	// モデルタイプの設定
-	pTankTurret->SetType(BULLET_MODEL);
+	pTankGun->SetType(BULLET_MODEL);
 
 	// モデルカウントの設定
-	pTankTurret->SetModelConut(MODEL_BULLET_SPHERE);
+	pTankGun->SetModelConut(MODEL_BULLET_SPHERE);
 
-	return pTankTurret;
+	return pTankGun;
 }
