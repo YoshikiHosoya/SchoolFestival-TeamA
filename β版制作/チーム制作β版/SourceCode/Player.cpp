@@ -147,6 +147,8 @@ void CPlayer::Update(void)
 	m_pPlayerUI->SetLifeUI(GetLife());
 
 	CCharacter::Update();
+
+	CDebugProc::Print("Žž‹@‚Ìƒ‰ƒCƒt %d\n",GetLife());
 }
 //====================================================================
 //•`‰æ

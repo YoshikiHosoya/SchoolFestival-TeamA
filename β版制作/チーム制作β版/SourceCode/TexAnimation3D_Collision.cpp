@@ -138,8 +138,10 @@ void CTexAnimation3D_Collision::Create(D3DXVECTOR3 pos, D3DXVECTOR3 size, D3DXVE
 		//当たり判定用のローカル座標計算
 		D3DXVec3TransformCoord(&LocalPosOrigin, &D3DXVECTOR3(0.0f, size.y, 0.0f), pTexAnimation->GetMtxWorld());
 
+
 		//計算用の変数　当たり判定のサイズ
 		D3DXVECTOR3 Max = D3DXVECTOR3(-1000.0f, -1000.0f, -0.0f);
+
 
 		//4頂点分
 		for (int nCnt = 0; nCnt < 4; nCnt++)

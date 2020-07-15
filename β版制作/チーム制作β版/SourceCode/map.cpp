@@ -1004,6 +1004,17 @@ void CMap::ObstacleSet()
 	// 全てセーブ
 	AllSaveButton();
 
+	// 改行キャンセル
+	ImGui::SameLine(250);
+
+	// 消去
+	if (ImGui::Button("Delete"))
+	{
+		m_pObstacle[nNowSelect]->Rerease();
+		m_pObstacle[nNowSelect] = nullptr;
+		m_pObstacle.erase(m_pObstacle.begin() + nNowSelect);
+	}
+
 #endif
 }
 
