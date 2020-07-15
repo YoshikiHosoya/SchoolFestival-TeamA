@@ -65,11 +65,11 @@ void CGame::Update(void)
 {
 	m_pMap->UpdateDieFlag();
 
-	if (m_pPlayer != nullptr && m_pPlayer->GetLife() <= 0)
-	{
-		m_pPlayer->Rerease();
-		m_pPlayer = nullptr;
-	}
+	//if (m_pPlayer != nullptr && m_pPlayer->GetLife() <= 0)
+	//{
+	//	m_pPlayer->Rerease();
+	//	m_pPlayer = nullptr;
+	//}
  }
 //==========================================================
 // ƒvƒŒƒCƒ„[æ“¾

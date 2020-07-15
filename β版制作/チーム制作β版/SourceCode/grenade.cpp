@@ -106,8 +106,8 @@ void CGrenade::Draw(void)
 // =====================================================================================================================================================================
 void CGrenade::DeleteBullet()
 {
-	CTexAnimation3D_Collision::Create(GetPosition(), D3DXVECTOR3(50.0f, 70.0f, 0.0f), ZeroVector3,
-	CTexture::SEPARATE_TEX_EFFECT_EXPLOSION01, 2, OBJTYPE_EXPROSION, true);
+	CTexAnimation3D_Collision::Create(GetPosition(), D3DXVECTOR3(60.0f, 80.0f, 0.0f), ZeroVector3,
+		CTexture::SEPARATE_TEX_EFFECT_EXPLOSION01, 2, OBJTYPE_EXPROSION, GetTag(), GetBulletParam(CGun::GUNTYPE_SHOTGUN)->fPower, 1, true);
 
 	CBullet::DeleteBullet();
 }

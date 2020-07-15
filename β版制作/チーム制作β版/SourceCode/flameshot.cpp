@@ -10,6 +10,7 @@
 #include "game.h"
 #include "debugproc.h"
 #include "texture.h"
+#include "TexAnimation3D_Collision.h"
 
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
@@ -71,6 +72,8 @@ void CFlameshot::Update(void)
 {
 	// 更新
 	CBullet::Update();
+
+	CTexAnimation3D_Collision::Create(GetPosition(), D3DXVECTOR3(60.0f, 60.0f, 0.0f), ZeroVector3, CTexture::SEPARATE_TEX_EFFECT_IMPACT00, 1, OBJTYPE_EFFECT, GetTag(), 1, 1, true);
 }
 
 // =====================================================================================================================================================================

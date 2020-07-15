@@ -79,6 +79,10 @@ HRESULT CPlayer::Init(void)
 	m_pPlayerUI->SetGrenadeAmmo(m_pGrenadeFire->GetGrenadeAmmo());
 	//初期の向き
 	SetCharacterDirection(CHARACTER_RIGHT);
+	//リスポーン時のカウント
+	m_nRespawnCnt = 0;
+	//プレイヤーの状態ステータス
+	m_PlayerState = PLAYER_STATE_NORMAL;
 
 	// 当たり判定生成
 	GetCollision()->SetPos(&GetPosition());
@@ -143,10 +147,12 @@ void CPlayer::Update(void)
 	Ride();
 
 	CollisionUpdate();
-
+	if (m_bRespawn == true)
+	{
+		ReSpawn();
+	}
 	// 体力UIの設定
 	m_pPlayerUI->SetLifeUI(GetLife());
-
 	CCharacter::Update();
 
 	CDebugProc::Print("時機のライフ %d\n",GetLife());
@@ -188,14 +194,6 @@ void CPlayer::DebugInfo(void)
 		SetGravity(true);
 	}
 
-	if (m_bCruch == true)
-	{
-		CDebugProc::Print("しゃがんでるでやんす\n");
-	}
-	else
-	{
-		CDebugProc::Print("しゃがんでないでやんす\n");
-	}
 }
 //====================================================================
 //移動関連
@@ -204,6 +202,8 @@ void CPlayer::MoveUpdate(void)
 {
 	CKeyboard *key;
 	key = CManager::GetInputKeyboard();
+	if (m_bRespawn == false)
+	{
 		if (key->GetKeyboardPress(DIK_W))
 		{
 			SetCharacterDirection(CHARACTER_UP);
@@ -304,6 +304,7 @@ void CPlayer::MoveUpdate(void)
 		{
 			SetCharacterDirection(CHARACTER_DOWN);
 		}
+	}
 }
 //====================================================================
 //当たり判定関連
@@ -384,6 +385,10 @@ void CPlayer::AttackUpdate(void)
 {
 	CKeyboard *key;
 	key = CManager::GetInputKeyboard();
+	if (m_bRespawn == false)
+	{
+
+
 		// 銃を撃つ or 近接攻撃
 		if (key->GetKeyboardTrigger(DIK_P))
 		{
@@ -466,6 +471,7 @@ void CPlayer::AttackUpdate(void)
 				m_pKnife->EndMeleeAttack();
 			}
 		}
+	}
 }
 //====================================================================
 //モデルのクリエイト
@@ -564,5 +570,21 @@ void CPlayer::Ride()
 
 			// 無敵判定
 		}
+	}
+}
+//====================================================================
+//リスポーン
+//====================================================================
+void CPlayer::ReSpawn(void)
+{
+	m_nRespawnCnt++;
+	m_PlayerState = PLAYER_STATE_RESPAWN;
+
+	if (m_nRespawnCnt == 120)
+	{
+		m_nRespawnCnt = 0;
+		m_bRespawn = false;
+		m_pGun->SetGunType(CGun::GUNTYPE_HANDGUN);
+		SetLife(10);
 	}
 }

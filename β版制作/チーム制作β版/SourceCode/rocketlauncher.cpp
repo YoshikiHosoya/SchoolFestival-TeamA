@@ -8,8 +8,7 @@
 #include "manager.h"
 #include "renderer.h"
 #include "game.h"
-#include "debugproc.h"
-#include "texture.h"
+#include "TexAnimation3D_Collision.h"
 
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
@@ -71,6 +70,9 @@ void CRocketlauncher::Update(void)
 {
 	// 更新
 	CBullet::Update();
+
+	CTexAnimation3D::Create(GetPosition(), D3DXVECTOR3(40.0f, 40.0f, 0.0f),
+							D3DXVECTOR3(0.0f,0.0f,CHossoLibrary::Random_PI()), CTexture::SEPARATE_TEX_EFFECT_SMOKE, 1, OBJTYPE_EFFECT);
 }
 
 // =====================================================================================================================================================================
@@ -92,6 +94,10 @@ void CRocketlauncher::Draw(void)
 void CRocketlauncher::DeleteBullet()
 {
 	CBullet::DeleteBullet();
+
+	CTexAnimation3D_Collision::Create(GetPosition(), D3DXVECTOR3(60.0f, 80.0f, 0.0f), ZeroVector3,
+		CTexture::SEPARATE_TEX_EFFECT_EXPLOSION01, 2, OBJTYPE_EXPROSION, GetTag(), GetBulletParam(CGun::GUNTYPE_ROCKETLAUNCHER)->fPower, 1, true);
+
 }
 
 // =====================================================================================================================================================================

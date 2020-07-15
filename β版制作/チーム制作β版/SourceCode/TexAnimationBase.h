@@ -27,7 +27,7 @@ public:
 	~CTexAnimationBase();									//デストラクタ
 
 	bool UpdateAnimation();			//更新
-	D3DXVECTOR2 CalcUV(int m_nPatternAnim, CTexture::SEPARATE_TEX_TYPE tex);
+	D3DXVECTOR2 CalcUV();
 
 	//Set関数
 	void SetTex(CTexture::SEPARATE_TEX_TYPE Tex)		{ m_EffectTex = Tex; };				//テクスチャ設定
