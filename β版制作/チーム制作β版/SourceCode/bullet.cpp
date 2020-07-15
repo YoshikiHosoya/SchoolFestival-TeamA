@@ -175,8 +175,6 @@ void CBullet::Update(void)
 
 	// çXêV
 	CModel::Update();
-
-	CParticle::CreateFromText(GetPosition(), CParticleParam::PARTICLE_BULLET_ORBIT);
 }
 
 // =====================================================================================================================================================================
