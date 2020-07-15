@@ -50,20 +50,20 @@ char *CModel::m_MapFileName[MODEL_MAP_MAX] =
 char *CModel::m_EnemyFileName[MODEL_ENEMY_MAX] =
 {
 	{ "data/MODEL/Enemy/Waist.x" },
-	{ "data/MODEL/Enemy/Body.x" },	
+	{ "data/MODEL/Enemy/Body.x" },
 	{ "data/MODEL/Enemy/Head.x" },
-	{ "data/MODEL/Enemy/L_Sholder.x" },	
-	{ "data/MODEL/Enemy/R_Sholder.x" },	
+	{ "data/MODEL/Enemy/L_Sholder.x" },
+	{ "data/MODEL/Enemy/R_Sholder.x" },
 	{ "data/MODEL/Enemy/L_Arm.x" },
 	{ "data/MODEL/Enemy/R_Arm.x" },
 	{ "data/MODEL/Enemy/L_Hand.x" },
 	{ "data/MODEL/Enemy/R_Hand.x" },
 	{ "data/MODEL/Enemy/L_Knee.x" },
 	{ "data/MODEL/Enemy/R_Knee.x" },
-	{ "data/MODEL/Enemy/L_Foot.x" },		
-	{ "data/MODEL/Enemy/R_Foot.x" },		
-	{ "data/MODEL/Enemy/L_Leg.x" },		
-	{ "data/MODEL/Enemy/R_Leg.x" },		
+	{ "data/MODEL/Enemy/L_Foot.x" },
+	{ "data/MODEL/Enemy/R_Foot.x" },
+	{ "data/MODEL/Enemy/L_Leg.x" },
+	{ "data/MODEL/Enemy/R_Leg.x" },
 };
 char *CModel::m_GunFileName[MODEL_GUN_MAX] =
 {

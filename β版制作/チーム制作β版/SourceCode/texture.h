@@ -91,8 +91,8 @@ public:
 
 	static LPDIRECT3DTEXTURE9 GetTexture(TEX_TYPE textype);							//通常テクスチャの取得
 
-	static FILENAME_LIST &GetTexFileName() { return m_aTexFileName; };						//テクスチャ名取得
-	static FILENAME_LIST &GetSeparateFileName() { return m_aSeparateTexFileNameList; };		//分割テクスチャ名取得
+	static std::vector<std::string> &GetTexFileName() { return m_aTexFileName; };						//テクスチャ名取得
+	static std::vector<std::string> &GetSeparateFileName() { return m_aSeparateTexFileNameList; };		//分割テクスチャ名取得
 
 	static LPDIRECT3DTEXTURE9 GetSeparateTexture(SEPARATE_TEX_TYPE textype);		//分割テクスチャ取得
 	static D3DXVECTOR2 GetSparateTex_UVSize(SEPARATE_TEX_TYPE textype);				//分割テクスチャ　UVのサイズ取得
@@ -101,10 +101,10 @@ public:
 
 private:
 	static std::vector<LPDIRECT3DTEXTURE9> m_apTextureList;							//通常テクスチャへのポインタのリスト
-	static FILENAME_LIST m_aTexFileName;											//通常テクスチャのファイル名
+	static std::vector<std::string> m_aTexFileName;											//通常テクスチャのファイル名
 
 
-	static FILENAME_LIST m_aSeparateTexFileNameList;								//分割テクスチャのファイル名
+	static std::vector<std::string> m_aSeparateTexFileNameList;								//分割テクスチャのファイル名
 	static std::vector<SEPARATE_TEX_INFO> m_apSeparateTexInfoList;					//分割テクスチャに関する情報のポインタ
 
 };
