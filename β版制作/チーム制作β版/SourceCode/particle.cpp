@@ -62,6 +62,11 @@ void CParticle::Update()
 	//ライフを減らす
 	m_pParticleParam->UpdateParam();
 
+	if (m_pParticleParam->GetAnimation())
+	{
+
+	}
+
 	//ライフが0以下になった時
 	if (m_pParticleParam->GetLife() <= 0)
 	{

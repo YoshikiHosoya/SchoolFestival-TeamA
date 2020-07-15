@@ -43,13 +43,14 @@ CTexAnimationBase::~CTexAnimationBase()
 //アニメーションの更新
 //アニメーション終了でfalseを返す
 //------------------------------------------------------------------------------
-bool CTexAnimationBase::UpdateAnimation(CSceneBase *pSceneBase)
+bool CTexAnimationBase::UpdateAnimation()
 {
-	bool bDelete = false;	 //削除フラグ
-
 	if (m_nLife-- <= 0)
 	{
-		bDelete = true;
+		//終了フラグtrue
+		m_bEnd = true;
+
+		return false;
 	}
 	//カウンターを進める
 	m_nCntAnim++;
@@ -65,17 +66,21 @@ bool CTexAnimationBase::UpdateAnimation(CSceneBase *pSceneBase)
 		{
 			m_bLoop ?
 				m_nPatternAnim = 0 :		//ループする時		パターン最初に戻す
-				bDelete = true;				//ループしない時　	フラグを立てる
+				m_bEnd = true;				//ループしない時　	フラグを立てる
+			return true;
 		}
-
-		//UV座標設定
-		D3DXVECTOR2 UV;
-		UV.x = m_nPatternAnim % (int)CTexture::GetSparateTex_UVCnt(m_EffectTex).x * CTexture::GetSparateTex_UVSize(m_EffectTex).x;
-		UV.y = m_nPatternAnim / (int)CTexture::GetSparateTex_UVCnt(m_EffectTex).x * CTexture::GetSparateTex_UVSize(m_EffectTex).y;
-
-		//テクスチャアニメーション処理
-		pSceneBase->SetAnimation(UV, CTexture::GetSparateTex_UVSize(m_EffectTex));
 	}
-	return bDelete;
+	return false;
+}
+
+D3DXVECTOR2 CTexAnimationBase::CalcUV(int nPatternAnim, CTexture::SEPARATE_TEX_TYPE tex)
+{
+	//UV座標計算
+	D3DXVECTOR2 UV;
+	UV.x = nPatternAnim % (int)CTexture::GetSparateTex_UVCnt(tex).x * CTexture::GetSparateTex_UVSize(tex).x;
+	UV.y = nPatternAnim / (int)CTexture::GetSparateTex_UVCnt(tex).x * CTexture::GetSparateTex_UVSize(tex).y;
+
+	//return
+	return UV;
 }
 

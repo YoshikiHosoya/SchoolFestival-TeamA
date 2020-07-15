@@ -68,7 +68,14 @@ void CTexAnimation3D::Update()
 	CScene3D::Update();
 
 	//テクスチャアニメーションの更新
-	if (CTexAnimationBase::UpdateAnimation(this))
+	if (CTexAnimationBase::UpdateAnimation())
+	{
+		//テクスチャアニメーション処理
+		SetAnimation(CalcUV(GetPatternAnim(), GetEffectTex()), CTexture::GetSparateTex_UVSize(GetEffectTex()));
+	}
+
+	//終了のフラグが立っていた時
+	if (GetEndFlag())
 	{
 		//消去
 		Rerease();

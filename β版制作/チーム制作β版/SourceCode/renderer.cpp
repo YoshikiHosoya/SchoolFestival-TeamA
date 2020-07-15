@@ -415,7 +415,7 @@ void CRenderer::ResetRenderer()
 	m_pCamera->ResetCamera();
 
 	//シーンの一時停止とか解除
-	CScene::Reset();
+	CScene::SetStopFlag(false);
 
 	//レンダラー設定
 	SetRendererCommand(CRenderer::RENDERER_LIGHTING_ON);
