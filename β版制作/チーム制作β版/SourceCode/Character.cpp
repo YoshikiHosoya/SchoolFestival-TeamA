@@ -110,11 +110,17 @@ void CCharacter::Update(void)
 	{
 		m_posfall = m_pos;
 	}
-	if (m_pos.y <= -500 && m_bFall == true)
+	if (m_pos.y <= -100 && m_bFall == true)
 	{
-		m_pos.x = m_posfall.x;
+		if (m_pos.x < m_posfall.x)
+		{
+		m_pos.x = m_posfall.x + 50;
+		}
+		else
+		{
+			m_pos.x = m_posfall.x - 50;
+		}
 		m_pos.y = m_posfall.y + 30;
-		m_pos.z = m_posfall.z;
 		m_bFall = false;
 	}
 	//目標点と現在の差分（回転）

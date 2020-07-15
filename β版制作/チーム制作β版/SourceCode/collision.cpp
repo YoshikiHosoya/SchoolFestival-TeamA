@@ -325,7 +325,8 @@ bool CCollision::ForEnemyCollision(int nPlayerDamage, int nPlayerTankDamage, boo
 					{
 						//pPlayer->SetDieFlag(true);
 						// ポインタをnullにする
-						pPlayer = nullptr;
+						//pPlayer = nullptr;
+						pPlayer->SetRespawnFlag(true);
 					}
 
 					// 当たり範囲フラグをtrueにする
