@@ -65,11 +65,17 @@ public:
 		D3DXVECTOR3 &pos2,
 		D3DXCOLOR	&col
 	);
+
+	static void SetDrawFlag(bool bflag) { m_bDrawFlag = bflag; };	// ラインの表示非表示を設定
+	static bool GetDrawFlag() { return m_bDrawFlag; };			// ラインの表示非表示フラグの取得
+
 protected:
 
 private:
 	/* メンバ関数 */
 	void MakeVertex(void);
+	/* 静的メンバ関数 */
+	static bool					m_bDrawFlag;	// 描画するかどうか
 
 	/* メンバ変数 */
 	D3DXVECTOR3					m_pos;			// 位置

@@ -36,6 +36,7 @@ public:
 	void DebugInfo();							//デバッグ情報表記
 
 	static void Create();
+	static void Release();
 	static void AddParticleList(std::unique_ptr<CParticle> pParticle);
 
 private:

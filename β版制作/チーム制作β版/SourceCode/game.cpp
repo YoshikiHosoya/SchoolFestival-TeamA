@@ -11,6 +11,7 @@
 #include "item.h"
 #include "UIManager.h"
 #include "Scene.h"
+#include "3Dline.h"
 
 #define _CRT_SECURE_NO_WARNINGS // 警告除去
 int			CGame::m_Counter	= 0;
@@ -55,6 +56,7 @@ HRESULT CGame::Init(void)
 //==========================================================
 void CGame::Uninit(void)
 {
+
 }
 //==========================================================
 // 更新
@@ -100,7 +102,36 @@ void CGame::Draw(void)
 void CGame::ShowDebugInfo(void)
 {
 	//キーボード情報取得
-	CKeyboard *key = CManager::GetInputKeyboard();;
+	CKeyboard *key = CManager::GetInputKeyboard();
+
+	//使い方説明
+	CDebugProc::Print("---------Debug Collision----------\n");
+	CDebugProc::Print("[Ctrl] + テンキー [5] : 当たり判定のラインの表示非表示\n");
+
+	if (C3DLine::GetDrawFlag())
+	{
+		CDebugProc::Print("デバッグ用当たり判定ラインを描画しています\n");
+	}
+	else
+	{
+		CDebugProc::Print("デバッグ用当たり判定ラインを描画していません\n");
+	}
+
+	// 当たり判定ラインの表示非表示
+	if (key->GetKeyboardPress(DIK_LCONTROL))
+	{// Ctrl + 5
+		if (key->GetKeyboardTrigger(DIK_NUMPAD5))
+		{
+			if (C3DLine::GetDrawFlag())
+			{// 表示中なら非表示
+				C3DLine::SetDrawFlag(false);
+			}
+			else
+			{// 非表示なら表示
+				C3DLine::SetDrawFlag(true);
+			}
+		}
+	}
 
 	// マップの更新
 	m_pMap->MapUpdate();

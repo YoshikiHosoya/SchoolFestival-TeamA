@@ -201,6 +201,8 @@ void CRenderer::Update(void)
 	//Sceneで管理してる情報
 	ImGui::Begin("SceneInfo");
 
+	CDebugProc::Print("FPS : [%d]\n", GetFps());
+
 #endif // _DEBUG
 
 	m_pLight->UpdateLight();
@@ -415,7 +417,7 @@ void CRenderer::ResetRenderer()
 	m_pCamera->ResetCamera();
 
 	//シーンの一時停止とか解除
-	CScene::Reset();
+	CScene::SetStopFlag(false);
 
 	//レンダラー設定
 	SetRendererCommand(CRenderer::RENDERER_LIGHTING_ON);

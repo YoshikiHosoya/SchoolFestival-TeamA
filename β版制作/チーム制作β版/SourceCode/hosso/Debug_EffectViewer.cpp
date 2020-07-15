@@ -46,7 +46,11 @@ CDebug_EffectViewer::CDebug_EffectViewer()
 //------------------------------------------------------------------------------
 CDebug_EffectViewer::~CDebug_EffectViewer()
 {
-
+	if (m_pWorldLine)
+	{
+		delete m_pWorldLine;
+		m_pWorldLine = nullptr;
+	}
 }
 
 //------------------------------------------------------------------------------
@@ -103,10 +107,37 @@ void CDebug_EffectViewer::Draw()
 void CDebug_EffectViewer::ShowDebugInfo()
 {
 #ifdef _DEBUG
+	//キャラクター情報情報
+	ImGui::Begin("EffectViewer");
 
+	////Tab
+	//if (ImGui::BeginTabBar("Viewer", m_bModel))
+	//{
+	//	//Tab
+	//	if (ImGui::BeginTabItem("MotionViewer"))
+	//	{
+			//モーションビューワ
+			ParticleParamaterViewer();
+			//ImGui::EndTabItem();
+	//	}
+
+	//	//TabEnd
+	//	ImGui::EndTabBar();
+	//}
+
+	ImGui::End();
+
+#endif
+}
+
+//------------------------------------------------------------------------------
+//パーティクルのパラメータのビューワ
+//------------------------------------------------------------------------------
+void CDebug_EffectViewer::ParticleParamaterViewer()
+{
 	//読み込むテキストの番号
 	static CParticleParam::PARTICLE_TEXT NowText = CParticleParam::PARTICLE_TEXT::PARTICLE_DEFAULT;
-	static std::vector<std::string> aShapeName = { "Sphere","Cone","Circle_XY","Line" };
+	static FILENAME_LIST aShapeName = { "Sphere","Cone","Circle_XY","Line" };
 
 	//止まってるかどうか
 	if (!CScene::GetStopFlag())
@@ -120,9 +151,9 @@ void CDebug_EffectViewer::ShowDebugInfo()
 
 	//Debug
 	CDebugProc::Print("[Enter] パーティクル発生\n");
-	CDebugProc::Print("[Ctrl] + [Enter] Loop %d \n",m_bLoop);
+	CDebugProc::Print("[Ctrl] + [Enter] Loop %d \n", m_bLoop);
 
-	//コンボボックス表示
+	//コンボボックス　ファイル名
 	if (CHossoLibrary::ImGui_Combobox(CParticleParam::GetFileNameList(), "ParamFileName", (int&)NowText))
 	{
 		//メモリ確保
@@ -136,16 +167,26 @@ void CDebug_EffectViewer::ShowDebugInfo()
 		m_pParticleParam.reset(std::move(pParam));
 	}
 
-	//コンボボックス表示
+	//コンボボックス　Shape
 	if (CHossoLibrary::ImGui_Combobox(aShapeName, "Shape", (int&)m_pParticleParam->GetShape()))
 	{
+
 	}
+
+	//アニメーションするかどうか
+	ImGui::Checkbox("bAnimation", &m_pParticleParam->GetAnimation());
+
+	//コンボボックス　テクスチャ
+	m_pParticleParam->GetAnimation() ?
+		CHossoLibrary::ImGui_Combobox(CTexture::GetSeparateFileName(), "SeparateTex", (int&)m_pParticleParam->GetSeparateTex()) :	//真
+		CHossoLibrary::ImGui_Combobox(CTexture::GetTexFileName(), "Texture", (int&)m_pParticleParam->GetTex());						//偽
+
+	ImGui::Checkbox("bAlphaBlend", &m_pParticleParam->GetAlphaBlend());
+
 
 	//それぞれのオフセットを調整
 	ImGui::DragFloat3("rot", m_pParticleParam->GetRot(), 0.005f, -D3DX_PI, D3DX_PI);
 	ImGui::DragFloat("fRange", &m_pParticleParam->GetRange(), 0.01f, -D3DX_PI, D3DX_PI);
-
-
 
 	//項目の大きさ設定
 	ImGui::PushItemWidth(120);
@@ -180,7 +221,7 @@ void CDebug_EffectViewer::ShowDebugInfo()
 	ImGui::ColorEdit4("Color", rCol);
 
 	//パーティクル情報保存
-	if(ImGui::Button("Save"))
+	if (ImGui::Button("Save"))
 	{
 		//セーブ
 		CParticleParam::SaveParticleDefaultParam(m_pParticleParam.get());
@@ -193,11 +234,10 @@ void CDebug_EffectViewer::ShowDebugInfo()
 		m_bLoop ^= 1;
 	}
 
-	//[Enter]を押したとき　または　ループする時
-	if (pKeyboard->GetKeyboardTrigger(DIK_RETURN) || (m_bLoop && m_nCnt % m_nLoopInterval == 0))
+	//( [Enter]を押したとき　または　ループする時 ) なおかつSceneが止まってない時
+	if ((pKeyboard->GetKeyboardTrigger(DIK_RETURN) || (m_bLoop && m_nCnt % m_nLoopInterval == 0)) && !CScene::GetStopFlag())
 	{
 		CParticle::CreateFromParam(EFFECT_CREATE_POS, m_pParticleParam.get());
 	}
 
-#endif
 }

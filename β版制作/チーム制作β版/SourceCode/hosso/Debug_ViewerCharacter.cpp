@@ -139,7 +139,7 @@ bool CDebug_ViewerCharacter::ShowMotionComboBox(CCharacter::CHARACTER_MOTION_STA
 #ifdef _DEBUG
 
 	//ƒtƒ@ƒCƒ‹–¼
-	std::vector<std::string > aFileName = {};
+	FILENAME_LIST aFileName = {};
 
 	//for
 	for (int nCnt = 0; nCnt < CCharacter::CHARACTER_MOTION_MAX; nCnt++)

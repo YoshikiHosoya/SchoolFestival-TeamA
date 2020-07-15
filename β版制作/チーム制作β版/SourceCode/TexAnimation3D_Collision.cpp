@@ -39,8 +39,10 @@ CTexAnimation3D_Collision::CTexAnimation3D_Collision(OBJ_TYPE obj) : CTexAnimati
 //------------------------------------------------------------------------------
 CTexAnimation3D_Collision::~CTexAnimation3D_Collision()
 {
-	if(m_pCollision)
+	//nullcheck
+	if (m_pCollision)
 	{
+		//当たり判定削除
 		delete m_pCollision;
 		m_pCollision = nullptr;
 	}
@@ -75,7 +77,23 @@ void CTexAnimation3D_Collision::Update()
 	//更新処理
 	CTexAnimation3D::Update();
 
-	Collision();
+	//当たり判定のカウントが亡くなった時
+	if (m_nCntCollision-- > 0)
+	{
+		//判定をする
+		Collision();
+	}
+	else
+	{
+		//nullcheck
+		if (m_pCollision)
+		{
+			//当たり判定削除
+			delete m_pCollision;
+			m_pCollision = nullptr;
+		}
+	}
+
 }
 //------------------------------------------------------------------------------
 //描画処理
@@ -97,7 +115,8 @@ void CTexAnimation3D_Collision::ShowDebugInfo()
 //------------------------------------------------------------------------------
 //生成処理
 //------------------------------------------------------------------------------
-void CTexAnimation3D_Collision::Create(D3DXVECTOR3 pos, D3DXVECTOR3 size, D3DXVECTOR3 rot, CTexture::SEPARATE_TEX_TYPE type, int nCntSwitch, CScene::OBJ_TYPE objtype, bool bPlayer)
+void CTexAnimation3D_Collision::Create(D3DXVECTOR3 pos, D3DXVECTOR3 size, D3DXVECTOR3 rot, CTexture::SEPARATE_TEX_TYPE type,
+										int nCntSwitch, CScene::OBJ_TYPE objtype, TAG tag, int nAttackValue, int nCntCollision,bool bOriginCenter)
 {
 	//メモリ確保
 	CTexAnimation3D_Collision *pTexAnimation = new CTexAnimation3D_Collision(objtype);
@@ -110,11 +129,12 @@ void CTexAnimation3D_Collision::Create(D3DXVECTOR3 pos, D3DXVECTOR3 size, D3DXVE
 
 		//情報をいれる　Scene側
 		pTexAnimation->SetPosition(pos);
-		pTexAnimation->SetSizeOfEdgeOrigin(size);
 		pTexAnimation->SetRot(rot);
 		pTexAnimation->BindTexture(CTexture::GetSeparateTexture(type));
 		pTexAnimation->SetAnimation(ZeroVector2, CTexture::GetSparateTex_UVSize(type));
-		pTexAnimation->m_bPlayer = bPlayer;
+		pTexAnimation->m_tag = tag;
+		pTexAnimation->m_nAttackValue = nAttackValue;
+		pTexAnimation->m_nCntCollision = nCntCollision;
 
 		//情報をいれる　TexAnimation側
 		pTexAnimation->SetTex(type);
@@ -123,56 +143,70 @@ void CTexAnimation3D_Collision::Create(D3DXVECTOR3 pos, D3DXVECTOR3 size, D3DXVE
 		//マトリックス計算
 		CHossoLibrary::CalcMatrix(pTexAnimation->GetMtxWorld(), ZeroVector3, rot);
 
-
-		D3DXVECTOR3 VtxPos[4] = {};
-		D3DXVECTOR3 LocalPosOrigin = ZeroVector3;
-
-		//頂点座標算出
-		D3DXVec3TransformCoord(&VtxPos[0], &D3DXVECTOR3(-size.x, +size.y * 2.0f	, 0.0f), pTexAnimation->GetMtxWorld());
-		D3DXVec3TransformCoord(&VtxPos[1], &D3DXVECTOR3(+size.x, +size.y * 2.0f	, 0.0f), pTexAnimation->GetMtxWorld());
-		D3DXVec3TransformCoord(&VtxPos[2], &D3DXVECTOR3(-size.x, 0.0f			, 0.0f), pTexAnimation->GetMtxWorld());
-		D3DXVec3TransformCoord(&VtxPos[3], &D3DXVECTOR3(+size.x, 0.0f			, 0.0f), pTexAnimation->GetMtxWorld());
-
-
-		D3DXVec3TransformCoord(&LocalPosOrigin, &D3DXVECTOR3(0.0f, size.y, 0.0f), pTexAnimation->GetMtxWorld());
-		D3DXVECTOR3 Max = D3DXVECTOR3(-1000.0f, -1000.0f, -0.0f);
-		D3DXVECTOR3 Min = D3DXVECTOR3(1000.0f, 1000.0f, 0.0f);
-		CHossoLibrary::RangeLimit_Equal_Float;
-
-
-		for (int nCnt = 0; nCnt < 4; nCnt++)
+		//当たり判定生成
+		pTexAnimation->m_pCollision = CCollision::Create();
+		//中央が原点かどうか
+		if(bOriginCenter)
 		{
-			//頂点情報を取得
-			D3DXVECTOR3 vtx = VtxPos[nCnt];
-			//最大の頂点座標と最少の頂点座標を比較して出す
-			if (Min.x > vtx.x)
+			//テクスチャのサイズ設定
+			pTexAnimation->SetSize(size);
+
+			pTexAnimation->m_pCollision->SetPos(pTexAnimation->GetPosPtr());
+			pTexAnimation->m_pCollision->SetSize(pTexAnimation->GetSize());
+		}
+		else
+		{
+			//テクスチャのサイズ設定
+			pTexAnimation->SetSizeOfEdgeOrigin(size);
+
+			//頂点座標
+			D3DXVECTOR3 VtxPos[4] = {};
+
+			//ローカル　当たり判定の中心
+			D3DXVECTOR3 LocalPosOrigin = ZeroVector3;
+
+			//頂点座標算出
+			D3DXVec3TransformCoord(&VtxPos[0], &D3DXVECTOR3(-size.x, +size.y * 2.0f, 0.0f), pTexAnimation->GetMtxWorld());
+			D3DXVec3TransformCoord(&VtxPos[1], &D3DXVECTOR3(+size.x, +size.y * 2.0f, 0.0f), pTexAnimation->GetMtxWorld());
+			D3DXVec3TransformCoord(&VtxPos[2], &D3DXVECTOR3(-size.x, 0.0f, 0.0f), pTexAnimation->GetMtxWorld());
+			D3DXVec3TransformCoord(&VtxPos[3], &D3DXVECTOR3(+size.x, 0.0f, 0.0f), pTexAnimation->GetMtxWorld());
+
+			//当たり判定用のローカル座標計算
+			D3DXVec3TransformCoord(&LocalPosOrigin, &D3DXVECTOR3(0.0f, size.y, 0.0f), pTexAnimation->GetMtxWorld());
+
+
+			//計算用の変数　当たり判定のサイズ
+			D3DXVECTOR3 Max = D3DXVECTOR3(-1000.0f, -1000.0f, -0.0f);
+
+
+			//4頂点分
+			for (int nCnt = 0; nCnt < 4; nCnt++)
 			{
-				Min.x = vtx.x;
+				//頂点情報を取得
+				D3DXVECTOR3 vtx = VtxPos[nCnt];
+				//最大の頂点座標を比較して出す
+				if (Max.x < vtx.x)
+				{
+					Max.x = vtx.x;
+				}
+				if (Max.y < vtx.y)
+				{
+					Max.y = vtx.y;
+				}
 			}
-			if (Max.x < vtx.x)
-			{
-				Max.x = vtx.x;
-			}
-			if (Min.y > vtx.y)
-			{
-				Min.y = vtx.y;
-			}
-			if (Max.y < vtx.y)
-			{
-				Max.y = vtx.y;
-			}
+
+			//マトリックス計算
+			CHossoLibrary::CalcMatrix(pTexAnimation->GetMtxWorld(), pos, rot);
+
+			//当たり判定用の原点作成　ちょっとキャラクター側とかに寄せる
+			D3DXVec3TransformCoord(&pTexAnimation->m_CollisionPosOrigin, &D3DXVECTOR3(0.0f, size.y * 0.8f, 0.0f), pTexAnimation->GetMtxWorld());
+
+			//当たり判定の設定
+			pTexAnimation->m_pCollision->SetPos(&pTexAnimation->m_CollisionPosOrigin);
+			pTexAnimation->m_pCollision->SetSize(D3DXVECTOR3(fabsf(LocalPosOrigin.x - Max.x), fabsf(LocalPosOrigin.y - Max.y), 0.0f) * 2.0f);
 		}
 
-
-
-		//マトリックス計算
-		CHossoLibrary::CalcMatrix(pTexAnimation->GetMtxWorld(), pos, rot);
-		D3DXVec3TransformCoord(&pTexAnimation->m_CollisionPosOrigin, &D3DXVECTOR3(0.0f,size.y * 0.5f,0.0f), pTexAnimation->GetMtxWorld());
-
-		//当たり判定の設定
-		pTexAnimation->m_pCollision = CCollision::Create();
-		pTexAnimation->m_pCollision->SetPos(&pTexAnimation->m_CollisionPosOrigin);
-		pTexAnimation->m_pCollision->SetSize(D3DXVECTOR3(fabsf(LocalPosOrigin.x - Max.x), fabsf(LocalPosOrigin.y - Max.y), 0.0f));
+		//デバッグの線表示
 		pTexAnimation->m_pCollision->DeCollisionCreate(CCollision::COLLISIONTYPE_NORMAL);
 	}
 }
@@ -186,10 +220,10 @@ bool CTexAnimation3D_Collision::Collision()
 	if (m_pCollision)
 	{
 		//プレイヤーの攻撃だった場合
-		if (m_bPlayer)
+		if (m_tag == TAG_PLAYER)
 		{
-			//当たり判定
-			m_pCollision->ForPlayerBulletCollision(1, 1, true);
+			//当たり判定　敵、捕虜、オブジェクトに対して　貫通有
+			m_pCollision->ForPlayerBulletCollision(m_nAttackValue, 1, true);
 		}
 	}
 

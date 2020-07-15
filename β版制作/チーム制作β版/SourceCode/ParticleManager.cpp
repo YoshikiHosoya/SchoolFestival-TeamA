@@ -38,7 +38,8 @@ CParticleManager::CParticleManager(OBJ_TYPE obj) : CScene(obj)
 //------------------------------------------------------------------------------
 CParticleManager::~CParticleManager()
 {
-
+	m_pParticleList.clear();
+	CParticle::ReleaseVertex();
 }
 //------------------------------------------------------------------------------
 //初期化処理
@@ -125,7 +126,7 @@ void CParticleManager::DebugInfo()
 //------------------------------------------------------------------------------
 void CParticleManager::Create()
 {
-	//メモリ確保
+	//メモリ確保 Scene側で管理
 	CParticleManager *pParticle = new CParticleManager(OBJTYPE_PARTICLE);
 
 	//初期化
@@ -133,6 +134,13 @@ void CParticleManager::Create()
 
 	//パーティクルの頂点バッファ確保
 	CParticle::MakeVertex();
+
+}
+//------------------------------------------------------------------------------
+//破棄
+//------------------------------------------------------------------------------
+void CParticleManager::Release()
+{
 
 }
 //------------------------------------------------------------------------------

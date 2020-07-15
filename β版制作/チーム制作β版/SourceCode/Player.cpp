@@ -103,6 +103,13 @@ void CPlayer::Uninit(void)
 		m_pGun = nullptr;
 	}
 
+	// ナイフのポインタ
+	if (m_pKnife)
+	{
+		m_pKnife->Rerease();
+		m_pKnife = nullptr;
+	}
+
 	// グレネード発射位置のポインタ
 	if (m_pGrenadeFire)
 	{

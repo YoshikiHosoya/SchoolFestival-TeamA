@@ -50,20 +50,20 @@ char *CModel::m_MapFileName[MODEL_MAP_MAX] =
 char *CModel::m_EnemyFileName[MODEL_ENEMY_MAX] =
 {
 	{ "data/MODEL/Enemy/Waist.x" },
-	{ "data/MODEL/Enemy/Body.x" },	
+	{ "data/MODEL/Enemy/Body.x" },
 	{ "data/MODEL/Enemy/Head.x" },
-	{ "data/MODEL/Enemy/L_Sholder.x" },	
-	{ "data/MODEL/Enemy/R_Sholder.x" },	
+	{ "data/MODEL/Enemy/L_Sholder.x" },
+	{ "data/MODEL/Enemy/R_Sholder.x" },
 	{ "data/MODEL/Enemy/L_Arm.x" },
 	{ "data/MODEL/Enemy/R_Arm.x" },
 	{ "data/MODEL/Enemy/L_Hand.x" },
 	{ "data/MODEL/Enemy/R_Hand.x" },
 	{ "data/MODEL/Enemy/L_Knee.x" },
 	{ "data/MODEL/Enemy/R_Knee.x" },
-	{ "data/MODEL/Enemy/L_Foot.x" },		
-	{ "data/MODEL/Enemy/R_Foot.x" },		
-	{ "data/MODEL/Enemy/L_Leg.x" },		
-	{ "data/MODEL/Enemy/R_Leg.x" },		
+	{ "data/MODEL/Enemy/L_Foot.x" },
+	{ "data/MODEL/Enemy/R_Foot.x" },
+	{ "data/MODEL/Enemy/L_Leg.x" },
+	{ "data/MODEL/Enemy/R_Leg.x" },
 };
 char *CModel::m_GunFileName[MODEL_GUN_MAX] =
 {
@@ -573,14 +573,15 @@ void CModel::UnLoad(void)
 //====================================================================
 HRESULT CModel::Init(void)
 {
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
-	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	m_col = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);
+	m_pos				= D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// 位置
+	m_move				= D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// 移動量
+	m_rot				= D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// 回転
+	m_col				= D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);	// カラー
+	m_AddColor			= D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);	// 加算する色
+	m_bDieFlag			= false;								// 死亡フラグ
+	m_bColorChangeFlag	= false;									// 色変更フラグ
+	m_type				= 0;									// 種類
 	int nNumVertices;
-	m_bDieFlag = false;
-	m_type = 0;
 	DWORD sizeFVF;
 	BYTE *pVertexBuffer;
 															// 当たり判定生成
@@ -650,32 +651,13 @@ void CModel::Update(void)
 void CModel::Draw(D3DXMATRIX mat)
 {
 	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
-	D3DXMATRIX mtxRot, mtxTrans,mtxScal;
-	D3DXMATERIAL *pMat;
-	D3DMATERIAL9 matDef;
-	// ワールドマトリックスの初期化
-	D3DXMatrixIdentity(&m_mtxWorld);
 
-	// 回転を反映
-	D3DXMatrixRotationYawPitchRoll(&mtxRot,
-		m_rot.y,
-		m_rot.x,
-		m_rot.z);
-	D3DXMatrixMultiply(&m_mtxWorld,
-		&m_mtxWorld,
-		&mtxRot);
-
-	// 移動を反映
-	D3DXMatrixTranslation(&mtxTrans,
-		m_pos.x,
-		m_pos.y,
-		m_pos.z);
-	D3DXMatrixMultiply(&m_mtxWorld,
-		&m_mtxWorld,
-		&mtxTrans);
+	// マトリックスの計算
+	CHossoLibrary::CalcMatrix(&m_mtxWorld, m_pos, m_rot);
 
 	// ポリゴンの描画
 	pDevice->SetTexture(0, NULL);
+
 	//親子関係
 	if (m_pParent== NULL)
 	{
@@ -689,59 +671,20 @@ void CModel::Draw(D3DXMATRIX mat)
 			&m_mtxWorld,
 			&m_pParent->m_mtxWorld);
 	}
-	// ワールドマトリックスの設定
-	pDevice->SetTransform(D3DTS_WORLD, &m_mtxWorld);
-	// 現在のマテリアルを取得
-	pDevice->GetMaterial(&matDef);
-	// マテリアル情報に対するポインタを取得
-	if (m_Model[m_type][m_modelCount].pBuffmat != NULL)
-	{
-		pMat = (D3DXMATERIAL*)m_Model[m_type][m_modelCount].pBuffmat->GetBufferPointer();
-		pDevice->SetRenderState(D3DRS_SPECULARENABLE, TRUE);						// すぺきゅらモード有効
 
-		for (int nCnt = 0; nCnt < (int)m_Model[m_type][m_modelCount].nNumMat; nCnt++)
-		{
-			pDevice->SetTexture(0, m_Model[m_type][m_modelCount].m_pTexture[nCnt]);
-			// マテリアルの設定
-			pDevice->SetMaterial(&pMat[nCnt].MatD3D);
-			// 描画
-			m_Model[m_type][m_modelCount].pMesh->DrawSubset(nCnt);
-		}
-	}
-	pDevice->SetRenderState(D3DRS_SPECULARENABLE, FALSE);						// すぺきゅらモード有効
-
-	// マテリアルをデフォルトに戻す
-	//pDevice->SetMaterial(&matDef);
+	// 描画
+	DrawMesh();
 }
 //====================================================================
 //描画
 //====================================================================
 void CModel::Draw()
 {
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
-	D3DXMATERIAL *pMat;
-
 	// マトリックスの計算
 	CHossoLibrary::CalcMatrix(&m_mtxWorld, m_pos, m_rot);
 
-	// ワールドマトリックスの設定
-	pDevice->SetTransform(D3DTS_WORLD, &m_mtxWorld);
-
-	// マテリアル情報に対するポインタを取得
-	if (m_Model[m_type][m_modelCount].pBuffmat != NULL)
-	{
-		pMat = (D3DXMATERIAL*)m_Model[m_type][m_modelCount].pBuffmat->GetBufferPointer();
-		pDevice->SetRenderState(D3DRS_SPECULARENABLE, TRUE);						// すぺきゅらモード有効
-
-		for (int nCnt = 0; nCnt < (int)m_Model[m_type][m_modelCount].nNumMat; nCnt++)
-		{
-			pDevice->SetTexture(0, m_Model[m_type][m_modelCount].m_pTexture[nCnt]);
-			// マテリアルの設定
-			pDevice->SetMaterial(&pMat[nCnt].MatD3D);
-			// 描画
-			m_Model[m_type][m_modelCount].pMesh->DrawSubset(nCnt);
-		}
-	}
+	// 描画
+	DrawMesh();
 }
 //====================================================================
 //デバッグ
@@ -808,76 +751,44 @@ char * CModel::GetModelFileName(int nType, int nModelCount)
 	}
 	return nullptr;
 }
-//====================================================================
-//親の設定
-//====================================================================
-void CModel::SetParent(CModel * pModel)
-{
-	m_pParent = pModel;
-}
-//====================================================================
-//モデルのオフセット指定
-//====================================================================
-void CModel::SetPosition(D3DXVECTOR3 pos)
-{
-	m_pos = pos;
-}
-void CModel::SetRot(D3DXVECTOR3 rot)
-{
-	m_rot = rot;
-}
-void CModel::SetSize(D3DXVECTOR3 size)
-{
-	m_size = size;
-}
-//====================================================================
-//位置の取得
-//====================================================================
-D3DXVECTOR3 &CModel::GetPosition(void)
-{
-	return m_pos;
-}
-//====================================================================
-//回転の取得
-//====================================================================
-D3DXVECTOR3 &CModel::GetRot(void)
-{
-	return m_rot;
-}
 
 //====================================================================
-//サイズの取得
+//描画
 //====================================================================
-D3DXVECTOR3 & CModel::GetSize(void)
+void CModel::DrawMesh()
 {
-	return m_size;
-}
+	// デバイスの取得
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
+	D3DXMATERIAL *pMat;
 
-//====================================================================
-//メッシュ取得
-//====================================================================
-LPD3DXMESH CModel::GetMesh(void)
-{
-	return m_Model[m_type][m_modelCount].pMesh;
-}
-//====================================================================
-//マトリックスの取得
-//====================================================================
-D3DXMATRIX *CModel::GetMatrix(void)
-{
-	return &m_mtxWorld;
-}
-//====================================================================
-//頂点情報のMAX取得
-//====================================================================
-D3DXVECTOR3 CModel::GetvtxMax(int nCnt)
-{
-	return m_Model[MAP_MODEL][nCnt].vtxMax;
-}
-//====================================================================
-//頂点情報のMIN取得
-//====================================================================
-D3DXVECTOR3 CModel::GetvtxMin(int nCnt)
-{
-	return m_Model[MAP_MODEL][nCnt].vtxMin;
+	// ワールドマトリックスの設定
+	pDevice->SetTransform(D3DTS_WORLD, &m_mtxWorld);
+
+	// マテリアル情報に対するポインタを取得
+	if (m_Model[m_type][m_modelCount].pBuffmat != NULL)
+	{
+		pMat = (D3DXMATERIAL*)m_Model[m_type][m_modelCount].pBuffmat->GetBufferPointer();
+
+		for (int nCnt = 0; nCnt < (int)m_Model[m_type][m_modelCount].nNumMat; nCnt++)
+		{
+			// ローカルのマテリアル
+			D3DMATERIAL9 LocalMat = pMat[nCnt].MatD3D;
+
+			// 色変更フラグがオンのとき
+			if (m_bColorChangeFlag)
+			{
+				// マテリアルカラー
+				D3DXCOLOR MatCol = LocalMat.Diffuse;
+				// 加算する色を代入
+				MatCol += m_AddColor;
+				// ローカルマテリアルの色変更
+				LocalMat.Diffuse = MatCol;
+			}
+			pDevice->SetTexture(0, m_Model[m_type][m_modelCount].m_pTexture[nCnt]);
+			// マテリアルの設定
+			pDevice->SetMaterial(&LocalMat);
+			// 描画
+			m_Model[m_type][m_modelCount].pMesh->DrawSubset(nCnt);
+		}
+	}
 }

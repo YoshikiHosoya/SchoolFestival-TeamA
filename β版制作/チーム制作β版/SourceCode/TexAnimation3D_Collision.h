@@ -29,14 +29,16 @@ public:
 	void Update();				//更新
 	void Draw();				//描画
 	void ShowDebugInfo();		//デバッグ情報表示
-	static void Create(D3DXVECTOR3 pos, D3DXVECTOR3 size,D3DXVECTOR3 rot, CTexture::SEPARATE_TEX_TYPE type, int nCntSwitch, CScene::OBJ_TYPE objtype,bool bPlayer);	//生成処理
+	static void Create(D3DXVECTOR3 pos, D3DXVECTOR3 size,D3DXVECTOR3 rot, CTexture::SEPARATE_TEX_TYPE type,
+						int nCntSwitch, CScene::OBJ_TYPE objtype,TAG tag,int nAttackValue,int nCntCollision, bool bOriginCenter);	//生成処理
 
 private:
 	CCollision *m_pCollision;	//コリジョンのポインタ
-	bool m_bPlayer;
+	TAG m_tag;
 	D3DXVECTOR3 m_CollisionPosOrigin = ZeroVector3;			//当たり判定用の座標
-
-	bool Collision();
+	int m_nAttackValue;			//攻撃力
+	int m_nCntCollision;		//判定のある時間
+	bool Collision();			//判定処理
 };
 
 #endif

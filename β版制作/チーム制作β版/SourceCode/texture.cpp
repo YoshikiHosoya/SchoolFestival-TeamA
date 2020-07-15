@@ -13,7 +13,7 @@
 std::vector<LPDIRECT3DTEXTURE9> CTexture::m_apTextureList = {};
 
 //テクスチャ名の設定
-std::vector<std::string> CTexture::m_aTexFileName =
+FILENAME_LIST CTexture::m_aTexFileName =
 {
 	{ "data/TEXTURE/TexNone.png" },							//白紙
 	{ "data/TEXTURE/Effect/particle.jpg" },					//パーティクル用の丸いの
@@ -38,23 +38,39 @@ std::vector<std::string> CTexture::m_aTexFileName =
 	{ "data/TEXTURE/UI/ranking.png" },						//ランキング
 };
 
+//テクスチャ名の設定
+FILENAME_LIST CTexture::m_aSeparateTexFileNameList =
+{
+	{ "data/TEXTURE/TexNone.png"},								//白紙
+	{ "data/TEXTURE/Effect/Explosion01.png" },					//爆発
+	{ "data/TEXTURE/Effect/ShotFlash.png" },					//発砲時の光
+	{ "data/TEXTURE/Effect/Spark.png" },						//電撃
+	{ "data/TEXTURE/Effect/HitEffect.png" },					//着弾エフェクト
+	{ "data/TEXTURE/Effect/Smoke.png" },						//煙
+	{ "data/TEXTURE/Effect/ShotGun.png" },						//ショットガン
+	{ "data/TEXTURE/Effect/Impact00.png" },						//インパクト
+	{ "data/TEXTURE/Effect/Impact01.png" },						//インパクト
+	{ "data/TEXTURE/UI/num.png" },								//ナンバー
+	{ "data/TEXTURE/UI/life.png" },								//体力のUI
+};
+
 
 //テクスチャ名の設定
 std::vector<CTexture::SEPARATE_TEX_INFO> CTexture::m_apSeparateTexInfoList =
 {
 	//テクスチャのポインタ、テクスチャのパス、テクスチャのタイプ、テクスチャの分割数、テクスチャのUVサイズ
 	//ポインタとUVサイズに関してはLoad関数で読み込み＆計算する
-	{ nullptr, "data/TEXTURE/TexNone.png",					CTexture::SEPARATE_TEX_NONE,					D3DXVECTOR2(1,1),	ZeroVector2 },		//白紙
-	{ nullptr, "data/TEXTURE/Effect/Explosion01.png",		CTexture::SEPARATE_TEX_EFFECT_EXPLOSION01,		D3DXVECTOR2(5,3),	ZeroVector2 },		//爆発
-	{ nullptr, "data/TEXTURE/Effect/ShotFlash.png",			CTexture::SEPARATE_TEX_EFFECT_SHOTFLASH,		D3DXVECTOR2(5,2),	ZeroVector2 },		//発砲時の光
-	{ nullptr, "data/TEXTURE/Effect/Spark.png",				CTexture::SEPARATE_TEX_EFFECT_SPARK,			D3DXVECTOR2(5,2),	ZeroVector2 },		//電撃
-	{ nullptr, "data/TEXTURE/Effect/HitEffect.png",			CTexture::SEPARATE_TEX_EFFECT_HITEFFECT,		D3DXVECTOR2(14,1),	ZeroVector2 },		//着弾エフェクト
-	{ nullptr, "data/TEXTURE/Effect/Smoke.png",				CTexture::SEPARATE_TEX_EFFECT_SMOKE,			D3DXVECTOR2(10,1),	ZeroVector2 },		//煙
-	{ nullptr, "data/TEXTURE/Effect/ShotGun.png",			CTexture::SEPARATE_TEX_EFFECT_SHOTGUN,			D3DXVECTOR2(5,3),	ZeroVector2 },		//ショットガン
-	{ nullptr, "data/TEXTURE/Effect/Impact00.png",			CTexture::SEPARATE_TEX_EFFECT_IMPACT00,			D3DXVECTOR2(2,5),	ZeroVector2 },		//インパクト
-	{ nullptr, "data/TEXTURE/Effect/Impact01.png",			CTexture::SEPARATE_TEX_EFFECT_IMPACT01,			D3DXVECTOR2(2,6),	ZeroVector2 },		//インパクト
-	{ nullptr, "data/TEXTURE/UI/num.png",					CTexture::SEPARATE_TEX_NUM,						D3DXVECTOR2(10,1),	ZeroVector2 },		//ナンバー
-	{ nullptr, "data/TEXTURE/UI/life.png",					CTexture::SEPARATE_TEX_UI_LIFE,					D3DXVECTOR2(5,1),	ZeroVector2 },		//体力のUI
+	{ nullptr, CTexture::SEPARATE_TEX_NONE,					D3DXVECTOR2(1,1),	ZeroVector2 },		//白紙
+	{ nullptr, CTexture::SEPARATE_TEX_EFFECT_EXPLOSION01,	D3DXVECTOR2(5,3),	ZeroVector2 },		//爆発
+	{ nullptr, CTexture::SEPARATE_TEX_EFFECT_SHOTFLASH,		D3DXVECTOR2(5,2),	ZeroVector2 },		//発砲時の光
+	{ nullptr, CTexture::SEPARATE_TEX_EFFECT_SPARK,			D3DXVECTOR2(5,2),	ZeroVector2 },		//電撃
+	{ nullptr, CTexture::SEPARATE_TEX_EFFECT_HITEFFECT,		D3DXVECTOR2(14,1),	ZeroVector2 },		//着弾エフェクト
+	{ nullptr, CTexture::SEPARATE_TEX_EFFECT_SMOKE,			D3DXVECTOR2(10,1),	ZeroVector2 },		//煙
+	{ nullptr, CTexture::SEPARATE_TEX_EFFECT_SHOTGUN,		D3DXVECTOR2(5,3),	ZeroVector2 },		//ショットガン
+	{ nullptr, CTexture::SEPARATE_TEX_EFFECT_IMPACT00,		D3DXVECTOR2(2,5),	ZeroVector2 },		//インパクト
+	{ nullptr, CTexture::SEPARATE_TEX_EFFECT_IMPACT01,		D3DXVECTOR2(2,6),	ZeroVector2 },		//インパクト
+	{ nullptr, CTexture::SEPARATE_TEX_NUM,					D3DXVECTOR2(10,1),	ZeroVector2 },		//ナンバー
+	{ nullptr, CTexture::SEPARATE_TEX_UI_LIFE,				D3DXVECTOR2(5,1),	ZeroVector2 },		//体力のUI
 
 };
 
@@ -100,20 +116,20 @@ void CTexture::TexLoad(HWND hwnd)
 	{
 		//テクスチャの読み込み
 		D3DXCreateTextureFromFile(pDevice,
-			m_apSeparateTexInfoList[nCnt].m_aSeparateTexFileName.data(),
+			m_aSeparateTexFileNameList[nCnt].data(),
 			&m_apSeparateTexInfoList[nCnt].m_apSeparateTexture);
 
 		//debug
-		std::cout << "SeparateTex Load - " << nCnt << m_apSeparateTexInfoList[nCnt].m_aSeparateTexFileName.data() << NEWLINE;
+		std::cout << "SeparateTex Load - " << nCnt << m_aSeparateTexFileNameList[nCnt].data() << NEWLINE;
 
 		//nullcheck
 		if (!m_apSeparateTexInfoList[nCnt].m_apSeparateTexture)
 		{
 			//debug
-			std::cout << "LOADFAILED!!! SeparateTex - " << nCnt << m_apSeparateTexInfoList[nCnt].m_aSeparateTexFileName.data() << NEWLINE;
+			std::cout << "LOADFAILED!!! SeparateTex - " << nCnt << m_aSeparateTexFileNameList[nCnt].data() << NEWLINE;
 
 			//失敗
-			MessageBox(hwnd, "テクスチャ読み込み失敗", m_apSeparateTexInfoList[nCnt].m_aSeparateTexFileName.data(), MB_OK | MB_ICONHAND);
+			MessageBox(hwnd, "テクスチャ読み込み失敗", m_aSeparateTexFileNameList[nCnt].data(), MB_OK | MB_ICONHAND);
 		}
 
 		//どちらかの値が0だった場合は計算しない
@@ -127,7 +143,7 @@ void CTexture::TexLoad(HWND hwnd)
 		{
 			m_apSeparateTexInfoList[nCnt].m_UVSize = ZeroVector2;
 			//警告文
-			MessageBox(hwnd, "0除算をしようとしました　値を確認してください", m_apSeparateTexInfoList[nCnt].m_aSeparateTexFileName.data(), MB_OK | MB_ICONHAND);
+			MessageBox(hwnd, "0除算をしようとしました　値を確認してください", m_aSeparateTexFileNameList[nCnt].data(), MB_OK | MB_ICONHAND);
 		}
 	}
 }

@@ -30,6 +30,7 @@
 // 静的変数宣言
 //
 // ----------------------------------------
+bool C3DLine::m_bDrawFlag = true;		// ラインの描画フラグ
 
 // ----------------------------------------
 // コンストラクタ処理
@@ -75,50 +76,53 @@ void C3DLine::Update(void)
 // ----------------------------------------
 void C3DLine::Draw(void)
 {
-	// 変数宣言
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
+	if (m_bDrawFlag)
+	{
+		// 変数宣言
+		LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
 
-	// 回転・位置の計算用変数
-	D3DXMATRIX mtxRot, mtxTrans;
+		// 回転・位置の計算用変数
+		D3DXMATRIX mtxRot, mtxTrans;
 
-	// ワールドマトリックスの初期化(単位行列にするため)
-	D3DXMatrixIdentity(GetMtxWorld());
+		// ワールドマトリックスの初期化(単位行列にするため)
+		D3DXMatrixIdentity(GetMtxWorld());
 
-	// 回転を反映 //
-	// 回転行列作成(y,x,z)
-	D3DXMatrixRotationYawPitchRoll(&mtxRot,
-		m_rot.y, m_rot.x, m_rot.z);
+		// 回転を反映 //
+		// 回転行列作成(y,x,z)
+		D3DXMatrixRotationYawPitchRoll(&mtxRot,
+			m_rot.y, m_rot.x, m_rot.z);
 
-	// 行列の積
-	D3DXMatrixMultiply(GetMtxWorld(),
-		GetMtxWorld(),
-		&mtxRot);
+		// 行列の積
+		D3DXMatrixMultiply(GetMtxWorld(),
+			GetMtxWorld(),
+			&mtxRot);
 
-	// 位置を反映 //
-	// 平行移動行列作成
-	D3DXMatrixTranslation(&mtxTrans,
-		m_pos.x, m_pos.y, m_pos.z);
+		// 位置を反映 //
+		// 平行移動行列作成
+		D3DXMatrixTranslation(&mtxTrans,
+			m_pos.x, m_pos.y, m_pos.z);
 
-	// 行列の積
-	D3DXMatrixMultiply(GetMtxWorld(),
-		GetMtxWorld(),
-		&mtxTrans);
+		// 行列の積
+		D3DXMatrixMultiply(GetMtxWorld(),
+			GetMtxWorld(),
+			&mtxTrans);
 
-	// ワールドマトリックスの設定
-	pDevice->SetTransform(D3DTS_WORLD, GetMtxWorld());
+		// ワールドマトリックスの設定
+		pDevice->SetTransform(D3DTS_WORLD, GetMtxWorld());
 
-	// 頂点バッファをデータストリームに設定
-	pDevice->SetStreamSource(0, GetVtxBuff(), 0, sizeof(VERTEX_3D));
+		// 頂点バッファをデータストリームに設定
+		pDevice->SetStreamSource(0, GetVtxBuff(), 0, sizeof(VERTEX_3D));
 
-	// 頂点フォーマットの設定
-	pDevice->SetFVF(FVF_VERTEX_3D);
+		// 頂点フォーマットの設定
+		pDevice->SetFVF(FVF_VERTEX_3D);
 
-	// ポリゴンの描画
-	pDevice->DrawPrimitive(
-		D3DPT_LINELIST,
-		0,
-		2
-	);
+		// ポリゴンの描画
+		pDevice->DrawPrimitive(
+			D3DPT_LINELIST,
+			0,
+			2
+		);
+	}
 }
 // ----------------------------------------
 // デバッグ

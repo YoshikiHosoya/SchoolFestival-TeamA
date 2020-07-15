@@ -63,7 +63,7 @@ public:
 	OBJ_TYPE GetObjType(void);
 	void Rerease(void);
 	static void StopUpdate(void);
-	static void Reset() { m_bStopFlag = false; };
+	static void SetStopFlag(bool bStop) { m_bStopFlag = bStop; };
 	static void Set1FUpdate() { m_b1FUpdateFlag = true; };
 protected:
 

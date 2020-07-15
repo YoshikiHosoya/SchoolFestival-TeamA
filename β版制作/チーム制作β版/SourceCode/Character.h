@@ -163,8 +163,9 @@ public:
 	char* GetOffsetFileName(CHARACTER_TYPE type);
 	char* GetMotionFileName(CHARACTER_MOTION_STATE motionstate);
 
-	bool GetDieFlag(){return m_bDieFlag; };							// 死亡フラグの取得
-	void SetDieFlag(bool DieFlag) { m_bDieFlag = DieFlag; };		// 死亡フラグの設定
+	bool GetDieFlag()								{ return m_bDieFlag; };						// 死亡フラグの取得
+	void SetDieFlag(bool DieFlag)					{ m_bDieFlag = DieFlag; };					// 死亡フラグの設定
+	void ChangeColor(bool ColorChangeFlag, D3DXCOLOR AddColor);									// 色変更
 
 	CCollision *GetCollision() { return m_pCollision; };			// 当たり判定のポインタ取得
 

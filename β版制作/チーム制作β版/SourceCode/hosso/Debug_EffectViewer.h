@@ -48,6 +48,8 @@ private:
 
 	C3DLine *m_p3DLine;									//3Dの線 Shapeとかrotを視覚化する為
 
+	void ParticleParamaterViewer();						//パーティクルのパラメータ系のビューワ
+
 };
 
 #endif
