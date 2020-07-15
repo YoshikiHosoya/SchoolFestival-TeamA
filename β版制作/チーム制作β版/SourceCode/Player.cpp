@@ -24,6 +24,7 @@
 #include "Knife.h"
 #include "playerUI.h"
 #include "playertank.h"
+#include "battleplane.h"
 
 //====================================================================
 //マクロ定義
@@ -525,25 +526,35 @@ void CPlayer::Ride()
 	}
 	else
 	{
-		// 戦車の総数分
-		for (int nCntVehicle = 0; nCntVehicle < CManager::GetBaseMode()->GetMap()->GetMaxPlayerTank(); nCntVehicle++)
-		{
-			// 乗り物のポインタ取得
-			CPlayertank *pPlayertank = CManager::GetBaseMode()->GetMap()->GetPlayertank(nCntVehicle);
-			// 戦車が存在した時
-			if (pPlayertank != nullptr)
-			{
-				// プレイヤーの座標を戦車の座標に合わせる
-				this->SetPosition(pPlayertank->GetPosition());
+		CPlayertank *pPlayertank = nullptr;
+		pPlayertank = this->GetCollision()->ForPlayer_TankCollision();
 
-				// 弾の残数表示
-				m_pPlayerUI->SetBulletAmmo(pPlayertank->GetGun()->GetGunAmmo(), pPlayertank->GetGun()->GetGunType());
-				// グレネードの残数表示
-				m_pPlayerUI->SetGrenadeAmmo(pPlayertank->GetGrenadeFire()->GetGrenadeAmmo());
-			}
+		CBattlePlane *pBattlePlane = nullptr;
+		pBattlePlane = this->GetCollision()->ForPlayer_PlaneCollision();
+
+		// 戦車に乗っている時
+		if (pPlayertank != nullptr)
+		{
+			// プレイヤーの座標を戦車の座標に合わせる
+			this->SetPosition(pPlayertank->GetPosition());
+
+			// 弾の残数表示
+			m_pPlayerUI->SetBulletAmmo(pPlayertank->GetGun()->GetGunAmmo(), pPlayertank->GetGun()->GetGunType());
+			// グレネードの残数表示
+			m_pPlayerUI->SetGrenadeAmmo(pPlayertank->GetGrenadeFire()->GetGrenadeAmmo());
 		}
 
-		// 戦車に乗っている時にジャンプして戦車から降りる
+		// 戦闘機に乗っている時
+		else if (pBattlePlane != nullptr)
+		{
+			// プレイヤーの座標を戦闘機の座標に合わせる
+			this->SetPosition(pBattlePlane->GetPosition());
+
+			// 弾の残数表示
+			m_pPlayerUI->SetBulletAmmo(pBattlePlane->GetGun()->GetGunAmmo(), pBattlePlane->GetGun()->GetGunType());
+		}
+
+		// 乗り物に乗っている時にジャンプして戦車から降りる
 		CKeyboard *key = CManager::GetInputKeyboard();
 		if (key->GetKeyboardTrigger(DIK_SPACE) && GetJump() == false)
 		{

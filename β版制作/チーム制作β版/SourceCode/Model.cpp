@@ -73,7 +73,8 @@ char *CModel::m_GunFileName[MODEL_GUN_MAX] =
 	{ "data/MODEL/Gun/Gun.x" },						// レーザーガン
 	{ "data/MODEL/Gun/Gun.x" },						// ロケットランチャー
 	{ "data/MODEL/Gun/Gun.x" },						// フレイムショット
-	{ "data/MODEL/Gun/Tankgun.x" },					// 戦車の銃
+	{ "data/MODEL/Gun/TankGun.x" },					// 戦車の銃
+	{ "data/MODEL/Gun/PlaneGun.x" },				// 戦闘機の銃
 	{ "data/MODEL/Gun/Knife.x" },					// ナイフ
 };
 char *CModel::m_BulletFileName[MODEL_BULLET_MAX] =
@@ -91,6 +92,13 @@ char *CModel::m_TankFileName[MODEL_TANK_MAX] =
 	{ "data/MODEL/Tank/Tank_backwheel.x" },			// 戦車の後タイヤ
 	{ "data/MODEL/Tank/Tankgun.x" },				// 戦車の銃
 };
+
+char *CModel::m_PlaneFileName[MODEL_PLANE_MAX] =
+{
+	{ "data/MODEL/BattlePlane/BattlePlane_Body.x" },	// 戦闘機の機体
+	{ "data/MODEL/BattlePlane/BattlePlane_Gun.x" },		// 戦闘機の銃
+};
+
 
 char *CModel::m_ObstacleFileName[OBSTACLE_TYPE_MAX] =
 {
@@ -342,6 +350,32 @@ void CModel::LoadModel(void)
 
 	}
 
+	//戦闘機のモデル読み込み
+	for (int nCnt = 0; nCnt < MODEL_PLANE_MAX; nCnt++)
+	{
+		// Xファイルの読み込み
+		D3DXLoadMeshFromX(
+			m_PlaneFileName[nCnt],
+			D3DXMESH_SYSTEMMEM,
+			pDevice,
+			NULL,
+			&m_Model[PLANE_MODEL][nCnt].pBuffmat,
+			NULL,
+			&m_Model[PLANE_MODEL][nCnt].nNumMat,
+			&m_Model[PLANE_MODEL][nCnt].pMesh
+		);
+		//テクスチャのメモリ確保
+		m_Model[PLANE_MODEL][nCnt].m_pTexture = new LPDIRECT3DTEXTURE9[(int)m_Model[PLANE_MODEL][nCnt].nNumMat];
+		pMat = (D3DXMATERIAL*)m_Model[PLANE_MODEL][nCnt].pBuffmat->GetBufferPointer();
+
+		for (int nCntmat = 0; nCntmat < (int)m_Model[PLANE_MODEL][nCnt].nNumMat; nCntmat++)
+		{
+			m_Model[PLANE_MODEL][nCnt].m_pTexture[nCntmat] = NULL;
+			D3DXCreateTextureFromFile(pDevice, pMat[nCntmat].pTextureFilename, &m_Model[PLANE_MODEL][nCnt].m_pTexture[nCntmat]);
+		}
+
+		std::cout << "PLANEMODEL Load >>" << m_PlaneFileName[nCnt] << NEWLINE;
+	}
 }
 //====================================================================
 //モデルの開放
@@ -562,8 +596,36 @@ void CModel::UnLoad(void)
 					m_Model[TANK_MODEL][nCnt].m_pTexture[nCntmat] = NULL;
 				}
 			}
-			delete[] m_Model[OBSTACLE_MODEL][nCnt].m_pTexture;
+			delete[] m_Model[TANK_MODEL][nCnt].m_pTexture;
 			m_Model[TANK_MODEL][nCnt].m_pTexture = NULL;
+		}
+	}
+
+	// 戦闘機
+	for (int nCnt = 0; nCnt < MODEL_PLANE_MAX; nCnt++)
+	{
+		if (m_Model[PLANE_MODEL][nCnt].pBuffmat != NULL)
+		{
+			m_Model[PLANE_MODEL][nCnt].pBuffmat->Release();
+			m_Model[PLANE_MODEL][nCnt].pBuffmat = NULL;
+		}
+		if (m_Model[PLANE_MODEL][nCnt].pMesh != NULL)
+		{
+			m_Model[PLANE_MODEL][nCnt].pMesh->Release();
+			m_Model[PLANE_MODEL][nCnt].pMesh = NULL;
+		}
+		if (m_Model[PLANE_MODEL][nCnt].m_pTexture != NULL)
+		{
+			for (int nCntmat = 0; nCntmat < (int)m_Model[PLANE_MODEL][nCnt].nNumMat; nCntmat++)
+			{
+				if (m_Model[PLANE_MODEL][nCnt].m_pTexture[nCntmat] != NULL)
+				{
+					m_Model[PLANE_MODEL][nCnt].m_pTexture[nCntmat]->Release();
+					m_Model[PLANE_MODEL][nCnt].m_pTexture[nCntmat] = NULL;
+				}
+			}
+			delete[] m_Model[PLANE_MODEL][nCnt].m_pTexture;
+			m_Model[PLANE_MODEL][nCnt].m_pTexture = NULL;
 		}
 	}
 
@@ -804,6 +866,10 @@ char * CModel::GetModelFileName(int nType, int nModelCount)
 		//戦車
 	case TANK_MODEL:
 		return m_TankFileName[nModelCount];
+		break;
+		//戦車
+	case PLANE_MODEL:
+		return m_PlaneFileName[nModelCount];
 		break;
 	}
 	return nullptr;

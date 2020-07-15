@@ -23201,7 +23201,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "\data\MODEL\BattlePlane\diffuse_map.jpg\";
+    "data/MODEL/BattlePlane/diffuse_map.jpg";
    }
   }
   Material {
