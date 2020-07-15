@@ -222,6 +222,8 @@ void CMap::EnemyLoad(MAP MapNum)
 								m_pEnemy[m_pEnemy.size() - 1]->SetPosition(pos);
 								// �̗͂̐ݒ�
 								m_pEnemy[m_pEnemy.size() - 1]->SetLife(nLife);
+
+								m_pEnemy[m_pEnemy.size() - 1]->ChangeColor(true, D3DXCOLOR(1.0f, 0.0f, 1.0f, 0.0f));
 						}
 					}
 				}

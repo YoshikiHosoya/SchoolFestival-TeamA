@@ -15,6 +15,7 @@ class CCollision;
 class CModel : public CScene
 {
 public:
+	/*--- プレイヤーのパーツモデル ---*/
 	typedef enum
 	{
 		MODEL_PLAYER_WAIST,			//プレイヤーの腰
@@ -35,6 +36,7 @@ public:
 		MODEL_PLAYER_MAX
 	}CHARA_MODEL;
 
+	/*--- 捕虜のパーツモデル ---*/
 	typedef enum
 	{
 		MODEL_PRISONER_HEAD,			//捕虜の頭
@@ -56,6 +58,7 @@ public:
 		MODEL_MAP_ICESWORD,			//マップの武器
 		MODEL_MAP_MAX
 	}CREATE_MAP_MODEL;
+	/*--- 敵のパーツモデル ---*/
 	typedef enum
 	{
 		MODEL_ENEMY_WAIST,		//腰
@@ -108,6 +111,7 @@ public:
 		MODEL_TANK_MAX
 	}TANK_PARTS_MODEL;
 
+	// モデルの種類
 	typedef enum
 	{
 		PLAYER_MODEL,
@@ -143,43 +147,53 @@ public:
 		//D3DXVECTOR3 Dest;
 	} MODEL;
 
-	CModel(OBJ_TYPE type);
-	~CModel();
-	HRESULT Init(void);
-	void Uninit(void);
-	void Update(void);
-	void Draw(D3DXMATRIX mat);
-	void Draw();
-	void DebugInfo();
-	void SetParent(CModel *pModel);
-	void SetPosition(D3DXVECTOR3 pos);
-	void SetRot(D3DXVECTOR3 rot);
-	void SetSize(D3DXVECTOR3 size);
-	void SetType(int type)				{ m_type = type; };					// モデルタイプの設定
-	void SetModelConut(int nModelCount) { m_modelCount = nModelCount; };	// モデルカウントの設定
-	void SetParentIdx(int nParentIdx)	{ m_nParentIdx = nParentIdx; };		// 親番号設定
-	int GetType()						{ return m_type; };					// モデルタイプの取得
-	int &GetModelCount()				{ return m_modelCount; };			// モデルカウントの取得
-	int &GetParentIdx()					{ return m_nParentIdx; };			// 親番号取得
-	LPD3DXMESH GetMesh(void);
-	D3DXMATRIX *GetMatrix(void);
-	static void LoadModel(void);
-	static void UnLoad(void);
-	D3DXVECTOR3 &GetPosition(void);
-	D3DXVECTOR3 &GetRot(void);
-	D3DXVECTOR3 &GetSize(void);
-	D3DXVECTOR3 GetvtxMax(int nCnt);
-	D3DXVECTOR3 GetvtxMin(int nCnt);
-	static CModel *Create(int type, int modelCount);
-	static CModel *CreateSceneManagement(int type, int modelCount);
-	D3DXVECTOR3 *GetPosptr() { return &m_pos; };
+	CModel(OBJ_TYPE type);				// コンストラクタ
+	~CModel();							// デストラクタ
 
-	static char* GetModelFileName(int nType, int nModelCount);
-	bool GetDieFlag() { return m_bDieFlag; };							// 死亡フラグの取得
-	void SetDieFlag(bool DieFlag) { m_bDieFlag = DieFlag; };			// 死亡フラグの設定
+	/* メンバ関数 */
+	HRESULT Init(void);					// 初期化処理
+	void Uninit(void);					// 終了処理
+	void Update(void);					// 更新処理
+	void Draw(D3DXMATRIX mat);			// 描画処理
+	void Draw();						// 描画処理
+	void DebugInfo();					// デバッグ情報
 
-	CCollision *GetCollision() { return m_pCollision; };				// 当たり判定のポインタ取得
+	/* 静的メンバ関数 */
+	static void LoadModel(void);									// モデルのロード
+	static void UnLoad(void);										// モデルの開放
+	static CModel *Create(int type, int modelCount);				// モデルのクリエイト
+	static CModel *CreateSceneManagement(int type, int modelCount);	// モデルのクリエイト(シーンで管理する)
+	static char* GetModelFileName(int nType, int nModelCount);		// モデルのファイル名取得
+
+	/* メンバ関数 */
+	void SetParent(CModel *pModel)					{ m_pParent = pModel; };							// 親の設定
+	void SetPosition(D3DXVECTOR3 pos)				{ m_pos = pos; };									// モデルのオフセット指定
+	void SetRot(D3DXVECTOR3 rot)					{ m_rot = rot; };									// 回転の設定
+	void SetSize(D3DXVECTOR3 size)					{ m_size = size; };									// サイズの設定
+	void SetType(int type)							{ m_type = type; };									// モデルタイプの設定
+	void SetModelConut(int nModelCount)				{ m_modelCount = nModelCount; };					// モデルカウントの設定
+	void SetParentIdx(int nParentIdx)				{ m_nParentIdx = nParentIdx; };						// 親番号設定
+	void SetDieFlag(bool DieFlag)					{ m_bDieFlag = DieFlag; };							// 死亡フラグの設定
+	void SetColorChangeFlag(bool ColorChangeFlag)	{ m_bColorChangeFlag = ColorChangeFlag; };			// 色変更フラグの設定
+	void SetAddColor(D3DXCOLOR AddColor)			{ m_AddColor = AddColor; };							// 加算する色の設定
+	D3DXVECTOR3 &GetPosition(void)					{ return m_pos; };									// 位置の取得
+	D3DXVECTOR3 &GetRot(void)						{ return m_rot; };									// 回転の取得
+	D3DXVECTOR3 &GetSize(void)						{ return m_size; };									// サイズの取得
+	D3DXVECTOR3 GetvtxMax(int nCnt)					{ return m_Model[MAP_MODEL][nCnt].vtxMax;};			// 頂点情報のMAX取得
+	D3DXVECTOR3 GetvtxMin(int nCnt)					{ return m_Model[MAP_MODEL][nCnt].vtxMin; };		// 頂点情報のMIN取得
+	int GetType()									{ return m_type; };									// モデルタイプの取得
+	int &GetModelCount()							{ return m_modelCount; };							// モデルカウントの取得
+	int &GetParentIdx()								{ return m_nParentIdx; };							// 親番号取得
+	D3DXMATRIX *GetMatrix(void)						{ return &m_mtxWorld; };							// マトリックスの取得
+	LPD3DXMESH GetMesh(void)						{ return m_Model[m_type][m_modelCount].pMesh; };	// メッシュ取得
+	CCollision *GetCollision()						{ return m_pCollision; };							// 当たり判定のポインタ取得
+	bool GetDieFlag()								{ return m_bDieFlag; };								// 死亡フラグの取得
+	bool GetColorChangeFlag()						{ return m_bColorChangeFlag; };						// 色変更フラグの取得
+	D3DXCOLOR	GetAddColor()						{ return m_AddColor; };								// 加算する色の取得
+
 private:
+	/* メンバ関数 */
+	void DrawMesh();			// 描画
 
 	static MODEL m_Model[TYPE_MAX][MAX_ALLMODEL];
 	static char *m_PlayerFileName[MODEL_PLAYER_MAX];
@@ -192,20 +206,22 @@ private:
 	static char *m_TankFileName[MODEL_TANK_MAX];
 
 
-	D3DXVECTOR3 m_pos;					//位置
-	D3DXVECTOR3 m_size;					//サイズ
-	D3DXVECTOR3 m_posold;				//位置
-	D3DXVECTOR3 m_move;					//移動量
-	D3DXVECTOR3 m_rot;					//回転
-	D3DXCOLOR m_col;					//カラー
-	D3DXMATRIX m_mtxWorld;				//マトリックス
-	D3DXMATRIX m_mtxparent;
-	CModel *m_pParent;					//親のポインタ
-	int m_modelCount;					//モデルの種類
-	int m_type;
-	int m_nIdxModelpalent;				//親のインデックス
-	int m_nParentIdx;					//親番号
-	bool m_bDieFlag;					// 死亡フラグ
-	CCollision				*m_pCollision;			// 当たり判定情報
+	D3DXVECTOR3		m_pos;					//位置
+	D3DXVECTOR3		m_size;					//サイズ
+	D3DXVECTOR3		m_posold;				//位置
+	D3DXVECTOR3		m_move;					//移動量
+	D3DXVECTOR3		m_rot;					//回転
+	D3DXCOLOR		m_col;					//カラー
+	D3DXCOLOR		m_AddColor;				//加算する色
+	D3DXMATRIX		m_mtxWorld;				//マトリックス
+	D3DXMATRIX		m_mtxparent;
+	CModel			*m_pParent;				//親のポインタ
+	int				m_modelCount;			//モデルの種類
+	int				m_type;
+	int				m_nIdxModelpalent;		//親のインデックス
+	int				m_nParentIdx;			//親番号
+	bool			m_bDieFlag;				// 死亡フラグ
+	bool			m_bColorChangeFlag;		// 色変更フラグ	
+	CCollision		*m_pCollision;			// 当たり判定情報
 };
 #endif
