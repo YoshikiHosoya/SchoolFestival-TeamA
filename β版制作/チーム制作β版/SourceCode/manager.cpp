@@ -63,10 +63,13 @@ void CManager::Uninit(void)
 	m_pRenderer->Uninit();
 	m_pMouse->Uninit();
 	m_pPad->Uninit();
+	//nullcheck
 	if (m_pBaseMode)
 	{
-		//ƒ‚[ƒh
 		m_pBaseMode->Uninit();
+
+		delete m_pBaseMode;
+		m_pBaseMode = nullptr;
 	}
 }
 //===========================================

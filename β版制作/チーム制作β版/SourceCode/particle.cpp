@@ -81,8 +81,11 @@ void CParticle::Draw()
 	//ライティングOFF
 	CManager::GetRenderer()->SetRendererCommand(CRenderer::RENDERER_LIGHTING_OFF);
 
-	//加算合成
-	CManager::GetRenderer()->SetRendererCommand(CRenderer::RENDERER_ALPHABLEND_ADD);
+	if (m_pParticleParam->GetAlphaBlend())
+	{
+		//加算合成
+		CManager::GetRenderer()->SetRendererCommand(CRenderer::RENDERER_ALPHABLEND_ADD);
+	}
 
 	//Zテスト無効でZライティング有効
 	CManager::GetRenderer()->SetRendererCommand(CRenderer::RENDERER_ZTEST_OFF_ZWRITING_ON);
@@ -93,8 +96,13 @@ void CParticle::Draw()
 	//頂点フォーマットの設定
 	pDevice->SetFVF(FVF_VERTEX_3D);
 
+
+	CDebugProc::Print("draw Anim %d\n", m_pParticleParam->GetAnimation());
+
 	//テクスチャの設定
-	pDevice->SetTexture(0, CTexture::GetTexture(m_pParticleParam->GetTex()));
+	m_pParticleParam->GetAnimation() ?
+		pDevice->SetTexture(0, CTexture::GetSeparateTexture(m_pParticleParam->GetSeparateTex())) :
+		pDevice->SetTexture(0, CTexture::GetTexture(m_pParticleParam->GetTex()));
 
 	//パーティクルのリストの数分
 	for (size_t nCnt = 0; nCnt < m_pParticleList.size(); nCnt++)

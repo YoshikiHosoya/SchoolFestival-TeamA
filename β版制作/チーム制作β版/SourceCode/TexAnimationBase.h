@@ -27,7 +27,6 @@ public:
 	~CTexAnimationBase();									//デストラクタ
 
 	bool UpdateAnimation(CSceneBase *pSceneBase);			//更新
-	//void DrawSetting();										//描画するにあたっての設定
 
 	//Set関数
 	void SetTex(CTexture::SEPARATE_TEX_TYPE Tex)		{ m_EffectTex = Tex; };				//テクスチャ設定

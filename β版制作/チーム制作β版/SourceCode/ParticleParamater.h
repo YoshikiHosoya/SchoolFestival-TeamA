@@ -45,23 +45,27 @@ public:
 	//コンストラクタ
 	CParticleParam()
 	{
-		m_bGravity = false;									//重力
-		m_bSpeedRandom = false;								//速度がランダムかどうか
-		m_nLife = 50;										//ライフ
-		m_nNumber = 10;										//個数
-		m_fRadius = 15.0f;									//半径
-		m_fSpeed = 10.0f;									//速度
-		m_fRange = 0.5f;									//範囲
-		m_fRadiusDamping = DEFAULT_DAMPING;					//半径の減衰地
-		m_fAlphaDamping = DEFAULT_DAMPING;					//アルファ値の減衰値
-		m_fGravityPower = DEFAULT_GRAVITY_POWER;			//重力の大きさ
+		m_bGravity = false;												//重力
+		m_bSpeedRandom = false;											//速度がランダムかどうか
+		m_bAnimation = false;											//アニメーションするかどうか
+		m_bAlphaBlend = true;											//αブレンドするか
 
-		m_col = WhiteColor;									//色
-		m_rot = ZeroVector3;								//角度
+		m_nLife = 50;													//ライフ
+		m_nNumber = 10;													//個数
+		m_fRadius = 15.0f;												//半径
+		m_fSpeed = 10.0f;												//速度
+		m_fRange = 0.5f;												//範囲
+		m_fRadiusDamping = DEFAULT_DAMPING;								//半径の減衰地
+		m_fAlphaDamping = DEFAULT_DAMPING;								//アルファ値の減衰値
+		m_fGravityPower = DEFAULT_GRAVITY_POWER;						//重力の大きさ
 
-		m_Textype = CTexture::TEX_EFFECT_PARTICLE;			//テクスチャ
-		m_shape = SHAPE_SPHERE;								//パーティクルの方向
-		m_ParticleType = PARTICLE_DEFAULT;					//パーティクルのタイプ
+		m_col = WhiteColor;												//色
+		m_rot = ZeroVector3;											//角度
+
+		m_Textype = CTexture::TEX_EFFECT_PARTICLE;						//テクスチャ
+		m_SeparateTex = CTexture::SEPARATE_TEX_EFFECT_EXPLOSION01;		//分割テクスチャ
+		m_shape = SHAPE_SPHERE;											//パーティクルの方向
+		m_ParticleType = PARTICLE_DEFAULT;								//パーティクルのタイプ
 	}
 	~CParticleParam() {};
 
@@ -75,22 +79,25 @@ public:
 	//Get関数
 	static std::vector<std::string> &GetFileNameList() {	return m_aFileNameList;};
 
-	bool&GetSpeedRandom()			{ return m_bSpeedRandom; };			//パーティクルの速度がランダムかどうか
-	bool &GetGravity()				{ return m_bGravity; };				//重力
-	int &GetLife()					{ return m_nLife; };				//ライフ
-	int &GetNumber()				{ return m_nNumber; };				//個数
-	float &GetRadius()				{ return m_fRadius; };				//半径
-	float &GetSpeed()				{ return m_fSpeed; };				//速度
-	float &GetRange()				{ return m_fRange; };				//角度
-	float &GetRadiusDamping()		{ return m_fRadiusDamping; };		//半径の減衰地
-	float &GetAlphaDamping()		{ return m_fAlphaDamping; };		//アルファ値の減衰値
-	float &GetGravityPower()		{ return m_fGravityPower; };		//重力の大きさ
-	D3DXCOLOR &GetCol()				{ return m_col; };					//色
-	D3DXVECTOR3 &GetRot()			{ return m_rot;};					//角度
+	bool&GetSpeedRandom()								{ return m_bSpeedRandom; };			//パーティクルの速度がランダムかどうか
+	bool &GetGravity()									{ return m_bGravity; };				//重力
+	bool &GetAnimation()								{ return m_bAnimation;};			//アニメーションするかどうか
+	bool &GetAlphaBlend()								{ return m_bAlphaBlend;};			//αブレンドするか
+	int &GetLife()										{ return m_nLife; };				//ライフ
+	int &GetNumber()									{ return m_nNumber; };				//個数
+	float &GetRadius()									{ return m_fRadius; };				//半径
+	float &GetSpeed()									{ return m_fSpeed; };				//速度
+	float &GetRange()									{ return m_fRange; };				//角度
+	float &GetRadiusDamping()							{ return m_fRadiusDamping; };		//半径の減衰地
+	float &GetAlphaDamping()							{ return m_fAlphaDamping; };		//アルファ値の減衰値
+	float &GetGravityPower()							{ return m_fGravityPower; };		//重力の大きさ
+	D3DXCOLOR &GetCol()									{ return m_col; };					//色
+	D3DXVECTOR3 &GetRot()								{ return m_rot;};					//角度
 
-	PARTICLE_SHAPE &GetShape()		{ return m_shape; };				//パーティクルの方向
-	CTexture::TEX_TYPE &GetTex()	{ return m_Textype; };				//テクスチャ
-	PARTICLE_TEXT &GetType()		{ return m_ParticleType; };			//パーティクルのタイプ
+	PARTICLE_SHAPE &GetShape()							{ return m_shape; };				//パーティクルの方向
+	CTexture::TEX_TYPE &GetTex()						{ return m_Textype; };				//テクスチャ
+	CTexture::SEPARATE_TEX_TYPE &GetSeparateTex()		{ return m_SeparateTex; };			//分割テクスチャ
+	PARTICLE_TEXT &GetType()							{ return m_ParticleType; };			//パーティクルのタイプ
 
 	static CParticleParam *GetDefaultParam(CParticleParam::PARTICLE_TEXT type) { return m_pParticleDefaultParamList[type].get(); };
 	static bool ShowParamConboBox(CParticleParam::PARTICLE_TEXT & rType);
@@ -100,10 +107,12 @@ public:
 
 private:
 	static std::vector<std::unique_ptr<CParticleParam>> m_pParticleDefaultParamList;	//パーティクルの初期パラメータのリスト
-	static FILENAME_LIST m_aFileNameList;									//読み込むファイルのリスト
+	static FILENAME_LIST m_aFileNameList;												//読み込むファイルのリスト
 
 	bool m_bSpeedRandom;							//速度がランダムかどうか
 	bool m_bGravity;								//重力をかけるか
+	bool m_bAnimation;								//アニメーションするか
+	bool m_bAlphaBlend;								//加算合成するか
 	int m_nLife;									//ライフ
 	int m_nNumber;									//個数
 	float m_fRadius;								//半径
@@ -117,6 +126,7 @@ private:
 
 	PARTICLE_SHAPE m_shape;							//パーティクルの出方
 	CTexture::TEX_TYPE m_Textype;					//テクスチャ
+	CTexture::SEPARATE_TEX_TYPE m_SeparateTex;		//分割テクスチャ
 	PARTICLE_TEXT m_ParticleType;					//パーティクルのタイプ
 
 };

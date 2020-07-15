@@ -397,6 +397,9 @@ void * CParticleParam::operator=(const CParticleParam * pParam)
 	m_bSpeedRandom			= pParam->m_bSpeedRandom;
 	m_rot					= pParam->m_rot;
 	m_fRange				= pParam->m_fRange;
+	m_SeparateTex			= pParam->m_SeparateTex;
+	m_bAnimation			= pParam->m_bAnimation;
+	m_bAlphaBlend			= pParam->m_bAlphaBlend;
 	return this;
 }
 
