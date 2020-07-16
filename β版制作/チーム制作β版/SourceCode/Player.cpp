@@ -256,34 +256,37 @@ void CPlayer::MoveUpdate(void)
 			//ジャンプストップモーションじゃない時
 			if (GetMotionType() != PLAYER_MOTION_JUMPSTOP)
 			{
-				//移動したらウォークモーション
-				if (GetMove().x > 0.2f || GetMove().x < -0.2f)
+				if (GetMotionType() != PLAYER_MOTION_ATTACK01)
 				{
-					SetMotion(PLAYER_MOTION_WALK);
-					m_bCruch = false;
-				}
-				//移動してない時かつしゃがみストップじゃない時
-				else if (GetMotionType() != PLAYER_MOTION_SQUATSTOP&& m_bCruch == false)
-				{
-					SetMotion(PLAYER_MOTION_NORMAL);
-				}
-				//Sを押したらしゃがみモーション
-				if (key->GetKeyboardPress(DIK_S) && GetJump() == true)
-				{
-					if (m_bCruch == false && GetMotionType() != PLAYER_MOTION_WALK)
+					//移動したらウォークモーション
+					if (GetMove().x > 0.2f || GetMove().x < -0.2f)
 					{
-						SetMotion(PLAYER_MOTION_SQUATSTOP);
-						m_bCruch = true;
+						SetMotion(PLAYER_MOTION_WALK);
+						m_bCruch = false;
 					}
-				}
-				else if (GetJump() == true && GetMotionType() != PLAYER_MOTION_WALK)
-				{
-					m_bCruch = false;
-					SetMotion(PLAYER_MOTION_NORMAL);
+					//移動してない時かつしゃがみストップじゃない時
+					else if (GetMotionType() != PLAYER_MOTION_SQUATSTOP&& m_bCruch == false)
+					{
+						SetMotion(PLAYER_MOTION_NORMAL);
+					}
+					//Sを押したらしゃがみモーション
+					if (key->GetKeyboardPress(DIK_S) && GetJump() == true)
+					{
+						if (m_bCruch == false && GetMotionType() != PLAYER_MOTION_WALK)
+						{
+							SetMotion(PLAYER_MOTION_SQUATSTOP);
+							m_bCruch = true;
+						}
+					}
+					else if (GetJump() == true && GetMotionType() != PLAYER_MOTION_WALK)
+					{
+						m_bCruch = false;
+						SetMotion(PLAYER_MOTION_NORMAL);
+					}
 				}
 			}
 			//ジャンプ、しゃがみをしてなかったらニュートラル
-			else if (GetJump() == true && m_bCruch == false)
+			else if (GetJump() == true && m_bCruch == false && GetMotionType() != PLAYER_MOTION_ATTACK01)
 			{
 				SetMotion(PLAYER_MOTION_NORMAL);
 			}
