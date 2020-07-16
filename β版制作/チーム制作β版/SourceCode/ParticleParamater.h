@@ -29,7 +29,10 @@ public:
 		PARTICLE_EXPLOSION,
 		PARTICLE_BLOOD,
 		PARTICLE_SUMPLE,
-		PARTICLE_BULLET_ORBIT,
+		PARTICLE_HEAVY_MACHINEGUN,
+		PARTICLE_TANKGUN,
+		PARTICLE_LAZER,
+
 		PARTICLE_MAX,
 	};
 
@@ -45,31 +48,31 @@ public:
 	//コンストラクタ
 	CParticleParam()
 	{
-		m_bGravity = false;												//重力
-		m_bSpeedRandom = false;											//速度がランダムかどうか
-		m_bAnimation = false;											//アニメーションするかどうか
-		m_bAlphaBlend = true;											//αブレンドするか
+		m_bGravity = false;														//重力
+		m_bSpeedRandom = false;													//速度がランダムかどうか
+		m_bAnimation = false;													//アニメーションするかどうか
+		m_bAlphaBlend = true;													//αブレンドするか
 
-		m_nLife = 50;													//ライフ
-		m_nNumber = 10;													//個数
-		m_fRadius = 15.0f;												//半径
-		m_fSpeed = 10.0f;												//速度
-		m_fRange = 0.5f;												//範囲
-		m_fRadiusDamping = DEFAULT_DAMPING;								//半径の減衰地
-		m_fAlphaDamping = DEFAULT_DAMPING;								//アルファ値の減衰値
-		m_fGravityPower = DEFAULT_GRAVITY_POWER;						//重力の大きさ
+		m_nLife = 50;															//ライフ
+		m_nNumber = 10;															//個数
+		m_fSpeed = 10.0f;														//速度
+		m_fRange = 0.5f;														//範囲
+		m_fAlphaDamping = DEFAULT_DAMPING;										//アルファ値の減衰値
+		m_fGravityPower = DEFAULT_GRAVITY_POWER;								//重力の大きさ
 
-		m_col = WhiteColor;												//色
-		m_rot = ZeroVector3;											//角度
+		m_Size = D3DXVECTOR3(15.0f,15.0f,0.0f);									//サイズ
+		m_SizeDamping = D3DXVECTOR3(DEFAULT_DAMPING, DEFAULT_DAMPING, 0.0f);	//サイズの減衰地
+		m_col = WhiteColor;														//色
+		m_rot = ZeroVector3;													//角度
 
-		m_Textype = CTexture::TEX_EFFECT_PARTICLE;						//テクスチャ
-		m_SeparateTex = CTexture::SEPARATE_TEX_EFFECT_EXPLOSION01;		//分割テクスチャ
-		m_shape = SHAPE_SPHERE;											//パーティクルの方向
-		m_ParticleType = PARTICLE_DEFAULT;								//パーティクルのタイプ
+		m_Textype = CTexture::TEX_EFFECT_PARTICLE;								//テクスチャ
+		m_SeparateTex = CTexture::SEPARATE_TEX_EFFECT_EXPLOSION01;				//分割テクスチャ
+		m_shape = SHAPE_SPHERE;													//パーティクルの方向
+		m_ParticleType = PARTICLE_DEFAULT;										//パーティクルのタイプ
 	}
 	~CParticleParam() {};
 
-	void SetParamater(int nLife, float fRadius, D3DXCOLOR col,int nNumber,float fSpeed);
+	void SetParamater(int nLife, D3DXVECTOR3 size, D3DXCOLOR col,int nNumber,float fSpeed);
 	void UpdateParam();
 
 
@@ -85,12 +88,12 @@ public:
 	bool &GetAlphaBlend()								{ return m_bAlphaBlend;};			//αブレンドするか
 	int &GetLife()										{ return m_nLife; };				//ライフ
 	int &GetNumber()									{ return m_nNumber; };				//個数
-	float &GetRadius()									{ return m_fRadius; };				//半径
 	float &GetSpeed()									{ return m_fSpeed; };				//速度
 	float &GetRange()									{ return m_fRange; };				//角度
-	float &GetRadiusDamping()							{ return m_fRadiusDamping; };		//半径の減衰地
 	float &GetAlphaDamping()							{ return m_fAlphaDamping; };		//アルファ値の減衰値
 	float &GetGravityPower()							{ return m_fGravityPower; };		//重力の大きさ
+	D3DXVECTOR3 &GetSize()								{ return m_Size; };				//サイズ
+	D3DXVECTOR3 &GetSizeDamping()						{ return m_SizeDamping; };			//サイズの減衰地
 	D3DXCOLOR &GetCol()									{ return m_col; };					//色
 	D3DXVECTOR3 &GetRot()								{ return m_rot;};					//角度
 
@@ -115,12 +118,12 @@ private:
 	bool m_bAlphaBlend;								//加算合成するか
 	int m_nLife;									//ライフ
 	int m_nNumber;									//個数
-	float m_fRadius;								//半径
 	float m_fSpeed;									//速度
 	float m_fRange;									//範囲
-	float m_fRadiusDamping;							//半径の減衰値
 	float m_fAlphaDamping;							//アルファ値の減衰値
 	float m_fGravityPower;							//重力の大きさ
+	D3DXVECTOR3 m_Size;								//サイズ
+	D3DXVECTOR3 m_SizeDamping;						//サイズの減衰値
 	D3DXCOLOR m_col;								//色
 	D3DXVECTOR3 m_rot;								//角度
 

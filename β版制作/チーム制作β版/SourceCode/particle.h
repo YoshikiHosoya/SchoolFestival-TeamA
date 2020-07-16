@@ -68,9 +68,7 @@ public:
 	static void ReleaseVertex();					//頂点破棄
 	static void ResetVertexID();					//頂点IDリセット　画面が停止してもパーティクルの処理を行う為
 
-	static void Create(D3DXVECTOR3 pos, int nLife, float fRadius, D3DXCOLOR col,int nNumber, float fSpeed);		//生成処理
 	static void CreateFromParam(D3DXVECTOR3 pos, CParticleParam *pInputParam);
-
 	static void CreateFromText(D3DXVECTOR3 pos, CParticleParam::PARTICLE_TEXT type);
 
 	bool GetDeleteFlag() { return m_bDeleteFlag; };

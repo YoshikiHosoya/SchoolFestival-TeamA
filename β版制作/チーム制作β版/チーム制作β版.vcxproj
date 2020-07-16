@@ -207,6 +207,7 @@
     <ClCompile Include="SourceCode\ParticleManager.cpp" />
     <ClCompile Include="SourceCode\ParticleParamater.cpp" />
     <ClCompile Include="SourceCode\pause.cpp" />
+    <ClCompile Include="SourceCode\planegun.cpp" />
     <ClCompile Include="SourceCode\Player.cpp" />
     <ClCompile Include="SourceCode\playertank.cpp" />
     <ClCompile Include="SourceCode\playerUI.cpp" />
@@ -293,6 +294,7 @@
     <ClInclude Include="SourceCode\ParticleManager.h" />
     <ClInclude Include="SourceCode\ParticleParamater.h" />
     <ClInclude Include="SourceCode\pause.h" />
+    <ClInclude Include="SourceCode\planegun.h" />
     <ClInclude Include="SourceCode\Player.h" />
     <ClInclude Include="SourceCode\playertank.h" />
     <ClInclude Include="SourceCode\playerUI.h" />

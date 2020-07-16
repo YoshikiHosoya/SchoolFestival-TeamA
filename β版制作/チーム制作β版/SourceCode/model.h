@@ -88,6 +88,7 @@ public:
 		MODEL_GUN_ROCKETLAUNCHER,		// ロケットランチャー
 		MODEL_GUN_FLAMESHOT,			// フレイムショット
 		MODEL_GUN_TANKGUN,				// 戦車の銃
+		MODEL_GUN_PLANEGUN,				// 戦闘機の銃
 		MODEL_KNIFE,					// ナイフ
 		MODEL_GUN_MAX
 	}GUN_MODEL;
@@ -114,6 +115,14 @@ public:
 	// モデルの種類
 	typedef enum
 	{
+		//===戦闘機のモデル===
+		MODEL_PLANE_BODY,			// 機体
+		MODEL_PLANE_GUN,			// 武器
+		MODEL_PLANE_MAX
+	}PLANE_PARTS_MODEL;
+
+	typedef enum
+	{
 		PLAYER_MODEL,
 		ENEMY_MODEL,
 		MAP_MODEL,
@@ -122,6 +131,7 @@ public:
 		OBSTACLE_MODEL,
 		PRISONER_MODEL,
 		TANK_MODEL,
+		PLANE_MODEL,
 		TYPE_MAX
 	}MODEL_TYPE;
 
@@ -204,6 +214,7 @@ private:
 	static char *m_ObstacleFileName[OBSTACLE_TYPE_MAX];
 	static char *m_PrisonerFileName[MODEL_PRISONER_MAX];
 	static char *m_TankFileName[MODEL_TANK_MAX];
+	static char *m_PlaneFileName[MODEL_PLANE_MAX];
 
 
 	D3DXVECTOR3		m_pos;					//位置
