@@ -178,10 +178,10 @@ void CParticle::UpdateVertex()
 		m_pParticleList[nCnt]->m_pos += m_pParticleList[nCnt]->m_move;
 
 		//頂点の座標
-		pVtx[0].pos = D3DXVECTOR3(-m_pParticleParam->GetRadius(), m_pParticleParam->GetRadius(), 0.0f);
-		pVtx[1].pos = D3DXVECTOR3( m_pParticleParam->GetRadius(), m_pParticleParam->GetRadius(), 0.0f);
-		pVtx[2].pos = D3DXVECTOR3(-m_pParticleParam->GetRadius(), -m_pParticleParam->GetRadius(), 0.0f);
-		pVtx[3].pos = D3DXVECTOR3( m_pParticleParam->GetRadius(), -m_pParticleParam->GetRadius(), 0.0f);
+		pVtx[0].pos = D3DXVECTOR3(-m_pParticleParam->GetSize().x,  m_pParticleParam->GetSize().y, 0.0f);
+		pVtx[1].pos = D3DXVECTOR3( m_pParticleParam->GetSize().x,  m_pParticleParam->GetSize().y, 0.0f);
+		pVtx[2].pos = D3DXVECTOR3(-m_pParticleParam->GetSize().x, -m_pParticleParam->GetSize().y, 0.0f);
+		pVtx[3].pos = D3DXVECTOR3( m_pParticleParam->GetSize().x, -m_pParticleParam->GetSize().y, 0.0f);
 
 		//頂点の座標
 		pVtx[0].col = m_pParticleParam->GetCol();
@@ -196,37 +196,6 @@ void CParticle::UpdateVertex()
 
 	//頂点ID加算
 	m_nVertexID += m_pParticleList.size();
-}
-
-//------------------------------------------------------------------------------
-//生成処理
-//------------------------------------------------------------------------------
-void CParticle::Create(D3DXVECTOR3 pos, int nLife, float fRadius, D3DXCOLOR col, int nNumber,float fSpeed)
-{
-	//メモリ確保
-	std::unique_ptr<CParticle> pParticle(new CParticle);
-
-	//nullcheck
-	if (pParticle)
-	{
-		//初期化
-		pParticle->Init();
-
-		//パーティクルのパラメータのメモリ確保
-		pParticle->m_pParticleParam.reset(new CParticleParam);
-
-		if (pParticle->m_pParticleParam)
-		{
-			//情報設定
-			pParticle->m_pParticleParam->SetParamater(nLife, fRadius, col,nNumber,fSpeed);
-
-			//パーティクルの設定
-			pParticle->SetParticle(pos, pParticle->m_pParticleParam.get());
-
-			//オブジェタイプ設定してSceneに所有権を渡す
-			CParticleManager::AddParticleList(std::move(pParticle));
-		}
-	}
 }
 
 //------------------------------------------------------------------------------
