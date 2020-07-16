@@ -16,11 +16,17 @@
 #include "battleplane.h"
 #include "Player.h"
 #include "BaseMode.h"
+#include "item.h"
 
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
 // =====================================================================================================================================================================
-CMap::MAP CMap::m_MapNum = MAP_1;		// マップ番号
+CMap::MAP	CMap::m_MapNum = MAP_1;							// マップ番号
+
+// =====================================================================================================================================================================
+// マクロ定義
+// =====================================================================================================================================================================
+#define TranslucentColor			(D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.5f))		//半透明
 
 // =====================================================================================================================================================================
 // テキストファイル名
@@ -73,6 +79,7 @@ CMap::CMap()
 	m_pObstacle.clear();
 	m_pPlayerTank.clear();
 	m_pBattlePlane.clear();
+	m_nOldSelect = 0;
 }
 
 // =====================================================================================================================================================================
@@ -229,8 +236,6 @@ void CMap::EnemyLoad(MAP MapNum)
 								m_pEnemy[m_pEnemy.size() - 1]->SetPosition(pos);
 								// 体力の設定
 								m_pEnemy[m_pEnemy.size() - 1]->SetLife(nLife);
-
-								m_pEnemy[m_pEnemy.size() - 1]->ChangeColor(true, D3DXCOLOR(1.0f, 0.0f, 1.0f, 0.0f));
 						}
 					}
 				}
@@ -438,10 +443,10 @@ void CMap::PlayerTankLoad(MAP MapNum)
 				fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
 				sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
 
-															// OBSTACLESETが来たら
+				// PLAYERTANKSETが来たら
 				if (strcmp(cHeadText, "PLAYERTANKSET") == 0)
 				{
-					// END_OBSTACLESETが来るまでループ
+					// END_PLAYERTANKSETが来るまでループ
 					while (strcmp(cHeadText, "END_PLAYERTANKSET") != 0)
 					{
 						fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
@@ -560,9 +565,9 @@ CMap *CMap::MapCreate(MAP MapNum)
 	// 敵のロード
 	pMap->EnemyLoad(MapNum);
 	// 捕虜のロード
-	pMap->PrisonerLoad(MapNum);
-	// 障害物のロード
-	pMap->ObstacleLoad(MapNum);
+	//pMap->PrisonerLoad(MapNum);
+	//// 障害物のロード
+	//pMap->ObstacleLoad(MapNum);
 	// プレイヤー戦車のロード
 	pMap->PlayerTankLoad(MapNum);
 	// 戦闘機のロード
@@ -1090,8 +1095,23 @@ void CMap::ObstacleSet()
 			ImGui::DragInt("Y", &y);
 			ImGui::DragInt("Z", &z);
 
-			// オブジェクトの位置の設定
+			// 障害物の位置の設定
 			m_pObstacle[nNowSelect]->SetPosition(D3DXVECTOR3((float)x, (float)y, (float)z));
+
+			// 前回選択していたものと違うとき
+			if (m_nOldSelect != nNowSelect)
+			{
+				// 色変更無し
+				m_pObstacle[m_nOldSelect]->SetColorChangeFlag(false);
+			}
+			else
+			{
+				// 色変更フラグをオンして選択している障害物を半透明化
+				m_pObstacle[nNowSelect]->SetColorChangeFlag(true);
+				m_pObstacle[nNowSelect]->SetAddColor(-TranslucentColor);
+			}
+			// 前回選択していたもの
+			m_nOldSelect = nNowSelect;
 		}
 	}
 
@@ -1199,6 +1219,20 @@ void CMap::PrisonerSet()
 
 			// オブジェクトの位置の設定
 			m_pPrisoner[nNowSelect]->SetPosition(D3DXVECTOR3((float)x, (float)y, (float)z));
+
+			// 前回選択していたものと違うとき
+			if (m_nOldSelect != nNowSelect)
+			{
+				// 色変更無し
+				m_pPrisoner[m_nOldSelect]->ChangeColor(false, ZeroColor);
+			}
+			else
+			{
+				// 色変更フラグをオンして選択している障害物を半透明化
+				m_pPrisoner[nNowSelect]->ChangeColor(true, -TranslucentColor);
+			}
+			// 前回選択していたもの
+			m_nOldSelect = nNowSelect;
 		}
 	}
 
@@ -1225,6 +1259,16 @@ void CMap::PrisonerSet()
 	// 全てセーブ
 	AllSaveButton();
 
+	// 改行キャンセル
+	ImGui::SameLine(250);
+
+	// 消去
+	if (ImGui::Button("Delete"))
+	{
+		m_pPrisoner[nNowSelect]->Rerease();
+		m_pPrisoner[nNowSelect] = nullptr;
+		m_pPrisoner.erase(m_pPrisoner.begin() + nNowSelect);
+	}
 #endif
 }
 
@@ -1290,6 +1334,20 @@ void CMap::EnemySet()
 
 			// オブジェクトの位置の設定
 			m_pEnemy[nNowSelect]->SetPosition(D3DXVECTOR3((float)x, (float)y, (float)z));
+
+			// 前回選択していたものと違うとき
+			if (m_nOldSelect != nNowSelect)
+			{
+				// 色変更無し
+				m_pEnemy[m_nOldSelect]->ChangeColor(false, ZeroColor);
+			}
+			else
+			{
+				// 色変更フラグをオンして選択している障害物を半透明化
+				m_pEnemy[nNowSelect]->ChangeColor(true, -TranslucentColor);
+			}
+			// 前回選択していたもの
+			m_nOldSelect = nNowSelect;
 		}
 	}
 
@@ -1316,6 +1374,16 @@ void CMap::EnemySet()
 	// 全てセーブ
 	AllSaveButton();
 
+	// 改行キャンセル
+	ImGui::SameLine(250);
+
+	// 消去
+	if (ImGui::Button("Delete"))
+	{
+		m_pEnemy[nNowSelect]->Rerease();
+		m_pEnemy[nNowSelect] = nullptr;
+		m_pEnemy.erase(m_pEnemy.begin() + nNowSelect);
+	}
 #endif
 }
 
@@ -1331,7 +1399,7 @@ void CMap::PlayerTankSet()
 	static int nPlayerTankType = 0;		// 戦車の種類
 	static int nNowSelect = -1;			// 現在選択している番号
 
-										// オブジェクト番号の選択
+	// オブジェクト番号の選択
 	ImGui::InputInt("nowSelect", &nNowSelect, 1, 20, 0);
 
 	// 範囲制限
@@ -1400,13 +1468,23 @@ void CMap::PlayerTankSet()
 	// セーブ
 	if (ImGui::Button("Save"))
 	{
-		// 敵のセーブ
+		// プレイヤーの戦車のセーブ
 		PlayerTankSave(m_MapNum);
 	}
 
 	// 全てセーブ
 	AllSaveButton();
 
+	// 改行キャンセル
+	ImGui::SameLine(250);
+
+	// 消去
+	if (ImGui::Button("Delete"))
+	{
+		m_pPlayerTank[nNowSelect]->Rerease();
+		m_pPlayerTank[nNowSelect] = nullptr;
+		m_pPlayerTank.erase(m_pPlayerTank.begin() + nNowSelect);
+	}
 #endif
 
 }
@@ -1675,6 +1753,8 @@ void CMap::UpdateDieFlag()
 	{
 		if (m_pEnemy[nCnt]->GetDieFlag())
 		{
+			//アイテムを生成
+			CItem::DropCreate(m_pEnemy[nCnt]->GetPosition());
 			m_pEnemy[nCnt]->Rerease();
 			m_pEnemy[nCnt] = nullptr;
 			m_pEnemy.erase(m_pEnemy.begin() + nCnt);

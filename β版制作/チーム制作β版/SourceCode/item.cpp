@@ -33,6 +33,9 @@
 CItem::CItem(OBJ_TYPE type) :CScene3D(type)
 {
 	m_pCollision = nullptr;
+
+	// アイテムがマップに残る時間
+	m_nRemainTime = 180;
 }
 
 // =====================================================================================================================================================================
@@ -42,16 +45,12 @@ CItem::CItem(OBJ_TYPE type) :CScene3D(type)
 // =====================================================================================================================================================================
 CItem::~CItem()
 {
-#ifdef _DEBUG
-
 	// 当たり判定の削除
 	if (m_pCollision != nullptr)
 	{
 		delete m_pCollision;
 		m_pCollision = nullptr;
 	}
-#endif // _DEBUG
-
 }
 
 // =====================================================================================================================================================================
@@ -61,8 +60,8 @@ CItem::~CItem()
 // =====================================================================================================================================================================
 HRESULT CItem::Init()
 {
-	// 変数初期化
-	m_Type = ITEMTYPE_HEAVYMACHINEGUN;			// タイプ
+	// タイプの初期化
+	m_Type = ITEMTYPE_HEAVYMACHINEGUN;
 
 	// 初期化
 	CScene3D::Init();
@@ -102,6 +101,9 @@ void CItem::Update(void)
 		m_pCollision->SetPos(&GetPosition());
 	}
 
+	// アイテムの滞在時間管理
+	RemainTimer();
+
 	// 更新
 	CScene3D::Update();
 }
@@ -130,14 +132,8 @@ void CItem::Draw(void)
 	// 現在のビューマトリックスを取得
 	pDevice->GetTransform(D3DTS_VIEW, &mtxView);
 
-	//CHossoLibrary::SetBillboard(&mtxView);
-	// 逆行列
-	m_mtxWorld._11 = mtxView._11;
-	m_mtxWorld._12 = mtxView._21;
-	m_mtxWorld._13 = mtxView._31;
-	m_mtxWorld._21 = mtxView._12;
-	m_mtxWorld._22 = mtxView._22;
-	m_mtxWorld._23 = mtxView._32;
+	// ビルボード処理
+	CHossoLibrary::SetBillboard(&mtxView);
 
 	// 描画
 	CScene3D::Draw();
@@ -240,6 +236,23 @@ void CItem::SetDropPos(D3DXVECTOR3 &characterpos)
 		}
 
 		characterpos.y += 50;
+	}
+}
+
+// =====================================================================================================================================================================
+//
+// 滞在時間を計算し0になったら削除する
+//
+// =====================================================================================================================================================================
+void CItem::RemainTimer()
+{
+	// アイテムの滞在時間を減少
+	m_nRemainTime--;
+
+	// 残り時間が0以下になったら削除
+	if (m_nRemainTime <= 0)
+	{
+		Rerease();
 	}
 }
 

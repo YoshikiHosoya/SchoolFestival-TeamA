@@ -75,7 +75,7 @@ HRESULT CVehicle::Init(void)
 	// ‰ÁŽZ‚·‚é‰ñ“]—Ê‚Ì‰Šú‰»
 	m_AddRot		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	// ‘Ì—Í‚Ì‰Šú‰»
-	m_nLife			= 100;
+	m_nLife			= 1000;
 	// ó‘Ô‚Ì‰Šú‰»
 	m_state			= VEHICLE_STATE_NORMAL;
 	// ‰ñ“]—Ê‚Ì‰Šú‰»

@@ -244,6 +244,9 @@
     <ClCompile Include="SourceCode\planegun.cpp">
       <Filter>Wepon</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\Debug_MapEditor.cpp">
+      <Filter>Debug</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SourceCode\mesh.h">
@@ -497,6 +500,9 @@
     </ClInclude>
     <ClInclude Include="SourceCode\planegun.h">
       <Filter>Wepon</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Debug_MapEditor.h">
+      <Filter>Debug</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
