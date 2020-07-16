@@ -41,22 +41,12 @@ public:
 		MAP_MAX
 	};
 
-	// マップに配置するモデルの種類
-	enum MAP_MODEL_TYPE
-	{
-		MAP_MODEL_TYPE_ENEMY,					// 敵
-		MAP_MODEL_TYPE_OBSTACLE,				// 障害物
-		MAP_MODEL_TYPE_PRISONER,				// 捕虜
-		MAP_MODEL_TYPE_PLAYERTANK,				// プレイヤー用の戦車
-		MAP_MODEL_TYPE_MAX
-	};
-
 	CMap();																	// コンストラクタ
 	~CMap();																// デストラクタ
 
 	/* 静的メンバ関数 */
 	static	CMap	*MapCreate(MAP MapNum);									// マップの生成
-	void	MapUpdate();											// マップの更新
+	void			MapUpdate();											// マップの更新
 
 	/* メンバ関数 */
 	int				GetMaxModel();												// モデルの最大数取得
