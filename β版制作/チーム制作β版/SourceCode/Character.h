@@ -108,7 +108,6 @@ public:
 	void Update(void);
 	void Draw(void);
 	virtual bool DefaultMotion(void) = 0;
-
 	void Move(float move, float fdest);
 	void AddDamage(int Damage);
 	void Moation(void);

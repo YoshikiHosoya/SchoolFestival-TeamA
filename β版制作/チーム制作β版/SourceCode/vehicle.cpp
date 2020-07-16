@@ -15,7 +15,7 @@
 #include "Xinput.h"
 #include "hosso\/Debug_ModelViewer.h"
 #include "playertank.h"
-
+#include "battleplane.h"
 
 //====================================================================
 // モデルのオフセット読み込みファイルの設定
@@ -23,12 +23,15 @@
 char *CVehicle::m_LoadOffsetFileName[VEHICLE_TYPE_MAX] =
 {
 	{ "data/Load/PlayerTank/PlayerTankOffset.txt" },
+	{ "data/Load/BattlePlane/BattlePlaneOffset.txt" },
 };
 
 //====================================================================
 //マクロ定義
 //====================================================================
-#define VEHICLE_GRAVITY (0.5f)
+#define VEHICLE_GRAVITY (0.3f)
+#define VEHICLE_SPEED	(2.0f)
+#define VESSEL_SPEED	(10.0f)
 
 // =====================================================================================================================================================================
 //
@@ -97,6 +100,8 @@ HRESULT CVehicle::Init(void)
 	m_VehicleDirection = VEHICLE_RIGHT;
 	// ジャンプしているかのフラグを初期化
 	m_bJump = false;
+	// 重力加算用カウント
+	m_nGravityCnt = 0;
 
 	return S_OK;
 }
@@ -118,8 +123,11 @@ void CVehicle::Update(void)
 	// 慣性処理
 	Inertia();
 
-	// 重力処理
-	Gravity();
+	if (this->m_VehicleType != VEHICLE_TYPE_PLANE)
+	{
+		// 重力処理
+		Gravity();
+	}
 
 	// 回転量計算処理
 	Rot();
@@ -278,7 +286,9 @@ void CVehicle::Inertia()
 {
 	m_move.x += (0 - m_move.x)* 0.2f;
 	m_move.z += (0 - m_move.z)* 0.2f;
-	m_move.y += m_move.y * -0.1f;
+	m_move.y += (0 - m_move.y)* 0.2f;
+
+	//m_move.y += m_move.y * -0.1f;
 }
 
 //====================================================================
@@ -286,11 +296,18 @@ void CVehicle::Inertia()
 //====================================================================
 void CVehicle::Gravity()
 {
-	// 重力フラグがtrueだった時
-	if (m_bGravity == true)
+	// ジャンプ中だった時
+	if (this->GetJump() == true)
 	{
-		// 重力
-		m_move.y -= VEHICLE_GRAVITY;
+		// 重力加速度を元に加算
+		m_pos.y -= (VEHICLE_GRAVITY + m_nGravityCnt * VEHICLE_GRAVITY);
+		m_nGravityCnt++;
+	}
+	else
+	{
+		// 強制的に地面につかせる
+		m_pos.y -= 5.0f;
+		m_nGravityCnt = 0;
 	}
 }
 
@@ -451,16 +468,57 @@ void CVehicle::GunRot(CModel * pModel)
 			}
 		}
 	}
+
+	// 戦車の総数分
+	for (int nCntVehicle = 0; nCntVehicle < CManager::GetBaseMode()->GetMap()->GetMaxBattlePlane(); nCntVehicle++)
+	{
+		// 乗り物のポインタ取得
+		CBattlePlane *pBattlePlane = CManager::GetBaseMode()->GetMap()->GetBattlePlane(nCntVehicle);
+		// 戦車が存在した時
+		if (pBattlePlane != nullptr)
+		{
+			if (pBattlePlane->GetVehicleDirection() == VEHICLE_LEFT)
+			{
+				// 条件ごと回転させる
+				this->VehiclePartsRotLimit(pModel, D3DX_PI * 0.5f);
+			}
+			else if (pBattlePlane->GetVehicleDirection() == VEHICLE_RIGHT)
+			{
+				// 条件ごと回転させる
+				this->VehiclePartsRotLimit(pModel, -D3DX_PI * 0.5f);
+			}
+			else if (pBattlePlane->GetVehicleDirection() == VEHICLE_UP)
+			{
+				// 条件ごと回転させる
+				this->VehiclePartsRotLimit(pModel, D3DX_PI * 0.0f);
+			}
+			else if (pBattlePlane->GetVehicleDirection() == VEHICLE_DOWN)
+			{
+				// 条件ごと回転させる
+				this->VehiclePartsRotLimit(pModel, D3DX_PI * 1.0f);
+			}
+		}
+	}
 }
 
 //====================================================================
-//移動
+// 戦闘機の移動
+//====================================================================
+void CVehicle::MovePlane(D3DXVECTOR3 move, float fdest)
+{
+	D3DXVec3Normalize(&move, &move);
+	GetMove() = move * VESSEL_SPEED;
+	GetRotDest().y = fdest *  D3DX_PI;
+}
+
+//====================================================================
+// 乗り物の移動 基本版
 //====================================================================
 void CVehicle::Move(float move, float fdest)
 {
-	GetMove().x += sinf(move * -D3DX_PI) * 1.0f;
-	GetMove().z += cosf(move * -D3DX_PI) * 1.0f;
-	GetRotDest().y = fdest *  D3DX_PI;
+	m_move.x += sinf(move * -D3DX_PI) * VEHICLE_SPEED;
+	//m_move.z += cosf(move * -D3DX_PI) * VEHICLE_SPEED;
+	m_rotDest.y = fdest *  D3DX_PI;
 }
 
 //====================================================================
