@@ -95,7 +95,7 @@ void CEnemyAI::Update(void)
 			}
 			else if (pEnemyPass->GetCharacterDirection() == CCharacter::CHARACTER_RIGHT)
 			{
-				if (GetCollision()->RayFloorCollision(pMap, pEnemyPass->GetCharacterModelPartsList(0)->GetMatrix(), 
+				if (GetCollision()->RayFloorCollision(pMap, pEnemyPass->GetCharacterModelPartsList(0)->GetMatrix(),
 					D3DXVECTOR3(0.0f, -1.0f, 0.0f),
 					D3DXVECTOR3(pEnemyPass->GetPosition().x+30, pEnemyPass->GetPosition().y, pEnemyPass->GetPosition().z)))
 				{

@@ -110,6 +110,15 @@ HRESULT CParticleParam::LoadParticleDefaultParam()
 								sscanf(cReadText, "%s %s %d", &cDie, &cDie, &n_BoolValue);
 								pParam->m_bAnimation = n_BoolValue ? true : false;
 							}
+							if (strcmp(cHeadText, "ANIMATION_LOOP") == 0)
+							{
+								sscanf(cReadText, "%s %s %d", &cDie, &cDie, &n_BoolValue);
+								pParam->m_bAnimationLoop = n_BoolValue ? true : false;
+							}
+							if (strcmp(cHeadText, "ANIMATION_CNTSWITCH") == 0)
+							{
+								sscanf(cReadText, "%s %s %d", &cDie, &cDie, &pParam->m_nAnimationCntSwitch);
+							}
 							if (strcmp(cHeadText, "TEXTURE") == 0)
 							{
 								//アニメーションするかどうかで代入する場所が変わる
@@ -262,6 +271,18 @@ HRESULT CParticleParam::SaveParticleDefaultParam(CParticleParam *pSaveParam)
 		fputs(cWriteText, pFile);
 		fputs(NEWLINE, pFile);
 
+		if (pSaveParam->m_bAnimation)
+		{
+			sprintf(cWriteText, "		%s %s %d				%s", "ANIMATION_LOOP", &EQUAL, pSaveParam->m_bAnimationLoop, "//アニメーションループするか");
+			fputs(cWriteText, pFile);
+			fputs(NEWLINE, pFile);
+
+			sprintf(cWriteText, "		%s %s %d			%s", "ANIMATION_CNTSWITCH", &EQUAL, pSaveParam->m_nAnimationCntSwitch, "//切替のカウント");
+			fputs(cWriteText, pFile);
+			fputs(NEWLINE, pFile);
+
+		}
+
 		sprintf(cWriteText, "		%s %s %d						%s", "SHAPE", &EQUAL, pSaveParam->m_shape, "//パーティクルの出し方");
 		fputs(cWriteText, pFile);
 		fputs(NEWLINE, pFile);
@@ -274,7 +295,7 @@ HRESULT CParticleParam::SaveParticleDefaultParam(CParticleParam *pSaveParam)
 		fputs(cWriteText, pFile);
 		fputs(NEWLINE, pFile);
 
-		sprintf(cWriteText, "		%s %s %.1f					%s", "SPEED", &EQUAL, pSaveParam->m_fSpeed, "//速度");
+		sprintf(cWriteText, "		%s %s %.1f						%s", "SPEED", &EQUAL, pSaveParam->m_fSpeed, "//速度");
 		fputs(cWriteText, pFile);
 		fputs(NEWLINE, pFile);
 
@@ -295,7 +316,7 @@ HRESULT CParticleParam::SaveParticleDefaultParam(CParticleParam *pSaveParam)
 		fputs(cWriteText, pFile);
 		fputs(NEWLINE, pFile);
 
-		sprintf(cWriteText, "		%s %s %.2f %.2f %.2f		%s", "SIZEDAMPING", &EQUAL,
+		sprintf(cWriteText, "		%s %s %.2f %.2f %.2f	%s", "SIZEDAMPING", &EQUAL,
 			pSaveParam->m_SizeDamping.x, pSaveParam->m_SizeDamping.y, pSaveParam->m_SizeDamping.z, "//サイズ減衰量");
 		fputs(cWriteText, pFile);
 		fputs(NEWLINE, pFile);
@@ -402,6 +423,7 @@ void CParticleParam::UpdateParam()
 //------------------------------------------------------------------------------
 //オペレータ
 //クラスのパラメータを丸ごと代入できるように
+//値をコピーして渡している
 //ポインタ同士
 //------------------------------------------------------------------------------
 void * CParticleParam::operator=(const CParticleParam * pParam)
@@ -424,6 +446,10 @@ void * CParticleParam::operator=(const CParticleParam * pParam)
 	m_SeparateTex			= pParam->m_SeparateTex;
 	m_bAnimation			= pParam->m_bAnimation;
 	m_bAlphaBlend			= pParam->m_bAlphaBlend;
+	m_bAnimationLoop		= pParam->m_bAnimationLoop;
+	m_nAnimationCntSwitch	= pParam->m_nAnimationCntSwitch;
+
+
 	return this;
 }
 

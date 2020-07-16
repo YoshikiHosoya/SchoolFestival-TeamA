@@ -400,7 +400,7 @@ void CMap::ObstacleLoad(MAP MapNum)
 							// 体力の設定
 							m_pObstacle[m_pObstacle.size() - 1]->SetLife(nLife);
 							// 当たり判定の大きさの設定
-							m_pObstacle[m_pObstacle.size() - 1]->SetCollisionSize(size);
+							m_pObstacle[m_pObstacle.size() - 1]->SetCollisionSize((CObstacle::OBSTACLE_TYPE)nType);
 						}
 					}
 				}
@@ -644,8 +644,8 @@ CMap *CMap::MapCreate(MAP MapNum)
 	pMap->EnemyLoad(MapNum);
 	// 捕虜のロード
 	//pMap->PrisonerLoad(MapNum);
-	//// 障害物のロード
-	//pMap->ObstacleLoad(MapNum);
+	// 障害物のロード
+	pMap->ObstacleLoad(MapNum);
 	// プレイヤー戦車のロード
 	pMap->PlayerTankLoad(MapNum);
 	// 戦闘機のロード
@@ -1683,6 +1683,16 @@ void CMap::BattlePlaneSet()
 	// 全てセーブ
 	AllSaveButton();
 
+	// 改行キャンセル
+	ImGui::SameLine(250);
+
+	// 消去
+	if (ImGui::Button("Delete"))
+	{
+		m_pBattlePlane[nNowSelect]->Rerease();
+		m_pBattlePlane[nNowSelect] = nullptr;
+		m_pBattlePlane.erase(m_pBattlePlane.begin() + nNowSelect);
+	}
 #endif
 
 }

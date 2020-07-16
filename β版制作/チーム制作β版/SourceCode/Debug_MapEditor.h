@@ -42,7 +42,6 @@ public:
 	void ShowDebugInfo(void);					//デバッグ情報表記
 
 private:
-	static CPlayer	*m_pPlayer;
 	static CMap		*m_pMap;
 	CPause *m_pPause;
 };

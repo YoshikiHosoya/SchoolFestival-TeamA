@@ -70,6 +70,7 @@ CCollision::~CCollision()
 	if (m_Debugcollision != nullptr)
 	{
 		m_Debugcollision->DeleteDeCollision();
+		m_Debugcollision->Rerease();
 		m_Debugcollision = nullptr;
 	}
 

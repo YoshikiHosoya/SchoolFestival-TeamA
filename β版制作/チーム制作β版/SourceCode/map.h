@@ -42,17 +42,7 @@ public:
 		MAP_MAX
 	};
 
-	// マップに配置するモデルの種類
-	enum MAP_MODEL_TYPE
-	{
-		MAP_MODEL_TYPE_ENEMY,					// 敵
-		MAP_MODEL_TYPE_OBSTACLE,				// 障害物
-		MAP_MODEL_TYPE_PRISONER,				// 捕虜
-		MAP_MODEL_TYPE_PLAYERTANK,				// プレイヤー用の戦車
 		MAP_MODEL_TYPE_HELICOPTER,				// ヘリコプター
-		MAP_MODEL_TYPE_MAX
-	};
-
 	CMap();																	// コンストラクタ
 	~CMap();																// デストラクタ
 

@@ -27,7 +27,7 @@ CTexAnimationBase::CTexAnimationBase()
 	//èâä˙âª
 	m_nPatternAnim = 0;
 	m_nCntAnim = 0;
-	m_nCntSwitch = 0;
+	m_nCntSwitch = 1;
 	m_nLife = 120;
 	m_bLoop = false;
 	m_EffectTex = CTexture::SEPARATE_TEX_EFFECT_EXPLOSION01;

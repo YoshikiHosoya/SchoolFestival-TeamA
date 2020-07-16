@@ -28,7 +28,8 @@
 //マクロ
 //------------------------------------------------------------------------------
 #define EFFECT_CREATE_POS (D3DXVECTOR3(0.0f, 50.0f, 100.0f))
-#define LINE_OFFSET (D3DXVECTOR3(0.0f,500.0f,0.0f))
+#define LINE_LENGTH (500.0f)
+#define LINE_OFFSET (D3DXVECTOR3(0.0f,LINE_LENGTH,0.0f))
 
 //------------------------------------------------------------------------------
 //コンストラクタ
@@ -51,6 +52,11 @@ CDebug_EffectViewer::~CDebug_EffectViewer()
 		delete m_pWorldLine;
 		m_pWorldLine = nullptr;
 	}
+	if (m_p3DLine)
+	{
+		m_p3DLine->Rerease();
+		m_p3DLine = nullptr;
+	}
 }
 
 //------------------------------------------------------------------------------
@@ -65,7 +71,7 @@ HRESULT CDebug_EffectViewer::Init()
 	m_pWorldLine = CDebug_WorldLine::Create(EFFECT_CREATE_POS);
 
 	//ラインの生成
-	m_p3DLine = C3DLine::Create(EFFECT_CREATE_POS, ZeroVector3, ZeroVector3, LINE_OFFSET, WhiteColor);
+	m_p3DLine = C3DLine::Create(EFFECT_CREATE_POS, ZeroVector3, ZeroVector3, LINE_OFFSET, D3DXCOLOR(0.4f, 0.4f, 0.8f, 1.0f));
 
 	//パーティクルのマネージャ
 	CParticleManager::Create();
@@ -139,6 +145,8 @@ void CDebug_EffectViewer::ParticleParamaterViewer()
 	static CParticleParam::PARTICLE_TEXT NowText = CParticleParam::PARTICLE_TEXT::PARTICLE_DEFAULT;
 	static FILENAME_LIST aShapeName = { "Sphere","Cone","Circle_XY","Line" };
 	static bool bSquare = false;	//正方形を保つか
+	//キーボードのポインタ取得
+	CKeyboard *pKeyboard = CManager::GetInputKeyboard();
 
 	//止まってるかどうか
 	if (!CScene::GetStopFlag())
@@ -147,8 +155,6 @@ void CDebug_EffectViewer::ParticleParamaterViewer()
 		m_nCnt++;
 	}
 
-	//キーボードのポインタ取得
-	CKeyboard *pKeyboard = CManager::GetInputKeyboard();
 
 	//Debug
 	CDebugProc::Print("[Enter] パーティクル発生\n");
@@ -182,11 +188,41 @@ void CDebug_EffectViewer::ParticleParamaterViewer()
 		CHossoLibrary::ImGui_Combobox(CTexture::GetSeparateFileName(), "SeparateTex", (int&)m_pParticleParam->GetSeparateTex()) :	//真
 		CHossoLibrary::ImGui_Combobox(CTexture::GetTexFileName(), "Texture", (int&)m_pParticleParam->GetTex());						//偽
 
+	//アニメーションする時
+	if (m_pParticleParam->GetAnimation())
+	{
+		//ツリー
+		if(ImGui::TreeNode("AnimationParam"))
+		{
+			//アニメーションパラメータ設定
+
+			//ループするか
+			ImGui::Checkbox("bAnimationLoop", &m_pParticleParam->GetAnimationLoop());
+
+			//アニメーション切り替えの家運後
+			ImGui::InputInt("AnimationCntSwitch", &m_pParticleParam->GetAnimationCntSwitch(), 1, 1, 20);
+
+			//ツリー終了
+			ImGui::TreePop();
+		}
+	}
+
+	//αブレンドするか
 	ImGui::Checkbox("bAlphaBlend", &m_pParticleParam->GetAlphaBlend());
 
 
 	//それぞれのオフセットを調整
-	ImGui::DragFloat3("rot", m_pParticleParam->GetRot(), 0.005f, -D3DX_PI, D3DX_PI);
+	if (ImGui::DragFloat3("rot", m_pParticleParam->GetRot(), 0.005f, -D3DX_PI, D3DX_PI))
+	{
+		D3DXVECTOR3 TargetPos = D3DXVECTOR3(-sinf(m_pParticleParam->GetRot().y) * cosf(m_pParticleParam->GetRot().x) * LINE_LENGTH,
+									sinf(m_pParticleParam->GetRot().x) * LINE_LENGTH,
+									-cosf(m_pParticleParam->GetRot().y) * cosf(m_pParticleParam->GetRot().x) * LINE_LENGTH);
+
+
+		m_p3DLine->SetPos(ZeroVector3, TargetPos);
+
+
+	}
 	ImGui::DragFloat("fRange", &m_pParticleParam->GetRange(), 0.01f, -D3DX_PI, D3DX_PI);
 
 	//項目の大きさ設定
@@ -194,14 +230,17 @@ void CDebug_EffectViewer::ParticleParamaterViewer()
 
 	//パラメータ設定
 	ImGui::DragInt("Life", &m_pParticleParam->GetLife(), 1, 1, 300);
-	ImGui::DragFloat("Speed", &m_pParticleParam->GetSpeed(), 0.5f, 1.0f, 250.0f);
-	ImGui::DragInt("ParticleNum", &m_pParticleParam->GetNumber(), 1, 0, 300);
+	ImGui::DragFloat("Speed", &m_pParticleParam->GetSpeed(), 0.5f, 0.0f, 250.0f);
+	ImGui::DragInt("ParticleNum", &m_pParticleParam->GetNumber(), 1, 1, 300);
 
 	//正方形を保つか
 	ImGui::Checkbox("Square", &bSquare);
 
+	//正方形を保つとき
 	if (bSquare)
 	{
+		//サイズで設定した値をxとyにちゃんと入れる
+		//xのパラメータをいじってる
 		float fSize = m_pParticleParam->GetSize().x;
 		float fSizeDamping = m_pParticleParam->GetSizeDamping().x;
 
@@ -213,12 +252,15 @@ void CDebug_EffectViewer::ParticleParamaterViewer()
 	}
 	else
 	{
+		//x.y.zそれぞれのパラメータ
 		ImGui::DragFloat3("Size", m_pParticleParam->GetSize(), 0.5f, 1.0f, 250.0f);
 		ImGui::DragFloat3("SizeDamping", m_pParticleParam->GetSizeDamping(), 0.001f, 0.5f, 1.0f);
 	}
 
+	//a値の減衰量
 	ImGui::DragFloat("AlphaDamping", &m_pParticleParam->GetAlphaDamping(), 0.001f, 0.5f, 1.0f);
 
+	//速度のランダムとか重力とか
 	ImGui::Checkbox("bSpeedRandom", &m_pParticleParam->GetSpeedRandom());
 	ImGui::Checkbox("bGravity", &m_pParticleParam->GetGravity());
 	//重力がONの時

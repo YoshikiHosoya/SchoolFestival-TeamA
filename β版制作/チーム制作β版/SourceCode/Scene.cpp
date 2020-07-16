@@ -15,6 +15,12 @@ int CScene::m_NumAll = 0;
 bool CScene::m_bStopFlag = false;
 bool CScene::m_b1FUpdateFlag = false;
 std::vector<CScene*> CScene::m_pSceneList[TYPE_MAX] = {};
+
+//debug
+#ifdef _DEBUG
+std::vector<int> CScene::m_fUpdateTimeList(CScene::TYPE_MAX);
+std::vector<int> CScene::m_fDrawTimeList(CScene::TYPE_MAX);
+#endif // _DEBUG
 //==========================================================
 //コンストラクタ
 //==========================================================
@@ -49,6 +55,10 @@ void CScene::UpdateAll(void)
 		//OBJTYPE分回す
 		for (int nCntObjtype = 0; nCntObjtype < TYPE_MAX; nCntObjtype++)
 		{
+#ifdef _DEBUG
+			//更新する前の時間を保存
+			DWORD dwBeforeUpdateTime = timeGetTime();
+#endif // _DEBUG
 			//配列が空かどうか
 			if (!m_pSceneList[nCntObjtype].empty())
 			{
@@ -63,6 +73,11 @@ void CScene::UpdateAll(void)
 					}
 				}
 			}
+#ifdef _DEBUG
+			//配列の値を書き換え
+			//現在の時間 - 前回の更新が終わった時間
+			m_fUpdateTimeList[nCntObjtype] = timeGetTime() - dwBeforeUpdateTime;
+#endif // _DEBUG
 		}
 	}
 
@@ -137,6 +152,11 @@ void CScene::DrawAll(void)
 	//OBJTYPE分回す
 	for (int nCntObjtype = 0; nCntObjtype < TYPE_MAX; nCntObjtype++)
 	{
+#ifdef _DEBUG
+		//更新する前の時間を保存
+		DWORD dwBeforeUpdateTime = timeGetTime();
+#endif // _DEBUG
+
 		//配列が空かどうか
 		if (!m_pSceneList[nCntObjtype].empty())
 		{
@@ -151,6 +171,10 @@ void CScene::DrawAll(void)
 				}
 			}
 		}
+#ifdef _DEBUG
+		//現在の時間 - 前回の更新が終わった時間
+		m_fDrawTimeList[nCntObjtype] = timeGetTime() - dwBeforeUpdateTime;
+#endif // _DEBUG
 	}
 }
 //==========================================================
@@ -186,6 +210,64 @@ void CScene::DebugAll(void)
 	}
 #endif
 }
+//==========================================================
+//デバッグ更新や描画にかかる時間を表記
+//==========================================================
+void CScene::ShowUpdateGraph()
+{
+#ifdef _DEBUG
+
+	//グラフ用のウィンドウ
+	ImGui::Begin("Gragh");
+
+	//出力用の配列
+	std::vector<float> OutputDataList(TYPE_MAX);
+
+	//CDebugProc::Print("FPS_IntervalCount >> %d\n", GetFPSInterval());
+	CDebugProc::Print("FPS >> %d\n", GetFps());
+
+	//更新のグラフ
+	if (ImGui::TreeNode("Update_Graph"))
+	{
+		//出力用のデータに計算
+		for (int nCntObjType = 0; nCntObjType < TYPE_MAX; nCntObjType++)
+		{
+			//更新にかかった時間 / 全部の更新と描画にかかった時間
+			OutputDataList[nCntObjType] = (float)m_fUpdateTimeList[nCntObjType];
+		}
+
+		//ヒストグラフ生成
+		ImGui::PlotHistogram("Update (mSec)", OutputDataList.data(), OutputDataList.size(), 0, NULL, 0.0f, 16.0f, ImVec2(0, 100));
+
+		//ツリー終了
+		ImGui::TreePop();
+
+	}
+
+	//更新のグラフ
+	if (ImGui::TreeNode("Draw_Graph"))
+	{
+		//出力用のデータに計算
+		for (int nCntObjType = 0; nCntObjType < TYPE_MAX; nCntObjType++)
+		{
+			//描画にかかった時間 / 全部の更新と描画にかかった時間
+			OutputDataList[nCntObjType] = (float)m_fDrawTimeList[nCntObjType];
+		}
+
+		//ヒストグラフ生成
+		ImGui::PlotHistogram("Renderer (mSec)", OutputDataList.data(), OutputDataList.size(), 0, NULL, 0.0f, 16.0f, ImVec2(0, 100));
+
+		//ツリー終了
+		ImGui::TreePop();
+	}
+	//配列の開放
+	OutputDataList.clear();
+
+	//
+	ImGui::End();
+
+#endif // _DEBUG
+}
 
 //==========================================================
 //ストップの状態取得
@@ -194,6 +276,7 @@ bool &CScene::GetStopFlag(void)
 {
 	return m_bStopFlag;
 }
+
 //==========================================================
 //オブジェクトの設定
 //==========================================================

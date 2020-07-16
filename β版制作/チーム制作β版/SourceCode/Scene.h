@@ -27,13 +27,13 @@ public:
 		OBJTYPE_PRISONER,
 		OBJTYPE_PLAYER_VEHICLE,
 		OBJTYPE_ENEMY_VEHICLE,
-		OBJTYPE_DEBUG3DLINE,
-		OBJTYPE_DEBUGCOLLISION,
-		OBJTYPE_SCORE,
 		OBJTYPE_EFFECT,
 		OBJTYPE_PARTICLE,
 		OBJTYPE_ORBIT,
 		OBJTYPE_EXPROSION,
+		OBJTYPE_DEBUG3DLINE,
+		OBJTYPE_DEBUGCOLLISION,
+		OBJTYPE_SCORE,
 		OBJTYPE_UI,
 		OBJTYPE_NUMBER,
 		OBJTYPE_SKILLSLOT,
@@ -57,6 +57,8 @@ public:
 	static int GetAll(void);
 	static void DebugAll(void);
 	static bool &GetStopFlag(void);
+	static void ShowUpdateGraph();		//デバッグ用　更新や描画にかかる時間をグラフで表記
+
 	void SetObjType(OBJ_TYPE type);
 	static CScene *GetScene(OBJ_TYPE type);
 	static void GetSceneList(OBJ_TYPE objtype, std::vector<CScene*> &rSceneList);
@@ -74,6 +76,11 @@ private:
 	static bool m_bStopFlag;			//画面停止のフラグ
 	static bool m_b1FUpdateFlag;		//画面停止中に1Fだけ更新するフラグ
 	bool m_bflag;
+
+#ifdef _DEBUG
+	static std::vector<int> m_fUpdateTimeList;		//更新の経過時間のリスト
+	static std::vector<int> m_fDrawTimeList;		//描画の経過時間リスト
+#endif //_DEBUG
 
 };
 #endif

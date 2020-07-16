@@ -17,6 +17,18 @@
 OBSTACLE_PARAM	CObstacle::m_ObstacleParam[CObstacle::TYPE_MAX] = {};
 
 // =====================================================================================================================================================================
+// テキストファイル名
+// =====================================================================================================================================================================
+char *CObstacle::m_ObstacleFileName[CObstacle::TYPE_MAX] =
+{
+	{ "data/Load/Obstacle/Box.txt" },				// 木箱
+	{ "data/Load/Obstacle/Barrel.txt" },			// 樽
+	{ "data/Load/Obstacle/Tree.txt" },				// 木
+	{ "data/Load/Obstacle/Chest.txt" },				// 金庫
+	{ "data/Load/Obstacle/Sandbags.txt" },			// 土嚢
+};
+
+// =====================================================================================================================================================================
 // マクロ定義
 // =====================================================================================================================================================================
 #define OBSTACLE_BOX_COLLISION			(D3DXVECTOR3(50.0f,50.0f,0.0f))		// 障害物の判定の大きさ
@@ -137,6 +149,83 @@ CObstacle * CObstacle::Create()
 // 障害物が壊されるときの処理
 //
 // =====================================================================================================================================================================
+void CObstacle::ObstacleLoad()
+{
+	// ファイルポイント
+	FILE *pFile;
+
+	char cReadText[128];			// 文字として読み取る
+	char cHeadText[128];			// 比較用
+	char cDie[128];					// 不要な文字
+	D3DXVECTOR3 pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 位置
+
+	for (int nCnt = 0; nCnt < CObstacle::TYPE_MAX; nCnt++)
+	{
+		// ファイルを開く
+		pFile = fopen(m_ObstacleFileName[nCnt], "r");
+
+		// 開いているとき
+		if (pFile != NULL)
+		{
+			// SCRIPTが来るまでループ
+			while (strcmp(cHeadText, "SCRIPT") != 0)
+			{
+				fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
+				sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
+			}
+
+			// SCRIPTが来たら
+			if (strcmp(cHeadText, "SCRIPT") == 0)
+			{
+				// END_SCRIPTが来るまでループ
+				while (strcmp(cHeadText, "END_SCRIPT") != 0)
+				{
+					fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
+					sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
+
+					// OBSTACLESETが来たら
+					if (strcmp(cHeadText, "OBSTACLESET") == 0)
+					{
+						// END_OBSTACLESETが来るまでループ
+						while (strcmp(cHeadText, "END_OBSTACLESET") != 0)
+						{
+							fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
+							sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
+
+							// LIFEが来たら
+							if (strcmp(cHeadText, "LIFE") == 0)
+							{
+								sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_ObstacleParam[nCnt].nLife);			// 比較用テキストにLIFEを代入
+							}
+							// COLLISIONSIZEが来たら
+							else if (strcmp(cHeadText, "COLLISIONSIZE") == 0)
+							{
+								sscanf(cReadText, "%s %s %f %f %f", &cDie, &cDie, &m_ObstacleParam[nCnt].CollisionSize.x
+									, &m_ObstacleParam[nCnt].CollisionSize.y
+									, &m_ObstacleParam[nCnt].CollisionSize.z);		// 比較用テキストにCOLLISIONSIZEを代入
+							}
+							else if (strcmp(cHeadText, "END_OBSTACLESET") == 0)
+							{
+							}
+						}
+					}
+				}
+			}
+			// ファイルを閉じる
+			fclose(pFile);
+		}
+		else
+		{
+			MessageBox(NULL, "障害物のパラメーター読み込み失敗", "警告", MB_ICONWARNING);
+		}
+	}
+}
+
+// =====================================================================================================================================================================
+//
+// 障害物が壊されるときの処理
+//
+// =====================================================================================================================================================================
 void CObstacle::Hit(OBSTACLE_TYPE type,int nDamage)
 {
 	switch (type)
@@ -204,10 +293,10 @@ void CObstacle::AddDamage(int nDamage)
 //====================================================================
 // サイズの設定
 //====================================================================
-void CObstacle::SetCollisionSize(D3DXVECTOR3 size)
+void CObstacle::SetCollisionSize(CObstacle::OBSTACLE_TYPE type)
 {
 	// 当たり判定の大きさを設定
-	GetCollision()->SetSize2D(size);
+	GetCollision()->SetSize2D(m_ObstacleParam[type].CollisionSize);
 	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_NORMAL);
 };
 

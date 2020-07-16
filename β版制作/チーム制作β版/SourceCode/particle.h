@@ -11,6 +11,7 @@
 //------------------------------------------------------------------------------
 #include "main.h"
 #include "ParticleParamater.h"
+#include "TexAnimationBase.h"
 //------------------------------------------------------------------------------
 //マクロ
 //------------------------------------------------------------------------------
@@ -51,7 +52,8 @@ class COneParticle
 };
 
 //パーティクルのまとまり
-class CParticle
+//テクスチャアニメーション継承
+class CParticle : public CTexAnimationBase
 {
 public:
 	CParticle();									//コンストラクタ
@@ -82,7 +84,7 @@ private:
 	bool m_bDeleteFlag;												//消去フラグ
 
 	void SetParticle(D3DXVECTOR3 &pos, CParticleParam *pShape);				//パーティクル設定
-
+	void SetAnimationParam();												//アニメーションのパラメータ設定
 };
 
 #endif

@@ -118,6 +118,8 @@ void CBaseMode::BaseLoad(HWND hWnd)
 	CCharacter::LoadMotion();
 	//弾のパラメーターロード
 	CBullet::BulletLoad();
+	//障害物のパラメーターロード
+	CObstacle::ObstacleLoad();
 	//パーティクルのパラメータロード
 	CParticleParam::LoadParticleDefaultParam();
 }

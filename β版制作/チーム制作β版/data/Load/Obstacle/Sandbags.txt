@@ -1,16 +1,11 @@
 #------------------------------------------------------------------------------
-# 弾のパラメーター
+# 障害物のパラメーター
 #------------------------------------------------------------------------------
 SCRIPT
 
-BULLETSET									# 0
-	SPEED			= 20
-	LIFE			= 50
-	POWER			= 3
-	AMMO			= 30
-	TRIGGER			= 4
-	INTERVAL		= 3
-	COLLISIONSIZE	= 5 5 0
-END_BULLETSET
+OBSTACLESET									# 0
+	LIFE			= 5
+	COLLISIONSIZE	= 60 60 0
+END_OBSTACLESET
 
 END_SCRIPT
