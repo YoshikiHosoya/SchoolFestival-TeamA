@@ -25,7 +25,7 @@ typedef struct
 {
 	float				fBulletSpeed;	// 弾速
 	int					nLife;			// 体力
-	float				fPower;			// 威力
+	int					nPower;			// 威力
 	int					nAmmo;			// 弾薬数
 	int					nTrigger;		// 1トリガーで発射される弾数
 	int					nInterval;		// インターバル

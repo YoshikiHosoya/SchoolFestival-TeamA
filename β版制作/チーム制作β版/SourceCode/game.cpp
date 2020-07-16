@@ -132,7 +132,4 @@ void CGame::ShowDebugInfo(void)
 			}
 		}
 	}
-
-	// マップの更新
-	m_pMap->MapUpdate();
 }
