@@ -84,12 +84,6 @@ HRESULT CBullet::Init()
 	// 初期化
 	CModel::Init();
 
-	// 当たり判定生成
-	GetCollision()->SetPos(&GetPosition());
-	GetCollision()->SetSize2D(D3DXVECTOR3(40.0f, 40.0f, 0.0f));
-	GetCollision()->SetMove(&m_move);
-	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_NORMAL);
-
 	return S_OK;
 }
 
@@ -289,6 +283,13 @@ void CBullet::BulletLoad()
 							{
 								sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_BulletParam[nCnt].nInterval);		// 比較用テキストにINTERVALを代入
 							}
+							// COLLISIONSIZEが来たら
+							else if (strcmp(cHeadText, "COLLISIONSIZE") == 0)
+							{
+								sscanf(cReadText, "%s %s %f %f %f", &cDie, &cDie, &m_BulletParam[nCnt].CollisionSize.x
+																				, &m_BulletParam[nCnt].CollisionSize.y
+																				, &m_BulletParam[nCnt].CollisionSize.z);		// 比較用テキストにCOLLISIONSIZEを代入
+							}
 							else if (strcmp(cHeadText, "END_BULLETSET") == 0)
 							{
 							}
@@ -314,4 +315,10 @@ void CBullet::BulletLoad()
 void CBullet::SetBulletParam(CGun::GUN_TYPE type)
 {
 	m_nLife = m_BulletParam[type].nLife;	// 体力
+
+	// 当たり判定生成
+	GetCollision()->SetPos(&GetPosition());
+	GetCollision()->SetSize2D(m_BulletParam[type].CollisionSize);
+	GetCollision()->SetMove(&m_move);
+	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_NORMAL);
 }
