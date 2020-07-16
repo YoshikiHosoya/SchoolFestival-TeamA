@@ -73,7 +73,7 @@ void CTankGun::Update(void)
 	CBullet::Update();
 
 	//パーティクル発生 軌跡みたいな
-	CParticle::CreateFromText(GetPosition(), CParticleParam::PARTICLE_TANKGUN);
+	CParticle::CreateFromText(GetPosition(),D3DXVECTOR3(0.0f,0.0f,GetRot().x + D3DX_PI * 0.5f), CParticleParam::EFFECT_TANKGUN);
 
 }
 
@@ -139,6 +139,8 @@ CTankGun * CTankGun::Create(D3DXVECTOR3 rot)
 	pTankGun->GetMove() = D3DXVECTOR3(-sinf(rot.x) * pBulletParam->fBulletSpeed,
 										cosf(rot.x) * cosf(rot.y) * pBulletParam->fBulletSpeed,
 										sinf(rot.y) * cosf(rot.x) * pBulletParam->fBulletSpeed);
+
+	pTankGun->GetRot() = rot;
 
 	// モデルタイプの設定
 	pTankGun->SetType(BULLET_MODEL);

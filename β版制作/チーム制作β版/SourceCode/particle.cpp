@@ -102,9 +102,6 @@ void CParticle::Draw()
 	//頂点フォーマットの設定
 	pDevice->SetFVF(FVF_VERTEX_3D);
 
-
-	CDebugProc::Print("draw Anim %d\n", m_pParticleParam->GetAnimation());
-
 	//テクスチャの設定
 	m_pParticleParam->GetAnimation() ?
 		pDevice->SetTexture(0, CTexture::GetSeparateTexture(m_pParticleParam->GetSeparateTex())) :
@@ -114,10 +111,10 @@ void CParticle::Draw()
 	for (size_t nCnt = 0; nCnt < m_pParticleList.size(); nCnt++)
 	{
 		//マトリック計算
-		CHossoLibrary::CalcMatrix(&m_pParticleList[nCnt]->m_Mtx, m_pParticleList[nCnt]->m_pos, m_pParticleList[nCnt]->m_rot);
+		CHossoLibrary::CalcMatrixAndBillboard(&m_pParticleList[nCnt]->m_Mtx, m_pParticleList[nCnt]->m_pos, m_pParticleList[nCnt]->m_rot);
 
 		//ビルボード設定
-		CHossoLibrary::SetBillboard(&m_pParticleList[nCnt]->m_Mtx);
+		//CHossoLibrary::SetBillboard(&m_pParticleList[nCnt]->m_Mtx);
 
 		// ワールドマトリックスの設定
 		pDevice->SetTransform(D3DTS_WORLD, &m_pParticleList[nCnt]->m_Mtx);
@@ -226,7 +223,7 @@ void CParticle::UpdateVertex()
 //生成
 //パーティクルのクラスを用いて生成
 //------------------------------------------------------------------------------
-void CParticle::CreateFromParam(D3DXVECTOR3 pos, CParticleParam *pInputParam)
+void CParticle::CreateFromParam(D3DXVECTOR3 pos, D3DXVECTOR3 rot, CParticleParam *pInputParam)
 {
 	//メモリ確保
 	std::unique_ptr<CParticle> pParticle(new CParticle);
@@ -251,7 +248,7 @@ void CParticle::CreateFromParam(D3DXVECTOR3 pos, CParticleParam *pInputParam)
 			pParticle->m_pParticleParam.reset(std::move(pParam));
 
 			//パーティクルの設定
-			pParticle->SetParticle(pos, pParam);
+			pParticle->SetParticle(pos, rot, pParam);
 
 			//オブジェタイプ設定してSceneに所有権を渡す
 			CParticleManager::AddParticleList(std::move(pParticle));
@@ -284,7 +281,7 @@ void CParticle::ResetVertexID()
 //------------------------------------------------------------------------------
 //テキスト情報を元にパーティクル作成
 //------------------------------------------------------------------------------
-void CParticle::CreateFromText(D3DXVECTOR3 pos, CParticleParam::PARTICLE_TEXT type)
+void CParticle::CreateFromText(D3DXVECTOR3 pos, D3DXVECTOR3 rot, CParticleParam::PARTICLE_TEXT type)
 {
 	//メモリ確保
 	std::unique_ptr<CParticle> pParticle(new CParticle);
@@ -309,7 +306,7 @@ void CParticle::CreateFromText(D3DXVECTOR3 pos, CParticleParam::PARTICLE_TEXT ty
 			pParticle->m_pParticleParam.reset(std::move(pParam));
 
 			//パーティクルの設定
-			pParticle->SetParticle(pos, pParam);
+			pParticle->SetParticle(pos, rot, pParam);
 
 			//オブジェタイプ設定してSceneに所有権を渡す
 			CParticleManager::AddParticleList(std::move(pParticle));
@@ -381,7 +378,7 @@ void CParticle::ResetVertex()
 //------------------------------------------------------------------------------
 //パーティクル設定
 //------------------------------------------------------------------------------
-void CParticle::SetParticle(D3DXVECTOR3 &pos, CParticleParam *pParam)
+void CParticle::SetParticle(D3DXVECTOR3 const & pos, D3DXVECTOR3 const & rot, CParticleParam * pParam)
 {
 	//変数宣言
 	float fAngleX, fAngleY;
@@ -413,8 +410,8 @@ void CParticle::SetParticle(D3DXVECTOR3 &pos, CParticleParam *pParam)
 
 				//移動の方向を設定
 				move = D3DXVECTOR3(sinf(fAngleY) * sinf(fAngleX) * fSpeed,
-									sinf(fAngleY) * cosf(fAngleX) * fSpeed,
-									cosf(fAngleY) * cosf(fAngleX) * fSpeed);
+					sinf(fAngleY) * cosf(fAngleX) * fSpeed,
+					cosf(fAngleY) * cosf(fAngleX) * fSpeed);
 				break;
 			case CParticleParam::SHAPE_CIRCLE_XY:
 				//360度ランダム 3.14 - 3.14
@@ -423,8 +420,8 @@ void CParticle::SetParticle(D3DXVECTOR3 &pos, CParticleParam *pParam)
 
 				//移動の方向を設定
 				move = D3DXVECTOR3(sinf(fAngleX) *  fSpeed,
-									cosf(fAngleX) * fSpeed,
-									0.0f);
+					cosf(fAngleX) * fSpeed,
+					0.0f);
 				break;
 
 			case CParticleParam::SHAPE_CONE:
@@ -434,8 +431,8 @@ void CParticle::SetParticle(D3DXVECTOR3 &pos, CParticleParam *pParam)
 				fAngleY = pParam->GetRot().y + CHossoLibrary::Random(pParam->GetRange());
 
 				move = D3DXVECTOR3(-sinf(fAngleY) * cosf(fAngleX) * fSpeed,
-									sinf(fAngleX) * fSpeed,
-									-cosf(fAngleY) * cosf(fAngleX) * fSpeed);
+					sinf(fAngleX) * fSpeed,
+					-cosf(fAngleY) * cosf(fAngleX) * fSpeed);
 
 
 				break;
@@ -444,9 +441,13 @@ void CParticle::SetParticle(D3DXVECTOR3 &pos, CParticleParam *pParam)
 				//視点の目的地の計算
 				fAngleX = pParam->GetRot().x;
 				fAngleY = pParam->GetRot().y;
+
+				fAngleX += rot.x;
+				fAngleY += rot.y;
+
 				move = D3DXVECTOR3(-sinf(fAngleY) * cosf(fAngleX) * fSpeed,
-									sinf(fAngleX) * fSpeed,
-									-cosf(fAngleY) * cosf(fAngleX) * fSpeed);
+					sinf(fAngleX) * fSpeed,
+					-cosf(fAngleY) * cosf(fAngleX) * fSpeed);
 
 				break;
 			default:
@@ -454,13 +455,20 @@ void CParticle::SetParticle(D3DXVECTOR3 &pos, CParticleParam *pParam)
 			}
 		}
 
+		if (pParam->GetType() == CParticleParam::EFFECT_LAZER)
+		{
+			std::unique_ptr<COneParticle>pOneParticle = COneParticle::Create(pos, move, D3DXVECTOR3(0.0f, 0.0f, rot.x));
+			//配列に追加
+			m_pParticleList.emplace_back(std::move(pOneParticle));
+		}
+		else
+		{
 
-		//パーティクル生成
-		std::unique_ptr<COneParticle>pOneParticle = COneParticle::Create(pos, move, ZeroVector3);
-
-		//配列に追加
-		m_pParticleList.emplace_back(std::move(pOneParticle));
-
+			//パーティクル生成
+			std::unique_ptr<COneParticle>pOneParticle = COneParticle::Create(pos, move, D3DXVECTOR3(rot));
+			//配列に追加
+			m_pParticleList.emplace_back(std::move(pOneParticle));
+		}
 	}
 
 	//アニメーションのパラメータ設定

@@ -41,8 +41,8 @@ public:
 		MAP_2,			// 2
 		MAP_MAX
 	};
+		//MAP_MODEL_TYPE_HELICOPTER,				// ヘリコプター
 
-		MAP_MODEL_TYPE_HELICOPTER,				// ヘリコプター
 	CMap();																	// コンストラクタ
 	~CMap();																// デストラクタ
 

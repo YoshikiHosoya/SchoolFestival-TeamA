@@ -104,17 +104,18 @@ class CHossoLibrary
 {
 public:
 
-	static float Vec2Cross(D3DXVECTOR2 const &rVecA, D3DXVECTOR2 const &rVecB);					//2D 外積計算
-	static void CalcMatrix(D3DXMATRIX *pMtx,D3DXVECTOR3 const &rPos, D3DXVECTOR3 const &rRot);	//ワールドマトリックス計算
-	static void SetBillboard(D3DXMATRIX *pMtx);													//ビルボード設定
-	static void SetBillboard_XZ_Only(D3DXMATRIX *pMtx);											//ビルボード設定　XとZのみ
+	static float Vec2Cross(D3DXVECTOR2 const &rVecA, D3DXVECTOR2 const &rVecB);									//2D 外積計算
+	static void CalcMatrix(D3DXMATRIX *pMtx,D3DXVECTOR3 const &rPos, D3DXVECTOR3 const &rRot);					//ワールドマトリックス計算
+	static void CalcMatrixAndBillboard(D3DXMATRIX *pMtx, D3DXVECTOR3 const &rPos, D3DXVECTOR3 const &rRot);		//ワールドマトリックス計算とビルボード
+	static void SetBillboard(D3DXMATRIX *pMtx);																	//ビルボード設定
+	static void SetBillboard_XZ_Only(D3DXMATRIX *pMtx);															//ビルボード設定　XとZのみ
 
-	static bool RangeLimit_Equal_Int(int &nValue, int nMin, int nMax);							//範囲内に抑える(int)
-	static bool RangeLimit_Equal_Float(float &nValue, float nMin, float nMax);					//範囲内に抑える(float)
+	static bool RangeLimit_Equal_Int(int &nValue, int nMin, int nMax);											//範囲内に抑える(int)
+	static bool RangeLimit_Equal_Float(float &nValue, float nMin, float nMax);									//範囲内に抑える(float)
 
-	static float Random_PI();																	//-3.14から3.14までのランダムで返す
-	static float Random(float fInputValue);															//入力された値の+-ランダムな値で返す
-	static void CalcRotation(float &fRot);														//回転を360度以内にする計算
+	static float Random_PI();																					//-3.14から3.14までのランダムで返す
+	static float Random(float fInputValue);																			//入力された値の+-ランダムな値で返す
+	static void CalcRotation(float &fRot);																		//回転を360度以内にする計算
 
 	static bool PressAnyButton(void);
 

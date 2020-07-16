@@ -142,7 +142,7 @@ void CDebug_EffectViewer::ShowDebugInfo()
 void CDebug_EffectViewer::ParticleParamaterViewer()
 {
 	//読み込むテキストの番号
-	static CParticleParam::PARTICLE_TEXT NowText = CParticleParam::PARTICLE_TEXT::PARTICLE_DEFAULT;
+	static CParticleParam::PARTICLE_TEXT NowText = CParticleParam::PARTICLE_TEXT::EFFECT_DEFAULT;
 	static FILENAME_LIST aShapeName = { "Sphere","Cone","Circle_XY","Line" };
 	static bool bSquare = false;	//正方形を保つか
 	//キーボードのポインタ取得
@@ -299,7 +299,7 @@ void CDebug_EffectViewer::ParticleParamaterViewer()
 	//( [Enter]を押したとき　または　ループする時 ) なおかつSceneが止まってない時
 	if ((pKeyboard->GetKeyboardTrigger(DIK_RETURN) || (m_bLoop && m_nCnt % m_nLoopInterval == 0)) && !CScene::GetStopFlag())
 	{
-		CParticle::CreateFromParam(EFFECT_CREATE_POS, m_pParticleParam.get());
+		CParticle::CreateFromParam(EFFECT_CREATE_POS,ZeroVector3 ,m_pParticleParam.get());
 	}
 
 }

@@ -73,7 +73,7 @@ void CHeliGun::Update(void)
 	CBullet::Update();
 
 	//パーティクル発生 軌跡みたいな
-	CParticle::CreateFromText(GetPosition(), CParticleParam::PARTICLE_TANKGUN);
+	CParticle::CreateFromText(GetPosition(), D3DXVECTOR3(0.0f, 0.0f, GetRot().x + D3DX_PI * 0.5f), CParticleParam::EFFECT_TANKGUN);
 
 }
 
@@ -142,6 +142,8 @@ CHeliGun * CHeliGun::Create(D3DXVECTOR3 rot)
 
 	// モデルタイプの設定
 	pHeliGun->SetType(BULLET_MODEL);
+
+	pHeliGun->GetRot() = rot;
 
 	// モデルカウントの設定
 	pHeliGun->SetModelConut(MODEL_BULLET_SPHERE);

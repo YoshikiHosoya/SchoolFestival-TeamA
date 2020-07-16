@@ -25,13 +25,15 @@ public:
 	//パーティクルのテキスト
 	enum PARTICLE_TEXT
 	{
-		PARTICLE_DEFAULT = 0,
-		PARTICLE_EXPLOSION,
-		PARTICLE_BLOOD,
-		PARTICLE_SUMPLE,
-		PARTICLE_HEAVY_MACHINEGUN,
-		PARTICLE_TANKGUN,
-		PARTICLE_LAZER,
+		EFFECT_DEFAULT = 0,
+		EFFECT_EXPLOSION,
+		EFFECT_BLOOD,
+		EFFECT_SUMPLE,
+		EFFECT_HANDGUN,
+		EFFECT_HEAVY_MACHINEGUN,
+		EFFECT_TANKGUN,
+		EFFECT_LAZER,
+		EFFECT_SMOKE,
 
 		PARTICLE_MAX,
 	};
@@ -71,7 +73,7 @@ public:
 		m_Textype = CTexture::TEX_EFFECT_PARTICLE;								//テクスチャ
 		m_SeparateTex = CTexture::SEPARATE_TEX_EFFECT_EXPLOSION01;				//分割テクスチャ
 		m_shape = SHAPE_SPHERE;													//パーティクルの方向
-		m_ParticleType = PARTICLE_DEFAULT;										//パーティクルのタイプ
+		m_ParticleType = EFFECT_DEFAULT;										//パーティクルのタイプ
 	}
 	~CParticleParam() {};
 
@@ -151,7 +153,7 @@ public:
 		m_bLoop = false;
 		m_nLoopNum = 0;
 		m_nLoopInterval = 0;
-		m_text = CParticleParam::PARTICLE_TEXT::PARTICLE_DEFAULT;
+		m_text = CParticleParam::PARTICLE_TEXT::EFFECT_DEFAULT;
 	}
 	~CreaterParam() {};
 

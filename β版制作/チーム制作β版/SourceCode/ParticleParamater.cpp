@@ -21,9 +21,11 @@ FILENAME_LIST CParticleParam::m_aFileNameList =
 	{ "data/Load/Effect/Paramater/Explosion.txt" },
 	{ "data/Load/Effect/Paramater/Blood.txt" },
 	{ "data/Load/Effect/Paramater/Sumple.txt" },
+	{ "data/Load/Effect/Paramater/Handgun.txt" },
 	{ "data/Load/Effect/Paramater/HeavyMachinegun.txt" },
 	{ "data/Load/Effect/Paramater/TankGun.txt" },
 	{ "data/Load/Effect/Paramater/Lazer.txt" },
+	{ "data/Load/Effect/Paramater/Smoke.txt" },
 
 };
 
@@ -124,8 +126,8 @@ HRESULT CParticleParam::LoadParticleDefaultParam()
 								//アニメーションするかどうかで代入する場所が変わる
 								//通常テクスチャか分割テクスチャか
 								pParam->m_bAnimation ?
-									sscanf(cReadText, "%s %s %d", &cDie, &cDie, &pParam->m_Textype) :
-									sscanf(cReadText, "%s %s %d", &cDie, &cDie, &pParam->m_SeparateTex);
+									sscanf(cReadText, "%s %s %d", &cDie, &cDie, &pParam->m_SeparateTex) :
+									sscanf(cReadText, "%s %s %d", &cDie, &cDie, &pParam->m_Textype);
 							}
 							if (strcmp(cHeadText, "SHAPE") == 0)
 							{

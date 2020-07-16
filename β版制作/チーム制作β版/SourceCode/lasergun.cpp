@@ -100,7 +100,7 @@ void CLasergun::DeleteBullet()
 void CLasergun::BulletReaction(D3DXVECTOR3 rot)
 {
 	//パーティクル発生 レーザー
-	CParticle::CreateFromText(GetPosition(), CParticleParam::PARTICLE_LAZER);
+	CParticle::CreateFromText(GetPosition(), rot, CParticleParam::EFFECT_LAZER);
 
 }
 

@@ -70,8 +70,8 @@ public:
 	static void ReleaseVertex();					//頂点破棄
 	static void ResetVertexID();					//頂点IDリセット　画面が停止してもパーティクルの処理を行う為
 
-	static void CreateFromParam(D3DXVECTOR3 pos, CParticleParam *pInputParam);
-	static void CreateFromText(D3DXVECTOR3 pos, CParticleParam::PARTICLE_TEXT type);
+	static void CreateFromParam(D3DXVECTOR3 pos, D3DXVECTOR3 rot, CParticleParam *pInputParam);
+	static void CreateFromText(D3DXVECTOR3 pos, D3DXVECTOR3 rot, CParticleParam::PARTICLE_TEXT type);
 
 	bool GetDeleteFlag() { return m_bDeleteFlag; };
 
@@ -83,7 +83,7 @@ private:
 	std::vector<std::unique_ptr<COneParticle>> m_pParticleList;		//パーティクルの構造体のリスト
 	bool m_bDeleteFlag;												//消去フラグ
 
-	void SetParticle(D3DXVECTOR3 &pos, CParticleParam *pShape);				//パーティクル設定
+	void SetParticle(D3DXVECTOR3 const &pos, D3DXVECTOR3 const &rot, CParticleParam *pParam);				//パーティクル設定
 	void SetAnimationParam();												//アニメーションのパラメータ設定
 };
 
