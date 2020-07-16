@@ -70,7 +70,7 @@ void CHeavyMachinegun::Update(void)
 	CBullet::Update();
 
 	//パーティクル発生 軌跡みたいな
-	CParticle::CreateFromText(GetPosition(), CParticleParam::PARTICLE_BULLET_ORBIT);
+	CParticle::CreateFromText(GetPosition(), CParticleParam::PARTICLE_HEAVY_MACHINEGUN);
 }
 
 // =====================================================================================================================================================================
