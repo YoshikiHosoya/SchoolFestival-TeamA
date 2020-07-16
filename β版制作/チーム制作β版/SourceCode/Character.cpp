@@ -60,22 +60,21 @@ CCharacter::~CCharacter()
 //====================================================================
 HRESULT CCharacter::Init(void)
 {
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
-	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	m_AddArmRot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	m_AddHeadRot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	m_Life = 50;
-	m_state = CHARACTER_STATE_NONE;
-	m_rotDest.y = -0.5f*  D3DX_PI;
-	m_bJump = false;
-	m_bGravity = true;
-	m_bDieFlag = false;
-	m_bMotion = true;
-	m_ShotRot = D3DXVECTOR3(0.0f, 0.5f, 0.0f);
-	m_HeightBet = 0.0f;
-	m_bFall = false;
+	m_pos				= D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// 位置
+	m_move				= D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// 移動量
+	m_rot				= D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// 回転
+	m_AddArmRot			= D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// 
+	m_AddHeadRot		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// 
+	m_Life				= 50;									// 体力
+	m_state				= CHARACTER_STATE_NONE;					// 状態
+	m_rotDest.y			= -0.5f*  D3DX_PI;						// 回転する差分
+	m_bJump				= false;								// ジャンプフラグ
+	m_bGravity			= true;									// 
+	m_bDieFlag			= false;								// 死亡フラグ
+	m_bMotion			= true;									// モーションするかどうか
+	m_ShotRot			= D3DXVECTOR3(0.0f, 0.5f, 0.0f);		// 撃つ向き
+	m_HeightBet			= 0.0f;									// 
+	m_bFall				= false;								// 
 	// 当たり判定生成
 	m_pCollision = CCollision::Create();
 	//マトリックス初期化
@@ -110,11 +109,17 @@ void CCharacter::Update(void)
 	{
 		m_posfall = m_pos;
 	}
-	if (m_pos.y <= -500 && m_bFall == true)
+	if (m_pos.y <= -100 && m_bFall == true)
 	{
-		m_pos.x = m_posfall.x;
+		if (m_pos.x < m_posfall.x)
+		{
+		m_pos.x = m_posfall.x + 50;
+		}
+		else
+		{
+			m_pos.x = m_posfall.x - 50;
+		}
 		m_pos.y = m_posfall.y + 30;
-		m_pos.z = m_posfall.z;
 		m_bFall = false;
 	}
 	//目標点と現在の差分（回転）
@@ -510,6 +515,20 @@ char * CCharacter::GetOffsetFileName(CHARACTER_TYPE type)
 char * CCharacter::GetMotionFileName(CHARACTER_MOTION_STATE motionstate)
 {
 	return m_LoadMotionFileName[motionstate];
+}
+//====================================================================
+//色変更
+//====================================================================
+void CCharacter::ChangeColor(bool ColorChangeFlag, D3DXCOLOR AddColor)
+{
+	//モデルの色変更
+	for (unsigned int nCnt = 0; nCnt < m_vModelList.size(); nCnt++)
+	{
+		// 加算する色の設定
+		m_vModelList[nCnt]->SetAddColor(AddColor);
+		// 色変更フラグの設定
+		m_vModelList[nCnt]->SetColorChangeFlag(ColorChangeFlag);
+	}
 }
 //====================================================================
 //モーションのロード

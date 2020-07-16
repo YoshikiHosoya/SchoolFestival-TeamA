@@ -53,6 +53,7 @@ public:
 	typedef enum
 	{
 		VEHICLE_TYPE_TANK,									// 戦車
+		VEHICLE_TYPE_PLANE,									// 戦闘機
 		VEHICLE_TYPE_MAX									// 乗り物の最大数
 	}VEHICLE_TYPE;
 
@@ -65,7 +66,7 @@ public:
 	//	VEHICLE_USE_TYPE_TYPE_MAX							// 乗り物を使うキャラクターの最大数
 	//}VEHICLE_USE_TYPE;
 
-	/* 乗り物モデルのモーション */
+	/* 戦車の挙動 */
 	typedef enum
 	{
 		VEHICLE_BEHAVIOR_NORMAL = 0,						// 通常状態
@@ -103,7 +104,9 @@ public:
 	void	Draw(void);										// 描画
 
 	void AddDamage			(int Damage);					// ダメージ計算
-	void Move				(float move, float fdest);		// 移動
+	void MovePlane			(D3DXVECTOR3 move, float fdest);// 移動
+	void Move				(float move, float fdest);// 移動
+
 	void					VehiclePartsRotCondition(
 							CModel *pModel,
 							PARTS_ROT_TYPE type);			// パーツを回転させるための条件
@@ -197,5 +200,6 @@ private:
 	bool					m_bGravity;								// 重力をかけるかのフラグ
 	bool					m_bDieFlag;								// 死亡フラグ
 	CCollision				*m_pCollision;							// 当たり判定のポインタ
+	int						m_nGravityCnt;							// 重力用カウント
 };
 #endif

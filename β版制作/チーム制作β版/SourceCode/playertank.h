@@ -40,6 +40,7 @@ public:
 	void				DebugInfo(void);					// デバッグ
 	CGun				*GetGun() { return  m_pGun; };					// 銃のポインタ取得
 	CGrenadeFire		*GetGrenadeFire() { return  m_pGrenadeFire; };	// グレネード発射位置のポインタ取得
+	bool				GetLandFlag() { return m_bLand; };				// 地面についているかどうかのフラグの取得
 
 private:
 	/* メンバ関数 */
@@ -50,6 +51,6 @@ private:
 	/* メンバ変数 */
 	CGun				*m_pGun;							// ガンクラスのポインタ
 	CGrenadeFire		*m_pGrenadeFire;					// グレネード発射クラスのポインタ
-
+	bool				m_bLand;							// 地面についているかどうか
 };
 #endif

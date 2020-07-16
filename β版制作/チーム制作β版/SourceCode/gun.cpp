@@ -16,6 +16,7 @@
 #include "rocketlauncher.h"
 #include "flameshot.h"
 #include "tankgun.h"
+#include "planegun.h"
 #include "Character.h"
 #include "TexAnimation3D.h"
 
@@ -242,6 +243,12 @@ void CGun::Shot()
 		case CGun::GUNTYPE_TANKGUN:
 			// 戦車の銃の生成
 			pBullet = CTankGun::Create(m_ShotRot);
+			m_bMultiple = true;		// 複数発撃つフラグをオン
+			break;
+
+		case CGun::GUNTYPE_PLANEGUN:
+			// 戦車の銃の生成
+			pBullet = CPlaneGun::Create(m_ShotRot);
 			m_bMultiple = true;		// 複数発撃つフラグをオン
 			break;
 		}

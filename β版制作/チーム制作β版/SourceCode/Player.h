@@ -29,6 +29,14 @@ public:
 		DEBUG_MAX					//最大数
 	}DEBUG_STATE;
 
+	typedef enum
+	{
+		PLAYER_STATE_NORMAL = 0,	//通常
+		PLAYER_STATE_RESPAWN,		//復活時
+		PLAYER_STATE_DIE,			//死亡時
+		PLAYER_STATE_MAX			//最大数
+	}PLAYER_STATE;
+
 	CPlayer(OBJ_TYPE type);
 	~CPlayer();
 	HRESULT Init(void);
@@ -39,6 +47,7 @@ public:
 	void MoveUpdate(void);
 	void CollisionUpdate(void);
 	void AttackUpdate(void);
+	void ReSpawn(void);
 	DEBUG_STATE GetDebugState(void);
 	static CPlayer *Create(void);
 	bool DefaultMotion(void);
@@ -49,13 +58,17 @@ public:
 	void			SetRideFlag(bool bRide)			{ m_bRideVehicle = bRide; };	// ライドフラグの設定
 	bool			GetRideFlag()					{ return m_bRideVehicle; };		// ライドフラグの取得
 
+	void			SetRespawnFlag(bool bRespawn)	{ m_bRespawn = bRespawn; };
+	bool			GetRespawnFlag()				{ return m_bRespawn; };
 private:
 	void Move(float move, float fdest);
 	void Ride();
 
 		DEBUG_STATE m_DebugState;						//デバッグのステータス
+		PLAYER_STATE m_PlayerState;						//プレイヤーの状態ステータス
 		bool m_bAttack_Enemy;							//攻撃時
 		bool m_bAttack_Prisoner;						//攻撃時
+		bool m_bRespawn;
 		float m_Angle;
 		bool m_bCruch;
 		WORD Oldstate;											//コントローラーの1frame前のステート
@@ -64,5 +77,6 @@ private:
 		CPlayerUI		*m_pPlayerUI;							// プレイヤーUIのポインタ
 		CKnife			*m_pKnife;								// ナイフのポインタ
 		bool			m_bRideVehicle;							// 乗り物に乗り込んでいるかどうかのフラグ
+		int m_nRespawnCnt;
 };
 #endif

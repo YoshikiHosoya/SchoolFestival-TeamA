@@ -35,6 +35,7 @@ char *CBullet::m_BulletFileName[CGun::GUNTYPE_MAX] =
 	{ "data/Load/Gun/RocketLauncher.txt" },			// ロケットランチャー
 	{ "data/Load/Gun/FlameShot.txt" },				// フレイムショット
 	{ "data/Load/Gun/TankGun.txt" },				// 戦車の銃
+	{ "data/Load/Gun/PlaneGun.txt" },				// 戦車の銃
 	{ "data/Load/Gun/Grenade.txt" },				// グレネード
 };
 
@@ -175,8 +176,6 @@ void CBullet::Update(void)
 
 	// 更新
 	CModel::Update();
-
-	CParticle::CreateFromText(GetPosition(), CParticleParam::PARTICLE_BULLET_ORBIT);
 }
 
 // =====================================================================================================================================================================

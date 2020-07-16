@@ -71,7 +71,7 @@ void CTexAnimation2D::Update()
 	if (CTexAnimationBase::UpdateAnimation())
 	{
 		//テクスチャアニメーション処理
-		SetAnimation(CalcUV(GetPatternAnim(), GetEffectTex()), CTexture::GetSparateTex_UVSize(GetEffectTex()));
+		SetAnimation(CalcUV(), CTexture::GetSparateTex_UVSize(GetEffectTex()));
 	}
 
 	//終了のフラグが立っていた時

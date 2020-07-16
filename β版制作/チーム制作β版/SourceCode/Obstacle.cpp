@@ -60,7 +60,6 @@ HRESULT CObstacle::Init()
 	GetCollision()->SetPos(&GetPosition());
 
 	GetCollision()->SetMove(nullptr);
-	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_NORMAL);
 
 	return S_OK;
 }
@@ -209,5 +208,6 @@ void CObstacle::SetCollisionSize(D3DXVECTOR3 size)
 {
 	// “–‚½‚è”»’è‚Ì‘å‚«‚³‚ðÝ’è
 	GetCollision()->SetSize2D(size);
+	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_NORMAL);
 };
 

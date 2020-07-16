@@ -25,7 +25,7 @@
 //マクロ定義
 //====================================================================
 #define PLAYERTANK_SIZE			(D3DXVECTOR3(90.0f,65.0f,0.0f)) // プレイヤーの判定のサイズ
-#define PLAYERTANK_JUMP			(20.0f)				// 戦車が飛ぶ移動量
+#define PLAYERTANK_JUMP			(60.0f)				// 戦車が飛ぶ移動量
 #define SHOT_BULLET_POS_X		(0.0f)			// 弾の発射位置X
 #define SHOT_BULLET_POS_Y		(25.0f)				// 弾の発射位置Y
 #define SHOT_BULLET_POS_Z		(0.0f)			// 弾の発射位置Z
@@ -73,6 +73,8 @@ HRESULT CPlayertank::Init(void)
 	m_pGun->SetGunType(CGun::GUNTYPE_TANKGUN);
 	// 発射位置のオフセットの設定
 	m_pGun->SetShotOffsetPos(D3DXVECTOR3(SHOT_BULLET_POS_X, SHOT_BULLET_POS_Y, SHOT_BULLET_POS_Z));
+	// 地面についているかのフラグ
+	m_bLand = true;
 	// 当たり判定生成
 	GetCollision()->SetPos(&GetPosition());
 	GetCollision()->SetPosOld(&GetPositionOld());
@@ -228,7 +230,14 @@ void CPlayertank::Operation(CKeyboard * key)
 	// 左に動かせる
 	if (key->GetKeyboardPress(DIK_A))
 	{
-		CVehicle::Move(0.5f, -0.5f);
+		if (m_bLand == true)
+		{
+			CVehicle::Move(0.5f, -0.5f);
+		}
+		else if(m_bLand == false)
+		{
+			CVehicle::Move(0.3f, -0.5f);
+		}
 
 		// 上を向く
 		if (key->GetKeyboardPress(DIK_W))
@@ -252,8 +261,14 @@ void CPlayertank::Operation(CKeyboard * key)
 	// 右に動かせる
 	else if (key->GetKeyboardPress(DIK_D))
 	{
-		CVehicle::Move(-0.5f, -0.5f);
-
+		if (m_bLand == true)
+		{
+			CVehicle::Move(-0.5f, -0.5f);
+		}
+		else if (m_bLand == false)
+		{
+			CVehicle::Move(-0.3f, -0.5f);
+		}
 		// 上を向く
 		if (key->GetKeyboardPress(DIK_W))
 		{
@@ -278,8 +293,6 @@ void CPlayertank::Operation(CKeyboard * key)
 	{
 		// 1回ジャンプさせる
 		Jump();
-		// ジャンプフラグをtrueにしジャンプできなくする
-		SetJump(true);
 	}
 }
 
@@ -292,6 +305,9 @@ void CPlayertank::Jump()
 	{
 		GetMove().y += PLAYERTANK_JUMP;
 	}
+
+	// ジャンプフラグをtrueにしジャンプできなくする
+	SetJump(true);
 }
 
 //====================================================================
@@ -324,16 +340,19 @@ void CPlayertank::Collision()
 		// レイの判定
 		if (GetCollision()->RayBlockCollision(pMap, GetMtxWorld()))
 		{
-			// ジャンプすることを承認しない
+			// ジャンプすることを承認する
 			SetJump(false);
 
+			m_bLand = true;
 			// マップモデルの斜面の角度に車体を傾ける
-
+			//
 		}
 		else
 		{
+			m_bLand = false;
 			// ジャンプすることを承認しない
 			SetJump(true);
+
 		}
 	}
 }

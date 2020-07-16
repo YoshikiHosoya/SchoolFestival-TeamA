@@ -116,7 +116,7 @@ void CDebug_EffectViewer::ShowDebugInfo()
 	//	//Tab
 	//	if (ImGui::BeginTabItem("MotionViewer"))
 	//	{
-			//モーションビューワ
+			//エフェクトビューワ
 			ParticleParamaterViewer();
 			//ImGui::EndTabItem();
 	//	}
@@ -138,6 +138,7 @@ void CDebug_EffectViewer::ParticleParamaterViewer()
 	//読み込むテキストの番号
 	static CParticleParam::PARTICLE_TEXT NowText = CParticleParam::PARTICLE_TEXT::PARTICLE_DEFAULT;
 	static FILENAME_LIST aShapeName = { "Sphere","Cone","Circle_XY","Line" };
+	static bool bSquare = false;	//正方形を保つか
 
 	//止まってるかどうか
 	if (!CScene::GetStopFlag())
@@ -189,14 +190,33 @@ void CDebug_EffectViewer::ParticleParamaterViewer()
 	ImGui::DragFloat("fRange", &m_pParticleParam->GetRange(), 0.01f, -D3DX_PI, D3DX_PI);
 
 	//項目の大きさ設定
-	ImGui::PushItemWidth(120);
+	ImGui::PushItemWidth(200);
 
 	//パラメータ設定
 	ImGui::DragInt("Life", &m_pParticleParam->GetLife(), 1, 1, 300);
-	ImGui::DragFloat("Radius", &m_pParticleParam->GetRadius(), 0.5f, 1.0f, 250.0f);
 	ImGui::DragFloat("Speed", &m_pParticleParam->GetSpeed(), 0.5f, 1.0f, 250.0f);
 	ImGui::DragInt("ParticleNum", &m_pParticleParam->GetNumber(), 1, 0, 300);
-	ImGui::DragFloat("RadiusDamping", &m_pParticleParam->GetRadiusDamping(), 0.001f, 0.5f, 1.0f);
+
+	//正方形を保つか
+	ImGui::Checkbox("Square", &bSquare);
+
+	if (bSquare)
+	{
+		float fSize = m_pParticleParam->GetSize().x;
+		float fSizeDamping = m_pParticleParam->GetSizeDamping().x;
+
+		ImGui::DragFloat("Size", &fSize, 0.5f, 1.0f, 250.0f);
+		ImGui::DragFloat("SizeDamping", &fSizeDamping, 0.001f, 0.5f, 1.0f);
+
+		m_pParticleParam->GetSize().x = m_pParticleParam->GetSize().y = fSize;
+		m_pParticleParam->GetSizeDamping().x = m_pParticleParam->GetSizeDamping().y = fSizeDamping;
+	}
+	else
+	{
+		ImGui::DragFloat3("Size", m_pParticleParam->GetSize(), 0.5f, 1.0f, 250.0f);
+		ImGui::DragFloat3("SizeDamping", m_pParticleParam->GetSizeDamping(), 0.001f, 0.5f, 1.0f);
+	}
+
 	ImGui::DragFloat("AlphaDamping", &m_pParticleParam->GetAlphaDamping(), 0.001f, 0.5f, 1.0f);
 
 	ImGui::Checkbox("bSpeedRandom", &m_pParticleParam->GetSpeedRandom());

@@ -201,6 +201,8 @@ void CRenderer::Update(void)
 	//Scene‚ÅŠÇ—‚µ‚Ä‚éî•ñ
 	ImGui::Begin("SceneInfo");
 
+	CDebugProc::Print("FPS : [%d]\n", GetFps());
+
 #endif // _DEBUG
 
 	m_pLight->UpdateLight();
