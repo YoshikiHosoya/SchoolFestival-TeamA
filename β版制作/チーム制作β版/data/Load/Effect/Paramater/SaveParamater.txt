@@ -9,22 +9,24 @@
 SCRIPT
 	PARAMSET
 
-		SPEEDRANDOM = 1					//速度がランダムかどうか
+		SPEEDRANDOM = 0					//速度がランダムかどうか
 		GRAVITY = 0						//重力をつけるか
 		ALPHABLEND = 1					//αブレンドするか
-		ANIMATION = 0					//アニメーションするか
+		ANIMATION = 1					//アニメーションするか
 		TEXTURE = 1						//テクスチャ
-		SHAPE = 3						//パーティクルの出し方
-		LIFE = 50						//ライフ
-		NUMBER = 50						//個数
-		SPEED = 50.0					//速度
+		ANIMATION_LOOP = 1						//アニメーションループするか
+		ANIMATION_CNTSWITCH = 3						//切替のカウント
+		SHAPE = 0						//パーティクルの出し方
+		LIFE = 100						//ライフ
+		NUMBER = 1						//個数
+		SPEED = 0.0					//速度
 		RANGE = 0.5						//範囲
-		ALPHADAMPING = 0.92				//アルファ値の減衰値
+		ALPHADAMPING = 1.00				//アルファ値の減衰値
 		GRAVITYPOWER = 0.80				//重力の強さ
-		SIZE = 250.00 15.00 0.00		//サイズ
-		SIZEDAMPING = 1.00 0.98 0.00		//サイズ減衰量
-		COLOR = 0.7 1.0 0.8 1.0			//色
-		ROT = 0.00 1.57 0.00			//回転量
+		SIZE = 109.00 109.00 0.00		//サイズ
+		SIZEDAMPING = 1.00 1.00 0.00		//サイズ減衰量
+		COLOR = 1.0 1.0 1.0 1.0			//色
+		ROT = 0.00 0.00 0.00			//回転量
 
 	END_PARAMSET
 END_SCRIPT
