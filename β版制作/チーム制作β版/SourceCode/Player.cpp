@@ -390,8 +390,6 @@ void CPlayer::AttackUpdate(void)
 	key = CManager::GetInputKeyboard();
 	if (m_bRespawn == false)
 	{
-
-
 		// e‚ðŒ‚‚Â or ‹ßÚUŒ‚
 		if (key->GetKeyboardTrigger(DIK_P))
 		{
@@ -419,7 +417,7 @@ void CPlayer::AttackUpdate(void)
 			}
 
 			// ‹ßÚUŒ‚‚ð‚·‚éó‘Ô‚¾‚Á‚½Žž
-			if (m_bAttack_Enemy == true)
+			if (m_bAttack_Enemy == true&&GetJump() == true)
 			{// ‹ßÚUŒ‚
 			 // ƒGƒlƒ~[‚Æ‚ÌÚG”»’è •ß—¸‚Ìó‘Ô‚ð•Ï‚¦‚é
 				CEnemy		*pEnemy = GetCollision()->ForPlayer_EnemyCollision();
@@ -432,7 +430,7 @@ void CPlayer::AttackUpdate(void)
 			}
 
 			// ‹ßÚ”»’è‚ªo‚Ä‚¢‚éŽž‚Í‹ßÚUŒ‚‚ð‚·‚é
-			if (m_bAttack_Prisoner == true)
+			else if (m_bAttack_Prisoner == true && GetJump() == true)
 			{// ‹ßÚUŒ‚
 			 // •ß—¸‚Æ‚ÌÚG”»’è •ß—¸‚Ìó‘Ô‚ð•Ï‚¦‚é
 				CPrisoner	*pPrisoner = GetCollision()->ForPlayer_PrisonerCollision();
@@ -469,7 +467,7 @@ void CPlayer::AttackUpdate(void)
 		// UŒ‚ƒ‚[ƒVƒ‡ƒ“‚©‚ç•Ê‚Ìƒ‚[ƒVƒ‡ƒ“‚É‚È‚Á‚½Žž
 		if (GetMotionType() != CCharacter::PLAYER_MOTION_ATTACK01)
 		{
-			if (m_bAttack_Enemy == false && m_bAttack_Prisoner == false)
+			if (m_bAttack_Enemy == false || m_bAttack_Prisoner == false)
 			{
 				m_pKnife->EndMeleeAttack();
 			}
