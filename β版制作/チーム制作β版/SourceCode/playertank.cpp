@@ -195,9 +195,6 @@ void CPlayertank::Shot(CKeyboard *key)
 	// ƒ}ƒVƒ“ƒKƒ“‚ðŒ‚‚Â
 	if (key->GetKeyboardTrigger(DIK_P))
 	{
-		// ƒ}ƒVƒ“ƒKƒ“”­ŽËˆ—
-		//m_pGun->Shot(GetShotDirection());
-
 		// ƒKƒ“‚Ìƒ‚ƒfƒ‹‚Ì”­ŽËŒû‚©‚ç’e‚ð¶¬
 		m_pGun->Shot();
 	}

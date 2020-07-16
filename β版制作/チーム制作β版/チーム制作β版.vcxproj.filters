@@ -247,6 +247,12 @@
     <ClCompile Include="SourceCode\Debug_MapEditor.cpp">
       <Filter>Debug</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\helicopter.cpp">
+      <Filter>Model</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\helicoptergun.cpp">
+      <Filter>Wepon</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SourceCode\mesh.h">
@@ -503,6 +509,12 @@
     </ClInclude>
     <ClInclude Include="SourceCode\Debug_MapEditor.h">
       <Filter>Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\helicopter.h">
+      <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\helicoptergun.h">
+      <Filter>Wepon</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

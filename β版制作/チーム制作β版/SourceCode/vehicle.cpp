@@ -16,6 +16,7 @@
 #include "hosso\/Debug_ModelViewer.h"
 #include "playertank.h"
 #include "battleplane.h"
+#include "helicopter.h"
 
 //====================================================================
 // モデルのオフセット読み込みファイルの設定
@@ -24,6 +25,7 @@ char *CVehicle::m_LoadOffsetFileName[VEHICLE_TYPE_MAX] =
 {
 	{ "data/Load/PlayerTank/PlayerTankOffset.txt" },
 	{ "data/Load/BattlePlane/BattlePlaneOffset.txt" },
+	{ "data/Load/Helicopter/HelicopterOffset.txt" },
 };
 
 //====================================================================
@@ -123,7 +125,7 @@ void CVehicle::Update(void)
 	// 慣性処理
 	Inertia();
 
-	if (this->m_VehicleType != VEHICLE_TYPE_PLANE)
+	if (this->m_VehicleType != VEHICLE_TYPE_PLANE && this->m_VehicleType != VEHICLE_TYPE_HELICOPTER)
 	{
 		// 重力処理
 		Gravity();
@@ -469,7 +471,7 @@ void CVehicle::GunRot(CModel * pModel)
 		}
 	}
 
-	// 戦車の総数分
+	// 戦闘機の総数分
 	for (int nCntVehicle = 0; nCntVehicle < CManager::GetBaseMode()->GetMap()->GetMaxBattlePlane(); nCntVehicle++)
 	{
 		// 乗り物のポインタ取得
@@ -493,6 +495,37 @@ void CVehicle::GunRot(CModel * pModel)
 				this->VehiclePartsRotLimit(pModel, D3DX_PI * 0.0f);
 			}
 			else if (pBattlePlane->GetVehicleDirection() == VEHICLE_DOWN)
+			{
+				// 条件ごと回転させる
+				this->VehiclePartsRotLimit(pModel, D3DX_PI * 1.0f);
+			}
+		}
+	}
+
+	// ヘリコプターの総数分
+	for (int nCntVehicle = 0; nCntVehicle < CManager::GetBaseMode()->GetMap()->GetMaxHelicopter(); nCntVehicle++)
+	{
+		// 乗り物のポインタ取得
+		CHelicopter *pHelicopter = CManager::GetBaseMode()->GetMap()->GetHelicopter(nCntVehicle);
+		// 戦車が存在した時
+		if (pHelicopter != nullptr)
+		{
+			if (pHelicopter->GetVehicleDirection() == VEHICLE_LEFT)
+			{
+				// 条件ごと回転させる
+				this->VehiclePartsRotLimit(pModel, D3DX_PI * 0.5f);
+			}
+			else if (pHelicopter->GetVehicleDirection() == VEHICLE_RIGHT)
+			{
+				// 条件ごと回転させる
+				this->VehiclePartsRotLimit(pModel, -D3DX_PI * 0.5f);
+			}
+			else if (pHelicopter->GetVehicleDirection() == VEHICLE_UP)
+			{
+				// 条件ごと回転させる
+				this->VehiclePartsRotLimit(pModel, D3DX_PI * 0.0f);
+			}
+			else if (pHelicopter->GetVehicleDirection() == VEHICLE_DOWN)
 			{
 				// 条件ごと回転させる
 				this->VehiclePartsRotLimit(pModel, D3DX_PI * 1.0f);
