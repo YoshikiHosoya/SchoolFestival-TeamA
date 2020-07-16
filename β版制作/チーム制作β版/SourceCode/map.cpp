@@ -1576,6 +1576,16 @@ void CMap::BattlePlaneSet()
 	// 全てセーブ
 	AllSaveButton();
 
+	// 改行キャンセル
+	ImGui::SameLine(250);
+
+	// 消去
+	if (ImGui::Button("Delete"))
+	{
+		m_pBattlePlane[nNowSelect]->Rerease();
+		m_pBattlePlane[nNowSelect] = nullptr;
+		m_pBattlePlane.erase(m_pBattlePlane.begin() + nNowSelect);
+	}
 #endif
 
 }
