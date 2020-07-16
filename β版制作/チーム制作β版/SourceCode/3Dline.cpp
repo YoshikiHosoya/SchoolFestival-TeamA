@@ -116,6 +116,9 @@ void C3DLine::Draw(void)
 		// 頂点フォーマットの設定
 		pDevice->SetFVF(FVF_VERTEX_3D);
 
+		//テクスチャ設定
+		pDevice->SetTexture(0, nullptr);
+
 		// ポリゴンの描画
 		pDevice->DrawPrimitive(
 			D3DPT_LINELIST,

@@ -64,11 +64,12 @@ void CParticle::Update()
 
 	if (m_pParticleParam->GetAnimation())
 	{
-
+		//アニメーション更新処理
+		UpdateAnimation();
 	}
 
-	//ライフが0以下になった時
-	if (m_pParticleParam->GetLife() <= 0)
+	//ライフが0以下になった時かアニメーションが終了した時
+	if (m_pParticleParam->GetLife() <= 0 || CTexAnimationBase::GetEndFlag())
 	{
 		//消す
 		m_bDeleteFlag = true;
@@ -188,6 +189,29 @@ void CParticle::UpdateVertex()
 		pVtx[1].col = m_pParticleParam->GetCol();
 		pVtx[2].col = m_pParticleParam->GetCol();
 		pVtx[3].col = m_pParticleParam->GetCol();
+
+		//アニメーションする時はUV計算
+		if (m_pParticleParam->GetAnimation())
+		{
+			D3DXVECTOR2 UV = CTexAnimationBase::CalcUV();
+			D3DXVECTOR2 UVsize = CTexture::GetSparateTex_UVSize(CTexAnimationBase::GetEffectTex());
+
+			//テクスチャ座標の設定
+			pVtx[0].tex = D3DXVECTOR2(UV.x, UV.y);
+			pVtx[1].tex = D3DXVECTOR2(UV.x + UVsize.x, UV.y);
+			pVtx[2].tex = D3DXVECTOR2(UV.x, UV.y + UVsize.y);
+			pVtx[3].tex = D3DXVECTOR2(UV.x + UVsize.x, UV.y + UVsize.y);
+		}
+		//アニメーションしてない時は通常
+		else
+		{
+			//テクスチャ座標
+			pVtx[0].tex = D3DXVECTOR2(0.0f, 0.0f);
+			pVtx[1].tex = D3DXVECTOR2(1.0f, 0.0f);
+			pVtx[2].tex = D3DXVECTOR2(0.0f, 1.0f);
+			pVtx[3].tex = D3DXVECTOR2(1.0f, 1.0f);
+		}
+
 
 		pVtx += 4;
 	}
@@ -438,6 +462,22 @@ void CParticle::SetParticle(D3DXVECTOR3 &pos, CParticleParam *pParam)
 		m_pParticleList.emplace_back(std::move(pOneParticle));
 
 	}
+
+	//アニメーションのパラメータ設定
+	SetAnimationParam();
+
 	//頂点の更新
 	UpdateVertex();
+}
+
+//------------------------------------------------------------------------------
+//アニメーションに関する情報設定
+//------------------------------------------------------------------------------
+void CParticle::SetAnimationParam()
+{
+	CTexAnimationBase::SetLife(m_pParticleParam->GetLife());
+	CTexAnimationBase::SetTex(m_pParticleParam->GetSeparateTex());
+	CTexAnimationBase::SetLoop(m_pParticleParam->GetAnimationLoop());
+	CTexAnimationBase::SetCntSwitch(m_pParticleParam->GetAnimationCntSwitch());
+
 }

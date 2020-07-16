@@ -16,6 +16,7 @@
 #include "battleplane.h"
 #include "Player.h"
 #include "BaseMode.h"
+#include "item.h"
 
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
@@ -564,9 +565,9 @@ CMap *CMap::MapCreate(MAP MapNum)
 	// 敵のロード
 	pMap->EnemyLoad(MapNum);
 	// 捕虜のロード
-	pMap->PrisonerLoad(MapNum);
-	// 障害物のロード
-	pMap->ObstacleLoad(MapNum);
+	//pMap->PrisonerLoad(MapNum);
+	//// 障害物のロード
+	//pMap->ObstacleLoad(MapNum);
 	// プレイヤー戦車のロード
 	pMap->PlayerTankLoad(MapNum);
 	// 戦闘機のロード
@@ -1762,6 +1763,8 @@ void CMap::UpdateDieFlag()
 	{
 		if (m_pEnemy[nCnt]->GetDieFlag())
 		{
+			//アイテムを生成
+			CItem::DropCreate(m_pEnemy[nCnt]->GetPosition());
 			m_pEnemy[nCnt]->Rerease();
 			m_pEnemy[nCnt] = nullptr;
 			m_pEnemy.erase(m_pEnemy.begin() + nCnt);

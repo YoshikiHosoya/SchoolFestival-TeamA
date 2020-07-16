@@ -103,6 +103,10 @@ public:
 
 	bool ForPlayer_VehicleCollision(CCollision * pCollision);	// プレイヤーと乗り物が行う判定
 	bool ForPlayer_VehicleCollision();							// プレイヤーと乗り物が行う判定
+	bool ForVehicleCollision();									// 乗り物が行う判定
+	bool ForTankCollision();									// 戦車が行う判定
+
+
 
 	bool KnifeCollision(D3DXVECTOR3 Knifepos,
 		CCollision *pCollision);						// ナイフとキャラクターの判定

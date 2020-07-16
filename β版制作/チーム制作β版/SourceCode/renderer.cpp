@@ -212,7 +212,12 @@ void CRenderer::Update(void)
 
 #ifdef _DEBUG
 
+	//更新と描画のグラフ
+	CScene::ShowUpdateGraph();
+
+
 	CScene::DebugAll();
+
 	//Sceneで管理してる情報 終了
 	ImGui::End();	//SceneInfo
 
