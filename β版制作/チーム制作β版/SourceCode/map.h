@@ -33,12 +33,22 @@ class CBattlePlane;
 class CMap
 {
 public:
-	// マップのオブジェクトの種類
+	// マップの種類
 	enum MAP
 	{
 		MAP_1,			// 1
 		MAP_2,			// 2
 		MAP_MAX
+	};
+
+	// マップに配置するモデルの種類
+	enum MAP_MODEL_TYPE
+	{
+		MAP_MODEL_TYPE_ENEMY,					// 敵
+		MAP_MODEL_TYPE_OBSTACLE,				// 障害物
+		MAP_MODEL_TYPE_PRISONER,				// 捕虜
+		MAP_MODEL_TYPE_PLAYERTANK,				// プレイヤー用の戦車
+		MAP_MODEL_TYPE_MAX
 	};
 
 	CMap();																	// コンストラクタ
@@ -109,5 +119,6 @@ private:
 	std::vector<CObstacle*>		m_pObstacle;								// 可変長配列 設置した障害物
 	std::vector<CPlayertank*>	m_pPlayerTank;								// 可変長配列 設置した戦車
 	std::vector<CBattlePlane*>	m_pBattlePlane;								// 可変長配列 設置した戦闘機
+	int							m_nOldSelect;								// 前回選択していたモノの番号
 };
 #endif

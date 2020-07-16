@@ -256,34 +256,37 @@ void CPlayer::MoveUpdate(void)
 			//ジャンプストップモーションじゃない時
 			if (GetMotionType() != PLAYER_MOTION_JUMPSTOP)
 			{
-				//移動したらウォークモーション
-				if (GetMove().x > 0.2f || GetMove().x < -0.2f)
+				if (GetMotionType() != PLAYER_MOTION_ATTACK01)
 				{
-					SetMotion(PLAYER_MOTION_WALK);
-					m_bCruch = false;
-				}
-				//移動してない時かつしゃがみストップじゃない時
-				else if (GetMotionType() != PLAYER_MOTION_SQUATSTOP&& m_bCruch == false)
-				{
-					SetMotion(PLAYER_MOTION_NORMAL);
-				}
-				//Sを押したらしゃがみモーション
-				if (key->GetKeyboardPress(DIK_S) && GetJump() == true)
-				{
-					if (m_bCruch == false && GetMotionType() != PLAYER_MOTION_WALK)
+					//移動したらウォークモーション
+					if (GetMove().x > 0.2f || GetMove().x < -0.2f)
 					{
-						SetMotion(PLAYER_MOTION_SQUATSTOP);
-						m_bCruch = true;
+						SetMotion(PLAYER_MOTION_WALK);
+						m_bCruch = false;
 					}
-				}
-				else if (GetJump() == true && GetMotionType() != PLAYER_MOTION_WALK)
-				{
-					m_bCruch = false;
-					SetMotion(PLAYER_MOTION_NORMAL);
+					//移動してない時かつしゃがみストップじゃない時
+					else if (GetMotionType() != PLAYER_MOTION_SQUATSTOP&& m_bCruch == false)
+					{
+						SetMotion(PLAYER_MOTION_NORMAL);
+					}
+					//Sを押したらしゃがみモーション
+					if (key->GetKeyboardPress(DIK_S) && GetJump() == true)
+					{
+						if (m_bCruch == false && GetMotionType() != PLAYER_MOTION_WALK)
+						{
+							SetMotion(PLAYER_MOTION_SQUATSTOP);
+							m_bCruch = true;
+						}
+					}
+					else if (GetJump() == true && GetMotionType() != PLAYER_MOTION_WALK)
+					{
+						m_bCruch = false;
+						SetMotion(PLAYER_MOTION_NORMAL);
+					}
 				}
 			}
 			//ジャンプ、しゃがみをしてなかったらニュートラル
-			else if (GetJump() == true && m_bCruch == false)
+			else if (GetJump() == true && m_bCruch == false && GetMotionType() != PLAYER_MOTION_ATTACK01)
 			{
 				SetMotion(PLAYER_MOTION_NORMAL);
 			}
@@ -387,8 +390,6 @@ void CPlayer::AttackUpdate(void)
 	key = CManager::GetInputKeyboard();
 	if (m_bRespawn == false)
 	{
-
-
 		// 銃を撃つ or 近接攻撃
 		if (key->GetKeyboardTrigger(DIK_P))
 		{
@@ -416,7 +417,7 @@ void CPlayer::AttackUpdate(void)
 			}
 
 			// 近接攻撃をする状態だった時
-			if (m_bAttack_Enemy == true)
+			if (m_bAttack_Enemy == true&&GetJump() == true)
 			{// 近接攻撃
 			 // エネミーとの接触判定 捕虜の状態を変える
 				CEnemy		*pEnemy = GetCollision()->ForPlayer_EnemyCollision();
@@ -429,7 +430,7 @@ void CPlayer::AttackUpdate(void)
 			}
 
 			// 近接判定が出ている時は近接攻撃をする
-			if (m_bAttack_Prisoner == true)
+			else if (m_bAttack_Prisoner == true && GetJump() == true)
 			{// 近接攻撃
 			 // 捕虜との接触判定 捕虜の状態を変える
 				CPrisoner	*pPrisoner = GetCollision()->ForPlayer_PrisonerCollision();
@@ -466,7 +467,7 @@ void CPlayer::AttackUpdate(void)
 		// 攻撃モーションから別のモーションになった時
 		if (GetMotionType() != CCharacter::PLAYER_MOTION_ATTACK01)
 		{
-			if (m_bAttack_Enemy == false && m_bAttack_Prisoner == false)
+			if (m_bAttack_Enemy == false || m_bAttack_Prisoner == false)
 			{
 				m_pKnife->EndMeleeAttack();
 			}

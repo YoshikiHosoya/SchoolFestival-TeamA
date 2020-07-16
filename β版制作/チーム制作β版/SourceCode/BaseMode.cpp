@@ -25,13 +25,14 @@ void CBaseMode::DebugCommand(void)
 	CDebugProc::Print("---------Debug Command----------\n");
 	CDebugProc::Print("[F2] : デバッグ表記on/off\n");
 	CDebugProc::Print("[F3] : 一時停止\n");
-	CDebugProc::Print("[F4] : 一時停止中に1Fだけ更新n");
+	CDebugProc::Print("[F4] : 一時停止中に1Fだけ更新\n");
 
 	CDebugProc::Print("[Ctrl] + テンキー [0] : 現在のModeに遷移\n");
 	CDebugProc::Print("[Ctrl] + テンキー [1] : Titleに遷移\n");
 	CDebugProc::Print("[Ctrl] + テンキー [2] : Gameに遷移\n");
 	CDebugProc::Print("[Ctrl] + テンキー [3] : Resultに遷移\n");
 	CDebugProc::Print("[Ctrl] + テンキー [4] : Rankingに遷移\n");
+	CDebugProc::Print("[Ctrl] + テンキー [7] : MapEditorに遷移\n");
 	CDebugProc::Print("[Ctrl] + テンキー [8] : EffectViewerに遷移\n");
 	CDebugProc::Print("[Ctrl] + テンキー [9] : MotionViewerに遷移\n");
 
@@ -80,6 +81,11 @@ void CBaseMode::DebugCommand(void)
 		if (key->GetKeyboardTrigger(DIK_NUMPAD4))
 		{
 			CManager::GetRenderer()->GetFade()->SetFade(CManager::MODE_RANKING);
+		}
+		//マップエディター
+		if (key->GetKeyboardTrigger(DIK_NUMPAD7))
+		{
+			CManager::GetRenderer()->GetFade()->SetFade(CManager::MODE_DEBUG_MAPEDITOR);
 		}
 		//エフェクトビューワ
 		if (key->GetKeyboardTrigger(DIK_NUMPAD8))
