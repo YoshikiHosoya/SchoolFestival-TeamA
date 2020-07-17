@@ -569,7 +569,7 @@ void CMap::HelicopterLoad(MAP MapNum)
 	char cDie[128];					// 不要な文字
 	D3DXVECTOR3 pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 位置
 
-														// ファイルを開く
+	// ファイルを開く
 	pFile = fopen(m_HelicopterFileName[MapNum], "r");
 
 	// 開いているとき
