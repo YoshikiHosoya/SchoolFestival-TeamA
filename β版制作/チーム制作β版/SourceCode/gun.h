@@ -64,7 +64,7 @@ public:
 	void				SetShotRot(D3DXVECTOR3 ShotRot)				{ m_ShotRot = ShotRot; };				// Œ‚‚Â‚Æ‚«‚Ì‰ñ“]‚ÌŒü‚«‚Ìİ’è
 	void				SetMtxWorld(D3DXMATRIX *mtx) { m_mtx = mtx; };
 	void				Shot();					// e‚Ì”­Ë
-
+	void				AddAmmo(int nAmmo) { m_nAmmo += nAmmo; };						// ’e”‚Ì‰ÁZ
 private:
 	/* ƒƒ“ƒoŠÖ” */
 	void				MultipleShot();			// •¡””­Œ‚‚Âˆ—
