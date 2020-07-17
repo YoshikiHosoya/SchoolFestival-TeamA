@@ -142,6 +142,11 @@ void CPlayertank::Update(void)
 			VehiclePartsRotCondition(GetVehicleModelPartsList(CModel::MODEL_TANK_TANK_FRONTWHEEL), MODEL_ROT_TYPE_MOVING);
 			VehiclePartsRotCondition(GetVehicleModelPartsList(CModel::MODEL_TANK_TANK_BACKWHEEL), MODEL_ROT_TYPE_MOVING);
 			VehiclePartsRotCondition(GetVehicleModelPartsList(CModel::MODEL_TANK_TANKGUN), MODEL_ROT_TYPE_OPERATION);
+
+			// æ‚è•¨‚Ì”»’è
+			GetCollision()->ForVehicleCollision();
+			// íŽÔ‚Ì”»’è
+			GetCollision()->ForTankCollision();
 		}
 	}
 
@@ -190,9 +195,6 @@ void CPlayertank::Shot(CKeyboard *key)
 	// ƒ}ƒVƒ“ƒKƒ“‚ðŒ‚‚Â
 	if (key->GetKeyboardTrigger(DIK_P))
 	{
-		// ƒ}ƒVƒ“ƒKƒ“”­ŽËˆ—
-		//m_pGun->Shot(GetShotDirection());
-
 		// ƒKƒ“‚Ìƒ‚ƒfƒ‹‚Ì”­ŽËŒû‚©‚ç’e‚ð¶¬
 		m_pGun->Shot();
 	}

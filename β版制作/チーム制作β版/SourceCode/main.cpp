@@ -9,7 +9,7 @@
 #include "manager.h"
 //マクロ定義
 #define CLASS_NAME		"WindowClass"		//ウィンドウクラスの名前
-#define WINDOW_NAME		"MagicKnight"		//キャプション
+#define WINDOW_NAME		"METAL PANZER"		//キャプション
 
 //プロトタイプ宣言
 LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);

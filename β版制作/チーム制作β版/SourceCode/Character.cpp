@@ -63,18 +63,18 @@ HRESULT CCharacter::Init(void)
 	m_pos				= D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// 位置
 	m_move				= D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// 移動量
 	m_rot				= D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// 回転
-	m_AddArmRot			= D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// 
-	m_AddHeadRot		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// 
+	m_AddArmRot			= D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//
+	m_AddHeadRot		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//
 	m_Life				= 50;									// 体力
 	m_state				= CHARACTER_STATE_NONE;					// 状態
 	m_rotDest.y			= -0.5f*  D3DX_PI;						// 回転する差分
 	m_bJump				= false;								// ジャンプフラグ
-	m_bGravity			= true;									// 
+	m_bGravity			= true;									//
 	m_bDieFlag			= false;								// 死亡フラグ
 	m_bMotion			= true;									// モーションするかどうか
 	m_ShotRot			= D3DXVECTOR3(0.0f, 0.5f, 0.0f);		// 撃つ向き
-	m_HeightBet			= 0.0f;									// 
-	m_bFall				= false;								// 
+	m_HeightBet			= 0.0f;									//
+	m_bFall				= false;								//
 	// 当たり判定生成
 	m_pCollision = CCollision::Create();
 	//マトリックス初期化

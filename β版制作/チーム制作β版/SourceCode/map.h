@@ -26,6 +26,7 @@ class CPrisoner;
 class CObstacle;
 class CPlayertank;
 class CBattlePlane;
+class CHelicopter;
 
 // =====================================================================================================================================================================
 // マップクラス
@@ -33,13 +34,14 @@ class CBattlePlane;
 class CMap
 {
 public:
-	// マップのオブジェクトの種類
+	// マップの種類
 	enum MAP
 	{
 		MAP_1,			// 1
 		MAP_2,			// 2
 		MAP_MAX
 	};
+		//MAP_MODEL_TYPE_HELICOPTER,				// ヘリコプター
 
 	CMap();																	// コンストラクタ
 	~CMap();																// デストラクタ
@@ -55,6 +57,7 @@ public:
 	int				GetMaxObstacle();											// 障害物の最大数取得
 	int				GetMaxPlayerTank();											// 戦車の最大数取得
 	int				GetMaxBattlePlane();										// 戦闘機の最大数取得
+	int				GetMaxHelicopter();											// ヘリの最大数取得
 	LPD3DXMESH		GetMesh(int nCnt);											// メッシュの取得
 	CModel			*GetModel(int nCnt) { return m_pModel[nCnt]; };				// モデルの取得
 	CEnemy			*GetEnemy(int nCnt) { return m_pEnemy[nCnt]; };				// 敵の取得
@@ -62,6 +65,7 @@ public:
 	CObstacle		*GetObstacle(int nCnt) { return m_pObstacle[nCnt]; };		// 障害物の取得
 	CPlayertank		*GetPlayertank(int nCnt) { return m_pPlayerTank[nCnt]; };	// 戦車の取得
 	CBattlePlane	*GetBattlePlane(int nCnt) { return m_pBattlePlane[nCnt]; };	// 戦闘機の取得
+	CHelicopter		*GetHelicopter(int nCnt) { return m_pHelicopter[nCnt]; };	// ヘリコプターの取得
 
 	void			UpdateDieFlag();										// 死亡フラグ確認関数
 
@@ -73,12 +77,14 @@ private:
 	void			ObstacleLoad(MAP MapNum);								// 障害物のロード
 	void			PlayerTankLoad(MAP MapNum);								// プレイヤー用の戦車のロード
 	void			BattlePlaneLoad(MAP MapNum);							// 戦闘機のロード
+	void			HelicopterLoad(MAP MapNum);								// ヘリコプターのロード
 	void			ModelSave(MAP MapNum);									// モデルのセーブ
 	void			EnemySave(MAP MapNum);									// 敵のセーブ
 	void			PrisonerSave(MAP MapNum);								// 捕虜のセーブ
 	void			ObstacleSave(MAP MapNum);								// 障害物のセーブ
 	void			PlayerTankSave(MAP MapNum);								// 戦車のセーブ
 	void			BattlePlaneSave(MAP MapNum);							// 戦闘機のセーブ
+	void			HelicopterSave(MAP MapNum);								// ヘリコプターのセーブ
 	void			AllSaveButton();										// 配置したモデルを全てセーブするボタン
 	void			MapModelTab();											// マップに配置するモデルのタブ
 	void			MapModelSet();											// マップに配置するモデルの設置
@@ -86,12 +92,15 @@ private:
 	void			EnemySet();												// 敵の設置
 	void			PlayerTankSet();										// 戦車の設置
 	void			BattlePlaneSet();										// 戦闘機の設置
+	void			HelicopterSet();										// ヘリの設置
 	bool			ObstacleComboBox(int &nType);							// 障害物のコンボボックス
 	void			PrisonerSet();											// 捕虜の設置
 	bool			EnemyComboBox(int &nType);								// 敵のコンボボックス
 	bool			PrisonerComboBox(int &nType);							// 捕虜のコンボボックス
 	bool			PlayerTankComboBox(int &nType);							// 戦車のコンボボックス
 	bool			BattlePlaneComboBox(int &nType);						// 戦闘機のコンボボックス
+	bool			HelicopterComboBox(int &nType);							// ヘリのコンボボックス
+	void			SetSelectMapModelPosRDest(D3DXVECTOR3 posR);			// 選択しているモデルを注視点の目的地に設定
 
 	/* 静的メンバ変数 */
 	static char					*m_MapFileName[MAP_MAX];					// マップファイル名
@@ -100,6 +109,7 @@ private:
 	static char					*m_ObstacleFileName[MAP_MAX];				// 障害物ファイル名
 	static char					*m_PlayerTankFileName[MAP_MAX];				// 戦車ファイル名
 	static char					*m_BattlePlaneFileName[MAP_MAX];			// 戦闘機ファイル名
+	static char					*m_HelicopterFileName[MAP_MAX];				// ヘリファイル名
 	static MAP					m_MapNum;									// マップ番号
 
 	/* メンバ変数 */
@@ -109,5 +119,7 @@ private:
 	std::vector<CObstacle*>		m_pObstacle;								// 可変長配列 設置した障害物
 	std::vector<CPlayertank*>	m_pPlayerTank;								// 可変長配列 設置した戦車
 	std::vector<CBattlePlane*>	m_pBattlePlane;								// 可変長配列 設置した戦闘機
+	std::vector<CHelicopter*>	m_pHelicopter;								// 可変長配列 設置したヘリ
+	int							m_nOldSelect;								// 前回選択していたモノの番号
 };
 #endif

@@ -54,6 +54,7 @@ public:
 	{
 		VEHICLE_TYPE_TANK,									// 戦車
 		VEHICLE_TYPE_PLANE,									// 戦闘機
+		VEHICLE_TYPE_HELICOPTER,							// ヘリコプター
 		VEHICLE_TYPE_MAX									// 乗り物の最大数
 	}VEHICLE_TYPE;
 

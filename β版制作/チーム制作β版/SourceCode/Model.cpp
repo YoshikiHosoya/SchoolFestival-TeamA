@@ -75,6 +75,7 @@ char *CModel::m_GunFileName[MODEL_GUN_MAX] =
 	{ "data/MODEL/Gun/Gun.x" },						// フレイムショット
 	{ "data/MODEL/Gun/TankGun.x" },					// 戦車の銃
 	{ "data/MODEL/Gun/PlaneGun.x" },				// 戦闘機の銃
+	{ "data/MODEL/Gun/HeliGun.x" },					// ヘリの銃
 	{ "data/MODEL/Gun/Knife.x" },					// ナイフ
 };
 char *CModel::m_BulletFileName[MODEL_BULLET_MAX] =
@@ -95,8 +96,15 @@ char *CModel::m_TankFileName[MODEL_TANK_MAX] =
 
 char *CModel::m_PlaneFileName[MODEL_PLANE_MAX] =
 {
-	{ "data/MODEL/BattlePlane/BattlePlane_Body.x" },	// 戦闘機の機体
-	{ "data/MODEL/BattlePlane/BattlePlane_Gun.x" },		// 戦闘機の銃
+	{ "data/MODEL/BattlePlane/BattlePlane_Body.x" },// 戦闘機の機体
+	{ "data/MODEL/BattlePlane/BattlePlane_Gun.x" },	// 戦闘機の銃
+};
+
+char *CModel::m_HeliFileName[MODEL_HELI_MAX] =
+{
+	{ "data/MODEL/Helicopter/Helicopter_Body.x" },		// ヘリコプターの機体
+	{ "data/MODEL/Helicopter/Helicopter_Propeller.x" },	// ヘリコプターのプロペラ
+	{ "data/MODEL/Helicopter/Helicopter_Gun.x" },		// ヘリコプターの銃
 };
 
 
@@ -376,6 +384,33 @@ void CModel::LoadModel(void)
 
 		std::cout << "PLANEMODEL Load >>" << m_PlaneFileName[nCnt] << NEWLINE;
 	}
+
+	// ヘリのモデル読み込み
+	for (int nCnt = 0; nCnt < MODEL_HELI_MAX; nCnt++)
+	{
+		// Xファイルの読み込み
+		D3DXLoadMeshFromX(
+			m_HeliFileName[nCnt],
+			D3DXMESH_SYSTEMMEM,
+			pDevice,
+			NULL,
+			&m_Model[HELI_MODEL][nCnt].pBuffmat,
+			NULL,
+			&m_Model[HELI_MODEL][nCnt].nNumMat,
+			&m_Model[HELI_MODEL][nCnt].pMesh
+		);
+		//テクスチャのメモリ確保
+		m_Model[HELI_MODEL][nCnt].m_pTexture = new LPDIRECT3DTEXTURE9[(int)m_Model[HELI_MODEL][nCnt].nNumMat];
+		pMat = (D3DXMATERIAL*)m_Model[HELI_MODEL][nCnt].pBuffmat->GetBufferPointer();
+
+		for (int nCntmat = 0; nCntmat < (int)m_Model[HELI_MODEL][nCnt].nNumMat; nCntmat++)
+		{
+			m_Model[HELI_MODEL][nCnt].m_pTexture[nCntmat] = NULL;
+			D3DXCreateTextureFromFile(pDevice, pMat[nCntmat].pTextureFilename, &m_Model[HELI_MODEL][nCnt].m_pTexture[nCntmat]);
+		}
+
+		std::cout << "HELIMODEL Load >>" << m_HeliFileName[nCnt] << NEWLINE;
+	}
 }
 //====================================================================
 //モデルの開放
@@ -629,6 +664,33 @@ void CModel::UnLoad(void)
 		}
 	}
 
+	// ヘリコプター
+	for (int nCnt = 0; nCnt < MODEL_HELI_MAX; nCnt++)
+	{
+		if (m_Model[HELI_MODEL][nCnt].pBuffmat != NULL)
+		{
+			m_Model[HELI_MODEL][nCnt].pBuffmat->Release();
+			m_Model[HELI_MODEL][nCnt].pBuffmat = NULL;
+		}
+		if (m_Model[HELI_MODEL][nCnt].pMesh != NULL)
+		{
+			m_Model[HELI_MODEL][nCnt].pMesh->Release();
+			m_Model[HELI_MODEL][nCnt].pMesh = NULL;
+		}
+		if (m_Model[HELI_MODEL][nCnt].m_pTexture != NULL)
+		{
+			for (int nCntmat = 0; nCntmat < (int)m_Model[HELI_MODEL][nCnt].nNumMat; nCntmat++)
+			{
+				if (m_Model[HELI_MODEL][nCnt].m_pTexture[nCntmat] != NULL)
+				{
+					m_Model[HELI_MODEL][nCnt].m_pTexture[nCntmat]->Release();
+					m_Model[HELI_MODEL][nCnt].m_pTexture[nCntmat] = NULL;
+				}
+			}
+			delete[] m_Model[HELI_MODEL][nCnt].m_pTexture;
+			m_Model[HELI_MODEL][nCnt].m_pTexture = NULL;
+		}
+	}
 }
 //====================================================================
 //初期化
@@ -813,6 +875,10 @@ char * CModel::GetModelFileName(int nType, int nModelCount)
 		//戦車
 	case PLANE_MODEL:
 		return m_PlaneFileName[nModelCount];
+		break;
+		//ヘリ
+	case HELI_MODEL:
+		return m_HeliFileName[nModelCount];
 		break;
 	}
 	return nullptr;

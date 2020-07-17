@@ -70,6 +70,7 @@ CCollision::~CCollision()
 	if (m_Debugcollision != nullptr)
 	{
 		m_Debugcollision->DeleteDeCollision();
+		m_Debugcollision->Rerease();
 		m_Debugcollision = nullptr;
 	}
 
@@ -172,7 +173,11 @@ bool CCollision::ForPlayerBulletCollision(int nEnemyDamage, int nObstacleDamage,
 				// 敵のライフが0以下になった時
 				if (pEnemy->CCharacter::GetLife() <= 0)
 				{
+					////アイテムを生成
+					//CItem::DropCreate(pEnemy->GetPosition());
+					// 死亡フラグを立てる
 					pEnemy->SetDieFlag(true);
+					// ポインタをnullにする
 					pEnemy = nullptr;
 				}
 
@@ -613,6 +618,69 @@ bool CCollision::ForPlayer_VehicleCollision()
 }
 
 //======================================================================================================================
+// 乗り物が行う判定
+//======================================================================================================================
+bool CCollision::ForVehicleCollision()
+{
+	// 判定を確認するフラグ
+	bool bHitFlag = false;
+
+	//相手がアイテムだったら
+	// ベクター型の変数
+	std::vector<CScene*> SceneList;
+
+	// 指定したオブジェクトのポインタを取得
+	CScene::GetSceneList(CScene::OBJTYPE_ITEM, SceneList);
+
+	//アイテムの総数分
+	for (size_t nCnt = 0; nCnt < SceneList.size(); nCnt++)
+	{
+		CItem *pItem = (CItem*)SceneList[nCnt];
+		if (pItem != nullptr)
+		{
+			if (pItem->GetItemType() == CItem::ITEMTYPE_BEAR)
+			{
+				if (pItem->GetCollision()->OtherCollision2D(this))
+				{
+					bHitFlag = true;
+					// アイテムごとの処理を通す
+					pItem->HitItem(pItem->GetItemType());
+					pItem = nullptr;
+				}
+			}
+		}
+	}
+
+	return bHitFlag;
+}
+
+//======================================================================================================================
+// 戦車が行う判定
+//======================================================================================================================
+bool CCollision::ForTankCollision()
+{
+	// 判定を確認するフラグ
+	bool bHitFlag = false;
+
+	//相手がエネミーだったら
+	// 敵の総数分
+	for (int nCnt = 0; nCnt < CManager::GetBaseMode()->GetMap()->GetMaxEnemy(); nCnt++)
+	{
+		CEnemy *pEnemy = CManager::GetBaseMode()->GetMap()->GetEnemy(nCnt);
+		if (pEnemy != nullptr)
+		{
+			if (this->CharCollision2D(pEnemy->GetCollision()))
+			{
+				bHitFlag = true;
+				pEnemy->AddDamage(100);
+			}
+		}
+	}
+
+	return false;
+}
+
+//======================================================================================================================
 // ナイフとキャラクターの判定
 //======================================================================================================================
 bool CCollision::KnifeCollision(D3DXVECTOR3 Knifepos, CCollision *pCollision)
@@ -700,10 +768,6 @@ bool CCollision::ForPlayer_ItemCollision()
 				// アイテムごとの処理を通す
 				pItem->HitItem(pItem->GetItemType());
 				pItem = nullptr;
-			}
-			else
-			{
-				bHitFlag = false;
 			}
 		}
 	}

@@ -89,6 +89,7 @@ public:
 		MODEL_GUN_FLAMESHOT,			// フレイムショット
 		MODEL_GUN_TANKGUN,				// 戦車の銃
 		MODEL_GUN_PLANEGUN,				// 戦闘機の銃
+		MODEL_GUN_HELIGUN,				// ヘリの銃
 		MODEL_KNIFE,					// ナイフ
 		MODEL_GUN_MAX
 	}GUN_MODEL;
@@ -121,6 +122,16 @@ public:
 		MODEL_PLANE_MAX
 	}PLANE_PARTS_MODEL;
 
+	// モデルの種類
+	typedef enum
+	{
+		//===ヘリのモデル===
+		MODEL_HELIBODY,				// 機体
+		MODEL_HELIPROPELLER,		// プロペラ
+		MODEL_HELIGUN,				// 武器
+		MODEL_HELI_MAX
+	}HELI_PARTS_MODEL;
+
 	typedef enum
 	{
 		PLAYER_MODEL,
@@ -132,6 +143,7 @@ public:
 		PRISONER_MODEL,
 		TANK_MODEL,
 		PLANE_MODEL,
+		HELI_MODEL,
 		TYPE_MAX
 	}MODEL_TYPE;
 
@@ -215,6 +227,7 @@ private:
 	static char *m_PrisonerFileName[MODEL_PRISONER_MAX];
 	static char *m_TankFileName[MODEL_TANK_MAX];
 	static char *m_PlaneFileName[MODEL_PLANE_MAX];
+	static char *m_HeliFileName[MODEL_HELI_MAX];
 
 
 	D3DXVECTOR3		m_pos;					//位置
@@ -232,7 +245,7 @@ private:
 	int				m_nIdxModelpalent;		//親のインデックス
 	int				m_nParentIdx;			//親番号
 	bool			m_bDieFlag;				// 死亡フラグ
-	bool			m_bColorChangeFlag;		// 色変更フラグ	
+	bool			m_bColorChangeFlag;		// 色変更フラグ
 	CCollision		*m_pCollision;			// 当たり判定情報
 };
 #endif

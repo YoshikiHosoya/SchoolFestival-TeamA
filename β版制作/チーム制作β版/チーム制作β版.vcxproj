@@ -163,6 +163,7 @@
     <ClCompile Include="SourceCode\collision.cpp" />
     <ClCompile Include="SourceCode\debugcollision.cpp" />
     <ClCompile Include="SourceCode\debugproc.cpp" />
+    <ClCompile Include="SourceCode\Debug_MapEditor.cpp" />
     <ClCompile Include="SourceCode\Enemy.cpp" />
     <ClCompile Include="SourceCode\EnemyAI.cpp" />
     <ClCompile Include="SourceCode\fade.cpp" />
@@ -173,6 +174,8 @@
     <ClCompile Include="SourceCode\gun.cpp" />
     <ClCompile Include="SourceCode\handgun.cpp" />
     <ClCompile Include="SourceCode\heavymachinegun.cpp" />
+    <ClCompile Include="SourceCode\helicopter.cpp" />
+    <ClCompile Include="SourceCode\helicoptergun.cpp" />
     <ClCompile Include="SourceCode\hosso\Debug_EffectViewer.cpp" />
     <ClCompile Include="SourceCode\hosso\Debug_ModelViewer.cpp" />
     <ClCompile Include="SourceCode\hosso\Debug_ViewerCharacter.cpp" />
@@ -246,6 +249,7 @@
     <ClInclude Include="SourceCode\collision.h" />
     <ClInclude Include="SourceCode\debugcollision.h" />
     <ClInclude Include="SourceCode\debugproc.h" />
+    <ClInclude Include="SourceCode\Debug_MapEditor.h" />
     <ClInclude Include="SourceCode\Enemy.h" />
     <ClInclude Include="SourceCode\EnemyAI.h" />
     <ClInclude Include="SourceCode\fade.h" />
@@ -256,6 +260,8 @@
     <ClInclude Include="SourceCode\gun.h" />
     <ClInclude Include="SourceCode\handgun.h" />
     <ClInclude Include="SourceCode\heavymachinegun.h" />
+    <ClInclude Include="SourceCode\helicopter.h" />
+    <ClInclude Include="SourceCode\helicoptergun.h" />
     <ClInclude Include="SourceCode\hosso\Debug_EffectViewer.h" />
     <ClInclude Include="SourceCode\hosso\Debug_ModelViewer.h" />
     <ClInclude Include="SourceCode\hosso\Debug_ViewerCharacter.h" />

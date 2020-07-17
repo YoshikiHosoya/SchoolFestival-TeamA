@@ -31,6 +31,7 @@ public:
 		GUNTYPE_FLAMESHOT,							// フレイムショット
 		GUNTYPE_TANKGUN,							// 戦車の銃
 		GUNTYPE_PLANEGUN,							// 戦闘機の銃
+		GUNTYPE_HELIGUN,							// ヘリの銃
 		GUNTYPE_GRENADE,							// グレネード
 		GUNTYPE_MAX									// 銃の種類の最大数
 	};

@@ -14,13 +14,20 @@
 #include "prisoner.h"
 #include "playertank.h"
 #include "battleplane.h"
+#include "helicopter.h"
 #include "Player.h"
 #include "BaseMode.h"
+#include "item.h"
 
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
 // =====================================================================================================================================================================
-CMap::MAP CMap::m_MapNum = MAP_1;		// マップ番号
+CMap::MAP	CMap::m_MapNum = MAP_1;							// マップ番号
+
+// =====================================================================================================================================================================
+// マクロ定義
+// =====================================================================================================================================================================
+#define TranslucentColor			(D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.5f))		//半透明
 
 // =====================================================================================================================================================================
 // テキストファイル名
@@ -59,6 +66,12 @@ char *CMap::m_BattlePlaneFileName[MAP_MAX] =
 	{ "data/Load/BattlePlane/BattlePlane_Map_02.txt" },
 };
 
+char *CMap::m_HelicopterFileName[MAP_MAX] =
+{
+	{ "data/Load/Helicopter/Helicopter_Map_01.txt" },
+	{ "data/Load/Helicopter/Helicopter_Map_02.txt" },
+};
+
 // =====================================================================================================================================================================
 //
 // コンストラクタ
@@ -73,6 +86,8 @@ CMap::CMap()
 	m_pObstacle.clear();
 	m_pPlayerTank.clear();
 	m_pBattlePlane.clear();
+	m_pHelicopter.clear();
+	m_nOldSelect = 0;
 }
 
 // =====================================================================================================================================================================
@@ -86,7 +101,7 @@ CMap::~CMap()
 
 // =====================================================================================================================================================================
 //
-// モデルのロード
+// マップのロード
 //
 // =====================================================================================================================================================================
 void CMap::ModelLoad(MAP MapNum)
@@ -159,7 +174,7 @@ void CMap::ModelLoad(MAP MapNum)
 
 // =====================================================================================================================================================================
 //
-// エネミーのロード
+// 敵のロード
 //
 // =====================================================================================================================================================================
 void CMap::EnemyLoad(MAP MapNum)
@@ -229,8 +244,6 @@ void CMap::EnemyLoad(MAP MapNum)
 								m_pEnemy[m_pEnemy.size() - 1]->SetPosition(pos);
 								// 体力の設定
 								m_pEnemy[m_pEnemy.size() - 1]->SetLife(nLife);
-
-								m_pEnemy[m_pEnemy.size() - 1]->ChangeColor(true, D3DXCOLOR(1.0f, 0.0f, 1.0f, 0.0f));
 						}
 					}
 				}
@@ -387,7 +400,7 @@ void CMap::ObstacleLoad(MAP MapNum)
 							// 体力の設定
 							m_pObstacle[m_pObstacle.size() - 1]->SetLife(nLife);
 							// 当たり判定の大きさの設定
-							m_pObstacle[m_pObstacle.size() - 1]->SetCollisionSize(size);
+							m_pObstacle[m_pObstacle.size() - 1]->SetCollisionSize((CObstacle::OBSTACLE_TYPE)nType);
 						}
 					}
 				}
@@ -438,10 +451,10 @@ void CMap::PlayerTankLoad(MAP MapNum)
 				fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
 				sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
 
-															// OBSTACLESETが来たら
+				// PLAYERTANKSETが来たら
 				if (strcmp(cHeadText, "PLAYERTANKSET") == 0)
 				{
-					// END_OBSTACLESETが来るまでループ
+					// END_PLAYERTANKSETが来るまでループ
 					while (strcmp(cHeadText, "END_PLAYERTANKSET") != 0)
 					{
 						fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
@@ -486,7 +499,7 @@ void CMap::BattlePlaneLoad(MAP MapNum)
 	char cDie[128];					// 不要な文字
 	D3DXVECTOR3 pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 位置
 
-														// ファイルを開く
+	// ファイルを開く
 	pFile = fopen(m_BattlePlaneFileName[MapNum], "r");
 
 	// 開いているとき
@@ -542,6 +555,75 @@ void CMap::BattlePlaneLoad(MAP MapNum)
 	}
 }
 
+// =====================================================================================================================================================================
+//
+// ヘリの配置
+//
+// =====================================================================================================================================================================
+void CMap::HelicopterLoad(MAP MapNum)
+{
+	// ファイルポイント
+	FILE *pFile;
+	char cReadText[128];			// 文字として読み取る
+	char cHeadText[128];			// 比較用
+	char cDie[128];					// 不要な文字
+	D3DXVECTOR3 pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 位置
+
+														// ファイルを開く
+	pFile = fopen(m_HelicopterFileName[MapNum], "r");
+
+	// 開いているとき
+	if (pFile != NULL)
+	{
+		// SCRIPTが来るまでループ
+		while (strcmp(cHeadText, "SCRIPT") != 0)
+		{
+			fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
+			sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
+		}
+
+		// SCRIPTが来たら
+		if (strcmp(cHeadText, "SCRIPT") == 0)
+		{
+			// END_SCRIPTが来るまでループ
+			while (strcmp(cHeadText, "END_SCRIPT") != 0)
+			{
+				fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
+				sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
+
+															// OBSTACLESETが来たら
+				if (strcmp(cHeadText, "HELISET") == 0)
+				{
+					// END_OBSTACLESETが来るまでループ
+					while (strcmp(cHeadText, "END_HELISET") != 0)
+					{
+						fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
+						sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
+
+																	// POSが来たら
+						if (strcmp(cHeadText, "POS") == 0)
+						{
+							sscanf(cReadText, "%s %s %f %f %f", &cDie, &cDie, &pos.x, &pos.y, &pos.z);		// 比較用テキストにPOSを代入
+						}
+						else if (strcmp(cHeadText, "END_HELISET") == 0)
+						{
+							// オブジェクトの生成
+							m_pHelicopter.emplace_back(CHelicopter::Create());
+							// 位置の設定
+							m_pHelicopter[m_pHelicopter.size() - 1]->SetPosition(pos);
+						}
+					}
+				}
+			}
+		}
+		// ファイルを閉じる
+		fclose(pFile);
+	}
+	else
+	{
+		MessageBox(NULL, "ヘリのパラメーター読み込み失敗", "警告", MB_ICONWARNING);
+	}
+}
 
 // =====================================================================================================================================================================
 //
@@ -560,13 +642,15 @@ CMap *CMap::MapCreate(MAP MapNum)
 	// 敵のロード
 	pMap->EnemyLoad(MapNum);
 	// 捕虜のロード
-	pMap->PrisonerLoad(MapNum);
+	//pMap->PrisonerLoad(MapNum);
 	// 障害物のロード
 	pMap->ObstacleLoad(MapNum);
 	// プレイヤー戦車のロード
 	pMap->PlayerTankLoad(MapNum);
 	// 戦闘機のロード
 	//pMap->BattlePlaneLoad(MapNum);
+	// ヘリ
+	//pMap->HelicopterLoad(MapNum);
 
 	return pMap;
 }
@@ -693,6 +777,19 @@ int CMap::GetMaxBattlePlane()
 	return 0;
 }
 
+// =====================================================================================================================================================================
+//
+// ヘリの最大数取得
+//
+// =====================================================================================================================================================================
+int CMap::GetMaxHelicopter()
+{
+	if (!m_pHelicopter.empty())
+	{
+		return m_pHelicopter.size();
+	}
+	return 0;
+}
 
 // =====================================================================================================================================================================
 //
@@ -944,6 +1041,10 @@ void CMap::BattlePlaneSave(MAP MapNum)
 {
 }
 
+void CMap::HelicopterSave(MAP MapNum)
+{
+}
+
 // =====================================================================================================================================================================
 //
 // 配置したモデルを全てセーブするボタン
@@ -967,6 +1068,8 @@ void CMap::AllSaveButton()
 		PlayerTankSave(m_MapNum);
 		// 戦闘機のセーブ
 		BattlePlaneSave(m_MapNum);
+		// ヘリのセーブ
+		HelicopterSave(m_MapNum);
 	}
 }
 
@@ -1004,15 +1107,22 @@ void CMap::MapModelTab()
 		// 戦車
 		if (ImGui::BeginTabItem("Tank"))
 		{
-			// 敵の設置
+			// 戦車の設置
 			PlayerTankSet();
 			ImGui::EndTabItem();
 		}
 		// 戦闘機
 		if (ImGui::BeginTabItem("BattlePlane"))
 		{
-			// 敵の設置
+			// 戦闘機の設置
 			BattlePlaneSet();
+			ImGui::EndTabItem();
+		}
+		// ヘリ
+		if (ImGui::BeginTabItem("Helicopter"))
+		{
+			// ヘリの設置
+			HelicopterSet();
 			ImGui::EndTabItem();
 		}
 
@@ -1090,8 +1200,32 @@ void CMap::ObstacleSet()
 			ImGui::DragInt("Y", &y);
 			ImGui::DragInt("Z", &z);
 
-			// オブジェクトの位置の設定
+			// 障害物の位置の設定
 			m_pObstacle[nNowSelect]->SetPosition(D3DXVECTOR3((float)x, (float)y, (float)z));
+			
+			// 選択しているモデルを注視点の目的地に設定
+			SetSelectMapModelPosRDest(m_pObstacle[nNowSelect]->GetPosition());
+
+			// 選択しているモデルにカメラを合わせる
+
+			// 前回選択していたものと違うとき
+			if (m_nOldSelect != nNowSelect)
+			{
+				// 配置されているモデルのみ
+				if (m_pObstacle.size() > (unsigned)m_nOldSelect)
+				{
+					// 色変更無し
+					m_pObstacle[m_nOldSelect]->SetColorChangeFlag(false);
+				}
+			}
+			else
+			{
+				// 色変更フラグをオンして選択している障害物を半透明化
+				m_pObstacle[nNowSelect]->SetColorChangeFlag(true);
+				m_pObstacle[nNowSelect]->SetAddColor(-TranslucentColor);
+			}
+			// 前回選択していたもの
+			m_nOldSelect = nNowSelect;
 		}
 	}
 
@@ -1103,11 +1237,6 @@ void CMap::ObstacleSet()
 	{
 		// オブジェクトの生成
 		m_pObstacle.emplace_back(CObstacle::Create());
-
-		//// プレイヤーの位置に合わせる
-		//CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
-		//// オブジェクトの位置の設定
-		//m_pObstacle[nNowSelect]->SetPosition(pPlayer->GetPosition());
 	}
 
 	// 改行キャンセル
@@ -1199,6 +1328,27 @@ void CMap::PrisonerSet()
 
 			// オブジェクトの位置の設定
 			m_pPrisoner[nNowSelect]->SetPosition(D3DXVECTOR3((float)x, (float)y, (float)z));
+
+			// 選択しているモデルを注視点の目的地に設定
+			SetSelectMapModelPosRDest(m_pPrisoner[nNowSelect]->GetPosition());
+
+			// 前回選択していたものと違うとき
+			if (m_nOldSelect != nNowSelect)
+			{
+				// 配置されているモデルのみ
+				if (m_pObstacle.size() > (unsigned)m_nOldSelect)
+				{
+					// 色変更無し
+					m_pPrisoner[m_nOldSelect]->ChangeColor(false, ZeroColor);
+				}
+			}
+			else
+			{
+				// 色変更フラグをオンして選択している障害物を半透明化
+				m_pPrisoner[nNowSelect]->ChangeColor(true, -TranslucentColor);
+			}
+			// 前回選択していたもの
+			m_nOldSelect = nNowSelect;
 		}
 	}
 
@@ -1225,6 +1375,16 @@ void CMap::PrisonerSet()
 	// 全てセーブ
 	AllSaveButton();
 
+	// 改行キャンセル
+	ImGui::SameLine(250);
+
+	// 消去
+	if (ImGui::Button("Delete"))
+	{
+		m_pPrisoner[nNowSelect]->Rerease();
+		m_pPrisoner[nNowSelect] = nullptr;
+		m_pPrisoner.erase(m_pPrisoner.begin() + nNowSelect);
+	}
 #endif
 }
 
@@ -1290,6 +1450,27 @@ void CMap::EnemySet()
 
 			// オブジェクトの位置の設定
 			m_pEnemy[nNowSelect]->SetPosition(D3DXVECTOR3((float)x, (float)y, (float)z));
+
+			// 選択しているモデルを注視点の目的地に設定
+			SetSelectMapModelPosRDest(m_pEnemy[nNowSelect]->GetPosition());
+
+			// 前回選択していたものと違うとき
+			if (m_nOldSelect != nNowSelect)
+			{
+				// 配置されているモデルのみ
+				if (m_pObstacle.size() > (unsigned)m_nOldSelect)
+				{
+					// 色変更無し
+					m_pEnemy[m_nOldSelect]->ChangeColor(false, ZeroColor);
+				}
+			}
+			else
+			{
+				// 色変更フラグをオンして選択している障害物を半透明化
+				m_pEnemy[nNowSelect]->ChangeColor(true, -TranslucentColor);
+			}
+			// 前回選択していたもの
+			m_nOldSelect = nNowSelect;
 		}
 	}
 
@@ -1316,6 +1497,16 @@ void CMap::EnemySet()
 	// 全てセーブ
 	AllSaveButton();
 
+	// 改行キャンセル
+	ImGui::SameLine(250);
+
+	// 消去
+	if (ImGui::Button("Delete"))
+	{
+		m_pEnemy[nNowSelect]->Rerease();
+		m_pEnemy[nNowSelect] = nullptr;
+		m_pEnemy.erase(m_pEnemy.begin() + nNowSelect);
+	}
 #endif
 }
 
@@ -1331,7 +1522,7 @@ void CMap::PlayerTankSet()
 	static int nPlayerTankType = 0;		// 戦車の種類
 	static int nNowSelect = -1;			// 現在選択している番号
 
-										// オブジェクト番号の選択
+	// オブジェクト番号の選択
 	ImGui::InputInt("nowSelect", &nNowSelect, 1, 20, 0);
 
 	// 範囲制限
@@ -1381,6 +1572,9 @@ void CMap::PlayerTankSet()
 
 			// オブジェクトの位置の設定
 			m_pPlayerTank[nNowSelect]->SetPosition(D3DXVECTOR3((float)x, (float)y, (float)z));
+
+			// 選択しているモデルを注視点の目的地に設定
+			SetSelectMapModelPosRDest(m_pPlayerTank[nNowSelect]->GetPosition());
 		}
 	}
 
@@ -1400,13 +1594,23 @@ void CMap::PlayerTankSet()
 	// セーブ
 	if (ImGui::Button("Save"))
 	{
-		// 敵のセーブ
+		// プレイヤーの戦車のセーブ
 		PlayerTankSave(m_MapNum);
 	}
 
 	// 全てセーブ
 	AllSaveButton();
 
+	// 改行キャンセル
+	ImGui::SameLine(250);
+
+	// 消去
+	if (ImGui::Button("Delete"))
+	{
+		m_pPlayerTank[nNowSelect]->Rerease();
+		m_pPlayerTank[nNowSelect] = nullptr;
+		m_pPlayerTank.erase(m_pPlayerTank.begin() + nNowSelect);
+	}
 #endif
 
 }
@@ -1473,6 +1677,9 @@ void CMap::BattlePlaneSet()
 
 			// オブジェクトの位置の設定
 			m_pBattlePlane[nNowSelect]->SetPosition(D3DXVECTOR3((float)x, (float)y, (float)z));
+
+			// 選択しているモデルを注視点の目的地に設定
+			SetSelectMapModelPosRDest(m_pBattlePlane[nNowSelect]->GetPosition());
 		}
 	}
 
@@ -1494,6 +1701,111 @@ void CMap::BattlePlaneSet()
 	{
 		// 敵のセーブ
 		BattlePlaneSave(m_MapNum);
+	}
+
+	// 全てセーブ
+	AllSaveButton();
+
+	// 改行キャンセル
+	ImGui::SameLine(250);
+
+	// 消去
+	if (ImGui::Button("Delete"))
+	{
+		m_pBattlePlane[nNowSelect]->Rerease();
+		m_pBattlePlane[nNowSelect] = nullptr;
+		m_pBattlePlane.erase(m_pBattlePlane.begin() + nNowSelect);
+	}
+#endif
+
+}
+
+// =====================================================================================================================================================================
+//
+// ヘリの設置
+//
+// =====================================================================================================================================================================
+void CMap::HelicopterSet()
+{
+#ifdef _DEBUG
+
+	static int nHelicopterType = 0;		// ヘリの種類
+	static int nNowSelect = -1;			// 現在選択している番号
+
+										// オブジェクト番号の選択
+	ImGui::InputInt("nowSelect", &nNowSelect, 1, 20, 0);
+
+	// 範囲制限
+	if (nNowSelect <= -1)
+	{
+		nNowSelect = -1;
+	}
+	else if (nNowSelect >= (int)m_pHelicopter.size())
+	{
+		nNowSelect = (int)m_pHelicopter.size();
+	}
+	// 選択しているモデルが生成されているとき
+	else if (nNowSelect >= 0 || nNowSelect <= (int)m_pHelicopter.size())
+	{
+		//// コンボボックス
+		//if (EnemyComboBox(nHelicopterType))
+		//{
+		//	// NULLチェック
+		//	if (m_pHelicopter[nNowSelect])
+		//	{
+		//		// 敵の種類の取得
+		//		CModel::PLAYERTANK_TYPE nHelicopterType = (CModel::OBSTACLE_TYPE)m_pHelicopter[nNowSelect]->GetModelCount();
+
+		//		// 前回と違うとき
+		//		if (nHelicopterType != nHelicopterType)
+		//		{
+		//			// 種類代入
+		//			nHelicopterType = (CModel::PLAYERTANK_TYPE)nHelicopterType;
+		//			// 敵のタイプの設定
+		//			m_pHelicopter[nNowSelect]->SetModelConut(nHelicopterType);
+		//		}
+		//	}
+		//}
+
+		// NULLチェック
+		if (m_pHelicopter[nNowSelect])
+		{
+			// 現在地
+			int x = (int)m_pHelicopter[nNowSelect]->GetPosition().x,
+				y = (int)m_pHelicopter[nNowSelect]->GetPosition().y,
+				z = (int)m_pHelicopter[nNowSelect]->GetPosition().z;
+
+			// オブジェクトの移動
+			ImGui::DragInt("X", &x);
+			ImGui::DragInt("Y", &y);
+			ImGui::DragInt("Z", &z);
+
+			// オブジェクトの位置の設定
+			m_pHelicopter[nNowSelect]->SetPosition(D3DXVECTOR3((float)x, (float)y, (float)z));
+
+			// 選択しているモデルを注視点の目的地に設定
+			SetSelectMapModelPosRDest(m_pHelicopter[nNowSelect]->GetPosition());
+		}
+	}
+
+	// 改行
+	ImGui::Separator();
+
+	// 生成
+	if (ImGui::Button("Crate"))
+	{
+		// オブジェクトの生成
+		m_pHelicopter.emplace_back(CHelicopter::Create());
+	}
+
+	// 改行キャンセル
+	ImGui::SameLine();
+
+	// セーブ
+	if (ImGui::Button("Save"))
+	{
+		// 敵のセーブ
+		HelicopterSave(m_MapNum);
 	}
 
 	// 全てセーブ
@@ -1665,6 +1977,30 @@ bool CMap::BattlePlaneComboBox(int & nType)
 
 // =====================================================================================================================================================================
 //
+// ヘリのコンボボックス
+//
+// =====================================================================================================================================================================
+bool CMap::HelicopterComboBox(int & nType)
+{
+	return false;
+}
+
+// =====================================================================================================================================================================
+//
+// 選択しているモデルを注視点の目的地に設定
+//
+// =====================================================================================================================================================================
+void CMap::SetSelectMapModelPosRDest(D3DXVECTOR3 posR)
+{
+	// カメラの取得
+	CCamera *pCamera = CManager::GetRenderer()->GetCamera();
+
+	// 注視点の目的地の設定
+	pCamera->SetCameraPosRDest(posR);
+}
+
+// =====================================================================================================================================================================
+//
 // 死亡フラグ確認関数
 //
 // =====================================================================================================================================================================
@@ -1675,6 +2011,8 @@ void CMap::UpdateDieFlag()
 	{
 		if (m_pEnemy[nCnt]->GetDieFlag())
 		{
+			//アイテムを生成
+			CItem::DropCreate(m_pEnemy[nCnt]->GetPosition());
 			m_pEnemy[nCnt]->Rerease();
 			m_pEnemy[nCnt] = nullptr;
 			m_pEnemy.erase(m_pEnemy.begin() + nCnt);
@@ -1722,6 +2060,17 @@ void CMap::UpdateDieFlag()
 			m_pBattlePlane[nCnt]->Rerease();
 			m_pBattlePlane[nCnt] = nullptr;
 			m_pBattlePlane.erase(m_pBattlePlane.begin() + nCnt);
+		}
+	}
+
+	// ヘリの削除
+	for (size_t nCnt = 0; nCnt < m_pHelicopter.size(); nCnt++)
+	{
+		if (m_pHelicopter[nCnt]->GetDieFlag())
+		{
+			m_pHelicopter[nCnt]->Rerease();
+			m_pHelicopter[nCnt] = nullptr;
+			m_pHelicopter.erase(m_pHelicopter.begin() + nCnt);
 		}
 	}
 }

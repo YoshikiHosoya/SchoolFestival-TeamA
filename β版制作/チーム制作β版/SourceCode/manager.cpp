@@ -14,6 +14,7 @@
 #include "mouse.h"
 #include "hosso/Debug_ModelViewer.h"
 #include "hosso/Debug_EffectViewer.h"
+#include "Debug_MapEditor.h"
 #include "XInputPad.h"
 //‘¼‚Ì‚Æ‚±‚Å‚àŽg‚¦‚é‚æ‚¤‚É‚·‚éƒƒ“ƒo
 CRenderer	*CManager::m_pRenderer		= nullptr;
@@ -158,6 +159,13 @@ void CManager::SetGameMode(GAME_MODE mode)
 		//EffectViewer
 	case MODE_DEBUG_EFFECTVIEWER:
 		m_pBaseMode = new CDebug_EffectViewer;
+		m_pBaseMode->Init();
+
+		break;
+
+		//MapEditor
+	case MODE_DEBUG_MAPEDITOR:
+		m_pBaseMode = new CDebugMapEditor;
 		m_pBaseMode->Init();
 
 		break;

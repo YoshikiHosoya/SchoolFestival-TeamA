@@ -24,7 +24,6 @@
 #define YellowColor			(D3DXCOLOR(1.0f, 1.0f, 0.0f, 1.0f))			//黄
 #define OrangeColor			(D3DXCOLOR(1.0f, 0.5f, 0.0f, 1.0f))			//橙
 #define BlackColor			(D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f))			//黒
-
 #define MAX_TEXT			(128)
 #define SCREEN_CENTER_POS	(D3DXVECTOR3(SCREEN_WIDTH * 0.5f , SCREEN_HEIGHT * 0.5f ,0.0f))			//画面中央の座標
 #define SCREEN_SIZE			(D3DXVECTOR3(SCREEN_WIDTH, SCREEN_HEIGHT,0.0f))							//画面のサイズ
@@ -105,17 +104,18 @@ class CHossoLibrary
 {
 public:
 
-	static float Vec2Cross(D3DXVECTOR2 const &rVecA, D3DXVECTOR2 const &rVecB);					//2D 外積計算
-	static void CalcMatrix(D3DXMATRIX *pMtx,D3DXVECTOR3 const &rPos, D3DXVECTOR3 const &rRot);	//ワールドマトリックス計算
-	static void SetBillboard(D3DXMATRIX *pMtx);													//ビルボード設定
-	static void SetBillboard_XZ_Only(D3DXMATRIX *pMtx);											//ビルボード設定　XとZのみ
+	static float Vec2Cross(D3DXVECTOR2 const &rVecA, D3DXVECTOR2 const &rVecB);									//2D 外積計算
+	static void CalcMatrix(D3DXMATRIX *pMtx,D3DXVECTOR3 const &rPos, D3DXVECTOR3 const &rRot);					//ワールドマトリックス計算
+	static void CalcMatrixAndBillboard(D3DXMATRIX *pMtx, D3DXVECTOR3 const &rPos, D3DXVECTOR3 const &rRot);		//ワールドマトリックス計算とビルボード
+	static void SetBillboard(D3DXMATRIX *pMtx);																	//ビルボード設定
+	static void SetBillboard_XZ_Only(D3DXMATRIX *pMtx);															//ビルボード設定　XとZのみ
 
-	static bool RangeLimit_Equal_Int(int &nValue, int nMin, int nMax);							//範囲内に抑える(int)
-	static bool RangeLimit_Equal_Float(float &nValue, float nMin, float nMax);					//範囲内に抑える(float)
+	static bool RangeLimit_Equal_Int(int &nValue, int nMin, int nMax);											//範囲内に抑える(int)
+	static bool RangeLimit_Equal_Float(float &nValue, float nMin, float nMax);									//範囲内に抑える(float)
 
-	static float Random_PI();																	//-3.14から3.14までのランダムで返す
-	static float Random(float fInputValue);															//入力された値の+-ランダムな値で返す
-	static void CalcRotation(float &fRot);														//回転を360度以内にする計算
+	static float Random_PI();																					//-3.14から3.14までのランダムで返す
+	static float Random(float fInputValue);																			//入力された値の+-ランダムな値で返す
+	static void CalcRotation(float &fRot);																		//回転を360度以内にする計算
 
 	static bool PressAnyButton(void);
 

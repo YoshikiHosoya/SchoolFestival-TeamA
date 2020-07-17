@@ -7,9 +7,7 @@
 #include "handgun.h"			// インクルードファイル
 #include "manager.h"
 #include "renderer.h"
-#include "game.h"
-#include "debugproc.h"
-#include "texture.h"
+#include "particle.h"
 
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
@@ -71,6 +69,10 @@ void CHandgun::Update(void)
 {
 	// 更新
 	CBullet::Update();
+
+	//パーティクル発生 軌跡みたいな
+	CParticle::CreateFromText(GetPosition(), ZeroVector3, CParticleParam::EFFECT_HANDGUN);
+
 }
 
 // =====================================================================================================================================================================

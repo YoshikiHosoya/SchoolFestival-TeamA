@@ -18,7 +18,6 @@
 // =====================================================================================================================================================================
 typedef struct
 {
-	D3DXVECTOR3			pos;			// 座標
 	int					nLife;			// 体力
 	D3DXVECTOR3			CollisionSize;	// 大きさ // 当たり判定に使うサイズ
 }OBSTACLE_PARAM;
@@ -47,7 +46,7 @@ public:
 	CObstacle(OBJ_TYPE type);						// コンストラクタ
 	~CObstacle();									// デストラクタ
 
-													/* メンバ関数 */
+	/* メンバ関数 */
 	virtual HRESULT			Init();					// 初期化
 	virtual void			Uninit();				// 終了
 	virtual void			Update();				// 更新
@@ -55,18 +54,18 @@ public:
 	virtual void			DebugInfo();			//デバッグ
 
 	/* 静的メンバ関数 */
-	static	CObstacle		*Create();																// 障害物の生成
+	static	CObstacle		*Create();				// 障害物の生成
+	static	void			ObstacleLoad();			// 障害物のロード
 
 	/* メンバ関数 */
 	OBSTACLE_TYPE			&GetObstacleType()					{ return m_ObstacleType; };			// 障害物の種類の取得
 	void					SetObstacleType(OBSTACLE_TYPE type) { m_ObstacleType = type; };			// 障害物の種類の設定
 	OBSTACLE_PARAM			*GetObstacleParam(int nCnt)			{ return &m_ObstacleParam[nCnt]; };	// 弾のパラメーターの構造体の取得
 	void					SetObstacleParam(CObstacle::OBSTACLE_TYPE type)
-							{m_nLife = m_ObstacleParam[type].nLife;
-							m_pos = m_ObstacleParam[type].pos;};									// 障害物の情報設定
+								{ m_nLife = m_ObstacleParam[type].nLife; };							// 障害物の情報設定
 	int						GetLife() { return m_nLife; };											// 体力の取得
 	void					SetLife(int nLife) { m_nLife = nLife; };								// 体力の設定
-	void					SetCollisionSize(D3DXVECTOR3 Size);										// 大きさの設定
+	void					SetCollisionSize(CObstacle::OBSTACLE_TYPE type);						// 大きさの設定
 
 	void					Hit(OBSTACLE_TYPE type, int nDamage);									// 障害物が壊されるときの処理
 
@@ -75,7 +74,8 @@ private:
 	void					CheckDie();																// 体力があるか確認
 	void					AddDamage(int Damage);													// ダメージを加算する
 	/* 静的メンバ変数 */
-	static OBSTACLE_PARAM	m_ObstacleParam[CObstacle::TYPE_MAX];									// 弾のパラメーター
+	static OBSTACLE_PARAM	m_ObstacleParam[CObstacle::TYPE_MAX];									// 障害物のパラメーター
+	static char				*m_ObstacleFileName[CObstacle::TYPE_MAX];								// 障害物のファイル名
 	/* メンバ変数 */
 	OBSTACLE_TYPE			m_ObstacleType;															// 障害物の種類
 	D3DXVECTOR3				m_pos;																	// 座標

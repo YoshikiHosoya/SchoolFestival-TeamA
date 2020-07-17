@@ -98,8 +98,7 @@ void CEnemy::Update(void)
 	//‘Ì—Í‚ª0ˆÈ‰º‚É‚È‚Á‚½Žž
 	if (this->GetLife() <= 0)
 	{
-		//ƒAƒCƒeƒ€‚ð¶¬
-		CItem::DropCreate(this->GetPosition());
+		this->SetDieFlag(true);
 	}
 	else
 	{

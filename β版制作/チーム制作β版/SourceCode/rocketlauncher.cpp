@@ -7,7 +7,7 @@
 #include "rocketlauncher.h"			// インクルードファイル
 #include "manager.h"
 #include "renderer.h"
-#include "game.h"
+#include "particle.h"
 #include "TexAnimation3D_Collision.h"
 
 // =====================================================================================================================================================================
@@ -71,8 +71,8 @@ void CRocketlauncher::Update(void)
 	// 更新
 	CBullet::Update();
 
-	CTexAnimation3D::Create(GetPosition(), D3DXVECTOR3(40.0f, 40.0f, 0.0f),
-							D3DXVECTOR3(0.0f,0.0f,CHossoLibrary::Random_PI()), CTexture::SEPARATE_TEX_EFFECT_SMOKE, 1, OBJTYPE_EFFECT);
+	//パーティクル発生 軌跡みたいな
+	CParticle::CreateFromText(GetPosition(), D3DXVECTOR3(0.0f, 0.0f, CHossoLibrary::Random_PI()), CParticleParam::EFFECT_SMOKE);
 }
 
 // =====================================================================================================================================================================
@@ -96,7 +96,7 @@ void CRocketlauncher::DeleteBullet()
 	CBullet::DeleteBullet();
 
 	CTexAnimation3D_Collision::Create(GetPosition(), D3DXVECTOR3(60.0f, 80.0f, 0.0f), ZeroVector3,
-		CTexture::SEPARATE_TEX_EFFECT_EXPLOSION01, 2, OBJTYPE_EXPROSION, GetTag(), GetBulletParam(CGun::GUNTYPE_ROCKETLAUNCHER)->fPower, 1, true);
+		CTexture::SEPARATE_TEX_EFFECT_EXPLOSION01, 2, OBJTYPE_EXPROSION, GetTag(), GetBulletParam(CGun::GUNTYPE_ROCKETLAUNCHER)->nPower, 1, true);
 
 }
 

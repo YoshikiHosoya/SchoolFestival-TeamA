@@ -38,7 +38,7 @@ HRESULT CGame::Init(void)
 
 	m_pMap		= CMap::MapCreate(CMap::MAP_1);	// マップの生成
 	m_pPlayer	= CPlayer::Create();
-	m_pPlayer->SetLife(10);
+	m_pPlayer->SetLife(100);
 	m_pPlayer->SetPosition(D3DXVECTOR3(50.0f, 100.0f, 0.0f));
 
 	m_pPause->CreatePause();
@@ -132,7 +132,4 @@ void CGame::ShowDebugInfo(void)
 			}
 		}
 	}
-
-	// マップの更新
-	m_pMap->MapUpdate();
 }
