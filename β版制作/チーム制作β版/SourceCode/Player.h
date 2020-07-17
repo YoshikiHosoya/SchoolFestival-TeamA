@@ -66,8 +66,8 @@ private:
 
 		DEBUG_STATE m_DebugState;						//デバッグのステータス
 		PLAYER_STATE m_PlayerState;						//プレイヤーの状態ステータス
-		bool m_bAttack_Enemy;							//攻撃時
-		bool m_bAttack_Prisoner;						//攻撃時
+		bool m_bAttack;									//近接攻撃できるかどうか
+		bool m_bKnifeAttack;							//攻撃をしているかどうか
 		bool m_bRespawn;
 		float m_Angle;
 		bool m_bCruch;

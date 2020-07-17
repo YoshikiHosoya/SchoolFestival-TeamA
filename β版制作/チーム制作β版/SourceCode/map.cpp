@@ -101,7 +101,7 @@ CMap::~CMap()
 
 // =====================================================================================================================================================================
 //
-// モデルのロード
+// マップのロード
 //
 // =====================================================================================================================================================================
 void CMap::ModelLoad(MAP MapNum)
@@ -174,7 +174,7 @@ void CMap::ModelLoad(MAP MapNum)
 
 // =====================================================================================================================================================================
 //
-// エネミーのロード
+// 敵のロード
 //
 // =====================================================================================================================================================================
 void CMap::EnemyLoad(MAP MapNum)
@@ -499,7 +499,7 @@ void CMap::BattlePlaneLoad(MAP MapNum)
 	char cDie[128];					// 不要な文字
 	D3DXVECTOR3 pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 位置
 
-														// ファイルを開く
+	// ファイルを開く
 	pFile = fopen(m_BattlePlaneFileName[MapNum], "r");
 
 	// 開いているとき
@@ -624,7 +624,6 @@ void CMap::HelicopterLoad(MAP MapNum)
 		MessageBox(NULL, "ヘリのパラメーター読み込み失敗", "警告", MB_ICONWARNING);
 	}
 }
-
 
 // =====================================================================================================================================================================
 //
@@ -1203,12 +1202,21 @@ void CMap::ObstacleSet()
 
 			// 障害物の位置の設定
 			m_pObstacle[nNowSelect]->SetPosition(D3DXVECTOR3((float)x, (float)y, (float)z));
+			
+			// 選択しているモデルを注視点の目的地に設定
+			SetSelectMapModelPosRDest(m_pObstacle[nNowSelect]->GetPosition());
+
+			// 選択しているモデルにカメラを合わせる
 
 			// 前回選択していたものと違うとき
 			if (m_nOldSelect != nNowSelect)
 			{
-				// 色変更無し
-				m_pObstacle[m_nOldSelect]->SetColorChangeFlag(false);
+				// 配置されているモデルのみ
+				if (m_pObstacle.size() > (unsigned)m_nOldSelect)
+				{
+					// 色変更無し
+					m_pObstacle[m_nOldSelect]->SetColorChangeFlag(false);
+				}
 			}
 			else
 			{
@@ -1229,11 +1237,6 @@ void CMap::ObstacleSet()
 	{
 		// オブジェクトの生成
 		m_pObstacle.emplace_back(CObstacle::Create());
-
-		//// プレイヤーの位置に合わせる
-		//CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
-		//// オブジェクトの位置の設定
-		//m_pObstacle[nNowSelect]->SetPosition(pPlayer->GetPosition());
 	}
 
 	// 改行キャンセル
@@ -1326,11 +1329,18 @@ void CMap::PrisonerSet()
 			// オブジェクトの位置の設定
 			m_pPrisoner[nNowSelect]->SetPosition(D3DXVECTOR3((float)x, (float)y, (float)z));
 
+			// 選択しているモデルを注視点の目的地に設定
+			SetSelectMapModelPosRDest(m_pPrisoner[nNowSelect]->GetPosition());
+
 			// 前回選択していたものと違うとき
 			if (m_nOldSelect != nNowSelect)
 			{
-				// 色変更無し
-				m_pPrisoner[m_nOldSelect]->ChangeColor(false, ZeroColor);
+				// 配置されているモデルのみ
+				if (m_pObstacle.size() > (unsigned)m_nOldSelect)
+				{
+					// 色変更無し
+					m_pPrisoner[m_nOldSelect]->ChangeColor(false, ZeroColor);
+				}
 			}
 			else
 			{
@@ -1441,11 +1451,18 @@ void CMap::EnemySet()
 			// オブジェクトの位置の設定
 			m_pEnemy[nNowSelect]->SetPosition(D3DXVECTOR3((float)x, (float)y, (float)z));
 
+			// 選択しているモデルを注視点の目的地に設定
+			SetSelectMapModelPosRDest(m_pEnemy[nNowSelect]->GetPosition());
+
 			// 前回選択していたものと違うとき
 			if (m_nOldSelect != nNowSelect)
 			{
-				// 色変更無し
-				m_pEnemy[m_nOldSelect]->ChangeColor(false, ZeroColor);
+				// 配置されているモデルのみ
+				if (m_pObstacle.size() > (unsigned)m_nOldSelect)
+				{
+					// 色変更無し
+					m_pEnemy[m_nOldSelect]->ChangeColor(false, ZeroColor);
+				}
 			}
 			else
 			{
@@ -1555,6 +1572,9 @@ void CMap::PlayerTankSet()
 
 			// オブジェクトの位置の設定
 			m_pPlayerTank[nNowSelect]->SetPosition(D3DXVECTOR3((float)x, (float)y, (float)z));
+
+			// 選択しているモデルを注視点の目的地に設定
+			SetSelectMapModelPosRDest(m_pPlayerTank[nNowSelect]->GetPosition());
 		}
 	}
 
@@ -1657,6 +1677,9 @@ void CMap::BattlePlaneSet()
 
 			// オブジェクトの位置の設定
 			m_pBattlePlane[nNowSelect]->SetPosition(D3DXVECTOR3((float)x, (float)y, (float)z));
+
+			// 選択しているモデルを注視点の目的地に設定
+			SetSelectMapModelPosRDest(m_pBattlePlane[nNowSelect]->GetPosition());
 		}
 	}
 
@@ -1759,6 +1782,9 @@ void CMap::HelicopterSet()
 
 			// オブジェクトの位置の設定
 			m_pHelicopter[nNowSelect]->SetPosition(D3DXVECTOR3((float)x, (float)y, (float)z));
+
+			// 選択しているモデルを注視点の目的地に設定
+			SetSelectMapModelPosRDest(m_pHelicopter[nNowSelect]->GetPosition());
 		}
 	}
 
@@ -1957,6 +1983,20 @@ bool CMap::BattlePlaneComboBox(int & nType)
 bool CMap::HelicopterComboBox(int & nType)
 {
 	return false;
+}
+
+// =====================================================================================================================================================================
+//
+// 選択しているモデルを注視点の目的地に設定
+//
+// =====================================================================================================================================================================
+void CMap::SetSelectMapModelPosRDest(D3DXVECTOR3 posR)
+{
+	// カメラの取得
+	CCamera *pCamera = CManager::GetRenderer()->GetCamera();
+
+	// 注視点の目的地の設定
+	pCamera->SetCameraPosRDest(posR);
 }
 
 // =====================================================================================================================================================================
