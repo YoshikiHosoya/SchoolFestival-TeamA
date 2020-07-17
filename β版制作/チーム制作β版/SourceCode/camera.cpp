@@ -26,6 +26,8 @@
 //=============================================================================
 void CCamera::InitCamera(void)
 {
+	// カメラをプレイや追従にする
+	m_CameraFollowingType = CAMERA_FOLLOWING_TYPE_PLAYER;
 	//カメラ初期化
 	ResetCamera();
 }
@@ -47,10 +49,20 @@ void CCamera::UpdateCamera(void)
 
 #endif // _DEBUG
 
-	//カメラの状態でカメラの動かし方を変える
-	m_bCameraMode ?
-		MouseMoveCamera() :
+	// カメラの追従種類によってカメラの動かし方を変える
+	switch (m_CameraFollowingType)
+	{
+	case CCamera::CAMERA_FOLLOWING_TYPE_PLAYER:
+		// キャラクター追従カメラ
 		CharacterFollowingMoveCamera();
+		break;
+	case CCamera::CAMERA_FOLLOWING_TYPE_MAPEDITOR:
+		break;
+	case CCamera::CAMERA_FOLLOWING_TYPE_MOUSE:
+		// マウスによるカメラ操作
+		MouseMoveCamera();
+		break;
+	}
 }
 //=============================================================================
 // カメラの設定処理
@@ -102,7 +114,7 @@ void CCamera::DebugCommand()
 
 	//使い方説明
 	CDebugProc::Print("---------Camera Debug Command----------\n");
-	CDebugProc::Print("[Ctrl] + [1] : カメラ切替 : CameraMode >> [%d]\n",m_bCameraMode);
+	CDebugProc::Print("[Ctrl] + [1] : カメラ切替 : CameraMode >> [%d]\n", m_CameraFollowingType);
 	CDebugProc::Print("[Ctrl] + [↑] or [Ctrl] + [↓] : カメラ距離調整 : Distance>>[%f]\n", m_fDistance);
 
 	CDebugProc::Print("m_posV %.1f %.1f %.1f \n", m_posV.x, m_posV.y, m_posV.z);
@@ -114,7 +126,12 @@ void CCamera::DebugCommand()
 		if (key->GetKeyboardTrigger(DIK_1))
 		{
 			//カメラ切り替え
-			m_bCameraMode ^= 1;
+			m_CameraFollowingType += 1;
+
+			if (m_CameraFollowingType >= CAMERA_FOLLOWING_TYPE_MAX)
+			{
+				m_CameraFollowingType = CAMERA_FOLLOWING_TYPE_PLAYER;
+			}
 		}
 		if (key->GetKeyboardPress(DIK_DOWN))
 		{
@@ -213,10 +230,7 @@ void CCamera::CharacterFollowingMoveCamera()
 	m_move.y += (0 - m_move.y)*0.3f;
 	m_move.z += (0 - m_move.z)*0.3f;
 	m_posRDest += m_move;
-
-
 }
-
 
 //=============================================================================
 //マウスによるカメラの操作
@@ -371,7 +385,6 @@ void CCamera::MouseMoveCamera()
 //-----------------------------------------------------------------------------
 void CCamera::ResetCamera()
 {
-
 	//初期座標へ
 	m_rotDest = m_rot = DEFAULT_CAMERA_ROTATION;
 	m_fDistance = DEFAULT_DISTANCE;
@@ -384,9 +397,8 @@ void CCamera::ResetCamera()
 	m_vecV = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
 	m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
-	m_bCameraMode = false;
-
-
+	// カメラをプレイや追従にする
+	m_CameraFollowingType = CAMERA_FOLLOWING_TYPE_PLAYER;
 }
 //-----------------------------------------------------------------------------
 //カメラ座標設定 角度と距離を基に算出
@@ -405,8 +417,8 @@ void CCamera::SetCameraPosfromDistance(D3DXVECTOR3 posR, D3DXVECTOR3 rot, float 
 	m_vecV = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
 	m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
-	m_bCameraMode = false;
-
+	// カメラをプレイや追従にする
+	m_CameraFollowingType = CAMERA_FOLLOWING_TYPE_PLAYER;
 }
 
 //-----------------------------------------------------------------------------
