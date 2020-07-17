@@ -340,11 +340,15 @@ void CPlayer::CollisionUpdate(void)
 		// 乗り物に乗っている時に乗り物以外の判定をしない
 		if (m_bRideVehicle == false)
 		{
+			CPrisoner *pPrisoner = GetCollision()->ForPlayer_PrisonerCollision();
 			// エネミーととの判定
 			if (GetCollision()->ForPlayer_EnemyCollision(ATTACK_PENETRATION) == true||
 				GetCollision()->ForPlayer_PrisonerCollision(ATTACK_PENETRATION) == true)
 			{
-				m_bAttack = true;
+				if (pPrisoner != nullptr)
+				{
+					m_bAttack = true;
+				}
 			}
 			else
 			{
@@ -399,7 +403,7 @@ void CPlayer::AttackUpdate(void)
 			if (m_bAttack == false && m_bKnifeAttack == false)
 			{
 				// 銃発射処理
-				m_pGun->Shot();
+				//m_pGun->Shot();
 			}
 
 			// 近接攻撃をする状態だった時
