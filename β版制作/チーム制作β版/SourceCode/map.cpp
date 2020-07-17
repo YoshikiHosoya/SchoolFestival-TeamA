@@ -642,7 +642,7 @@ CMap *CMap::MapCreate(MAP MapNum)
 	// 敵のロード
 	pMap->EnemyLoad(MapNum);
 	// 捕虜のロード
-	//pMap->PrisonerLoad(MapNum);
+	pMap->PrisonerLoad(MapNum);
 	// 障害物のロード
 	pMap->ObstacleLoad(MapNum);
 	// プレイヤー戦車のロード

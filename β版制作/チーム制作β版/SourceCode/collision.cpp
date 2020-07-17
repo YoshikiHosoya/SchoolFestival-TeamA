@@ -512,9 +512,12 @@ bool CCollision::ForPlayer_PrisonerCollision(bool Penetration)
 		CPrisoner *pPrisoner = CManager::GetBaseMode()->GetMap()->GetPrisoner(nCntPriso);
 		if (pPrisoner != nullptr)
 		{
-			if (this->CharCollision2D(pPrisoner->GetCollision()))
+			if (pPrisoner->GetPrisonerState() == CPrisoner::PRISONER_STATE_STAY)
 			{
-				bHitFlag = true;
+				if (this->CharCollision2D(pPrisoner->GetCollision()))
+				{
+					bHitFlag = true;
+				}
 			}
 		}
 	}
