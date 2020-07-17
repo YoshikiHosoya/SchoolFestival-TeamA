@@ -642,7 +642,7 @@ CMap *CMap::MapCreate(MAP MapNum)
 	// 敵のロード
 	pMap->EnemyLoad(MapNum);
 	// 捕虜のロード
-	//pMap->PrisonerLoad(MapNum);
+	pMap->PrisonerLoad(MapNum);
 	// 障害物のロード
 	pMap->ObstacleLoad(MapNum);
 	// プレイヤー戦車のロード
@@ -2011,8 +2011,12 @@ void CMap::UpdateDieFlag()
 	{
 		if (m_pEnemy[nCnt]->GetDieFlag())
 		{
-			//アイテムを生成
-			CItem::DropCreate(m_pEnemy[nCnt]->GetPosition());
+			// ランダムな確率でアイテムをドロップする
+			if (CItem::DropRate())
+			{
+				//アイテムを生成
+				CItem::DropCreate(m_pEnemy[nCnt]->GetPosition());
+			}
 			m_pEnemy[nCnt]->Rerease();
 			m_pEnemy[nCnt] = nullptr;
 			m_pEnemy.erase(m_pEnemy.begin() + nCnt);

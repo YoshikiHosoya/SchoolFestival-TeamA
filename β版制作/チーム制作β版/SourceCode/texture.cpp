@@ -23,7 +23,12 @@ FILENAME_LIST CTexture::m_aTexFileName =
 	{ "data/TEXTURE/Item/Lasergun.png" },					//レーザーガンの弾
 	{ "data/TEXTURE/Item/Rocketlauncher.png" },				//ロケットランチャーの弾
 	{ "data/TEXTURE/Item/Flameshot.png" },					//フレイムショットの弾
+	{ "data/TEXTURE/Item/Enemychaser.png" },				//エネミーチェイサーの弾
+	{ "data/TEXTURE/Item/Ironlizard.png" },					//アイアンリザードの弾
 	{ "data/TEXTURE/Item/Bear.png" },						//熊
+	{ "data/TEXTURE/Item/Bombup.png" },						//ボムアップ
+	{ "data/TEXTURE/Item/Energyup.png" },					//乗り物の耐久値アップ
+	{ "data/TEXTURE/Item/Bulletup.png" },					//残段数アップ
 	{ "data/TEXTURE/Mesh/Grass.jpg" },						//草
 	{ "data/TEXTURE/Mesh/Block.jpg" },						//ブロック
 	{ "data/TEXTURE/Mesh/Water.jpg" },						//水

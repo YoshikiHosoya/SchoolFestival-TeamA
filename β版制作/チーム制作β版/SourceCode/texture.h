@@ -34,7 +34,12 @@ public:
 		TEX_ITEM_LASERGUN,						//レーザーガン
 		TEX_ITEM_ROCKETLAUNCHER,				//ロケットランチャー
 		TEX_ITEM_FLAMESHOT,						//フレイムショット
+		TEX_ITEM_ENEMYCHASER,					//エネミーチェイサー
+		TEX_ITEM_IRONLIZARD,					//アイアンリザード
 		TEX_ITEM_BEAR,							//熊-スコアアップ
+		TEX_ITEM_BOMBUP,						//爆弾の数加算
+		TEX_ITEM_ENERGYUP,						//ガソリン
+		TEX_ITEM_BULLETUP,						//残段数加算
 
 		TEX_MESH_GRASS,							//草
 		TEX_MESH_BLOCK,							//ブロック
