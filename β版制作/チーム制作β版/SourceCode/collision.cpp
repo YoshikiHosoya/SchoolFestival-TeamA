@@ -638,7 +638,10 @@ bool CCollision::ForVehicleCollision()
 		CItem *pItem = (CItem*)SceneList[nCnt];
 		if (pItem != nullptr)
 		{
-			if (pItem->GetItemType() == CItem::ITEMTYPE_BEAR)
+			if (pItem->GetItemType() == CItem::ITEMTYPE_BEAR ||
+				pItem->GetItemType() == CItem::ITEMTYPE_ENERGYUP||
+				pItem->GetItemType() == CItem::ITEMTYPE_BOMBUP||
+				pItem->GetItemType() == CItem::ITEMTYPE_BULLETUP)
 			{
 				if (pItem->GetCollision()->OtherCollision2D(this))
 				{

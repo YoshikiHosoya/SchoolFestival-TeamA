@@ -31,12 +31,17 @@ public:
 	// タイプ
 	typedef enum
 	{
-		ITEMTYPE_HEAVYMACHINEGUN,	//ヘビーマシンガン
-		ITEMTYPE_SHOTGUN,			//ショットガン
-		ITEMTYPE_LASERGUN,			//レーザーガン
-		ITEMTYPE_ROCKETLAUNCHER,	//ロケットランチャー
-		ITEMTYPE_FLAMESHOT,			//フレイムショット
-		ITEMTYPE_BEAR,				//熊-スコアアップ
+		ITEMTYPE_HEAVYMACHINEGUN,	// ヘビーマシンガン
+		ITEMTYPE_SHOTGUN,			// ショットガン
+		ITEMTYPE_LASERGUN,			// レーザーガン
+		ITEMTYPE_ROCKETLAUNCHER,	// ロケットランチャー
+		ITEMTYPE_FLAMESHOT,			// フレイムショット
+		ITEMTYPE_ENEMYCHASER,		// エネミーチェイサー
+		ITEMTYPE_IRONLIZARD,		// アイアンリザード
+		ITEMTYPE_BEAR,				// 熊-スコアアップ
+		ITEMTYPE_BOMBUP,			// 爆弾の数を増やす
+		ITEMTYPE_ENERGYUP,			// 乗り物の耐久値を回復する
+		ITEMTYPE_BULLETUP,			// ハンドガン以外の弾の残弾数を増やす
 		ITEMTYPE_MAX
 	} ITEMTYPE;
 
@@ -62,6 +67,7 @@ public:
 	static	CItem				*DropCreate(D3DXVECTOR3 pos);					// キャラクターがアイテムを落とす時の生成
 	static	void				SwitchTexture(ITEMTYPE type, CItem *pItem);		// 種類別テクスチャ設定
 	static	ITEMTYPE			RandDropItem();									// アイテムの種類をランダムに計算
+	static	bool				DropRate();										// アイテムをドロップする確率
 protected:
 private:
 	/* メンバ変数 */
