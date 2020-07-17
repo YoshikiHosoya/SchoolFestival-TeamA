@@ -69,6 +69,7 @@ public:
 		SEPARATE_TEX_EFFECT_SHOTGUN,				//ショットガン
 		SEPARATE_TEX_EFFECT_IMPACT00,				//インパクト
 		SEPARATE_TEX_EFFECT_IMPACT01,				//インパクト
+		SEPARATE_TEX_EFFECT_FIRE,					//ファイア
 
 		SEPARATE_TEX_NUM,							//ナンバー
 

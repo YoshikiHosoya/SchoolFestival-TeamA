@@ -48,34 +48,8 @@ public:
 	};
 
 	//コンストラクタ
-	CParticleParam()
-	{
-		m_bGravity = false;														//重力
-		m_bSpeedRandom = false;													//速度がランダムかどうか
-		m_bAlphaBlend = true;													//αブレンドするか
-
-		m_nLife = 50;															//ライフ
-		m_nNumber = 10;															//個数
-		m_fSpeed = 10.0f;														//速度
-		m_fRange = 0.5f;														//範囲
-		m_fAlphaDamping = DEFAULT_DAMPING;										//アルファ値の減衰値
-		m_fGravityPower = DEFAULT_GRAVITY_POWER;								//重力の大きさ
-
-		m_bAnimation = false;													//アニメーションするかどうか
-		m_bAnimationLoop = false;												//アニメーションループするかどうか
-		m_nAnimationCntSwitch = 1;												//アニメーション切替のカウント
-
-		m_Size = D3DXVECTOR3(15.0f,15.0f,0.0f);									//サイズ
-		m_SizeDamping = D3DXVECTOR3(DEFAULT_DAMPING, DEFAULT_DAMPING, 0.0f);	//サイズの減衰地
-		m_col = WhiteColor;														//色
-		m_rot = ZeroVector3;													//角度
-
-		m_Textype = CTexture::TEX_EFFECT_PARTICLE;								//テクスチャ
-		m_SeparateTex = CTexture::SEPARATE_TEX_EFFECT_EXPLOSION01;				//分割テクスチャ
-		m_shape = SHAPE_SPHERE;													//パーティクルの方向
-		m_ParticleType = EFFECT_DEFAULT;										//パーティクルのタイプ
-	}
-	~CParticleParam() {};
+	CParticleParam();
+	~CParticleParam();
 
 	void SetParamater(int nLife, D3DXVECTOR3 size, D3DXCOLOR col,int nNumber,float fSpeed);
 	void UpdateParam();
@@ -87,27 +61,35 @@ public:
 	//Get関数
 	static std::vector<std::string> &GetFileNameList() {	return m_aFileNameList;};
 
-	bool&GetSpeedRandom()								{ return m_bSpeedRandom; };			//パーティクルの速度がランダムかどうか
-	bool &GetGravity()									{ return m_bGravity; };				//重力
-	bool &GetAlphaBlend()								{ return m_bAlphaBlend;};			//αブレンドするか
-	int &GetLife()										{ return m_nLife; };				//ライフ
-	int &GetNumber()									{ return m_nNumber; };				//個数
-	float &GetSpeed()									{ return m_fSpeed; };				//速度
-	float &GetRange()									{ return m_fRange; };				//角度
-	float &GetAlphaDamping()							{ return m_fAlphaDamping; };		//アルファ値の減衰値
-	float &GetGravityPower()							{ return m_fGravityPower; };		//重力の大きさ
-	D3DXVECTOR3 &GetSize()								{ return m_Size; };					//サイズ
-	D3DXVECTOR3 &GetSizeDamping()						{ return m_SizeDamping; };			//サイズの減衰地
-	D3DXCOLOR &GetCol()									{ return m_col; };					//色
-	D3DXVECTOR3 &GetRot()								{ return m_rot;};					//角度
-	bool &GetAnimation()								{ return m_bAnimation;};			//アニメーションするかどうか
-	bool &GetAnimationLoop()							{ return m_bAnimationLoop; };		//アニメーションループするかどうか
-	int &GetAnimationCntSwitch()						{ return m_nAnimationCntSwitch; };	//アニメーション切替のカウント
+	bool&GetSpeedRandom()								{ return m_bSpeedRandom; };					//パーティクルの速度がランダムかどうか
+	bool &GetGravity()									{ return m_bGravity; };						//重力
+	bool &GetAlphaBlend()								{ return m_bAlphaBlend;};					//αブレンドするか
+	int &GetLife()										{ return m_nLife; };						//ライフ
+	int &GetNumber()									{ return m_nNumber; };						//個数
+	float &GetSpeed()									{ return m_fSpeed; };						//速度
+	float &GetRange()									{ return m_fRange; };						//角度
+	float &GetAlphaDamping()							{ return m_fAlphaDamping; };				//アルファ値の減衰値
+	float &GetGravityPower()							{ return m_fGravityPower; };				//重力の大きさ
+	D3DXVECTOR3 &GetSize()								{ return m_Size; };							//サイズ
+	D3DXVECTOR3 &GetSizeDamping()						{ return m_SizeDamping; };					//サイズの減衰地
+	D3DXCOLOR &GetCol()									{ return m_col; };							//色
+	D3DXVECTOR3 &GetRot()								{ return m_rot;};							//角度
 
-	PARTICLE_SHAPE &GetShape()							{ return m_shape; };				//パーティクルの方向
-	CTexture::TEX_TYPE &GetTex()						{ return m_Textype; };				//テクスチャ
-	CTexture::SEPARATE_TEX_TYPE &GetSeparateTex()		{ return m_SeparateTex; };			//分割テクスチャ
-	PARTICLE_TEXT &GetType()							{ return m_ParticleType; };			//パーティクルのタイプ
+	bool &GetAnimation()								{ return m_bAnimation;};					//アニメーションするかどうか
+	bool &GetAnimationLoop()							{ return m_bAnimationLoop; };				//アニメーションループするかどうか
+	int &GetAnimationCntSwitch()						{ return m_nAnimationCntSwitch; };			//アニメーション切替のカウント
+
+	D3DXVECTOR3 &GetCollisionSize()						{ return m_CollisionSize; };				//当たり判定の大きさ
+	bool &GetCollision()								{ return m_bCollision; };					//当たり判定あるか
+	bool &GetCollisionSizeCalc()						{ return m_bCollisionSizeCalc; };			//当たり判定生成時にサイズを計算するかどうか　ShotGunとかに必要
+	int &GetCollisionAttackValue()						{ return m_nCollisionAttackValue; };		//攻撃力
+	int &GetCollisionCnt()								{ return m_nCollisionCnt; };				//判定をする時間
+	TAG &GetCollisionTag()								{ return m_CollisionTag; };					//タグ　プレイヤーかどうか
+
+	PARTICLE_SHAPE &GetShape()							{ return m_shape; };						//パーティクルの方向
+	CTexture::TEX_TYPE &GetTex()						{ return m_Textype; };						//テクスチャ
+	CTexture::SEPARATE_TEX_TYPE &GetSeparateTex()		{ return m_SeparateTex; };					//分割テクスチャ
+	PARTICLE_TEXT &GetType()							{ return m_ParticleType; };					//パーティクルのタイプ
 
 	static CParticleParam *GetDefaultParam(CParticleParam::PARTICLE_TEXT type) { return m_pParticleDefaultParamList[type].get(); };
 	static bool ShowParamConboBox(CParticleParam::PARTICLE_TEXT & rType);
@@ -128,9 +110,20 @@ private:
 	float m_fRange;									//範囲
 	float m_fAlphaDamping;							//アルファ値の減衰値
 	float m_fGravityPower;							//重力の大きさ
+
 	bool m_bAnimation;								//アニメーションするか
 	bool m_bAnimationLoop;							//アニメーションがループするか
 	int m_nAnimationCntSwitch;						//アニメーションが切り替わるカウント
+
+	D3DXVECTOR3 m_CollisionSize;					//当たり判定の大きさ
+	bool m_bCollision;								//当たり判定あるか
+	bool m_bCollisionSizeCalc;						//当たり判定生成時にサイズを計算するかどうか　ShotGunとかに必要
+	int m_nCollisionAttackValue;					//攻撃力
+	int m_nCollisionCnt;							//判定をする時間
+	TAG m_CollisionTag;								//タグ　プレイヤーかどうか
+
+
+
 	D3DXVECTOR3 m_Size;								//サイズ
 	D3DXVECTOR3 m_SizeDamping;						//サイズの減衰値
 	D3DXCOLOR m_col;								//色

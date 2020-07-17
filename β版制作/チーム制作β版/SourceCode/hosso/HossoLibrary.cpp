@@ -261,3 +261,18 @@ float CHossoLibrary::Random(float fInputValue)
 
 	return fValue;
 }
+
+//------------------------------------------------------------------------------
+//“ü—Í‚³‚ê‚½’l‚Ì+-ƒ‰ƒ“ƒ_ƒ€‚È’l‚Å•Ô‚·
+//------------------------------------------------------------------------------
+D3DXVECTOR3 CHossoLibrary::RandomVector3(float Max)
+{
+	D3DXVECTOR3 Value = ZeroVector3;
+
+	Value.x = Random(Max);
+	Value.y = Random(Max);
+	//Value.z = Random(Max);
+
+
+	return Value;
+}

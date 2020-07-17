@@ -106,6 +106,8 @@ void CShotgun::BulletReaction(D3DXVECTOR3 rot)
 	CTexAnimation3D_Collision::Create(GetPosition(), D3DXVECTOR3(100.0f, 200.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, rot.y),
 		CTexture::SEPARATE_TEX_EFFECT_SHOTGUN, 2, OBJTYPE_EXPROSION, GetTag(), GetBulletParam(CGun::GUNTYPE_SHOTGUN)->nPower, 1, false);
 
+	//À’e‚Ì•û‚ÍÁ‹
+	CBullet::Rerease();
 }
 
 // =====================================================================================================================================================================

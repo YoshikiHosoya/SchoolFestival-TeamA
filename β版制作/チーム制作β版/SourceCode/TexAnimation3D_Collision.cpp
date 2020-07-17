@@ -152,7 +152,7 @@ void CTexAnimation3D_Collision::Create(D3DXVECTOR3 pos, D3DXVECTOR3 size, D3DXVE
 			pTexAnimation->SetSize(size);
 
 			pTexAnimation->m_pCollision->SetPos(pTexAnimation->GetPosPtr());
-			pTexAnimation->m_pCollision->SetSize(pTexAnimation->GetSize());
+			pTexAnimation->m_pCollision->SetSize(pTexAnimation->GetSize() * 2);
 		}
 		else
 		{

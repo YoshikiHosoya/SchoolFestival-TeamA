@@ -102,6 +102,7 @@ void CLasergun::BulletReaction(D3DXVECTOR3 rot)
 	//パーティクル発生 レーザー
 	CParticle::CreateFromText(GetPosition(), rot, CParticleParam::EFFECT_LAZER);
 
+	CBullet::Rerease();
 }
 
 // =====================================================================================================================================================================
