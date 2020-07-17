@@ -317,7 +317,6 @@ void CCamera::MouseMoveCamera()
 	// 回転量を360度ないに直す
 	CHossoLibrary::CalcRotation(m_rotDest.y);
 
-
 	//[W]キーを押した時
 	if (pKeyboard->GetKeyboardPress(DIK_W))
 	{
@@ -373,11 +372,8 @@ void CCamera::MouseMoveCamera()
 	// 視点の更新
 	m_posV += (m_posVDest - m_posV) * 0.2f;
 
-
 	// 注視点の更新
 	m_posR += (m_posRDest - m_posR) * 0.2f;
-
-
 }
 
 //-----------------------------------------------------------------------------
@@ -434,5 +430,4 @@ void CCamera::SetCameraPos(D3DXVECTOR3 posR, D3DXVECTOR3 posV)
 	D3DXVECTOR3	Length = m_posV - m_posR;																						//PosRとPosVの座標の差
 	m_rot = m_rotDest = D3DXVECTOR3(atan2f(Length.y, Length.z), atan2f(-Length.x, -Length.z), atan2f(Length.x, Length.z));		//初期角度を求める
 	m_fDistance = (float)sqrt((Length.y * Length.y + Length.z * Length.z) + Length.x * Length.x);								//視点と注視点の距離
-
 }
