@@ -60,6 +60,8 @@ public:
 	static	BULLET_PARAM		*GetBulletParam(int nCnt)		{ return &m_BulletParam[nCnt]; };	// 弾のパラメーターの構造体の取得
 	void						SetBulletParam(CGun::GUN_TYPE type);								// 弾のパラメーター設定
 
+	int							GetLife()						{ return m_nLife; };
+
 private:
 	/* メンバ変数 */
 	D3DXVECTOR3					m_move;					// 移動値

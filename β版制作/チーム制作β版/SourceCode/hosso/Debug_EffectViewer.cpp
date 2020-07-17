@@ -180,6 +180,12 @@ void CDebug_EffectViewer::ParticleParamaterViewer()
 
 	}
 
+
+
+	//項目の大きさ設定
+	ImGui::PushItemWidth(200);
+
+
 	//アニメーションするかどうか
 	ImGui::Checkbox("bAnimation", &m_pParticleParam->GetAnimation());
 
@@ -207,6 +213,39 @@ void CDebug_EffectViewer::ParticleParamaterViewer()
 		}
 	}
 
+	//当たり判定があるかどうか
+	ImGui::Checkbox("bCollision", &m_pParticleParam->GetCollision());
+
+	//当たり判定がある時
+	if (m_pParticleParam->GetCollision())
+	{
+		//ツリー
+		if (ImGui::TreeNode("CollisionParam"))
+		{
+			//当たり判定があるかどうか
+			ImGui::Checkbox("m_bCollisionSizeCalc", &m_pParticleParam->GetCollisionSizeCalc());
+
+			//サイズを計算して算出するかどうか
+			if (m_pParticleParam->GetCollisionSizeCalc())
+			{
+				//同じ行
+				ImGui::SameLine();
+
+				//アニメーションパラメータ設定
+				ImGui::DragFloat3("Size", m_pParticleParam->GetCollisionSize(), 0.5f, 1.0f, 250.0f);
+			}
+
+			//コリジョンの継続時間
+			ImGui::InputInt("CollisionCnt", &m_pParticleParam->GetCollisionCnt(), 1, 1, 20);
+
+			//攻撃力
+			ImGui::InputInt("CollisionAttackValue", &m_pParticleParam->GetCollisionAttackValue(), 1, 1, 100);
+
+			//ツリー終了
+			ImGui::TreePop();
+		}
+	}
+
 	//αブレンドするか
 	ImGui::Checkbox("bAlphaBlend", &m_pParticleParam->GetAlphaBlend());
 
@@ -225,8 +264,6 @@ void CDebug_EffectViewer::ParticleParamaterViewer()
 	}
 	ImGui::DragFloat("fRange", &m_pParticleParam->GetRange(), 0.01f, -D3DX_PI, D3DX_PI);
 
-	//項目の大きさ設定
-	ImGui::PushItemWidth(200);
 
 	//パラメータ設定
 	ImGui::DragInt("Life", &m_pParticleParam->GetLife(), 1, 1, 300);
@@ -297,7 +334,7 @@ void CDebug_EffectViewer::ParticleParamaterViewer()
 	}
 
 	//( [Enter]を押したとき　または　ループする時 ) なおかつSceneが止まってない時
-	if ((pKeyboard->GetKeyboardTrigger(DIK_RETURN) || (m_bLoop && m_nCnt % m_nLoopInterval == 0)) && !CScene::GetStopFlag())
+	if (pKeyboard->GetKeyboardTrigger(DIK_RETURN) || ((m_bLoop && m_nCnt % m_nLoopInterval == 0) && !CScene::GetStopFlag()))
 	{
 		CParticle::CreateFromParam(EFFECT_CREATE_POS,ZeroVector3 ,m_pParticleParam.get());
 	}

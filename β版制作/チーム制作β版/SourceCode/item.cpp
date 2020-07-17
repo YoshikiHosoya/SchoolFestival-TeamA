@@ -35,7 +35,7 @@ CItem::CItem(OBJ_TYPE type) :CScene3D(type)
 	m_pCollision = nullptr;
 
 	// アイテムがマップに残る時間
-	m_nRemainTime = 180;
+	m_nRemainTime = 240;
 }
 
 // =====================================================================================================================================================================
@@ -155,36 +155,58 @@ void CItem::ItemType(ITEMTYPE type)
 
 	switch (type)
 	{
-		//ヘビーマシンガン
+		// ヘビーマシンガン
 	case (ITEMTYPE_HEAVYMACHINEGUN): {
 		pPlayer->GetGun()->SetGunType(CGun::GUNTYPE_HEAVYMACHINEGUN);
 	}break;
 
-		//ショットガン
+		// ショットガン
 	case (ITEMTYPE_SHOTGUN): {
 		pPlayer->GetGun()->SetGunType(CGun::GUNTYPE_SHOTGUN);
 	}break;
 
-		//レーザーガン
+		// レーザーガン
 	case (ITEMTYPE_LASERGUN): {
 		pPlayer->GetGun()->SetGunType(CGun::GUNTYPE_LASERGUN);
 	}break;
 
-		//ロケットランチャー
+		// ロケットランチャー
 	case (ITEMTYPE_ROCKETLAUNCHER): {
 		pPlayer->GetGun()->SetGunType(CGun::GUNTYPE_ROCKETLAUNCHER);
 	}break;
 
-		//フレイムショット
+		// フレイムショット
 	case (ITEMTYPE_FLAMESHOT): {
 		pPlayer->GetGun()->SetGunType(CGun::GUNTYPE_FLAMESHOT);
 	}break;
 
-		//熊
+		// エネミーチェイサー
+	case (ITEMTYPE_ENEMYCHASER): {
+		//pPlayer->GetGun()->SetGunType(CGun::GUNTYPE_FLAMESHOT);
+	}break;
+
+		// アイアンリザード
+	case (ITEMTYPE_IRONLIZARD): {
+		//pPlayer->GetGun()->SetGunType(CGun::GUNTYPE_FLAMESHOT);
+	}break;
+
+		// 熊
 	case (ITEMTYPE_BEAR): {
 		// スコアアップ
 		CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
 		pPlayer->GetPlayerUI()->SetScore(100);
+	}break;
+
+		// 爆弾の数を増やす
+	case (ITEMTYPE_BOMBUP): {
+	}break;
+
+		// 乗り物の耐久値を回復する
+	case (ITEMTYPE_ENERGYUP): {
+	}break;
+
+		// ハンドガン以外の弾の残弾数を増やす
+	case (ITEMTYPE_BULLETUP): {
 	}break;
 
 	default:
@@ -360,10 +382,40 @@ void CItem::SwitchTexture(ITEMTYPE type, CItem *pItem)
 		pItem->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_FLAMESHOT));
 	}break;
 
+		// エネミーチェイサー
+	case (ITEMTYPE_ENEMYCHASER): {
+		// テクスチャの割り当て
+		pItem->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_ENEMYCHASER));
+	}break;
+
+		// アイアンリザード
+	case (ITEMTYPE_IRONLIZARD): {
+		// テクスチャの割り当て
+		pItem->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_IRONLIZARD));
+	}break;
+
 		//熊
 	case (ITEMTYPE_BEAR): {
 		// テクスチャの割り当て
 		pItem->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_BEAR));
+	}break;
+
+		// 爆弾の数を増やす
+	case (ITEMTYPE_BOMBUP): {
+		// テクスチャの割り当て
+		pItem->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_BOMBUP));
+	}break;
+
+		// 乗り物の耐久値を回復する
+	case (ITEMTYPE_ENERGYUP): {
+		// テクスチャの割り当て
+		pItem->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_ENERGYUP));
+	}break;
+
+		// ハンドガン以外の弾の残弾数を増やす
+	case (ITEMTYPE_BULLETUP): {
+		// テクスチャの割り当て
+		pItem->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_BULLETUP));
 	}break;
 
 	default:
@@ -379,4 +431,51 @@ void CItem::SwitchTexture(ITEMTYPE type, CItem *pItem)
 CItem::ITEMTYPE CItem::RandDropItem()
 {
 	return ITEMTYPE(rand() % ITEMTYPE_MAX);
+}
+
+// =====================================================================================================================================================================
+//
+// アイテムをドロップする確率を求める
+//
+// =====================================================================================================================================================================
+bool CItem::DropRate()
+{
+	// アイテムをドロップするかのフラグ
+	bool bDrop = false;
+
+	// 求めたドロップ率を格納する変数
+	int nDrop = 0;
+
+	// ドロップ率を表す変数
+	int nRate = 4;
+
+	// 基準を求める
+	int nAdjusted_max = (RAND_MAX + 1) - (RAND_MAX + 1) % nRate;
+
+	// ランダムに求めた値を格納する比較用変数
+	int nRandom = 0;
+
+	// RAND_MAX + 1 が nRate で割り切れない場合、乱数がその端数分の範囲になったら捨ててやり直す
+	do {
+		// ランダムに値を求める
+		nRandom = rand();
+	} while (nRandom >= nAdjusted_max);
+
+	//
+	nDrop = (int)(((float)nRandom / nAdjusted_max) * nRate);
+
+	// 結果が0ならアイテムをドロップする許可を出す
+	if (nDrop == 0)
+	{
+		bDrop = true;
+	}
+
+	// 結果がそれ以外ならアイテムをドロップする許可を出さない
+	else
+	{
+		bDrop = false;
+	}
+
+	// 結果を返す
+	return bDrop;
 }

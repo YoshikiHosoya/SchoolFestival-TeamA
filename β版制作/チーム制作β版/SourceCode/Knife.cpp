@@ -233,30 +233,6 @@ void CKnife::CollisionKnife()
 	{
 		if (m_pCollision)
 		{
-			// 当たり判定 相手がエネミーだったら
-			// 敵の総数分
-			for (int nCnt = 0; nCnt < CManager::GetBaseMode()->GetMap()->GetMaxEnemy(); nCnt++)
-			{
-				// エネミーのポインタ取得
-				CEnemy *pEnemy = CManager::GetBaseMode()->GetMap()->GetEnemy(nCnt);
-				if (pEnemy != nullptr)
-				{
-					// 判定関数
-					if (m_pCollision->KnifeCollision(D3DXVECTOR3(m_HandMatrix->_41, m_HandMatrix->_42, m_HandMatrix->_43),pEnemy->GetCollision()))
-					{
-						// 敵のライフ減衰
-						pEnemy->CCharacter::AddDamage(50);
-
-						// 敵のライフが0以下になった時
-						if (pEnemy->CCharacter::GetLife() <= 0)
-						{
-							CItem::DropCreate(pEnemy->GetPosition());
-							pEnemy->SetDieFlag(true);
-							pEnemy = nullptr;
-						}
-					}
-				}
-			}
-		}
+			m_pCollision->ForPlayerBulletCollision(50, 50, true);		}
 	}
 }

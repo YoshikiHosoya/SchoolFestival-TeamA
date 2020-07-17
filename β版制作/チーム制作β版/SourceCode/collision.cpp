@@ -512,9 +512,12 @@ bool CCollision::ForPlayer_PrisonerCollision(bool Penetration)
 		CPrisoner *pPrisoner = CManager::GetBaseMode()->GetMap()->GetPrisoner(nCntPriso);
 		if (pPrisoner != nullptr)
 		{
-			if (this->CharCollision2D(pPrisoner->GetCollision()))
+			if (pPrisoner->GetPrisonerState() == CPrisoner::PRISONER_STATE_STAY)
 			{
-				bHitFlag = true;
+				if (this->CharCollision2D(pPrisoner->GetCollision()))
+				{
+					bHitFlag = true;
+				}
 			}
 		}
 	}
@@ -638,7 +641,10 @@ bool CCollision::ForVehicleCollision()
 		CItem *pItem = (CItem*)SceneList[nCnt];
 		if (pItem != nullptr)
 		{
-			if (pItem->GetItemType() == CItem::ITEMTYPE_BEAR)
+			if (pItem->GetItemType() == CItem::ITEMTYPE_BEAR ||
+				pItem->GetItemType() == CItem::ITEMTYPE_ENERGYUP||
+				pItem->GetItemType() == CItem::ITEMTYPE_BOMBUP||
+				pItem->GetItemType() == CItem::ITEMTYPE_BULLETUP)
 			{
 				if (pItem->GetCollision()->OtherCollision2D(this))
 				{

@@ -23,7 +23,12 @@ FILENAME_LIST CTexture::m_aTexFileName =
 	{ "data/TEXTURE/Item/Lasergun.png" },					//レーザーガンの弾
 	{ "data/TEXTURE/Item/Rocketlauncher.png" },				//ロケットランチャーの弾
 	{ "data/TEXTURE/Item/Flameshot.png" },					//フレイムショットの弾
+	{ "data/TEXTURE/Item/Enemychaser.png" },				//エネミーチェイサーの弾
+	{ "data/TEXTURE/Item/Ironlizard.png" },					//アイアンリザードの弾
 	{ "data/TEXTURE/Item/Bear.png" },						//熊
+	{ "data/TEXTURE/Item/Bombup.png" },						//ボムアップ
+	{ "data/TEXTURE/Item/Energyup.png" },					//乗り物の耐久値アップ
+	{ "data/TEXTURE/Item/Bulletup.png" },					//残段数アップ
 	{ "data/TEXTURE/Mesh/Grass.jpg" },						//草
 	{ "data/TEXTURE/Mesh/Block.jpg" },						//ブロック
 	{ "data/TEXTURE/Mesh/Water.jpg" },						//水
@@ -50,6 +55,7 @@ FILENAME_LIST CTexture::m_aSeparateTexFileNameList =
 	{ "data/TEXTURE/Effect/ShotGun.png" },						//ショットガン
 	{ "data/TEXTURE/Effect/Impact00.png" },						//インパクト
 	{ "data/TEXTURE/Effect/Impact01.png" },						//インパクト
+	{ "data/TEXTURE/Effect/Fire.png" },							//ファイア
 	{ "data/TEXTURE/UI/num.png" },								//ナンバー
 	{ "data/TEXTURE/UI/life.png" },								//体力のUI
 };
@@ -69,6 +75,7 @@ std::vector<CTexture::SEPARATE_TEX_INFO> CTexture::m_apSeparateTexInfoList =
 	{ nullptr, CTexture::SEPARATE_TEX_EFFECT_SHOTGUN,		D3DXVECTOR2(5,3),	ZeroVector2 },		//ショットガン
 	{ nullptr, CTexture::SEPARATE_TEX_EFFECT_IMPACT00,		D3DXVECTOR2(2,5),	ZeroVector2 },		//インパクト
 	{ nullptr, CTexture::SEPARATE_TEX_EFFECT_IMPACT01,		D3DXVECTOR2(2,6),	ZeroVector2 },		//インパクト
+	{ nullptr, CTexture::SEPARATE_TEX_EFFECT_FIRE,			D3DXVECTOR2(8,1),	ZeroVector2 },		//ファイア
 	{ nullptr, CTexture::SEPARATE_TEX_NUM,					D3DXVECTOR2(10,1),	ZeroVector2 },		//ナンバー
 	{ nullptr, CTexture::SEPARATE_TEX_UI_LIFE,				D3DXVECTOR2(5,1),	ZeroVector2 },		//体力のUI
 

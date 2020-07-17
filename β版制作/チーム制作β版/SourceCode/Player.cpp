@@ -54,8 +54,8 @@ HRESULT CPlayer::Init(void)
 	LoadOffset(CCharacter::CHARACTER_TYPE_PLAYER);
 	SetCharacterType(CCharacter::CHARACTER_TYPE_PLAYER);
 	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
-	m_bAttack_Enemy = false;
-	m_bAttack_Prisoner = false;
+	m_bAttack = false;
+	m_bKnifeAttack = false;
 	m_bCruch = false;
 	 // e‚Ì¶¬
 	m_pGun = CGun::Create(GetCharacterModelPartsList(CModel::MODEL_PLAYER_RHAND)->GetMatrix());
@@ -156,6 +156,22 @@ void CPlayer::Update(void)
 	CCharacter::Update();
 
 	CDebugProc::Print("Žž‹@‚Ìƒ‰ƒCƒt %d\n",GetLife());
+	if (m_bAttack == true)
+	{
+		CDebugProc::Print("UŒ‚‰Â”\\n");
+	}
+	else
+	{
+		CDebugProc::Print("UŒ‚•s‰Â”\\n");
+	}
+	if (m_bKnifeAttack == true)
+	{
+		CDebugProc::Print("UŒ‚‚¿‚ã‚¤‚¤‚¤\n");
+	}
+	else
+	{
+		CDebugProc::Print("UŒ‚‚µ‚Ä‚È‚¢‚Å\n");
+	}
 }
 //====================================================================
 //•`‰æ
@@ -314,72 +330,58 @@ void CPlayer::MoveUpdate(void)
 //====================================================================
 void CPlayer::CollisionUpdate(void)
 {
-		// “–‚½‚è”»’è
-		if (GetCollision() != nullptr)
+	// “–‚½‚è”»’è
+	if (GetCollision() != nullptr)
+	{
+		// À•W‚ÌXV pos‚Æposold
+		GetCollision()->SetPos(&GetPosition());
+		GetCollision()->SetPosOld(&GetPositionOld());
+
+		// æ‚è•¨‚Éæ‚Á‚Ä‚¢‚éŽž‚Éæ‚è•¨ˆÈŠO‚Ì”»’è‚ð‚µ‚È‚¢
+		if (m_bRideVehicle == false)
 		{
-			// À•W‚ÌXV pos‚Æposold
-			GetCollision()->SetPos(&GetPosition());
-			GetCollision()->SetPosOld(&GetPositionOld());
-
-			// æ‚è•¨‚Éæ‚Á‚Ä‚¢‚éŽž‚Éæ‚è•¨ˆÈŠO‚Ì”»’è‚ð‚µ‚È‚¢
-			if (m_bRideVehicle == false)
+			// ƒGƒlƒ~[‚Æ‚Æ‚Ì”»’è
+			if (GetCollision()->ForPlayer_EnemyCollision(ATTACK_PENETRATION) == true||
+				GetCollision()->ForPlayer_PrisonerCollision(ATTACK_PENETRATION) == true)
 			{
-				// ƒGƒlƒ~[‚Æ‚Æ‚Ì”»’è
-				if (GetCollision()->ForPlayer_EnemyCollision(ATTACK_PENETRATION) == true)
-				{
-					// ‹ßÚUŒ‚‰Â”\‚É‚·‚é
-					m_bAttack_Enemy = true;
-				}
-				else
-				{
-					// ‹ßÚUŒ‚‚ª–³Œø‚É‚È‚é
-					m_bAttack_Enemy = false;
-				}
-
-				// •ß—¸‚Æ‚Ì”»’è
-				if (GetCollision()->ForPlayer_PrisonerCollision(ATTACK_PENETRATION) == true)
-				{
-					// ‹ßÚUŒ‚‰Â”\‚É‚·‚é
-					m_bAttack_Prisoner = true;
-				}
-				else
-				{
-					// ‹ßÚUŒ‚‚ª–³Œø‚É‚È‚é
-					m_bAttack_Prisoner = false;
-				}
-
-				// áŠQ•¨‚Æ‚Ì”»’è
-				//if (GetCollision()->ForPlayer_ObstacleCollision())
-				//{
-				//	// ƒWƒƒƒ“ƒvƒtƒ‰ƒO‚ð‰Â”\‚É‚·‚é
-				//	CCharacter::SetJump(true);
-				//}
-
-				// ƒAƒCƒeƒ€‚Æ‚Ì”»’è
-				if (GetCollision()->ForPlayer_ItemCollision())
-				{
-				}
+				m_bAttack = true;
+			}
+			else
+			{
+				m_bAttack = false;
 			}
 
-			//
-			if (m_bRideVehicle == false)
+			// áŠQ•¨‚Æ‚Ì”»’è
+			//if (GetCollision()->ForPlayer_ObstacleCollision())
+			//{
+			//	// ƒWƒƒƒ“ƒvƒtƒ‰ƒO‚ð‰Â”\‚É‚·‚é
+			//	CCharacter::SetJump(true);
+			//}
+
+			// ƒAƒCƒeƒ€‚Æ‚Ì”»’è
+			if (GetCollision()->ForPlayer_ItemCollision())
 			{
-				// æ‚è•¨‚Æ‚Ì”»’è
-				if (GetCollision()->ForPlayer_VehicleCollision())
-				{
-					// æ‚èž‚ñ‚¾Žž
-					m_bRideVehicle = true;
-				}
-				else
-				{
-					// æ‚Á‚Ä‚¢‚È‚¢‚Æ‚«
-					m_bRideVehicle = false;
-				}
 			}
 		}
 
-		// e‚Ì•`‰æƒtƒ‰ƒO‚ÌÝ’è
-		m_pGun->SetDrawFlag(m_bRideVehicle);
+		if (m_bRideVehicle == false)
+		{
+			// æ‚è•¨‚Æ‚Ì”»’è
+			if (GetCollision()->ForPlayer_VehicleCollision())
+			{
+				// æ‚èž‚ñ‚¾Žž
+				m_bRideVehicle = true;
+			}
+			else
+			{
+				// æ‚Á‚Ä‚¢‚È‚¢‚Æ‚«
+				m_bRideVehicle = false;
+			}
+		}
+	}
+
+	// e‚Ì•`‰æƒtƒ‰ƒO‚ÌÝ’è
+	m_pGun->SetDrawFlag(m_bRideVehicle);
 }
 //====================================================================
 //UŒ‚ŠÖ˜A
@@ -393,62 +395,20 @@ void CPlayer::AttackUpdate(void)
 		// e‚ðŒ‚‚Â or ‹ßÚUŒ‚
 		if (key->GetKeyboardTrigger(DIK_P))
 		{
-			// •ß—¸‚Ìƒ|ƒCƒ“ƒ^‚ðŽæ“¾
-			CPrisoner	*pPrisoner = GetCollision()->ForPlayer_PrisonerCollision();
-
-			// ƒ|ƒCƒ“ƒ^‚ªnull‚¶‚á‚È‚©‚Á‚½Žž
-			if (pPrisoner != nullptr)
+			// e‚ðŒ‚‚Ä‚éó‘Ô‚¾‚Á‚½Žž
+			if (m_bAttack == false && m_bKnifeAttack == false)
 			{
-				// e‚ðŒ‚‚Ä‚éó‘Ô‚¾‚Á‚½Žž
-				if (m_bAttack_Enemy == false && m_bAttack_Prisoner == false)
-				{// e”­ŽËˆ—
-					m_pGun->Shot();
-				}
-				// •ß—¸‚ª”»’è‰Â”\‚Èó‘Ô‚¾‚Á‚½Žž
-				else if (pPrisoner->GetPrisonerState() != CPrisoner::PRISONER_STATE_STAY)
-				{// e”­ŽËˆ—
-					m_pGun->Shot();
-				}
-			}
-			// •ß—¸‚ª‚¢‚È‚¢Žž‚Í’Êí’Ê‚è’e‚ðŒ‚‚Â
-			else
-			{// e”­ŽËˆ—
+				// e”­ŽËˆ—
 				m_pGun->Shot();
 			}
 
 			// ‹ßÚUŒ‚‚ð‚·‚éó‘Ô‚¾‚Á‚½Žž
-			if (m_bAttack_Enemy == true&&GetJump() == true)
-			{// ‹ßÚUŒ‚
-			 // ƒGƒlƒ~[‚Æ‚ÌÚG”»’è •ß—¸‚Ìó‘Ô‚ð•Ï‚¦‚é
-				CEnemy		*pEnemy = GetCollision()->ForPlayer_EnemyCollision();
-				if (pEnemy != nullptr)
-				{
-					// ‹ßÚUŒ‚
-					SetMotion(CCharacter::PLAYER_MOTION_ATTACK01);
-					m_pKnife->StartMeleeAttack();
-				}
-			}
-
-			// ‹ßÚ”»’è‚ªo‚Ä‚¢‚éŽž‚Í‹ßÚUŒ‚‚ð‚·‚é
-			else if (m_bAttack_Prisoner == true && GetJump() == true)
-			{// ‹ßÚUŒ‚
-			 // •ß—¸‚Æ‚ÌÚG”»’è •ß—¸‚Ìó‘Ô‚ð•Ï‚¦‚é
-				CPrisoner	*pPrisoner = GetCollision()->ForPlayer_PrisonerCollision();
-
-				// ƒ|ƒCƒ“ƒ^‚ªnull‚¶‚á‚È‚©‚Á‚½Žž
-				if (pPrisoner != nullptr)
-				{
-					// •ß—¸‚ª”»’è‰Â”\‚Èó‘Ô‚¾‚Á‚½Žž
-					if (pPrisoner->GetPrisonerState() == CPrisoner::PRISONER_STATE_STAY)
-					{
-						// ‹ßÚUŒ‚
-						SetMotion(CCharacter::PLAYER_MOTION_ATTACK01);
-						// ƒiƒCƒtˆ—
-						m_pKnife->StartMeleeAttack();
-						// •ß—¸‚Ìó‘Ô‚ðƒAƒCƒeƒ€‚ð—Ž‚Æ‚·ó‘Ô‚É‚·‚é
-						pPrisoner->SetPrisonerState(CPrisoner::PRISONER_STATE_DROPITEM);
-					}
-				}
+			if (m_bAttack == true && m_bKnifeAttack == false)
+			{
+				// ‹ßÚUŒ‚
+				m_bKnifeAttack = true;
+				m_pKnife->StartMeleeAttack();
+				SetMotion(CCharacter::PLAYER_MOTION_ATTACK01);
 			}
 		}
 		// ƒOƒŒƒl[ƒh‚ð“Š‚°‚é
@@ -467,10 +427,8 @@ void CPlayer::AttackUpdate(void)
 		// UŒ‚ƒ‚[ƒVƒ‡ƒ“‚©‚ç•Ê‚Ìƒ‚[ƒVƒ‡ƒ“‚É‚È‚Á‚½Žž
 		if (GetMotionType() != CCharacter::PLAYER_MOTION_ATTACK01)
 		{
-			if (m_bAttack_Enemy == false || m_bAttack_Prisoner == false)
-			{
-				m_pKnife->EndMeleeAttack();
-			}
+			m_bKnifeAttack = false;
+			m_pKnife->EndMeleeAttack();
 		}
 	}
 }

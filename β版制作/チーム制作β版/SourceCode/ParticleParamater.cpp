@@ -11,6 +11,7 @@
 #include "ParticleParamater.h"
 #include "manager.h"
 #include "renderer.h"
+#include "collision.h"
 //------------------------------------------------------------------------------
 //静的メンバ変数の初期化
 //------------------------------------------------------------------------------
@@ -38,6 +39,54 @@ FILENAME_LIST CParticleCreators::m_aFileNameList =
 //マクロ
 //------------------------------------------------------------------------------
 #define PARAMATER_SAVE_FILENAME ("data/Load/Effect/Paramater/SaveParamater.txt")
+
+//------------------------------------------------------------------------------
+//コンストラクタ
+//------------------------------------------------------------------------------
+CParticleParam::CParticleParam()
+{
+
+	m_bGravity = false;														//重力
+	m_bSpeedRandom = false;													//速度がランダムかどうか
+	m_bAlphaBlend = true;													//αブレンドするか
+
+	m_nLife = 50;															//ライフ
+	m_nNumber = 10;															//個数
+	m_fSpeed = 10.0f;														//速度
+	m_fRange = 0.5f;														//範囲
+	m_fAlphaDamping = DEFAULT_DAMPING;										//アルファ値の減衰値
+	m_fGravityPower = DEFAULT_GRAVITY_POWER;								//重力の大きさ
+
+	m_Size = D3DXVECTOR3(15.0f, 15.0f, 0.0f);								//サイズ
+	m_SizeDamping = D3DXVECTOR3(DEFAULT_DAMPING, DEFAULT_DAMPING, 0.0f);	//サイズの減衰地
+	m_col = WhiteColor;														//色
+	m_rot = ZeroVector3;													//角度
+
+	m_bAnimation = false;													//アニメーションするかどうか
+	m_bAnimationLoop = false;												//アニメーションループするかどうか
+	m_nAnimationCntSwitch = 1;												//アニメーション切替のカウント
+
+	m_CollisionSize = m_Size;												//当たり判定の大きさ
+	m_bCollision = false;													//当たり判定あるか
+	m_bCollisionSizeCalc = false;											//当たり判定生成時にサイズを計算するかどうか　ShotGunとかに必要
+	m_nCollisionAttackValue = 1;											//攻撃力
+	m_nCollisionCnt = 10;													//判定をする時間
+	m_CollisionTag = TAG_PLAYER;											//タグ　プレイヤーかどうか
+
+
+	m_Textype = CTexture::TEX_EFFECT_PARTICLE;								//テクスチャ
+	m_SeparateTex = CTexture::SEPARATE_TEX_EFFECT_EXPLOSION01;				//分割テクスチャ
+	m_shape = SHAPE_SPHERE;													//パーティクルの方向
+	m_ParticleType = EFFECT_DEFAULT;										//パーティクルのタイプ
+}
+
+//------------------------------------------------------------------------------
+//デストラクタ
+//------------------------------------------------------------------------------
+CParticleParam::~CParticleParam()
+{
+}
+
 //------------------------------------------------------------------------------
 //テキストからパラメータ取得
 //------------------------------------------------------------------------------
@@ -394,6 +443,7 @@ bool CParticleParam::ShowParamConboBox(CParticleParam::PARTICLE_TEXT &rType)
 #endif //DEBUG
 	return bChange;
 }
+
 //------------------------------------------------------------------------------
 //パラメータ設定
 //------------------------------------------------------------------------------
@@ -450,7 +500,12 @@ void * CParticleParam::operator=(const CParticleParam * pParam)
 	m_bAlphaBlend			= pParam->m_bAlphaBlend;
 	m_bAnimationLoop		= pParam->m_bAnimationLoop;
 	m_nAnimationCntSwitch	= pParam->m_nAnimationCntSwitch;
-
+	m_CollisionSize			= pParam->m_CollisionSize;
+	m_bCollision			= pParam->m_bCollision;
+	m_bCollisionSizeCalc	= pParam->m_bCollisionSizeCalc;
+	m_nCollisionAttackValue = pParam->m_nCollisionAttackValue;
+	m_nCollisionCnt			= pParam->m_nCollisionCnt;
+	m_CollisionTag			= pParam->m_CollisionTag;
 
 	return this;
 }

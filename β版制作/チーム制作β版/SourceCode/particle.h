@@ -20,6 +20,7 @@
 //クラス定義
 //------------------------------------------------------------------------------
 class CParticleParam;
+class CCollision;
 
 //パーティクルの粒子
 class COneParticle
@@ -76,15 +77,22 @@ public:
 	bool GetDeleteFlag() { return m_bDeleteFlag; };
 
 private:
-	static LPDIRECT3DVERTEXBUFFER9	m_pVtxBuff;											//頂点バッファへのポインタ
-	static int m_nVertexID;																//頂点ID
-	std::unique_ptr<CParticleParam> m_pParticleParam;									//パーティクルの現在のパラメータ
+	static LPDIRECT3DVERTEXBUFFER9	m_pVtxBuff;						//頂点バッファへのポインタ
+	static int m_nVertexID;											//頂点ID
+
+	D3DXVECTOR3 m_posOrigin;										//原点座標
+	D3DXVECTOR3 m_rotOrigin;										//原点回転量
+
+	CCollision *m_pCollision;										//コリジョンのポインタ
+	std::unique_ptr<CParticleParam> m_pParticleParam;				//パーティクルの現在のパラメータのポインタ
 
 	std::vector<std::unique_ptr<COneParticle>> m_pParticleList;		//パーティクルの構造体のリスト
 	bool m_bDeleteFlag;												//消去フラグ
 
 	void SetParticle(D3DXVECTOR3 const &pos, D3DXVECTOR3 const &rot, CParticleParam *pParam);				//パーティクル設定
-	void SetAnimationParam();												//アニメーションのパラメータ設定
+	void SetCollsionParam();										//当たり判定のパラメータ設定
+	void SetAnimationParam();										//アニメーションのパラメータ設定
+	void Collision();												//判定
 };
 
 #endif

@@ -12,6 +12,7 @@
 #include "manager.h"
 #include "renderer.h"
 #include "ParticleManager.h"
+#include "collision.h"
 //------------------------------------------------------------------------------
 //静的メンバ変数の初期化
 //------------------------------------------------------------------------------
@@ -31,6 +32,8 @@ CParticle::CParticle()
 {
 	//初期化
 	m_bDeleteFlag = false;
+	m_posOrigin = ZeroVector3;
+	m_rotOrigin = ZeroVector3;
 }
 //------------------------------------------------------------------------------
 //デストラクタ
@@ -39,6 +42,12 @@ CParticle::~CParticle()
 {
 	//リストの開放
 	m_pParticleList.clear();
+
+	if (m_pCollision)
+	{
+		delete m_pCollision;
+		m_pCollision = nullptr;
+	}
 }
 //------------------------------------------------------------------------------
 //初期化処理
@@ -66,6 +75,13 @@ void CParticle::Update()
 	{
 		//アニメーション更新処理
 		UpdateAnimation();
+	}
+
+	//コリジョン
+	if (m_pParticleParam->GetCollision() && m_pParticleParam->GetCollisionCnt() >= 0)
+	{
+		m_pParticleParam->GetCollisionCnt()--;
+		Collision();
 	}
 
 	//ライフが0以下になった時かアニメーションが終了した時
@@ -385,6 +401,9 @@ void CParticle::SetParticle(D3DXVECTOR3 const & pos, D3DXVECTOR3 const & rot, CP
 	D3DXVECTOR3 move;
 	float fSpeed;
 
+	m_posOrigin = pos;
+	m_rotOrigin = rot;
+
 	//生成する個数分
 	for (int nCnt = 0; nCnt < pParam->GetNumber(); nCnt++)
 	{
@@ -474,6 +493,11 @@ void CParticle::SetParticle(D3DXVECTOR3 const & pos, D3DXVECTOR3 const & rot, CP
 	//アニメーションのパラメータ設定
 	SetAnimationParam();
 
+	//判定があるときは当たり判定のポインタ作成
+	if (m_pParticleParam->GetCollision())
+	{
+		SetCollsionParam();
+	}
 	//頂点の更新
 	UpdateVertex();
 }
@@ -488,4 +512,110 @@ void CParticle::SetAnimationParam()
 	CTexAnimationBase::SetLoop(m_pParticleParam->GetAnimationLoop());
 	CTexAnimationBase::SetCntSwitch(m_pParticleParam->GetAnimationCntSwitch());
 
+}
+
+//------------------------------------------------------------------------------
+//コリジョンの情報設定
+//------------------------------------------------------------------------------
+void CParticle::SetCollsionParam()
+{
+	m_pCollision = CCollision::Create();
+
+	m_pCollision->SetPos(&m_posOrigin);
+	m_pCollision->SetSize(m_pParticleParam->GetCollisionSize());
+
+	D3DXMATRIX Mat;
+
+	//nullcheck
+	if (m_pCollision)
+	{
+		//マトリックス計算
+		CHossoLibrary::CalcMatrix(&Mat, ZeroVector3, m_rotOrigin);
+
+		//当たり判定生成
+		m_pCollision = CCollision::Create();
+
+		//中央が原点かどうか
+		if (!m_pParticleParam->GetCollisionSizeCalc())
+		{
+			m_pCollision->SetPos(&m_posOrigin);
+			m_pCollision->SetSize(m_pParticleParam->GetCollisionSize() * 2);
+
+			//デバッグの線表示
+			m_pCollision->DeCollisionCreate(CCollision::COLLISIONTYPE_NORMAL);
+
+		}
+		//	else
+		//	{
+		//		//頂点座標
+		//		D3DXVECTOR3 VtxPos[4] = {};
+
+		//		//ローカル　当たり判定の中心
+		//		D3DXVECTOR3 LocalPosOrigin = ZeroVector3;
+
+		//		//頂点座標算出
+		//		D3DXVec3TransformCoord(&VtxPos[0], &D3DXVECTOR3(-m_pParticleParam->GetSize().x, +m_pParticleParam->GetSize().y * 2.0f, 0.0f), &Mat);
+		//		D3DXVec3TransformCoord(&VtxPos[1], &D3DXVECTOR3(+m_pParticleParam->GetSize().x, +m_pParticleParam->GetSize().y * 2.0f, 0.0f), &Mat);
+		//		D3DXVec3TransformCoord(&VtxPos[2], &D3DXVECTOR3(-m_pParticleParam->GetSize().x, 0.0f, 0.0f), &Mat);
+		//		D3DXVec3TransformCoord(&VtxPos[3], &D3DXVECTOR3(+m_pParticleParam->GetSize().x, 0.0f, 0.0f), &Mat);
+
+		//		//当たり判定用のローカル座標計算
+		//		D3DXVec3TransformCoord(&LocalPosOrigin, &D3DXVECTOR3(0.0f, m_pParticleParam->GetSize().y, 0.0f), &Mat);
+
+
+		//		//計算用の変数　当たり判定のサイズ
+		//		D3DXVECTOR3 Max = D3DXVECTOR3(-1000.0f, -1000.0f, -0.0f);
+
+
+		//		//4頂点分
+		//		for (int nCnt = 0; nCnt < 4; nCnt++)
+		//		{
+		//			//頂点情報を取得
+		//			D3DXVECTOR3 vtx = VtxPos[nCnt];
+		//			//最大の頂点座標を比較して出す
+		//			if (Max.x < vtx.x)
+		//			{
+		//				Max.x = vtx.x;
+		//			}
+		//			if (Max.y < vtx.y)
+		//			{
+		//				Max.y = vtx.y;
+		//			}
+		//		}
+
+		//		//マトリックス計算
+		//		CHossoLibrary::CalcMatrix(GetMtxWorld(), pos, rot);
+
+		//		//当たり判定用の原点作成　ちょっとキャラクター側とかに寄せる
+		//		D3DXVec3TransformCoord(&m_CollisionPosOrigin, &D3DXVECTOR3(0.0f, size.y * 0.8f, 0.0f), GetMtxWorld());
+
+		//		//当たり判定の設定
+		//		m_pCollision->SetPos(&m_CollisionPosOrigin);
+		//		m_pCollision->SetSize(D3DXVECTOR3(fabsf(LocalPosOrigin.x - Max.x), fabsf(LocalPosOrigin.y - Max.y), 0.0f) * 2.0f);
+		//	}
+
+		//	//デバッグの線表示
+		//	m_pCollision->DeCollisionCreate(CCollision::COLLISIONTYPE_NORMAL);
+	}
+}
+
+
+//------------------------------------------------------------------------------
+//判定
+//------------------------------------------------------------------------------
+void CParticle::Collision()
+{
+//nullcheck
+	if (m_pCollision)
+	{
+		//プレイヤーの攻撃だった場合
+		if (m_pParticleParam->GetCollisionTag() == TAG_PLAYER)
+		{
+			if (CManager::GetGameState() == CManager::MODE_GAME)
+			{
+				//当たり判定　敵、捕虜、オブジェクトに対して　貫通有
+				m_pCollision->ForPlayerBulletCollision(m_pParticleParam->GetCollisionAttackValue(), m_pParticleParam->GetCollisionAttackValue(), true);
+			}
+		}
+	}
 }

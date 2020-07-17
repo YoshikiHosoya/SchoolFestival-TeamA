@@ -114,7 +114,8 @@ public:
 	static bool RangeLimit_Equal_Float(float &nValue, float nMin, float nMax);									//範囲内に抑える(float)
 
 	static float Random_PI();																					//-3.14から3.14までのランダムで返す
-	static float Random(float fInputValue);																			//入力された値の+-ランダムな値で返す
+	static float Random(float fInputValue);																		//入力された値の+-ランダムな値で返す
+	static D3DXVECTOR3 RandomVector3(float Max);																//ランダムなvector3型で値を返す
 	static void CalcRotation(float &fRot);																		//回転を360度以内にする計算
 
 	static bool PressAnyButton(void);
