@@ -100,6 +100,7 @@ private:
 	bool			PlayerTankComboBox(int &nType);							// 戦車のコンボボックス
 	bool			BattlePlaneComboBox(int &nType);						// 戦闘機のコンボボックス
 	bool			HelicopterComboBox(int &nType);							// ヘリのコンボボックス
+	void			SetSelectMapModelPosRDest(D3DXVECTOR3 posR);			// 選択しているモデルを注視点の目的地に設定
 
 	/* 静的メンバ変数 */
 	static char					*m_MapFileName[MAP_MAX];					// マップファイル名
