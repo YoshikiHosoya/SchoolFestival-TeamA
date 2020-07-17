@@ -225,15 +225,8 @@ void CDebug_EffectViewer::ParticleParamaterViewer()
 			//当たり判定があるかどうか
 			ImGui::Checkbox("m_bCollisionSizeCalc", &m_pParticleParam->GetCollisionSizeCalc());
 
-			//サイズを計算して算出するかどうか
-			if (m_pParticleParam->GetCollisionSizeCalc())
-			{
-				//同じ行
-				ImGui::SameLine();
-
-				//アニメーションパラメータ設定
-				ImGui::DragFloat3("Size", m_pParticleParam->GetCollisionSize(), 0.5f, 1.0f, 250.0f);
-			}
+			//アニメーションパラメータ設定
+			ImGui::DragFloat3("CollisionSize", m_pParticleParam->GetCollisionSize(), 0.5f, 1.0f, 250.0f);
 
 			//コリジョンの継続時間
 			ImGui::InputInt("CollisionCnt", &m_pParticleParam->GetCollisionCnt(), 1, 1, 20);

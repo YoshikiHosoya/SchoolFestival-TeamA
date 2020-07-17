@@ -83,6 +83,11 @@ void CParticle::Update()
 		m_pParticleParam->GetCollisionCnt()--;
 		Collision();
 	}
+	else
+	{
+		delete m_pCollision;
+		m_pCollision = nullptr;
+	}
 
 	//ライフが0以下になった時かアニメーションが終了した時
 	if (m_pParticleParam->GetLife() <= 0 || CTexAnimationBase::GetEndFlag())
@@ -191,12 +196,23 @@ void CParticle::UpdateVertex()
 		//移動
 		m_pParticleList[nCnt]->m_pos += m_pParticleList[nCnt]->m_move;
 
-		//頂点の座標
-		pVtx[0].pos = D3DXVECTOR3(-m_pParticleParam->GetSize().x,  m_pParticleParam->GetSize().y, 0.0f);
-		pVtx[1].pos = D3DXVECTOR3( m_pParticleParam->GetSize().x,  m_pParticleParam->GetSize().y, 0.0f);
-		pVtx[2].pos = D3DXVECTOR3(-m_pParticleParam->GetSize().x, -m_pParticleParam->GetSize().y, 0.0f);
-		pVtx[3].pos = D3DXVECTOR3( m_pParticleParam->GetSize().x, -m_pParticleParam->GetSize().y, 0.0f);
-
+		//中心が原点じゃない場合
+		if (m_pParticleParam->GetCollisionSizeCalc())
+		{
+			//頂点の座標
+			pVtx[0].pos = D3DXVECTOR3(-m_pParticleParam->GetSize().x, +m_pParticleParam->GetSize().y * 2.0f, 0.0f);
+			pVtx[1].pos = D3DXVECTOR3(+m_pParticleParam->GetSize().x, +m_pParticleParam->GetSize().y * 2.0f, 0.0f);
+			pVtx[2].pos = D3DXVECTOR3(-m_pParticleParam->GetSize().x, 0.0f, 0.0f);
+			pVtx[3].pos = D3DXVECTOR3(+m_pParticleParam->GetSize().x, 0.0f, 0.0f);
+		}
+		else
+		{
+			//頂点の座標
+			pVtx[0].pos = D3DXVECTOR3(-m_pParticleParam->GetSize().x, m_pParticleParam->GetSize().y, 0.0f);
+			pVtx[1].pos = D3DXVECTOR3(m_pParticleParam->GetSize().x, m_pParticleParam->GetSize().y, 0.0f);
+			pVtx[2].pos = D3DXVECTOR3(-m_pParticleParam->GetSize().x, -m_pParticleParam->GetSize().y, 0.0f);
+			pVtx[3].pos = D3DXVECTOR3(m_pParticleParam->GetSize().x, -m_pParticleParam->GetSize().y, 0.0f);
+		}
 		//頂点の座標
 		pVtx[0].col = m_pParticleParam->GetCol();
 		pVtx[1].col = m_pParticleParam->GetCol();
@@ -524,78 +540,72 @@ void CParticle::SetCollsionParam()
 	m_pCollision->SetPos(&m_posOrigin);
 	m_pCollision->SetSize(m_pParticleParam->GetCollisionSize());
 
-	D3DXMATRIX Mat;
+	D3DXMATRIX RotationMatrix;
+
+	//当たり判定生成
+	m_pCollision = CCollision::Create();
 
 	//nullcheck
 	if (m_pCollision)
 	{
-		//マトリックス計算
-		CHossoLibrary::CalcMatrix(&Mat, ZeroVector3, m_rotOrigin);
-
-		//当たり判定生成
-		m_pCollision = CCollision::Create();
-
 		//中央が原点かどうか
 		if (!m_pParticleParam->GetCollisionSizeCalc())
 		{
 			m_pCollision->SetPos(&m_posOrigin);
 			m_pCollision->SetSize(m_pParticleParam->GetCollisionSize() * 2);
-
-			//デバッグの線表示
-			m_pCollision->DeCollisionCreate(CCollision::COLLISIONTYPE_NORMAL);
-
 		}
-		//	else
-		//	{
-		//		//頂点座標
-		//		D3DXVECTOR3 VtxPos[4] = {};
+		else
+		{
+			//マトリックス計算
+			CHossoLibrary::CalcMatrix(&RotationMatrix, ZeroVector3, m_rotOrigin);
 
-		//		//ローカル　当たり判定の中心
-		//		D3DXVECTOR3 LocalPosOrigin = ZeroVector3;
+			//頂点座標
+			D3DXVECTOR3 VtxPos[4] = {};
 
-		//		//頂点座標算出
-		//		D3DXVec3TransformCoord(&VtxPos[0], &D3DXVECTOR3(-m_pParticleParam->GetSize().x, +m_pParticleParam->GetSize().y * 2.0f, 0.0f), &Mat);
-		//		D3DXVec3TransformCoord(&VtxPos[1], &D3DXVECTOR3(+m_pParticleParam->GetSize().x, +m_pParticleParam->GetSize().y * 2.0f, 0.0f), &Mat);
-		//		D3DXVec3TransformCoord(&VtxPos[2], &D3DXVECTOR3(-m_pParticleParam->GetSize().x, 0.0f, 0.0f), &Mat);
-		//		D3DXVec3TransformCoord(&VtxPos[3], &D3DXVECTOR3(+m_pParticleParam->GetSize().x, 0.0f, 0.0f), &Mat);
+			//ローカル　当たり判定の中心
+			D3DXVECTOR3 LocalPosOrigin = ZeroVector3;
 
-		//		//当たり判定用のローカル座標計算
-		//		D3DXVec3TransformCoord(&LocalPosOrigin, &D3DXVECTOR3(0.0f, m_pParticleParam->GetSize().y, 0.0f), &Mat);
+			//頂点座標算出
+			D3DXVec3TransformCoord(&VtxPos[0], &D3DXVECTOR3(-m_pParticleParam->GetCollisionSize().x, +m_pParticleParam->GetCollisionSize().y * 2.0f, 0.0f), &RotationMatrix);
+			D3DXVec3TransformCoord(&VtxPos[1], &D3DXVECTOR3(+m_pParticleParam->GetCollisionSize().x, +m_pParticleParam->GetCollisionSize().y * 2.0f, 0.0f), &RotationMatrix);
+			D3DXVec3TransformCoord(&VtxPos[2], &D3DXVECTOR3(-m_pParticleParam->GetCollisionSize().x, 0.0f, 0.0f), &RotationMatrix);
+			D3DXVec3TransformCoord(&VtxPos[3], &D3DXVECTOR3(+m_pParticleParam->GetCollisionSize().x, 0.0f, 0.0f), &RotationMatrix);
 
+			//当たり判定用のローカル座標計算
+			D3DXVec3TransformCoord(&LocalPosOrigin, &D3DXVECTOR3(0.0f, m_pParticleParam->GetCollisionSize().y, 0.0f), &RotationMatrix);
 
-		//		//計算用の変数　当たり判定のサイズ
-		//		D3DXVECTOR3 Max = D3DXVECTOR3(-1000.0f, -1000.0f, -0.0f);
+			//計算用の変数　当たり判定のサイズ
+			D3DXVECTOR3 Max = D3DXVECTOR3(-1000.0f, -1000.0f, -0.0f);
 
+			//4頂点分
+			for (int nCnt = 0; nCnt < 4; nCnt++)
+			{
+				//頂点情報を取得
+				D3DXVECTOR3 vtx = VtxPos[nCnt];
+				//最大の頂点座標を比較して出す
+				if (Max.x < vtx.x)
+				{
+					Max.x = vtx.x;
+				}
+				if (Max.y < vtx.y)
+				{
+					Max.y = vtx.y;
+				}
+			}
 
-		//		//4頂点分
-		//		for (int nCnt = 0; nCnt < 4; nCnt++)
-		//		{
-		//			//頂点情報を取得
-		//			D3DXVECTOR3 vtx = VtxPos[nCnt];
-		//			//最大の頂点座標を比較して出す
-		//			if (Max.x < vtx.x)
-		//			{
-		//				Max.x = vtx.x;
-		//			}
-		//			if (Max.y < vtx.y)
-		//			{
-		//				Max.y = vtx.y;
-		//			}
-		//		}
+			//マトリックス計算
+			CHossoLibrary::CalcMatrix(&RotationMatrix, m_posOrigin, m_rotOrigin);
 
-		//		//マトリックス計算
-		//		CHossoLibrary::CalcMatrix(GetMtxWorld(), pos, rot);
+			//当たり判定用の原点作成　ちょっとキャラクター側とかに寄せる
+			D3DXVec3TransformCoord(&LocalPosOrigin, &D3DXVECTOR3(0.0f, m_pParticleParam->GetCollisionSize().y * 0.8f, 0.0f), &RotationMatrix);
 
-		//		//当たり判定用の原点作成　ちょっとキャラクター側とかに寄せる
-		//		D3DXVec3TransformCoord(&m_CollisionPosOrigin, &D3DXVECTOR3(0.0f, size.y * 0.8f, 0.0f), GetMtxWorld());
+			//当たり判定の設定
+			m_pCollision->SetPos(&LocalPosOrigin);
+			m_pCollision->SetSize(D3DXVECTOR3(fabsf(LocalPosOrigin.x - Max.x), fabsf(LocalPosOrigin.y - Max.y), 0.0f) * 2.0f);
+		}
 
-		//		//当たり判定の設定
-		//		m_pCollision->SetPos(&m_CollisionPosOrigin);
-		//		m_pCollision->SetSize(D3DXVECTOR3(fabsf(LocalPosOrigin.x - Max.x), fabsf(LocalPosOrigin.y - Max.y), 0.0f) * 2.0f);
-		//	}
-
-		//	//デバッグの線表示
-		//	m_pCollision->DeCollisionCreate(CCollision::COLLISIONTYPE_NORMAL);
+		//デバッグの線表示
+		m_pCollision->DeCollisionCreate(CCollision::COLLISIONTYPE_NORMAL);
 	}
 }
 
