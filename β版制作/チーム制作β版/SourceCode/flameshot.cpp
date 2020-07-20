@@ -19,6 +19,9 @@
 // =====================================================================================================================================================================
 // マクロ定義
 // =====================================================================================================================================================================
+#define MOVE_RANGE_HEIGHT		(4.0f)		// 縦の移動量の範囲
+#define MOVE_RESTRAIN_HEIGHT	(1.0f)		// 縦の移動量を抑制する
+#define MOVE_RISE_HEIGHT		(3.5f)		// 上昇する移動量
 
 // =====================================================================================================================================================================
 //
@@ -70,13 +73,42 @@ void CFlameshot::Uninit(void)
 // =====================================================================================================================================================================
 void CFlameshot::Update(void)
 {
+	// 移動量
+	D3DXVECTOR3 move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+
+	// 移動量取得
+	move = D3DXVECTOR3(GetMove().x * 0.9f, GetMove().y, GetMove().z * 0.9f);
+
+	// 一定範囲上昇したら
+	if (move.y > MOVE_RANGE_HEIGHT)
+	{
+		// 移動を抑える
+		move.y += (float)sin(-MOVE_RESTRAIN_HEIGHT);
+	}
+	// 一定範囲下降したら
+	else if (move.y < -MOVE_RANGE_HEIGHT)
+	{
+		// 移動を抑える
+		move.y += (float)sin(MOVE_RESTRAIN_HEIGHT);
+	}
+	else
+	{
+		// 上昇する
+		move.y += (float)sin(-MOVE_RISE_HEIGHT);
+	}
+
+	// 移動量の設定
+	SetMove(move);
+
 	// 更新
 	CBullet::Update();
+
+	CDebugProc::Print("\n\n BulletMove (%f, %f, %f)\n\n", GetMove().x, GetMove().y, GetMove().z);
 
 	if (CBullet::GetLife() % 3 == 0)
 	{
 		CTexAnimation3D_Collision::Create(GetPosition() + CHossoLibrary::RandomVector3(20.0f),
-											D3DXVECTOR3(60.0f, 60.0f, 0.0f), ZeroVector3, CTexture::SEPARATE_TEX_EFFECT_IMPACT00, 2, OBJTYPE_EFFECT, GetTag(), 1, 3, true);
+		D3DXVECTOR3(60.0f, 60.0f, 0.0f), ZeroVector3, CTexture::SEPARATE_TEX_EFFECT_IMPACT00, 2, OBJTYPE_EFFECT, GetTag(), 1, 3, true);
 	}
 }
 
