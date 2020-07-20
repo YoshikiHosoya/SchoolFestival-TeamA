@@ -403,7 +403,7 @@ void CPlayer::AttackUpdate(void)
 			if (m_bAttack == false && m_bKnifeAttack == false)
 			{
 				// e”­ŽËˆ—
-				//m_pGun->Shot();
+				m_pGun->Shot();
 			}
 
 			// ‹ßÚUŒ‚‚ð‚·‚éó‘Ô‚¾‚Á‚½Žž
