@@ -642,7 +642,7 @@ CMap *CMap::MapCreate(MAP MapNum)
 	// 敵のロード
 	pMap->EnemyLoad(MapNum);
 	// 捕虜のロード
-	pMap->PrisonerLoad(MapNum);
+	//pMap->PrisonerLoad(MapNum);
 	// 障害物のロード
 	pMap->ObstacleLoad(MapNum);
 	// プレイヤー戦車のロード
@@ -1202,7 +1202,7 @@ void CMap::ObstacleSet()
 
 			// 障害物の位置の設定
 			m_pObstacle[nNowSelect]->SetPosition(D3DXVECTOR3((float)x, (float)y, (float)z));
-			
+
 			// 選択しているモデルを注視点の目的地に設定
 			SetSelectMapModelPosRDest(m_pObstacle[nNowSelect]->GetPosition());
 
@@ -2015,7 +2015,7 @@ void CMap::UpdateDieFlag()
 			if (CItem::DropRate())
 			{
 				//アイテムを生成
-				CItem::DropCreate(m_pEnemy[nCnt]->GetPosition());
+				CItem::DropCreate(m_pEnemy[nCnt]->GetPosition(), CItem::ITEMDROP_WEAPON);
 			}
 			m_pEnemy[nCnt]->Rerease();
 			m_pEnemy[nCnt] = nullptr;

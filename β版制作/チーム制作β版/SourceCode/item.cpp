@@ -40,6 +40,12 @@ CItem::CItem(OBJ_TYPE type) :CScene3D(type)
 
 	// αカラーカウント
 	m_nColCnt = 0;
+
+	// アイテムの種類
+	m_Type = ITEMTYPE_HEAVYMACHINEGUN;
+
+	// アイテムをドロップさせる種類
+	m_Drop = ITEMDROP_WEAPON;
 }
 
 // =====================================================================================================================================================================
@@ -64,9 +70,6 @@ CItem::~CItem()
 // =====================================================================================================================================================================
 HRESULT CItem::Init()
 {
-	// タイプの初期化
-	m_Type = ITEMTYPE_HEAVYMACHINEGUN;
-
 	// 初期化
 	CScene3D::Init();
 
@@ -74,7 +77,6 @@ HRESULT CItem::Init()
 	m_pCollision = CCollision::Create();
 	m_pCollision->SetPos(&GetPosition());
 	m_pCollision->SetSize2D(ITEM_COLLISION_SIZE_XY);
-	m_pCollision->SetMove(nullptr);
 	m_pCollision->DeCollisionCreate(CCollision::COLLISIONTYPE_NORMAL);
 
 	return S_OK;
@@ -182,16 +184,6 @@ void CItem::ItemType(ITEMTYPE type)
 		// フレイムショット
 	case (ITEMTYPE_FLAMESHOT): {
 		pPlayer->GetGun()->SetGunType(CGun::GUNTYPE_FLAMESHOT);
-	}break;
-
-		// エネミーチェイサー
-	case (ITEMTYPE_ENEMYCHASER): {
-		//pPlayer->GetGun()->SetGunType(CGun::GUNTYPE_FLAMESHOT);
-	}break;
-
-		// アイアンリザード
-	case (ITEMTYPE_IRONLIZARD): {
-		//pPlayer->GetGun()->SetGunType(CGun::GUNTYPE_FLAMESHOT);
 	}break;
 
 		// 熊
@@ -315,33 +307,35 @@ void CItem::Flashing()
 
 // =====================================================================================================================================================================
 //
-// 生成処理
+// ランダム　範囲指定
 //
 // =====================================================================================================================================================================
-CItem * CItem::Create(D3DXVECTOR3 pos, ITEMTYPE type)
+CItem::ITEMTYPE CItem::RandomRange(ITEMTYPE min, ITEMTYPE max)
 {
-	// 変数
-	CItem *pItem;
+	// 範囲でランダムに値を求め値を返す
+	return (ITEMTYPE)(min + (int)(rand()*(max - min + 1.0) / (1.0 + RAND_MAX)));
+}
 
-	// メモリの確保
-	pItem = new CItem(OBJTYPE_ITEM);
+// =====================================================================================================================================================================
+//
+// ランダム関数
+//
+// =====================================================================================================================================================================
+int CItem::ItemRand(int max)
+{
+	// 基準を求める
+	int nAdjusted_max = (RAND_MAX + 1) - (RAND_MAX + 1) % max;
 
-	// 初期化
-	pItem->Init();
+	// ランダムに求めた値を格納する比較用変数
+	int nRandom = 0;
 
-	// サイズの設定
-	pItem->SetSize(ITEM_SIZE_XY);
+	// RAND_MAX + 1 が max で割り切れない場合、乱数がその端数分の範囲になったら捨ててやり直す
+	do {
+		// ランダムに値を求める
+		nRandom = rand();
+	} while (nRandom >= nAdjusted_max);
 
-	// アイテムの位置の設定
-	pItem->SetPosition(pos);
-
-	// アイテムのタイプを設定
-	pItem->m_Type = type;
-
-	// 種類別にテクスチャを設定
-	pItem->SwitchTexture(type,	pItem);
-
-	return pItem;
+	return (int)(((float)nRandom / nAdjusted_max) * max);
 }
 
 // =====================================================================================================================================================================
@@ -349,7 +343,7 @@ CItem * CItem::Create(D3DXVECTOR3 pos, ITEMTYPE type)
 // キャラクターがアイテムを落とすときの生成処理
 //
 // =====================================================================================================================================================================
-CItem * CItem::DropCreate(D3DXVECTOR3 pos)
+CItem * CItem::DropCreate(D3DXVECTOR3 pos, ITEMDROP drop)
 {
 	// 変数
 	CItem *pItem;
@@ -370,7 +364,7 @@ CItem * CItem::DropCreate(D3DXVECTOR3 pos)
 	pItem->SetPosition(pos);
 
 	// アイテムのタイプをランダムに設定
-	pItem->m_Type = RandDropItem();
+	pItem->m_Type = RandDropItem(drop);
 
 	// 種類別にテクスチャを設定
 	pItem->SwitchTexture(pItem->m_Type, pItem);
@@ -417,18 +411,6 @@ void CItem::SwitchTexture(ITEMTYPE type, CItem *pItem)
 		pItem->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_FLAMESHOT));
 	}break;
 
-		// エネミーチェイサー
-	case (ITEMTYPE_ENEMYCHASER): {
-		// テクスチャの割り当て
-		pItem->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_ENEMYCHASER));
-	}break;
-
-		// アイアンリザード
-	case (ITEMTYPE_IRONLIZARD): {
-		// テクスチャの割り当て
-		pItem->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_IRONLIZARD));
-	}break;
-
 		//熊
 	case (ITEMTYPE_BEAR): {
 		// テクスチャの割り当て
@@ -463,9 +445,34 @@ void CItem::SwitchTexture(ITEMTYPE type, CItem *pItem)
 // ドロップするアイテムのランダム処理
 //
 // =====================================================================================================================================================================
-CItem::ITEMTYPE CItem::RandDropItem()
+CItem::ITEMTYPE CItem::RandDropItem(ITEMDROP drop)
 {
-	return ITEMTYPE(rand() % ITEMTYPE_MAX);
+	// 値を返すための変数
+	ITEMTYPE type;
+	// 条件によってドロップさせるアイテムの種類に制限をかける
+	switch (drop)
+	{
+		// 武器のみの場合
+	case CItem::ITEMDROP_WEAPON:
+		// ランダムの範囲を武器のみに選択
+		type = RandomRange(ITEMTYPE_HEAVYMACHINEGUN, ITEMTYPE_FLAMESHOT);
+		break;
+
+		// スコアアップのみの場合
+	case CItem::ITEMDROP_SCORE:
+		// ランダムの範囲をスコアアイテムのみに選択
+		type = RandomRange(ITEMTYPE_BEAR, ITEMTYPE_BULLETUP);
+		break;
+
+		// 全てのアイテム
+	case CItem::ITEMDROP_ALL:
+		type = ITEMTYPE(rand() % ITEMTYPE_MAX);
+		break;
+	default:
+		break;
+	}
+
+	return type;
 }
 
 // =====================================================================================================================================================================
@@ -484,20 +491,8 @@ bool CItem::DropRate()
 	// ドロップ率を表す変数
 	int nRate = 4;
 
-	// 基準を求める
-	int nAdjusted_max = (RAND_MAX + 1) - (RAND_MAX + 1) % nRate;
-
-	// ランダムに求めた値を格納する比較用変数
-	int nRandom = 0;
-
-	// RAND_MAX + 1 が nRate で割り切れない場合、乱数がその端数分の範囲になったら捨ててやり直す
-	do {
-		// ランダムに値を求める
-		nRandom = rand();
-	} while (nRandom >= nAdjusted_max);
-
-	//
-	nDrop = (int)(((float)nRandom / nAdjusted_max) * nRate);
+	// ランダムにドロップするかを求める
+	nDrop = ItemRand(nRate);
 
 	// 結果が0ならアイテムをドロップする許可を出す
 	if (nDrop == 0)
