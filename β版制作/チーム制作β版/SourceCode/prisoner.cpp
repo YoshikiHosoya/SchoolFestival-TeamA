@@ -148,7 +148,7 @@ void CPrisoner::PrisonerState()
 			pPlayer->SetLife(pPlayer->GetLife() + 1);
 		}
 		// アイテムの生成
-		CItem::DropCreate(GetPosition());
+		CItem::DropCreate(GetPosition(), CItem::ITEMDROP_ALL);
 		// 捕虜の状態の変更
 		this->SetPrisonerState(PRISONER_STATE_RUN);
 	}

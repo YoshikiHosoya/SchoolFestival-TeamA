@@ -22,12 +22,8 @@
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
 // =====================================================================================================================================================================
-CMap::MAP	CMap::m_MapNum = MAP_1;							// マップ番号
-
-// =====================================================================================================================================================================
-// マクロ定義
-// =====================================================================================================================================================================
-#define TranslucentColor			(D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.5f))		//半透明
+CMap::MAP		CMap::m_MapNum = MAP_1;							// マップ番号
+CMap::EDITOR	CMap::m_Editor = EDITOR_MAP;					// マップエディター
 
 // =====================================================================================================================================================================
 // テキストファイル名
@@ -71,6 +67,11 @@ char *CMap::m_HelicopterFileName[MAP_MAX] =
 	{ "data/Load/Helicopter/Helicopter_Map_01.txt" },
 	{ "data/Load/Helicopter/Helicopter_Map_02.txt" },
 };
+
+// =====================================================================================================================================================================
+// マクロ定義
+// =====================================================================================================================================================================
+#define TranslucentColor			(D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.5f))		//半透明
 
 // =====================================================================================================================================================================
 //
@@ -669,22 +670,54 @@ void CMap::MapUpdate()
 	// オブジェクトウィンドウ
 	ImGui::Begin("MapModel", nullptr, ImGuiWindowFlags_MenuBar);
 
-	// オブジェクト番号の選択
-	ImGui::InputInt("nowMapNum", &nNowMapSelect, 1, 20, 0);
-
-	// 範囲制限
-	if (nNowMapSelect <= 0)
+	//Tab
+	if (ImGui::BeginTabBar("EditorType"))
 	{
-		nNowMapSelect = 0;
-	}
-	else if (nNowMapSelect >= MAP_MAX)
-	{
-		// 最後の番号にする
-		nNowMapSelect = MAP_MAX - 1;
+		// マップエディター
+		if (ImGui::BeginTabItem("MapEditor"))
+		{
+			// マップエディター
+			m_Editor = EDITOR_MAP;
+
+			// オブジェクト番号の選択
+			ImGui::InputInt("nowMapNum", &nNowMapSelect, 1, 20, 0);
+
+			// 範囲制限
+			if (nNowMapSelect <= 0)
+			{
+				nNowMapSelect = 0;
+			}
+			else if (nNowMapSelect >= MAP_MAX)
+			{
+				// 最後の番号にする
+				nNowMapSelect = MAP_MAX - 1;
+			}
+
+			// 選択したマップ番号代入
+			m_MapNum = (MAP)nNowMapSelect;
+
+			ImGui::EndTabItem();
+		}
+		// ウェーブエディター
+		if (ImGui::BeginTabItem("WaveEditor"))
+		{
+			// ウェーブエディター
+			m_Editor = EDITOR_WAVE;
+
+			ImGui::EndTabItem();
+		}
+		// 小隊エディター
+		if (ImGui::BeginTabItem("PlatoonEditor"))
+		{
+			// 小隊エディター
+			m_Editor = EDITOR_PLATOON;
+
+			ImGui::EndTabItem();
+		}
+		//TabEnd
+		ImGui::EndTabBar();
 	}
 
-	// 選択したマップ番号代入
-	m_MapNum = (MAP)nNowMapSelect;
 
 	// マップモデルのタブ
 	MapModelTab();
@@ -1033,16 +1066,175 @@ void CMap::ObstacleSave(MAP MapNum)
 	}
 }
 
+// =====================================================================================================================================================================
+//
+// 戦車のセーブ
+//
+// =====================================================================================================================================================================
 void CMap::PlayerTankSave(MAP MapNum)
 {
+	// ファイルポイント
+	FILE	*pFile;
+
+	// ファイルを開く
+	pFile = fopen(m_PlayerTankFileName[MapNum], "w");
+
+	// 開いているとき
+	if (pFile != NULL)
+	{
+		fprintf(pFile, "#------------------------------------------------------------------------------\n");
+		fprintf(pFile, "# 戦車の配置情報\n");
+		fprintf(pFile, "#------------------------------------------------------------------------------\n");
+		fprintf(pFile, "#------------------------------------------------------------------------------\n");
+		fprintf(pFile, "# TYPE情報\n");
+		fprintf(pFile, "#\n");
+		fprintf(pFile, "#	[ 0 ]	戦車\n");
+		fprintf(pFile, "#\n");
+		fprintf(pFile, "#------------------------------------------------------------------------------\n");
+
+		fprintf(pFile, "SCRIPT\n\n");
+
+		for (unsigned int nCntTank = 0; nCntTank < m_pPlayerTank.size(); nCntTank++)
+		{
+			// NULLチェック
+			if (m_pPlayerTank[nCntTank])
+			{
+				D3DXVECTOR3 PlayerTankPos = m_pPlayerTank[nCntTank]->GetPosition();	// モデルの位置取得
+
+				fprintf(pFile, "PLAYERTANKSET									# %d\n", nCntTank);
+				fprintf(pFile, "	TYPE	= %d\n", 0 /*m_pPlayerTank[nCntObstacle]->GetModelCount()*/);
+				fprintf(pFile, "	POS		= %.0f %.0f %.0f\n", PlayerTankPos.x, PlayerTankPos.y, PlayerTankPos.z);
+				fprintf(pFile, "	LIFE	= %d\n", m_pPlayerTank[nCntTank]->GetLife());
+				fprintf(pFile, "END_PLAYERTANKSET\n\n");
+			}
+		}
+		// メッセージウィンドウで表示
+		MessageBox(NULL, "戦車の配置データをセーブしました", "結果", MB_OK | MB_ICONINFORMATION);
+
+		fprintf(pFile, "END_SCRIPT\n");
+
+		// ファイルを閉じる
+		fclose(pFile);
+	}
+	else
+	{
+		// メッセージウィンドウで警告
+		MessageBox(NULL, "ファイルが読み込めません", "警告", MB_OK | MB_ICONWARNING);
+	}
 }
 
+// =====================================================================================================================================================================
+//
+// 戦闘機のセーブ
+//
+// =====================================================================================================================================================================
 void CMap::BattlePlaneSave(MAP MapNum)
 {
+	// ファイルポイント
+	FILE	*pFile;
+
+	// ファイルを開く
+	pFile = fopen(m_BattlePlaneFileName[MapNum], "w");
+
+	// 開いているとき
+	if (pFile != NULL)
+	{
+		fprintf(pFile, "#------------------------------------------------------------------------------\n");
+		fprintf(pFile, "# 戦闘機の配置情報\n");
+		fprintf(pFile, "#------------------------------------------------------------------------------\n");
+		fprintf(pFile, "#------------------------------------------------------------------------------\n");
+		fprintf(pFile, "# TYPE情報\n");
+		fprintf(pFile, "#\n");
+		fprintf(pFile, "#	[ 0 ]	戦闘機\n");
+		fprintf(pFile, "#\n");
+		fprintf(pFile, "#------------------------------------------------------------------------------\n");
+
+		fprintf(pFile, "SCRIPT\n\n");
+
+		for (unsigned int nCntBattlePlane= 0; nCntBattlePlane < m_pBattlePlane.size(); nCntBattlePlane++)
+		{
+			// NULLチェック
+			if (m_pBattlePlane[nCntBattlePlane])
+			{
+				D3DXVECTOR3 BattlePlanePos = m_pBattlePlane[nCntBattlePlane]->GetPosition();	// モデルの位置取得
+
+				fprintf(pFile, "BATTLEPLANESET									# %d\n", nCntBattlePlane);
+				fprintf(pFile, "	TYPE	= %d\n", 0 /*m_pBattlePlane[nCntBattlePlane]->GetModelCount()*/);
+				fprintf(pFile, "	POS		= %.0f %.0f %.0f\n", BattlePlanePos.x, BattlePlanePos.y, BattlePlanePos.z);
+				fprintf(pFile, "	LIFE	= %d\n", m_pBattlePlane[nCntBattlePlane]->GetLife());
+				fprintf(pFile, "END_BATTLEPLANESET\n\n");
+			}
+		}
+		// メッセージウィンドウで表示
+		MessageBox(NULL, "戦闘機の配置データをセーブしました", "結果", MB_OK | MB_ICONINFORMATION);
+
+		fprintf(pFile, "END_SCRIPT\n");
+
+		// ファイルを閉じる
+		fclose(pFile);
+	}
+	else
+	{
+		// メッセージウィンドウで警告
+		MessageBox(NULL, "ファイルが読み込めません", "警告", MB_OK | MB_ICONWARNING);
+	}
 }
 
+// =====================================================================================================================================================================
+//
+// ヘリコプターのセーブ
+//
+// =====================================================================================================================================================================
 void CMap::HelicopterSave(MAP MapNum)
 {
+	// ファイルポイント
+	FILE	*pFile;
+
+	// ファイルを開く
+	pFile = fopen(m_HelicopterFileName[MapNum], "w");
+
+	// 開いているとき
+	if (pFile != NULL)
+	{
+		fprintf(pFile, "#------------------------------------------------------------------------------\n");
+		fprintf(pFile, "# ヘリコプターの配置情報\n");
+		fprintf(pFile, "#------------------------------------------------------------------------------\n");
+		fprintf(pFile, "#------------------------------------------------------------------------------\n");
+		fprintf(pFile, "# TYPE情報\n");
+		fprintf(pFile, "#\n");
+		fprintf(pFile, "#	[ 0 ]	ヘリコプター\n");
+		fprintf(pFile, "#\n");
+		fprintf(pFile, "#------------------------------------------------------------------------------\n");
+
+		fprintf(pFile, "SCRIPT\n\n");
+
+		for (unsigned int nCntHelicopter = 0; nCntHelicopter < m_pHelicopter.size(); nCntHelicopter++)
+		{
+			// NULLチェック
+			if (m_pHelicopter[nCntHelicopter])
+			{
+				D3DXVECTOR3 HelicopterPos = m_pHelicopter[nCntHelicopter]->GetPosition();	// モデルの位置取得
+
+				fprintf(pFile, "HELISET									# %d\n", nCntHelicopter);
+				fprintf(pFile, "	TYPE	= %d\n", 0 /*m_pBattlePlane[nCntHelicopter]->GetModelCount()*/);
+				fprintf(pFile, "	POS		= %.0f %.0f %.0f\n", HelicopterPos.x, HelicopterPos.y, HelicopterPos.z);
+				fprintf(pFile, "	LIFE	= %d\n", m_pHelicopter[nCntHelicopter]->GetLife());
+				fprintf(pFile, "END_HELISET\n\n");
+			}
+		}
+		// メッセージウィンドウで表示
+		MessageBox(NULL, "ヘリコプターの配置データをセーブしました", "結果", MB_OK | MB_ICONINFORMATION);
+
+		fprintf(pFile, "END_SCRIPT\n");
+
+		// ファイルを閉じる
+		fclose(pFile);
+	}
+	else
+	{
+		// メッセージウィンドウで警告
+		MessageBox(NULL, "ファイルが読み込めません", "警告", MB_OK | MB_ICONWARNING);
+	}
 }
 
 // =====================================================================================================================================================================
@@ -1125,7 +1317,6 @@ void CMap::MapModelTab()
 			HelicopterSet();
 			ImGui::EndTabItem();
 		}
-
 		//TabEnd
 		ImGui::EndTabBar();
 	}
@@ -1202,7 +1393,7 @@ void CMap::ObstacleSet()
 
 			// 障害物の位置の設定
 			m_pObstacle[nNowSelect]->SetPosition(D3DXVECTOR3((float)x, (float)y, (float)z));
-			
+
 			// 選択しているモデルを注視点の目的地に設定
 			SetSelectMapModelPosRDest(m_pObstacle[nNowSelect]->GetPosition());
 
@@ -1627,7 +1818,7 @@ void CMap::BattlePlaneSet()
 	static int nBattlePlaneType = 0;	// 戦闘機の種類
 	static int nNowSelect = -1;			// 現在選択している番号
 
-										// オブジェクト番号の選択
+	// オブジェクト番号の選択
 	ImGui::InputInt("nowSelect", &nNowSelect, 1, 20, 0);
 
 	// 範囲制限
@@ -2015,7 +2206,7 @@ void CMap::UpdateDieFlag()
 			if (CItem::DropRate())
 			{
 				//アイテムを生成
-				CItem::DropCreate(m_pEnemy[nCnt]->GetPosition());
+				CItem::DropCreate(m_pEnemy[nCnt]->GetPosition(), CItem::ITEMDROP_WEAPON);
 			}
 			m_pEnemy[nCnt]->Rerease();
 			m_pEnemy[nCnt] = nullptr;

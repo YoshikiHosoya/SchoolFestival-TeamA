@@ -11,6 +11,7 @@
 #include "bullet.h"
 #include "Obstacle.h"
 #include "particle.h"
+#include "item.h"
 
 //==========================================================
 //デバッグコマンド
@@ -122,6 +123,8 @@ void CBaseMode::BaseLoad(HWND hWnd)
 	CObstacle::ObstacleLoad();
 	//パーティクルのパラメータロード
 	CParticleParam::LoadParticleDefaultParam();
+	// アイテムのデータのロード
+	CItem::ItemLoad();
 }
 //==========================================================
 //生成したものを全て破棄

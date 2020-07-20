@@ -184,9 +184,6 @@
     <ClCompile Include="SourceCode\hosso\HossoLibrary.cpp">
       <Filter>Etc</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\item.cpp">
-      <Filter>Etc</Filter>
-    </ClCompile>
     <ClCompile Include="SourceCode\EnemyAI.cpp">
       <Filter>Etc</Filter>
     </ClCompile>
@@ -252,6 +249,9 @@
     </ClCompile>
     <ClCompile Include="SourceCode\helicoptergun.cpp">
       <Filter>Wepon</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\item.cpp">
+      <Filter>Item</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -447,9 +447,6 @@
     <ClInclude Include="SourceCode\hosso\HossoLibrary.h">
       <Filter>Etc</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\item.h">
-      <Filter>Etc</Filter>
-    </ClInclude>
     <ClInclude Include="SourceCode\EnemyAI.h">
       <Filter>Etc</Filter>
     </ClInclude>
@@ -516,6 +513,9 @@
     <ClInclude Include="SourceCode\helicoptergun.h">
       <Filter>Wepon</Filter>
     </ClInclude>
+    <ClInclude Include="SourceCode\item.h">
+      <Filter>Item</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="mesh">
@@ -565,6 +565,9 @@
     </Filter>
     <Filter Include="UI">
       <UniqueIdentifier>{58a587fd-f96d-4ac4-8079-9134ab65ea8c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Item">
+      <UniqueIdentifier>{807d9b35-6e0f-4d6f-953f-bf34a7f3bcad}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
