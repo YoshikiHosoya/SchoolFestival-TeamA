@@ -61,6 +61,7 @@ public:
 	CCollision					*GetCollision() { return m_pCollision; };		// 当たり判定
 	void						SetDropPos(D3DXVECTOR3 &characterpos);			// アイテムを生成位置を設定
 	void						RemainTimer();									// 滞在時間を計算し0になったら削除する
+	void						Flashing();										// 点滅処理
 
 	/* 静的メンバ関数 */
 	static	CItem				*Create(D3DXVECTOR3 pos, ITEMTYPE type);		// アイテムの生成
@@ -75,5 +76,6 @@ private:
 	D3DXMATRIX					m_mtxWorld;										// ワールドマトリックス
 	CCollision					*m_pCollision;									// 当たり判定
 	int							m_nRemainTime;									// アイテムがマップに残る時間
+	int							m_nColCnt;										// αカラーカウント
 };
 #endif
