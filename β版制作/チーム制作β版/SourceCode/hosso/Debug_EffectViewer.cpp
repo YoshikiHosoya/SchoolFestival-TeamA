@@ -228,11 +228,18 @@ void CDebug_EffectViewer::ParticleParamaterViewer()
 			//アニメーションパラメータ設定
 			ImGui::DragFloat3("CollisionSize", m_pParticleParam->GetCollisionSize(), 0.5f, 1.0f, 250.0f);
 
+			//ボタン　テクスチャのサイズにする
+			if(ImGui::Button("TexSize"))
+			{
+				//コリジョンのサイズをテクスチャのサイズにする
+				m_pParticleParam->GetCollisionSize() = m_pParticleParam->GetSize();
+			}
+
 			//コリジョンの継続時間
-			ImGui::InputInt("CollisionCnt", &m_pParticleParam->GetCollisionCnt(), 1, 1, 20);
+			ImGui::InputInt("CollisionCnt", &m_pParticleParam->GetCollisionCnt());
 
 			//攻撃力
-			ImGui::InputInt("CollisionAttackValue", &m_pParticleParam->GetCollisionAttackValue(), 1, 1, 100);
+			ImGui::InputInt("CollisionAttackValue", &m_pParticleParam->GetCollisionAttackValue());
 
 			//ツリー終了
 			ImGui::TreePop();
@@ -243,14 +250,15 @@ void CDebug_EffectViewer::ParticleParamaterViewer()
 	ImGui::Checkbox("bAlphaBlend", &m_pParticleParam->GetAlphaBlend());
 
 
-	//それぞれのオフセットを調整
+	//回転量
 	if (ImGui::DragFloat3("rot", m_pParticleParam->GetRot(), 0.005f, -D3DX_PI, D3DX_PI))
 	{
+		//
 		D3DXVECTOR3 TargetPos = D3DXVECTOR3(-sinf(m_pParticleParam->GetRot().y) * cosf(m_pParticleParam->GetRot().x) * LINE_LENGTH,
 									sinf(m_pParticleParam->GetRot().x) * LINE_LENGTH,
 									-cosf(m_pParticleParam->GetRot().y) * cosf(m_pParticleParam->GetRot().x) * LINE_LENGTH);
 
-
+		//出る方向のナビ線設定
 		m_p3DLine->SetPos(ZeroVector3, TargetPos);
 
 

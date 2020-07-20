@@ -68,6 +68,11 @@ void CParticle::Uninit()
 //------------------------------------------------------------------------------
 void CParticle::Update()
 {
+	if (m_pParticleParam->GetType() == CParticleParam::EFFECT_LAZER)
+	{
+		CDebugProc::Print("Rot >>  %.2f,%.2f,%.2f\n", m_rotOrigin.x, m_rotOrigin.y, m_rotOrigin.z);
+	}
+
 	//ライフを減らす
 	m_pParticleParam->UpdateParam();
 
@@ -313,7 +318,7 @@ void CParticle::ResetVertexID()
 //------------------------------------------------------------------------------
 //テキスト情報を元にパーティクル作成
 //------------------------------------------------------------------------------
-void CParticle::CreateFromText(D3DXVECTOR3 pos, D3DXVECTOR3 rot, CParticleParam::PARTICLE_TEXT type)
+void CParticle::CreateFromText(D3DXVECTOR3 pos, D3DXVECTOR3 rot, CParticleParam::PARTICLE_TEXT type,TAG tag, int nAttack)
 {
 	//メモリ確保
 	std::unique_ptr<CParticle> pParticle(new CParticle);
@@ -323,6 +328,7 @@ void CParticle::CreateFromText(D3DXVECTOR3 pos, D3DXVECTOR3 rot, CParticleParam:
 	{
 		//初期化
 		pParticle->Init();
+		pParticle->m_Tag = tag;
 
 		//パーティクルのパラメータのメモリ確保
 		CParticleParam *pParam = new CParticleParam;
@@ -333,6 +339,12 @@ void CParticle::CreateFromText(D3DXVECTOR3 pos, D3DXVECTOR3 rot, CParticleParam:
 			//情報設定
 			//Uniqueptrを使うとオペレータできなかったから普通のポインタ同士でオペレータ
 			*pParam = *CParticleParam::GetDefaultParam(type);
+
+			//攻撃力が入力されていた場合
+			if (nAttack > 0)
+			{
+				pParam->GetCollisionAttackValue() = nAttack;
+			}
 
 			//メンバのポインタに格納
 			pParticle->m_pParticleParam.reset(std::move(pParam));
@@ -492,7 +504,7 @@ void CParticle::SetParticle(D3DXVECTOR3 const & pos, D3DXVECTOR3 const & rot, CP
 
 		if (pParam->GetType() == CParticleParam::EFFECT_LAZER)
 		{
-			std::unique_ptr<COneParticle>pOneParticle = COneParticle::Create(pos, move, D3DXVECTOR3(0.0f, 0.0f, rot.x));
+			std::unique_ptr<COneParticle>pOneParticle = COneParticle::Create(pos, move, D3DXVECTOR3(0.0f, 0.0f, rot.x - D3DX_PI * 0.5f));
 			//配列に追加
 			m_pParticleList.emplace_back(std::move(pOneParticle));
 		}
@@ -556,6 +568,11 @@ void CParticle::SetCollsionParam()
 		}
 		else
 		{
+			//角度調整
+			m_rotOrigin.z = m_rotOrigin.y;
+			m_rotOrigin.y = 0.0f;
+			m_rotOrigin.x = 0.0f;
+
 			//マトリックス計算
 			CHossoLibrary::CalcMatrix(&RotationMatrix, ZeroVector3, m_rotOrigin);
 
@@ -565,11 +582,13 @@ void CParticle::SetCollsionParam()
 			//ローカル　当たり判定の中心
 			D3DXVECTOR3 LocalPosOrigin = ZeroVector3;
 
+			D3DXVECTOR3 size = m_pParticleParam->GetCollisionSize();
+
 			//頂点座標算出
-			D3DXVec3TransformCoord(&VtxPos[0], &D3DXVECTOR3(-m_pParticleParam->GetCollisionSize().x, +m_pParticleParam->GetCollisionSize().y * 2.0f, 0.0f), &RotationMatrix);
-			D3DXVec3TransformCoord(&VtxPos[1], &D3DXVECTOR3(+m_pParticleParam->GetCollisionSize().x, +m_pParticleParam->GetCollisionSize().y * 2.0f, 0.0f), &RotationMatrix);
-			D3DXVec3TransformCoord(&VtxPos[2], &D3DXVECTOR3(-m_pParticleParam->GetCollisionSize().x, 0.0f, 0.0f), &RotationMatrix);
-			D3DXVec3TransformCoord(&VtxPos[3], &D3DXVECTOR3(+m_pParticleParam->GetCollisionSize().x, 0.0f, 0.0f), &RotationMatrix);
+			D3DXVec3TransformCoord(&VtxPos[0], &D3DXVECTOR3(-size.x, +size.y * 2.0f, 0.0f), &RotationMatrix);
+			D3DXVec3TransformCoord(&VtxPos[1], &D3DXVECTOR3(+size.x, +size.y * 2.0f, 0.0f), &RotationMatrix);
+			D3DXVec3TransformCoord(&VtxPos[2], &D3DXVECTOR3(-size.x, 0.0f, 0.0f), &RotationMatrix);
+			D3DXVec3TransformCoord(&VtxPos[3], &D3DXVECTOR3(+size.x, 0.0f, 0.0f), &RotationMatrix);
 
 			//当たり判定用のローカル座標計算
 			D3DXVec3TransformCoord(&LocalPosOrigin, &D3DXVECTOR3(0.0f, m_pParticleParam->GetCollisionSize().y, 0.0f), &RotationMatrix);
@@ -597,10 +616,10 @@ void CParticle::SetCollsionParam()
 			CHossoLibrary::CalcMatrix(&RotationMatrix, m_posOrigin, m_rotOrigin);
 
 			//当たり判定用の原点作成　ちょっとキャラクター側とかに寄せる
-			D3DXVec3TransformCoord(&LocalPosOrigin, &D3DXVECTOR3(0.0f, m_pParticleParam->GetCollisionSize().y * 0.8f, 0.0f), &RotationMatrix);
+			D3DXVec3TransformCoord(&m_posOrigin, &D3DXVECTOR3(0.0f, m_pParticleParam->GetCollisionSize().y * 0.8f, 0.0f), &RotationMatrix);
 
 			//当たり判定の設定
-			m_pCollision->SetPos(&LocalPosOrigin);
+			m_pCollision->SetPos(&m_posOrigin);
 			m_pCollision->SetSize(D3DXVECTOR3(fabsf(LocalPosOrigin.x - Max.x), fabsf(LocalPosOrigin.y - Max.y), 0.0f) * 2.0f);
 		}
 
@@ -619,7 +638,7 @@ void CParticle::Collision()
 	if (m_pCollision)
 	{
 		//プレイヤーの攻撃だった場合
-		if (m_pParticleParam->GetCollisionTag() == TAG_PLAYER)
+		if (m_Tag == TAG_PLAYER)
 		{
 			if (CManager::GetGameState() == CManager::MODE_GAME)
 			{
