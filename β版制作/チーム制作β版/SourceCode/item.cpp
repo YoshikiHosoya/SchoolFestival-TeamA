@@ -18,12 +18,24 @@
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
 // =====================================================================================================================================================================
+ITEM_DATA	CItem::m_ItemData		 = {};
+int			CItem::m_nDropRate		 = 0;
+int			CItem::m_nDeleteTime	 = 0;
+int			CItem::m_nFlashTime		 = 0;
+int			CItem::m_nBearScore		 = 0;
+D3DXVECTOR3 CItem::m_CollisionSize	 = D3DXVECTOR3(0,0,0);
+
+// =====================================================================================================================================================================
+// テキストファイル名
+// =====================================================================================================================================================================
+char *CItem::m_ItemFileName =
+{
+	"data/Load/Item/ItemData.txt" 			// アイテムの情報
+};
 
 // =====================================================================================================================================================================
 // マクロ定義
 // =====================================================================================================================================================================
-#define ITEM_SIZE_XY				(D3DXVECTOR3(20.0f,20.0f,0.0f))				// アイテムのサイズ
-#define ITEM_COLLISION_SIZE_XY		(D3DXVECTOR3(40.0f,40.0f,0.0f))				// アイテムのサイズ
 
 // =====================================================================================================================================================================
 //
@@ -36,7 +48,7 @@ CItem::CItem(OBJ_TYPE type) :CScene3D(type)
 	m_pCollision = nullptr;
 
 	// アイテムがマップに残る時間
-	m_nRemainTime = 240;
+	m_nRemainTime = m_nDeleteTime;
 
 	// αカラーカウント
 	m_nColCnt = 0;
@@ -76,7 +88,7 @@ HRESULT CItem::Init()
 	// 当たり判定生成
 	m_pCollision = CCollision::Create();
 	m_pCollision->SetPos(&GetPosition());
-	m_pCollision->SetSize2D(ITEM_COLLISION_SIZE_XY);
+	m_pCollision->SetSize2D(m_CollisionSize);
 	m_pCollision->DeCollisionCreate(CCollision::COLLISIONTYPE_NORMAL);
 
 	return S_OK;
@@ -189,8 +201,7 @@ void CItem::ItemType(ITEMTYPE type)
 		// 熊
 	case (ITEMTYPE_BEAR): {
 		// スコアアップ
-		CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
-		pPlayer->GetPlayerUI()->SetScore(100);
+		pPlayer->GetPlayerUI()->SetScore(m_nBearScore);
 	}break;
 
 		// 爆弾の数を増やす
@@ -296,13 +307,27 @@ void CItem::Flashing()
 	}
 
 	// 3秒以上経過したらアイテムを削除する
-	if (m_nColCnt >= 180)
+	if (m_nColCnt >= m_nFlashTime)
 	{
 		// 変数の初期化
 		m_nColCnt = 0;
 		// 削除
 		Rerease();
 	}
+}
+
+// =====================================================================================================================================================================
+//
+// アイテムの情報の設定
+//
+// =====================================================================================================================================================================
+void CItem::SetItemData()
+{
+	m_nDropRate		 = m_ItemData.nDropRate;		// ドロップ率の設定
+	m_nDeleteTime	 = m_ItemData.nDeleteTime;		// アイテムが点滅するまでの時間
+	m_nFlashTime	 = m_ItemData.nFlashTime;		// アイテムが点滅する時間
+	m_nBearScore	 = m_ItemData.nBearScore;		// 熊のアイテムのスコア
+	m_CollisionSize	 = m_ItemData.CollisionSize;	// 当たり判定の大きさ
 }
 
 // =====================================================================================================================================================================
@@ -340,6 +365,98 @@ int CItem::ItemRand(int max)
 
 // =====================================================================================================================================================================
 //
+// アイテムのデータの読み込み
+//
+// =====================================================================================================================================================================
+void CItem::ItemLoad()
+{
+	// ファイルポイント
+	FILE *pFile;
+
+	char cReadText[128];			// 文字として読み取る
+	char cHeadText[128];			// 比較用
+	char cDie[128];					// 不要な文字
+
+	// ファイルを開く
+	pFile = fopen(m_ItemFileName, "r");
+
+	// 開いているとき
+	if (pFile != NULL)
+	{
+		// SCRIPTが来るまでループ
+		while (strcmp(cHeadText, "SCRIPT") != 0)
+		{
+			fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
+			sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
+		}
+
+		// SCRIPTが来たら
+		if (strcmp(cHeadText, "SCRIPT") == 0)
+		{
+			// END_SCRIPTが来るまでループ
+			while (strcmp(cHeadText, "END_SCRIPT") != 0)
+			{
+				fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
+				sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
+
+															// ITEMSETが来たら
+				if (strcmp(cHeadText, "ITEMSET") == 0)
+				{
+					// END_BULLETSETが来るまでループ
+					while (strcmp(cHeadText, "END_ITEMSET") != 0)
+					{
+						fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
+						sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
+
+																	// SPEEDが来たら
+						if (strcmp(cHeadText, "RATE") == 0)
+						{
+							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_ItemData.nDropRate);		// 比較用テキストにRATEを代入
+						}
+						// LIFEが来たら
+						else if (strcmp(cHeadText, "DELETE") == 0)
+						{
+							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_ItemData.nDeleteTime);	// 比較用テキストにDELETEを代入
+						}
+						// POWERが来たら
+						else if (strcmp(cHeadText, "FLASH") == 0)
+						{
+							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_ItemData.nFlashTime);	// 比較用テキストにFLASHを代入
+						}
+						// AMMOが来たら
+						else if (strcmp(cHeadText, "BEAR") == 0)
+						{
+							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_ItemData.nBearScore);	// 比較用テキストにBEARを代入
+						}
+						// COLLISIONSIZEが来たら
+						else if (strcmp(cHeadText, "COLLISIONSIZE") == 0)
+						{
+							sscanf(cReadText, "%s %s %f %f %f", &cDie, &cDie,
+								&m_ItemData.CollisionSize.x,
+								&m_ItemData.CollisionSize.y,
+								&m_ItemData.CollisionSize.z);										// 比較用テキストにCOLLISIONSIZEを代入
+						}
+						else if (strcmp(cHeadText, "END_ITEMSET") == 0)
+						{
+						}
+					}
+				}
+			}
+		}
+		// ファイルを閉じる
+		fclose(pFile);
+	}
+	else
+	{
+		MessageBox(NULL, "アイテムのデータ読み込み失敗", "警告", MB_ICONWARNING);
+	}
+
+	// 読み込んだ情報の代入
+	SetItemData();
+}
+
+// =====================================================================================================================================================================
+//
 // キャラクターがアイテムを落とすときの生成処理
 //
 // =====================================================================================================================================================================
@@ -355,7 +472,10 @@ CItem * CItem::DropCreate(D3DXVECTOR3 pos, ITEMDROP drop)
 	pItem->Init();
 
 	// サイズの設定
-	pItem->SetSize(ITEM_SIZE_XY);
+	pItem->SetSize(D3DXVECTOR3(
+		m_CollisionSize.x /2,
+		m_CollisionSize.y /2,
+		m_CollisionSize.z /2));
 
 	// アイテムが生成される位置の調整
 	pItem->SetDropPos(pos);
@@ -489,7 +609,7 @@ bool CItem::DropRate()
 	int nDrop = 0;
 
 	// ドロップ率を表す変数
-	int nRate = 4;
+	int nRate = m_nDropRate;
 
 	// ランダムにドロップするかを求める
 	nDrop = ItemRand(nRate);
