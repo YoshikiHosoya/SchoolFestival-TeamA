@@ -17,6 +17,18 @@
 // =====================================================================================================================================================================
 
 // =====================================================================================================================================================================
+// アイテムのデータ
+// =====================================================================================================================================================================
+typedef struct
+{
+	int					nDropRate;		// アイテムのドロップ率
+	int					nDeleteTime;	// 点滅するまでの時間
+	int					nFlashTime;		// 点滅する時間
+	int					nBearScore;		// 熊のアイテムを取った時のスコアの値
+	D3DXVECTOR3			CollisionSize;	// 当たり判定のサイズ
+}ITEM_DATA;
+
+// =====================================================================================================================================================================
 // 前方宣言
 // =====================================================================================================================================================================
 class CCollision;
@@ -28,22 +40,30 @@ class CItem : public CScene3D
 {
 public:
 	/* 列挙型 */
-	// タイプ
-	typedef enum
+	// 種類
+	enum ITEMTYPE
 	{
 		ITEMTYPE_HEAVYMACHINEGUN,	// ヘビーマシンガン
 		ITEMTYPE_SHOTGUN,			// ショットガン
 		ITEMTYPE_LASERGUN,			// レーザーガン
 		ITEMTYPE_ROCKETLAUNCHER,	// ロケットランチャー
 		ITEMTYPE_FLAMESHOT,			// フレイムショット
-		ITEMTYPE_ENEMYCHASER,		// エネミーチェイサー
-		ITEMTYPE_IRONLIZARD,		// アイアンリザード
+
 		ITEMTYPE_BEAR,				// 熊-スコアアップ
 		ITEMTYPE_BOMBUP,			// 爆弾の数を増やす
 		ITEMTYPE_ENERGYUP,			// 乗り物の耐久値を回復する
 		ITEMTYPE_BULLETUP,			// ハンドガン以外の弾の残弾数を増やす
+
 		ITEMTYPE_MAX
-	} ITEMTYPE;
+	};
+
+	// アイテムの用途
+	enum ITEMDROP
+	{
+		ITEMDROP_WEAPON,			// 武器強化
+		ITEMDROP_SCORE,				// スコアアップ
+		ITEMDROP_ALL,				// 全て
+	};
 
 	/* 関数 */
 	CItem(OBJ_TYPE type);														// コンストラクタ
@@ -61,19 +81,35 @@ public:
 	CCollision					*GetCollision() { return m_pCollision; };		// 当たり判定
 	void						SetDropPos(D3DXVECTOR3 &characterpos);			// アイテムを生成位置を設定
 	void						RemainTimer();									// 滞在時間を計算し0になったら削除する
+	void						Flashing();										// 点滅処理
 
 	/* 静的メンバ関数 */
-	static	CItem				*Create(D3DXVECTOR3 pos, ITEMTYPE type);		// アイテムの生成
-	static	CItem				*DropCreate(D3DXVECTOR3 pos);					// キャラクターがアイテムを落とす時の生成
+	static	CItem				*DropCreate(D3DXVECTOR3 pos, ITEMDROP drop);	// キャラクターがアイテムを落とす時の生成
 	static	void				SwitchTexture(ITEMTYPE type, CItem *pItem);		// 種類別テクスチャ設定
-	static	ITEMTYPE			RandDropItem();									// アイテムの種類をランダムに計算
+	static	ITEMTYPE			RandDropItem(ITEMDROP drop);					// アイテムの種類をランダムに計算
 	static	bool				DropRate();										// アイテムをドロップする確率
+	static	ITEMTYPE			RandomRange(ITEMTYPE min, ITEMTYPE max);		// ランダムの範囲選択
+	static	int					ItemRand(int max);								// ランダムに値を返す
+	static	void				ItemLoad();										// アイテムのロード
+	static	void				SetItemData();									// アイテムのデータ設定
+
 protected:
 private:
+	/* 静的メンバ変数 */
+	static char					*m_ItemFileName;								// アイテムのファイル名
+	static ITEM_DATA			m_ItemData;										// アイテムのデータ
+	static int					m_nDropRate;									// ドロップ率
+	static int					m_nDeleteTime;									// アイテムが点滅するまでの時間
+	static int					m_nFlashTime;									// アイテムが点滅する時間
+	static int					m_nBearScore;									// 熊のアイテムのスコア
+	static D3DXVECTOR3			m_CollisionSize;								// 当たり判定の大きさ
+
 	/* メンバ変数 */
 	ITEMTYPE					m_Type;											// アイテムタイプ
+	ITEMDROP					m_Drop;											// アイテムをドロップさせる時の種類
 	D3DXMATRIX					m_mtxWorld;										// ワールドマトリックス
 	CCollision					*m_pCollision;									// 当たり判定
 	int							m_nRemainTime;									// アイテムがマップに残る時間
+	int							m_nColCnt;										// αカラーカウント
 };
 #endif
