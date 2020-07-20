@@ -41,14 +41,22 @@ public:
 		MAP_2,			// 2
 		MAP_MAX
 	};
-		//MAP_MODEL_TYPE_HELICOPTER,				// ヘリコプター
 
-	CMap();																	// コンストラクタ
-	~CMap();																// デストラクタ
+	// エディターの種類
+	enum EDITOR
+	{
+		EDITOR_MAP,			// マップエディター
+		EDITOR_WAVE,		// ウェーブエディター
+		EDITOR_PLATOON,		// 小隊エディター
+		EDITOR_MAX
+	};
+
+	CMap();																		// コンストラクタ
+	~CMap();																	// デストラクタ
 
 	/* 静的メンバ関数 */
-	static	CMap	*MapCreate(MAP MapNum);									// マップの生成
-	void	MapUpdate();											// マップの更新
+	static	CMap	*MapCreate(MAP MapNum);										// マップの生成
+	void	MapUpdate();														// マップの更新
 
 	/* メンバ関数 */
 	int				GetMaxModel();												// モデルの最大数取得
@@ -67,7 +75,7 @@ public:
 	CBattlePlane	*GetBattlePlane(int nCnt) { return m_pBattlePlane[nCnt]; };	// 戦闘機の取得
 	CHelicopter		*GetHelicopter(int nCnt) { return m_pHelicopter[nCnt]; };	// ヘリコプターの取得
 
-	void			UpdateDieFlag();										// 死亡フラグ確認関数
+	void			UpdateDieFlag();											// 死亡フラグ確認関数
 
 private:
 	/* メンバ関数 */
@@ -111,6 +119,7 @@ private:
 	static char					*m_BattlePlaneFileName[MAP_MAX];			// 戦闘機ファイル名
 	static char					*m_HelicopterFileName[MAP_MAX];				// ヘリファイル名
 	static MAP					m_MapNum;									// マップ番号
+	static EDITOR				m_Editor;									// エディターの種類
 
 	/* メンバ変数 */
 	std::vector<CModel*>		m_pModel;									// 可変長配列 設置するモデル
