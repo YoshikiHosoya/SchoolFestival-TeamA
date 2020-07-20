@@ -71,8 +71,6 @@ CParticleParam::CParticleParam()
 	m_bCollisionSizeCalc = false;											//当たり判定生成時にサイズを計算するかどうか　ShotGunとかに必要
 	m_nCollisionAttackValue = 1;											//攻撃力
 	m_nCollisionCnt = 10;													//判定をする時間
-	m_CollisionTag = TAG_PLAYER;											//タグ　プレイヤーかどうか
-
 
 	m_Textype = CTexture::TEX_EFFECT_PARTICLE;								//テクスチャ
 	m_SeparateTex = CTexture::SEPARATE_TEX_EFFECT_EXPLOSION01;				//分割テクスチャ
@@ -169,6 +167,29 @@ HRESULT CParticleParam::LoadParticleDefaultParam()
 							if (strcmp(cHeadText, "ANIMATION_CNTSWITCH") == 0)
 							{
 								sscanf(cReadText, "%s %s %d", &cDie, &cDie, &pParam->m_nAnimationCntSwitch);
+							}
+							if (strcmp(cHeadText, "COLLISION") == 0)
+							{
+								sscanf(cReadText, "%s %s %d", &cDie, &cDie, &n_BoolValue);
+								pParam->m_bCollision = n_BoolValue ? true : false;
+							}
+							if (strcmp(cHeadText, "COLLISION_SIZE_CALC") == 0)
+							{
+								sscanf(cReadText, "%s %s %d", &cDie, &cDie, &n_BoolValue);
+								pParam->m_bCollisionSizeCalc = n_BoolValue ? true : false;
+							}
+							if (strcmp(cHeadText, "COLLISION_ATTACK_VALUE") == 0)
+							{
+								sscanf(cReadText, "%s %s %d", &cDie, &cDie, &pParam->m_nCollisionAttackValue);
+							}
+							if (strcmp(cHeadText, "COLLISION_COUNT") == 0)
+							{
+								sscanf(cReadText, "%s %s %d", &cDie, &cDie, &pParam->m_nCollisionCnt);
+							}
+							if (strcmp(cHeadText, "COLLISION_SIZE") == 0)
+							{
+								sscanf(cReadText, "%s %s %f %f %f", &cDie, &cDie,
+									&pParam->m_CollisionSize.x, &pParam->m_CollisionSize.y, &pParam->m_CollisionSize.z);
 							}
 							if (strcmp(cHeadText, "TEXTURE") == 0)
 							{
@@ -298,19 +319,23 @@ HRESULT CParticleParam::SaveParticleDefaultParam(CParticleParam *pSaveParam)
 
 
 		//それぞれの項目書き出し
-		sprintf(cWriteText, "		%s %s %d					%s", "SPEEDRANDOM", &EQUAL, pSaveParam->m_bSpeedRandom, "//速度がランダムかどうか");
+		sprintf(cWriteText, "		%s %s %d							%s", "SPEEDRANDOM", &EQUAL, pSaveParam->m_bSpeedRandom, "//速度がランダムかどうか");
 		fputs(cWriteText, pFile);
 		fputs(NEWLINE, pFile);
 
-		sprintf(cWriteText, "		%s %s %d						%s", "GRAVITY", &EQUAL, pSaveParam->m_bGravity, "//重力をつけるか");
+		sprintf(cWriteText, "		%s %s %d								%s", "GRAVITY", &EQUAL, pSaveParam->m_bGravity, "//重力をつけるか");
 		fputs(cWriteText, pFile);
 		fputs(NEWLINE, pFile);
 
-		sprintf(cWriteText, "		%s %s %d					%s", "ALPHABLEND", &EQUAL, pSaveParam->m_bAlphaBlend, "//αブレンドするか");
+		sprintf(cWriteText, "		%s %s %d							%s", "ALPHABLEND", &EQUAL, pSaveParam->m_bAlphaBlend, "//αブレンドするか");
 		fputs(cWriteText, pFile);
 		fputs(NEWLINE, pFile);
 
-		sprintf(cWriteText, "		%s %s %d					%s", "ANIMATION", &EQUAL, pSaveParam->m_bAnimation, "//アニメーションするか");
+		sprintf(cWriteText, "		%s %s %d							%s", "ANIMATION", &EQUAL, pSaveParam->m_bAnimation, "//アニメーションするか");
+		fputs(cWriteText, pFile);
+		fputs(NEWLINE, pFile);
+
+		sprintf(cWriteText, "		%s %s %d							%s", "COLLISION", &EQUAL, pSaveParam->m_bCollision, "//当たり判定があるかどうか");
 		fputs(cWriteText, pFile);
 		fputs(NEWLINE, pFile);
 
@@ -318,66 +343,87 @@ HRESULT CParticleParam::SaveParticleDefaultParam(CParticleParam *pSaveParam)
 		//通常のテクスチャか分割テクスチャか
 		int TexID = pSaveParam->m_bAnimation ?
 			pSaveParam->m_SeparateTex : pSaveParam->m_Textype;
-		sprintf(cWriteText, "		%s %s %d						%s", "TEXTURE", &EQUAL, TexID, "//テクスチャ");
+		sprintf(cWriteText, "		%s %s %d								%s", "TEXTURE", &EQUAL, TexID, "//テクスチャ");
 		fputs(cWriteText, pFile);
 		fputs(NEWLINE, pFile);
 
+		//アニメーションがある場合
 		if (pSaveParam->m_bAnimation)
 		{
-			sprintf(cWriteText, "		%s %s %d				%s", "ANIMATION_LOOP", &EQUAL, pSaveParam->m_bAnimationLoop, "//アニメーションループするか");
+			sprintf(cWriteText, "		%s %s %d						%s", "ANIMATION_LOOP", &EQUAL, pSaveParam->m_bAnimationLoop, "//アニメーションループするか");
 			fputs(cWriteText, pFile);
 			fputs(NEWLINE, pFile);
 
-			sprintf(cWriteText, "		%s %s %d			%s", "ANIMATION_CNTSWITCH", &EQUAL, pSaveParam->m_nAnimationCntSwitch, "//切替のカウント");
+			sprintf(cWriteText, "		%s %s %d					%s", "ANIMATION_CNTSWITCH", &EQUAL, pSaveParam->m_nAnimationCntSwitch, "//切替のカウント");
 			fputs(cWriteText, pFile);
 			fputs(NEWLINE, pFile);
-
 		}
 
-		sprintf(cWriteText, "		%s %s %d						%s", "SHAPE", &EQUAL, pSaveParam->m_shape, "//パーティクルの出し方");
+		//コリジョンがある場合
+		if (pSaveParam->m_bCollision)
+		{
+			sprintf(cWriteText, "		%s %s %d					%s", "COLLISION_SIZE_CALC", &EQUAL, pSaveParam->m_bCollisionSizeCalc, "//コリジョンのサイズの計算");
+			fputs(cWriteText, pFile);
+			fputs(NEWLINE, pFile);
+
+			sprintf(cWriteText, "		%s %s %d				%s", "COLLISION_ATTACK_VALUE", &EQUAL, pSaveParam->m_nCollisionAttackValue, "//攻撃力");
+			fputs(cWriteText, pFile);
+			fputs(NEWLINE, pFile);
+
+			sprintf(cWriteText, "		%s %s %d					%s", "COLLISION_COUNT", &EQUAL, pSaveParam->m_nCollisionCnt, "//判定のカウント");
+			fputs(cWriteText, pFile);
+			fputs(NEWLINE, pFile);
+
+			sprintf(cWriteText, "		%s %s %.2f %.2f %.2f		%s", "COLLISION_SIZE", &EQUAL,
+				pSaveParam->m_CollisionSize.x, pSaveParam->m_CollisionSize.y, pSaveParam->m_CollisionSize.z, "//コリジョンのサイズ");
+			fputs(cWriteText, pFile);
+			fputs(NEWLINE, pFile);
+		}
+
+		sprintf(cWriteText, "		%s %s %d								%s", "SHAPE", &EQUAL, pSaveParam->m_shape, "//パーティクルの出し方");
 		fputs(cWriteText, pFile);
 		fputs(NEWLINE, pFile);
 
-		sprintf(cWriteText, "		%s %s %d						%s", "LIFE", &EQUAL, pSaveParam->m_nLife, "//ライフ");
+		sprintf(cWriteText, "		%s %s %d								%s", "LIFE", &EQUAL, pSaveParam->m_nLife, "//ライフ");
 		fputs(cWriteText, pFile);
 		fputs(NEWLINE, pFile);
 
-		sprintf(cWriteText, "		%s %s %d						%s", "NUMBER", &EQUAL, pSaveParam->m_nNumber, "//個数");
+		sprintf(cWriteText, "		%s %s %d								%s", "NUMBER", &EQUAL, pSaveParam->m_nNumber, "//個数");
 		fputs(cWriteText, pFile);
 		fputs(NEWLINE, pFile);
 
-		sprintf(cWriteText, "		%s %s %.1f						%s", "SPEED", &EQUAL, pSaveParam->m_fSpeed, "//速度");
+		sprintf(cWriteText, "		%s %s %.1f								%s", "SPEED", &EQUAL, pSaveParam->m_fSpeed, "//速度");
 		fputs(cWriteText, pFile);
 		fputs(NEWLINE, pFile);
 
-		sprintf(cWriteText, "		%s %s %.1f						%s", "RANGE", &EQUAL, pSaveParam->m_fRange, "//範囲");
+		sprintf(cWriteText, "		%s %s %.1f								%s", "RANGE", &EQUAL, pSaveParam->m_fRange, "//範囲");
 		fputs(cWriteText, pFile);
 		fputs(NEWLINE, pFile);
 
-		sprintf(cWriteText, "		%s %s %.2f				%s", "ALPHADAMPING", &EQUAL, pSaveParam->m_fAlphaDamping, "//アルファ値の減衰値");
+		sprintf(cWriteText, "		%s %s %.2f						%s", "ALPHADAMPING", &EQUAL, pSaveParam->m_fAlphaDamping, "//アルファ値の減衰値");
 		fputs(cWriteText, pFile);
 		fputs(NEWLINE, pFile);
 
-		sprintf(cWriteText, "		%s %s %.2f				%s", "GRAVITYPOWER", &EQUAL, pSaveParam->m_fGravityPower, "//重力の強さ");
+		sprintf(cWriteText, "		%s %s %.2f						%s", "GRAVITYPOWER", &EQUAL, pSaveParam->m_fGravityPower, "//重力の強さ");
 		fputs(cWriteText, pFile);
 		fputs(NEWLINE, pFile);
 
-		sprintf(cWriteText, "		%s %s %.2f %.2f %.2f		%s", "SIZE", &EQUAL,
+		sprintf(cWriteText, "		%s %s %.2f %.2f %.2f				%s", "SIZE", &EQUAL,
 			pSaveParam->m_Size.x, pSaveParam->m_Size.y, pSaveParam->m_Size.z, "//サイズ");
 		fputs(cWriteText, pFile);
 		fputs(NEWLINE, pFile);
 
-		sprintf(cWriteText, "		%s %s %.2f %.2f %.2f	%s", "SIZEDAMPING", &EQUAL,
+		sprintf(cWriteText, "		%s %s %.2f %.2f %.2f			%s", "SIZEDAMPING", &EQUAL,
 			pSaveParam->m_SizeDamping.x, pSaveParam->m_SizeDamping.y, pSaveParam->m_SizeDamping.z, "//サイズ減衰量");
 		fputs(cWriteText, pFile);
 		fputs(NEWLINE, pFile);
 
-		sprintf(cWriteText, "		%s %s %.1f %.1f %.1f %.1f			%s", "COLOR", &EQUAL,
+		sprintf(cWriteText, "		%s %s %.1f %.1f %.1f %.1f					%s", "COLOR", &EQUAL,
 			pSaveParam->m_col.r, pSaveParam->m_col.g, pSaveParam->m_col.b, pSaveParam->m_col.a, "//色");
 		fputs(cWriteText, pFile);
 		fputs(NEWLINE, pFile);
 
-		sprintf(cWriteText, "		%s %s %.2f %.2f %.2f			%s", "ROT", &EQUAL,
+		sprintf(cWriteText, "		%s %s %.2f %.2f %.2f					%s", "ROT", &EQUAL,
 				pSaveParam->m_rot.x, pSaveParam->m_rot.y, pSaveParam->m_rot.z, "//回転量");
 		fputs(cWriteText, pFile);
 		fputs(NEWLINE, pFile);
@@ -505,7 +551,6 @@ void * CParticleParam::operator=(const CParticleParam * pParam)
 	m_bCollisionSizeCalc	= pParam->m_bCollisionSizeCalc;
 	m_nCollisionAttackValue = pParam->m_nCollisionAttackValue;
 	m_nCollisionCnt			= pParam->m_nCollisionCnt;
-	m_CollisionTag			= pParam->m_CollisionTag;
 
 	return this;
 }

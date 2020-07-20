@@ -34,6 +34,7 @@ float CHossoLibrary::Vec2Cross(D3DXVECTOR2 const &rVecA, D3DXVECTOR2 const &rVec
 //------------------------------------------------------------------------------
 void CHossoLibrary::CalcMatrix(D3DXMATRIX *pMtx, D3DXVECTOR3 const &rPos, D3DXVECTOR3 const &rRot)
 {
+
 	D3DXMATRIX	mtxRot, mtxTrans;			//計算用
 
 	//ワールドマトリックスの初期化
