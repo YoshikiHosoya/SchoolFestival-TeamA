@@ -18,18 +18,18 @@ SCRIPT
 		COLLISION_SIZE_CALC = 1					//コリジョンのサイズの計算
 		COLLISION_ATTACK_VALUE = 1				//攻撃力
 		COLLISION_COUNT = 20					//判定のカウント
-		COLLISION_SIZE = 250.00 250.00 0.00		//コリジョンのサイズ
+		COLLISION_SIZE = 10.00 500.00 0.00		//コリジョンのサイズ
 		SHAPE = 3								//パーティクルの出し方
 		LIFE = 50								//ライフ
 		NUMBER = 50								//個数
 		SPEED = 50.0								//速度
 		RANGE = 0.5								//範囲
-		ALPHADAMPING = 0.92						//アルファ値の減衰値
+		ALPHADAMPING = 0.91						//アルファ値の減衰値
 		GRAVITYPOWER = 0.80						//重力の強さ
-		SIZE = 250.00 250.00 0.00				//サイズ
+		SIZE = 10.00 100.00 0.00				//サイズ
 		SIZEDAMPING = 1.00 0.98 0.00			//サイズ減衰量
 		COLOR = 0.7 1.0 0.8 1.0					//色
-		ROT = 0.00 0.00 0.00					//回転量
+		ROT = 1.58 0.00 0.00					//回転量
 
 	END_PARAMSET
 END_SCRIPT
