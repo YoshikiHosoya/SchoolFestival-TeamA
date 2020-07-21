@@ -12,6 +12,7 @@
 #include "Obstacle.h"
 #include "particle.h"
 #include "item.h"
+#include "prisoner.h"
 
 //==========================================================
 //デバッグコマンド
@@ -125,6 +126,8 @@ void CBaseMode::BaseLoad(HWND hWnd)
 	CParticleParam::LoadParticleDefaultParam();
 	// アイテムのデータのロード
 	CItem::ItemLoad();
+	// 捕虜のデータの読み込み
+	CPrisoner::PrisonerLoad();
 }
 //==========================================================
 //生成したものを全て破棄

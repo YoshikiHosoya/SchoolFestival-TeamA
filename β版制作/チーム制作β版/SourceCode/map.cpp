@@ -22,46 +22,50 @@
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
 // =====================================================================================================================================================================
-CMap::MAP		CMap::m_MapNum = MAP_1;							// マップ番号
-CMap::EDITOR	CMap::m_Editor = EDITOR_MAP;					// マップエディター
+CMap::MAP					CMap::m_MapNum			= MAP_1;					// マップ番号
+CMap::EDITOR				CMap::m_Editor			= EDITOR_MAP;				// マップエディター
+int							CMap::m_ArrangmentModel = ARRANGEMENT_MODEL_MAP;	// 配置するモデルの種類
 
 // =====================================================================================================================================================================
 // テキストファイル名
 // =====================================================================================================================================================================
+// マップファイル名
 char *CMap::m_MapFileName[MAP_MAX] =
 {
 	{ "data/Load/Map/testMap.txt" },
 	{ "data/Load/Map/testMap.txt" },
 };
+// 敵ファイル名
 char *CMap::m_EnemyFileName[MAP_MAX] =
 {
 	{ "data/Load/Enemy/Enemy_Map_01.txt" },
 	{ "data/Load/Enemy/Enemy_Map_02.txt" },
 };
+// 捕虜ファイル名
 char *CMap::m_PrisonerFileName[MAP_MAX] =
 {
 	{ "data/Load/Prisoner/Prisoner_Map_01.txt" },
 	{ "data/Load/Prisoner/Prisoner_Map_02.txt" },
 };
-
+// 障害物ファイル名
 char *CMap::m_ObstacleFileName[MAP_MAX] =
 {
 	{ "data/Load/Obstacle/Obstacle_Map_01.txt" },
 	{ "data/Load/Obstacle/Obstacle_Map_02.txt" },
 };
-
+// 戦車ファイル名
 char *CMap::m_PlayerTankFileName[MAP_MAX] =
 {
 	{ "data/Load/PlayerTank/PlayerTank_Map_01.txt" },
 	{ "data/Load/PlayerTank/PlayerTank_Map_02.txt" },
 };
-
+// 戦闘機ファイル名
 char *CMap::m_BattlePlaneFileName[MAP_MAX] =
 {
 	{ "data/Load/BattlePlane/BattlePlane_Map_01.txt" },
 	{ "data/Load/BattlePlane/BattlePlane_Map_02.txt" },
 };
-
+// ヘリコプターファイル名
 char *CMap::m_HelicopterFileName[MAP_MAX] =
 {
 	{ "data/Load/Helicopter/Helicopter_Map_01.txt" },
@@ -102,231 +106,10 @@ CMap::~CMap()
 
 // =====================================================================================================================================================================
 //
-// マップのロード
+// 配置するモデルのロード
 //
 // =====================================================================================================================================================================
-void CMap::ModelLoad(MAP MapNum)
-{
-	// ファイルポイント
-	FILE *pFile;
-
-	char cReadText[128];			// 文字として読み取る
-	char cHeadText[128];			// 比較用
-	char cDie[128];					// 不要な文字
-	D3DXVECTOR3 pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 位置
-	CModel::CREATE_MAP_MODEL ModelCount = CModel::MODEL_MAP_BLOCK;		// 種類
-
-	// ファイルを開く
-	pFile = fopen(m_MapFileName[MapNum], "r");
-
-	// 開いているとき
-	if (pFile != NULL)
-	{
-		// SCRIPTが来るまでループ
-		while (strcmp(cHeadText, "SCRIPT") != 0)
-		{
-			fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
-			sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
-		}
-
-		// SCRIPTが来たら
-		if (strcmp(cHeadText, "SCRIPT") == 0)
-		{
-			// END_SCRIPTが来るまでループ
-			while (strcmp(cHeadText, "END_SCRIPT") != 0)
-			{
-				fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
-				sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
-
-				// MODELSETが来たら
-				if (strcmp(cHeadText, "MODELSET") == 0)
-				{
-					// END_MODELSETが来るまでループ
-					while (strcmp(cHeadText, "END_MODELSET") != 0)
-					{
-						fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
-						sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
-
-						// TYPEが来たら
-						if (strcmp(cHeadText, "TYPE") == 0)
-						{
-							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &ModelCount);		// 比較用テキストにTYPEを代入
-						}
-						// POSが来たら
-						else if (strcmp(cHeadText, "POS") == 0)
-						{
-							sscanf(cReadText, "%s %s %f %f %f", &cDie, &cDie, &pos.x, &pos.y, &pos.z);		// 比較用テキストにPOSを代入
-						}
-						else if (strcmp(cHeadText, "END_MODELSET") == 0)
-						{
-							// オブジェクトの生成
-							m_pModel.emplace_back(CModel::CreateSceneManagement(CModel::MAP_MODEL, ModelCount));
-							// 位置の設定
-							m_pModel[m_pModel.size() - 1]->SetPosition(pos);
-						}
-					}
-				}
-			}
-		}
-		// ファイルを閉じる
-		fclose(pFile);
-	}
-}
-
-// =====================================================================================================================================================================
-//
-// 敵のロード
-//
-// =====================================================================================================================================================================
-void CMap::EnemyLoad(MAP MapNum)
-{
-	// ファイルポイント
-	FILE *pFile;
-
-	char cReadText[128];			// 文字として読み取る
-	char cHeadText[128];			// 比較用
-	char cDie[128];					// 不要な文字
-	D3DXVECTOR3 pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 位置
-	int nLife		= 0;								// 体力
-	//CEnemy::TYPE type = CEnemy::NONE;		// 種類
-	int nType = 0;
-
-	// ファイルを開く
-	pFile = fopen(m_EnemyFileName[MapNum], "r");
-
-	// 開いているとき
-	if (pFile != NULL)
-	{
-		// SCRIPTが来るまでループ
-		while (strcmp(cHeadText, "SCRIPT") != 0)
-		{
-			fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
-			sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
-		}
-
-		// SCRIPTが来たら
-		if (strcmp(cHeadText, "SCRIPT") == 0)
-		{
-			// END_SCRIPTが来るまでループ
-			while (strcmp(cHeadText, "END_SCRIPT") != 0)
-			{
-				fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
-				sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
-
-				// ENEMYSETが来たら
-				if (strcmp(cHeadText, "ENEMYSET") == 0)
-				{
-					// END_ENEMYSETが来るまでループ
-					while (strcmp(cHeadText, "END_ENEMYSET") != 0)
-					{
-						fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
-						sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
-
-						// TYPEが来たら
-						if (strcmp(cHeadText, "TYPE") == 0)
-						{
-							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &nType);		// 比較用テキストにTYPEを代入
-						}
-						// POSが来たら
-						else if (strcmp(cHeadText, "POS") == 0)
-						{
-							sscanf(cReadText, "%s %s %f %f %f", &cDie, &cDie, &pos.x, &pos.y, &pos.z);		// 比較用テキストにPOSを代入
-						}
-						// LIFEが来たら
-						else if (strcmp(cHeadText, "LIFE") == 0)
-						{
-							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &nLife);		// 比較用テキストにTYPEを代入
-						}
-						else if (strcmp(cHeadText, "END_ENEMYSET") == 0)
-						{
-								// オブジェクトの生成
-								m_pEnemy.emplace_back(CEnemy::Create());
-								// 位置の設定
-								m_pEnemy[m_pEnemy.size() - 1]->SetPosition(pos);
-								// 体力の設定
-								m_pEnemy[m_pEnemy.size() - 1]->SetLife(nLife);
-						}
-					}
-				}
-			}
-		}
-		// ファイルを閉じる
-		fclose(pFile);
-	}
-}
-
-// =====================================================================================================================================================================
-//
-// 捕虜の配置
-//
-// =====================================================================================================================================================================
-void CMap::PrisonerLoad(MAP MapNum)
-{
-	// ファイルポイント
-	FILE *pFile;
-
-	char cReadText[128];								// 文字として読み取る
-	char cHeadText[128];								// 比較用
-	char cDie[128];										// 不要な文字
-	D3DXVECTOR3 pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 位置
-	// ファイルを開く
-	pFile = fopen(m_PrisonerFileName[MapNum], "r");
-
-	// 開いているとき
-	if (pFile != NULL)
-	{
-		// SCRIPTが来るまでループ
-		while (strcmp(cHeadText, "SCRIPT") != 0)
-		{
-			fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
-			sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
-		}
-
-		// SCRIPTが来たら
-		if (strcmp(cHeadText, "SCRIPT") == 0)
-		{
-			// END_SCRIPTが来るまでループ
-			while (strcmp(cHeadText, "END_SCRIPT") != 0)
-			{
-				fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
-				sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
-
-				// PRISONERSETが来たら
-				if (strcmp(cHeadText, "PRISONERSET") == 0)
-				{
-					// END_PRISONERSETが来るまでループ
-					while (strcmp(cHeadText, "END_PRISONERSET") != 0)
-					{
-						fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
-						sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
-
-						// POSが来たら
-						if (strcmp(cHeadText, "POS") == 0)
-						{
-							sscanf(cReadText, "%s %s %f %f %f", &cDie, &cDie, &pos.x, &pos.y, &pos.z);		// 比較用テキストにPOSを代入
-						}
-						else if (strcmp(cHeadText, "END_PRISONERSET") == 0)
-						{
-							// 捕虜の生成
-							m_pPrisoner.emplace_back(CPrisoner::Create());
-							// 位置の設定
-							m_pPrisoner[m_pPrisoner.size() - 1]->SetPosition(pos);
-						}
-					}
-				}
-			}
-		}
-		// ファイルを閉じる
-		fclose(pFile);
-	}
-}
-
-// =====================================================================================================================================================================
-//
-// 障害物の配置
-//
-// =====================================================================================================================================================================
-void CMap::ObstacleLoad(MAP MapNum)
+void CMap::ArrangementModelLoad()
 {
 	// ファイルポイント
 	FILE *pFile;
@@ -334,296 +117,241 @@ void CMap::ObstacleLoad(MAP MapNum)
 	char cHeadText[128];			// 比較用
 	char cDie[128];					// 不要な文字
 	D3DXVECTOR3 pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 位置
+	D3DXVECTOR3 size = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 大きさ
 	int nLife = 0;										// 体力
 	int nType = 0;										// 種類
-	D3DXVECTOR3 size = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 大きさ
+	char *cFileName = nullptr;			// ファイル名
 
-	// ファイルを開く
-	pFile = fopen(m_ObstacleFileName[MapNum], "r");
-
-	// 開いているとき
-	if (pFile != NULL)
+	for (int nCnt = 0; nCnt < ARRANGEMENT_MODEL_MAX; nCnt++)
 	{
-		// SCRIPTが来るまでループ
-		while (strcmp(cHeadText, "SCRIPT") != 0)
-		{
-			fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
-			sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
-		}
+		// 各モデルファイルのファイルを開く
+		pFile = fopen(MapFileOpen(nCnt), "r");
 
-		// SCRIPTが来たら
-		if (strcmp(cHeadText, "SCRIPT") == 0)
+		// 開いているとき
+		if (pFile != NULL)
 		{
-			// END_SCRIPTが来るまでループ
-			while (strcmp(cHeadText, "END_SCRIPT") != 0)
+			// SCRIPTが来るまでループ
+			while (strcmp(cHeadText, "SCRIPT") != 0)
 			{
 				fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
 				sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
+			}
 
-				// OBSTACLESETが来たら
-				if (strcmp(cHeadText, "OBSTACLESET") == 0)
+			// SCRIPTが来たら
+			if (strcmp(cHeadText, "SCRIPT") == 0)
+			{
+				// END_SCRIPTが来るまでループ
+				while (strcmp(cHeadText, "END_SCRIPT") != 0)
 				{
-					// END_OBSTACLESETが来るまでループ
-					while (strcmp(cHeadText, "END_OBSTACLESET") != 0)
+					fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
+					sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
+
+					// MODELSETが来たら
+					if (strcmp(cHeadText, "MODELSET") == 0)
 					{
-						fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
-						sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
+						// END_MODELSETが来るまでループ
+						while (strcmp(cHeadText, "END_MODELSET") != 0)
+						{
+							fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
+							sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
 
-						// TYPEが来たら
-						if (strcmp(cHeadText, "TYPE") == 0)
-						{
-							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &nType);		// 比較用テキストにTYPEを代入
-						}
-						// POSが来たら
-						else if (strcmp(cHeadText, "POS") == 0)
-						{
-							sscanf(cReadText, "%s %s %f %f %f", &cDie, &cDie, &pos.x, &pos.y, &pos.z);		// 比較用テキストにPOSを代入
-						}
-						// LIFEが来たら
-						else if (strcmp(cHeadText, "LIFE") == 0)
-						{
-							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &nLife);		// 比較用テキストにTYPEを代入
-						}
-						// SIZEが来たら
-						else if (strcmp(cHeadText, "SIZE") == 0)
-						{
-							sscanf(cReadText, "%s %s %f %f %f ", &cDie, &cDie, &size.x, &size.y, &size.z);		// 比較用テキストにTYPEを代入
-						}
-
-						else if (strcmp(cHeadText, "END_OBSTACLESET") == 0)
-						{
-							// オブジェクトの生成
-							m_pObstacle.emplace_back(CObstacle::Create());
-							// タイプの代入
-							m_pObstacle[m_pObstacle.size() - 1]->SetModelConut(nType);
-							// 位置の設定
-							m_pObstacle[m_pObstacle.size() - 1]->SetPosition(pos);
-							// 体力の設定
-							m_pObstacle[m_pObstacle.size() - 1]->SetLife(nLife);
-							// 当たり判定の大きさの設定
-							m_pObstacle[m_pObstacle.size() - 1]->SetCollisionSize((CObstacle::OBSTACLE_TYPE)nType);
+							// TYPEが来たら
+							if (strcmp(cHeadText, "TYPE") == 0)
+							{
+								sscanf(cReadText, "%s %s %d", &cDie, &cDie, &nType);		// 比較用テキストにTYPEを代入
+							}
+							// POSが来たら
+							else if (strcmp(cHeadText, "POS") == 0)
+							{
+								sscanf(cReadText, "%s %s %f %f %f", &cDie, &cDie, &pos.x, &pos.y, &pos.z);		// 比較用テキストにPOSを代入
+							}
+							// LIFEが来たら
+							else if (strcmp(cHeadText, "LIFE") == 0)
+							{
+								sscanf(cReadText, "%s %s %d", &cDie, &cDie, &nLife);		// 比較用テキストにTYPEを代入
+							}
+							// SIZEが来たら
+							else if (strcmp(cHeadText, "SIZE") == 0)
+							{
+								sscanf(cReadText, "%s %s %f %f %f ", &cDie, &cDie, &size.x, &size.y, &size.z);		// 比較用テキストにTYPEを代入
+							}
+							else if (strcmp(cHeadText, "END_MODELSET") == 0)
+							{
+								// 配置するモデルの生成
+								ArrangementModelCreate(nCnt, nType, pos, nLife, size);
+							}
 						}
 					}
 				}
 			}
+			// ファイルを閉じる
+			fclose(pFile);
 		}
-		// ファイルを閉じる
-		fclose(pFile);
-	}
-	else
-	{
-		MessageBox(NULL, "障害物のパラメーター読み込み失敗", "警告", MB_ICONWARNING);
+		else
+		{
+			// ロード失敗時の警告表示
+			LoadFailureMessage(nCnt);
+		}
 	}
 }
 
 // =====================================================================================================================================================================
 //
-// プレイヤー用の戦車の配置
+// 配置するモデルの生成
 //
 // =====================================================================================================================================================================
-void CMap::PlayerTankLoad(MAP MapNum)
+void CMap::ArrangementModelCreate(int ModelType, int nType, D3DXVECTOR3 pos, int nLife, D3DXVECTOR3 size)
 {
-	// ファイルポイント
-	FILE *pFile;
-	char cReadText[128];			// 文字として読み取る
-	char cHeadText[128];			// 比較用
-	char cDie[128];					// 不要な文字
-	D3DXVECTOR3 pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 位置
-
-	// ファイルを開く
-	pFile = fopen(m_PlayerTankFileName[MapNum], "r");
-
-	// 開いているとき
-	if (pFile != NULL)
+	switch (ModelType)
 	{
-		// SCRIPTが来るまでループ
-		while (strcmp(cHeadText, "SCRIPT") != 0)
-		{
-			fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
-			sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
-		}
+	/* --- マップ --- */
+	case CMap::ARRANGEMENT_MODEL_MAP:
+		// オブジェクトの生成
+		m_pModel.emplace_back(CModel::CreateSceneManagement(CModel::MAP_MODEL, nType));
+		// 位置の設定
+		m_pModel[m_pModel.size() - 1]->SetPosition(pos);
+		break;
 
-		// SCRIPTが来たら
-		if (strcmp(cHeadText, "SCRIPT") == 0)
-		{
-			// END_SCRIPTが来るまでループ
-			while (strcmp(cHeadText, "END_SCRIPT") != 0)
-			{
-				fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
-				sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
+	/* --- 敵 --- */
+	case CMap::ARRANGEMENT_MODEL_ENEMY:
+		// オブジェクトの生成
+		m_pEnemy.emplace_back(CEnemy::Create());
+		// 位置の設定
+		m_pEnemy[m_pEnemy.size() - 1]->SetPosition(pos);
+		// 体力の設定
+		m_pEnemy[m_pEnemy.size() - 1]->SetLife(nLife);
+		break;
 
-				// PLAYERTANKSETが来たら
-				if (strcmp(cHeadText, "PLAYERTANKSET") == 0)
-				{
-					// END_PLAYERTANKSETが来るまでループ
-					while (strcmp(cHeadText, "END_PLAYERTANKSET") != 0)
-					{
-						fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
-						sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
+	/* --- 捕虜 --- */
+	case CMap::ARRANGEMENT_MODEL_PRISONER:
+		// オブジェクトの生成
+		m_pPrisoner.emplace_back(CPrisoner::Create());
+		// 位置の設定
+		m_pPrisoner[m_pPrisoner.size() - 1]->SetPosition(pos);
+		// 種類の設定
+		m_pPrisoner[m_pPrisoner.size() - 1]->SetPrisonerType((CPrisoner::PRISONER_ITEM_DROPTYPE)nType);
+		break;
 
-						// POSが来たら
-						if (strcmp(cHeadText, "POS") == 0)
-						{
-							sscanf(cReadText, "%s %s %f %f %f", &cDie, &cDie, &pos.x, &pos.y, &pos.z);		// 比較用テキストにPOSを代入
-						}
-						else if (strcmp(cHeadText, "END_PLAYERTANKSET") == 0)
-						{
-							// オブジェクトの生成
-							m_pPlayerTank.emplace_back(CPlayertank::Create());
-							// 位置の設定
-							m_pPlayerTank[m_pPlayerTank.size() - 1]->SetPosition(pos);
-						}
-					}
-				}
-			}
-		}
-		// ファイルを閉じる
-		fclose(pFile);
-	}
-	else
-	{
-		MessageBox(NULL, "プレイヤー戦車のパラメーター読み込み失敗", "警告", MB_ICONWARNING);
+	/* --- 障害物 --- */
+	case CMap::ARRANGEMENT_MODEL_OBSTACLE:
+		// オブジェクトの生成
+		m_pObstacle.emplace_back(CObstacle::Create());
+		// 障害物種類の設定
+		m_pObstacle[m_pObstacle.size() - 1]->SetModelConut(nType);
+		// 位置の設定
+		m_pObstacle[m_pObstacle.size() - 1]->SetPosition(pos);
+		// 体力の設定
+		m_pObstacle[m_pObstacle.size() - 1]->SetLife(nLife);
+		// 当たり判定の大きさの設定
+		m_pObstacle[m_pObstacle.size() - 1]->SetCollisionSize((CObstacle::OBSTACLE_TYPE)nType);
+		break;
+
+	/* --- 戦車 --- */
+	case CMap::ARRANGEMENT_MODEL_TANK:
+		// オブジェクトの生成
+		m_pPlayerTank.emplace_back(CPlayertank::Create());
+		// 位置の設定
+		m_pPlayerTank[m_pPlayerTank.size() - 1]->SetPosition(pos);
+		break;
+
+	/* --- 戦闘機 --- */
+	case CMap::ARRANGEMENT_MODEL_BATTLEPLANE:
+		//// オブジェクトの生成
+		//m_pBattlePlane.emplace_back(CBattlePlane::Create());
+		//// 位置の設定
+		//m_pBattlePlane[m_pBattlePlane.size() - 1]->SetPosition(pos);
+		break;
+
+	/* --- ヘリコプター --- */
+	case CMap::ARRANGEMENT_MODEL_HELICOPTER:
+		//// オブジェクトの生成
+		//m_pHelicopter.emplace_back(CHelicopter::Create());
+		//// 位置の設定
+		//m_pHelicopter[m_pHelicopter.size() - 1]->SetPosition(pos);
+		break;
 	}
 }
 
 // =====================================================================================================================================================================
 //
-// 戦闘機の配置
+// ロード失敗時の警告表示
 //
 // =====================================================================================================================================================================
-void CMap::BattlePlaneLoad(MAP MapNum)
+void CMap::LoadFailureMessage(int ModelType)
 {
-	// ファイルポイント
-	FILE *pFile;
-	char cReadText[128];			// 文字として読み取る
-	char cHeadText[128];			// 比較用
-	char cDie[128];					// 不要な文字
-	D3DXVECTOR3 pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 位置
-
-	// ファイルを開く
-	pFile = fopen(m_BattlePlaneFileName[MapNum], "r");
-
-	// 開いているとき
-	if (pFile != NULL)
+	switch (ModelType)
 	{
-		// SCRIPTが来るまでループ
-		while (strcmp(cHeadText, "SCRIPT") != 0)
-		{
-			fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
-			sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
-		}
+		/* --- マップ --- */
+	case CMap::ARRANGEMENT_MODEL_MAP:
+		MessageBox(NULL, "マップモデルの読み込み失敗", "警告", MB_ICONWARNING);
+		break;
 
-		// SCRIPTが来たら
-		if (strcmp(cHeadText, "SCRIPT") == 0)
-		{
-			// END_SCRIPTが来るまでループ
-			while (strcmp(cHeadText, "END_SCRIPT") != 0)
-			{
-				fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
-				sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
+		/* --- 敵 --- */
+	case CMap::ARRANGEMENT_MODEL_ENEMY:
+		MessageBox(NULL, "敵の読み込み失敗", "警告", MB_ICONWARNING);
+		break;
 
-															// OBSTACLESETが来たら
-				if (strcmp(cHeadText, "BATTLEPLANESET") == 0)
-				{
-					// END_OBSTACLESETが来るまでループ
-					while (strcmp(cHeadText, "END_BATTLEPLANESET") != 0)
-					{
-						fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
-						sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
+		/* --- 捕虜 --- */
+	case CMap::ARRANGEMENT_MODEL_PRISONER:
+		MessageBox(NULL, "捕虜の読み込み失敗", "警告", MB_ICONWARNING);
+		break;
 
-																	// POSが来たら
-						if (strcmp(cHeadText, "POS") == 0)
-						{
-							sscanf(cReadText, "%s %s %f %f %f", &cDie, &cDie, &pos.x, &pos.y, &pos.z);		// 比較用テキストにPOSを代入
-						}
-						else if (strcmp(cHeadText, "END_BATTLEPLANESET") == 0)
-						{
-							// オブジェクトの生成
-							m_pBattlePlane.emplace_back(CBattlePlane::Create());
-							// 位置の設定
-							m_pBattlePlane[m_pBattlePlane.size() - 1]->SetPosition(pos);
-						}
-					}
-				}
-			}
-		}
-		// ファイルを閉じる
-		fclose(pFile);
-	}
-	else
-	{
-		MessageBox(NULL, "戦闘機のパラメーター読み込み失敗", "警告", MB_ICONWARNING);
-	}
-}
+		/* --- 障害物 --- */
+	case CMap::ARRANGEMENT_MODEL_OBSTACLE:
+		MessageBox(NULL, "障害物の読み込み失敗", "警告", MB_ICONWARNING);
+		break;
+
+		/* --- 戦車 --- */
+	case CMap::ARRANGEMENT_MODEL_TANK:
+		MessageBox(NULL, "戦車の読み込み失敗", "警告", MB_ICONWARNING);
+		break;
+
+		/* --- 戦闘機 --- */
+	case CMap::ARRANGEMENT_MODEL_BATTLEPLANE:
+		MessageBox(NULL, "戦闘機の読み込み失敗", "警告", MB_ICONWARNING);
+		break;
+
+		/* --- ヘリコプター --- */
+	case CMap::ARRANGEMENT_MODEL_HELICOPTER:
+		MessageBox(NULL, "ヘリコプターの読み込み失敗", "警告", MB_ICONWARNING);
+		break;
+	}}
 
 // =====================================================================================================================================================================
 //
-// ヘリの配置
+// 各モデルファイル名(初期配置)
 //
 // =====================================================================================================================================================================
-void CMap::HelicopterLoad(MAP MapNum)
+char * CMap::MapFileOpen(int ModelType)
 {
-	// ファイルポイント
-	FILE *pFile;
-	char cReadText[128];			// 文字として読み取る
-	char cHeadText[128];			// 比較用
-	char cDie[128];					// 不要な文字
-	D3DXVECTOR3 pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 位置
+	char *cFileName = nullptr;			// ファイル名
 
-	// ファイルを開く
-	pFile = fopen(m_HelicopterFileName[MapNum], "r");
-
-	// 開いているとき
-	if (pFile != NULL)
+	switch (ModelType)
 	{
-		// SCRIPTが来るまでループ
-		while (strcmp(cHeadText, "SCRIPT") != 0)
-		{
-			fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
-			sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
-		}
-
-		// SCRIPTが来たら
-		if (strcmp(cHeadText, "SCRIPT") == 0)
-		{
-			// END_SCRIPTが来るまでループ
-			while (strcmp(cHeadText, "END_SCRIPT") != 0)
-			{
-				fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
-				sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
-
-															// OBSTACLESETが来たら
-				if (strcmp(cHeadText, "HELISET") == 0)
-				{
-					// END_OBSTACLESETが来るまでループ
-					while (strcmp(cHeadText, "END_HELISET") != 0)
-					{
-						fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
-						sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
-
-																	// POSが来たら
-						if (strcmp(cHeadText, "POS") == 0)
-						{
-							sscanf(cReadText, "%s %s %f %f %f", &cDie, &cDie, &pos.x, &pos.y, &pos.z);		// 比較用テキストにPOSを代入
-						}
-						else if (strcmp(cHeadText, "END_HELISET") == 0)
-						{
-							// オブジェクトの生成
-							m_pHelicopter.emplace_back(CHelicopter::Create());
-							// 位置の設定
-							m_pHelicopter[m_pHelicopter.size() - 1]->SetPosition(pos);
-						}
-					}
-				}
-			}
-		}
-		// ファイルを閉じる
-		fclose(pFile);
+	case CMap::ARRANGEMENT_MODEL_MAP:
+		cFileName = m_MapFileName[m_MapNum];
+		break;
+	case CMap::ARRANGEMENT_MODEL_ENEMY:
+		cFileName = m_EnemyFileName[m_MapNum];
+		break;
+	case CMap::ARRANGEMENT_MODEL_PRISONER:
+		cFileName = m_PrisonerFileName[m_MapNum];
+		break;
+	case CMap::ARRANGEMENT_MODEL_OBSTACLE:
+		cFileName = m_ObstacleFileName[m_MapNum];
+		break;
+	case CMap::ARRANGEMENT_MODEL_TANK:
+		cFileName = m_PlayerTankFileName[m_MapNum];
+		break;
+	case CMap::ARRANGEMENT_MODEL_BATTLEPLANE:
+		cFileName = m_BattlePlaneFileName[m_MapNum];
+		break;
+	case CMap::ARRANGEMENT_MODEL_HELICOPTER:
+		cFileName = m_HelicopterFileName[m_MapNum];
+		break;
 	}
-	else
-	{
-		MessageBox(NULL, "ヘリのパラメーター読み込み失敗", "警告", MB_ICONWARNING);
-	}
+
+	return cFileName;
 }
 
 // =====================================================================================================================================================================
@@ -633,25 +361,17 @@ void CMap::HelicopterLoad(MAP MapNum)
 // =====================================================================================================================================================================
 CMap *CMap::MapCreate(MAP MapNum)
 {
+	// 現在のマップ番号
+	m_MapNum = MapNum;
+
 	// 変数
 	CMap *pMap;
 
 	// メモリの確保
 	pMap = new CMap();
-	// モデルのロード
-	pMap->ModelLoad(MapNum);
-	// 敵のロード
-	pMap->EnemyLoad(MapNum);
-	// 捕虜のロード
-	pMap->PrisonerLoad(MapNum);
-	// 障害物のロード
-	pMap->ObstacleLoad(MapNum);
-	// プレイヤー戦車のロード
-	pMap->PlayerTankLoad(MapNum);
-	// 戦闘機のロード
-	//pMap->BattlePlaneLoad(MapNum);
-	// ヘリ
-	//pMap->HelicopterLoad(MapNum);
+
+	// 配置するモデルのロード
+	pMap->ArrangementModelLoad();
 
 	return pMap;
 }
@@ -704,6 +424,22 @@ void CMap::MapUpdate()
 			// ウェーブエディター
 			m_Editor = EDITOR_WAVE;
 
+			// オブジェクト番号の選択
+			ImGui::InputInt("nowWaveNum", &nNowMapSelect, 1, 20, 0);
+
+			// 範囲制限
+			if (nNowMapSelect <= 0)
+			{
+				nNowMapSelect = 0;
+			}
+			else if (nNowMapSelect >= WAVE_MAX)
+			{
+				// 最後の番号にする
+				nNowMapSelect = MAP_MAX - 1;
+			}
+
+			// 選択したマップ番号代入
+
 			ImGui::EndTabItem();
 		}
 		// 小隊エディター
@@ -717,7 +453,6 @@ void CMap::MapUpdate()
 		//TabEnd
 		ImGui::EndTabBar();
 	}
-
 
 	// マップモデルのタブ
 	MapModelTab();
@@ -840,6 +575,15 @@ LPD3DXMESH CMap::GetMesh(int nCnt)
 
 // =====================================================================================================================================================================
 //
+// セーブするモデルのヘッダー
+//
+// =====================================================================================================================================================================
+void CMap::SaveModelHeader(FILE * pFile, int ModelType)
+{
+}
+
+// =====================================================================================================================================================================
+//
 // モデルのセーブ
 //
 // =====================================================================================================================================================================
@@ -855,7 +599,7 @@ void CMap::ModelSave(MAP MapNum)
 	if (pFile != NULL)
 	{
 		fprintf(pFile, "#------------------------------------------------------------------------------\n");
-		fprintf(pFile, "# モデルの配置情報\n");
+		fprintf(pFile, "# マップモデルの配置情報\n");
 		fprintf(pFile, "#------------------------------------------------------------------------------\n");
 		fprintf(pFile, "#------------------------------------------------------------------------------\n");
 		fprintf(pFile, "# TYPE情報\n");
@@ -927,11 +671,11 @@ void CMap::EnemySave(MAP MapNum)
 			{
 				D3DXVECTOR3 EnemyPos = m_pEnemy[nCntEnemy]->GetPosition();	// モデルの位置取得
 
-				fprintf(pFile, "ENEMYSET									# %d\n", nCntEnemy);
+				fprintf(pFile, "MODELSET									# %d\n", nCntEnemy);
 				fprintf(pFile, "	TYPE	= %d\n", 0 /*m_pEnemy[nCntEnemy]->GetType()*/);
 				fprintf(pFile, "	POS		= %.0f %.0f %.0f\n", EnemyPos.x, EnemyPos.y, EnemyPos.z);
 				fprintf(pFile, "	LIFE	= %d\n", m_pEnemy[nCntEnemy]->GetLife());
-				fprintf(pFile, "END_ENEMYSET\n\n");
+				fprintf(pFile, "END_MODELSET\n\n");
 			}
 		}
 		fprintf(pFile, "END_SCRIPT\n");
@@ -984,9 +728,9 @@ void CMap::PrisonerSave(MAP MapNum)
 			{
 				D3DXVECTOR3 PrisonerPos = m_pPrisoner[nCntPrisoner]->GetPosition();	// モデルの位置取得
 
-				fprintf(pFile, "PRISONERSET									# %d\n", nCntPrisoner);
+				fprintf(pFile, "MODELSET									# %d\n", nCntPrisoner);
 				fprintf(pFile, "	POS		= %.0f %.0f %.0f\n", PrisonerPos.x, PrisonerPos.y, PrisonerPos.z);
-				fprintf(pFile, "END_PRISONERSET\n\n");
+				fprintf(pFile, "END_MODELSET\n\n");
 			}
 		}
 		fprintf(pFile, "END_SCRIPT\n");
@@ -1043,12 +787,12 @@ void CMap::ObstacleSave(MAP MapNum)
 			{
 				D3DXVECTOR3 ObstaclePos = m_pObstacle[nCntObstacle]->GetPosition();	// モデルの位置取得
 
-				fprintf(pFile, "OBSTACLESET									# %d\n", nCntObstacle);
+				fprintf(pFile, "MODELSET									# %d\n", nCntObstacle);
 				fprintf(pFile, "	TYPE	= %d\n", m_pObstacle[nCntObstacle]->GetModelCount());
 				fprintf(pFile, "	POS		= %.0f %.0f %.0f\n", ObstaclePos.x, ObstaclePos.y, ObstaclePos.z);
 				fprintf(pFile, "	LIFE	= %d\n", m_pObstacle[nCntObstacle]->GetLife());
 				fprintf(pFile, "	SIZE	= %.0f %.0f %.0f\n", m_pObstacle[nCntObstacle]->GetSize().x, m_pObstacle[nCntObstacle]->GetSize().y, m_pObstacle[nCntObstacle]->GetSize().z);
-				fprintf(pFile, "END_OBSTACLESET\n\n");
+				fprintf(pFile, "END_MODELSET\n\n");
 			}
 		}
 		// メッセージウィンドウで表示
@@ -1101,11 +845,11 @@ void CMap::PlayerTankSave(MAP MapNum)
 			{
 				D3DXVECTOR3 PlayerTankPos = m_pPlayerTank[nCntTank]->GetPosition();	// モデルの位置取得
 
-				fprintf(pFile, "PLAYERTANKSET									# %d\n", nCntTank);
+				fprintf(pFile, "MODELSET									# %d\n", nCntTank);
 				fprintf(pFile, "	TYPE	= %d\n", 0 /*m_pPlayerTank[nCntObstacle]->GetModelCount()*/);
 				fprintf(pFile, "	POS		= %.0f %.0f %.0f\n", PlayerTankPos.x, PlayerTankPos.y, PlayerTankPos.z);
 				fprintf(pFile, "	LIFE	= %d\n", m_pPlayerTank[nCntTank]->GetLife());
-				fprintf(pFile, "END_PLAYERTANKSET\n\n");
+				fprintf(pFile, "END_MODELSET\n\n");
 			}
 		}
 		// メッセージウィンドウで表示
@@ -1158,11 +902,11 @@ void CMap::BattlePlaneSave(MAP MapNum)
 			{
 				D3DXVECTOR3 BattlePlanePos = m_pBattlePlane[nCntBattlePlane]->GetPosition();	// モデルの位置取得
 
-				fprintf(pFile, "BATTLEPLANESET									# %d\n", nCntBattlePlane);
+				fprintf(pFile, "MODELSET									# %d\n", nCntBattlePlane);
 				fprintf(pFile, "	TYPE	= %d\n", 0 /*m_pBattlePlane[nCntBattlePlane]->GetModelCount()*/);
 				fprintf(pFile, "	POS		= %.0f %.0f %.0f\n", BattlePlanePos.x, BattlePlanePos.y, BattlePlanePos.z);
 				fprintf(pFile, "	LIFE	= %d\n", m_pBattlePlane[nCntBattlePlane]->GetLife());
-				fprintf(pFile, "END_BATTLEPLANESET\n\n");
+				fprintf(pFile, "END_MODELSET\n\n");
 			}
 		}
 		// メッセージウィンドウで表示
@@ -1215,11 +959,11 @@ void CMap::HelicopterSave(MAP MapNum)
 			{
 				D3DXVECTOR3 HelicopterPos = m_pHelicopter[nCntHelicopter]->GetPosition();	// モデルの位置取得
 
-				fprintf(pFile, "HELISET									# %d\n", nCntHelicopter);
+				fprintf(pFile, "MODELSET									# %d\n", nCntHelicopter);
 				fprintf(pFile, "	TYPE	= %d\n", 0 /*m_pBattlePlane[nCntHelicopter]->GetModelCount()*/);
 				fprintf(pFile, "	POS		= %.0f %.0f %.0f\n", HelicopterPos.x, HelicopterPos.y, HelicopterPos.z);
 				fprintf(pFile, "	LIFE	= %d\n", m_pHelicopter[nCntHelicopter]->GetLife());
-				fprintf(pFile, "END_HELISET\n\n");
+				fprintf(pFile, "END_MODELSET\n\n");
 			}
 		}
 		// メッセージウィンドウで表示
@@ -2206,7 +1950,10 @@ void CMap::UpdateDieFlag()
 			if (CItem::DropRate())
 			{
 				//アイテムを生成
-				CItem::DropCreate(m_pEnemy[nCnt]->GetPosition(), CItem::ITEMDROP_WEAPON);
+				CItem::DropCreate(m_pEnemy[nCnt]->GetPosition(),
+					CItem::ITEMDROP_WEAPON,
+					CItem::ITEMDROP_PATTERN_RANDOM,
+					CItem::ITEMTYPE_HEAVYMACHINEGUN);
 			}
 			m_pEnemy[nCnt]->Rerease();
 			m_pEnemy[nCnt] = nullptr;

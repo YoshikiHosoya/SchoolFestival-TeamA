@@ -15,6 +15,7 @@
 #include "playerui.h"
 #include "gun.h"
 #include <random>
+#include "inputKeyboard.h"
 
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
@@ -372,6 +373,145 @@ CItem::ITEMTYPE CItem::RandomRange(ITEMTYPE min, ITEMTYPE max)
 
 // =====================================================================================================================================================================
 //
+// アイテムをドロップする時のパターン
+//
+// =====================================================================================================================================================================
+void CItem::DropPattern(ITEMDROP_PATTERN pattern , ITEMDROP drop, ITEMTYPE type)
+{
+	// 条件ごとにドロップさせる条件を変える
+	switch (pattern)
+	{
+		// ドロップするアイテムを指定する
+	case CItem::ITEMDROP_PATTERN_DESIGNATE:
+		m_Type = type;
+		break;
+
+		// ドロップするアイテムをランダムにする
+	case CItem::ITEMDROP_PATTERN_RANDOM:
+		// アイテムのタイプをランダムに設定
+		m_Type = RandDropItem(drop);
+		break;
+	default:
+		break;
+	}
+}
+
+// =====================================================================================================================================================================
+//
+// デバッグ用アイテムコマンド
+//
+// =====================================================================================================================================================================
+void CItem::DebugItemCommand(CKeyboard *key)
+{
+	//使い方説明
+	CDebugProc::Print("\n---------Debug ItemCommand----------\n");
+
+	CDebugProc::Print("[LShift] + テンキー [0] : ヘビーマシンガン\n");
+	CDebugProc::Print("[LShift] + テンキー [1] : ショットガン\n");
+	CDebugProc::Print("[LShift] + テンキー [2] : レーザーガン\n");
+	CDebugProc::Print("[LShift] + テンキー [3] : ロケットランチャー\n");
+	CDebugProc::Print("[LShift] + テンキー [4] : フレイムショット\n");
+	CDebugProc::Print("[LShift] + テンキー [5] : 熊\n");
+	CDebugProc::Print("[LShift] + テンキー [6] : BomUp\n");
+	CDebugProc::Print("[LShift] + テンキー [7] : ガソリン\n");
+	CDebugProc::Print("[LShift] + テンキー [8] : BulletUp\n");
+
+	//LShift押しながら
+	if (key->GetKeyboardPress(DIK_LSHIFT))
+	{
+		// ヘビーマシンガンの生成
+		if (key->GetKeyboardTrigger(DIK_NUMPAD0))
+		{
+			CItem::DebugCreate(ITEMTYPE_HEAVYMACHINEGUN);
+		}
+		// ショットガン生成
+		else if (key->GetKeyboardTrigger(DIK_NUMPAD1))
+		{
+			CItem::DebugCreate(ITEMTYPE_SHOTGUN);
+		}
+		// レーザーガン生成
+		else if (key->GetKeyboardTrigger(DIK_NUMPAD2))
+		{
+			CItem::DebugCreate(ITEMTYPE_LASERGUN);
+		}
+		// ロケットランチャー\生成
+		else if (key->GetKeyboardTrigger(DIK_NUMPAD3))
+		{
+			CItem::DebugCreate(ITEMTYPE_ROCKETLAUNCHER);
+		}
+		// フレイムショット生成
+		else if (key->GetKeyboardTrigger(DIK_NUMPAD4))
+		{
+			CItem::DebugCreate(ITEMTYPE_FLAMESHOT);
+		}
+		// 熊の生成
+		else 	if (key->GetKeyboardTrigger(DIK_NUMPAD5))
+		{
+			CItem::DebugCreate(ITEMTYPE_BEAR);
+		}
+		// BomUp生成
+		else if (key->GetKeyboardTrigger(DIK_NUMPAD6))
+		{
+			CItem::DebugCreate(ITEMTYPE_BOMBUP);
+		}
+		// ガソリン生成
+		else if (key->GetKeyboardTrigger(DIK_NUMPAD7))
+		{
+			CItem::DebugCreate(ITEMTYPE_ENERGYUP);
+		}
+		// BulletUp生成
+		else if (key->GetKeyboardTrigger(DIK_NUMPAD8))
+		{
+			CItem::DebugCreate(ITEMTYPE_BULLETUP);
+		}
+	}
+}
+
+// =====================================================================================================================================================================
+//
+// デバッグ用アイテム生成
+//
+// =====================================================================================================================================================================
+CItem * CItem::DebugCreate(ITEMTYPE type)
+{
+	// 変数
+	CItem *pItem;
+
+	// メモリの確保
+	pItem = new CItem(OBJTYPE_ITEM);
+
+	// 初期化
+	pItem->Init();
+
+	// サイズの設定
+	pItem->SetSize(D3DXVECTOR3(
+		m_CollisionSize.x / 2,
+		m_CollisionSize.y / 2,
+		m_CollisionSize.z / 2));
+
+
+	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
+
+	if (pPlayer != nullptr)
+	{
+		D3DXVECTOR3 pos = pPlayer->GetPosition();
+		// アイテムが生成される位置の調整
+		pItem->SetDropPos(pos);
+
+		// アイテムの位置の設定
+		pItem->SetPosition(pos);
+
+		pItem->m_Type = type;
+	}
+
+	// 種類別にテクスチャを設定
+	pItem->SwitchTexture(pItem->m_Type, pItem);
+
+	return pItem;
+}
+
+// =====================================================================================================================================================================
+//
 // ランダム関数
 //
 // =====================================================================================================================================================================
@@ -432,7 +572,7 @@ void CItem::ItemLoad()
 															// ITEMSETが来たら
 				if (strcmp(cHeadText, "ITEMSET") == 0)
 				{
-					// END_BULLETSETが来るまでループ
+					// END_ITEMSETが来るまでループ
 					while (strcmp(cHeadText, "END_ITEMSET") != 0)
 					{
 						fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
@@ -448,12 +588,12 @@ void CItem::ItemLoad()
 						{
 							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_ItemData.nDeleteTime);	// 比較用テキストにDELETEを代入
 						}
-						// POWERが来たら
+						// FLASHが来たら
 						else if (strcmp(cHeadText, "FLASH") == 0)
 						{
 							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_ItemData.nFlashTime);	// 比較用テキストにFLASHを代入
 						}
-						// AMMOが来たら
+						// BEARが来たら
 						else if (strcmp(cHeadText, "BEAR") == 0)
 						{
 							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_ItemData.nBearScore);	// 比較用テキストにBEARを代入
@@ -490,7 +630,7 @@ void CItem::ItemLoad()
 // キャラクターがアイテムを落とすときの生成処理
 //
 // =====================================================================================================================================================================
-CItem * CItem::DropCreate(D3DXVECTOR3 pos, ITEMDROP drop)
+CItem * CItem::DropCreate(D3DXVECTOR3 pos, ITEMDROP drop , ITEMDROP_PATTERN pattern ,ITEMTYPE type)
 {
 	// 変数
 	CItem *pItem;
@@ -513,8 +653,8 @@ CItem * CItem::DropCreate(D3DXVECTOR3 pos, ITEMDROP drop)
 	// アイテムの位置の設定
 	pItem->SetPosition(pos);
 
-	// アイテムのタイプをランダムに設定
-	pItem->m_Type = pItem->RandDropItem(drop);
+	// アイテムのドロップをパターンごとに変える
+	pItem->DropPattern(pattern, drop, type);
 
 	// 種類別にテクスチャを設定
 	pItem->SwitchTexture(pItem->m_Type, pItem);
@@ -616,7 +756,8 @@ CItem::ITEMTYPE CItem::RandDropItem(ITEMDROP drop)
 
 		// 全てのアイテム
 	case CItem::ITEMDROP_ALL:
-		type = ITEMTYPE(rand() % ITEMTYPE_MAX);
+		//type = ITEMTYPE(rand() % ITEMTYPE_MAX);
+		type = (ITEMTYPE)ItemRand(ITEMTYPE_MAX);
 		break;
 	default:
 		break;
