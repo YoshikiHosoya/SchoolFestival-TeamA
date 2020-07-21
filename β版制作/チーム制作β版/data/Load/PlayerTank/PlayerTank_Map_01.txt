@@ -9,9 +9,10 @@
 #------------------------------------------------------------------------------
 SCRIPT
 
-PLAYERTANKSET									# 0
+MODELSET									# 0
+	TYPE	= 0
 	POS		= 200 100 0
-END_PLAYERTANKSET
+	LIFE	= 1000
+END_MODELSET
 
 END_SCRIPT
-
