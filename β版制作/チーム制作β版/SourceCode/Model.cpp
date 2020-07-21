@@ -30,16 +30,21 @@ char *CModel::m_PlayerFileName[MODEL_PLAYER_MAX] =
 
 char *CModel::m_PrisonerFileName[MODEL_PRISONER_MAX] =
 {
-	{ "data/MODEL/Prisoner/Head.x" },
+	{ "data/MODEL/Prisoner/Waist.x" },
 	{ "data/MODEL/Prisoner/Body.x" },
+	{ "data/MODEL/Prisoner/Head.x" },
 	{ "data/MODEL/Prisoner/L_Sholder.x" },
 	{ "data/MODEL/Prisoner/R_Sholder.x" },
+	{ "data/MODEL/Prisoner/L_Arm.x" },
+	{ "data/MODEL/Prisoner/R_Arm.x" },
 	{ "data/MODEL/Prisoner/L_Hand.x" },
 	{ "data/MODEL/Prisoner/R_Hand.x" },
+	{ "data/MODEL/Prisoner/L_Knee.x" },
+	{ "data/MODEL/Prisoner/R_Knee.x" },
 	{ "data/MODEL/Prisoner/L_Foot.x" },
 	{ "data/MODEL/Prisoner/R_Foot.x" },
 	{ "data/MODEL/Prisoner/L_Leg.x" },
-	{ "data/MODEL/Prisoner/R_Leg.x" }
+	{ "data/MODEL/Prisoner/R_Leg.x" },
 };
 
 char *CModel::m_MapFileName[MODEL_MAP_MAX] =

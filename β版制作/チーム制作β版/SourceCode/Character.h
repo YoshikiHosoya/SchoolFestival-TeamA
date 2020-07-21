@@ -168,6 +168,7 @@ public:
 	void ChangeColor(bool ColorChangeFlag, D3DXCOLOR AddColor);									// 色変更
 
 	CCollision *GetCollision() { return m_pCollision; };			// 当たり判定のポインタ取得
+	void					DebugInfo(void);						// デバッグ用関数
 
 private:
 	static char *m_LoadOffsetFileName[CHARACTER_TYPE_MAX];			//読み込むファイル名
@@ -190,6 +191,7 @@ private:
 	int m_Life;														//ライフ
 	int m_nStateCnt;												//ステータスのカウント
 	CHARACTER_DIRECTION	m_CharacterDirection;						//キャラクターの向き
+
 	//モーション関連の情報
 	static std::vector<MOTION*>m_CharacterMotion;					//キャラクターのモーション情報
 	CHARACTER_MOTION_STATE m_MotionType;							//現在のモーション
