@@ -345,7 +345,7 @@ void CDebug_ViewerCharacter::MotionViewer()
 			std::string aPartsName = CModel::GetModelFileName(vModelList[nCnt]->GetType(), nCnt);
 
 			//“ª‚Ì•”•ª‚Ì•¶š—ñ‚ğÁ‚·("data/MODEL/character/)
-			aPartsName.erase(aPartsName.begin(), aPartsName.begin() + 21);
+			aPartsName.erase(aPartsName.begin(), aPartsName.begin() + 19);
 
 			//Ÿ‚Ì€–Ú‚Ì˜g‚Ì‘å‚«‚³İ’è
 			ImGui::SetNextItemWidth(250);
