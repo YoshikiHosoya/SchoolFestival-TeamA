@@ -30,7 +30,6 @@ public:
 		PRISONER_STATE_STAY = 0,							// 縛られている初期状態
 		PRISONER_STATE_DROPITEM,							// アイテムを落とす
 		PRISONER_STATE_RUN,									// 走って消える
-		PRISONER_STATE_SKIP,								// スキップする
 		PRISONER_STATE_MAX									// 最大数
 	}PRISONER_STATE;
 
