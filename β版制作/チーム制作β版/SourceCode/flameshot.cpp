@@ -19,8 +19,8 @@
 // =====================================================================================================================================================================
 // ƒ}ƒNƒ’è‹`
 // =====================================================================================================================================================================
-#define MOVE_RANGE_HEIGHT		(4.0f)		// c‚ÌˆÚ“®—Ê‚Ì”ÍˆÍ
-#define MOVE_RESTRAIN_HEIGHT	(1.0f)		// c‚ÌˆÚ“®—Ê‚ð—}§‚·‚é
+#define MOVE_RANGE_HEIGHT		(3.0f)		// c‚ÌˆÚ“®—Ê‚Ì”ÍˆÍ
+#define MOVE_RESTRAIN_HEIGHT	(0.8f)		// c‚ÌˆÚ“®—Ê‚ð—}§‚·‚é
 #define MOVE_RISE_HEIGHT		(3.5f)		// ã¸‚·‚éˆÚ“®—Ê
 
 // =====================================================================================================================================================================
@@ -77,24 +77,24 @@ void CFlameshot::Update(void)
 	D3DXVECTOR3 move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
 	// ˆÚ“®—ÊŽæ“¾
-	move = D3DXVECTOR3(GetMove().x * 0.9f, GetMove().y, GetMove().z * 0.9f);
+	move = D3DXVECTOR3(GetMove().x * 0.92f, GetMove().y, GetMove().z * 0.92f);
 
 	// ˆê’è”ÍˆÍã¸‚µ‚½‚ç
 	if (move.y > MOVE_RANGE_HEIGHT)
 	{
 		// ˆÚ“®‚ð—}‚¦‚é
-		move.y += (float)sin(-MOVE_RESTRAIN_HEIGHT);
+		move.y += sinf(-MOVE_RESTRAIN_HEIGHT);
 	}
 	// ˆê’è”ÍˆÍ‰º~‚µ‚½‚ç
 	else if (move.y < -MOVE_RANGE_HEIGHT)
 	{
 		// ˆÚ“®‚ð—}‚¦‚é
-		move.y += (float)sin(MOVE_RESTRAIN_HEIGHT);
+		move.y += sinf(MOVE_RESTRAIN_HEIGHT);
 	}
 	else
 	{
 		// ã¸‚·‚é
-		move.y += (float)sin(-MOVE_RISE_HEIGHT);
+		move.y += sinf(-MOVE_RISE_HEIGHT);
 	}
 
 	// ˆÚ“®—Ê‚ÌÝ’è

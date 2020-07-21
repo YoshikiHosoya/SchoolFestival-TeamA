@@ -48,8 +48,11 @@ CParticleParam::CParticleParam()
 
 	m_bGravity = false;														//重力
 	m_bSpeedRandom = false;													//速度がランダムかどうか
-	m_bAlphaBlend = true;													//αブレンドするか
-
+	m_bAlphaBlend_Add = true;												//αブレンドするか
+	m_bAlphaBlend_Sub = false;												//αブレンドするか
+	m_bZtest = false;														//Zテスト
+	m_bZWrite = true;														//Zライティング
+	m_bBillboard = false;													//ビルボード
 	m_nLife = 50;															//ライフ
 	m_nNumber = 10;															//個数
 	m_fSpeed = 10.0f;														//速度
@@ -149,10 +152,30 @@ HRESULT CParticleParam::LoadParticleDefaultParam()
 								sscanf(cReadText, "%s %s %d", &cDie, &cDie, &n_BoolValue);
 								pParam->m_bGravity = n_BoolValue ? true : false;
 							}
-							if (strcmp(cHeadText, "ALPHABLEND") == 0)
+							if (strcmp(cHeadText, "ALPHABLEND_ADD") == 0)
 							{
 								sscanf(cReadText, "%s %s %d", &cDie, &cDie, &n_BoolValue);
-								pParam->m_bAlphaBlend = n_BoolValue ? true : false;
+								pParam->m_bAlphaBlend_Add = n_BoolValue ? true : false;
+							}
+							if (strcmp(cHeadText, "ALPHABLEND_SUB") == 0)
+							{
+								sscanf(cReadText, "%s %s %d", &cDie, &cDie, &n_BoolValue);
+								pParam->m_bAlphaBlend_Sub = n_BoolValue ? true : false;
+							}
+							if (strcmp(cHeadText, "ZTEST") == 0)
+							{
+								sscanf(cReadText, "%s %s %d", &cDie, &cDie, &n_BoolValue);
+								pParam->m_bZtest = n_BoolValue ? true : false;
+							}
+							if (strcmp(cHeadText, "ZWRITE") == 0)
+							{
+								sscanf(cReadText, "%s %s %d", &cDie, &cDie, &n_BoolValue);
+								pParam->m_bZWrite = n_BoolValue ? true : false;
+							}
+							if (strcmp(cHeadText, "BILLBOARD") == 0)
+							{
+								sscanf(cReadText, "%s %s %d", &cDie, &cDie, &n_BoolValue);
+								pParam->m_bBillboard = n_BoolValue ? true : false;
 							}
 							if (strcmp(cHeadText, "ANIMATION") == 0)
 							{
@@ -327,7 +350,23 @@ HRESULT CParticleParam::SaveParticleDefaultParam(CParticleParam *pSaveParam)
 		fputs(cWriteText, pFile);
 		fputs(NEWLINE, pFile);
 
-		sprintf(cWriteText, "		%s %s %d							%s", "ALPHABLEND", &EQUAL, pSaveParam->m_bAlphaBlend, "//αブレンドするか");
+		sprintf(cWriteText, "		%s %s %d							%s", "ALPHABLEND_ADD", &EQUAL, pSaveParam->m_bAlphaBlend_Add, "//加算合成するか");
+		fputs(cWriteText, pFile);
+		fputs(NEWLINE, pFile);
+
+		sprintf(cWriteText, "		%s %s %d							%s", "ALPHABLEND_SUB", &EQUAL, pSaveParam->m_bAlphaBlend_Sub, "//減算合成するか");
+		fputs(cWriteText, pFile);
+		fputs(NEWLINE, pFile);
+
+		sprintf(cWriteText, "		%s %s %d							%s", "ZTEST", &EQUAL, pSaveParam->m_bZtest, "//Zテストするか");
+		fputs(cWriteText, pFile);
+		fputs(NEWLINE, pFile);
+
+		sprintf(cWriteText, "		%s %s %d							%s", "ZWRITE", &EQUAL, pSaveParam->m_bZWrite, "//Zライティングするか");
+		fputs(cWriteText, pFile);
+		fputs(NEWLINE, pFile);
+
+		sprintf(cWriteText, "		%s %s %d							%s", "BILLBOARD", &EQUAL, pSaveParam->m_bZWrite, "//ビルボードするか");
 		fputs(cWriteText, pFile);
 		fputs(NEWLINE, pFile);
 
@@ -526,26 +565,30 @@ void CParticleParam::UpdateParam()
 //------------------------------------------------------------------------------
 void * CParticleParam::operator=(const CParticleParam * pParam)
 {
+	m_ParticleType			= pParam->m_ParticleType;
+	m_shape					= pParam->m_shape;
+	m_bAlphaBlend_Add		= pParam->m_bAlphaBlend_Add;
+	m_bAlphaBlend_Sub		= pParam->m_bAlphaBlend_Sub;
+	m_bZtest				= pParam->m_bZtest;
+	m_bZWrite				= pParam->m_bZWrite;
+	m_bBillboard			= pParam->m_bBillboard;
+	m_bAnimation			= pParam->m_bAnimation;
+	m_bAnimationLoop		= pParam->m_bAnimationLoop;
+	m_nAnimationCntSwitch	= pParam->m_nAnimationCntSwitch;
 	m_nLife					= pParam->m_nLife;
 	m_Size					= pParam->m_Size;
 	m_col					= pParam->m_col;
 	m_nNumber				= pParam->m_nNumber;
 	m_fSpeed				= pParam->m_fSpeed;
-	m_SizeDamping			= pParam->m_SizeDamping;
+	m_bSpeedRandom			= pParam->m_bSpeedRandom;
 	m_fAlphaDamping			= pParam->m_fAlphaDamping;
-	m_Textype				= pParam->m_Textype;
-	m_ParticleType			= pParam->m_ParticleType;
-	m_shape					= pParam->m_shape;
+	m_SizeDamping			= pParam->m_SizeDamping;
 	m_bGravity				= pParam->m_bGravity;
 	m_fGravityPower			= pParam->m_fGravityPower;
-	m_bSpeedRandom			= pParam->m_bSpeedRandom;
 	m_rot					= pParam->m_rot;
 	m_fRange				= pParam->m_fRange;
+	m_Textype				= pParam->m_Textype;
 	m_SeparateTex			= pParam->m_SeparateTex;
-	m_bAnimation			= pParam->m_bAnimation;
-	m_bAlphaBlend			= pParam->m_bAlphaBlend;
-	m_bAnimationLoop		= pParam->m_bAnimationLoop;
-	m_nAnimationCntSwitch	= pParam->m_nAnimationCntSwitch;
 	m_CollisionSize			= pParam->m_CollisionSize;
 	m_bCollision			= pParam->m_bCollision;
 	m_bCollisionSizeCalc	= pParam->m_bCollisionSizeCalc;

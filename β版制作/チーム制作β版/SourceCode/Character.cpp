@@ -34,6 +34,11 @@ char *CCharacter::m_LoadMotionFileName[CHARACTER_MOTION_MAX] =
 	{ "data/Load/Enemy/Motion/EnemyWalk.txt" },
 	{ "data/Load/Enemy/Motion/EnemySquatStop.txt" },
 	{ "data/Load/Prisoner/Motion/PrisonerStay.txt" },
+	{ "data/Load/Prisoner/Motion/PrisonerRelease.txt" },
+	{ "data/Load/Prisoner/Motion/PrisonerRun.txt" },
+	{ "data/Load/Prisoner/Motion/PrisonerSalute.txt" },
+	{ "data/Load/Prisoner/Motion/PrisonerFall.txt" },
+	{ "data/Load/Prisoner/Motion/PrisonerSkip.txt" },
 };
 std::vector<CCharacter::MOTION*> CCharacter::m_CharacterMotion = {};
 //====================================================================

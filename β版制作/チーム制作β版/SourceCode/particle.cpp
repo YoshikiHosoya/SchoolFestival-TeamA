@@ -68,11 +68,6 @@ void CParticle::Uninit()
 //------------------------------------------------------------------------------
 void CParticle::Update()
 {
-	if (m_pParticleParam->GetType() == CParticleParam::EFFECT_LAZER)
-	{
-		CDebugProc::Print("Rot >>  %.2f,%.2f,%.2f\n", m_rotOrigin.x, m_rotOrigin.y, m_rotOrigin.z);
-	}
-
 	//ライフを減らす
 	m_pParticleParam->UpdateParam();
 
@@ -82,16 +77,23 @@ void CParticle::Update()
 		UpdateAnimation();
 	}
 
-	//コリジョン
-	if (m_pParticleParam->GetCollision() && m_pParticleParam->GetCollisionCnt() >= 0)
+	//当たり判定
+	if (m_pParticleParam->GetCollision())
 	{
-		m_pParticleParam->GetCollisionCnt()--;
-		Collision();
-	}
-	else
-	{
-		delete m_pCollision;
-		m_pCollision = nullptr;
+		//nullcheck
+		if (m_pCollision)
+		{
+			//当たり判定処理
+			Collision();
+
+			//当たり判定のカウントが0になったら消す
+			if (m_pParticleParam->GetCollisionCnt()-- <= 0)
+			{
+				//メモリ開放
+				delete m_pCollision;
+				m_pCollision = nullptr;
+			}
+		}
 	}
 
 	//ライフが0以下になった時かアニメーションが終了した時
@@ -110,17 +112,8 @@ void CParticle::Draw()
 	//デバイス取得
 	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
 
-	//ライティングOFF
-	CManager::GetRenderer()->SetRendererCommand(CRenderer::RENDERER_LIGHTING_OFF);
-
-	if (m_pParticleParam->GetAlphaBlend())
-	{
-		//加算合成
-		CManager::GetRenderer()->SetRendererCommand(CRenderer::RENDERER_ALPHABLEND_ADD);
-	}
-
-	//Zテスト無効でZライティング有効
-	CManager::GetRenderer()->SetRendererCommand(CRenderer::RENDERER_ZTEST_OFF_ZWRITING_ON);
+	//描画する為の設定
+	RendererSetting();
 
 	//頂点バッファをデバイスのデータストリームにバインド
 	pDevice->SetStreamSource(0, m_pVtxBuff, 0, sizeof(VERTEX_3D));
@@ -129,6 +122,7 @@ void CParticle::Draw()
 	pDevice->SetFVF(FVF_VERTEX_3D);
 
 	//テクスチャの設定
+	//アニメーションするかどうかで変化
 	m_pParticleParam->GetAnimation() ?
 		pDevice->SetTexture(0, CTexture::GetSeparateTexture(m_pParticleParam->GetSeparateTex())) :
 		pDevice->SetTexture(0, CTexture::GetTexture(m_pParticleParam->GetTex()));
@@ -139,8 +133,12 @@ void CParticle::Draw()
 		//マトリック計算
 		CHossoLibrary::CalcMatrixAndBillboard(&m_pParticleList[nCnt]->m_Mtx, m_pParticleList[nCnt]->m_pos, m_pParticleList[nCnt]->m_rot);
 
-		//ビルボード設定
-		//CHossoLibrary::SetBillboard(&m_pParticleList[nCnt]->m_Mtx);
+		if (m_pParticleParam->GetBillboard())
+		{
+			//ビルボード設定
+			CHossoLibrary::SetBillboard(&m_pParticleList[nCnt]->m_Mtx);
+		}
+
 
 		// ワールドマトリックスの設定
 		pDevice->SetTransform(D3DTS_WORLD, &m_pParticleList[nCnt]->m_Mtx);
@@ -504,7 +502,7 @@ void CParticle::SetParticle(D3DXVECTOR3 const & pos, D3DXVECTOR3 const & rot, CP
 
 		if (pParam->GetType() == CParticleParam::EFFECT_LAZER)
 		{
-			std::unique_ptr<COneParticle>pOneParticle = COneParticle::Create(pos, move, D3DXVECTOR3(0.0f, 0.0f, rot.x - D3DX_PI * 0.5f));
+			std::unique_ptr<COneParticle>pOneParticle = COneParticle::Create(pos, move, D3DXVECTOR3(0.0f, 0.0f, rot.y));
 			//配列に追加
 			m_pParticleList.emplace_back(std::move(pOneParticle));
 		}
@@ -548,9 +546,6 @@ void CParticle::SetAnimationParam()
 void CParticle::SetCollsionParam()
 {
 	m_pCollision = CCollision::Create();
-
-	m_pCollision->SetPos(&m_posOrigin);
-	m_pCollision->SetSize(m_pParticleParam->GetCollisionSize());
 
 	D3DXMATRIX RotationMatrix;
 
@@ -616,11 +611,12 @@ void CParticle::SetCollsionParam()
 			CHossoLibrary::CalcMatrix(&RotationMatrix, m_posOrigin, m_rotOrigin);
 
 			//当たり判定用の原点作成　ちょっとキャラクター側とかに寄せる
-			D3DXVec3TransformCoord(&m_posOrigin, &D3DXVECTOR3(0.0f, m_pParticleParam->GetCollisionSize().y * 0.8f, 0.0f), &RotationMatrix);
+			D3DXVec3TransformCoord(&m_posOrigin, &D3DXVECTOR3(0.0f, m_pParticleParam->GetCollisionSize().y, 0.0f), &RotationMatrix);
 
 			//当たり判定の設定
 			m_pCollision->SetPos(&m_posOrigin);
 			m_pCollision->SetSize(D3DXVECTOR3(fabsf(LocalPosOrigin.x - Max.x), fabsf(LocalPosOrigin.y - Max.y), 0.0f) * 2.0f);
+			//m_pParticleParam->GetSize() = D3DXVECTOR3(fabsf(LocalPosOrigin.x - Max.x), fabsf(LocalPosOrigin.y - Max.y), 0.0f) * 2.0f;
 		}
 
 		//デバッグの線表示
@@ -647,4 +643,42 @@ void CParticle::Collision()
 			}
 		}
 	}
+}
+
+//------------------------------------------------------------------------------
+//レンダラーの設定1
+//------------------------------------------------------------------------------
+void CParticle::RendererSetting()
+{
+	//ライティングOFF
+	CManager::GetRenderer()->SetRendererCommand(CRenderer::RENDERER_LIGHTING_OFF);
+
+	//加算合成
+	if (m_pParticleParam->GetAlphaBlend_Add())
+	{
+		CManager::GetRenderer()->SetRendererCommand(CRenderer::RENDERER_ALPHABLEND_ADD);
+	}
+	//減算合成
+	else if (m_pParticleParam->GetAlphaBlend_Sub())
+	{
+		CManager::GetRenderer()->SetRendererCommand(CRenderer::RENDERER_ALPHABLEND_SUB);
+	}
+
+	//Zテスト無効　Zライティング有効
+	if (!m_pParticleParam->GetZTest() && m_pParticleParam->GetZWrite())
+	{
+		CManager::GetRenderer()->SetRendererCommand(CRenderer::RENDERER_ZTEST_OFF);
+	}
+	//Zテスト有効　Zライティング無効
+	else if (m_pParticleParam->GetZTest() && !m_pParticleParam->GetZWrite())
+	{
+		CManager::GetRenderer()->SetRendererCommand(CRenderer::RENDERER_ZTEST_ON_ZWRITING_OFF);
+
+	}
+	//Zテストもライティングも無効
+	else if (!m_pParticleParam->GetZTest() && !m_pParticleParam->GetZWrite())
+	{
+		CManager::GetRenderer()->SetRendererCommand(CRenderer::RENDERER_ZTEST_OFF);
+	}
+
 }

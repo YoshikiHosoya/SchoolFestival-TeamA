@@ -15,6 +15,7 @@
 #include "playerui.h"
 #include "gun.h"
 #include <random>
+#include "inputKeyboard.h"
 
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
@@ -24,6 +25,9 @@ int			CItem::m_nDropRate		 = 0;
 int			CItem::m_nDeleteTime	 = 0;
 int			CItem::m_nFlashTime		 = 0;
 int			CItem::m_nBearScore		 = 0;
+int			CItem::m_nCoinScore		 = 0;
+int			CItem::m_nJewelryScore	 = 0;
+int			CItem::m_nMedalScore	 = 0;
 D3DXVECTOR3 CItem::m_CollisionSize	 = D3DXVECTOR3(0,0,0);
 
 // =====================================================================================================================================================================
@@ -207,6 +211,24 @@ void CItem::ItemType(ITEMTYPE type)
 		pPlayer->GetPlayerUI()->SetScore(m_nBearScore);
 	}break;
 
+		// コイン
+	case (ITEMTYPE_COIN): {
+		// コインを取るたびにコインのスコアアップ
+		AddCoinScore(m_nCoinScore);
+		// スコアアップ
+		pPlayer->GetPlayerUI()->SetScore(m_nCoinScore);
+	}break;
+		// 宝石
+	case (ITEMTYPE_JEWELRY): {
+		// スコアアップ
+		pPlayer->GetPlayerUI()->SetScore(m_nJewelryScore);
+	}break;
+		// メダル
+	case (ITEMTYPE_MEDAL): {
+		// スコアアップ
+		pPlayer->GetPlayerUI()->SetScore(m_nMedalScore);
+	}break;
+
 		// 爆弾の数を増やす
 	case (ITEMTYPE_BOMBUP): {
 	}break;
@@ -334,6 +356,12 @@ void CItem::SetItemData()
 	m_nFlashTime	 = m_ItemData.nFlashTime;
 	// 熊のアイテムのスコア
 	m_nBearScore	 = m_ItemData.nBearScore;
+	// コインのアイテムのスコア
+	m_nCoinScore	 = m_ItemData.nCoinScore;
+	// 宝石のアイテムのスコア
+	m_nJewelryScore	 = m_ItemData.nJewelryScore;
+	// メダルのアイテムのスコア
+	m_nMedalScore	 = m_ItemData.nMedalScore;
 	// 当たり判定の大きさ
 	m_CollisionSize	 = m_ItemData.CollisionSize;
 }
@@ -345,14 +373,38 @@ void CItem::SetItemData()
 // =====================================================================================================================================================================
 uint64_t CItem::get_rand_range(uint64_t min_val, uint64_t max_val)
 {
+	// メルセンヌ・ツイスター法による擬似乱数生成器を、
+	// ハードウェア乱数をシードにして初期化
+	std::random_device seed_gen;
+	std::mt19937 engine(seed_gen());
+
 	// 乱数生成器
-	static std::mt19937_64 mt64(0);
+	static std::mt19937_64 mt64(seed_gen());
 
 	// [min_val, max_val] の一様分布整数 (int) の分布生成器
 	std::uniform_int_distribution<uint64_t> get_rand_uni_int(min_val, max_val);
 
-	// 乱数を生成
+	// 乱数を生成 初動偏る
 	return get_rand_uni_int(mt64);
+	// 乱数を生成
+	//return get_rand_uni_int(engine);
+}
+
+// =====================================================================================================================================================================
+//
+// コインのスコアを加算する処理
+//
+// =====================================================================================================================================================================
+void CItem::AddCoinScore(int &nScore)
+{
+	// 加算用カウント変数
+	static int nAddCnt = 1;
+
+	// カウント
+	nScore *= nAddCnt;
+
+	// 関数が呼ばれるたびに加算
+	nAddCnt = 2;
 }
 
 // =====================================================================================================================================================================
@@ -368,6 +420,163 @@ CItem::ITEMTYPE CItem::RandomRange(ITEMTYPE min, ITEMTYPE max)
 	//return (ITEMTYPE)(min + (int)(rand()*(max - min) / (RAND_MAX)));
 
 	return (ITEMTYPE)get_rand_range(min, max);
+}
+
+// =====================================================================================================================================================================
+//
+// アイテムをドロップする時のパターン
+//
+// =====================================================================================================================================================================
+void CItem::DropPattern(ITEMDROP_PATTERN pattern , ITEMDROP drop, ITEMTYPE type)
+{
+	// 条件ごとにドロップさせる条件を変える
+	switch (pattern)
+	{
+		// ドロップするアイテムを指定する
+	case CItem::ITEMDROP_PATTERN_DESIGNATE:
+		m_Type = type;
+		break;
+
+		// ドロップするアイテムをランダムにする
+	case CItem::ITEMDROP_PATTERN_RANDOM:
+		// アイテムのタイプをランダムに設定
+		m_Type = RandDropItem(drop);
+		break;
+	default:
+		break;
+	}
+}
+
+// =====================================================================================================================================================================
+//
+// デバッグ用アイテムコマンド
+//
+// =====================================================================================================================================================================
+void CItem::DebugItemCommand(CKeyboard *key)
+{
+	//使い方説明
+	CDebugProc::Print("\n---------Debug ItemCommand----------\n");
+
+	CDebugProc::Print("[LShift] + テンキー [0] : ヘビーマシンガン\n");
+	CDebugProc::Print("[LShift] + テンキー [1] : ショットガン\n");
+	CDebugProc::Print("[LShift] + テンキー [2] : レーザーガン\n");
+	CDebugProc::Print("[LShift] + テンキー [3] : ロケットランチャー\n");
+	CDebugProc::Print("[LShift] + テンキー [4] : フレイムショット\n");
+	CDebugProc::Print("[LShift] + テンキー [5] : 熊\n");
+	CDebugProc::Print("[LShift] + テンキー [6] : コイン\n");
+	CDebugProc::Print("[LShift] + テンキー [7] : 宝石\n");
+	CDebugProc::Print("[LShift] + テンキー [8] : メダル\n");
+	CDebugProc::Print("[LShift] + テンキー [9] : BomUp\n");
+	CDebugProc::Print("[LShift] + テンキー [-] : ガソリン\n");
+	CDebugProc::Print("[LShift] + テンキー [+] : BulletUp\n");
+
+	//LShift押しながら
+	if (key->GetKeyboardPress(DIK_LSHIFT))
+	{
+		// ヘビーマシンガンの生成
+		if (key->GetKeyboardTrigger(DIK_NUMPAD0))
+		{
+			CItem::DebugCreate(ITEMTYPE_HEAVYMACHINEGUN);
+		}
+		// ショットガン生成
+		else if (key->GetKeyboardTrigger(DIK_NUMPAD1))
+		{
+			CItem::DebugCreate(ITEMTYPE_SHOTGUN);
+		}
+		// レーザーガン生成
+		else if (key->GetKeyboardTrigger(DIK_NUMPAD2))
+		{
+			CItem::DebugCreate(ITEMTYPE_LASERGUN);
+		}
+		// ロケットランチャー生成
+		else if (key->GetKeyboardTrigger(DIK_NUMPAD3))
+		{
+			CItem::DebugCreate(ITEMTYPE_ROCKETLAUNCHER);
+		}
+		// フレイムショット生成
+		else if (key->GetKeyboardTrigger(DIK_NUMPAD4))
+		{
+			CItem::DebugCreate(ITEMTYPE_FLAMESHOT);
+		}
+		// 熊の生成
+		else 	if (key->GetKeyboardTrigger(DIK_NUMPAD5))
+		{
+			CItem::DebugCreate(ITEMTYPE_BEAR);
+		}
+		// コインの生成
+		else 	if (key->GetKeyboardTrigger(DIK_NUMPAD6))
+		{
+			CItem::DebugCreate(ITEMTYPE_COIN);
+		}
+		// 宝石の生成
+		else 	if (key->GetKeyboardTrigger(DIK_NUMPAD7))
+		{
+			CItem::DebugCreate(ITEMTYPE_JEWELRY);
+		}
+		// メダルの生成
+		else 	if (key->GetKeyboardTrigger(DIK_NUMPAD8))
+		{
+			CItem::DebugCreate(ITEMTYPE_MEDAL);
+		}
+		// BomUp生成
+		else if (key->GetKeyboardTrigger(DIK_NUMPAD9))
+		{
+			CItem::DebugCreate(ITEMTYPE_BOMBUP);
+		}
+		// ガソリン生成
+		else if (key->GetKeyboardTrigger(DIK_NUMPADMINUS))
+		{
+			CItem::DebugCreate(ITEMTYPE_ENERGYUP);
+		}
+		// BulletUp生成
+		else if (key->GetKeyboardTrigger(DIK_NUMPADPLUS))
+		{
+			CItem::DebugCreate(ITEMTYPE_BULLETUP);
+		}
+	}
+}
+
+// =====================================================================================================================================================================
+//
+// デバッグ用アイテム生成
+//
+// =====================================================================================================================================================================
+CItem * CItem::DebugCreate(ITEMTYPE type)
+{
+	// 変数
+	CItem *pItem;
+
+	// メモリの確保
+	pItem = new CItem(OBJTYPE_ITEM);
+
+	// 初期化
+	pItem->Init();
+
+	// サイズの設定
+	pItem->SetSize(D3DXVECTOR3(
+		m_CollisionSize.x / 2,
+		m_CollisionSize.y / 2,
+		m_CollisionSize.z / 2));
+
+
+	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
+
+	if (pPlayer != nullptr)
+	{
+		D3DXVECTOR3 pos = pPlayer->GetPosition();
+		// アイテムが生成される位置の調整
+		pItem->SetDropPos(pos);
+
+		// アイテムの位置の設定
+		pItem->SetPosition(pos);
+
+		pItem->m_Type = type;
+	}
+
+	// 種類別にテクスチャを設定
+	pItem->SwitchTexture(pItem->m_Type, pItem);
+
+	return pItem;
 }
 
 // =====================================================================================================================================================================
@@ -432,7 +641,7 @@ void CItem::ItemLoad()
 															// ITEMSETが来たら
 				if (strcmp(cHeadText, "ITEMSET") == 0)
 				{
-					// END_BULLETSETが来るまでループ
+					// END_ITEMSETが来るまでループ
 					while (strcmp(cHeadText, "END_ITEMSET") != 0)
 					{
 						fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
@@ -448,15 +657,30 @@ void CItem::ItemLoad()
 						{
 							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_ItemData.nDeleteTime);	// 比較用テキストにDELETEを代入
 						}
-						// POWERが来たら
+						// FLASHが来たら
 						else if (strcmp(cHeadText, "FLASH") == 0)
 						{
 							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_ItemData.nFlashTime);	// 比較用テキストにFLASHを代入
 						}
-						// AMMOが来たら
+						// BEARが来たら
 						else if (strcmp(cHeadText, "BEAR") == 0)
 						{
 							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_ItemData.nBearScore);	// 比較用テキストにBEARを代入
+						}
+						// BEARが来たら
+						else if (strcmp(cHeadText, "COIN") == 0)
+						{
+							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_ItemData.nCoinScore);	// 比較用テキストにCOINを代入
+						}
+						// BEARが来たら
+						else if (strcmp(cHeadText, "JEWELRY") == 0)
+						{
+							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_ItemData.nJewelryScore);	// 比較用テキストにJEWELRYを代入
+						}
+						// BEARが来たら
+						else if (strcmp(cHeadText, "MEDAL") == 0)
+						{
+							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_ItemData.nMedalScore);	// 比較用テキストにMEDALを代入
 						}
 						// COLLISIONSIZEが来たら
 						else if (strcmp(cHeadText, "COLLISIONSIZE") == 0)
@@ -490,7 +714,7 @@ void CItem::ItemLoad()
 // キャラクターがアイテムを落とすときの生成処理
 //
 // =====================================================================================================================================================================
-CItem * CItem::DropCreate(D3DXVECTOR3 pos, ITEMDROP drop)
+CItem * CItem::DropCreate(D3DXVECTOR3 pos, ITEMDROP drop , ITEMDROP_PATTERN pattern ,ITEMTYPE type)
 {
 	// 変数
 	CItem *pItem;
@@ -513,8 +737,8 @@ CItem * CItem::DropCreate(D3DXVECTOR3 pos, ITEMDROP drop)
 	// アイテムの位置の設定
 	pItem->SetPosition(pos);
 
-	// アイテムのタイプをランダムに設定
-	pItem->m_Type = pItem->RandDropItem(drop);
+	// アイテムのドロップをパターンごとに変える
+	pItem->DropPattern(pattern, drop, type);
 
 	// 種類別にテクスチャを設定
 	pItem->SwitchTexture(pItem->m_Type, pItem);
@@ -566,7 +790,21 @@ void CItem::SwitchTexture(ITEMTYPE type, CItem *pItem)
 		// テクスチャの割り当て
 		pItem->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_BEAR));
 	}break;
-
+		//コイン
+	case (ITEMTYPE_COIN): {
+		// テクスチャの割り当て
+		pItem->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_COIN));
+	}break;
+		//宝石
+	case (ITEMTYPE_JEWELRY): {
+		// テクスチャの割り当て
+		pItem->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_JEWELRY));
+	}break;
+		//メダル
+	case (ITEMTYPE_MEDAL): {
+		// テクスチャの割り当て
+		pItem->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_MEDAL));
+	}break;
 		// 爆弾の数を増やす
 	case (ITEMTYPE_BOMBUP): {
 		// テクスチャの割り当て
@@ -611,12 +849,19 @@ CItem::ITEMTYPE CItem::RandDropItem(ITEMDROP drop)
 		// スコアアップのみの場合
 	case CItem::ITEMDROP_SCORE:
 		// ランダムの範囲をスコアアイテムのみに選択
-		type = RandomRange(ITEMTYPE_BEAR, ITEMTYPE_BULLETUP);
+		type = RandomRange(ITEMTYPE_BEAR, ITEMTYPE_MEDAL);
+		break;
+
+		// 弾薬などのみの場合
+	case CItem::ITEMDROP_CHARGE:
+		// ランダムの範囲をスコアアイテムのみに選択
+		type = RandomRange(ITEMTYPE_BOMBUP, ITEMTYPE_BULLETUP);
 		break;
 
 		// 全てのアイテム
 	case CItem::ITEMDROP_ALL:
-		type = ITEMTYPE(rand() % ITEMTYPE_MAX);
+		//type = ITEMTYPE(rand() % ITEMTYPE_MAX);
+		type = (ITEMTYPE)ItemRand(ITEMTYPE_MAX);
 		break;
 	default:
 		break;

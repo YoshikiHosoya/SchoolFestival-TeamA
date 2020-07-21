@@ -120,9 +120,6 @@ CDebug_ViewerCharacter* CDebug_ViewerCharacter::Create()
 	{
 		//初期化7
 		pCharacter->Init();
-
-		////オブジェクトタイプ設定
-		pCharacter->SetObjType(OBJTYPE_PLAYER);
 	}
 
 	//生成した情報
@@ -348,7 +345,7 @@ void CDebug_ViewerCharacter::MotionViewer()
 			std::string aPartsName = CModel::GetModelFileName(vModelList[nCnt]->GetType(), nCnt);
 
 			//頭の部分の文字列を消す("data/MODEL/character/)
-			aPartsName.erase(aPartsName.begin(), aPartsName.begin() + 21);
+			aPartsName.erase(aPartsName.begin(), aPartsName.begin() + 19);
 
 			//次の項目の枠の大きさ設定
 			ImGui::SetNextItemWidth(250);

@@ -5,6 +5,12 @@
 #include "BaseMode.h"
 #include "fade.h"
 #include "inputKeyboard.h"
+//=============================================================================
+// マクロ定義
+//=============================================================================
+#define DEFAULT_BACKCOLOR (D3DXCOLOR(0.0f,0.0f,0.0f,1.0f))
+
+
 //プロトタイプ宣言
 #ifdef _DEBUG
 LPD3DXFONT			g_pFont = NULL;	 // フォントへのポインタ
@@ -26,6 +32,7 @@ HRESULT  CRenderer::Init(HWND hWnd, BOOL bWindow)
 	D3DDISPLAYMODE d3ddm;			// ディスプレイモード
 	m_pLight  = new CLight;
 	m_pCamera = new CCamera;
+	m_BackColor = DEFAULT_BACKCOLOR;
 
 	// Direct3Dオブジェクトの生成
 	m_pD3D = Direct3DCreate9(D3D_SDK_VERSION);
@@ -215,7 +222,10 @@ void CRenderer::Update(void)
 	//更新と描画のグラフ
 	CScene::ShowUpdateGraph();
 
+	//レンダラー関係のデバッグ情報
+	RendererDebugInfo();
 
+	//Sceneのデバッグ情報
 	CScene::DebugAll();
 
 	//Sceneで管理してる情報 終了
@@ -249,7 +259,7 @@ void CRenderer::Update(void)
 void CRenderer::Draw(void)
 {
 	//バックバッファ＆Zバッファの
-	m_pD3DDevice->Clear(0, NULL, (D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER), D3DCOLOR_RGBA(0, 0, 0, 0), 1.0f, 0);
+	m_pD3DDevice->Clear(0, NULL, (D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER), m_BackColor, 1.0f, 0);
 	//Direct3Dによる描画開始
 	if (SUCCEEDED(m_pD3DDevice->BeginScene()))
 	{
@@ -443,6 +453,26 @@ void CRenderer::ResetDevice()
 	if (hr == D3DERR_INVALIDCALL)
 		IM_ASSERT(0);
 	ImGui_ImplDX9_CreateDeviceObjects();
+}
+
+//=============================================================================
+//デバイスリセット imGui用の処理含む
+//=============================================================================
+void CRenderer::RendererDebugInfo()
+{
+	ImGui::Begin("RendererInfo");
+
+	//背景色
+	//D3DXCLORではImGui対応していないのでfloat型にキャスト
+	float *pCol = m_BackColor;
+
+	//項目の大きさ設定
+	ImGui::SetNextItemWidth(250);
+
+	//色の設定
+	ImGui::ColorEdit4("BackColor", pCol);
+
+	ImGui::End();	//RendererInfo
 }
 
 //=============================================================================

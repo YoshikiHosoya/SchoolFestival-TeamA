@@ -24,6 +24,9 @@ FILENAME_LIST CTexture::m_aTexFileName =
 	{ "data/TEXTURE/Item/Rocketlauncher.png" },				//ロケットランチャーの弾
 	{ "data/TEXTURE/Item/Flameshot.png" },					//フレイムショットの弾
 	{ "data/TEXTURE/Item/Bear.png" },						//熊
+	{ "data/TEXTURE/Item/Coin.png" },						//コイン
+	{ "data/TEXTURE/Item/Jewelry.png" },					//宝石
+	{ "data/TEXTURE/Item/Medal.png" },						//メダル
 	{ "data/TEXTURE/Item/Bombup.png" },						//ボムアップ
 	{ "data/TEXTURE/Item/Energyup.png" },					//乗り物の耐久値アップ
 	{ "data/TEXTURE/Item/Bulletup.png" },					//残段数アップ

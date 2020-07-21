@@ -35,6 +35,9 @@ public:
 		TEX_ITEM_ROCKETLAUNCHER,				//ロケットランチャー
 		TEX_ITEM_FLAMESHOT,						//フレイムショット
 		TEX_ITEM_BEAR,							//熊-スコアアップ
+		TEX_ITEM_COIN,							//コイン-スコアアップ
+		TEX_ITEM_JEWELRY,						//宝石-スコアアップ
+		TEX_ITEM_MEDAL,							//メダル-スコアアップ
 		TEX_ITEM_BOMBUP,						//爆弾の数加算
 		TEX_ITEM_ENERGYUP,						//ガソリン
 		TEX_ITEM_BULLETUP,						//残段数加算

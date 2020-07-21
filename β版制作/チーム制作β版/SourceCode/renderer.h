@@ -50,6 +50,7 @@ private:
 	LPDIRECT3D9 m_pD3D = NULL;				//Direc3Dオブジェクトへのポインタ
 	LPDIRECT3DDEVICE9 m_pD3DDevice = NULL;	//Direct3dデバイスへのポインタ
 	D3DPRESENT_PARAMETERS m_d3dpp;			//プレゼンテーションパラメータ
+	D3DXCOLOR m_BackColor;
 
 	CLight *m_pLight;
 	CCamera *m_pCamera;
@@ -58,6 +59,7 @@ private:
 	bool m_bShowDebug;
 
 	void ResetDevice();		//デバイスリセット
+	void RendererDebugInfo();	//レンダラーに関する事のデバッグ情報
 };
 #endif
 #pragma once

@@ -81,14 +81,15 @@ public:
 
 		ENEMY_MOTION_NORMAL,				//ニュートラル
 		ENEMY_MOTION_WALK,					//歩き
-		ENEMY_MOTION_SQUAT,				//通常攻撃1
+		ENEMY_MOTION_SQUAT,					//通常攻撃1
 
 		// 捕虜のモーション
 		PRISONER_MOTION_STAY,				//ニュートラル
-		//PRISONER_MOTION_RELEASE,			//開放された時
-		//PRISONER_MOTION_RUN,				//走る
-		//PRISONER_MOTION_SKIP,				//スキップをしながら走る
-
+		PRISONER_MOTION_RELEASE,			//開放された時
+		PRISONER_MOTION_RUN,				//走る
+		PRISONER_MOTION_SALUTE,				//敬礼
+		PRISONER_MOTION_FALL,				//落下
+		PRISONER_MOTION_SKIP,				//スキップをしながら走る
 		CHARACTER_MOTION_MAX				//最大数
 	}CHARACTER_MOTION_STATE;
 

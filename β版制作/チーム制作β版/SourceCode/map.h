@@ -51,64 +51,82 @@ public:
 		EDITOR_MAX
 	};
 
-	CMap();																		// コンストラクタ
-	~CMap();																	// デストラクタ
+	// 配置するモデルの種類
+	enum ARRANGEMENT_MODEL
+	{
+		ARRANGEMENT_MODEL_MAP,					// マップ
+		ARRANGEMENT_MODEL_ENEMY,				// 敵
+		ARRANGEMENT_MODEL_PRISONER,				// 捕虜
+		ARRANGEMENT_MODEL_OBSTACLE,				// 障害物
+		ARRANGEMENT_MODEL_TANK,					// 戦車
+		ARRANGEMENT_MODEL_BATTLEPLANE,			// 戦闘機
+		ARRANGEMENT_MODEL_HELICOPTER,			// ヘリコプター
+		ARRANGEMENT_MODEL_MAX
+	};
+
+	// ウェーブの種類
+	enum WAVE
+	{
+		WAVE_1,									// ウェーブ1
+		WAVE_2,									// ウェーブ2
+		WAVE_3,									// ウェーブ3
+		WAVE_MAX
+	};
+	CMap();																			// コンストラクタ
+	~CMap();																		// デストラクタ
 
 	/* 静的メンバ関数 */
-	static	CMap	*MapCreate(MAP MapNum);										// マップの生成
-	void	MapUpdate();														// マップの更新
+	static	CMap	*MapCreate(MAP MapNum);											// マップの生成
+	void	MapUpdate();															// マップの更新
 
 	/* メンバ関数 */
-	int				GetMaxModel();												// モデルの最大数取得
-	int				GetMaxEnemy();												// 敵の最大数取得
-	int				GetMaxPrisoner();											// 捕虜の最大数取得
-	int				GetMaxObstacle();											// 障害物の最大数取得
-	int				GetMaxPlayerTank();											// 戦車の最大数取得
-	int				GetMaxBattlePlane();										// 戦闘機の最大数取得
-	int				GetMaxHelicopter();											// ヘリの最大数取得
-	LPD3DXMESH		GetMesh(int nCnt);											// メッシュの取得
-	CModel			*GetModel(int nCnt) { return m_pModel[nCnt]; };				// モデルの取得
-	CEnemy			*GetEnemy(int nCnt) { return m_pEnemy[nCnt]; };				// 敵の取得
-	CPrisoner		*GetPrisoner(int nCnt) { return m_pPrisoner[nCnt]; };		// 捕虜の取得
-	CObstacle		*GetObstacle(int nCnt) { return m_pObstacle[nCnt]; };		// 障害物の取得
-	CPlayertank		*GetPlayertank(int nCnt) { return m_pPlayerTank[nCnt]; };	// 戦車の取得
-	CBattlePlane	*GetBattlePlane(int nCnt) { return m_pBattlePlane[nCnt]; };	// 戦闘機の取得
-	CHelicopter		*GetHelicopter(int nCnt) { return m_pHelicopter[nCnt]; };	// ヘリコプターの取得
+	int				GetMaxModel();													// モデルの最大数取得
+	int				GetMaxEnemy();													// 敵の最大数取得
+	int				GetMaxPrisoner();												// 捕虜の最大数取得
+	int				GetMaxObstacle();												// 障害物の最大数取得
+	int				GetMaxPlayerTank();												// 戦車の最大数取得
+	int				GetMaxBattlePlane();											// 戦闘機の最大数取得
+	int				GetMaxHelicopter();												// ヘリの最大数取得
+	LPD3DXMESH		GetMesh(int nCnt);												// メッシュの取得
+	CModel			*GetModel(int nCnt)			{ return m_pModel[nCnt]; };			// モデルの取得
+	CEnemy			*GetEnemy(int nCnt)			{ return m_pEnemy[nCnt]; };			// 敵の取得
+	CPrisoner		*GetPrisoner(int nCnt)		{ return m_pPrisoner[nCnt]; };		// 捕虜の取得
+	CObstacle		*GetObstacle(int nCnt)		{ return m_pObstacle[nCnt]; };		// 障害物の取得
+	CPlayertank		*GetPlayertank(int nCnt)	{ return m_pPlayerTank[nCnt]; };	// 戦車の取得
+	CBattlePlane	*GetBattlePlane(int nCnt)	{ return m_pBattlePlane[nCnt]; };	// 戦闘機の取得
+	CHelicopter		*GetHelicopter(int nCnt)	{ return m_pHelicopter[nCnt]; };	// ヘリコプターの取得
 
-	void			UpdateDieFlag();											// 死亡フラグ確認関数
+	void			UpdateDieFlag();												// 死亡フラグ確認関数
 
 private:
 	/* メンバ関数 */
-	void			ModelLoad(MAP MapNum);									// モデルのロード
-	void			EnemyLoad(MAP MapNum);									// 敵のロード
-	void			PrisonerLoad(MAP MapNum);								// 捕虜のロード
-	void			ObstacleLoad(MAP MapNum);								// 障害物のロード
-	void			PlayerTankLoad(MAP MapNum);								// プレイヤー用の戦車のロード
-	void			BattlePlaneLoad(MAP MapNum);							// 戦闘機のロード
-	void			HelicopterLoad(MAP MapNum);								// ヘリコプターのロード
-	void			ModelSave(MAP MapNum);									// モデルのセーブ
-	void			EnemySave(MAP MapNum);									// 敵のセーブ
-	void			PrisonerSave(MAP MapNum);								// 捕虜のセーブ
-	void			ObstacleSave(MAP MapNum);								// 障害物のセーブ
-	void			PlayerTankSave(MAP MapNum);								// 戦車のセーブ
-	void			BattlePlaneSave(MAP MapNum);							// 戦闘機のセーブ
-	void			HelicopterSave(MAP MapNum);								// ヘリコプターのセーブ
-	void			AllSaveButton();										// 配置したモデルを全てセーブするボタン
-	void			MapModelTab();											// マップに配置するモデルのタブ
-	void			MapModelSet();											// マップに配置するモデルの設置
-	void			ObstacleSet();											// 障害物の設置
-	void			EnemySet();												// 敵の設置
-	void			PlayerTankSet();										// 戦車の設置
-	void			BattlePlaneSet();										// 戦闘機の設置
-	void			HelicopterSet();										// ヘリの設置
-	bool			ObstacleComboBox(int &nType);							// 障害物のコンボボックス
-	void			PrisonerSet();											// 捕虜の設置
-	bool			EnemyComboBox(int &nType);								// 敵のコンボボックス
-	bool			PrisonerComboBox(int &nType);							// 捕虜のコンボボックス
-	bool			PlayerTankComboBox(int &nType);							// 戦車のコンボボックス
-	bool			BattlePlaneComboBox(int &nType);						// 戦闘機のコンボボックス
-	bool			HelicopterComboBox(int &nType);							// ヘリのコンボボックス
-	void			SetSelectMapModelPosRDest(D3DXVECTOR3 posR);			// 選択しているモデルを注視点の目的地に設定
+	void			ArrangementModelLoad();													// 配置するモデルのロード
+	void			ArrangementModelCreate(int ModelType, int nType, 
+											D3DXVECTOR3 pos, int nLife, D3DXVECTOR3 size);	// 配置するモデルの生成
+	void			LoadFailureMessage(int ModelType);										// 読み込み失敗時の警告表示
+	void			LoadSuccessMessage(int ModelType);										// 読み込み成功時の結果表示
+
+	char			*ArrangementModelFileName(int ModelType);								// 配置するモデルファイル名(初期配置)
+
+	void			SaveModelHeader(FILE *pFile, int ModelType);							// セーブするモデルのヘッダー
+	void			SaveModelContents(FILE *pFile,int ModelType, int nCnt);					// セーブするモデルの情報
+
+	unsigned int	GetMaxArrangementModel(int ModelType);									// 配置するモデルの最大数取得
+	void			*GetArrangementModel(int ModelType, int nCnt);							// 配置するモデルのポインタ
+	void			ArrangementModelSave(int ModelType);									// 配置するモデルのセーブ
+
+	void			AllSaveButton();														// 配置したモデルを全てセーブするボタン
+	void			MapModelTab();															// マップに配置するモデルのタブ
+	void			ObstacleSet();															// 障害物の設置
+	void			EnemySet();																// 敵の設置
+	void			PlayerTankSet();														// 戦車の設置
+	void			BattlePlaneSet();														// 戦闘機の設置
+	void			HelicopterSet();														// ヘリの設置
+	bool			ObstacleComboBox(int &nType);											// 障害物のコンボボックス
+	void			PrisonerSet();															// 捕虜の設置
+	bool			EnemyComboBox(int &nType);												// 敵のコンボボックス
+	bool			PrisonerComboBox(int &nType);											// 捕虜のコンボボックス
+	void			SetSelectMapModelPosRDest(D3DXVECTOR3 posR);							// 選択しているモデルを注視点の目的地に設定
 
 	/* 静的メンバ変数 */
 	static char					*m_MapFileName[MAP_MAX];					// マップファイル名
@@ -120,6 +138,7 @@ private:
 	static char					*m_HelicopterFileName[MAP_MAX];				// ヘリファイル名
 	static MAP					m_MapNum;									// マップ番号
 	static EDITOR				m_Editor;									// エディターの種類
+	static int					m_ArrangmentModel;							// 配置するモデルの種類
 
 	/* メンバ変数 */
 	std::vector<CModel*>		m_pModel;									// 可変長配列 設置するモデル

@@ -95,6 +95,7 @@ private:
 	void SetCollsionParam();										//当たり判定のパラメータ設定
 	void SetAnimationParam();										//アニメーションのパラメータ設定
 	void Collision();												//判定
+	void RendererSetting();											//描画の設定
 };
 
 #endif
