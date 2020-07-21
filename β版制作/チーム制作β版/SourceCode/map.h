@@ -103,20 +103,20 @@ private:
 	void			ArrangementModelLoad();													// 配置するモデルのロード
 	void			ArrangementModelCreate(int ModelType, int nType, 
 											D3DXVECTOR3 pos, int nLife, D3DXVECTOR3 size);	// 配置するモデルの生成
-	void			LoadFailureMessage(int ModelType);										// ロード失敗時の警告表示
-	char			*MapFileOpen(int ModelType);											// 各モデルファイル名(初期配置)
+	void			LoadFailureMessage(int ModelType);										// 読み込み失敗時の警告表示
+	void			LoadSuccessMessage(int ModelType);										// 読み込み成功時の結果表示
+
+	char			*ArrangementModelFileName(int ModelType);								// 配置するモデルファイル名(初期配置)
 
 	void			SaveModelHeader(FILE *pFile, int ModelType);							// セーブするモデルのヘッダー
-	void			ModelSave(MAP MapNum);													// モデルのセーブ
-	void			EnemySave(MAP MapNum);													// 敵のセーブ
-	void			PrisonerSave(MAP MapNum);												// 捕虜のセーブ
-	void			ObstacleSave(MAP MapNum);												// 障害物のセーブ
-	void			PlayerTankSave(MAP MapNum);												// 戦車のセーブ
-	void			BattlePlaneSave(MAP MapNum);											// 戦闘機のセーブ
-	void			HelicopterSave(MAP MapNum);												// ヘリコプターのセーブ
+	void			SaveModelContents(FILE *pFile,int ModelType, int nCnt);					// セーブするモデルの情報
+
+	unsigned int	GetMaxArrangementModel(int ModelType);									// 配置するモデルの最大数取得
+	void			*GetArrangementModel(int ModelType, int nCnt);							// 配置するモデルのポインタ
+	void			ArrangementModelSave(int ModelType);									// 配置するモデルのセーブ
+
 	void			AllSaveButton();														// 配置したモデルを全てセーブするボタン
 	void			MapModelTab();															// マップに配置するモデルのタブ
-	void			MapModelSet();															// マップに配置するモデルの設置
 	void			ObstacleSet();															// 障害物の設置
 	void			EnemySet();																// 敵の設置
 	void			PlayerTankSet();														// 戦車の設置
@@ -126,9 +126,6 @@ private:
 	void			PrisonerSet();															// 捕虜の設置
 	bool			EnemyComboBox(int &nType);												// 敵のコンボボックス
 	bool			PrisonerComboBox(int &nType);											// 捕虜のコンボボックス
-	bool			PlayerTankComboBox(int &nType);											// 戦車のコンボボックス
-	bool			BattlePlaneComboBox(int &nType);										// 戦闘機のコンボボックス
-	bool			HelicopterComboBox(int &nType);											// ヘリのコンボボックス
 	void			SetSelectMapModelPosRDest(D3DXVECTOR3 posR);							// 選択しているモデルを注視点の目的地に設定
 
 	/* 静的メンバ変数 */
