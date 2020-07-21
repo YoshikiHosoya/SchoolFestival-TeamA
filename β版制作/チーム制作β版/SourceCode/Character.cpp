@@ -9,6 +9,7 @@
 #include "map.h"
 #include "Xinput.h"
 #include "collision.h"
+#include "hosso\/Debug_ModelViewer.h"
 
 //オフセットの読み込みファイル
 char *CCharacter::m_LoadOffsetFileName[CHARACTER_TYPE_MAX] =
@@ -902,6 +903,18 @@ void CCharacter::CharacterUnLoad(void)
 	}
 	m_CharacterMotion.clear();
 }
+
+//====================================================================
+//デバッグ
+//====================================================================
+void CCharacter::DebugInfo(void)
+{
+	CDebug_ModelViewer::OffsetViewer(m_vModelList);
+
+	//CDebugProc::Print("");
+}
+
+
 //====================================================================
 //モーションタイプの取得
 //====================================================================

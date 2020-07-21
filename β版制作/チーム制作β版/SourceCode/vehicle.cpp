@@ -191,7 +191,7 @@ void CVehicle::Draw(void)
 //====================================================================
 void CVehicle::DebugInfo(void)
 {
-	CDebug_ModelViewer::OffsetViewer(m_vModelList);
+	//CDebug_ModelViewer::OffsetViewer(m_vModelList);
 
 
 	//CDebugProc::Print("");

@@ -106,6 +106,7 @@ void CPrisoner::Draw(void)
 void CPrisoner::DebugInfo(void)
 {
 	//CDebugProc::Print("");
+	CCharacter::DebugInfo();
 }
 //====================================================================
 //モデルのクリエイト

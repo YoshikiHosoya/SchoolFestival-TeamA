@@ -14,6 +14,7 @@
 #include "player.h"
 #include "playerui.h"
 #include "gun.h"
+#include <random>
 
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
@@ -169,8 +170,10 @@ void CItem::Draw(void)
 // =====================================================================================================================================================================
 void CItem::ItemType(ITEMTYPE type)
 {
+	// プレイヤーのポインタを取得
 	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
 
+	// アイテムの種類ごとの処理
 	switch (type)
 	{
 		// ヘビーマシンガン
@@ -323,11 +326,33 @@ void CItem::Flashing()
 // =====================================================================================================================================================================
 void CItem::SetItemData()
 {
-	m_nDropRate		 = m_ItemData.nDropRate;		// ドロップ率の設定
-	m_nDeleteTime	 = m_ItemData.nDeleteTime;		// アイテムが点滅するまでの時間
-	m_nFlashTime	 = m_ItemData.nFlashTime;		// アイテムが点滅する時間
-	m_nBearScore	 = m_ItemData.nBearScore;		// 熊のアイテムのスコア
-	m_CollisionSize	 = m_ItemData.CollisionSize;	// 当たり判定の大きさ
+	// ドロップ率の設定
+	m_nDropRate		 = m_ItemData.nDropRate;
+	// アイテムが点滅するまでの時間
+	m_nDeleteTime	 = m_ItemData.nDeleteTime;
+	// アイテムが点滅する時間
+	m_nFlashTime	 = m_ItemData.nFlashTime;
+	// 熊のアイテムのスコア
+	m_nBearScore	 = m_ItemData.nBearScore;
+	// 当たり判定の大きさ
+	m_CollisionSize	 = m_ItemData.CollisionSize;
+}
+
+// =====================================================================================================================================================================
+//
+// ランダム生成
+//
+// =====================================================================================================================================================================
+uint64_t CItem::get_rand_range(uint64_t min_val, uint64_t max_val)
+{
+	// 乱数生成器
+	static std::mt19937_64 mt64(0);
+
+	// [min_val, max_val] の一様分布整数 (int) の分布生成器
+	std::uniform_int_distribution<uint64_t> get_rand_uni_int(min_val, max_val);
+
+	// 乱数を生成
+	return get_rand_uni_int(mt64);
 }
 
 // =====================================================================================================================================================================
@@ -338,7 +363,11 @@ void CItem::SetItemData()
 CItem::ITEMTYPE CItem::RandomRange(ITEMTYPE min, ITEMTYPE max)
 {
 	// 範囲でランダムに値を求め値を返す
-	return (ITEMTYPE)(min + (int)(rand()*(max - min + 1.0) / (1.0 + RAND_MAX)));
+	//return (ITEMTYPE)(min + (int)(rand()*(max - min + 1.0) / (1.0 + RAND_MAX)));
+
+	//return (ITEMTYPE)(min + (int)(rand()*(max - min) / (RAND_MAX)));
+
+	return (ITEMTYPE)get_rand_range(min, max);
 }
 
 // =====================================================================================================================================================================
@@ -360,6 +389,7 @@ int CItem::ItemRand(int max)
 		nRandom = rand();
 	} while (nRandom >= nAdjusted_max);
 
+	// 値を返す
 	return (int)(((float)nRandom / nAdjusted_max) * max);
 }
 
@@ -484,7 +514,7 @@ CItem * CItem::DropCreate(D3DXVECTOR3 pos, ITEMDROP drop)
 	pItem->SetPosition(pos);
 
 	// アイテムのタイプをランダムに設定
-	pItem->m_Type = RandDropItem(drop);
+	pItem->m_Type = pItem->RandDropItem(drop);
 
 	// 種類別にテクスチャを設定
 	pItem->SwitchTexture(pItem->m_Type, pItem);
