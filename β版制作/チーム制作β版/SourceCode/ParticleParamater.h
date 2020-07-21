@@ -63,7 +63,12 @@ public:
 
 	bool&GetSpeedRandom()								{ return m_bSpeedRandom; };					//パーティクルの速度がランダムかどうか
 	bool &GetGravity()									{ return m_bGravity; };						//重力
-	bool &GetAlphaBlend()								{ return m_bAlphaBlend;};					//αブレンドするか
+	bool &GetAlphaBlend_Add()							{ return m_bAlphaBlend_Add;};				//加算合成するか
+	bool &GetAlphaBlend_Sub()							{ return m_bAlphaBlend_Sub;};				//減算合成するか
+	bool &GetZTest()									{ return m_bZtest;};						//Zテストするか
+	bool &GetZWrite()									{ return m_bZWrite;};						//Zライティングするか
+	bool &GetBillboard()								{ return m_bBillboard; };					//ビルボード
+
 	int &GetLife()										{ return m_nLife; };						//ライフ
 	int &GetNumber()									{ return m_nNumber; };						//個数
 	float &GetSpeed()									{ return m_fSpeed; };						//速度
@@ -102,7 +107,12 @@ private:
 
 	bool m_bSpeedRandom;							//速度がランダムかどうか
 	bool m_bGravity;								//重力をかけるか
-	bool m_bAlphaBlend;								//加算合成するか
+	bool m_bAlphaBlend_Sub;							//加算合成するか
+	bool m_bAlphaBlend_Add;							//減算合成するか
+	bool m_bZtest;									//Zテストするか
+	bool m_bZWrite;									//Zライティングするか
+	bool m_bBillboard;								//ビルボードするかどうか
+
 	int m_nLife;									//ライフ
 	int m_nNumber;									//個数
 	float m_fSpeed;									//速度
