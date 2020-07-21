@@ -104,11 +104,6 @@ void CGame::ShowDebugInfo(void)
 	//キーボード情報取得
 	CKeyboard *key = CManager::GetInputKeyboard();
 
-	if (key->GetKeyboardTrigger(DIK_L))
-	{
-		CItem::Create(D3DXVECTOR3(300.0f, 100.0f, 0.0f), CItem::ITEMTYPE_LASERGUN);
-	}
-
 	//使い方説明
 	CDebugProc::Print("---------Debug Collision----------\n");
 	CDebugProc::Print("[Ctrl] + テンキー [5] : 当たり判定のラインの表示非表示\n");
