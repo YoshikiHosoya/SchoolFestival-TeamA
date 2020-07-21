@@ -372,6 +372,31 @@ CItem::ITEMTYPE CItem::RandomRange(ITEMTYPE min, ITEMTYPE max)
 
 // =====================================================================================================================================================================
 //
+// アイテムをドロップする時のパターン
+//
+// =====================================================================================================================================================================
+void CItem::DropPattern(ITEMDROP_PATTERN pattern , ITEMDROP drop, ITEMTYPE type)
+{
+	// 条件ごとにドロップさせる条件を変える
+	switch (pattern)
+	{
+		// ドロップするアイテムを指定する
+	case CItem::ITEMDROP_PATTERN_DESIGNATE:
+		m_Type = type;
+		break;
+
+		// ドロップするアイテムをランダムにする
+	case CItem::ITEMDROP_PATTERN_RANDOM:
+		// アイテムのタイプをランダムに設定
+		m_Type = RandDropItem(drop);
+		break;
+	default:
+		break;
+	}
+}
+
+// =====================================================================================================================================================================
+//
 // ランダム関数
 //
 // =====================================================================================================================================================================
@@ -432,7 +457,7 @@ void CItem::ItemLoad()
 															// ITEMSETが来たら
 				if (strcmp(cHeadText, "ITEMSET") == 0)
 				{
-					// END_BULLETSETが来るまでループ
+					// END_ITEMSETが来るまでループ
 					while (strcmp(cHeadText, "END_ITEMSET") != 0)
 					{
 						fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
@@ -448,12 +473,12 @@ void CItem::ItemLoad()
 						{
 							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_ItemData.nDeleteTime);	// 比較用テキストにDELETEを代入
 						}
-						// POWERが来たら
+						// FLASHが来たら
 						else if (strcmp(cHeadText, "FLASH") == 0)
 						{
 							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_ItemData.nFlashTime);	// 比較用テキストにFLASHを代入
 						}
-						// AMMOが来たら
+						// BEARが来たら
 						else if (strcmp(cHeadText, "BEAR") == 0)
 						{
 							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_ItemData.nBearScore);	// 比較用テキストにBEARを代入
@@ -490,7 +515,7 @@ void CItem::ItemLoad()
 // キャラクターがアイテムを落とすときの生成処理
 //
 // =====================================================================================================================================================================
-CItem * CItem::DropCreate(D3DXVECTOR3 pos, ITEMDROP drop)
+CItem * CItem::DropCreate(D3DXVECTOR3 pos, ITEMDROP drop , ITEMDROP_PATTERN pattern ,ITEMTYPE type)
 {
 	// 変数
 	CItem *pItem;
@@ -513,8 +538,8 @@ CItem * CItem::DropCreate(D3DXVECTOR3 pos, ITEMDROP drop)
 	// アイテムの位置の設定
 	pItem->SetPosition(pos);
 
-	// アイテムのタイプをランダムに設定
-	pItem->m_Type = pItem->RandDropItem(drop);
+	// アイテムのドロップをパターンごとに変える
+	pItem->DropPattern(pattern, drop, type);
 
 	// 種類別にテクスチャを設定
 	pItem->SwitchTexture(pItem->m_Type, pItem);

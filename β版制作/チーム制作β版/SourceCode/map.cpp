@@ -2206,7 +2206,10 @@ void CMap::UpdateDieFlag()
 			if (CItem::DropRate())
 			{
 				//ƒAƒCƒeƒ€‚ð¶¬
-				CItem::DropCreate(m_pEnemy[nCnt]->GetPosition(), CItem::ITEMDROP_WEAPON);
+				CItem::DropCreate(m_pEnemy[nCnt]->GetPosition(),
+					CItem::ITEMDROP_WEAPON,
+					CItem::ITEMDROP_PATTERN_RANDOM,
+					CItem::ITEMTYPE_HEAVYMACHINEGUN);
 			}
 			m_pEnemy[nCnt]->Rerease();
 			m_pEnemy[nCnt] = nullptr;

@@ -65,6 +65,13 @@ public:
 		ITEMDROP_ALL,				// 全て
 	};
 
+	// アイテムのドロップ形式
+	enum ITEMDROP_PATTERN
+	{
+		ITEMDROP_PATTERN_DESIGNATE,	// 指定してドロップさせる
+		ITEMDROP_PATTERN_RANDOM,	// ランダムでドロップさせる
+	};
+
 	/* 関数 */
 	CItem(OBJ_TYPE type);														// コンストラクタ
 	~CItem();																	// デストラクタ
@@ -84,7 +91,11 @@ public:
 	void						Flashing();										// 点滅処理
 
 	/* 静的メンバ関数 */
-	static	CItem				*DropCreate(D3DXVECTOR3 pos, ITEMDROP drop);	// キャラクターがアイテムを落とす時の生成
+	static	CItem				*DropCreate(
+		D3DXVECTOR3 pos,
+		ITEMDROP drop,
+		ITEMDROP_PATTERN pattern,
+		ITEMTYPE type);															// キャラクターがアイテムを落とす時の生成
 	static	void				SwitchTexture(ITEMTYPE type, CItem *pItem);		// 種類別テクスチャ設定
 	static	bool				DropRate();										// アイテムをドロップする確率
 	static	int					ItemRand(int max);								// ランダムに値を返す
@@ -94,6 +105,10 @@ public:
 	/* メンバ関数 */
 	ITEMTYPE					RandDropItem(ITEMDROP drop);					// アイテムの種類をランダムに計算
 	ITEMTYPE					RandomRange(ITEMTYPE min, ITEMTYPE max);		// ランダムの範囲選択
+	void						DropPattern(
+		ITEMDROP_PATTERN pattern,
+		ITEMDROP drop,
+		ITEMTYPE type);															// アイテムのドロップパターン
 
 protected:
 private:
@@ -107,7 +122,7 @@ private:
 	static D3DXVECTOR3			m_CollisionSize;								// 当たり判定の大きさ
 
 	/* メンバ関数 */
-	uint64_t get_rand_range(uint64_t min_val, uint64_t max_val);
+	uint64_t get_rand_range(uint64_t min_val, uint64_t max_val);				// ランダム関数 範囲
 
 	/* メンバ変数 */
 	ITEMTYPE					m_Type;											// アイテムタイプ
