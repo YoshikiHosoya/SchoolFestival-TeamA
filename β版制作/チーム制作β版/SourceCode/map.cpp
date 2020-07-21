@@ -109,7 +109,7 @@ CMap::~CMap()
 // 配置するモデルのロード
 //
 // =====================================================================================================================================================================
-void CMap::ArrangementModelLoad(MAP MapNum)
+void CMap::ArrangementModelLoad()
 {
 	// ファイルポイント
 	FILE *pFile;
@@ -124,34 +124,8 @@ void CMap::ArrangementModelLoad(MAP MapNum)
 
 	for (int nCnt = 0; nCnt < ARRANGEMENT_MODEL_MAX; nCnt++)
 	{
-		// 配置するモデルの読み込み
-		switch (nCnt)
-		{
-		case CMap::ARRANGEMENT_MODEL_MAP:
-			cFileName = m_MapFileName[MapNum];
-			break;
-		case CMap::ARRANGEMENT_MODEL_ENEMY:
-			cFileName = m_EnemyFileName[MapNum];
-			break;
-		case CMap::ARRANGEMENT_MODEL_PRISONER:
-			cFileName = m_PrisonerFileName[MapNum];
-			break;
-		case CMap::ARRANGEMENT_MODEL_OBSTACLE:
-			cFileName = m_ObstacleFileName[MapNum];
-			break;
-		case CMap::ARRANGEMENT_MODEL_TANK:
-			cFileName = m_PlayerTankFileName[MapNum];
-			break;
-		case CMap::ARRANGEMENT_MODEL_BATTLEPLANE:
-			cFileName = m_BattlePlaneFileName[MapNum];
-			break;
-		case CMap::ARRANGEMENT_MODEL_HELICOPTER:
-			cFileName = m_HelicopterFileName[MapNum];
-			break;
-		}
-
-		// ファイルを開く
-		pFile = fopen(cFileName, "r");
+		// 各モデルファイルのファイルを開く
+		pFile = fopen(MapFileOpen(nCnt), "r");
 
 		// 開いているとき
 		if (pFile != NULL)
@@ -343,11 +317,51 @@ void CMap::LoadFailureMessage(int ModelType)
 
 // =====================================================================================================================================================================
 //
+// 各モデルファイル名(初期配置)
+//
+// =====================================================================================================================================================================
+char * CMap::MapFileOpen(int ModelType)
+{
+	char *cFileName = nullptr;			// ファイル名
+
+	switch (ModelType)
+	{
+	case CMap::ARRANGEMENT_MODEL_MAP:
+		cFileName = m_MapFileName[m_MapNum];
+		break;
+	case CMap::ARRANGEMENT_MODEL_ENEMY:
+		cFileName = m_EnemyFileName[m_MapNum];
+		break;
+	case CMap::ARRANGEMENT_MODEL_PRISONER:
+		cFileName = m_PrisonerFileName[m_MapNum];
+		break;
+	case CMap::ARRANGEMENT_MODEL_OBSTACLE:
+		cFileName = m_ObstacleFileName[m_MapNum];
+		break;
+	case CMap::ARRANGEMENT_MODEL_TANK:
+		cFileName = m_PlayerTankFileName[m_MapNum];
+		break;
+	case CMap::ARRANGEMENT_MODEL_BATTLEPLANE:
+		cFileName = m_BattlePlaneFileName[m_MapNum];
+		break;
+	case CMap::ARRANGEMENT_MODEL_HELICOPTER:
+		cFileName = m_HelicopterFileName[m_MapNum];
+		break;
+	}
+
+	return cFileName;
+}
+
+// =====================================================================================================================================================================
+//
 // マップの生成
 //
 // =====================================================================================================================================================================
 CMap *CMap::MapCreate(MAP MapNum)
 {
+	// 現在のマップ番号
+	m_MapNum = MapNum;
+
 	// 変数
 	CMap *pMap;
 
@@ -355,7 +369,7 @@ CMap *CMap::MapCreate(MAP MapNum)
 	pMap = new CMap();
 
 	// 配置するモデルのロード
-	pMap->ArrangementModelLoad(MapNum);
+	pMap->ArrangementModelLoad();
 
 	return pMap;
 }
@@ -407,6 +421,22 @@ void CMap::MapUpdate()
 		{
 			// ウェーブエディター
 			m_Editor = EDITOR_WAVE;
+
+			// オブジェクト番号の選択
+			ImGui::InputInt("nowWaveNum", &nNowMapSelect, 1, 20, 0);
+
+			// 範囲制限
+			if (nNowMapSelect <= 0)
+			{
+				nNowMapSelect = 0;
+			}
+			else if (nNowMapSelect >= WAVE_MAX)
+			{
+				// 最後の番号にする
+				nNowMapSelect = MAP_MAX - 1;
+			}
+
+			// 選択したマップ番号代入
 
 			ImGui::EndTabItem();
 		}
@@ -539,6 +569,15 @@ LPD3DXMESH CMap::GetMesh(int nCnt)
 		return m_pModel[nCnt]->GetMesh();
 	}
 	return 0;
+}
+
+// =====================================================================================================================================================================
+//
+// セーブするモデルのヘッダー
+//
+// =====================================================================================================================================================================
+void CMap::SaveModelHeader(FILE * pFile, int ModelType)
+{
 }
 
 // =====================================================================================================================================================================

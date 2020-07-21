@@ -64,6 +64,14 @@ public:
 		ARRANGEMENT_MODEL_MAX
 	};
 
+	// ウェーブの種類
+	enum WAVE
+	{
+		WAVE_1,									// ウェーブ1
+		WAVE_2,									// ウェーブ2
+		WAVE_3,									// ウェーブ3
+		WAVE_MAX
+	};
 	CMap();																			// コンストラクタ
 	~CMap();																		// デストラクタ
 
@@ -92,11 +100,13 @@ public:
 
 private:
 	/* メンバ関数 */
-	void			ArrangementModelLoad(MAP MapNum);										// 配置するモデルのロード
+	void			ArrangementModelLoad();													// 配置するモデルのロード
 	void			ArrangementModelCreate(int ModelType, int nType, 
 											D3DXVECTOR3 pos, int nLife, D3DXVECTOR3 size);	// 配置するモデルの生成
 	void			LoadFailureMessage(int ModelType);										// ロード失敗時の警告表示
+	char			*MapFileOpen(int ModelType);											// 各モデルファイル名(初期配置)
 
+	void			SaveModelHeader(FILE *pFile, int ModelType);							// セーブするモデルのヘッダー
 	void			ModelSave(MAP MapNum);													// モデルのセーブ
 	void			EnemySave(MAP MapNum);													// 敵のセーブ
 	void			PrisonerSave(MAP MapNum);												// 捕虜のセーブ
