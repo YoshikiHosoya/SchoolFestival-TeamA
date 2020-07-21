@@ -84,7 +84,6 @@ public:
 	bool &GetCollisionSizeCalc()						{ return m_bCollisionSizeCalc; };			//当たり判定生成時にサイズを計算するかどうか　ShotGunとかに必要
 	int &GetCollisionAttackValue()						{ return m_nCollisionAttackValue; };		//攻撃力
 	int &GetCollisionCnt()								{ return m_nCollisionCnt; };				//判定をする時間
-	TAG &GetCollisionTag()								{ return m_CollisionTag; };					//タグ　プレイヤーかどうか
 
 	PARTICLE_SHAPE &GetShape()							{ return m_shape; };						//パーティクルの方向
 	CTexture::TEX_TYPE &GetTex()						{ return m_Textype; };						//テクスチャ
@@ -120,9 +119,6 @@ private:
 	bool m_bCollisionSizeCalc;						//当たり判定生成時にサイズを計算するかどうか　ShotGunとかに必要
 	int m_nCollisionAttackValue;					//攻撃力
 	int m_nCollisionCnt;							//判定をする時間
-	TAG m_CollisionTag;								//タグ　プレイヤーかどうか
-
-
 
 	D3DXVECTOR3 m_Size;								//サイズ
 	D3DXVECTOR3 m_SizeDamping;						//サイズの減衰値

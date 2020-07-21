@@ -70,7 +70,7 @@ void CHeavyMachinegun::Update(void)
 	CBullet::Update();
 
 	//パーティクル発生 軌跡みたいな
-	CParticle::CreateFromText(GetPosition(), D3DXVECTOR3(0.0f, 0.0f, GetRot().x), CParticleParam::EFFECT_HEAVY_MACHINEGUN);
+	CParticle::CreateFromText(GetPosition(), D3DXVECTOR3(0.0f, 0.0f, GetRot().x), CParticleParam::EFFECT_HEAVY_MACHINEGUN, CBullet::GetTag());
 
 }
 

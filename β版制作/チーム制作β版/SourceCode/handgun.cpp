@@ -71,7 +71,7 @@ void CHandgun::Update(void)
 	CBullet::Update();
 
 	//パーティクル発生 軌跡みたいな
-	CParticle::CreateFromText(GetPosition(), ZeroVector3, CParticleParam::EFFECT_HANDGUN);
+	CParticle::CreateFromText(GetPosition(), ZeroVector3, CParticleParam::EFFECT_HANDGUN, CBullet::GetTag());
 
 }
 
