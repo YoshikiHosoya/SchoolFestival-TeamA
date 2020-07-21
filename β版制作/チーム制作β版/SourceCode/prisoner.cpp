@@ -294,27 +294,32 @@ void CPrisoner::PrisonerDropType()
 {
 	switch (this->GetPrisonerDropType())
 	{
+		// アイテムを1種類指定して確定でドロップさせる
 	case CPrisoner::PRISONER_ITEM_DROPTYPE_DESIGNATE_ONE:
 		// アイテムの生成
 		CItem::DropCreate(
 			GetPosition(),
-			CItem::ITEMDROP_ALL,
+			CItem::ITEMDROP_NONE,
 			CItem::ITEMDROP_PATTERN_DESIGNATE,
-			CItem::ITEMTYPE_HEAVYMACHINEGUN);
+			CItem::ITEMTYPE_COIN);
 		break;
+
+		// ドロップするアイテムを範囲で指定してドロップさせる
 	case CPrisoner::PRISONER_ITEM_DROPTYPE_DESIGNATE_RANGE:
 		CItem::DropCreate(
 			GetPosition(),
 			CItem::ITEMDROP_WEAPON,
 			CItem::ITEMDROP_PATTERN_RANDOM,
-			CItem::ITEMTYPE_HEAVYMACHINEGUN);
+			CItem::ITEMTYPE_NONE);
 		break;
+
+		// 全てのアイテムの中からランダムでアイテムをドロップさせる
 	case CPrisoner::PRISONER_ITEM_DROPTYPE_ALL:
 		CItem::DropCreate(
 			GetPosition(),
 			CItem::ITEMDROP_ALL,
 			CItem::ITEMDROP_PATTERN_RANDOM,
-			CItem::ITEMTYPE_HEAVYMACHINEGUN);
+			CItem::ITEMTYPE_NONE);
 		break;
 	default:
 		break;

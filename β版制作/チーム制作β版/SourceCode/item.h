@@ -25,6 +25,9 @@ typedef struct
 	int					nDeleteTime;	// 点滅するまでの時間
 	int					nFlashTime;		// 点滅する時間
 	int					nBearScore;		// 熊のアイテムを取った時のスコアの値
+	int					nCoinScore;		// コインのアイテムを取った時のスコアの値
+	int					nJewelryScore;	// 宝石のアイテムを取った時のスコアの値
+	int					nMedalScore;	// メダルのアイテムを取った時のスコアの値
 	D3DXVECTOR3			CollisionSize;	// 当たり判定のサイズ
 }ITEM_DATA;
 
@@ -43,13 +46,21 @@ public:
 	// 種類
 	enum ITEMTYPE
 	{
+		ITEMTYPE_NONE = -1,			// 未選択
+		// ------ 武器 ------ //
 		ITEMTYPE_HEAVYMACHINEGUN,	// ヘビーマシンガン
 		ITEMTYPE_SHOTGUN,			// ショットガン
 		ITEMTYPE_LASERGUN,			// レーザーガン
 		ITEMTYPE_ROCKETLAUNCHER,	// ロケットランチャー
 		ITEMTYPE_FLAMESHOT,			// フレイムショット
 
-		ITEMTYPE_BEAR,				// 熊-スコアアップ
+		// ------ スコア ------ //
+		ITEMTYPE_BEAR,				// 熊
+		ITEMTYPE_COIN,				// コイン
+		ITEMTYPE_JEWELRY,			// 宝石
+		ITEMTYPE_MEDAL,				// メダル
+
+		// ------ チャージ ------ //
 		ITEMTYPE_BOMBUP,			// 爆弾の数を増やす
 		ITEMTYPE_ENERGYUP,			// 乗り物の耐久値を回復する
 		ITEMTYPE_BULLETUP,			// ハンドガン以外の弾の残弾数を増やす
@@ -60,14 +71,17 @@ public:
 	// アイテムの用途
 	enum ITEMDROP
 	{
+		ITEMDROP_NONE = -1,			// ドロップしない
 		ITEMDROP_WEAPON,			// 武器強化
 		ITEMDROP_SCORE,				// スコアアップ
+		ITEMDROP_CHARGE,			// 弾薬など
 		ITEMDROP_ALL,				// 全て
 	};
 
 	// アイテムのドロップ形式
 	enum ITEMDROP_PATTERN
 	{
+		ITEMDROP_PATTERN_NONE = -1,	// 何もしない
 		ITEMDROP_PATTERN_DESIGNATE,	// 指定してドロップさせる
 		ITEMDROP_PATTERN_RANDOM,	// ランダムでドロップさせる
 	};
@@ -114,7 +128,6 @@ public:
 protected:
 private:
 	/* 静的メンバ関数 */
-
 	static CItem				*DebugCreate(ITEMTYPE type);					// デバッグ用アイテム生成
 	/* 静的メンバ変数 */
 	static char					*m_ItemFileName;								// アイテムのファイル名
@@ -123,10 +136,14 @@ private:
 	static int					m_nDeleteTime;									// アイテムが点滅するまでの時間
 	static int					m_nFlashTime;									// アイテムが点滅する時間
 	static int					m_nBearScore;									// 熊のアイテムのスコア
+	static int					m_nCoinScore;									// コインのアイテムのスコア
+	static int					m_nJewelryScore;								// 宝石のアイテムのスコア
+	static int					m_nMedalScore;									// メダルのアイテムのスコア
 	static D3DXVECTOR3			m_CollisionSize;								// 当たり判定の大きさ
 
 	/* メンバ関数 */
-	uint64_t get_rand_range(uint64_t min_val, uint64_t max_val);				// ランダム関数 範囲
+	uint64_t	get_rand_range(uint64_t min_val, uint64_t max_val);				// ランダム関数 範囲
+	void		AddCoinScore(int &nScore);										// コインのスコアの加算
 
 	/* メンバ変数 */
 	ITEMTYPE					m_Type;											// アイテムタイプ
