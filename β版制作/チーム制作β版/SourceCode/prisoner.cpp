@@ -89,9 +89,6 @@ void CPrisoner::Update(void)
 
 	// キャラクターの更新
 	CCharacter::Update();
-
-	// 捕虜の状態
-	//CDebugProc::Print("\n 捕虜の状態 %d\n\n", m_PrisonerState);
 }
 //====================================================================
 //描画
