@@ -228,6 +228,8 @@ void CMap::ArrangementModelCreate(int ModelType, int nType, D3DXVECTOR3 pos, int
 		m_pPrisoner.emplace_back(CPrisoner::Create());
 		// à íuÇÃê›íË
 		m_pPrisoner[m_pPrisoner.size() - 1]->SetPosition(pos);
+		// éÌóﬁÇÃê›íË
+		m_pPrisoner[m_pPrisoner.size() - 1]->SetPrisonerType((CPrisoner::PRISONER_ITEM_DROPTYPE)nType);
 		break;
 
 	/* --- è·äQï® --- */

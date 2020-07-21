@@ -104,8 +104,19 @@ void CGame::ShowDebugInfo(void)
 	//キーボード情報取得
 	CKeyboard *key = CManager::GetInputKeyboard();
 
+	// デバッグ用当たり判定
+	DebugCollision(key);
+	// デバッグ用アイテム
+	DebugItem(key);
+}
+
+//==========================================================
+// デバッグ用当たり判定の可視化on off
+//==========================================================
+void CGame::DebugCollision(CKeyboard *key)
+{
 	//使い方説明
-	CDebugProc::Print("---------Debug Collision----------\n");
+	CDebugProc::Print("\n---------Debug Collision----------\n");
 	CDebugProc::Print("[Ctrl] + テンキー [5] : 当たり判定のラインの表示非表示\n");
 
 	if (C3DLine::GetDrawFlag())
@@ -132,4 +143,13 @@ void CGame::ShowDebugInfo(void)
 			}
 		}
 	}
+}
+
+//==========================================================
+// デバッグ用アイテム
+//==========================================================
+void CGame::DebugItem(CKeyboard *key)
+{
+	// デバッグ用アイテムコマンド
+	CItem::DebugItemCommand(key);
 }

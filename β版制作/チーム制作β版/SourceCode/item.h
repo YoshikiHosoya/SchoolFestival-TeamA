@@ -101,6 +101,7 @@ public:
 	static	int					ItemRand(int max);								// ランダムに値を返す
 	static	void				ItemLoad();										// アイテムのロード
 	static	void				SetItemData();									// アイテムのデータ設定
+	static  void				DebugItemCommand(CKeyboard *key);				// デバッグ用アイテムコマンド
 
 	/* メンバ関数 */
 	ITEMTYPE					RandDropItem(ITEMDROP drop);					// アイテムの種類をランダムに計算
@@ -112,6 +113,9 @@ public:
 
 protected:
 private:
+	/* 静的メンバ関数 */
+
+	static CItem				*DebugCreate(ITEMTYPE type);					// デバッグ用アイテム生成
 	/* 静的メンバ変数 */
 	static char					*m_ItemFileName;								// アイテムのファイル名
 	static ITEM_DATA			m_ItemData;										// アイテムのデータ

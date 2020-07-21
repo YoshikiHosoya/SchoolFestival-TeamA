@@ -27,6 +27,10 @@ public:
 	void ShowDebugInfo(void);					//デバッグ情報表記
 
 private:
+	/* メンバ関数 */
+	void DebugCollision(CKeyboard *key);		// デバッグ用当たり判定の可視化on off
+	void DebugItem(CKeyboard *key);				// デバッグ用アイテム
+
 	static LPDIRECT3DTEXTURE9 m_pTexture;
 	static CPlayer	*m_pPlayer;
 	static CMap		*m_pMap;
