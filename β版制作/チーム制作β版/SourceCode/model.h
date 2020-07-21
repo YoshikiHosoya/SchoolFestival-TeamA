@@ -39,12 +39,17 @@ public:
 	/*--- 捕虜のパーツモデル ---*/
 	typedef enum
 	{
-		MODEL_PRISONER_HEAD,			//捕虜の頭
+		MODEL_PRISONER_WAIST,			//捕虜の腰
 		MODEL_PRISONER_BODY,			//捕虜の体
+		MODEL_PRISONER_HEAD,			//捕虜の頭
+		MODEL_PRISONER_L_SHOLDER,		//捕虜の左肩
+		MODEL_PRISONER_R_SHOLDER,		//捕虜の右肩
 		MODEL_PRISONER_LARM,			//捕虜の左腕
 		MODEL_PRISONER_RARM,			//捕虜の右腕
 		MODEL_PRISONER_LHAND,			//捕虜の左手
 		MODEL_PRISONER_RHAND,			//捕虜の右手
+		MODEL_PRISONER_LKNEE,			//捕虜の左膝
+		MODEL_PRISONER_RKNEE,			//捕虜の右膝
 		MODEL_PRISONER_LLEG,			//捕虜の左脚
 		MODEL_PRISONER_RLEG,			//捕虜の右脚
 		MODEL_PRISONER_LFOOT,			//捕虜の左足

@@ -54,20 +54,20 @@ HRESULT CDebug_ViewerCharacter::Init()
 	CCharacter::Init();
 
 	//オフセット設定
-	CCharacter::LoadOffset(CCharacter::CHARACTER_TYPE_PLAYER);
+	CCharacter::LoadOffset(CCharacter::CHARACTER_TYPE_PRISONER);
 
 	//初期化
 	SetRotDest(ZeroVector3);
 
-	//銃の生成
-	m_pGun = CGun::Create(GetCharacterModelPartsList(CModel::MODEL_PLAYER_RHAND)->GetMatrix());
+	////銃の生成
+	//m_pGun = CGun::Create(GetCharacterModelPartsList(CModel::MODEL_PLAYER_RHAND)->GetMatrix());
 
-	//ナイフの生成
-	m_pKnife = CKnife::Create(GetCharacterModelPartsList(CModel::MODEL_PLAYER_LHAND)->GetMatrix());
-	m_pKnife->SetPosition(D3DXVECTOR3(6.0f, 0.0f, 0.0f));
+	////ナイフの生成
+	//m_pKnife = CKnife::Create(GetCharacterModelPartsList(CModel::MODEL_PLAYER_LHAND)->GetMatrix());
+	//m_pKnife->SetPosition(D3DXVECTOR3(6.0f, 0.0f, 0.0f));
 
-	//ナイフON状態
-	m_pKnife->StartMeleeAttack();
+	////ナイフON状態
+	//m_pKnife->StartMeleeAttack();
 
 	//成功
 	return S_OK;
