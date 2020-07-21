@@ -120,9 +120,6 @@ CDebug_ViewerCharacter* CDebug_ViewerCharacter::Create()
 	{
 		//初期化7
 		pCharacter->Init();
-
-		////オブジェクトタイプ設定
-		pCharacter->SetObjType(OBJTYPE_PLAYER);
 	}
 
 	//生成した情報
