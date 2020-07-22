@@ -84,18 +84,18 @@ void CFlameshot::Update(void)
 	if (move.y > MOVE_RANGE_HEIGHT)
 	{
 		// ˆÚ“®‚ð—}‚¦‚é
-		move.y += (float)sin(-MOVE_RESTRAIN_HEIGHT);
+		move.y += sinf(-MOVE_RESTRAIN_HEIGHT);
 	}
 	// ˆê’è”ÍˆÍ‰º~‚µ‚½‚ç
 	else if (move.y < -MOVE_RANGE_HEIGHT)
 	{
 		// ˆÚ“®‚ð—}‚¦‚é
-		move.y += (float)sin(MOVE_RESTRAIN_HEIGHT);
+		move.y += sinf(MOVE_RESTRAIN_HEIGHT);
 	}
 	else
 	{
 		// ã¸‚·‚é
-		move.y += (float)sin(-MOVE_RISE_HEIGHT);
+		move.y += sinf(-MOVE_RISE_HEIGHT);
 	}
 
 	// ˆÚ“®—Ê‚ÌÝ’è
