@@ -29,7 +29,7 @@ int			CItem::m_nCoinScore		 = 0;
 int			CItem::m_nJewelryScore	 = 0;
 int			CItem::m_nMedalScore	 = 0;
 D3DXVECTOR3 CItem::m_CollisionSize	 = D3DXVECTOR3(0,0,0);
-
+int			CItem::m_nAddCnt		 = 0;
 // =====================================================================================================================================================================
 // テキストファイル名
 // =====================================================================================================================================================================
@@ -214,9 +214,7 @@ void CItem::ItemType(ITEMTYPE type)
 		// コイン
 	case (ITEMTYPE_COIN): {
 		// コインを取るたびにコインのスコアアップ
-		AddCoinScore(m_nCoinScore);
-		// スコアアップ
-		pPlayer->GetPlayerUI()->SetScore(m_nCoinScore);
+		pPlayer->GetPlayerUI()->SetScore(AddCoinScore(m_nCoinScore));
 	}break;
 		// 宝石
 	case (ITEMTYPE_JEWELRY): {
@@ -384,7 +382,7 @@ uint64_t CItem::get_rand_range(uint64_t min_val, uint64_t max_val)
 	// [min_val, max_val] の一様分布整数 (int) の分布生成器
 	std::uniform_int_distribution<uint64_t> get_rand_uni_int(min_val, max_val);
 
-	// 乱数を生成 初動偏る
+	// 乱数を生成
 	return get_rand_uni_int(mt64);
 	// 乱数を生成
 	//return get_rand_uni_int(engine);
@@ -395,16 +393,27 @@ uint64_t CItem::get_rand_range(uint64_t min_val, uint64_t max_val)
 // コインのスコアを加算する処理
 //
 // =====================================================================================================================================================================
-void CItem::AddCoinScore(int &nScore)
+int CItem::AddCoinScore(int nScore)
 {
-	// 加算用カウント変数
-	static int nAddCnt = 1;
+	// コインを取得するごとにコインのスコアを倍にする
+	for (int nAdd = 0; nAdd < m_nAddCnt;nAdd++)
+	{
+		// 一回目は処理しない
+		if (m_nAddCnt == 0)
+		{
+			// スキップ
+			continue;
+		}
 
-	// カウント
-	nScore *= nAddCnt;
+		// スコアの値を倍にする
+		nScore += nScore;
+	}
 
-	// 関数が呼ばれるたびに加算
-	nAddCnt = 2;
+	// カウント加算
+	m_nAddCnt++;
+
+	// スコアの値を返す
+	return nScore;
 }
 
 // =====================================================================================================================================================================
@@ -534,6 +543,17 @@ void CItem::DebugItemCommand(CKeyboard *key)
 			CItem::DebugCreate(ITEMTYPE_BULLETUP);
 		}
 	}
+}
+
+// =====================================================================================================================================================================
+//
+// 静的変数の初期化 game終了時
+//
+// =====================================================================================================================================================================
+void CItem::InitVariable()
+{
+	// コインのカウント加算用変数の初期化
+	m_nAddCnt = 0;
 }
 
 // =====================================================================================================================================================================
@@ -860,7 +880,6 @@ CItem::ITEMTYPE CItem::RandDropItem(ITEMDROP drop)
 
 		// 全てのアイテム
 	case CItem::ITEMDROP_ALL:
-		//type = ITEMTYPE(rand() % ITEMTYPE_MAX);
 		type = (ITEMTYPE)ItemRand(ITEMTYPE_MAX);
 		break;
 	default:
