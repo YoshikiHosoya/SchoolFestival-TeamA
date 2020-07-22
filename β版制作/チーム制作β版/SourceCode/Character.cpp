@@ -328,7 +328,7 @@ void CCharacter::Draw(void)
 			m_vModelList[nCnt]->SetRot(m_vModelList[nCnt]->GetRot());
 		}
 	}
-	//CDebugProc::Print("˜‚Ì‚‚³%2f\n", m_vModelList[0]->GetPosition().y);
+	CDebugProc::Print("˜‚Ì‚‚³%2f\n", m_vModelList[0]->GetPosition().y);
 }
 //====================================================================
 //ƒ‚ƒfƒ‹‚Ìƒ€[ƒ”
