@@ -1,0 +1,41 @@
+//------------------------------------------------------------
+//
+//ParticleParamater
+//読み込み用のテキストにコピーしてください
+//Author:Yoshiki Hosoya
+//
+//------------------------------------------------------------
+
+SCRIPT
+	PARAMSET
+
+		SPEEDRANDOM = 0							//速度がランダムかどうか
+		GRAVITY = 0								//重力をつけるか
+		ALPHABLEND_ADD = 0							//加算合成するか
+		ALPHABLEND_SUB = 0							//減算合成するか
+		ZTEST = 0							//Zテストするか
+		ZWRITE = 1							//Zライティングするか
+		BILLBOARD = 1							//ビルボードするか
+		ANIMATION = 1							//アニメーションするか
+		COLLISION = 1							//当たり判定があるかどうか
+		TEXTURE = 10								//テクスチャ
+		ANIMATION_LOOP = 0						//アニメーションループするか
+		ANIMATION_CNTSWITCH = 3					//切替のカウント
+		COLLISION_SIZE_CALC = 0					//コリジョンのサイズの計算
+		COLLISION_ATTACK_VALUE = 1				//攻撃力
+		COLLISION_COUNT = 2					//判定のカウント
+		COLLISION_SIZE = 80.00 80.00 0.00		//コリジョンのサイズ
+		SHAPE = 3								//パーティクルの出し方
+		LIFE = 60								//ライフ
+		NUMBER = 1								//個数
+		SPEED = 1.0								//速度
+		RANGE = 0.5								//範囲
+		ALPHADAMPING = 1.00						//アルファ値の減衰値
+		GRAVITYPOWER = 0.80						//重力の強さ
+		SIZE = 120.00 120.00 0.00				//サイズ
+		SIZEDAMPING = 1.00 1.01 0.00			//サイズ減衰量
+		COLOR = 1.0 1.0 1.0 1.0					//色
+		ROT = 1.57 0.00 0.00					//回転量
+
+	END_PARAMSET
+END_SCRIPT

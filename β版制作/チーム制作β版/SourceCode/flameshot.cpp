@@ -10,6 +10,7 @@
 #include "game.h"
 #include "debugproc.h"
 #include "texture.h"
+#include "particle.h"
 #include "TexAnimation3D_Collision.h"
 
 // =====================================================================================================================================================================
@@ -107,8 +108,8 @@ void CFlameshot::Update(void)
 
 	if (CBullet::GetLife() % 3 == 0)
 	{
-		CTexAnimation3D_Collision::Create(GetPosition() + CHossoLibrary::RandomVector3(20.0f),
-		D3DXVECTOR3(60.0f, 60.0f, 0.0f), ZeroVector3, CTexture::SEPARATE_TEX_EFFECT_IMPACT00, 2, OBJTYPE_EFFECT, GetTag(), 1, 3, true);
+		CParticle::CreateFromText(GetPosition() + CHossoLibrary::RandomVector3(10), ZeroVector3,
+			CParticleParam::EFFECT_FIRE, GetTag(), GetBulletParam(CGun::GUNTYPE_FLAMESHOT)->nPower);
 	}
 }
 
