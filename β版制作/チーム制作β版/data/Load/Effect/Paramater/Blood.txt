@@ -9,22 +9,27 @@
 SCRIPT
 	PARAMSET
 
-		SPEEDRANDOM = 1					//速度がランダムかどうか
-		GRAVITY = 1						//重力をつけるか
-		ALPHABLEND = 1					//αブレンドするか
-		ANIMATION = 0					//アニメーションするか
-		TEXTURE = 1						//テクスチャ
-		SHAPE = 1						//パーティクルの出し方
-		LIFE = 112						//ライフ
-		NUMBER = 23						//個数
-		SPEED = 26.5					//速度
-		RANGE = 0.3						//範囲
-		ALPHADAMPING = 0.91				//アルファ値の減衰値
-		GRAVITYPOWER = 0.63				//重力の強さ
-		SIZE = 65.00 65.00 0.00		//サイズ
-		SIZEDAMPING = 1.00 1.00 0.00		//サイズ減衰量
-		COLOR = 1.0 0.0 0.0 1.0			//色
-		ROT = 0.81 0.00 0.00			//回転量
+		SPEEDRANDOM = 1							//速度がランダムかどうか
+		GRAVITY = 1								//重力をつけるか
+		ALPHABLEND_ADD = 1							//加算合成するか
+		ALPHABLEND_SUB = 0							//減算合成するか
+		ZTEST = 0							//Zテストするか
+		ZWRITE = 1							//Zライティングするか
+		BILLBOARD = 1							//ビルボードするか
+		ANIMATION = 0							//アニメーションするか
+		COLLISION = 0							//当たり判定があるかどうか
+		TEXTURE = 1								//テクスチャ
+		SHAPE = 1								//パーティクルの出し方
+		LIFE = 60								//ライフ
+		NUMBER = 23								//個数
+		SPEED = 14.5								//速度
+		RANGE = 0.3								//範囲
+		ALPHADAMPING = 0.91						//アルファ値の減衰値
+		GRAVITYPOWER = 0.29						//重力の強さ
+		SIZE = 35.50 35.50 0.00				//サイズ
+		SIZEDAMPING = 1.00 1.00 0.00			//サイズ減衰量
+		COLOR = 1.0 0.0 0.0 1.0					//色
+		ROT = 0.81 0.00 0.00					//回転量
 
 	END_PARAMSET
 END_SCRIPT

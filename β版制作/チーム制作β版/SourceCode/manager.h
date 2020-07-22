@@ -8,7 +8,6 @@ class CKeyboard;
 class CParticle;
 class CGame;
 class CTitle;
-class CResult;
 class CRanking;
 class CBaseMode;
 class CMouse;
@@ -21,7 +20,6 @@ public:
 		MODE_NONE,
 		MODE_TITLE,
 		MODE_GAME,
-		MODE_RESULT,
 		MODE_RANKING,
 		MODE_PAUSE,
 		//MODE_TUTORIAL,

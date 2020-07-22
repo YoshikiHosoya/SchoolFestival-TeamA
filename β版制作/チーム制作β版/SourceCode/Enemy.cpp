@@ -12,6 +12,7 @@
 #include "item.h"
 #include "EnemyAI.h"
 #include "gun.h"
+#include "particle.h"
 //====================================================================
 //ƒ}ƒNƒ’è‹`
 //====================================================================
@@ -99,6 +100,7 @@ void CEnemy::Update(void)
 	if (this->GetLife() <= 0)
 	{
 		this->SetDieFlag(true);
+		CParticle::CreateFromText(GetPosition(), GetShotDirection(), CParticleParam::EFFECT_BLOOD);
 	}
 	else
 	{

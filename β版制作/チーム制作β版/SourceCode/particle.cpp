@@ -475,6 +475,9 @@ void CParticle::SetParticle(D3DXVECTOR3 const & pos, D3DXVECTOR3 const & rot, CP
 				fAngleX = pParam->GetRot().x + CHossoLibrary::Random(pParam->GetRange());
 				fAngleY = pParam->GetRot().y + CHossoLibrary::Random(pParam->GetRange());
 
+				fAngleX += rot.x;
+				fAngleY += rot.y;
+
 				move = D3DXVECTOR3(-sinf(fAngleY) * cosf(fAngleX) * fSpeed,
 					sinf(fAngleX) * fSpeed,
 					-cosf(fAngleY) * cosf(fAngleX) * fSpeed);
