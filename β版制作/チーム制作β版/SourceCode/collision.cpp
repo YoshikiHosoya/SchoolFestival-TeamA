@@ -323,8 +323,11 @@ bool CCollision::ForEnemyCollision(int nPlayerDamage, int nPlayerTankDamage, boo
 				// 判定関数
 				if (this->OtherCollision2D(pPlayer->GetCollision()))
 				{
+					if (pPlayer->GetCharacterState() == CCharacter::CHARACTER_STATE_NORMAL)
+					{
 					// プレイヤーのライフ減衰
 					pPlayer->CCharacter::AddDamage(nPlayerDamage);
+					}
 
 					// プレイヤーのライフが0以下になった時
 					if (pPlayer->CCharacter::GetLife() <= 0)
