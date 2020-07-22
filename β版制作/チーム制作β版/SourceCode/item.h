@@ -68,13 +68,14 @@ public:
 		ITEMTYPE_MAX
 	};
 
-	// アイテムの用途
+	// アイテムの範囲
 	enum ITEMDROP
 	{
 		ITEMDROP_NONE = -1,			// ドロップしない
 		ITEMDROP_WEAPON,			// 武器強化
 		ITEMDROP_SCORE,				// スコアアップ
 		ITEMDROP_CHARGE,			// 弾薬など
+		ITEMDROP_WEA_SCO,			// 武器強化とスコアアップ
 		ITEMDROP_ALL,				// 全て
 	};
 

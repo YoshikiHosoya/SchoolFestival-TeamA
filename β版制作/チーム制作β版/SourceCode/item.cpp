@@ -878,6 +878,12 @@ CItem::ITEMTYPE CItem::RandDropItem(ITEMDROP drop)
 		type = RandomRange(ITEMTYPE_BOMBUP, ITEMTYPE_BULLETUP);
 		break;
 
+		// 武器強化とスコアアップの場合
+	case CItem::ITEMDROP_WEA_SCO:
+		// ランダムの範囲を武器強化とスコアアイテムのみに選択
+		type = RandomRange(ITEMTYPE_HEAVYMACHINEGUN, ITEMTYPE_MEDAL);
+		break;
+
 		// 全てのアイテム
 	case CItem::ITEMDROP_ALL:
 		type = (ITEMTYPE)ItemRand(ITEMTYPE_MAX);

@@ -5,7 +5,6 @@
 #include "model.h"
 #include "game.h"
 #include "title.h"
-#include "result.h"
 #include "ranking.h"
 #include "texture.h"
 #include "Xinput.h"
@@ -130,12 +129,6 @@ void CManager::SetGameMode(GAME_MODE mode)
 		//Game
 	case MODE_GAME:
 		m_pBaseMode = new CGame;
-		m_pBaseMode->Init();
-		break;
-
-		//Result
-	case MODE_RESULT:
-		m_pBaseMode = new CResult;
 		m_pBaseMode->Init();
 		break;
 
