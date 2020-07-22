@@ -51,7 +51,7 @@ HRESULT CEnemy::Init(void)
 	GetCollision()->SetSize2D(ENEMY_SIZE);
 	GetCollision()->SetMove(&GetMove());
 	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_CHARACTER);
-	CCharacter::SetLife(50);
+	CCharacter::SetLife(1);
 	return S_OK;
 }
 //====================================================================
