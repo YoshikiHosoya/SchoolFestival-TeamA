@@ -19,6 +19,8 @@ public:
 	//セットするもの
 	void SetAnimation(D3DXVECTOR2 UV, D3DXVECTOR2 UVsize);
 	void SetDisp(bool bDisp) { m_bDisp = bDisp; };		// 表示・非表示の設定
+
+	bool GetDisp() { return m_bDisp; };
 protected:
 
 private:

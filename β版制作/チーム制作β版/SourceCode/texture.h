@@ -55,7 +55,16 @@ public:
 		TEX_UI_TITLE,							//タイトルロゴ
 		TEX_UI_START,							//スタート
 
-		TEX_UI_RESULT,							//リザルト
+		TEX_UI_RESULT_BG,						//背景
+		TEX_UI_RESULT_NAME,						//名前ロゴ
+		TEX_UI_RESULT_1P,						//1P
+		TEX_UI_RESULT_2P,						//2P
+		TEX_UI_RESULT_GOOD,						//評価0
+		TEX_UI_RESULT_GREATE,					//評価1
+		TEX_UI_RESULT_NOPRISONER,				//評価2
+		TEX_UI_RESULT_MISSION1COMPLETE,			//クリアロゴ0
+		TEX_UI_RESULT_MISSION2COMPLETE,			//クリアロゴ1
+
 		TEX_UI_RANKING,							//ランキング
 
 		TEX_MAX									//MAX
