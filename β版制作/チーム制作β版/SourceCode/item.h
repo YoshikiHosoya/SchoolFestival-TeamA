@@ -68,13 +68,14 @@ public:
 		ITEMTYPE_MAX
 	};
 
-	// アイテムの用途
+	// アイテムの範囲
 	enum ITEMDROP
 	{
 		ITEMDROP_NONE = -1,			// ドロップしない
 		ITEMDROP_WEAPON,			// 武器強化
 		ITEMDROP_SCORE,				// スコアアップ
 		ITEMDROP_CHARGE,			// 弾薬など
+		ITEMDROP_WEA_SCO,			// 武器強化とスコアアップ
 		ITEMDROP_ALL,				// 全て
 	};
 
@@ -116,6 +117,7 @@ public:
 	static	void				ItemLoad();										// アイテムのロード
 	static	void				SetItemData();									// アイテムのデータ設定
 	static  void				DebugItemCommand(CKeyboard *key);				// デバッグ用アイテムコマンド
+	static	void				InitVariable();									// 静的変数の初期化
 
 	/* メンバ関数 */
 	ITEMTYPE					RandDropItem(ITEMDROP drop);					// アイテムの種類をランダムに計算
@@ -132,6 +134,9 @@ private:
 	/* 静的メンバ変数 */
 	static char					*m_ItemFileName;								// アイテムのファイル名
 	static ITEM_DATA			m_ItemData;										// アイテムのデータ
+	static int					m_nAddCnt;										// コインの加算用
+
+	// ロードする変数 //
 	static int					m_nDropRate;									// ドロップ率
 	static int					m_nDeleteTime;									// アイテムが点滅するまでの時間
 	static int					m_nFlashTime;									// アイテムが点滅する時間
@@ -143,7 +148,7 @@ private:
 
 	/* メンバ関数 */
 	uint64_t	get_rand_range(uint64_t min_val, uint64_t max_val);				// ランダム関数 範囲
-	void		AddCoinScore(int &nScore);										// コインのスコアの加算
+	int			AddCoinScore(int nScore);										// コインのスコアの加算した結果を返す
 
 	/* メンバ変数 */
 	ITEMTYPE					m_Type;											// アイテムタイプ

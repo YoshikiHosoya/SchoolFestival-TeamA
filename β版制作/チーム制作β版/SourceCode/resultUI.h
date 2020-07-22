@@ -1,7 +1,7 @@
 // =====================================================================================================================================================================
 //
 // リザルトUIの処理 [resultUI.h]
-// Author : Sato Yoshiki
+// Author : fujiwara masato
 //
 // =====================================================================================================================================================================
 #ifndef _RESULTUI_H_
@@ -17,6 +17,7 @@
 // 前方宣言
 // =====================================================================================================================================================================
 class CScene2D;
+class CMultiNumber;
 
 // =====================================================================================================================================================================
 // リザルトUIクラス
@@ -27,7 +28,18 @@ public:
 	// リザルトUIの種類
 	enum RESULT_UI
 	{
-		RESULT,				// リザルト
+		RESULT_UI_BG,				// 背景
+		RESULT_UI_NAME,				// リザルトの名前
+		RESULT_UI_1P,				// 1プレイヤー
+		RESULT_UI_2P,				// 2プレイヤー
+		RESULT_UI_EVALUATION01P,	// 評価0
+		RESULT_UI_EVALUATION11P,	// 評価1
+		RESULT_UI_EVALUATION21P,	// 評価2
+		RESULT_UI_EVALUATION02P,	// 評価0
+		RESULT_UI_EVALUATION12P,	// 評価1
+		RESULT_UI_EVALUATION22P,	// 評価2
+		RESULT_UI_MISSIONCOMP1,		// ミッションクリア1
+		RESULT_UI_MISSIONCOMP2,		// ミッションクリア2
 		RESULT_UI_MAX
 	};
 
@@ -47,9 +59,17 @@ public:
 
 private:
 	/* メンバ関数 */
+	void					DrawConditions();								// 描画条件
+	void					ResultUICreate();								// リザルトUIをまとめて生成する
+
 	/* 静的メンバ変数 */
+	static LPDIRECT3DTEXTURE9	m_TexNum[RESULT_UI_MAX];					// バインドするテクスチャの情報
+	static D3DXVECTOR3			m_Pos[RESULT_UI_MAX];						// 座標情報
+	static D3DXVECTOR3			m_Size[RESULT_UI_MAX];						// サイズ情報
 
 	/* メンバ変数 */
-	CScene2D				*m_apScene2D[RESULT_UI_MAX];		// シーン2Dのポインタ
+	CScene2D				*m_apScene2D[RESULT_UI_MAX];					// シーン2Dのポインタ
+	CMultiNumber			*m_pBonusScore;									// ボーナススコア
+	CMultiNumber			*m_pPrisonerNum;								// プレイヤーの残機の数
 };
 #endif
