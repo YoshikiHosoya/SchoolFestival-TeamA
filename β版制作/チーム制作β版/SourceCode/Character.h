@@ -85,7 +85,7 @@ public:
 
 		// 捕虜のモーション
 		PRISONER_MOTION_STAY,				//ニュートラル
-		PRISONER_MOTION_RELEASE,			//開放された時
+		PRISONER_MOTION_RELEASE,			//立ってる
 		PRISONER_MOTION_RUN,				//走る
 		PRISONER_MOTION_SALUTE,				//敬礼
 		PRISONER_MOTION_FALL,				//落下
