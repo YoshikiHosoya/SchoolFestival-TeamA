@@ -214,9 +214,6 @@
     <ClCompile Include="SourceCode\title.cpp">
       <Filter>Mode</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\result.cpp">
-      <Filter>Mode</Filter>
-    </ClCompile>
     <ClCompile Include="SourceCode\ranking.cpp">
       <Filter>Mode</Filter>
     </ClCompile>
@@ -252,6 +249,9 @@
     </ClCompile>
     <ClCompile Include="SourceCode\item.cpp">
       <Filter>Item</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\ResultManager.cpp">
+      <Filter>ManagerClass</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -477,9 +477,6 @@
     <ClInclude Include="SourceCode\title.h">
       <Filter>Mode</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\result.h">
-      <Filter>Mode</Filter>
-    </ClInclude>
     <ClInclude Include="SourceCode\ranking.h">
       <Filter>Mode</Filter>
     </ClInclude>
@@ -515,6 +512,9 @@
     </ClInclude>
     <ClInclude Include="SourceCode\item.h">
       <Filter>Item</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\ResultManager.h">
+      <Filter>ManagerClass</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -568,6 +568,9 @@
     </Filter>
     <Filter Include="Item">
       <UniqueIdentifier>{807d9b35-6e0f-4d6f-953f-bf34a7f3bcad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ManagerClass">
+      <UniqueIdentifier>{aef665cc-d0c9-479e-8e07-424d2884f6c3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

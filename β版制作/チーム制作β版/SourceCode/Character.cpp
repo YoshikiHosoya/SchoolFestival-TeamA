@@ -72,7 +72,7 @@ HRESULT CCharacter::Init(void)
 	m_AddArmRot			= D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//
 	m_AddHeadRot		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//
 	m_Life				= 50;									// 体力
-	m_state				= CHARACTER_STATE_NONE;					// 状態
+	m_state				= CHARACTER_STATE_NORMAL;				// 状態
 	m_rotDest.y			= -0.5f*  D3DX_PI;						// 回転する差分
 	m_bJump				= false;								// ジャンプフラグ
 	m_bGravity			= true;									//
@@ -159,8 +159,16 @@ void CCharacter::Update(void)
 		if (m_nStateCnt % 60 == 0)
 		{
 			m_state = CHARACTER_STATE_NORMAL;
+			ChangeColor(false, D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f));
 		}
-
+		else if (m_nStateCnt % 4 == 0 && m_nStateCnt % 8 != 0)
+		{
+			ChangeColor(true, D3DXCOLOR(0.0f, 0.0f, 0.0f, -1.0f));
+		}
+		else if (m_nStateCnt % 8 == 0)
+		{
+			ChangeColor(true, D3DXCOLOR(0.0f, 0.0f,0.0f,1.0f));
+		}
 		break;
 	case CHARACTER_STATE_INVINCIBLE:
 		m_nStateCnt++;
@@ -328,7 +336,7 @@ void CCharacter::Draw(void)
 			m_vModelList[nCnt]->SetRot(m_vModelList[nCnt]->GetRot());
 		}
 	}
-	//CDebugProc::Print("腰の高さ%2f\n", m_vModelList[0]->GetPosition().y);
+	CDebugProc::Print("腰の高さ%2f\n", m_vModelList[0]->GetPosition().y);
 }
 //====================================================================
 //モデルのムーヴ

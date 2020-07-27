@@ -40,7 +40,15 @@ FILENAME_LIST CTexture::m_aTexFileName =
 	{ "data/TEXTURE/UI/frame.png" },						//枠のUI
 	{ "data/TEXTURE/UI/title.png" },						//タイトルロゴ
 	{ "data/TEXTURE/UI/start.png" },						//スタート
-	{ "data/TEXTURE/UI/result.png" },						//リザルト
+	{ "data/TEXTURE/UI/Result_UI/Bg.png" },					//背景
+	{ "data/TEXTURE/UI/Result_UI/RESULT_NAME.png" },		//リザルト名ロゴ
+	{ "data/TEXTURE/UI/Result_UI/1P.png" },					//1P
+	{ "data/TEXTURE/UI/Result_UI/2P.png" },					//2P
+	{ "data/TEXTURE/UI/Result_UI/GOOD.png" },				//評価0
+	{ "data/TEXTURE/UI/Result_UI/GREATE.png" },				//評価1
+	{ "data/TEXTURE/UI/Result_UI/NOPRISONER.png" },			//評価2
+	{ "data/TEXTURE/UI/Result_UI/MISSION1COMPRLETE.png" },	//ミッションクリア0
+	{ "data/TEXTURE/UI/Result_UI/MISSION2COMPRLETE.png" },	//ミッションクリア1
 	{ "data/TEXTURE/UI/ranking.png" },						//ランキング
 };
 
