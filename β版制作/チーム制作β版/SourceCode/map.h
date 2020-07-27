@@ -72,11 +72,23 @@ public:
 		WAVE_3,									// ウェーブ3
 		WAVE_MAX
 	};
+
+	// 小隊の種類
+	enum PLATOON
+	{
+		PLATOON_1,								// 小隊1
+		PLATOON_2,								// 小隊2
+		PLATOON_3,								// 小隊3
+		PLATOON_MAX
+	};
+
 	CMap();																			// コンストラクタ
 	~CMap();																		// デストラクタ
 
 	/* 静的メンバ関数 */
 	static	CMap	*MapCreate(MAP MapNum);											// マップの生成
+	static	CMap	*WaveCreate(WAVE WaveNum);										// ウェーブの生成
+
 	void	MapUpdate();															// マップの更新
 
 	/* メンバ関数 */
@@ -100,13 +112,14 @@ public:
 
 private:
 	/* メンバ関数 */
-	void			ArrangementModelLoad();													// 配置するモデルのロード
+	void			ArrangementModelLoad(EDITOR Editor, int ModelType);						// 配置するモデルのロード
 	void			ArrangementModelCreate(int ModelType, int nType, 
 											D3DXVECTOR3 pos, int nLife, D3DXVECTOR3 size);	// 配置するモデルの生成
 	void			LoadFailureMessage(int ModelType);										// 読み込み失敗時の警告表示
 	void			LoadSuccessMessage(int ModelType);										// 読み込み成功時の結果表示
-
 	char			*ArrangementModelFileName(int ModelType);								// 配置するモデルファイル名(初期配置)
+	char			*WaveFileName(int ModelType);											// 各ウェーブファイル名
+	char			*PlatoonFileName(int ModelType);										// 各小隊ファイル名
 
 	void			SaveModelHeader(FILE *pFile, int ModelType);							// セーブするモデルのヘッダー
 	void			SaveModelContents(FILE *pFile,int ModelType, int nCnt);					// セーブするモデルの情報
@@ -116,6 +129,9 @@ private:
 	void			ArrangementModelSave(int ModelType);									// 配置するモデルのセーブ
 
 	void			AllSaveButton();														// 配置したモデルを全てセーブするボタン
+	void			AllLoadButton();														// 配置したモデルを全てロードするボタン
+	void			AllDeleteButton();														// 配置したモデルを全てデリートするボタン
+
 	void			MapModelTab();															// マップに配置するモデルのタブ
 	void			ObstacleSet();															// 障害物の設置
 	void			EnemySet();																// 敵の設置
@@ -136,7 +152,22 @@ private:
 	static char					*m_PlayerTankFileName[MAP_MAX];				// 戦車ファイル名
 	static char					*m_BattlePlaneFileName[MAP_MAX];			// 戦闘機ファイル名
 	static char					*m_HelicopterFileName[MAP_MAX];				// ヘリファイル名
+
+	static char					*m_EnemyWaveFileName[WAVE_MAX];				// 敵ファイル名
+	static char					*m_PrisonerWaveFileName[WAVE_MAX];			// 捕虜ファイル名
+	static char					*m_PlayerTankWaveFileName[WAVE_MAX];		// 戦車ファイル名
+	static char					*m_BattlePlaneWaveFileName[WAVE_MAX];		// 戦闘機ファイル名
+	static char					*m_HelicopterWaveFileName[WAVE_MAX];		// ヘリファイル名
+
+	static char					*m_EnemyPlatoonFileName[PLATOON_MAX];		// 敵ファイル名
+	static char					*m_PrisonerPlatoonFileName[PLATOON_MAX];	// 捕虜ファイル名
+	static char					*m_PlayerTankPlatoonFileName[PLATOON_MAX];	// 戦車ファイル名
+	static char					*m_BattlePlanePlatoonFileName[PLATOON_MAX];	// 戦闘機ファイル名
+	static char					*m_HelicopterPlatoonFileName[PLATOON_MAX];	// ヘリファイル名
+
 	static MAP					m_MapNum;									// マップ番号
+	static WAVE					m_WaveNum;									// ウェーブ番号
+	static PLATOON				m_PlatoonNum;								// 小隊番号
 	static EDITOR				m_Editor;									// エディターの種類
 	static int					m_ArrangmentModel;							// 配置するモデルの種類
 

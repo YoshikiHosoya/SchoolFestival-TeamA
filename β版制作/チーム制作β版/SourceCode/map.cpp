@@ -23,59 +23,137 @@
 // 静的メンバ変数の初期化
 // =====================================================================================================================================================================
 CMap::MAP					CMap::m_MapNum			= MAP_1;					// マップ番号
+CMap::WAVE					CMap::m_WaveNum			= WAVE_1;					// ウェーブ番号
+CMap::PLATOON				CMap::m_PlatoonNum		= PLATOON_1;				// 小隊番号
 CMap::EDITOR				CMap::m_Editor			= EDITOR_MAP;				// マップエディター
 int							CMap::m_ArrangmentModel = ARRANGEMENT_MODEL_MAP;	// 配置するモデルの種類
 
 // =====================================================================================================================================================================
 // テキストファイル名
 // =====================================================================================================================================================================
-// マップファイル名
+/* ----- マップ(初期配置) ----- */
+// マップ
 char *CMap::m_MapFileName[MAP_MAX] =
 {
 	{ "data/Load/Map/testMap.txt" },
 	{ "data/Load/Map/testMap.txt" },
 };
-// 敵ファイル名
+// 敵
 char *CMap::m_EnemyFileName[MAP_MAX] =
 {
 	{ "data/Load/Enemy/Enemy_Map_01.txt" },
 	{ "data/Load/Enemy/Enemy_Map_02.txt" },
 };
-// 捕虜ファイル名
+// 捕虜
 char *CMap::m_PrisonerFileName[MAP_MAX] =
 {
 	{ "data/Load/Prisoner/Prisoner_Map_01.txt" },
 	{ "data/Load/Prisoner/Prisoner_Map_02.txt" },
 };
-// 障害物ファイル名
+// 障害物
 char *CMap::m_ObstacleFileName[MAP_MAX] =
 {
 	{ "data/Load/Obstacle/Obstacle_Map_01.txt" },
 	{ "data/Load/Obstacle/Obstacle_Map_02.txt" },
 };
-// 戦車ファイル名
+// 戦車
 char *CMap::m_PlayerTankFileName[MAP_MAX] =
 {
 	{ "data/Load/PlayerTank/PlayerTank_Map_01.txt" },
 	{ "data/Load/PlayerTank/PlayerTank_Map_02.txt" },
 };
-// 戦闘機ファイル名
+// 戦闘機
 char *CMap::m_BattlePlaneFileName[MAP_MAX] =
 {
 	{ "data/Load/BattlePlane/BattlePlane_Map_01.txt" },
 	{ "data/Load/BattlePlane/BattlePlane_Map_02.txt" },
 };
-// ヘリコプターファイル名
+// ヘリコプター
 char *CMap::m_HelicopterFileName[MAP_MAX] =
 {
 	{ "data/Load/Helicopter/Helicopter_Map_01.txt" },
 	{ "data/Load/Helicopter/Helicopter_Map_02.txt" },
 };
 
+/* ----- ウェーブ ----- */
+// 敵
+char *CMap::m_EnemyWaveFileName[WAVE_MAX] =
+{
+	{ "data/Load/Enemy/Enemy_Wave_01.txt" },
+	{ "data/Load/Enemy/Enemy_Wave_02.txt" },
+	{ "data/Load/Enemy/Enemy_Wave_03.txt" },
+};
+// 捕虜
+char *CMap::m_PrisonerWaveFileName[WAVE_MAX] =
+{
+	{ "data/Load/Prisoner/Prisoner_Wave_01.txt" },
+	{ "data/Load/Prisoner/Prisoner_Wave_02.txt" },
+	{ "data/Load/Prisoner/Prisoner_Wave_03.txt" },
+};
+// 戦車
+char *CMap::m_PlayerTankWaveFileName[WAVE_MAX] =
+{
+	{ "data/Load/PlayerTank/PlayerTank_Wave_01.txt" },
+	{ "data/Load/PlayerTank/PlayerTank_Wave_02.txt" },
+	{ "data/Load/PlayerTank/PlayerTank_Wave_03.txt" },
+};
+// 戦闘機
+char *CMap::m_BattlePlaneWaveFileName[WAVE_MAX] =
+{
+	{ "data/Load/BattlePlane/BattlePlane_Wave_01.txt" },
+	{ "data/Load/BattlePlane/BattlePlane_Wave_02.txt" },
+	{ "data/Load/BattlePlane/BattlePlane_Wave_03.txt" },
+};
+// ヘリコプター
+char *CMap::m_HelicopterWaveFileName[WAVE_MAX] =
+{
+	{ "data/Load/Helicopter/Helicopter_Wave_01.txt" },
+	{ "data/Load/Helicopter/Helicopter_Wave_02.txt" },
+	{ "data/Load/Helicopter/Helicopter_Wave_03.txt" },
+};
+
+/* ----- 小隊 ----- */
+// 敵
+char *CMap::m_EnemyPlatoonFileName[PLATOON_MAX] =
+{
+	{ "data/Load/Enemy/Enemy_Wave_01.txt" },
+	{ "data/Load/Enemy/Enemy_Wave_02.txt" },
+	{ "data/Load/Enemy/Enemy_Wave_03.txt" },
+};
+// 捕虜
+char *CMap::m_PrisonerPlatoonFileName[PLATOON_MAX] =
+{
+	{ "data/Load/Prisoner/Prisoner_Wave_01.txt" },
+	{ "data/Load/Prisoner/Prisoner_Wave_02.txt" },
+	{ "data/Load/Prisoner/Prisoner_Wave_03.txt" },
+};
+// 戦車
+char *CMap::m_PlayerTankPlatoonFileName[PLATOON_MAX] =
+{
+	{ "data/Load/PlayerTank/PlayerTank_Wave_01.txt" },
+	{ "data/Load/PlayerTank/PlayerTank_Wave_02.txt" },
+	{ "data/Load/PlayerTank/PlayerTank_Wave_03.txt" },
+};
+// 戦闘機
+char *CMap::m_BattlePlanePlatoonFileName[PLATOON_MAX] =
+{
+	{ "data/Load/BattlePlane/BattlePlane_Wave_01.txt" },
+	{ "data/Load/BattlePlane/BattlePlane_Wave_02.txt" },
+	{ "data/Load/BattlePlane/BattlePlane_Wave_03.txt" },
+};
+// ヘリコプター
+char *CMap::m_HelicopterPlatoonFileName[PLATOON_MAX] =
+{
+	{ "data/Load/Helicopter/Helicopter_Wave_01.txt" },
+	{ "data/Load/Helicopter/Helicopter_Wave_02.txt" },
+	{ "data/Load/Helicopter/Helicopter_Wave_03.txt" },
+};
+
 // =====================================================================================================================================================================
 // マクロ定義
 // =====================================================================================================================================================================
 #define TranslucentColor			(D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.5f))		//半透明
+#define ButtonSpace					(250)									// ボタンの間隔
 
 // =====================================================================================================================================================================
 //
@@ -109,10 +187,10 @@ CMap::~CMap()
 // 配置するモデルのロード
 //
 // =====================================================================================================================================================================
-void CMap::ArrangementModelLoad()
+void CMap::ArrangementModelLoad(EDITOR Editor, int ModelType)
 {
 	// ファイルポイント
-	FILE *pFile;
+	FILE *pFile = nullptr;
 	char cReadText[128];			// 文字として読み取る
 	char cHeadText[128];			// 比較用
 	char cDie[128];					// 不要な文字
@@ -122,76 +200,86 @@ void CMap::ArrangementModelLoad()
 	int nType = 0;										// 種類
 	char *cFileName = nullptr;			// ファイル名
 
-	for (int nCnt = 0; nCnt < ARRANGEMENT_MODEL_MAX; nCnt++)
+	// 各モデルファイルのファイルを開く
+	switch (Editor)
 	{
-		// 各モデルファイルのファイルを開く
-		pFile = fopen(ArrangementModelFileName(nCnt), "r");
+	case CMap::EDITOR_MAP:
+		pFile = fopen(ArrangementModelFileName(ModelType), "r");
+		break;
 
-		// 開いているとき
-		if (pFile != NULL)
+	case CMap::EDITOR_WAVE:
+		pFile = fopen(WaveFileName(ModelType), "r");
+		break;
+
+	case CMap::EDITOR_PLATOON:
+		pFile = fopen(PlatoonFileName(ModelType), "r");
+		break;
+	}
+
+	// 開いているとき
+	if (pFile != NULL)
+	{
+		// SCRIPTが来るまでループ
+		while (strcmp(cHeadText, "SCRIPT") != 0)
 		{
-			// SCRIPTが来るまでループ
-			while (strcmp(cHeadText, "SCRIPT") != 0)
+			fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
+			sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
+		}
+
+		// SCRIPTが来たら
+		if (strcmp(cHeadText, "SCRIPT") == 0)
+		{
+			// END_SCRIPTが来るまでループ
+			while (strcmp(cHeadText, "END_SCRIPT") != 0)
 			{
 				fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
 				sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
-			}
 
-			// SCRIPTが来たら
-			if (strcmp(cHeadText, "SCRIPT") == 0)
-			{
-				// END_SCRIPTが来るまでループ
-				while (strcmp(cHeadText, "END_SCRIPT") != 0)
+				// MODELSETが来たら
+				if (strcmp(cHeadText, "MODELSET") == 0)
 				{
-					fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
-					sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
-
-					// MODELSETが来たら
-					if (strcmp(cHeadText, "MODELSET") == 0)
+					// END_MODELSETが来るまでループ
+					while (strcmp(cHeadText, "END_MODELSET") != 0)
 					{
-						// END_MODELSETが来るまでループ
-						while (strcmp(cHeadText, "END_MODELSET") != 0)
-						{
-							fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
-							sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
+						fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
+						sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
 
-							// TYPEが来たら
-							if (strcmp(cHeadText, "TYPE") == 0)
-							{
-								sscanf(cReadText, "%s %s %d", &cDie, &cDie, &nType);		// 比較用テキストにTYPEを代入
-							}
-							// POSが来たら
-							else if (strcmp(cHeadText, "POS") == 0)
-							{
-								sscanf(cReadText, "%s %s %f %f %f", &cDie, &cDie, &pos.x, &pos.y, &pos.z);		// 比較用テキストにPOSを代入
-							}
-							// LIFEが来たら
-							else if (strcmp(cHeadText, "LIFE") == 0)
-							{
-								sscanf(cReadText, "%s %s %d", &cDie, &cDie, &nLife);		// 比較用テキストにTYPEを代入
-							}
-							// SIZEが来たら
-							else if (strcmp(cHeadText, "SIZE") == 0)
-							{
-								sscanf(cReadText, "%s %s %f %f %f ", &cDie, &cDie, &size.x, &size.y, &size.z);		// 比較用テキストにTYPEを代入
-							}
-							else if (strcmp(cHeadText, "END_MODELSET") == 0)
-							{
-								// 配置するモデルの生成
-								ArrangementModelCreate(nCnt, nType, pos, nLife, size);
-							}
+						// TYPEが来たら
+						if (strcmp(cHeadText, "TYPE") == 0)
+						{
+							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &nType);		// 比較用テキストにTYPEを代入
+						}
+						// POSが来たら
+						else if (strcmp(cHeadText, "POS") == 0)
+						{
+							sscanf(cReadText, "%s %s %f %f %f", &cDie, &cDie, &pos.x, &pos.y, &pos.z);		// 比較用テキストにPOSを代入
+						}
+						// LIFEが来たら
+						else if (strcmp(cHeadText, "LIFE") == 0)
+						{
+							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &nLife);		// 比較用テキストにTYPEを代入
+						}
+						// SIZEが来たら
+						else if (strcmp(cHeadText, "SIZE") == 0)
+						{
+							sscanf(cReadText, "%s %s %f %f %f ", &cDie, &cDie, &size.x, &size.y, &size.z);		// 比較用テキストにTYPEを代入
+						}
+						else if (strcmp(cHeadText, "END_MODELSET") == 0)
+						{
+							// 配置するモデルの生成
+							ArrangementModelCreate(ModelType, nType, pos, nLife, size);
 						}
 					}
 				}
 			}
-			// ファイルを閉じる
-			fclose(pFile);
 		}
-		else
-		{
-			// 読み込み失敗時の警告表示
-			LoadFailureMessage(nCnt);
-		}
+		// ファイルを閉じる
+		fclose(pFile);
+	}
+	else
+	{
+		// 読み込み失敗時の警告表示
+		LoadFailureMessage(ModelType);
 	}
 }
 
@@ -415,6 +503,84 @@ char * CMap::ArrangementModelFileName(int ModelType)
 
 // =====================================================================================================================================================================
 //
+// 各ウェーブファイル名
+//
+// =====================================================================================================================================================================
+char * CMap::WaveFileName(int ModelType)
+{
+	char *cFileName = nullptr;			// ファイル名
+
+	switch (ModelType)
+	{
+		/* --- 敵 --- */
+	case CMap::ARRANGEMENT_MODEL_ENEMY:
+		cFileName = m_EnemyWaveFileName[m_WaveNum];
+		break;
+
+		/* --- 捕虜 --- */
+	case CMap::ARRANGEMENT_MODEL_PRISONER:
+		cFileName = m_PrisonerWaveFileName[m_WaveNum];
+		break;
+
+		/* --- 戦車 --- */
+	case CMap::ARRANGEMENT_MODEL_TANK:
+		cFileName = m_PlayerTankWaveFileName[m_WaveNum];
+		break;
+
+		/* --- 戦闘機 --- */
+	case CMap::ARRANGEMENT_MODEL_BATTLEPLANE:
+		cFileName = m_BattlePlaneWaveFileName[m_WaveNum];
+		break;
+
+		/* --- ヘリコプター --- */
+	case CMap::ARRANGEMENT_MODEL_HELICOPTER:
+		cFileName = m_HelicopterWaveFileName[m_WaveNum];
+		break;
+	}
+	return cFileName;
+}
+
+// =====================================================================================================================================================================
+//
+// 各小隊ファイル名
+//
+// =====================================================================================================================================================================
+char * CMap::PlatoonFileName(int ModelType)
+{
+	char *cFileName = nullptr;			// ファイル名
+
+	switch (ModelType)
+	{
+		/* --- 敵 --- */
+	case CMap::ARRANGEMENT_MODEL_ENEMY:
+		cFileName = m_EnemyPlatoonFileName[m_PlatoonNum];
+		break;
+
+		/* --- 捕虜 --- */
+	case CMap::ARRANGEMENT_MODEL_PRISONER:
+		cFileName = m_PrisonerPlatoonFileName[m_PlatoonNum];
+		break;
+
+		/* --- 戦車 --- */
+	case CMap::ARRANGEMENT_MODEL_TANK:
+		cFileName = m_PlayerTankPlatoonFileName[m_PlatoonNum];
+		break;
+
+		/* --- 戦闘機 --- */
+	case CMap::ARRANGEMENT_MODEL_BATTLEPLANE:
+		cFileName = m_BattlePlanePlatoonFileName[m_PlatoonNum];
+		break;
+
+		/* --- ヘリコプター --- */
+	case CMap::ARRANGEMENT_MODEL_HELICOPTER:
+		cFileName = m_HelicopterPlatoonFileName[m_PlatoonNum];
+		break;
+	}
+	return cFileName;
+}
+
+// =====================================================================================================================================================================
+//
 // マップの生成
 //
 // =====================================================================================================================================================================
@@ -429,9 +595,36 @@ CMap *CMap::MapCreate(MAP MapNum)
 	// メモリの確保
 	pMap = new CMap();
 
-	// 配置するモデルのロード
-	pMap->ArrangementModelLoad();
+	for (int nCnt = 0; nCnt < ARRANGEMENT_MODEL_MAX; nCnt++)
+	{
+		// マップで配置するモデルのロード
+		pMap->ArrangementModelLoad(EDITOR_MAP, nCnt);
+	}
+	return pMap;
+}
 
+// =====================================================================================================================================================================
+//
+// ウェーブの生成
+//
+// =====================================================================================================================================================================
+CMap * CMap::WaveCreate(WAVE WaveNum)
+{
+	// 現在のウェーブ番号
+	m_WaveNum = WaveNum;
+
+	// 変数
+	CMap *pMap;
+
+	// メモリの確保
+	pMap = new CMap();
+
+	// ウェーブで配置するモデルのロード
+	pMap->ArrangementModelLoad(EDITOR_WAVE, ARRANGEMENT_MODEL_ENEMY);			// 敵
+	pMap->ArrangementModelLoad(EDITOR_WAVE, ARRANGEMENT_MODEL_PRISONER);		// 捕虜
+	pMap->ArrangementModelLoad(EDITOR_WAVE, ARRANGEMENT_MODEL_TANK);			// 戦車
+	pMap->ArrangementModelLoad(EDITOR_WAVE, ARRANGEMENT_MODEL_BATTLEPLANE);		// 戦闘機
+	pMap->ArrangementModelLoad(EDITOR_WAVE, ARRANGEMENT_MODEL_HELICOPTER);		// ヘリコプター
 	return pMap;
 }
 
@@ -494,10 +687,11 @@ void CMap::MapUpdate()
 			else if (nNowMapSelect >= WAVE_MAX)
 			{
 				// 最後の番号にする
-				nNowMapSelect = MAP_MAX - 1;
+				nNowMapSelect = WAVE_MAX - 1;
 			}
 
 			// 選択したマップ番号代入
+			m_WaveNum = (WAVE)nNowMapSelect;
 
 			ImGui::EndTabItem();
 		}
@@ -506,6 +700,23 @@ void CMap::MapUpdate()
 		{
 			// 小隊エディター
 			m_Editor = EDITOR_PLATOON;
+
+			// オブジェクト番号の選択
+			ImGui::InputInt("nowPlatoonNum", &nNowMapSelect, 1, 20, 0);
+
+			// 範囲制限
+			if (nNowMapSelect <= 0)
+			{
+				nNowMapSelect = 0;
+			}
+			else if (nNowMapSelect >= PLATOON_MAX)
+			{
+				// 最後の番号にする
+				nNowMapSelect = PLATOON_MAX - 1;
+			}
+
+			// 選択したマップ番号代入
+			m_PlatoonNum = (PLATOON)nNowMapSelect;
 
 			ImGui::EndTabItem();
 		}
@@ -774,23 +985,17 @@ void CMap::SaveModelContents(FILE *pFile, int ModelType, int nCnt)
 
 		/* --- 戦車 --- */
 	case CMap::ARRANGEMENT_MODEL_TANK:
-		fprintf(pFile, "	TYPE	= %d\n", 0 /*m_pPlayerTank[nCnt]->GetModelCount()*/);
 		fprintf(pFile, "	POS		= %.0f %.0f %.0f\n", m_pPlayerTank[nCnt]->GetPosition().x, m_pPlayerTank[nCnt]->GetPosition().y, m_pPlayerTank[nCnt]->GetPosition().z);
-		fprintf(pFile, "	LIFE	= %d\n", m_pPlayerTank[nCnt]->GetLife());
 		break;
 
 		/* --- 戦闘機 --- */
 	case CMap::ARRANGEMENT_MODEL_BATTLEPLANE:
-		fprintf(pFile, "	TYPE	= %d\n", 0 /*m_pBattlePlane[nCnt]->GetModelCount()*/);
 		fprintf(pFile, "	POS		= %.0f %.0f %.0f\n", m_pBattlePlane[nCnt]->GetPosition().x, m_pBattlePlane[nCnt]->GetPosition().y, m_pBattlePlane[nCnt]->GetPosition().z);
-		fprintf(pFile, "	LIFE	= %d\n", m_pBattlePlane[nCnt]->GetLife());
 		break;
 
 		/* --- ヘリコプター --- */
 	case CMap::ARRANGEMENT_MODEL_HELICOPTER:
-		fprintf(pFile, "	TYPE	= %d\n", 0 /*m_pBattlePlane[nCnt]->GetModelCount()*/);
 		fprintf(pFile, "	POS		= %.0f %.0f %.0f\n", m_pHelicopter[nCnt]->GetPosition().x, m_pHelicopter[nCnt]->GetPosition().y, m_pHelicopter[nCnt]->GetPosition().z);
-		fprintf(pFile, "	LIFE	= %d\n", m_pHelicopter[nCnt]->GetLife());
 		break;
 	}
 }
@@ -965,6 +1170,96 @@ void CMap::AllSaveButton()
 
 // =====================================================================================================================================================================
 //
+// 配置したモデルを全てロードするボタン
+//
+// =====================================================================================================================================================================
+void CMap::AllLoadButton()
+{
+	// 改行キャンセル
+	ImGui::SameLine();
+
+	// セーブ
+	if (ImGui::Button("AllLoad"))
+	{
+		for (int nCnt = 0; nCnt < ARRANGEMENT_MODEL_MAX; nCnt++)
+		{
+			// マップモデルと障害物以外のとき
+			if (nCnt != ARRANGEMENT_MODEL_MAP && nCnt != ARRANGEMENT_MODEL_OBSTACLE)
+			{
+				// マップで配置するモデルのロード
+				ArrangementModelLoad(EDITOR_MAP, nCnt);
+			}
+		}
+	}
+}
+
+// =====================================================================================================================================================================
+//
+// 配置したモデルを全てデリートするボタン
+//
+// =====================================================================================================================================================================
+void CMap::AllDeleteButton()
+{
+	// 改行キャンセル
+	ImGui::SameLine();
+
+	// 全てデリート
+	if (ImGui::Button("AllDelete"))
+	{
+		// 障害物
+		for (unsigned int nCnt = 0; nCnt < m_pObstacle.size(); nCnt++)
+		{
+			m_pObstacle[nCnt]->Rerease();
+			m_pObstacle[nCnt] = nullptr;
+			//m_pObstacle.erase(m_pObstacle.begin() + nCnt);
+		}
+		// 敵
+		for (unsigned int nCnt = 0; nCnt < m_pEnemy.size(); nCnt++)
+		{
+			m_pEnemy[nCnt]->Rerease();
+			m_pEnemy[nCnt] = nullptr;
+			//m_pEnemy.erase(m_pEnemy.begin() + nCnt);
+		}
+		// 捕虜
+		for (unsigned int nCnt = 0; nCnt < m_pPrisoner.size(); nCnt++)
+		{
+			m_pPrisoner[nCnt]->Rerease();
+			m_pPrisoner[nCnt] = nullptr;
+			//m_pPrisoner.erase(m_pPrisoner.begin() + nCnt);
+		}
+		// 戦車
+		for (unsigned int nCnt = 0; nCnt < m_pPlayerTank.size(); nCnt++)
+		{
+			m_pPlayerTank[nCnt]->Rerease();
+			m_pPlayerTank[nCnt] = nullptr;
+			//m_pPlayerTank.erase(m_pPlayerTank.begin() + nCnt);
+		}
+		// 戦闘機
+		for (unsigned int nCnt = 0; nCnt < m_pBattlePlane.size(); nCnt++)
+		{
+			m_pBattlePlane[nCnt]->Rerease();
+			m_pBattlePlane[nCnt] = nullptr;
+			//m_pBattlePlane.erase(m_pBattlePlane.begin() + nCnt);
+		}
+		// ヘリコプター
+		for (unsigned int nCnt = 0; nCnt < m_pHelicopter.size(); nCnt++)
+		{
+			m_pHelicopter[nCnt]->Rerease();
+			m_pHelicopter[nCnt] = nullptr;
+			//m_pHelicopter.erase(m_pHelicopter.begin() + nCnt);
+		}
+		// 全ての要素の削除
+		m_pObstacle.clear();
+		m_pEnemy.clear();
+		m_pPrisoner.clear();
+		m_pPlayerTank.clear();
+		m_pBattlePlane.clear();
+		m_pHelicopter.clear();
+	}
+}
+
+// =====================================================================================================================================================================
+//
 // マップに配置するモデルのタブ
 //
 // =====================================================================================================================================================================
@@ -973,12 +1268,16 @@ void CMap::MapModelTab()
 	//Tab
 	if (ImGui::BeginTabBar("MapModelType"))
 	{
-		// 障害物
-		if (ImGui::BeginTabItem("Obstacle"))
+		// マップエディタのときのみ
+		if (m_Editor == EDITOR_MAP)
 		{
-			// 障害物の設置
-			ObstacleSet();
-			ImGui::EndTabItem();
+			// 障害物
+			if (ImGui::BeginTabItem("Obstacle"))
+			{
+				// 障害物の設置
+				ObstacleSet();
+				ImGui::EndTabItem();
+			}
 		}
 		// 捕虜
 		if (ImGui::BeginTabItem("Prisoner"))
@@ -1132,8 +1431,15 @@ void CMap::ObstacleSet()
 	// 全てセーブ
 	AllSaveButton();
 
+	// マップエディターのとき
+	if (m_Editor == EDITOR_MAP)
+	{
+		// 全てロード
+		AllLoadButton();
+	}
+
 	// 改行キャンセル
-	ImGui::SameLine(250);
+	ImGui::SameLine(ButtonSpace);
 
 	// 消去
 	if (ImGui::Button("Delete"))
@@ -1143,6 +1449,8 @@ void CMap::ObstacleSet()
 		m_pObstacle.erase(m_pObstacle.begin() + nNowSelect);
 	}
 
+	// 全てデリート
+	AllDeleteButton();
 #endif
 }
 
@@ -1216,7 +1524,7 @@ void CMap::PrisonerSet()
 			if (m_nOldSelect != nNowSelect)
 			{
 				// 配置されているモデルのみ
-				if (m_pObstacle.size() > (unsigned)m_nOldSelect)
+				if (m_pPrisoner.size() > (unsigned)m_nOldSelect)
 				{
 					// 色変更無し
 					m_pPrisoner[m_nOldSelect]->ChangeColor(false, ZeroColor);
@@ -1255,8 +1563,15 @@ void CMap::PrisonerSet()
 	// 全てセーブ
 	AllSaveButton();
 
+	// マップエディターのとき
+	if (m_Editor == EDITOR_MAP)
+	{
+		// 全てロード
+		AllLoadButton();
+	}
+
 	// 改行キャンセル
-	ImGui::SameLine(250);
+	ImGui::SameLine(ButtonSpace);
 
 	// 消去
 	if (ImGui::Button("Delete"))
@@ -1265,6 +1580,9 @@ void CMap::PrisonerSet()
 		m_pPrisoner[nNowSelect] = nullptr;
 		m_pPrisoner.erase(m_pPrisoner.begin() + nNowSelect);
 	}
+
+	// 全てデリート
+	AllDeleteButton();
 #endif
 }
 
@@ -1377,8 +1695,15 @@ void CMap::EnemySet()
 	// 全てセーブ
 	AllSaveButton();
 
+	// マップエディターのとき
+	if (m_Editor == EDITOR_MAP)
+	{
+		// 全てロード
+		AllLoadButton();
+	}
+
 	// 改行キャンセル
-	ImGui::SameLine(250);
+	ImGui::SameLine(ButtonSpace);
 
 	// 消去
 	if (ImGui::Button("Delete"))
@@ -1387,6 +1712,9 @@ void CMap::EnemySet()
 		m_pEnemy[nNowSelect] = nullptr;
 		m_pEnemy.erase(m_pEnemy.begin() + nNowSelect);
 	}
+
+	// 全てデリート
+	AllDeleteButton();
 #endif
 }
 
@@ -1461,8 +1789,15 @@ void CMap::PlayerTankSet()
 	// 全てセーブ
 	AllSaveButton();
 
+	// マップエディターのとき
+	if (m_Editor == EDITOR_MAP)
+	{
+		// 全てロード
+		AllLoadButton();
+	}
+
 	// 改行キャンセル
-	ImGui::SameLine(250);
+	ImGui::SameLine(ButtonSpace);
 
 	// 消去
 	if (ImGui::Button("Delete"))
@@ -1471,6 +1806,9 @@ void CMap::PlayerTankSet()
 		m_pPlayerTank[nNowSelect] = nullptr;
 		m_pPlayerTank.erase(m_pPlayerTank.begin() + nNowSelect);
 	}
+
+	// 全てデリート
+	AllDeleteButton();
 #endif
 
 }
@@ -1546,8 +1884,15 @@ void CMap::BattlePlaneSet()
 	// 全てセーブ
 	AllSaveButton();
 
+	// マップエディターのとき
+	if (m_Editor == EDITOR_MAP)
+	{
+		// 全てロード
+		AllLoadButton();
+	}
+
 	// 改行キャンセル
-	ImGui::SameLine(250);
+	ImGui::SameLine(ButtonSpace);
 
 	// 消去
 	if (ImGui::Button("Delete"))
@@ -1556,6 +1901,9 @@ void CMap::BattlePlaneSet()
 		m_pBattlePlane[nNowSelect] = nullptr;
 		m_pBattlePlane.erase(m_pBattlePlane.begin() + nNowSelect);
 	}
+
+	// 全てデリート
+	AllDeleteButton();
 #endif
 
 }
@@ -1631,6 +1979,26 @@ void CMap::HelicopterSet()
 	// 全てセーブ
 	AllSaveButton();
 
+	// マップエディターのとき
+	if (m_Editor == EDITOR_MAP)
+	{
+		// 全てロード
+		AllLoadButton();
+	}
+
+	// 改行キャンセル
+	ImGui::SameLine(ButtonSpace);
+
+	// 消去
+	if (ImGui::Button("Delete"))
+	{
+		m_pBattlePlane[nNowSelect]->Rerease();
+		m_pBattlePlane[nNowSelect] = nullptr;
+		m_pBattlePlane.erase(m_pBattlePlane.begin() + nNowSelect);
+	}
+
+	// 全てデリート
+	AllDeleteButton();
 #endif
 
 }
