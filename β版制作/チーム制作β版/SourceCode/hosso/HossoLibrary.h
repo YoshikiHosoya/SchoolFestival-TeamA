@@ -110,9 +110,6 @@ public:
 	static void SetBillboard(D3DXMATRIX *pMtx);																	//ビルボード設定
 	static void SetBillboard_XZ_Only(D3DXMATRIX *pMtx);															//ビルボード設定　XとZのみ
 
-	static bool RangeLimit_Equal_Int(int &nValue, int nMin, int nMax);											//範囲内に抑える(int)
-	static bool RangeLimit_Equal_Float(float &nValue, float nMin, float nMax);									//範囲内に抑える(float)
-
 	static float Random_PI();																					//-3.14から3.14までのランダムで返す
 	static float Random(float fInputValue);																		//入力された値の+-ランダムな値で返す
 	static D3DXVECTOR3 RandomVector3(float Max);																//ランダムなvector3型で値を返す
@@ -121,6 +118,30 @@ public:
 	static bool PressAnyButton(void);
 
 	static bool ImGui_Combobox(std::vector<std::string> aItemNameList, std::string aTitle, int &nValue);
+
+	//------------------------------------------------------------------------------
+	//範囲内の値に修正する関数
+	//intでもfloatでもいけるようにテンプレート
+	//------------------------------------------------------------------------------
+	template <class X> static bool RangeLimit_Equal(X &Value, X Min, X Max)
+	{
+		//最小値より小さい時
+		if (Value < Min)
+		{
+			//最小値に合わす
+			Value = Min;
+			return true;
+		}
+		//最大値より大きい時
+		if (Value > Max)
+		{
+			//最大値に合わす
+			Value = Max;
+			return true;
+		}
+		return false;
+	}
+
 private:
 
 };

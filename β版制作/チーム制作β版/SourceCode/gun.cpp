@@ -192,6 +192,14 @@ void CGun::SetGunType(GUN_TYPE type)
 // =====================================================================================================================================================================
 void CGun::Shot()
 {
+	D3DXVec3TransformCoord(&m_ShotPos, &m_ShotOffsetPos, GetMatrix());
+
+	//画面外から発射不可
+	if (!CManager::GetRenderer()->CheckScreenRange(m_ShotPos))
+	{
+		return;
+	}
+
 	CBullet *pBullet = nullptr;
 
 	// ハンドガンと戦車の銃以外のとき
@@ -254,7 +262,6 @@ void CGun::Shot()
 		}
 		if (pBullet)
 		{
-			D3DXVec3TransformCoord(&m_ShotPos, &m_ShotOffsetPos, GetMatrix());
 
 			// 位置の設定
 			pBullet->SetPosition(m_ShotPos);
