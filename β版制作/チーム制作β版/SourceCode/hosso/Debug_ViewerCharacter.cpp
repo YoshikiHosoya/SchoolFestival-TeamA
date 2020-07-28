@@ -249,7 +249,7 @@ void CDebug_ViewerCharacter::MotionViewer()
 	if (ImGui::InputInt("NumKey", &pMotionInfo->nNumKey))
 	{
 		//”ÍˆÍ“à‚ÉC³‚·‚é
-		CHossoLibrary::RangeLimit_Equal_Int(pMotionInfo->nNumKey, 0, 30);
+		CHossoLibrary::RangeLimit_Equal(pMotionInfo->nNumKey, 0, 30);
 
 		//ƒL[‰Šú‰»
 		ResetKey();
@@ -323,7 +323,7 @@ void CDebug_ViewerCharacter::MotionViewer()
 	if (bChangeNowKey)
 	{
 		//”ÍˆÍ“à‚ÉŽû‚ß‚é
-		CHossoLibrary::RangeLimit_Equal_Int(nNowKey, 0, pMotionInfo->nNumKey - 1);
+		CHossoLibrary::RangeLimit_Equal(nNowKey, 0, pMotionInfo->nNumKey - 1);
 
 		nNowFrame = 0;
 

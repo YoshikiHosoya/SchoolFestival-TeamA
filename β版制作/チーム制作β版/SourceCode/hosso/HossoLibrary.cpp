@@ -193,48 +193,6 @@ void CHossoLibrary::SetBillboard(D3DXMATRIX * pMtx)
 	pMtx->_33 = mtxView._33;
 }
 //------------------------------------------------------------------------------
-//範囲内の値に修正
-//------------------------------------------------------------------------------
-bool CHossoLibrary::RangeLimit_Equal_Int(int & nValue, int nMin, int nMax)
-{
-	//最小値より小さい時
-	if (nValue < nMin)
-	{
-		//最小値に合わす
-		nValue = nMin;
-		return true;
-	}
-	//最大値より大きい時
-	if (nValue > nMax)
-	{
-		//最大値に合わす
-		nValue = nMax;
-		return true;
-	}
-	return false;
-}
-//------------------------------------------------------------------------------
-//範囲内の値に修正
-//------------------------------------------------------------------------------
-bool CHossoLibrary::RangeLimit_Equal_Float(float & nValue, float nMin, float nMax)
-{
-	//最小値より小さい時
-	if (nValue < nMin)
-	{
-		//最小値に合わす
-		nValue = nMin;
-		return true;
-	}
-	//最大値より大きい時
-	if (nValue > nMax)
-	{
-		//最大値に合わす
-		nValue = nMax;
-		return true;
-	}
-	return false;
-}
-//------------------------------------------------------------------------------
 //-3.14～3.14を返す
 //------------------------------------------------------------------------------
 float CHossoLibrary::Random_PI()

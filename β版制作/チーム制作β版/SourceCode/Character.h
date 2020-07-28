@@ -169,6 +169,7 @@ public:
 
 	bool GetDieFlag()								{ return m_bDieFlag; };						// 死亡フラグの取得
 	void SetDieFlag(bool DieFlag)					{ m_bDieFlag = DieFlag; };					// 死亡フラグの設定
+	bool GetDraw()									{ return m_bDraw; };						// 描画するかどうか取得
 	void ChangeColor(bool ColorChangeFlag, D3DXCOLOR AddColor);									// 色変更
 
 	CCollision *GetCollision() { return m_pCollision; };			// 当たり判定のポインタ取得
@@ -207,6 +208,9 @@ private:
 	bool m_bDieFlag;												// 死亡フラグ
 	bool m_bMotion;													//モーションするかどうか
 	bool m_bFall;													//モーションするかどうか
+	bool m_bDraw;													//描画するかどうか
 	CCollision				*m_pCollision;							//当たり判定のポインタ
+
+	void CheckDrawRange();
 };
 #endif

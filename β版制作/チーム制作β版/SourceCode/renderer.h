@@ -42,10 +42,16 @@ public:
 	void SetShowDebug() { m_bShowDebug ^= 1; };
 
 	void SetRendererCommand(RENDERER_COMMAND Command);		//レンダラー設定 ショートカット
-	void ResetRenderer();
-#ifdef _DEBUG
-	void DrawFPS(void);
-#endif
+	void ResetRenderer();									//レンダラー設定リセット
+
+	D3DXMATRIX *CalcInvMtx(D3DXMATRIX *pOutInvMtx,int nScreen_Width, int nScreen_Height, D3DXMATRIX* pMtxView, D3DXMATRIX* pMtxPrj);		//スクリーン座標をワールド座標に変換
+	D3DXVECTOR3 *CalcScreenToWorld(D3DXVECTOR3* pout, int nScreenPos_X, int nScreenPos_Y, float fScreenPos_Z, D3DXMATRIX *pInvMtx);
+
+	D3DXVECTOR3 &GetMinScreenPos() { return m_MinScreenPos; };
+	D3DXVECTOR3 &GetMaxScreenPos() { return m_MaxScreenPos; };
+
+	bool CheckScreenRange(D3DXVECTOR3 const &pos);
+
 private:
 	LPDIRECT3D9 m_pD3D = NULL;				//Direc3Dオブジェクトへのポインタ
 	LPDIRECT3DDEVICE9 m_pD3DDevice = NULL;	//Direct3dデバイスへのポインタ
@@ -58,8 +64,12 @@ private:
 	CFADE *m_pFade;
 	bool m_bShowDebug;
 
-	void ResetDevice();		//デバイスリセット
-	void RendererDebugInfo();	//レンダラーに関する事のデバッグ情報
+	D3DXVECTOR3 m_MinScreenPos;				//画面の座標　最小値
+	D3DXVECTOR3 m_MaxScreenPos;				//画面の座標　最大値
+
+	void ResetDevice();				//デバイスリセット
+	void RendererDebugInfo();		//レンダラーに関する事のデバッグ情報
+	void CalcScreenPos();			//スクリーンの最大頂点と最少頂点求める
 };
 #endif
 #pragma once
