@@ -81,51 +81,52 @@ void CEnemy::Update(void)
 {
 	if (GetDraw())
 	{
-	CKeyboard *key;
-	key = CManager::GetInputKeyboard();
-	if (GetCollision() != nullptr)
-	{
-
 		CKeyboard *key;
 		key = CManager::GetInputKeyboard();
-
-		if (key->GetKeyboardTrigger(DIK_8))
-		{
-			SetMotion(CCharacter::ENEMY_MOTION_NORMAL);
-		}
-		if (key->GetKeyboardTrigger(DIK_9))
-		{
-			SetMotion(CCharacter::ENEMY_MOTION_WALK);
-		}
 		if (GetCollision() != nullptr)
 		{
 
-			//座標の更新
-			GetCollision()->SetPos(&GetPosition());
-		}
-		//体力が0以下になった時
-		if (this->GetLife() <= 0)
-		{
-			this->SetDieFlag(true);
-			CParticle::CreateFromText(GetPosition(), GetShotDirection(), CParticleParam::EFFECT_BLOOD);
-		}
-		else
-		{
-			// 弾を撃つ方向を設定
-			m_pGun->SetShotRot(GetShotDirection());
-		}
-		//AI関連処理
-		if (m_pAI != nullptr)
-		{
-			if (m_pAI->GetAIType() == m_pAI->AI_SHOT && m_pAI->GetShot() == true)
-			{
-				m_pGun->Shot();
-			}
+			CKeyboard *key;
+			key = CManager::GetInputKeyboard();
 
-			m_pAI->Update();
+			if (key->GetKeyboardTrigger(DIK_8))
+			{
+				SetMotion(CCharacter::ENEMY_MOTION_NORMAL);
+			}
+			if (key->GetKeyboardTrigger(DIK_9))
+			{
+				SetMotion(CCharacter::ENEMY_MOTION_WALK);
+			}
+			if (GetCollision() != nullptr)
+			{
+
+				//座標の更新
+				GetCollision()->SetPos(&GetPosition());
+			}
+			//体力が0以下になった時
+			if (this->GetLife() <= 0)
+			{
+				this->SetDieFlag(true);
+				CParticle::CreateFromText(GetPosition(), GetShotDirection(), CParticleParam::EFFECT_BLOOD);
+			}
+			else
+			{
+				// 弾を撃つ方向を設定
+				m_pGun->SetShotRot(GetShotDirection());
+			}
+			//AI関連処理
+			if (m_pAI != nullptr)
+			{
+				if (m_pAI->GetAIType() == m_pAI->AI_SHOT && m_pAI->GetShot() == true)
+				{
+					m_pGun->Shot();
+				}
+
+				m_pAI->Update();
+			}
 		}
+		CCharacter::Update();
 	}
-	CCharacter::Update();
 }
 //====================================================================
 //描画
