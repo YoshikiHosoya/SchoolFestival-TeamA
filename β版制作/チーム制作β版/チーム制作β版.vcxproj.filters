@@ -255,11 +255,15 @@
     </ClCompile>
     <ClCompile Include="SourceCode\GameManager.cpp">
       <Filter>ManagerClass</Filter>
-    </ClCompile>    <ClCompile Include="SourceCode\Boss.cpp">
+    </ClCompile>
+    <ClCompile Include="SourceCode\Boss.cpp">
       <Filter>Model</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\BossAI.cpp">
       <Filter>Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\TrackingGun.cpp">
+      <Filter>Wepon</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -532,6 +536,9 @@
     </ClInclude>
     <ClInclude Include="SourceCode\BossAI.h">
       <Filter>Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\TrackingGun.h">
+      <Filter>Wepon</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

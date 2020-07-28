@@ -19,7 +19,7 @@
 #include "planegun.h"
 #include "Character.h"
 #include "TexAnimation3D.h"
-
+#include "TrackingGun.h"
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
 // =====================================================================================================================================================================
@@ -257,6 +257,11 @@ void CGun::Shot()
 		case CGun::GUNTYPE_PLANEGUN:
 			// 戦車の銃の生成
 			pBullet = CPlaneGun::Create(m_ShotRot);
+			m_bMultiple = true;		// 複数発撃つフラグをオン
+			break;
+		case CGun::GUNTYPE_TRACKINGGUN:
+			// 戦車の銃の生成
+			pBullet = CTracking::Create(m_Shotvector);
 			m_bMultiple = true;		// 複数発撃つフラグをオン
 			break;
 		}

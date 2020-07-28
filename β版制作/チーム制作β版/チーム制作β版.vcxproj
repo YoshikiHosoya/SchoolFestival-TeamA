@@ -237,6 +237,7 @@
     <ClCompile Include="SourceCode\texture.cpp" />
     <ClCompile Include="SourceCode\title.cpp" />
     <ClCompile Include="SourceCode\titleUI.cpp" />
+    <ClCompile Include="SourceCode\TrackingGun.cpp" />
     <ClCompile Include="SourceCode\UI.cpp" />
     <ClCompile Include="SourceCode\UIManager.cpp" />
     <ClCompile Include="SourceCode\vehicle.cpp" />
@@ -329,6 +330,7 @@
     <ClInclude Include="SourceCode\texture.h" />
     <ClInclude Include="SourceCode\title.h" />
     <ClInclude Include="SourceCode\titleUI.h" />
+    <ClInclude Include="SourceCode\TrackingGun.h" />
     <ClInclude Include="SourceCode\UI.h" />
     <ClInclude Include="SourceCode\UIManager.h" />
     <ClInclude Include="SourceCode\vehicle.h" />

@@ -43,6 +43,7 @@ HRESULT CBoss::Init(void)
 	SetGravity(false);
 	// e‚Ì¶¬
 	m_pGun = CGun::Create(GetCharacterModelPartsList(CModel::MODEL_BOSS_BODY)->GetMatrix());
+	m_pGun->SetGunType(CGun::GUNTYPE_TRACKINGGUN);
 	// e‚Ì’e‚ÌŽí—Þ
 	m_pGun->GetTag() = TAG_ENEMY;
 	// “–‚½‚è”»’è¶¬
@@ -90,12 +91,11 @@ void CBoss::Update(void)
 	//AIŠÖ˜Aˆ—
 	if (m_pAI != nullptr)
 	{
-		m_pGun->SetShotRot(m_pAI->GetTrackingShotRot());
+		m_pGun->SetShotVec(m_pAI->GetTrackingShotRot());
 		if (m_pAI->GetAITypeAttack() == m_pAI->AI_TRACKING)
 		{
 			m_pGun->Shot();
 		}
-
 		m_pAI->Update();
 	}
 	CCharacter::Update();

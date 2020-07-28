@@ -124,13 +124,8 @@ void CBossAI::Update(void)
 		switch (m_AItypeAttack)
 		{
 		case AI_TRACKING://プレイヤー追従弾
-			Distance = pPlayer->GetPosition()-pBossPass->GetPosition() ;//射撃方向の計算
-			//D3DXVec3Normalize(&Distance, &Distance);//値の正規化
-			m_ShotVec = D3DXVECTOR3(atan2f(Distance.y, Distance.z), atan2f(-Distance.x, -Distance.z), atan2f(Distance.x, Distance.z));		//初期角度を求める
-
-
-			//pBossPass->GetPosition() += m_ShotVec;
-			CDebugProc::Print("ボス射撃向きX：%2f\nボス射撃向きY：%2f\n", m_ShotVec.y, m_ShotVec.z);
+			m_ShotVec = pPlayer->GetPosition()-pBossPass->GetPosition() ;//射撃方向の計算
+			D3DXVec3Normalize(&m_ShotVec, &m_ShotVec);//値の正規化
 			break;
 		case AI_DIFFUSION://拡散射撃
 
