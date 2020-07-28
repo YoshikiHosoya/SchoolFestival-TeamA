@@ -253,6 +253,9 @@
     <ClCompile Include="SourceCode\ResultManager.cpp">
       <Filter>ManagerClass</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\GameManager.cpp">
+      <Filter>ManagerClass</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SourceCode\mesh.h">
@@ -514,6 +517,9 @@
       <Filter>Item</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\ResultManager.h">
+      <Filter>ManagerClass</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\GameManager.h">
       <Filter>ManagerClass</Filter>
     </ClInclude>
   </ItemGroup>
