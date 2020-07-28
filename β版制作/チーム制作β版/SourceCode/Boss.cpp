@@ -1,7 +1,7 @@
 //====================================================================
-// エネミー処理 [enemy.cpp]: NORI
+// ボス処理 [Boss.cpp]: NORI
 //====================================================================
-#include "Enemy.h"
+#include "Boss.h"
 #include "inputKeyboard.h"
 #include "model.h"
 #include "game.h"
@@ -13,18 +13,18 @@
 #include "EnemyAI.h"
 #include "gun.h"
 #include "particle.h"
+#include "BossAI.h"
 //====================================================================
 //マクロ定義
 //====================================================================
-#define ENEMY_SIZE			(D3DXVECTOR3(50.0f,75.0f,0.0f)) //敵のサイズ
-
-CEnemy::CEnemy(OBJ_TYPE type) :CCharacter(type)
+#define BOSS_SIZE			(D3DXVECTOR3(50.0f,75.0f,0.0f)) //敵のサイズ
+CBoss::CBoss(OBJ_TYPE type) :CCharacter(type)
 {
-	SetObjType(OBJTYPE_ENEMY);
+	SetObjType(OBJTYPE_BOSS);
 	m_pGun = nullptr;
 }
 
-CEnemy::~CEnemy()
+CBoss::~CBoss()
 {
 
 
@@ -32,32 +32,34 @@ CEnemy::~CEnemy()
 //====================================================================
 //初期化
 //====================================================================
-HRESULT CEnemy::Init(void)
+HRESULT CBoss::Init(void)
 {
 	//キャラの初期化
 	CCharacter::Init();
-	LoadOffset(CCharacter::CHARACTER_TYPE_ENEMY);
-	SetCharacterType(CCharacter::CHARACTER_TYPE_ENEMY);
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
+	LoadOffset(CCharacter::CHARACTER_TYPE_BOSS);
+	SetCharacterType(CCharacter::CHARACTER_TYPE_BOSS);
 	m_Attack = false;
-
+	//重力無し
+	SetGravity(false);
 	// 銃の生成
-	m_pGun = CGun::Create(GetCharacterModelPartsList(CModel::MODEL_ENEMY_RHAND)->GetMatrix());
+	m_pGun = CGun::Create(GetCharacterModelPartsList(CModel::MODEL_BOSS_BODY)->GetMatrix());
 	// 銃の弾の種類
 	m_pGun->GetTag() = TAG_ENEMY;
 	// 当たり判定生成
 	GetCollision()->SetPos(&GetPosition());
 	GetCollision()->SetPosOld(&GetPositionOld());
-	GetCollision()->SetSize2D(ENEMY_SIZE);
+	GetCollision()->SetSize2D(BOSS_SIZE);
 	GetCollision()->SetMove(&GetMove());
 	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_CHARACTER);
+	SetPosition(D3DXVECTOR3(0.0f, 300.0f, 0.0f));
+	SetMotion(CCharacter::BOSS_MOTION_NORMAL);
 	CCharacter::SetLife(1);
 	return S_OK;
 }
 //====================================================================
 //終了
 //====================================================================
-void CEnemy::Uninit(void)
+void CBoss::Uninit(void)
 {
 	// 銃の解放
 	if (m_pGun != nullptr)
@@ -77,31 +79,19 @@ void CEnemy::Uninit(void)
 //====================================================================
 //更新
 //====================================================================
-void CEnemy::Update(void)
+void CBoss::Update(void)
 {
-	CKeyboard *key;
-	key = CManager::GetInputKeyboard();
-	if (GetCollision() != nullptr)
-	{
-
-		//座標の更新
-		GetCollision()->SetPos(&GetPosition());
-	}
 	//体力が0以下になった時
 	if (this->GetLife() <= 0)
 	{
 		this->SetDieFlag(true);
 		CParticle::CreateFromText(GetPosition(), GetShotDirection(), CParticleParam::EFFECT_BLOOD);
 	}
-	else
-	{
-		// 弾を撃つ方向を設定
-		m_pGun->SetShotRot(GetShotDirection());
-	}
 	//AI関連処理
 	if (m_pAI != nullptr)
 	{
-		if (m_pAI->GetAIType() == m_pAI->AI_SHOT && m_pAI->GetShot() == true)
+		m_pGun->SetShotRot(m_pAI->GetTrackingShotRot());
+		if (m_pAI->GetAITypeAttack() == m_pAI->AI_TRACKING)
 		{
 			m_pGun->Shot();
 		}
@@ -113,37 +103,37 @@ void CEnemy::Update(void)
 //====================================================================
 //描画
 //====================================================================
-void CEnemy::Draw(void)
+void CBoss::Draw(void)
 {
 	CCharacter::Draw();
 }
 //====================================================================
 //デバッグ
 //====================================================================
-void CEnemy::DebugInfo(void)
+void CBoss::DebugInfo(void)
 {
 }
 //====================================================================
 //モデルのクリエイト
 //====================================================================
-CEnemy *CEnemy::Create(void)
+CBoss *CBoss::Create(void)
 {
 	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
-	CEnemy*pEnemy;
-	pEnemy = new CEnemy(OBJTYPE_ENEMY);
-	pEnemy->Init();
-	pEnemy->m_pAI = CEnemyAI::CreateAI(pEnemy);
-	return pEnemy;
+	CBoss*pBoss;
+	pBoss = new CBoss(OBJTYPE_BOSS);
+	pBoss->Init();
+	pBoss->m_pAI = CBossAI::CreateAI(pBoss);
+	return pBoss;
 }
-bool CEnemy::DefaultMotion(void)
+bool CBoss::DefaultMotion(void)
 {
-	SetMotion(CCharacter::ENEMY_MOTION_NORMAL);
+	SetMotion(CCharacter::BOSS_MOTION_NORMAL);
 	return true;
 }
 //====================================================================
 //移動
 //====================================================================
-void CEnemy::Move(float move, float fdest)
+void CBoss::Move(float move, float fdest)
 {
 	GetMove().x += sinf(move * -D3DX_PI) * 1.0f;
 	GetMove().z += cosf(move * -D3DX_PI) * 1.0f;

@@ -16,7 +16,8 @@ char *CCharacter::m_LoadOffsetFileName[CHARACTER_TYPE_MAX] =
 {
 	{ "data/Load/Player/PlayerOffset.txt"},
 	{"data/Load/Enemy/EnemyOffset.txt"},
-	{"data/Load/Prisoner/PrisonerOffset.txt"}
+	{"data/Load/Prisoner/PrisonerOffset.txt"},
+	{"data/Load/Boss/BossOffset.txt"}
 };
 //モーションの読み込みファイル
 char *CCharacter::m_LoadMotionFileName[CHARACTER_MOTION_MAX] =
@@ -33,6 +34,7 @@ char *CCharacter::m_LoadMotionFileName[CHARACTER_MOTION_MAX] =
 	{ "data/Load/Enemy/Motion/EnemyNeutral.txt" },
 	{ "data/Load/Enemy/Motion/EnemyWalk.txt" },
 	{ "data/Load/Enemy/Motion/EnemySquatStop.txt" },
+	{ "data/Load/Boss/Motion/Neutral.txt" },
 	{ "data/Load/Prisoner/Motion/PrisonerStay.txt" },
 	{ "data/Load/Prisoner/Motion/PrisonerRelease.txt" },
 	{ "data/Load/Prisoner/Motion/PrisonerRun.txt" },

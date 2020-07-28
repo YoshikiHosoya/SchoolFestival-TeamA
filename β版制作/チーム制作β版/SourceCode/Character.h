@@ -27,6 +27,7 @@ public:
 		CHARACTER_TYPE_PLAYER,			// プレイヤー
 		CHARACTER_TYPE_ENEMY,			// エネミー
 		CHARACTER_TYPE_PRISONER,		// 捕虜
+		CHARACTER_TYPE_BOSS,			// ボス
 		CHARACTER_TYPE_MAX
 	}CHARACTER_TYPE;
 
@@ -82,6 +83,8 @@ public:
 		ENEMY_MOTION_NORMAL,				//ニュートラル
 		ENEMY_MOTION_WALK,					//歩き
 		ENEMY_MOTION_SQUAT,					//通常攻撃1
+
+		BOSS_MOTION_NORMAL,				//ニュートラル
 
 		// 捕虜のモーション
 		PRISONER_MOTION_STAY,				//ニュートラル

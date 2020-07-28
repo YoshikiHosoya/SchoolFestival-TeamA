@@ -137,6 +137,16 @@ public:
 		MODEL_HELI_MAX
 	}HELI_PARTS_MODEL;
 
+	// モデルの種類
+	typedef enum
+	{
+		//===ボスのモデル===
+		MODEL_BOSS_BODY,			// 体
+		MODEL_BOSS_GUN,				// 武器
+		MODEL_BOSS_MAX
+	}BOSS_PARTS_MODEL;
+
+	//全モデルの種類
 	typedef enum
 	{
 		PLAYER_MODEL,
@@ -149,6 +159,7 @@ public:
 		TANK_MODEL,
 		PLANE_MODEL,
 		HELI_MODEL,
+		BOSS_MODEL,
 		TYPE_MAX
 	}MODEL_TYPE;
 
@@ -233,7 +244,7 @@ private:
 	static char *m_TankFileName[MODEL_TANK_MAX];
 	static char *m_PlaneFileName[MODEL_PLANE_MAX];
 	static char *m_HeliFileName[MODEL_HELI_MAX];
-
+	static char *m_BossFileName[MODEL_BOSS_MAX];
 
 	D3DXVECTOR3		m_pos;					//位置
 	D3DXVECTOR3		m_size;					//サイズ
