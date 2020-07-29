@@ -24,7 +24,6 @@
 // =====================================================================================================================================================================
 CMap::MAP					CMap::m_MapNum			= MAP_1;					// マップ番号
 CMap::WAVE					CMap::m_WaveNum			= WAVE_1;					// ウェーブ番号
-CMap::PLATOON				CMap::m_PlatoonNum		= PLATOON_1;				// 小隊番号
 CMap::EDITOR				CMap::m_Editor			= EDITOR_MAP;				// マップエディター
 int							CMap::m_ArrangmentModel = ARRANGEMENT_MODEL_MAP;	// 配置するモデルの種類
 
@@ -112,43 +111,6 @@ char *CMap::m_HelicopterWaveFileName[WAVE_MAX] =
 	{ "data/Load/Helicopter/Helicopter_Wave_03.txt" },
 };
 
-/* ----- 小隊 ----- */
-// 敵
-char *CMap::m_EnemyPlatoonFileName[PLATOON_MAX] =
-{
-	{ "data/Load/Enemy/Enemy_Platoon_01.txt" },
-	{ "data/Load/Enemy/Enemy_Platoon_02.txt" },
-	{ "data/Load/Enemy/Enemy_Platoon_03.txt" },
-};
-// 捕虜
-char *CMap::m_PrisonerPlatoonFileName[PLATOON_MAX] =
-{
-	{ "data/Load/Prisoner/Prisoner_Platoon_01.txt" },
-	{ "data/Load/Prisoner/Prisoner_Platoon_02.txt" },
-	{ "data/Load/Prisoner/Prisoner_Platoon_03.txt" },
-};
-// 戦車
-char *CMap::m_PlayerTankPlatoonFileName[PLATOON_MAX] =
-{
-	{ "data/Load/PlayerTank/PlayerTank_Platoon_01.txt" },
-	{ "data/Load/PlayerTank/PlayerTank_Platoon_02.txt" },
-	{ "data/Load/PlayerTank/PlayerTank_Platoon_03.txt" },
-};
-// 戦闘機
-char *CMap::m_BattlePlanePlatoonFileName[PLATOON_MAX] =
-{
-	{ "data/Load/BattlePlane/BattlePlane_Platoon_01.txt" },
-	{ "data/Load/BattlePlane/BattlePlane_Platoon_02.txt" },
-	{ "data/Load/BattlePlane/BattlePlane_Platoon_03.txt" },
-};
-// ヘリコプター
-char *CMap::m_HelicopterPlatoonFileName[PLATOON_MAX] =
-{
-	{ "data/Load/Helicopter/Helicopter_Platoon_01.txt" },
-	{ "data/Load/Helicopter/Helicopter_Platoon_02.txt" },
-	{ "data/Load/Helicopter/Helicopter_Platoon_03.txt" },
-};
-
 // =====================================================================================================================================================================
 // マクロ定義
 // =====================================================================================================================================================================
@@ -207,10 +169,6 @@ void CMap::ArrangementModelLoad(EDITOR Editor, int ModelType)
 	{
 	case CMap::EDITOR_MAP:
 		pFile = fopen(ArrangementModelFileName(ModelType), "r");
-		break;
-
-	case CMap::EDITOR_PLATOON:
-		pFile = fopen(PlatoonFileName(ModelType), "r");
 		break;
 	}
 
@@ -309,10 +267,6 @@ void CMap::ArrangementModelSave(int ModelType)
 
 		case CMap::EDITOR_WAVE:
 			pFile = fopen(WaveFileName(ModelType), "w");
-			break;
-
-		case CMap::EDITOR_PLATOON:
-			pFile = fopen(PlatoonFileName(ModelType), "w");
 			break;
 		}
 
@@ -611,45 +565,6 @@ char * CMap::WaveFileName(int ModelType)
 
 // =====================================================================================================================================================================
 //
-// 各小隊ファイル名
-//
-// =====================================================================================================================================================================
-char * CMap::PlatoonFileName(int ModelType)
-{
-	char *cFileName = nullptr;			// ファイル名
-
-	switch (ModelType)
-	{
-		/* --- 敵 --- */
-	case CMap::ARRANGEMENT_MODEL_ENEMY:
-		cFileName = m_EnemyPlatoonFileName[m_PlatoonNum];
-		break;
-
-		/* --- 捕虜 --- */
-	case CMap::ARRANGEMENT_MODEL_PRISONER:
-		cFileName = m_PrisonerPlatoonFileName[m_PlatoonNum];
-		break;
-
-		/* --- 戦車 --- */
-	case CMap::ARRANGEMENT_MODEL_TANK:
-		cFileName = m_PlayerTankPlatoonFileName[m_PlatoonNum];
-		break;
-
-		/* --- 戦闘機 --- */
-	case CMap::ARRANGEMENT_MODEL_BATTLEPLANE:
-		cFileName = m_BattlePlanePlatoonFileName[m_PlatoonNum];
-		break;
-
-		/* --- ヘリコプター --- */
-	case CMap::ARRANGEMENT_MODEL_HELICOPTER:
-		cFileName = m_HelicopterPlatoonFileName[m_PlatoonNum];
-		break;
-	}
-	return cFileName;
-}
-
-// =====================================================================================================================================================================
-//
 // マップの生成
 //
 // =====================================================================================================================================================================
@@ -728,31 +643,6 @@ void CMap::MapUpdate()
 
 			// 選択したマップ番号代入
 			m_WaveNum = (WAVE)nNowMapSelect;
-
-			ImGui::EndTabItem();
-		}
-		// 小隊エディター
-		if (ImGui::BeginTabItem("PlatoonEditor"))
-		{
-			// 小隊エディター
-			m_Editor = EDITOR_PLATOON;
-
-			// オブジェクト番号の選択
-			ImGui::InputInt("nowPlatoonNum", &nNowMapSelect, 1, 20, 0);
-
-			// 範囲制限
-			if (nNowMapSelect <= 0)
-			{
-				nNowMapSelect = 0;
-			}
-			else if (nNowMapSelect >= PLATOON_MAX)
-			{
-				// 最後の番号にする
-				nNowMapSelect = PLATOON_MAX - 1;
-			}
-
-			// 選択したマップ番号代入
-			m_PlatoonNum = (PLATOON)nNowMapSelect;
 
 			ImGui::EndTabItem();
 		}
@@ -861,7 +751,6 @@ void CMap::WaveLoad(WAVE WaveNum)
 									// Waveのtxt情報保存
 									m_aWaveInfo[nWaveID].pos			= pos;
 									m_aWaveInfo[nWaveID].nFrame			= nFrame;
-									m_aWaveInfo[nWaveID].nPlatoonType	= nPlatoonType;
 									// カウントアップ
 									nWaveID++;
 								}
@@ -893,9 +782,6 @@ void CMap::WaveCreate(WAVE WaveNum, int ModelType, int &frame)
 
 	if (m_aWaveInfo[m_nWaveID].nFrame == frame)
 	{
-		// 小隊番号
-		m_PlatoonNum = (PLATOON)m_aWaveInfo[m_nWaveID].nPlatoonType;
-
 		// 小隊のロード
 		ArrangementModelLoad(EDITOR_PLATOON, ModelType);
 

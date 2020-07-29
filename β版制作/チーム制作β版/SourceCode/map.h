@@ -35,7 +35,6 @@ typedef struct
 {
 	D3DXVECTOR3 pos;			// 頂点座標
 	int			nFrame;			// フレーム
-	int			nPlatoonType;	// 小隊の種類
 	//bool		bEvent;
 } WAVE_INFO;
 
@@ -144,7 +143,6 @@ private:
 	void			LoadSuccessMessage(int ModelType);										// 読み込み成功時の結果表示
 	char			*ArrangementModelFileName(int ModelType);								// 配置するモデルファイル名(初期配置)
 	char			*WaveFileName(int ModelType);											// 各ウェーブファイル名
-	char			*PlatoonFileName(int ModelType);										// 各小隊ファイル名
 
 	void			SaveModelHeader(FILE *pFile, int ModelType);							// セーブするモデルのヘッダー
 	void			SaveModelContents(FILE *pFile,int ModelType, int nCnt);					// セーブするモデルの情報
@@ -185,15 +183,8 @@ private:
 	static char					*m_BattlePlaneWaveFileName[WAVE_MAX];		// 戦闘機ファイル名
 	static char					*m_HelicopterWaveFileName[WAVE_MAX];		// ヘリファイル名
 
-	static char					*m_EnemyPlatoonFileName[PLATOON_MAX];		// 敵ファイル名
-	static char					*m_PrisonerPlatoonFileName[PLATOON_MAX];	// 捕虜ファイル名
-	static char					*m_PlayerTankPlatoonFileName[PLATOON_MAX];	// 戦車ファイル名
-	static char					*m_BattlePlanePlatoonFileName[PLATOON_MAX];	// 戦闘機ファイル名
-	static char					*m_HelicopterPlatoonFileName[PLATOON_MAX];	// ヘリファイル名
-
 	static MAP					m_MapNum;									// マップ番号
 	static WAVE					m_WaveNum;									// ウェーブ番号
-	static PLATOON				m_PlatoonNum;								// 小隊番号
 	static EDITOR				m_Editor;									// エディターの種類
 	static int					m_ArrangmentModel;							// 配置するモデルの種類
 
