@@ -39,6 +39,16 @@ public:
 	void SetCameraPos(D3DXVECTOR3 posR, D3DXVECTOR3 posV);
 	void SetCameraPosRDest(D3DXVECTOR3 posR) { m_posRDest = posR; };	// 注視点の目的地の設定
 
+	D3DXVECTOR3 GetPosV()			{ return m_posV; };				//視点
+	D3DXVECTOR3 GetPosR()			{ return m_posR; };				//注視点
+	D3DXVECTOR3 GetRot()			{ return m_rot; };				//向き
+	D3DXMATRIX *GetProjMtxPtr()		{ return &m_mtxProjection; };	//プロジェクションマトリックス
+	D3DXMATRIX *GetViewMtxPtr()		{ return &m_mtxView; };			//ビューマトリックス
+	float GetDistance()				{ return m_fDistance; };		//視点と注視点の距離
+	float GetNear()					{ return m_fNear; };			//Near値
+	float GetFar()					{ return m_fFar; };				//Far値
+
+
 private:
 	D3DXVECTOR3 m_posV;			//視点
 	D3DXVECTOR3 m_posVDest;		//視点の目的地
@@ -51,6 +61,9 @@ private:
 	D3DXMATRIX m_mtxProjection;	//プロジェクションマトリックス
 	D3DXMATRIX m_mtxView;		//ビューマトリックス
 	float m_fDistance;			//距離
+	float m_fNear;				//Near値
+	float m_fFar;					//Far値
+
 	int m_nCountTimer;			//追従のタイマー
 	int m_nCnt;
 	int m_CameraFollowingType;	// カメラの追従種類

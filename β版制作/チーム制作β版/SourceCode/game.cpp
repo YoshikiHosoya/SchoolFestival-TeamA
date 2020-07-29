@@ -19,8 +19,8 @@
 #include "Scene.h"
 #include "3Dline.h"
 #include "resultUI.h"
+#include "Boss.h"
 #include "ResultManager.h"
-
 // =====================================================================================================================================================================
 // マクロ定義
 // =====================================================================================================================================================================
@@ -52,13 +52,15 @@ CGame::~CGame()
 //==========================================================
 HRESULT CGame::Init(void)
 {
-	m_pMap		= CMap::MapCreate(CMap::MAP_1);	// マップの生成
+	m_pMap		= CMap::MapCreate();		// マップの生成
+	m_pMap->MapLoad(CMap::MAP_1);			// マップのロード
+
 	m_pPlayer	= CPlayer::Create();
 	m_pPlayer->SetLife(30);
 	m_pPlayer->SetPosition(D3DXVECTOR3(50.0f, 100.0f, 0.0f));
 
 	m_pPause->CreatePause();
-
+	CBoss::Create();
 	// ゲームモードの初期設定
 	m_GameMode = GAME_MODE_NORMAL;
 

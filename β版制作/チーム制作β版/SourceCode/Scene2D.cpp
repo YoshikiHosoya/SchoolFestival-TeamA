@@ -102,6 +102,18 @@ CScene2D * CScene2D::Create(D3DXVECTOR3 pos, D3DXVECTOR3 size)
 	pScene2D->Init();
 	return pScene2D;
 }
+//==========================================================
+// クリエイト シーンで管理する
+//==========================================================
+CScene2D * CScene2D::CreateSceneManagement(D3DXVECTOR3 pos, D3DXVECTOR3 size,CScene::OBJ_TYPE objtype)
+{
+	CScene2D*pScene2D;
+	pScene2D = new CScene2D(objtype);
+	pScene2D->SetPosition(pos);
+	pScene2D->SetSize(size);
+	pScene2D->Init();
+	return pScene2D;
+}
 
 //==========================================================
 // アニメーションの設定

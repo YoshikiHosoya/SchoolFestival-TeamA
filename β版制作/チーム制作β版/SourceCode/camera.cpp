@@ -21,6 +21,9 @@
 
 #define DEFAULT_DISTANCE (1000.0f)
 #define DEFAULT_CAMERA_ROTATION (D3DXVECTOR3(0.2f,0.0f,0.0f))
+
+#define CAMERA_LENGTH_NEAR (10.0f)
+#define CAMERA_LENGTH_FAR (3000.0f)
 //=============================================================================
 // カメラの初期化処理
 //=============================================================================
@@ -28,6 +31,10 @@ void CCamera::InitCamera(void)
 {
 	// カメラをプレイや追従にする
 	m_CameraFollowingType = CAMERA_FOLLOWING_TYPE_PLAYER;
+
+	m_fNear = CAMERA_LENGTH_NEAR;
+	m_fFar = CAMERA_LENGTH_FAR;
+
 	//カメラ初期化
 	ResetCamera();
 }
@@ -78,8 +85,8 @@ void CCamera::SetCamera(void)
 	D3DXMatrixPerspectiveFovLH(&m_mtxProjection,
 		D3DXToRadian(45.0f),
 		(float)SCREEN_WIDTH / (float)SCREEN_HEIGHT,
-		10.0f,
-		10000.0f);
+		m_fNear,
+		m_fFar);
 
 	// プロジェクションマトリックスの設定
 	pDevice->SetTransform(D3DTS_PROJECTION, &m_mtxProjection);

@@ -253,6 +253,18 @@
     <ClCompile Include="SourceCode\ResultManager.cpp">
       <Filter>ManagerClass</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\GameManager.cpp">
+      <Filter>ManagerClass</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Boss.cpp">
+      <Filter>Model</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\BossAI.cpp">
+      <Filter>Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\TrackingGun.cpp">
+      <Filter>Wepon</Filter>
+    </ClCompile>
     <ClCompile Include="SourceCode\RankingManager.cpp">
       <Filter>ManagerClass</Filter>
     </ClCompile>
@@ -521,6 +533,18 @@
     </ClInclude>
     <ClInclude Include="SourceCode\RankingManager.h">
       <Filter>ManagerClass</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\GameManager.h">
+      <Filter>ManagerClass</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Boss.h">
+      <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\BossAI.h">
+      <Filter>Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\TrackingGun.h">
+      <Filter>Wepon</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

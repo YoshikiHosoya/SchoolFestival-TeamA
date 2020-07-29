@@ -19,6 +19,9 @@ LPD3DXFONT			g_pFont = NULL;	 // フォントへのポインタ
 CRenderer::CRenderer()
 {
 	m_bShowDebug = true;
+	m_BackColor = DEFAULT_BACKCOLOR;
+	m_MaxScreenPos = ZeroVector3;
+	m_MinScreenPos = ZeroVector3;
 }
 
 CRenderer::~CRenderer()
@@ -32,7 +35,6 @@ HRESULT  CRenderer::Init(HWND hWnd, BOOL bWindow)
 	D3DDISPLAYMODE d3ddm;			// ディスプレイモード
 	m_pLight  = new CLight;
 	m_pCamera = new CCamera;
-	m_BackColor = DEFAULT_BACKCOLOR;
 
 	// Direct3Dオブジェクトの生成
 	m_pD3D = Direct3DCreate9(D3D_SDK_VERSION);
@@ -180,6 +182,9 @@ void CRenderer::Uninit(void)
 //=============================================================================
 void CRenderer::Update(void)
 {
+	//スクリーン座標計算
+	CalcScreenPos();
+
 #ifdef _DEBUG
 
 	//ImGuiの更新
@@ -274,7 +279,6 @@ void CRenderer::Draw(void)
 		{
 			//デバッグ表記
 			m_pDebug->Draw();
-			DrawFPS();
 
 			//ImGui描画
 			ImGui::Render();
@@ -441,7 +445,61 @@ void CRenderer::ResetRenderer()
 	SetRendererCommand(CRenderer::REDNERER_ALPHABLEND_DEFAULT);
 	SetRendererCommand(CRenderer::RENDERER_WIRE_OFF);
 
+}
+//=============================================================================
+//スクリーン座標をワールド座標に変換
+//=============================================================================
+D3DXMATRIX * CRenderer::CalcInvMtx(D3DXMATRIX *pOutInvMtx,int nScreen_Width, int nScreen_Height, D3DXMATRIX * pMtxView, D3DXMATRIX * pMtxPrj)
+{
+	//変数宣言　逆行列
+	D3DXMATRIX InvView, InvPrj, Viewport, InvViewport;
 
+	//逆行列を算出
+	D3DXMatrixInverse(&InvView, NULL, pMtxView);
+	D3DXMatrixInverse(&InvPrj, NULL, pMtxPrj);
+
+	//初期化
+	D3DXMatrixIdentity(&Viewport);
+
+	//スクリーンの大きさを基にビューポート作成
+	Viewport._11 = nScreen_Width / 2.0f; Viewport._22 = -nScreen_Height / 2.0f;
+	Viewport._41 = nScreen_Width / 2.0f; Viewport._42 = nScreen_Height / 2.0f;
+
+	//ビューポートの逆行列算出
+	D3DXMatrixInverse(&InvViewport, NULL, &Viewport);
+
+	//逆行列の計算
+	*pOutInvMtx = InvViewport * InvPrj * InvView;
+
+	//return
+	return pOutInvMtx;
+}
+//=============================================================================
+//スクリーン座標をワールド座標に変換
+//=============================================================================
+D3DXVECTOR3 *CRenderer::CalcScreenToWorld(D3DXVECTOR3 * pout, int nScreenPos_X, int nScreenPos_Y, float fScreenPos_Z, D3DXMATRIX * pInvMtx)
+{
+	//逆行列の計算でワールド座標算出
+	D3DXVec3TransformCoord(pout, &D3DXVECTOR3((float)nScreenPos_X, (float)nScreenPos_Y, fScreenPos_Z), pInvMtx);
+
+	return pout;
+}
+//=============================================================================
+//デバイスリセット imGui用の処理含む
+//=============================================================================
+bool CRenderer::CheckScreenRange(D3DXVECTOR3 const &pos)
+{
+	//画面の範囲内であれば描画
+	//それ以外は描画しない
+	if (pos.x > m_MinScreenPos.x &&
+		pos.x < m_MaxScreenPos.x)
+	{
+		return true;
+	}
+	else
+	{
+		return  false;
+	}
 }
 //=============================================================================
 //デバイスリセット imGui用の処理含む
@@ -449,9 +507,12 @@ void CRenderer::ResetRenderer()
 void CRenderer::ResetDevice()
 {
 	ImGui_ImplDX9_InvalidateDeviceObjects();
+
 	HRESULT hr = m_pD3DDevice->Reset(&m_d3dpp);
+
 	if (hr == D3DERR_INVALIDCALL)
 		IM_ASSERT(0);
+
 	ImGui_ImplDX9_CreateDeviceObjects();
 }
 
@@ -476,41 +537,38 @@ void CRenderer::RendererDebugInfo()
 }
 
 //=============================================================================
-//デバック表示
+//スクリーンの最少頂点と最大頂点求める
 //=============================================================================
-#ifdef _DEBUG
-void CRenderer::DrawFPS(void)
+void CRenderer::CalcScreenPos()
 {
-	//CMouse *mouse;
-	//mouse = CManager::GetMouse();
-	//D3DXVECTOR3 mousePos;
-	//if (mouse != NULL)
-	//{
-	//	mousePos.x = (float)mouse->GetMouseX();
-	//	mousePos.y = (float)mouse->GetMouseY();
-	//	mousePos.z = 0.0f;
-	//}
+	//変数宣言
+	D3DXMATRIX InvMtx;
+	D3DXVECTOR3 nearpos, farpos;
+	float fScreenZValue = 1.0f - ((m_pCamera->GetPosV().z + m_pCamera->GetFar()) / m_pCamera->GetFar());
 
-	////キャスト
-	//CScene *pScene;
-	//pScene = CScene::GetScene(0, CScene3D::OBJTYPE_PLAYER);
-	//if (pScene != NULL)
-	//{
-	//	D3DXVECTOR3 posPlayer = ((CPlayer*)pScene)->GetPosition();
-	//	int lifePlayer = ((CPlayer*)pScene)->GetLife();
-	//	int nCountFPS = GetFps();
-	//	//	D3DXVECTOR3 pos = { 0.0f,0.0f,0.0f };
+	//Valueが0から1の範囲に収まるように
+	CHossoLibrary::RangeLimit_Equal(fScreenZValue, 0.0f, 1.0f);
 
-	//	RECT rect = { 0,300,1280,720 };
-	//	char aStr[256];
 
-	//	sprintf(&aStr[0], "FPS:%d\n\nHP:%d\nPOS.x:%f\nPOS.y:%f\nMouse.x:%f\nMouse.y:%f\n", nCountFPS, lifePlayer, posPlayer.x, posPlayer.y, mousePos.x, mousePos.y);
-	//	g_pFont->DrawText(NULL,
-	//		&aStr[0],
-	//		-1,
-	//		&rect,
-	//		DT_LEFT,
-	//		D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
-	//}
+	//逆行列計算
+	CalcInvMtx(&InvMtx, SCREEN_WIDTH, SCREEN_HEIGHT, m_pCamera->GetViewMtxPtr(), m_pCamera->GetProjMtxPtr());
+
+	//最小値の計算
+	CalcScreenToWorld(&nearpos, 0, SCREEN_HEIGHT, 0.0f, &InvMtx);
+	CalcScreenToWorld(&farpos, 0, SCREEN_HEIGHT, 1.0f, &InvMtx);
+	m_MinScreenPos = nearpos + ((farpos - nearpos) * fScreenZValue);
+
+	//最大値の計算
+	CalcScreenToWorld(&nearpos, SCREEN_WIDTH, 0, 0.0f, &InvMtx);
+	CalcScreenToWorld(&farpos, SCREEN_WIDTH, 0, 1.0f, &InvMtx);
+	m_MaxScreenPos = nearpos + ((farpos - nearpos) * fScreenZValue);
+
+	m_MinScreenPos -= D3DXVECTOR3(100.0f,100.0f,0.0f);
+	m_MaxScreenPos += D3DXVECTOR3(100.0f,100.0f,0.0f);
+
+	//debug
+	CDebugProc::Print("ZValue >> %.2f\n", fScreenZValue);
+	CDebugProc::Print("ScreenPosMin >> %.2f,%.2f,%.2f\n", m_MinScreenPos.x, m_MinScreenPos.y, m_MinScreenPos.z);
+	CDebugProc::Print("ScreenPosMax >> %.2f,%.2f,%.2f\n", m_MaxScreenPos.x, m_MaxScreenPos.y, m_MaxScreenPos.z);
 }
-#endif // _DEBUG
+

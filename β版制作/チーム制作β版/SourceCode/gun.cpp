@@ -19,7 +19,7 @@
 #include "planegun.h"
 #include "Character.h"
 #include "TexAnimation3D.h"
-
+#include "TrackingGun.h"
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
 // =====================================================================================================================================================================
@@ -192,6 +192,14 @@ void CGun::SetGunType(GUN_TYPE type)
 // =====================================================================================================================================================================
 void CGun::Shot()
 {
+	D3DXVec3TransformCoord(&m_ShotPos, &m_ShotOffsetPos, GetMatrix());
+
+	//画面外から発射不可
+	if (!CManager::GetRenderer()->CheckScreenRange(m_ShotPos))
+	{
+		return;
+	}
+
 	CBullet *pBullet = nullptr;
 
 	// ハンドガンと戦車の銃以外のとき
@@ -237,7 +245,6 @@ void CGun::Shot()
 		case CGun::GUNTYPE_FLAMESHOT:
 			// フレイムショットの生成
 			pBullet = CFlameshot::Create(m_ShotRot);
-			m_bMultiple = true;		// 複数発撃つフラグをオン
 			break;
 
 		case CGun::GUNTYPE_TANKGUN:
@@ -251,10 +258,14 @@ void CGun::Shot()
 			pBullet = CPlaneGun::Create(m_ShotRot);
 			m_bMultiple = true;		// 複数発撃つフラグをオン
 			break;
+		case CGun::GUNTYPE_TRACKINGGUN:
+			// 戦車の銃の生成
+			pBullet = CTracking::Create(m_Shotvector);
+			m_bMultiple = true;		// 複数発撃つフラグをオン
+			break;
 		}
 		if (pBullet)
 		{
-			D3DXVec3TransformCoord(&m_ShotPos, &m_ShotOffsetPos, GetMatrix());
 
 			// 位置の設定
 			pBullet->SetPosition(m_ShotPos);
