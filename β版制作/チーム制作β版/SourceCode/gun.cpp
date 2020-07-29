@@ -237,7 +237,6 @@ void CGun::Shot()
 		case CGun::GUNTYPE_FLAMESHOT:
 			// フレイムショットの生成
 			pBullet = CFlameshot::Create(m_ShotRot);
-			m_bMultiple = true;		// 複数発撃つフラグをオン
 			break;
 
 		case CGun::GUNTYPE_TANKGUN:

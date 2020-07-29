@@ -53,7 +53,10 @@ CGame::~CGame()
 //==========================================================
 HRESULT CGame::Init(void)
 {
-	m_pMap		= CMap::MapCreate(CMap::MAP_1);	// マップの生成
+	m_pMap		= CMap::MapCreate();		// マップの生成
+	m_pMap->MapLoad(CMap::MAP_1);			// マップのロード
+	m_pMap->WaveLoad(CMap::WAVE_1);
+
 	m_pPlayer	= CPlayer::Create();
 	m_pPlayer->SetLife(100);
 	m_pPlayer->SetPosition(D3DXVECTOR3(50.0f, 100.0f, 0.0f));
@@ -82,6 +85,13 @@ void CGame::Uninit(void)
 //==========================================================
 void CGame::Update(void)
 {
+	m_nFrame++;
+	m_pMap->WaveCreate(CMap::WAVE_1, CMap::ARRANGEMENT_MODEL_ENEMY, m_nFrame);
+
+	if (m_nFrame > 700)
+	{
+		m_nFrame = 0;
+	}
 	// 死亡判定が出ているかの確認
 	m_pMap->UpdateDieFlag();
 

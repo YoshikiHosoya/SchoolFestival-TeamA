@@ -61,5 +61,7 @@ private:
 	/* ƒƒ“ƒo•Ï” */
 	CPause						*m_pPause;
 	GAME_MODE					m_GameMode;
+
+	int m_nFrame;
 };
 #endif
