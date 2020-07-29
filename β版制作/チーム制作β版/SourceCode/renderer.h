@@ -50,7 +50,9 @@ public:
 	D3DXVECTOR3 &GetMinScreenPos() { return m_MinScreenPos; };
 	D3DXVECTOR3 &GetMaxScreenPos() { return m_MaxScreenPos; };
 
+
 	bool CheckScreenRange(D3DXVECTOR3 const &pos);
+	void ScreenLimitRange(D3DXVECTOR3 & pos);
 
 private:
 	LPDIRECT3D9 m_pD3D = NULL;				//Direc3Dオブジェクトへのポインタ

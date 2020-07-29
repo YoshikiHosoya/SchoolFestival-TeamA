@@ -9,7 +9,7 @@
 // マクロ定義
 //=============================================================================
 #define DEFAULT_BACKCOLOR (D3DXCOLOR(0.0f,0.0f,0.0f,1.0f))
-
+#define SCREEN_LIMIT_COMPLEMENT_VALUE (80.0f)
 
 //プロトタイプ宣言
 #ifdef _DEBUG
@@ -485,14 +485,14 @@ D3DXVECTOR3 *CRenderer::CalcScreenToWorld(D3DXVECTOR3 * pout, int nScreenPos_X, 
 	return pout;
 }
 //=============================================================================
-//デバイスリセット imGui用の処理含む
+//スクリーンの中かどうか確認
 //=============================================================================
 bool CRenderer::CheckScreenRange(D3DXVECTOR3 const &pos)
 {
 	//画面の範囲内であれば描画
 	//それ以外は描画しない
-	if (pos.x > m_MinScreenPos.x &&
-		pos.x < m_MaxScreenPos.x)
+	if (pos.x > m_MinScreenPos.x - SCREEN_LIMIT_COMPLEMENT_VALUE &&
+		pos.x < m_MaxScreenPos.x + SCREEN_LIMIT_COMPLEMENT_VALUE)
 	{
 		return true;
 	}
@@ -500,6 +500,14 @@ bool CRenderer::CheckScreenRange(D3DXVECTOR3 const &pos)
 	{
 		return  false;
 	}
+}
+//=============================================================================
+//スクリーンの中に収めるようにする
+//=============================================================================
+void CRenderer::ScreenLimitRange(D3DXVECTOR3 &pos)
+{
+	//画面の範囲内になるように描画
+	CHossoLibrary::RangeLimit_Equal(pos.x, m_MinScreenPos.x + SCREEN_LIMIT_COMPLEMENT_VALUE, m_MaxScreenPos.x - SCREEN_LIMIT_COMPLEMENT_VALUE);
 }
 //=============================================================================
 //デバイスリセット imGui用の処理含む
@@ -562,9 +570,6 @@ void CRenderer::CalcScreenPos()
 	CalcScreenToWorld(&nearpos, SCREEN_WIDTH, 0, 0.0f, &InvMtx);
 	CalcScreenToWorld(&farpos, SCREEN_WIDTH, 0, 1.0f, &InvMtx);
 	m_MaxScreenPos = nearpos + ((farpos - nearpos) * fScreenZValue);
-
-	m_MinScreenPos -= D3DXVECTOR3(100.0f,100.0f,0.0f);
-	m_MaxScreenPos += D3DXVECTOR3(100.0f,100.0f,0.0f);
 
 	//debug
 	CDebugProc::Print("ZValue >> %.2f\n", fScreenZValue);

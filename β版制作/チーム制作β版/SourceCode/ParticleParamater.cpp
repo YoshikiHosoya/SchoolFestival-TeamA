@@ -30,11 +30,11 @@ FILENAME_LIST CParticleParam::m_aFileNameList =
 	{ "data/Load/Effect/Paramater/Fire.txt" },
 
 };
-
-FILENAME_LIST CParticleCreators::m_aFileNameList =
-{
-	{ "data/Load/Effect/Creator/Default.txt" },
-};
+//
+//FILENAME_LIST CParticleCreators::m_aFileNameList =
+//{
+//	{ "data/Load/Effect/Creator/Default.txt" },
+//};
 
 //------------------------------------------------------------------------------
 //マクロ
@@ -57,7 +57,7 @@ CParticleParam::CParticleParam()
 	m_nLife = 50;															//ライフ
 	m_nNumber = 10;															//個数
 	m_fSpeed = 10.0f;														//速度
-	m_fRange = 0.5f;														//範囲
+	m_fConeRange = 0.5f;													//範囲
 	m_fAlphaDamping = DEFAULT_DAMPING;										//アルファ値の減衰値
 	m_fGravityPower = DEFAULT_GRAVITY_POWER;								//重力の大きさ
 
@@ -65,6 +65,9 @@ CParticleParam::CParticleParam()
 	m_SizeDamping = D3DXVECTOR3(DEFAULT_DAMPING, DEFAULT_DAMPING, 0.0f);	//サイズの減衰地
 	m_col = WhiteColor;														//色
 	m_rot = ZeroVector3;													//角度
+
+	m_LocalPos = ZeroVector3;												//ローカル座標
+	m_LocalPosRandomRange = ZeroVector3;									//ローカル座標がランダム時の値の範囲
 
 	m_bAnimation = false;													//アニメーションするかどうか
 	m_bAnimationLoop = false;												//アニメーションループするかどうか
@@ -241,7 +244,7 @@ HRESULT CParticleParam::LoadParticleDefaultParam()
 							}
 							if (strcmp(cHeadText, "RANGE") == 0)
 							{
-								sscanf(cReadText, "%s %s %f", &cDie, &cDie, &pParam->m_fRange);
+								sscanf(cReadText, "%s %s %f", &cDie, &cDie, &pParam->m_fConeRange);
 							}
 							if (strcmp(cHeadText, "ALPHADAMPING") == 0)
 							{
@@ -265,6 +268,16 @@ HRESULT CParticleParam::LoadParticleDefaultParam()
 							{
 								sscanf(cReadText, "%s %s %f %f %f %f", &cDie, &cDie,
 										&pParam->m_col.r, &pParam->m_col.g, &pParam->m_col.b, &pParam->m_col.a);
+							}
+							if (strcmp(cHeadText, "LOCALPOS") == 0)
+							{
+								sscanf(cReadText, "%s %s %f %f %f", &cDie, &cDie,
+									&pParam->m_LocalPos.x, &pParam->m_LocalPos.y, &pParam->m_LocalPos.z);
+							}
+							if (strcmp(cHeadText, "LOCALPOS_RANGE") == 0)
+							{
+								sscanf(cReadText, "%s %s %f %f %f", &cDie, &cDie,
+									&pParam->m_LocalPosRandomRange.x, &pParam->m_LocalPosRandomRange.y, &pParam->m_LocalPosRandomRange.z);
 							}
 							if (strcmp(cHeadText, "ROT") == 0)
 							{
@@ -436,7 +449,7 @@ HRESULT CParticleParam::SaveParticleDefaultParam(CParticleParam *pSaveParam)
 		fputs(cWriteText, pFile);
 		fputs(NEWLINE, pFile);
 
-		sprintf(cWriteText, "		%s %s %.1f								%s", "RANGE", &EQUAL, pSaveParam->m_fRange, "//範囲");
+		sprintf(cWriteText, "		%s %s %.1f								%s", "RANGE", &EQUAL, pSaveParam->m_fConeRange, "//範囲");
 		fputs(cWriteText, pFile);
 		fputs(NEWLINE, pFile);
 
@@ -445,6 +458,16 @@ HRESULT CParticleParam::SaveParticleDefaultParam(CParticleParam *pSaveParam)
 		fputs(NEWLINE, pFile);
 
 		sprintf(cWriteText, "		%s %s %.2f						%s", "GRAVITYPOWER", &EQUAL, pSaveParam->m_fGravityPower, "//重力の強さ");
+		fputs(cWriteText, pFile);
+		fputs(NEWLINE, pFile);
+
+		sprintf(cWriteText, "		%s %s %.2f %.2f %.2f				%s", "LOCALPOS", &EQUAL,
+			pSaveParam->m_LocalPos.x, pSaveParam->m_LocalPos.y, pSaveParam->m_LocalPos.z, "//ローカル座標");
+		fputs(cWriteText, pFile);
+		fputs(NEWLINE, pFile);
+
+		sprintf(cWriteText, "		%s %s %.2f %.2f %.2f				%s", "LOCALPOS_RANGE", &EQUAL,
+			pSaveParam->m_LocalPosRandomRange.x, pSaveParam->m_LocalPosRandomRange.y, pSaveParam->m_LocalPosRandomRange.z, "//ローカル座標がランダム時の値の範囲");
 		fputs(cWriteText, pFile);
 		fputs(NEWLINE, pFile);
 
@@ -566,136 +589,138 @@ void CParticleParam::UpdateParam()
 //------------------------------------------------------------------------------
 void * CParticleParam::operator=(const CParticleParam * pParam)
 {
-	m_ParticleType			= pParam->m_ParticleType;
-	m_shape					= pParam->m_shape;
-	m_bAlphaBlend_Add		= pParam->m_bAlphaBlend_Add;
-	m_bAlphaBlend_Sub		= pParam->m_bAlphaBlend_Sub;
-	m_bZtest				= pParam->m_bZtest;
-	m_bZWrite				= pParam->m_bZWrite;
-	m_bBillboard			= pParam->m_bBillboard;
-	m_bAnimation			= pParam->m_bAnimation;
-	m_bAnimationLoop		= pParam->m_bAnimationLoop;
-	m_nAnimationCntSwitch	= pParam->m_nAnimationCntSwitch;
-	m_nLife					= pParam->m_nLife;
-	m_Size					= pParam->m_Size;
-	m_col					= pParam->m_col;
-	m_nNumber				= pParam->m_nNumber;
-	m_fSpeed				= pParam->m_fSpeed;
-	m_bSpeedRandom			= pParam->m_bSpeedRandom;
-	m_fAlphaDamping			= pParam->m_fAlphaDamping;
-	m_SizeDamping			= pParam->m_SizeDamping;
-	m_bGravity				= pParam->m_bGravity;
-	m_fGravityPower			= pParam->m_fGravityPower;
-	m_rot					= pParam->m_rot;
-	m_fRange				= pParam->m_fRange;
-	m_Textype				= pParam->m_Textype;
-	m_SeparateTex			= pParam->m_SeparateTex;
-	m_CollisionSize			= pParam->m_CollisionSize;
-	m_bCollision			= pParam->m_bCollision;
-	m_bCollisionSizeCalc	= pParam->m_bCollisionSizeCalc;
-	m_nCollisionAttackValue = pParam->m_nCollisionAttackValue;
-	m_nCollisionCnt			= pParam->m_nCollisionCnt;
+	m_ParticleType				= pParam->m_ParticleType;
+	m_shape						= pParam->m_shape;
+	m_bAlphaBlend_Add			= pParam->m_bAlphaBlend_Add;
+	m_bAlphaBlend_Sub			= pParam->m_bAlphaBlend_Sub;
+	m_bZtest					= pParam->m_bZtest;
+	m_bZWrite					= pParam->m_bZWrite;
+	m_bBillboard				= pParam->m_bBillboard;
+	m_bAnimation				= pParam->m_bAnimation;
+	m_bAnimationLoop			= pParam->m_bAnimationLoop;
+	m_nAnimationCntSwitch		= pParam->m_nAnimationCntSwitch;
+	m_nLife						= pParam->m_nLife;
+	m_Size						= pParam->m_Size;
+	m_col						= pParam->m_col;
+	m_nNumber					= pParam->m_nNumber;
+	m_fSpeed					= pParam->m_fSpeed;
+	m_bSpeedRandom				= pParam->m_bSpeedRandom;
+	m_fAlphaDamping				= pParam->m_fAlphaDamping;
+	m_SizeDamping				= pParam->m_SizeDamping;
+	m_bGravity					= pParam->m_bGravity;
+	m_fGravityPower				= pParam->m_fGravityPower;
+	m_rot						= pParam->m_rot;
+	m_fConeRange				= pParam->m_fConeRange;
+	m_Textype					= pParam->m_Textype;
+	m_SeparateTex				= pParam->m_SeparateTex;
+	m_CollisionSize				= pParam->m_CollisionSize;
+	m_bCollision				= pParam->m_bCollision;
+	m_bCollisionSizeCalc		= pParam->m_bCollisionSizeCalc;
+	m_nCollisionAttackValue		= pParam->m_nCollisionAttackValue;
+	m_nCollisionCnt				= pParam->m_nCollisionCnt;
+	m_LocalPosRandomRange		= pParam->m_LocalPosRandomRange;
+	m_LocalPos					= pParam->m_LocalPos;
 
 	return this;
 }
 
-//------------------------------------------------------------------------------
-//パラメータ設定
-//------------------------------------------------------------------------------
-void CParticleCreators::LoadParticleCreators()
-{
-	////ファイルポイント
-	//FILE *pFile;
-	//char cReadText[128];	//文字として読み取り用
-	//char cHeadText[128];	//比較する用
-	//char cDie[128];			//不要な文字
-	//int n_BoolValue;		//boolに変換するようの格納
-	//HRESULT hResult = S_OK;
-
-	//CParticleCreators *pCreator;
-
-	////ファイル数分
-	//for (size_t nCnt = 0; nCnt < m_aFileNameList.size(); nCnt++)
-	//{
-	//	//ファイル読み込み
-	//	pFile = fopen(m_aFileNameList[nCnt].data(), "r");
-
-	//	//ファイルが開けた時
-	//	if (pFile != NULL)
-	//	{
-	//		//スクリプトが来るまでループ
-	//		while (strcmp(cHeadText, "SCRIPT") != 0)
-	//		{
-	//			fgets(cReadText, sizeof(cReadText), pFile);	//一文を読み込む
-	//			sscanf(cReadText, "%s", &cHeadText);		//比較用テキストに文字を代入
-	//		}
-	//		//スクリプトだったら
-	//		if (strcmp(cHeadText, "SCRIPT") == 0)
-	//		{
-	//			//エンドスクリプトが来るまでループ
-	//			while (strcmp(cHeadText, "END_SCRIPT") != 0)
-	//			{
-	//				fgets(cReadText, sizeof(cReadText), pFile);
-	//				sscanf(cReadText, "%s", &cHeadText);
-
-	//				//パラメータセットだったら
-	//				if (strcmp(cHeadText, "PARAMSET") == 0)
-	//				{
-	//					//メモリ確保
-	//					pCreator = new CParticleCreators;
-
-	//					//エンド来るまでループ
-	//					while (strcmp(cHeadText, "END_PARAMSET") != 0)
-	//					{
-
-	//						fgets(cReadText, sizeof(cReadText), pFile);
-	//						sscanf(cReadText, "%s", &cHeadText);
-
-
-	//						//それぞれの項目を読み込み
-	//						if (strcmp(cHeadText, "SPEEDRANDOM") == 0)
-	//						{
-	//							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &n_BoolValue);
-	//							pCreator-> = n_BoolValue ? true : false;
-	//						}
-
-	//						if (strcmp(cHeadText, "SHAPE") == 0)
-	//						{
-	//							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &pCreator->m_shape);
-	//						}
-	//						if (strcmp(cHeadText, "TEXTURE") == 0)
-	//						{
-	//							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &pCreator->m_Textype);
-	//						}
-
-	//					}
-	//				}
-	//			}
-	//		}
-
-	//		//パラメータロード
-	//		std::cout << "DefaultParticleParamLoad >>" << m_aFileNameList[nCnt].data() << NEWLINE;
-
-	//		//ファイルを閉じる
-	//		fclose(pFile);
-	//	}
-
-	//	//ファイル読み込めなかった場合
-	//	else
-	//	{
-	//		std::cout << "LoadFailed!!  >>" << m_aFileNameList[nCnt].data() << NEWLINE;
-	//		MessageBox(NULL, "パーティクルのパラメータ読み込み失敗", "警告", MB_ICONWARNING);
-	//		hResult = E_FAIL;
-	//	}
-	//}
-	//return S_OK;
-}
-
-
-//------------------------------------------------------------------------------
-//パラメータ設定
-//------------------------------------------------------------------------------
-CParticleCreators * CParticleCreators::Create()
-{
-	return nullptr;
-}
+////------------------------------------------------------------------------------
+////パラメータ設定
+////------------------------------------------------------------------------------
+//void CParticleCreators::LoadParticleCreators()
+//{
+//	////ファイルポイント
+//	//FILE *pFile;
+//	//char cReadText[128];	//文字として読み取り用
+//	//char cHeadText[128];	//比較する用
+//	//char cDie[128];			//不要な文字
+//	//int n_BoolValue;		//boolに変換するようの格納
+//	//HRESULT hResult = S_OK;
+//
+//	//CParticleCreators *pCreator;
+//
+//	////ファイル数分
+//	//for (size_t nCnt = 0; nCnt < m_aFileNameList.size(); nCnt++)
+//	//{
+//	//	//ファイル読み込み
+//	//	pFile = fopen(m_aFileNameList[nCnt].data(), "r");
+//
+//	//	//ファイルが開けた時
+//	//	if (pFile != NULL)
+//	//	{
+//	//		//スクリプトが来るまでループ
+//	//		while (strcmp(cHeadText, "SCRIPT") != 0)
+//	//		{
+//	//			fgets(cReadText, sizeof(cReadText), pFile);	//一文を読み込む
+//	//			sscanf(cReadText, "%s", &cHeadText);		//比較用テキストに文字を代入
+//	//		}
+//	//		//スクリプトだったら
+//	//		if (strcmp(cHeadText, "SCRIPT") == 0)
+//	//		{
+//	//			//エンドスクリプトが来るまでループ
+//	//			while (strcmp(cHeadText, "END_SCRIPT") != 0)
+//	//			{
+//	//				fgets(cReadText, sizeof(cReadText), pFile);
+//	//				sscanf(cReadText, "%s", &cHeadText);
+//
+//	//				//パラメータセットだったら
+//	//				if (strcmp(cHeadText, "PARAMSET") == 0)
+//	//				{
+//	//					//メモリ確保
+//	//					pCreator = new CParticleCreators;
+//
+//	//					//エンド来るまでループ
+//	//					while (strcmp(cHeadText, "END_PARAMSET") != 0)
+//	//					{
+//
+//	//						fgets(cReadText, sizeof(cReadText), pFile);
+//	//						sscanf(cReadText, "%s", &cHeadText);
+//
+//
+//	//						//それぞれの項目を読み込み
+//	//						if (strcmp(cHeadText, "SPEEDRANDOM") == 0)
+//	//						{
+//	//							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &n_BoolValue);
+//	//							pCreator-> = n_BoolValue ? true : false;
+//	//						}
+//
+//	//						if (strcmp(cHeadText, "SHAPE") == 0)
+//	//						{
+//	//							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &pCreator->m_shape);
+//	//						}
+//	//						if (strcmp(cHeadText, "TEXTURE") == 0)
+//	//						{
+//	//							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &pCreator->m_Textype);
+//	//						}
+//
+//	//					}
+//	//				}
+//	//			}
+//	//		}
+//
+//	//		//パラメータロード
+//	//		std::cout << "DefaultParticleParamLoad >>" << m_aFileNameList[nCnt].data() << NEWLINE;
+//
+//	//		//ファイルを閉じる
+//	//		fclose(pFile);
+//	//	}
+//
+//	//	//ファイル読み込めなかった場合
+//	//	else
+//	//	{
+//	//		std::cout << "LoadFailed!!  >>" << m_aFileNameList[nCnt].data() << NEWLINE;
+//	//		MessageBox(NULL, "パーティクルのパラメータ読み込み失敗", "警告", MB_ICONWARNING);
+//	//		hResult = E_FAIL;
+//	//	}
+//	//}
+//	//return S_OK;
+//}
+//
+//
+////------------------------------------------------------------------------------
+////パラメータ設定
+////------------------------------------------------------------------------------
+//CParticleCreators * CParticleCreators::Create()
+//{
+//	return nullptr;
+//}

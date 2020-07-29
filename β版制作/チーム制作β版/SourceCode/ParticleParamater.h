@@ -73,9 +73,12 @@ public:
 	int &GetLife()										{ return m_nLife; };						//ライフ
 	int &GetNumber()									{ return m_nNumber; };						//個数
 	float &GetSpeed()									{ return m_fSpeed; };						//速度
-	float &GetRange()									{ return m_fRange; };						//角度
+	float &GetRange()									{ return m_fConeRange; };						//角度
 	float &GetAlphaDamping()							{ return m_fAlphaDamping; };				//アルファ値の減衰値
 	float &GetGravityPower()							{ return m_fGravityPower; };				//重力の大きさ
+
+	D3DXVECTOR3 &GetLocalRandomPosRange()				{ return m_LocalPosRandomRange; };			//ローカル座標からランダムで出る時の値
+	D3DXVECTOR3 &GetLocalPos()							{ return m_LocalPos; };						//ローカル座標
 	D3DXVECTOR3 &GetSize()								{ return m_Size; };							//サイズ
 	D3DXVECTOR3 &GetSizeDamping()						{ return m_SizeDamping; };					//サイズの減衰地
 	D3DXCOLOR &GetCol()									{ return m_col; };							//色
@@ -85,7 +88,7 @@ public:
 	bool &GetAnimationLoop()							{ return m_bAnimationLoop; };				//アニメーションループするかどうか
 	int &GetAnimationCntSwitch()						{ return m_nAnimationCntSwitch; };			//アニメーション切替のカウント
 
-	D3DXVECTOR3 &GetCollisionSize()						{ return m_CollisionSize; };				//当たり判定の大きさ
+	D3DXVECTOR3 &GetCollisionSize()						{ return m_CollisionSize; };				//ランダム生成時の範囲
 	bool &GetCollision()								{ return m_bCollision; };					//当たり判定あるか
 	bool &GetCollisionSizeCalc()						{ return m_bCollisionSizeCalc; };			//当たり判定生成時にサイズを計算するかどうか　ShotGunとかに必要
 	int &GetCollisionAttackValue()						{ return m_nCollisionAttackValue; };		//攻撃力
@@ -117,7 +120,7 @@ private:
 	int m_nLife;									//ライフ
 	int m_nNumber;									//個数
 	float m_fSpeed;									//速度
-	float m_fRange;									//範囲
+	float m_fConeRange;								//範囲
 	float m_fAlphaDamping;							//アルファ値の減衰値
 	float m_fGravityPower;							//重力の大きさ
 
@@ -131,6 +134,8 @@ private:
 	int m_nCollisionAttackValue;					//攻撃力
 	int m_nCollisionCnt;							//判定をする時間
 
+	D3DXVECTOR3 m_LocalPos;							//生成される座標
+	D3DXVECTOR3 m_LocalPosRandomRange;				//ランダム生成時の範囲
 	D3DXVECTOR3 m_Size;								//サイズ
 	D3DXVECTOR3 m_SizeDamping;						//サイズの減衰値
 	D3DXCOLOR m_col;								//色
@@ -174,21 +179,21 @@ private:
 	std::vector<std::unique_ptr<CreaterParam>> m_ParamList;
 };
 
-
-//パーティクルの生成口
-class CParticleCreators
-{
-public:
-	CParticleCreators() {};				//コンストラクタ
-	~CParticleCreators() {};				//デストラクタ
-
-	static void LoadParticleCreators();			//パーティクル生成口のロード
-	static CParticleCreators *Create();
-private:
-	int m_nCntTime;		//時間計測
-	int m_nCntLoop;		//ループした回数計測
-
-	static std::vector<std::unique_ptr<CreatorWave>> m_pCreatorParamList;
-	static FILENAME_LIST m_aFileNameList;
-};
+//
+////パーティクルの生成口
+//class CParticleCreators
+//{
+//public:
+//	CParticleCreators() {};				//コンストラクタ
+//	~CParticleCreators() {};				//デストラクタ
+//
+//	static void LoadParticleCreators();			//パーティクル生成口のロード
+//	static CParticleCreators *Create();
+//private:
+//	int m_nCntTime;		//時間計測
+//	int m_nCntLoop;		//ループした回数計測
+//
+//	static std::vector<std::unique_ptr<CreatorWave>> m_pCreatorParamList;
+//	static FILENAME_LIST m_aFileNameList;
+//};
 #endif
