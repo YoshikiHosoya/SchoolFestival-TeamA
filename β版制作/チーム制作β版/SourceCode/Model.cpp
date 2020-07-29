@@ -122,6 +122,11 @@ char *CModel::m_ObstacleFileName[OBSTACLE_TYPE_MAX] =
 	{ "data/MODEL/Object/Obstacle_Sandbags.x" },	// 土嚢
 };
 
+char *CModel::m_BossFileName[MODEL_BOSS_MAX] =
+{
+	{ "data/MODEL/Boss/Obstacle_Box.x" },			// 箱
+	{ "data/MODEL/Boss/Obstacle_Barrel.x" },		// 樽
+};
 
 CModel::CModel(OBJ_TYPE type) : CScene(type)
 {
@@ -149,7 +154,7 @@ void CModel::LoadModel(void)
 	for (int nCnt = 0; nCnt < MODEL_PLAYER_MAX; nCnt++)
 	{
 		// Xファイルの読み込み
-		D3DXLoadMeshFromX(
+		if (FAILED(D3DXLoadMeshFromX(
 			m_PlayerFileName[nCnt],
 			D3DXMESH_SYSTEMMEM,
 			pDevice,
@@ -158,13 +163,20 @@ void CModel::LoadModel(void)
 			NULL,
 			&m_Model[PLAYER_MODEL][nCnt].nNumMat,
 			&m_Model[PLAYER_MODEL][nCnt].pMesh
-		);
-		m_Model[PLAYER_MODEL][nCnt].m_pTexture = new LPDIRECT3DTEXTURE9[(int)m_Model[PLAYER_MODEL][nCnt].nNumMat];
-		pMat = (D3DXMATERIAL*)m_Model[PLAYER_MODEL][nCnt].pBuffmat->GetBufferPointer();
-		for (int nCntmat = 0; nCntmat < (int)m_Model[PLAYER_MODEL][nCnt].nNumMat; nCntmat++)
+		)))
 		{
-			m_Model[PLAYER_MODEL][nCnt].m_pTexture[nCntmat] = NULL;
-			D3DXCreateTextureFromFile(pDevice, pMat[nCntmat].pTextureFilename, &m_Model[PLAYER_MODEL][nCnt].m_pTexture[nCntmat]);
+			//保存成功
+			std::cout << "LoadFailed!! >>" << m_PlayerFileName[nCnt] << NEWLINE;
+		}
+		else
+		{
+			m_Model[PLAYER_MODEL][nCnt].m_pTexture = new LPDIRECT3DTEXTURE9[(int)m_Model[PLAYER_MODEL][nCnt].nNumMat];
+			pMat = (D3DXMATERIAL*)m_Model[PLAYER_MODEL][nCnt].pBuffmat->GetBufferPointer();
+			for (int nCntmat = 0; nCntmat < (int)m_Model[PLAYER_MODEL][nCnt].nNumMat; nCntmat++)
+			{
+				m_Model[PLAYER_MODEL][nCnt].m_pTexture[nCntmat] = NULL;
+				D3DXCreateTextureFromFile(pDevice, pMat[nCntmat].pTextureFilename, &m_Model[PLAYER_MODEL][nCnt].m_pTexture[nCntmat]);
+			}
 		}
 
 		//保存成功
@@ -176,7 +188,7 @@ void CModel::LoadModel(void)
 	for (int nCnt = 0; nCnt < MODEL_MAP_MAX; nCnt++)
 	{
 		// Xファイルの読み込み
-		D3DXLoadMeshFromX(
+		if (FAILED(D3DXLoadMeshFromX(
 			m_MapFileName[nCnt],
 			D3DXMESH_SYSTEMMEM,
 			pDevice,
@@ -185,28 +197,35 @@ void CModel::LoadModel(void)
 			NULL,
 			&m_Model[MAP_MODEL][nCnt].nNumMat,
 			&m_Model[MAP_MODEL][nCnt].pMesh
-		);
-		m_Model[MAP_MODEL][nCnt].vtxMin = D3DXVECTOR3(1000, 1000, 1000);
-		m_Model[MAP_MODEL][nCnt].vtxMax = D3DXVECTOR3(-1000, -1000, -1000);
-		//テクスチャのメモリ確保
-		m_Model[MAP_MODEL][nCnt].m_pTexture = new LPDIRECT3DTEXTURE9[(int)m_Model[MAP_MODEL][nCnt].nNumMat];
-		pMat = (D3DXMATERIAL*)m_Model[MAP_MODEL][nCnt].pBuffmat->GetBufferPointer();
-
-		//テクスチャマテリアル情報の格納
-		for (int nCntmat = 0; nCntmat < (int)m_Model[MAP_MODEL][nCnt].nNumMat; nCntmat++)
+		)))
 		{
-			m_Model[MAP_MODEL][nCnt].m_pTexture[nCntmat] = NULL;
-			D3DXCreateTextureFromFile(pDevice, pMat[nCntmat].pTextureFilename, &m_Model[MAP_MODEL][nCnt].m_pTexture[nCntmat]);
+			//保存成功
+			std::cout << "LoadFailed!! >>" << m_PlayerFileName[nCnt] << NEWLINE;
 		}
+		else
+		{
+			m_Model[MAP_MODEL][nCnt].vtxMin = D3DXVECTOR3(1000, 1000, 1000);
+			m_Model[MAP_MODEL][nCnt].vtxMax = D3DXVECTOR3(-1000, -1000, -1000);
+			//テクスチャのメモリ確保
+			m_Model[MAP_MODEL][nCnt].m_pTexture = new LPDIRECT3DTEXTURE9[(int)m_Model[MAP_MODEL][nCnt].nNumMat];
+			pMat = (D3DXMATERIAL*)m_Model[MAP_MODEL][nCnt].pBuffmat->GetBufferPointer();
 
-		std::cout << "MapModelLoad >>" << m_MapFileName[nCnt] << NEWLINE;
+			//テクスチャマテリアル情報の格納
+			for (int nCntmat = 0; nCntmat < (int)m_Model[MAP_MODEL][nCnt].nNumMat; nCntmat++)
+			{
+				m_Model[MAP_MODEL][nCnt].m_pTexture[nCntmat] = NULL;
+				D3DXCreateTextureFromFile(pDevice, pMat[nCntmat].pTextureFilename, &m_Model[MAP_MODEL][nCnt].m_pTexture[nCntmat]);
+			}
+
+			std::cout << "MapModelLoad >>" << m_MapFileName[nCnt] << NEWLINE;
+		}
 
 	}
 	//エネミーのモデル読み込み
 	for (int nCnt = 0; nCnt < MODEL_ENEMY_MAX; nCnt++)
 	{
 		// Xファイルの読み込み
-		D3DXLoadMeshFromX(
+		if (FAILED(D3DXLoadMeshFromX(
 			m_EnemyFileName[nCnt],
 			D3DXMESH_SYSTEMMEM,
 			pDevice,
@@ -215,18 +234,25 @@ void CModel::LoadModel(void)
 			NULL,
 			&m_Model[ENEMY_MODEL][nCnt].nNumMat,
 			&m_Model[ENEMY_MODEL][nCnt].pMesh
-		);
-		//テクスチャのメモリ確保
-		m_Model[ENEMY_MODEL][nCnt].m_pTexture = new LPDIRECT3DTEXTURE9[(int)m_Model[ENEMY_MODEL][nCnt].nNumMat];
-		pMat = (D3DXMATERIAL*)m_Model[ENEMY_MODEL][nCnt].pBuffmat->GetBufferPointer();
-
-		for (int nCntmat = 0; nCntmat < (int)m_Model[ENEMY_MODEL][nCnt].nNumMat; nCntmat++)
+		)))
 		{
-			m_Model[ENEMY_MODEL][nCnt].m_pTexture[nCntmat] = NULL;
-			D3DXCreateTextureFromFile(pDevice, pMat[nCntmat].pTextureFilename, &m_Model[ENEMY_MODEL][nCnt].m_pTexture[nCntmat]);
+			//保存成功
+			std::cout << "LoadFailed!! >>" << m_PlayerFileName[nCnt] << NEWLINE;
 		}
+		else
+		{
+				//テクスチャのメモリ確保
+				m_Model[ENEMY_MODEL][nCnt].m_pTexture = new LPDIRECT3DTEXTURE9[(int)m_Model[ENEMY_MODEL][nCnt].nNumMat];
+			pMat = (D3DXMATERIAL*)m_Model[ENEMY_MODEL][nCnt].pBuffmat->GetBufferPointer();
 
-		std::cout << "EnemyLoad >>" << m_EnemyFileName[nCnt] << NEWLINE;
+			for (int nCntmat = 0; nCntmat < (int)m_Model[ENEMY_MODEL][nCnt].nNumMat; nCntmat++)
+			{
+				m_Model[ENEMY_MODEL][nCnt].m_pTexture[nCntmat] = NULL;
+				D3DXCreateTextureFromFile(pDevice, pMat[nCntmat].pTextureFilename, &m_Model[ENEMY_MODEL][nCnt].m_pTexture[nCntmat]);
+			}
+
+			std::cout << "EnemyLoad >>" << m_EnemyFileName[nCnt] << NEWLINE;
+		}
 	}
 
 	//捕虜のモデル読み込み
@@ -416,13 +442,39 @@ void CModel::LoadModel(void)
 
 		std::cout << "HELIMODEL Load >>" << m_HeliFileName[nCnt] << NEWLINE;
 	}
+	// ボスのモデル読み込み
+	for (int nCnt = 0; nCnt < MODEL_BOSS_MAX; nCnt++)
+	{
+		// Xファイルの読み込み
+		D3DXLoadMeshFromX(
+			m_BossFileName[nCnt],
+			D3DXMESH_SYSTEMMEM,
+			pDevice,
+			NULL,
+			&m_Model[BOSS_MODEL][nCnt].pBuffmat,
+			NULL,
+			&m_Model[BOSS_MODEL][nCnt].nNumMat,
+			&m_Model[BOSS_MODEL][nCnt].pMesh
+		);
+		//テクスチャのメモリ確保
+		m_Model[BOSS_MODEL][nCnt].m_pTexture = new LPDIRECT3DTEXTURE9[(int)m_Model[BOSS_MODEL][nCnt].nNumMat];
+		pMat = (D3DXMATERIAL*)m_Model[BOSS_MODEL][nCnt].pBuffmat->GetBufferPointer();
+
+		for (int nCntmat = 0; nCntmat < (int)m_Model[BOSS_MODEL][nCnt].nNumMat; nCntmat++)
+		{
+			m_Model[BOSS_MODEL][nCnt].m_pTexture[nCntmat] = NULL;
+			D3DXCreateTextureFromFile(pDevice, pMat[nCntmat].pTextureFilename, &m_Model[BOSS_MODEL][nCnt].m_pTexture[nCntmat]);
+		}
+
+		std::cout << "BOSSMODEL Load >>" << m_BossFileName[nCnt] << NEWLINE;
+	}
+
 }
 //====================================================================
 //モデルの開放
 //====================================================================
 void CModel::UnLoad(void)
 {
-	//マップのモデル読み込み
 	for (int nCnt = 0; nCnt < MODEL_PLAYER_MAX; nCnt++)
 	{
 		if (m_Model[PLAYER_MODEL][nCnt].pBuffmat != NULL)
@@ -449,6 +501,7 @@ void CModel::UnLoad(void)
 			m_Model[PLAYER_MODEL][nCnt].m_pTexture = NULL;
 		}
 	}
+	//マップのモデル読み込み
 	for (int nCnt = 0; nCnt < MODEL_MAP_MAX; nCnt++)
 	{
 		if (m_Model[MAP_MODEL][nCnt].pBuffmat != NULL)
@@ -501,10 +554,6 @@ void CModel::UnLoad(void)
 			m_Model[ENEMY_MODEL][nCnt].m_pTexture = NULL;
 		}
 	}
-	// 銃のモデル
-	for (int nCnt = 0; nCnt < MODEL_GUN_MAX; nCnt++)
-
-
 	for (int nCnt = 0; nCnt < MODEL_PRISONER_MAX; nCnt++)
 	{
 		if (m_Model[PRISONER_MODEL][nCnt].pBuffmat != NULL)
@@ -531,8 +580,7 @@ void CModel::UnLoad(void)
 			m_Model[PRISONER_MODEL][nCnt].m_pTexture = NULL;
 		}
 	}
-
-
+	// 銃のモデル
 	for (int nCnt = 0; nCnt < MODEL_GUN_MAX; nCnt++)
 	{
 		if (m_Model[GUN_MODEL][nCnt].pBuffmat != NULL)
@@ -696,6 +744,34 @@ void CModel::UnLoad(void)
 			m_Model[HELI_MODEL][nCnt].m_pTexture = NULL;
 		}
 	}
+	// ボス
+	for (int nCnt = 0; nCnt < MODEL_BOSS_MAX; nCnt++)
+	{
+		if (m_Model[BOSS_MODEL][nCnt].pBuffmat != NULL)
+		{
+			m_Model[BOSS_MODEL][nCnt].pBuffmat->Release();
+			m_Model[BOSS_MODEL][nCnt].pBuffmat = NULL;
+		}
+		if (m_Model[BOSS_MODEL][nCnt].pMesh != NULL)
+		{
+			m_Model[BOSS_MODEL][nCnt].pMesh->Release();
+			m_Model[BOSS_MODEL][nCnt].pMesh = NULL;
+		}
+		if (m_Model[BOSS_MODEL][nCnt].m_pTexture != NULL)
+		{
+			for (int nCntmat = 0; nCntmat < (int)m_Model[BOSS_MODEL][nCnt].nNumMat; nCntmat++)
+			{
+				if (m_Model[BOSS_MODEL][nCnt].m_pTexture[nCntmat] != NULL)
+				{
+					m_Model[BOSS_MODEL][nCnt].m_pTexture[nCntmat]->Release();
+					m_Model[BOSS_MODEL][nCnt].m_pTexture[nCntmat] = NULL;
+				}
+			}
+			delete[] m_Model[BOSS_MODEL][nCnt].m_pTexture;
+			m_Model[BOSS_MODEL][nCnt].m_pTexture = NULL;
+		}
+	}
+
 }
 //====================================================================
 //初期化
@@ -884,6 +960,10 @@ char * CModel::GetModelFileName(int nType, int nModelCount)
 		//ヘリ
 	case HELI_MODEL:
 		return m_HeliFileName[nModelCount];
+		break;
+		//ボス
+	case BOSS_MODEL:
+		return m_BossFileName[nModelCount];
 		break;
 	}
 	return nullptr;

@@ -16,6 +16,7 @@ public:
 	void Draw(void);
 	void DebugInfo(void);
 	static CScene2D *Create(D3DXVECTOR3 pos, D3DXVECTOR3 size);
+	static CScene2D *CreateSceneManagement(D3DXVECTOR3 pos, D3DXVECTOR3 size, CScene::OBJ_TYPE objtype);
 	//セットするもの
 	void SetAnimation(D3DXVECTOR2 UV, D3DXVECTOR2 UVsize);
 	void SetDisp(bool bDisp) { m_bDisp = bDisp; };		// 表示・非表示の設定

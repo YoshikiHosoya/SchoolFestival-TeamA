@@ -27,6 +27,7 @@ public:
 		CHARACTER_TYPE_PLAYER,			// プレイヤー
 		CHARACTER_TYPE_ENEMY,			// エネミー
 		CHARACTER_TYPE_PRISONER,		// 捕虜
+		CHARACTER_TYPE_BOSS,			// ボス
 		CHARACTER_TYPE_MAX
 	}CHARACTER_TYPE;
 
@@ -82,6 +83,8 @@ public:
 		ENEMY_MOTION_NORMAL,				//ニュートラル
 		ENEMY_MOTION_WALK,					//歩き
 		ENEMY_MOTION_SQUAT,					//通常攻撃1
+
+		BOSS_MOTION_NORMAL,				//ニュートラル
 
 		// 捕虜のモーション
 		PRISONER_MOTION_STAY,				//ニュートラル
@@ -166,7 +169,9 @@ public:
 
 	bool GetDieFlag()								{ return m_bDieFlag; };						// 死亡フラグの取得
 	void SetDieFlag(bool DieFlag)					{ m_bDieFlag = DieFlag; };					// 死亡フラグの設定
+	bool GetDraw()									{ return m_bDraw; };						// 描画するかどうか取得
 	void ChangeColor(bool ColorChangeFlag, D3DXCOLOR AddColor);									// 色変更
+	void CheckDrawRange();
 
 	CCollision *GetCollision() { return m_pCollision; };			// 当たり判定のポインタ取得
 	void					DebugInfo(void);						// デバッグ用関数
@@ -204,6 +209,8 @@ private:
 	bool m_bDieFlag;												// 死亡フラグ
 	bool m_bMotion;													//モーションするかどうか
 	bool m_bFall;													//モーションするかどうか
+	bool m_bDraw;													//描画するかどうか
 	CCollision				*m_pCollision;							//当たり判定のポインタ
+
 };
 #endif

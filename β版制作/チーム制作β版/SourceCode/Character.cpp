@@ -16,7 +16,8 @@ char *CCharacter::m_LoadOffsetFileName[CHARACTER_TYPE_MAX] =
 {
 	{ "data/Load/Player/PlayerOffset.txt"},
 	{"data/Load/Enemy/EnemyOffset.txt"},
-	{"data/Load/Prisoner/PrisonerOffset.txt"}
+	{"data/Load/Prisoner/PrisonerOffset.txt"},
+	{"data/Load/Boss/BossOffset.txt"}
 };
 //モーションの読み込みファイル
 char *CCharacter::m_LoadMotionFileName[CHARACTER_MOTION_MAX] =
@@ -33,6 +34,7 @@ char *CCharacter::m_LoadMotionFileName[CHARACTER_MOTION_MAX] =
 	{ "data/Load/Enemy/Motion/EnemyNeutral.txt" },
 	{ "data/Load/Enemy/Motion/EnemyWalk.txt" },
 	{ "data/Load/Enemy/Motion/EnemySquatStop.txt" },
+	{ "data/Load/Boss/Motion/Neutral.txt" },
 	{ "data/Load/Prisoner/Motion/PrisonerStay.txt" },
 	{ "data/Load/Prisoner/Motion/PrisonerRelease.txt" },
 	{ "data/Load/Prisoner/Motion/PrisonerRun.txt" },
@@ -81,6 +83,7 @@ HRESULT CCharacter::Init(void)
 	m_ShotRot			= D3DXVECTOR3(0.0f, 0.5f, 0.0f);		// 撃つ向き
 	m_HeightBet			= 0.0f;									//
 	m_bFall				= false;								//
+	m_bDraw				= false;								//描画するかどうか
 	// 当たり判定生成
 	m_pCollision = CCollision::Create();
 	//マトリックス初期化
@@ -98,6 +101,14 @@ void CCharacter::Uninit(void)
 //====================================================================
 void CCharacter::Update(void)
 {
+	//描画の範囲内かチェック
+	CheckDrawRange();
+
+	if (!m_bDraw)
+	{
+		return;
+	}
+
 	CKeyboard *key;
 	key = CManager::GetInputKeyboard();
 	m_posold = m_pos;
@@ -254,7 +265,10 @@ void CCharacter::Update(void)
 //====================================================================
 void CCharacter::Draw(void)
 {
-
+	if (!m_bDraw)
+	{
+		return;
+	}
 	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
 	D3DXMATRIX mtxRot, mtxTrans;
 	// ワールドマトリックスの初期化
@@ -276,6 +290,7 @@ void CCharacter::Draw(void)
 	D3DXMatrixMultiply(&m_mtxWorld,
 		&m_mtxWorld,
 		&mtxTrans);
+
 
 
 	//モデルの描画
@@ -925,6 +940,13 @@ void CCharacter::DebugInfo(void)
 	CDebug_ModelViewer::OffsetViewer(m_vModelList);
 
 	//CDebugProc::Print("");
+}
+//====================================================================
+//描画の範囲内かどうか確認
+//====================================================================
+void CCharacter::CheckDrawRange()
+{
+	m_bDraw = CManager::GetRenderer()->CheckScreenRange(m_pos);
 }
 
 
