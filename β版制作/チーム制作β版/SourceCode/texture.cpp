@@ -40,6 +40,14 @@ FILENAME_LIST CTexture::m_aTexFileName =
 	{ "data/TEXTURE/UI/frame.png" },						//枠のUI
 	{ "data/TEXTURE/UI/title.png" },						//タイトルロゴ
 	{ "data/TEXTURE/UI/start.png" },						//スタート
+	{ "data/TEXTURE/UI/Tutorial_UI/Tutorial_Name.png" },	//チュートリアル名前ロゴ
+	{ "data/TEXTURE/UI/Tutorial_UI/Tutorial_1.png" },		//チュートリアル開始
+	{ "data/TEXTURE/UI/Tutorial_UI/Tutorial_2.png" },		//チュートリアル指示1
+	{ "data/TEXTURE/UI/Tutorial_UI/Tutorial_3.png" },		//チュートリアル指示2
+	{ "data/TEXTURE/UI/Tutorial_UI/Tutorial_4.png" },		//チュートリアル指示3
+	{ "data/TEXTURE/UI/Tutorial_UI/Tutorial_5.png" },		//チュートリアル指示4
+	{ "data/TEXTURE/UI/Tutorial_UI/Tutorial_6.png" },		//チュートリアル指示5
+	{ "data/TEXTURE/UI/Tutorial_UI/Tutorial_7.png" },		//チュートリアル指示6
 	{ "data/TEXTURE/UI/Result_UI/Bg.png" },					//背景
 	{ "data/TEXTURE/UI/Result_UI/RESULT_NAME.png" },		//リザルト名ロゴ
 	{ "data/TEXTURE/UI/Result_UI/1P.png" },					//1P

@@ -27,6 +27,7 @@ class CObstacle;
 class CPlayertank;
 class CBattlePlane;
 class CHelicopter;
+class CVehicle;
 
 // =====================================================================================================================================================================
 // ウェーブの情報
@@ -41,7 +42,7 @@ typedef struct
 typedef struct
 {
 	std::vector<WAVE_INFO> EnemyWaveInfo;
-	std::vector<WAVE_INFO> horyoWaveInfo;
+	std::vector<WAVE_INFO> PrisonerWaveInfo;
 
 } WAVE;
 
@@ -67,7 +68,6 @@ public:
 	{
 		EDITOR_MAP,			// マップエディター
 		EDITOR_WAVE,		// ウェーブエディター
-		EDITOR_PLATOON,		// 小隊エディター
 		EDITOR_MAX
 	};
 
@@ -122,7 +122,7 @@ public:
 	int				GetMaxBattlePlane();											// 戦闘機の最大数取得
 	int				GetMaxHelicopter();												// ヘリの最大数取得
 	LPD3DXMESH		GetMesh(int nCnt);												// メッシュの取得
-	CModel			*GetModel(int nCnt)			{ return m_pModel[nCnt]; };			// モデルの取得
+	CModel			*GetModel(int nCnt)			{ return m_pMapModel[nCnt]; };		// モデルの取得
 	CEnemy			*GetEnemy(int nCnt)			{ return m_pEnemy[nCnt]; };			// 敵の取得
 	CPrisoner		*GetPrisoner(int nCnt)		{ return m_pPrisoner[nCnt]; };		// 捕虜の取得
 	CObstacle		*GetObstacle(int nCnt)		{ return m_pObstacle[nCnt]; };		// 障害物の取得
@@ -134,22 +134,21 @@ public:
 
 private:
 	/* メンバ関数 */
-	void			ArrangementModelLoad(EDITOR Editor, int ModelType);						// 配置するモデルのロード
-	void			ArrangementModelSave(int ModelType);									// 配置するモデルのセーブ
+	void			MapModelLoad();													// 配置するモデルのロード
+	void			MapModelSave();													// 配置するモデルのセーブ
 
-	void			ArrangementModelCreate(int ModelType, int nType, 
+	void			MapModelCreate(int ModelType, int nType, 
 											D3DXVECTOR3 pos, int nLife, D3DXVECTOR3 size);	// 配置するモデルの生成
 	void			LoadFailureMessage(int ModelType);										// 読み込み失敗時の警告表示
 	void			LoadSuccessMessage(int ModelType);										// 読み込み成功時の結果表示
-	char			*ArrangementModelFileName(int ModelType);								// 配置するモデルファイル名(初期配置)
 	char			*WaveFileName(int ModelType);											// 各ウェーブファイル名
 
 	void			SaveModelHeader(FILE *pFile, int ModelType);							// セーブするモデルのヘッダー
-	void			SaveModelContents(FILE *pFile,int ModelType, int nCnt);					// セーブするモデルの情報
+	void			SaveModelContents(FILE *pFile,int ModelType, int nCnt, int nNum);		// セーブするモデルの情報
 	void			SaveWaveContents(FILE *pFile, int ModelType, int nCnt);					// セーブするウェーブの情報
 
-	unsigned int	GetMaxArrangementModel(int ModelType);									// 配置するモデルの最大数取得
-	void			*GetArrangementModel(int ModelType, int nCnt);							// 配置するモデルのポインタ
+	unsigned int	GetMaxMapModel(int ModelType);									// 配置するモデルの最大数取得
+	void			*GetMapModel(int ModelType, int nCnt);							// 配置するモデルのポインタ
 
 	void			AllSaveButton();														// 配置したモデルを全てセーブするボタン
 	void			AllLoadButton();														// 配置したモデルを全てロードするボタン
@@ -157,9 +156,9 @@ private:
 	void			ModelDeleteButton(int nNowSelect);										// 配置するモデルをデリートするボタン
 	void			ModelCreateButton();													// 配置するモデルを生成するボタン
 	
-	D3DXVECTOR3		GetArrangementModelPos(int nNowSelect);									// 選択しているモデルの位置の取得
-	void			SetArrangementModelPos(D3DXVECTOR3 pos, int nNowSelect);				// 選択しているモデルの位置の設定
-	void			SetArrangementModelColorChangeFlag(bool bFlag, int nNowSelect);			// 選択しているモデルの色を半透明にするフラグの設定
+	D3DXVECTOR3		GetMapModelPos(int nNowSelect);									// 選択しているモデルの位置の取得
+	void			SetMapModelPos(D3DXVECTOR3 pos, int nNowSelect);				// 選択しているモデルの位置の設定
+	void			SetMapModelColorChangeFlag(bool bFlag, int nNowSelect);			// 選択しているモデルの色を半透明にするフラグの設定
 	void			MapModelTab();															// マップに配置するモデルのタブ
 	void			MapModelSet();															// マップに配置するモデルの設置
 	void			ComboBoxAll(int nNowSelect);											// 全てのコンボボックス
@@ -169,13 +168,7 @@ private:
 	void			SetSelectMapModelPosRDest(D3DXVECTOR3 posR);							// 選択しているモデルを注視点の目的地に設定
 
 	/* 静的メンバ変数 */
-	static char					*m_MapFileName[MAP_MAX];					// マップファイル名
-	static char					*m_EnemyFileName[MAP_MAX];					// 敵ファイル名
-	static char					*m_PrisonerFileName[MAP_MAX];				// 捕虜ファイル名
-	static char					*m_ObstacleFileName[MAP_MAX];				// 障害物ファイル名
-	static char					*m_PlayerTankFileName[MAP_MAX];				// 戦車ファイル名
-	static char					*m_BattlePlaneFileName[MAP_MAX];			// 戦闘機ファイル名
-	static char					*m_HelicopterFileName[MAP_MAX];				// ヘリファイル名
+	static char					*m_MapModelFileName[MAP_MAX];				// マップモデルファイル名
 
 	static char					*m_EnemyWaveFileName[WAVE_MAX];				// 敵ファイル名
 	static char					*m_PrisonerWaveFileName[WAVE_MAX];			// 捕虜ファイル名
@@ -186,16 +179,18 @@ private:
 	static MAP					m_MapNum;									// マップ番号
 	static WAVE					m_WaveNum;									// ウェーブ番号
 	static EDITOR				m_Editor;									// エディターの種類
-	static int					m_ArrangmentModel;							// 配置するモデルの種類
+	static ARRANGEMENT_MODEL	m_ArrangmentModel;							// 配置するモデルの種類
 
 	/* メンバ変数 */
-	std::vector<CModel*>		m_pModel;									// 可変長配列 設置するモデル
+	std::vector<CModel*>		m_pMapModel;								// 可変長配列 設置するモデル
 	std::vector<CEnemy*>		m_pEnemy;									// 可変長配列 設置したエネミー
 	std::vector<CPrisoner*>		m_pPrisoner;								// 可変長配列 設置した捕虜
 	std::vector<CObstacle*>		m_pObstacle;								// 可変長配列 設置した障害物
 	std::vector<CPlayertank*>	m_pPlayerTank;								// 可変長配列 設置した戦車
 	std::vector<CBattlePlane*>	m_pBattlePlane;								// 可変長配列 設置した戦闘機
 	std::vector<CHelicopter*>	m_pHelicopter;								// 可変長配列 設置したヘリ
+	std::vector<CVehicle*>		m_pVehicle;									// 可変長配列 設置した乗り物
+
 	int							m_nOldSelect;								// 前回選択していたモノの番号
 	int							m_nWaveID;									// ウェーブの出現番号
 	WAVE_INFO					m_aWaveInfo[128];							// ウェーブの情報

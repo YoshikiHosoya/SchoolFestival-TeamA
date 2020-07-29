@@ -1,0 +1,394 @@
+//------------------------------------------------------------
+// マップモデルの配置情報
+//------------------------------------------------------------
+//------------------------------------------------------------
+// TYPE情報
+//
+//	[ 0 ]	床
+//
+//------------------------------------------------------------
+
+//------------------------------------------------------------
+# 敵の配置情報
+//------------------------------------------------------------
+//------------------------------------------------------------
+# TYPE情報
+//
+#	[ 0 ]	兵士
+//
+//------------------------------------------------------------
+
+//------------------------------------------------------------
+# 捕虜の配置情報
+//------------------------------------------------------------
+//------------------------------------------------------------
+# TYPE情報
+//
+#	[ 0 ]	捕虜
+//
+//------------------------------------------------------------
+
+//------------------------------------------------------------
+# 障害物の配置情報
+//------------------------------------------------------------
+//------------------------------------------------------------
+# TYPE情報
+//
+#	[ 0 ]	箱
+#	[ 1 ]	樽
+#	[ 2 ]	木
+#	[ 3 ]	金庫
+#	[ 4 ]	土嚢
+//
+//------------------------------------------------------------
+
+//------------------------------------------------------------
+# 戦車の配置情報
+//------------------------------------------------------------
+//------------------------------------------------------------
+# TYPE情報
+//
+#	[ 0 ]	戦車
+//
+//------------------------------------------------------------
+
+//------------------------------------------------------------
+# 戦闘機の配置情報
+//------------------------------------------------------------
+//------------------------------------------------------------
+# TYPE情報
+//
+#	[ 0 ]	戦闘機
+//
+//------------------------------------------------------------
+
+//------------------------------------------------------------
+# ヘリコプターの配置情報
+//------------------------------------------------------------
+//------------------------------------------------------------
+# TYPE情報
+//
+#	[ 0 ]	ヘリコプター
+//
+//------------------------------------------------------------
+SCRIPT
+
+MAPSET									# 0
+	TYPE	= 0
+	POS		= 0 0 0
+END_MAPSET
+
+ENEMYSET									# 1
+	TYPE	= 0
+	POS		= 200 80 0
+	LIFE	= 1
+END_ENEMYSET
+
+ENEMYSET									# 2
+	TYPE	= 0
+	POS		= 300 80 0
+	LIFE	= 1
+END_ENEMYSET
+
+ENEMYSET									# 3
+	TYPE	= 0
+	POS		= 400 80 0
+	LIFE	= 1
+END_ENEMYSET
+
+PRISONERSET									# 4
+	TYPE	= 0
+	POS		= 500 207 0
+END_PRISONERSET
+
+PRISONERSET									# 5
+	TYPE	= 0
+	POS		= 600 207 0
+END_PRISONERSET
+
+PRISONERSET									# 6
+	TYPE	= 1
+	POS		= 700 207 0
+END_PRISONERSET
+
+PRISONERSET									# 7
+	TYPE	= 1
+	POS		= 800 207 0
+END_PRISONERSET
+
+PRISONERSET									# 8
+	TYPE	= 1
+	POS		= 900 207 0
+END_PRISONERSET
+
+OBSTACLESET									# 9
+	TYPE	= 4
+	POS		= 2650 318 0
+	LIFE	= 0
+	SIZE	= 0 0 0
+END_OBSTACLESET
+
+OBSTACLESET									# 10
+	TYPE	= 4
+	POS		= 3149 319 0
+	LIFE	= 0
+	SIZE	= 0 0 0
+END_OBSTACLESET
+
+OBSTACLESET									# 11
+	TYPE	= 4
+	POS		= 3870 318 0
+	LIFE	= 0
+	SIZE	= 0 0 0
+END_OBSTACLESET
+
+OBSTACLESET									# 12
+	TYPE	= 4
+	POS		= 4375 319 0
+	LIFE	= 0
+	SIZE	= 0 0 0
+END_OBSTACLESET
+
+OBSTACLESET									# 13
+	TYPE	= 4
+	POS		= 4880 318 0
+	LIFE	= 0
+	SIZE	= 0 0 0
+END_OBSTACLESET
+
+OBSTACLESET									# 14
+	TYPE	= 4
+	POS		= 5382 318 0
+	LIFE	= 0
+	SIZE	= 0 0 0
+END_OBSTACLESET
+
+OBSTACLESET									# 15
+	TYPE	= 1
+	POS		= 3411 97 0
+	LIFE	= 0
+	SIZE	= 0 0 0
+END_OBSTACLESET
+
+OBSTACLESET									# 16
+	TYPE	= 1
+	POS		= 3412 142 0
+	LIFE	= 0
+	SIZE	= 0 0 0
+END_OBSTACLESET
+
+OBSTACLESET									# 17
+	TYPE	= 1
+	POS		= 3463 97 0
+	LIFE	= 0
+	SIZE	= 0 0 0
+END_OBSTACLESET
+
+OBSTACLESET									# 18
+	TYPE	= 1
+	POS		= 3463 142 0
+	LIFE	= 0
+	SIZE	= 0 0 0
+END_OBSTACLESET
+
+OBSTACLESET									# 19
+	TYPE	= 1
+	POS		= 3515 97 0
+	LIFE	= 0
+	SIZE	= 0 0 0
+END_OBSTACLESET
+
+OBSTACLESET									# 20
+	TYPE	= 1
+	POS		= 3516 142 0
+	LIFE	= 0
+	SIZE	= 0 0 0
+END_OBSTACLESET
+
+OBSTACLESET									# 21
+	TYPE	= 1
+	POS		= 3566 97 0
+	LIFE	= 0
+	SIZE	= 0 0 0
+END_OBSTACLESET
+
+OBSTACLESET									# 22
+	TYPE	= 1
+	POS		= 3567 143 0
+	LIFE	= 0
+	SIZE	= 0 0 0
+END_OBSTACLESET
+
+OBSTACLESET									# 23
+	TYPE	= 1
+	POS		= 3618 97 0
+	LIFE	= 0
+	SIZE	= 0 0 0
+END_OBSTACLESET
+
+OBSTACLESET									# 24
+	TYPE	= 1
+	POS		= 3620 143 0
+	LIFE	= 0
+	SIZE	= 0 0 0
+END_OBSTACLESET
+
+OBSTACLESET									# 25
+	TYPE	= 4
+	POS		= 6263 100 0
+	LIFE	= 0
+	SIZE	= 0 0 0
+END_OBSTACLESET
+
+OBSTACLESET									# 26
+	TYPE	= 4
+	POS		= 6264 159 0
+	LIFE	= 0
+	SIZE	= 0 0 0
+END_OBSTACLESET
+
+OBSTACLESET									# 27
+	TYPE	= 4
+	POS		= 6265 215 0
+	LIFE	= 0
+	SIZE	= 0 0 0
+END_OBSTACLESET
+
+OBSTACLESET									# 28
+	TYPE	= 1
+	POS		= 5623 100 0
+	LIFE	= 0
+	SIZE	= 0 0 0
+END_OBSTACLESET
+
+OBSTACLESET									# 29
+	TYPE	= 1
+	POS		= 5624 144 0
+	LIFE	= 0
+	SIZE	= 0 0 0
+END_OBSTACLESET
+
+OBSTACLESET									# 30
+	TYPE	= 1
+	POS		= 5674 100 0
+	LIFE	= 0
+	SIZE	= 0 0 0
+END_OBSTACLESET
+
+OBSTACLESET									# 31
+	TYPE	= 1
+	POS		= 5674 144 0
+	LIFE	= 0
+	SIZE	= 0 0 0
+END_OBSTACLESET
+
+OBSTACLESET									# 32
+	TYPE	= 1
+	POS		= 5725 100 0
+	LIFE	= 0
+	SIZE	= 0 0 0
+END_OBSTACLESET
+
+OBSTACLESET									# 33
+	TYPE	= 1
+	POS		= 5725 144 0
+	LIFE	= 0
+	SIZE	= 0 0 0
+END_OBSTACLESET
+
+OBSTACLESET									# 34
+	TYPE	= 1
+	POS		= 5776 100 0
+	LIFE	= 0
+	SIZE	= 0 0 0
+END_OBSTACLESET
+
+OBSTACLESET									# 35
+	TYPE	= 1
+	POS		= 5777 144 0
+	LIFE	= 0
+	SIZE	= 0 0 0
+END_OBSTACLESET
+
+OBSTACLESET									# 36
+	TYPE	= 1
+	POS		= 5827 100 0
+	LIFE	= 0
+	SIZE	= 0 0 0
+END_OBSTACLESET
+
+OBSTACLESET									# 37
+	TYPE	= 1
+	POS		= 5827 144 0
+	LIFE	= 0
+	SIZE	= 0 0 0
+END_OBSTACLESET
+
+OBSTACLESET									# 38
+	TYPE	= 4
+	POS		= 2640 100 0
+	LIFE	= 0
+	SIZE	= 0 0 0
+END_OBSTACLESET
+
+OBSTACLESET									# 39
+	TYPE	= 4
+	POS		= 3152 100 0
+	LIFE	= 0
+	SIZE	= 0 0 0
+END_OBSTACLESET
+
+OBSTACLESET									# 40
+	TYPE	= 4
+	POS		= 1452 100 0
+	LIFE	= 0
+	SIZE	= 0 0 0
+END_OBSTACLESET
+
+OBSTACLESET									# 41
+	TYPE	= 4
+	POS		= 1526 100 0
+	LIFE	= 0
+	SIZE	= 0 0 0
+END_OBSTACLESET
+
+OBSTACLESET									# 42
+	TYPE	= 4
+	POS		= 1600 100 0
+	LIFE	= 0
+	SIZE	= 0 0 0
+END_OBSTACLESET
+
+OBSTACLESET									# 43
+	TYPE	= 4
+	POS		= 3864 100 0
+	LIFE	= 0
+	SIZE	= 0 0 0
+END_OBSTACLESET
+
+OBSTACLESET									# 44
+	TYPE	= 4
+	POS		= 4375 100 0
+	LIFE	= 0
+	SIZE	= 0 0 0
+END_OBSTACLESET
+
+OBSTACLESET									# 45
+	TYPE	= 4
+	POS		= 4869 100 0
+	LIFE	= 0
+	SIZE	= 0 0 0
+END_OBSTACLESET
+
+OBSTACLESET									# 46
+	TYPE	= 4
+	POS		= 5370 100 0
+	LIFE	= 0
+	SIZE	= 0 0 0
+END_OBSTACLESET
+
+TANKSET									# 47
+	POS		= 200 100 0
+END_TANKSET
+
+END_SCRIPT

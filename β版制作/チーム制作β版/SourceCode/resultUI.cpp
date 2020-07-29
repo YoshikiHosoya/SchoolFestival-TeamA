@@ -167,11 +167,6 @@ CResultUI::~CResultUI()
 // =====================================================================================================================================================================
 HRESULT CResultUI::Init(void)
 {
-	for (int nCnt = CTexture::TEX_UI_RESULT_BG; nCnt < RESULT_UI_TEX_TYPE; nCnt++)
-	{
-		m_TexNum[RESULT_UI_MAX] = {
-			CTexture::GetTexture((CTexture::TEX_TYPE)nCnt)};	// バインドするテクスチャの情報
-	}
 	// UIをまとめて生成する
 	ResultUICreate();
 	// α値を設定

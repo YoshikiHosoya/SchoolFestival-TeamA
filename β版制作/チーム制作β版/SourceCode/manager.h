@@ -12,6 +12,8 @@ class CRanking;
 class CBaseMode;
 class CMouse;
 class CXInputPad;
+class CTutorial;
+
 class CManager
 {
 public:
@@ -19,10 +21,10 @@ public:
 	{
 		MODE_NONE,
 		MODE_TITLE,
+		MODE_TUTORIAL,
 		MODE_GAME,
 		MODE_RANKING,
 		MODE_PAUSE,
-		//MODE_TUTORIAL,
 		MODE_DEBUG_MODELVIEWER,		//デバッグ用モデルビューワ
 		MODE_DEBUG_EFFECTVIEWER,	//デバッグ用エフェクトビューワ
 		MODE_DEBUG_MAPEDITOR,		//デバッグ用マップエディター
