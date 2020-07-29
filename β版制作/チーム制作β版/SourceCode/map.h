@@ -42,7 +42,7 @@ typedef struct
 typedef struct
 {
 	std::vector<WAVE_INFO> EnemyWaveInfo;
-	std::vector<WAVE_INFO> horyoWaveInfo;
+	std::vector<WAVE_INFO> PrisonerWaveInfo;
 
 } WAVE;
 
