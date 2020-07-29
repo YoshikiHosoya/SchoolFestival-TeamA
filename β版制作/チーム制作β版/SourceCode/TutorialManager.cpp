@@ -109,4 +109,22 @@ CTutorialManager * CTutorialManager::Create()
 // =====================================================================================================================================================================
 void CTutorialManager::TutorialUiOrder()
 {
+	// ï`âÊãñâ¬èáî‘
+	switch (m_TutorialState)
+	{
+	case CTutorialManager::RANKING_STATE_NONE:
+		break;
+	case CTutorialManager::RANKING_STATE_1:
+		break;
+	case CTutorialManager::RANKING_STATE_2:
+		break;
+	case CTutorialManager::RANKING_STATE_3:
+		break;
+	case CTutorialManager::RANKING_STATE_4:
+		break;
+	case CTutorialManager::RANKING_STATE_5:
+		break;
+	default:
+		break;
+	}
 }

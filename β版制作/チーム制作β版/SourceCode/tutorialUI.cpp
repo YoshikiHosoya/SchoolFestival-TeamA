@@ -17,9 +17,43 @@
 // =====================================================================================================================================================================
 #define _CRT_SECURE_NO_WARNINGS // 警告除去
 
+// テクスチャの種類
+#define TUTORIAL_UI_TEXTURE (TUTORIAL_UI)
+
+// UIの座標
+#define TUTORIAL_UI_NAME_POS (D3DXVECTOR3(SCREEN_WIDTH * 0.5f,80.0f,0.0f))
+#define TUTORIAL_UI_ORDER_POS (D3DXVECTOR3(SCREEN_WIDTH * 0.5f,200.0f,0.0f))
+
+// UIの大きさ
+#define TUTORIAL_UI_NAME_SIZE (D3DXVECTOR3(SCREEN_WIDTH * 0.45f,50.0f,0.0f))
+#define TUTORIAL_UI_ORDER_SIZE (D3DXVECTOR3(SCREEN_WIDTH * 0.4f,50.0f,0.0f))
+
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
 // =====================================================================================================================================================================
+LPDIRECT3DTEXTURE9		CTutorialUI::m_TexNum[UI_MAX] = {};					// バインドするテクスチャの情報
+
+D3DXVECTOR3				CTutorialUI::m_Pos[UI_MAX] = {
+	TUTORIAL_UI_NAME_POS,
+	TUTORIAL_UI_ORDER_POS,
+	TUTORIAL_UI_ORDER_POS,
+	TUTORIAL_UI_ORDER_POS,
+	TUTORIAL_UI_ORDER_POS,
+	TUTORIAL_UI_ORDER_POS,
+	TUTORIAL_UI_ORDER_POS,
+	TUTORIAL_UI_ORDER_POS,
+};
+
+D3DXVECTOR3				CTutorialUI::m_Size[UI_MAX] = {
+	TUTORIAL_UI_NAME_SIZE,
+	TUTORIAL_UI_ORDER_SIZE,
+	TUTORIAL_UI_ORDER_SIZE,
+	TUTORIAL_UI_ORDER_SIZE,
+	TUTORIAL_UI_ORDER_SIZE,
+	TUTORIAL_UI_ORDER_SIZE,
+	TUTORIAL_UI_ORDER_SIZE,
+	TUTORIAL_UI_ORDER_SIZE,
+};
 
 //==========================================================
 // コンストラクタ
@@ -27,7 +61,7 @@
 CTutorialUI::CTutorialUI()
 {
 	// 初期化
-	for (int nCnt = 0; nCnt < TUTORIAL_UI::UI_UI_MAX; nCnt++)
+	for (int nCnt = 0; nCnt < TUTORIAL_UI::UI_MAX; nCnt++)
 	{
 		m_apScene2D[nCnt] = nullptr;
 	}
@@ -47,45 +81,30 @@ CTutorialUI::~CTutorialUI()
 //==========================================================
 HRESULT CTutorialUI::Init(void)
 {
-	for (int nCnt = 0; nCnt < TUTORIAL_UI::UI_UI_MAX; nCnt++)
+	// テクスチャの取得
+	for (int nCntNum = 0 ,nCnt = CTexture::TEX_UI_TUTORIAL_NAME; nCntNum < UI_MAX; nCntNum++,nCnt++)
+	{
+		m_TexNum[nCntNum] = {
+			CTexture::GetTexture((CTexture::TEX_TYPE)nCnt) };	// バインドするテクスチャの情報
+	}
+
+	// UIの生成
+	for (int nCnt = 0; nCnt < TUTORIAL_UI::UI_MAX; nCnt++)
 	{
 		if (!m_apScene2D[nCnt])
 		{
-			// ランキングタイトルロゴ
-			if (nCnt == UI_NAME)
-			{
-				// シーン2Dの生成
-				m_apScene2D[nCnt] = CScene2D::Create(D3DXVECTOR3((SCREEN_WIDTH * 0.5f), 65.0f, 0.0f), D3DXVECTOR3(500.0f, 50.0f, 0.0f));
-				// テクスチャの割り当て
-				m_apScene2D[nCnt]->BindTexture(CTexture::GetTexture(CTexture::TEX_UI_RANKING_NAME));
-			}
+			// シーン2Dの生成
+			m_apScene2D[nCnt] = CScene2D::Create(m_Pos[nCnt], m_Size[nCnt]);
+			// テクスチャの割り当て
+			m_apScene2D[nCnt]->BindTexture(m_TexNum[nCnt]);
 
-			// 順位
-			else if (nCnt == UI_ORDER1)
+			if (nCnt != UI_NAME && nCnt != UI_ORDER0)
 			{
-			}
-			// 順位
-			else if (nCnt == UI_ORDER2)
-			{
-			}
-			// 順位
-			else if (nCnt == UI_ORDER3)
-			{
-			}
-			// 順位
-			else if (nCnt == UI_ORDER4)
-			{
-			}
-			// 順位
-			else if (nCnt == UI_ORDER5)
-			{
-			}
-			// 順位
-			else if (nCnt == UI_ORDER6)
-			{
+				m_apScene2D[nCnt]->SetDisp(false);
 			}
 		}
 	}
+
 	return S_OK;
 }
 
@@ -94,7 +113,7 @@ HRESULT CTutorialUI::Init(void)
 //==========================================================
 void CTutorialUI::Uninit(void)
 {
-	for (int nCnt = 0; nCnt < TUTORIAL_UI::UI_UI_MAX; nCnt++)
+	for (int nCnt = 0; nCnt < TUTORIAL_UI::UI_MAX; nCnt++)
 	{
 		if (m_apScene2D[nCnt])
 		{
@@ -112,7 +131,7 @@ void CTutorialUI::Uninit(void)
 //==========================================================
 void CTutorialUI::Update(void)
 {
-	for (int nCnt = 0; nCnt < TUTORIAL_UI::UI_UI_MAX; nCnt++)
+	for (int nCnt = 0; nCnt < TUTORIAL_UI::UI_MAX; nCnt++)
 	{
 		if (m_apScene2D[nCnt])
 		{
@@ -130,7 +149,7 @@ void CTutorialUI::Update(void)
 //==========================================================
 void CTutorialUI::Draw(void)
 {
-	for (int nCnt = 0; nCnt < TUTORIAL_UI::UI_UI_MAX; nCnt++)
+	for (int nCnt = 0; nCnt < TUTORIAL_UI::UI_MAX; nCnt++)
 	{
 		if (m_apScene2D[nCnt])
 		{

@@ -32,14 +32,15 @@ public:
 	// チュートリアルUIの種類
 	enum TUTORIAL_UI
 	{
-		UI_NAME,			// 名前ロゴ
+		UI_NAME,			// 名前ロゴ HOW TO PLAY
+		UI_ORDER0,			// 操作について
 		UI_ORDER1,			// 指令1
 		UI_ORDER2,			// 指令2
 		UI_ORDER3,			// 指令3
 		UI_ORDER4,			// 指令4
 		UI_ORDER5,			// 指令5
 		UI_ORDER6,			// 指令6
-		UI_UI_MAX
+		UI_MAX
 	};
 
 	CTutorialUI();							// コンストラクタ
@@ -63,10 +64,12 @@ private:
 	void					Flashing(CScene2D *m_apScene2D);	// 点滅処理
 
 	/* 静的メンバ変数 */
-
+	static LPDIRECT3DTEXTURE9	m_TexNum[UI_MAX];		// バインドするテクスチャの情報
+	static D3DXVECTOR3			m_Pos[UI_MAX];			// 座標情報
+	static D3DXVECTOR3			m_Size[UI_MAX];			// サイズ情報
 
 	/* メンバ変数 */
-	CScene2D				*m_apScene2D[UI_UI_MAX];			// シーン2Dのポインタ
+	CScene2D				*m_apScene2D[UI_MAX];			// シーン2Dのポインタ
 	int						m_nColCnt;							// カラーカウント
 };
 #endif
