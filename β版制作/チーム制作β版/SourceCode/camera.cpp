@@ -32,6 +32,7 @@ void CCamera::InitCamera(void)
 	// カメラをプレイや追従にする
 	m_CameraFollowingType = CAMERA_FOLLOWING_TYPE_PLAYER;
 
+	m_posCameraEndLine = ZeroVector3;
 	m_fNear = CAMERA_LENGTH_NEAR;
 	m_fFar = CAMERA_LENGTH_FAR;
 
@@ -214,6 +215,16 @@ void CCamera::CharacterFollowingMoveCamera()
 			//座標取得
 			//カメラ最終目的地
 			m_posRDest = pPlayer->GetPosition() + CAMETA_POSR_OFFSET;
+
+			if (m_posCameraEndLine.x > pPlayer->GetPosition().x)
+			{
+				m_posRDest.x = m_posCameraEndLine.x;
+			}
+			else
+			{
+				m_posCameraEndLine = m_posRDest;
+
+			}
 		}
 	}
 
@@ -391,7 +402,7 @@ void CCamera::ResetCamera()
 	//初期座標へ
 	m_rotDest = m_rot = DEFAULT_CAMERA_ROTATION;
 	m_fDistance = DEFAULT_DISTANCE;
-	m_posR = m_posRDest = ZeroVector3;
+	m_posCameraEndLine = m_posR = m_posRDest = ZeroVector3;
 
 	m_posV.x = m_posVDest.x = m_posRDest.x - sinf(m_rot.y) * cosf(m_rot.x) * m_fDistance;
 	m_posV.y = m_posVDest.y = m_posRDest.y + sinf(m_rot.x)	* m_fDistance;
@@ -411,7 +422,7 @@ void CCamera::SetCameraPosfromDistance(D3DXVECTOR3 posR, D3DXVECTOR3 rot, float 
 	//初期座標へ
 	m_rotDest = m_rot = rot;
 	m_fDistance = fDistance;
-	m_posR = m_posRDest = posR;
+	m_posCameraEndLine = m_posR = m_posRDest = posR;
 
 	m_posV.x = m_posVDest.x = m_posRDest.x - sinf(m_rot.y) * cosf(m_rot.x) * m_fDistance;
 	m_posV.y = m_posVDest.y = m_posRDest.y + sinf(m_rot.x)	* m_fDistance;
@@ -430,7 +441,7 @@ void CCamera::SetCameraPosfromDistance(D3DXVECTOR3 posR, D3DXVECTOR3 rot, float 
 void CCamera::SetCameraPos(D3DXVECTOR3 posR, D3DXVECTOR3 posV)
 {
 	//情報格納
-	m_posR = m_posRDest = posR;
+	m_posCameraEndLine = m_posR = m_posRDest = posR;
 	m_posV = m_posVDest = posV;
 
 	//カメラの視点と注視点から角度と距離を求める

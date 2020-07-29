@@ -91,7 +91,7 @@ private:
 	TAG m_Tag;														//タグ　プレイヤーかどうか
 
 
-	void SetParticle(D3DXVECTOR3 const &pos, D3DXVECTOR3 const &rot, CParticleParam *pParam);				//パーティクル設定
+	void SetParticle(D3DXVECTOR3 &pos, D3DXVECTOR3 const &rot, CParticleParam *pParam);				//パーティクル設定
 	void SetCollsionParam();										//当たり判定のパラメータ設定
 	void SetAnimationParam();										//アニメーションのパラメータ設定
 	void Collision();												//判定

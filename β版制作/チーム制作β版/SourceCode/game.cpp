@@ -20,6 +20,7 @@
 #include "3Dline.h"
 #include "resultUI.h"
 #include "Boss.h"
+#include "ResultManager.h"
 // =====================================================================================================================================================================
 // マクロ定義
 // =====================================================================================================================================================================
@@ -45,8 +46,6 @@ CGame::CGame()
 //==========================================================
 CGame::~CGame()
 {
-	// アイテムクラスの静的変数の初期化
-	CItem::InitVariable();
 }
 //==========================================================
 // 初期化
@@ -57,27 +56,38 @@ HRESULT CGame::Init(void)
 	m_pMap->MapLoad(CMap::MAP_1);			// マップのロード
 
 	m_pPlayer	= CPlayer::Create();
-	m_pPlayer->SetLife(100);
+	m_pPlayer->SetLife(30);
 	m_pPlayer->SetPosition(D3DXVECTOR3(50.0f, 100.0f, 0.0f));
 
 	m_pPause->CreatePause();
 	CBoss::Create();
+	// ゲームモードの初期設定
+	m_GameMode = GAME_MODE_NORMAL;
+
 	//パーティクル生成
 	CParticleManager::Create();
+
 	// UI生成
 	CUIManager::Create();
-	// リザルトuiの生成
-	//CResultUI::Create();
 
 	return S_OK;
-
 }
 //==========================================================
 // 終了
 //==========================================================
 void CGame::Uninit(void)
 {
+	// アイテムクラスの静的変数の初期化
+	CItem::InitVariable();
+	// スコアの計算
+	CResultUI::TotalScoreCalculation();
 
+	if (m_pResultManager != nullptr)
+	{
+		// リザルトマネジャーの破棄
+		delete m_pResultManager;
+		m_pResultManager = nullptr;
+	}
 }
 //==========================================================
 // 更新
@@ -87,10 +97,20 @@ void CGame::Update(void)
 	// 死亡判定が出ているかの確認
 	m_pMap->UpdateDieFlag();
 
-	// ゲームモードがリザルト状態になった時
-	if (m_GameMode == GAME_MODE_RESULT)
+	// リザルトモードでまだリザルトマネージャーが生成されていなかった時
+	if (m_GameMode == GAME_MODE_RESULT && m_pResultManager == nullptr)
 	{
-		// リザルト画像描画
+		// リザルト管理クラスの生成
+		m_pResultManager = CResultManager::Create();
+	}
+	else
+	{
+		// リザルトマネージャークラスが生成された時
+		if (m_pResultManager != nullptr)
+		{
+			// リザルトマネージャー更新
+			m_pResultManager->Update();
+		}
 	}
  }
 //==========================================================

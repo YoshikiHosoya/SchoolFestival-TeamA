@@ -65,7 +65,12 @@ public:
 		TEX_UI_RESULT_MISSION1COMPLETE,			//クリアロゴ0
 		TEX_UI_RESULT_MISSION2COMPLETE,			//クリアロゴ1
 
-		TEX_UI_RANKING,							//ランキング
+		TEX_UI_RANKING_NAME,					//ランキング名前ロゴ
+		TEX_UI_RANKING_1st,						//ランキング1位
+		TEX_UI_RANKING_2nd,						//ランキング2位
+		TEX_UI_RANKING_3rd,						//ランキング3位
+		TEX_UI_RANKING_4th,						//ランキング4位
+		TEX_UI_RANKING_5th,						//ランキング5位
 
 		TEX_MAX									//MAX
 	};

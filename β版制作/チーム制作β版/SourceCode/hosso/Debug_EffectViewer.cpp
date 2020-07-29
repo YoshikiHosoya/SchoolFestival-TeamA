@@ -305,6 +305,11 @@ void CDebug_EffectViewer::ParticleParamaterViewer()
 	//スピードランダムか
 	ImGui::Checkbox("bSpeedRandom", &m_pParticleParam->GetSpeedRandom());
 
+	ImGui::DragFloat3("LocalPos", m_pParticleParam->GetLocalPos(), 0.5f, 1.0f, 300.0f);
+	ImGui::DragFloat3("LocalPos_Range", m_pParticleParam->GetLocalRandomPosRange(), 0.5f, 1.0f, 300.0f);
+
+
+
 	//正方形を保つとき
 	if (bSquare)
 	{

@@ -265,6 +265,9 @@
     <ClCompile Include="SourceCode\TrackingGun.cpp">
       <Filter>Wepon</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\RankingManager.cpp">
+      <Filter>ManagerClass</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SourceCode\mesh.h">
@@ -526,6 +529,9 @@
       <Filter>Item</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\ResultManager.h">
+      <Filter>ManagerClass</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\RankingManager.h">
       <Filter>ManagerClass</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\GameManager.h">

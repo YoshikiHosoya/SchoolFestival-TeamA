@@ -1,17 +1,18 @@
 // =====================================================================================================================================================================
 //
-// リザルトマネージャーの処理 [resultmanager.h]
+// ランキングマネージャーの処理 [rankingmanager.h]
 // Author : fujiwara masato
 //
 // =====================================================================================================================================================================
 #include "main.h"
-#include "resultmanager.h"
+#include "rankingmanager.h"
 #include "game.h"
 #include "basemode.h"
 #include "manager.h"
-#include "resultui.h"
+#include "rankingui.h"
 #include "renderer.h"
 #include "fade.h"
+#include "inputKeyboard.h"
 
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
@@ -26,12 +27,10 @@
 // コンストラクタ
 //
 // =====================================================================================================================================================================
-CResultManager::CResultManager()
+CRankingManager::CRankingManager()
 {
-	m_bNextFlag = false;
-	m_nNextCount = 240;
-	m_ResultState = RESULT_STATE_0;
-	m_pResultUI = nullptr;
+	m_RankingState = RANKING_STATE_0;
+	m_pRankingUI = nullptr;
 }
 
 // =====================================================================================================================================================================
@@ -39,14 +38,13 @@ CResultManager::CResultManager()
 // デストラクタ
 //
 // =====================================================================================================================================================================
-CResultManager::~CResultManager()
+CRankingManager::~CRankingManager()
 {
 	// uiの解放
-	if (m_pResultUI)
+	if (m_pRankingUI)
 	{
-		m_pResultUI->Uninit();
-		//delete m_pResultUI;
-		m_pResultUI = nullptr;
+		m_pRankingUI->Uninit();
+		m_pRankingUI = nullptr;
 	}
 }
 
@@ -55,10 +53,10 @@ CResultManager::~CResultManager()
 // 初期化処理
 //
 // =====================================================================================================================================================================
-HRESULT CResultManager::Init(void)
+HRESULT CRankingManager::Init(void)
 {
 	// リザルトUIの生成
-	m_pResultUI = CResultUI::Create();
+	m_pRankingUI = CRankingUI::Create();
 	return S_OK;
 }
 
@@ -67,7 +65,7 @@ HRESULT CResultManager::Init(void)
 // 終了処理
 //
 // =====================================================================================================================================================================
-void CResultManager::Uninit(void)
+void CRankingManager::Uninit(void)
 {
 }
 
@@ -76,23 +74,16 @@ void CResultManager::Uninit(void)
 // 更新処理
 //
 // =====================================================================================================================================================================
-void CResultManager::Update(void)
+void CRankingManager::Update(void)
 {
-	if (m_bNextFlag == true)
-	{
-		m_nNextCount--;
+	//キーボード情報取得
+	CKeyboard *key = CManager::GetInputKeyboard();
 
-		if (m_nNextCount <= 0)
-		{
-			// 次の状態へ移行する
-			NextMode();
-		}
-	}
-
-	if (m_ResultState == RESULT_STATE_0)
+	// エンターを押したとき
+	if (key->GetKeyboardTrigger(DIK_RETURN))
 	{
-		// 順番通りに描画し処理していく
-		ResultUiOrder();
+		// ゲームモードへ状態遷移
+		CManager::GetRenderer()->GetFade()->SetFade(CManager::MODE_TITLE);
 	}
 }
 
@@ -101,15 +92,15 @@ void CResultManager::Update(void)
 // 生成
 //
 // =====================================================================================================================================================================
-CResultManager * CResultManager::Create()
+CRankingManager * CRankingManager::Create()
 {
 	//メモリの確保
-	CResultManager *pResultManager = new CResultManager();
+	CRankingManager *pRankingManager = new CRankingManager();
 
 	// 初期化
-	pResultManager->Init();
+	pRankingManager->Init();
 
-	return pResultManager;
+	return pRankingManager;
 }
 
 // =====================================================================================================================================================================
@@ -117,44 +108,7 @@ CResultManager * CResultManager::Create()
 // Uiの出現順番
 //
 // =====================================================================================================================================================================
-void CResultManager::ResultUiOrder()
+void CRankingManager::RankingUiOrder()
 {
 
-}
-
-// =====================================================================================================================================================================
-//
-// Uiの描画条件
-//
-// =====================================================================================================================================================================
-void CResultManager::DrawConditions(RESULT_STATE state)
-{
-}
-
-// =====================================================================================================================================================================
-//
-// 更新処理
-//
-// =====================================================================================================================================================================
-void CResultManager::NextMode()
-{
-	// リザルトの状態が0だった時
-	if (m_ResultState == RESULT_STATE_0)
-	{
-		m_nNextCount = 180;
-		m_bNextFlag = false;
-		// 状態を1に移行する
-		m_ResultState = RESULT_STATE_1;
-	}
-
-	// リザルトの状態が1だった時
-	else if (m_ResultState == RESULT_STATE_1)
-	{
-		// マップ2に移行
-		// ランキングに遷移する
-		if (CManager::GetBaseMode() != nullptr)
-		{
-			CManager::GetRenderer()->GetFade()->SetFade(CManager::MODE_RANKING);
-		}
-	}
 }

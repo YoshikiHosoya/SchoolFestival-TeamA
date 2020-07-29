@@ -48,7 +48,7 @@ public:
 	void				Draw(void);				// 描画
 
 	/* 静的メンバ関数 */
-	static  CPlayerUI	*Create();				// プレイヤーUIの生成
+	static				CPlayerUI	*Create();				// プレイヤーUIの生成
 
 	/* メンバ関数 */
 	void				SetScore(int nScore);				// スコアの設定
