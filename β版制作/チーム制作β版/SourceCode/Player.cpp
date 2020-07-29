@@ -172,6 +172,9 @@ void CPlayer::Update(void)
 	{
 		CDebugProc::Print("攻撃してないで\n");
 	}
+
+	//スクリーンの範囲内から出ないように制限
+	CManager::GetRenderer()->ScreenLimitRange(GetPosition());
 }
 //====================================================================
 //描画
@@ -504,6 +507,9 @@ void CPlayer::Ride()
 		// 戦車に乗っている時
 		if (pPlayertank != nullptr)
 		{
+			//スクリーンの範囲内から出ないように制限
+			CManager::GetRenderer()->ScreenLimitRange(pPlayertank->GetPosition());
+
 			// プレイヤーの座標を戦車の座標に合わせる
 			this->SetPosition(pPlayertank->GetPosition());
 
@@ -516,6 +522,9 @@ void CPlayer::Ride()
 		// 戦闘機に乗っている時
 		else if (pBattlePlane != nullptr)
 		{
+			//スクリーンの範囲内から出ないように制限
+			CManager::GetRenderer()->ScreenLimitRange(pBattlePlane->GetPosition());
+
 			// プレイヤーの座標を戦闘機の座標に合わせる
 			this->SetPosition(pBattlePlane->GetPosition());
 

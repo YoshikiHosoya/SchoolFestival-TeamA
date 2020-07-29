@@ -62,6 +62,20 @@ CCharacter::~CCharacter()
 		delete m_pCollision;
 		m_pCollision = nullptr;
 	}
+
+	//nullcheck
+	if (!m_vModelList.empty())
+	{
+		//パーツ数分
+		for (size_t nCnt = 0; nCnt < m_vModelList.size(); nCnt++)
+		{
+			//メモリ開放
+			delete m_vModelList[nCnt];
+			m_vModelList[nCnt] = nullptr;
+		}
+		//配列を空にする
+		m_vModelList.clear();
+	}
 }
 //====================================================================
 //初期化

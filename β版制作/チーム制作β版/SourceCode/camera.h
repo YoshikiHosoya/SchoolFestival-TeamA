@@ -50,22 +50,24 @@ public:
 
 
 private:
-	D3DXVECTOR3 m_posV;			//視点
-	D3DXVECTOR3 m_posVDest;		//視点の目的地
-	D3DXVECTOR3 m_posR;			//注視点
-	D3DXVECTOR3 m_posRDest;		//注視点の目的地
-	D3DXVECTOR3 m_rot;			//向き
-	D3DXVECTOR3 m_rotDest;		//向きたい方向
-	D3DXVECTOR3 m_move;			//移動視点
-	D3DXVECTOR3 m_vecV;			//上方向ベクトル
-	D3DXMATRIX m_mtxProjection;	//プロジェクションマトリックス
-	D3DXMATRIX m_mtxView;		//ビューマトリックス
-	float m_fDistance;			//距離
-	float m_fNear;				//Near値
-	float m_fFar;					//Far値
+	D3DXVECTOR3 m_posV;							//視点
+	D3DXVECTOR3 m_posVDest;						//視点の目的地
+	D3DXVECTOR3 m_posR;							//注視点
+	D3DXVECTOR3 m_posRDest;						//注視点の目的地
+	D3DXVECTOR3 m_rot;							//向き
+	D3DXVECTOR3 m_rotDest;						//向きたい方向
+	D3DXVECTOR3 m_move;							//移動視点
+	D3DXVECTOR3 m_vecV;							//上方向ベクトル
+	D3DXMATRIX m_mtxProjection;					//プロジェクションマトリックス
+	D3DXMATRIX m_mtxView;						//ビューマトリックス
+	float m_fDistance;							//距離
+	float m_fNear;								//Near値
+	float m_fFar;								//Far値
 
-	int m_nCountTimer;			//追従のタイマー
+	D3DXVECTOR3 m_posCameraEndLine;				//カメラのライン
+
+	int m_nCountTimer;							//追従のタイマー
 	int m_nCnt;
-	int m_CameraFollowingType;	// カメラの追従種類
+	int m_CameraFollowingType;					// カメラの追従種類
 };
 #endif
