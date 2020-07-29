@@ -22,10 +22,11 @@
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
 // =====================================================================================================================================================================
-CMap::MAP					CMap::m_MapNum			= MAP_1;					// マップ番号
-CMap::WAVE					CMap::m_WaveNum			= WAVE_1;					// ウェーブ番号
-CMap::EDITOR				CMap::m_Editor			= EDITOR_MAP;				// マップエディター
-CMap::ARRANGEMENT_MODEL		CMap::m_ArrangmentModel = ARRANGEMENT_MODEL_MAP;	// 配置するモデルの種類
+CMap::MAP					CMap::m_MapNum				= MAP_1;					// マップ番号
+CMap::WAVE					CMap::m_WaveNum				= WAVE_1;					// ウェーブ番号
+CMap::EDITOR				CMap::m_Editor				= EDITOR_MAP;				// マップエディター
+CMap::ARRANGEMENT_MODEL		CMap::m_ArrangmentModel		= ARRANGEMENT_MODEL_MAP;	// 配置するモデルの種類
+CMap::WAVE_INFO				CMap::m_aWaveInfo[WAVE_MAX] = {};						// ウェーブの情報
 
 // =====================================================================================================================================================================
 // テキストファイル名
@@ -39,6 +40,13 @@ char *CMap::m_MapModelFileName[MAP_MAX] =
 };
 
 /* ----- ウェーブ ----- */
+char *CMap::m_WaveFileName[WAVE_MAX] =
+{
+	{ "data/Load/Wave/Wave_01.txt" },
+	{ "data/Load/Wave/Wave_02.txt" },
+	{ "data/Load/Wave/Wave_03.txt" },
+};
+
 // 敵
 char *CMap::m_EnemyWaveFileName[WAVE_MAX] =
 {
@@ -118,17 +126,14 @@ CMap::~CMap()
 // =====================================================================================================================================================================
 void CMap::MapModelLoad()
 {
-	// ファイルポイント
-	FILE *pFile = nullptr;
-	char cReadText[128];			// 文字として読み取る
-	char cHeadText[128];			// 比較用
-	char cDie[128];					// 不要な文字
-	D3DXVECTOR3 pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 位置
-	D3DXVECTOR3 size = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 大きさ
-	int nLife = 0;										// 体力
-	int nType = 0;										// 種類
-	char *cFileName = nullptr;			// ファイル名
-	int nModelType = -1;
+	FILE			*pFile			= nullptr;							// ファイルのポインタ
+	char			cReadText[128];										// 文字として読み取る
+	char			cHeadText[128];										// 比較用
+	char			cDie[128];											// 不要な文字
+	D3DXVECTOR3		pos				= D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 位置
+	int				nType			= 0;								// 種類
+	char			*cFileName		= nullptr;							// ファイル名
+	int				nModelType		= -1;								// モデルの種類
 
 	// ファイルを開く
 	pFile = fopen(m_MapModelFileName[m_MapNum], "r");
@@ -149,12 +154,11 @@ void CMap::MapModelLoad()
 			// END_SCRIPTが来るまでループ
 			while (strcmp(cHeadText, "END_SCRIPT") != 0)
 			{
-				fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
-				sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
+				fgets(cReadText, sizeof(cReadText), pFile);
+				sscanf(cReadText, "%s", &cHeadText);
 
 				char cEndSetText[32];			// END_SET
 
-			// TYPEが来たら
 				if (strcmp(cHeadText, "MAPSET") == 0)
 				{
 					strcpy(cEndSetText, "END_MAPSET");
@@ -196,8 +200,8 @@ void CMap::MapModelLoad()
 					// END_MODELSETが来るまでループ
 					while (strcmp(cHeadText, cEndSetText) != 0)
 					{
-						fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
-						sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
+						fgets(cReadText, sizeof(cReadText), pFile);
+						sscanf(cReadText, "%s", &cHeadText);
 
 						// TYPEが来たら
 						if (strcmp(cHeadText, "TYPE") == 0)
@@ -209,24 +213,10 @@ void CMap::MapModelLoad()
 						{
 							sscanf(cReadText, "%s %s %f %f %f", &cDie, &cDie, &pos.x, &pos.y, &pos.z);		// 比較用テキストにPOSを代入
 						}
-						// LIFEが来たら
-						else if (strcmp(cHeadText, "LIFE") == 0)
-						{
-							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &nLife);		// 比較用テキストにTYPEを代入
-						}
-						// SIZEが来たら
-						else if (strcmp(cHeadText, "SIZE") == 0)
-						{
-							sscanf(cReadText, "%s %s %f %f %f ", &cDie, &cDie, &size.x, &size.y, &size.z);		// 比較用テキストにTYPEを代入
-						}
 						else if (strcmp(cHeadText, cEndSetText) == 0)
 						{
-							{
-								//// ウェーブの位置加算
-								//pos += m_aWaveInfo[m_nWaveID].pos;
-							}
 							// 配置するモデルの生成
-							MapModelCreate(nModelType, nType, pos, nLife, size);
+							MapModelCreate(nModelType, nType, pos);
 							nModelType = -1;
 						}
 					}
@@ -255,32 +245,24 @@ void CMap::MapModelSave()
 	// ファイルポイント
 	FILE	*pFile = nullptr;
 
-	// 各モデルファイルのファイルを開く
-	switch (m_Editor)
-	{
-	case CMap::EDITOR_MAP:
-		pFile = fopen(m_MapModelFileName[m_MapNum], "w");
-		break;
-
-	case CMap::EDITOR_WAVE:
-		//pFile = fopen(WaveFileName(ModelType), "w");
-		break;
-	}
+	// ファイルを開く
+	pFile = fopen(m_MapModelFileName[m_MapNum], "w");
 
 	// 開いているとき
 	if (pFile != NULL)
 	{
-		// マップに配置するモデルの種類分回す
+		fprintf(pFile, COMMENT02);
+		fprintf(pFile, "// マップの初期配置情報\n");
+		fprintf(pFile, COMMENT02);
+
+		fprintf(pFile, "SCRIPT\n");
+		fprintf(pFile, NEWLINE);
+
 		for (int nModelType = 0; nModelType < ARRANGEMENT_MODEL_MAX; nModelType++)
 		{
 			// セーブするモデルのヘッダー
 			SaveModelHeader(pFile, nModelType);
-		}
 
-		fprintf(pFile, "SCRIPT\n\n");
-
-		for (int nModelType = 0; nModelType < ARRANGEMENT_MODEL_MAX; nModelType++)
-		{
 			// 各モデルの種類分回す
 			for (unsigned int nCntModel = 0; nCntModel < GetMaxMapModel(nModelType); nCntModel++)
 			{
@@ -313,10 +295,76 @@ void CMap::MapModelSave()
 
 // =====================================================================================================================================================================
 //
+// ウェーブのセーブ
+//
+// =====================================================================================================================================================================
+void CMap::WaveSave()
+{
+	int nNum = 0;
+
+	// ファイルポイント
+	FILE	*pFile = nullptr;
+
+	// ファイルを開く
+	pFile = fopen(m_WaveFileName[m_WaveNum], "w");
+
+	// 開いているとき
+	if (pFile != NULL)
+	{
+		fprintf(pFile, COMMENT02);
+		fprintf(pFile, "// ウェーブの配置情報\n");
+		fprintf(pFile, COMMENT02);
+
+		fprintf(pFile, "SCRIPT\n");
+		fprintf(pFile, NEWLINE);
+		fprintf(pFile, "	EVENTPOS		= %.0f %.0f %.0f\n", m_aWaveInfo[m_WaveNum].EventPos.x, m_aWaveInfo[m_WaveNum].EventPos.y, m_aWaveInfo[m_WaveNum].EventPos.z);
+		fprintf(pFile, NEWLINE);
+
+		for (int nModelType = 0; nModelType < ARRANGEMENT_MODEL_MAX; nModelType++)
+		{
+			if (nModelType == ARRANGEMENT_MODEL_HELICOPTER || nModelType == ARRANGEMENT_MODEL_PRISONER)
+			{
+				// セーブするモデルのヘッダー
+				SaveModelHeader(pFile, nModelType);
+
+				// 各モデルの種類分回す
+				for (unsigned int nCntModel = 0; nCntModel < GetMaxMapModel(nModelType); nCntModel++)
+				{
+					if (GetMapModel(nModelType, nCntModel))
+					{
+						// セーブするモデルの情報
+						//SaveWaveContents(pFile, nModelType, nCntModel, nNum);
+
+						nNum++;
+					}
+				}
+			}
+		}
+		fprintf(pFile, "END_SCRIPT\n");
+
+		for (int nModelType = 0; nModelType < ARRANGEMENT_MODEL_MAX; nModelType++)
+		{
+			// 読み込み成功時の結果表示
+			LoadSuccessMessage(nModelType);
+		}
+
+		// ファイルを閉じる
+		fclose(pFile);
+	}
+	else
+	{
+		// 読み込み失敗時の警告表示
+		//LoadFailureMessage(ModelType);
+	}
+
+}
+
+// =====================================================================================================================================================================
+//
 // 配置するモデルの生成
 //
 // =====================================================================================================================================================================
-void CMap::MapModelCreate(int ModelType, int nType, D3DXVECTOR3 pos, int nLife, D3DXVECTOR3 size)
+void CMap::MapModelCreate(int ModelType, int nType, D3DXVECTOR3 pos)
 {
 	switch (ModelType)
 	{
@@ -334,8 +382,6 @@ void CMap::MapModelCreate(int ModelType, int nType, D3DXVECTOR3 pos, int nLife, 
 		m_pEnemy.emplace_back(CEnemy::Create());
 		// 位置の設定
 		m_pEnemy[m_pEnemy.size() - 1]->SetPosition(pos);
-		// 体力の設定
-		m_pEnemy[m_pEnemy.size() - 1]->SetLife(nLife);
 		break;
 
 	/* --- 捕虜 --- */
@@ -356,8 +402,6 @@ void CMap::MapModelCreate(int ModelType, int nType, D3DXVECTOR3 pos, int nLife, 
 		m_pObstacle[m_pObstacle.size() - 1]->SetModelConut(nType);
 		// 位置の設定
 		m_pObstacle[m_pObstacle.size() - 1]->SetPosition(pos);
-		// 体力の設定
-		m_pObstacle[m_pObstacle.size() - 1]->SetLife(nLife);
 		// 当たり判定の大きさの設定
 		m_pObstacle[m_pObstacle.size() - 1]->SetCollisionSize((CObstacle::OBSTACLE_TYPE)nType);
 		break;
@@ -381,12 +425,11 @@ void CMap::MapModelCreate(int ModelType, int nType, D3DXVECTOR3 pos, int nLife, 
 	/* --- ヘリコプター --- */
 	case CMap::ARRANGEMENT_MODEL_HELICOPTER:
 		//// オブジェクトの生成
-		//m_pVehicle.emplace_back(CVehicle::Create());
+		//m_pHelicopter.emplace_back(CHelicopter::Create());
 		//// 位置の設定
-		//m_pVehicle[m_pVehicle.size() - 1]->SetPosition(pos);
+		//m_pHelicopter[m_pHelicopter.size() - 1]->SetPosition(pos);
 		//// 種類の設定
-		//m_pVehicle[m_pVehicle.size() - 1]->SetVehicleType((CVehicle::VEHICLE_TYPE)nType);
-
+		//m_pHelicopter[m_pHelicopter.size() - 1]->SetVehicleType((CVehicle::VEHICLE_TYPE)nType);
 		break;
 	}
 }
@@ -642,89 +685,118 @@ void CMap::WaveLoad(WAVE WaveNum)
 	// 現在のウェーブ番号
 	m_WaveNum = WaveNum;
 
-	// ファイルポイント
-	FILE *pFile				= nullptr;
-	char *cFileName			= nullptr;							// ファイル名
-	int nWaveID				= 0;								// ウェーブの出現番号
-	int nFrame				= 0;								// フレーム
-	D3DXVECTOR3 pos			= D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 位置
-	int nPlatoonType		= 0;								// 小隊の種類
-	char cReadText[128];										// 文字として読み取る
-	char cHeadText[128];										// 比較用
-	char cDie[128];												// 不要な文字
+	FILE		*pFile				= nullptr;							// ファイルポインタ
+	char		*cFileName			= nullptr;							// ファイル名
+	int			nFrame				= 0;								// フレーム
+	D3DXVECTOR3	pos					= D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 位置
+	char		cReadText[128];											// 文字として読み取る
+	char		cHeadText[128];											// 比較用
+	char		cDie[128];												// 不要な文字
+	int			nModelType			= -1;								// モデルの種類
+	int			nType				= 0;								// 種類
+	int			nEvent				= 0;								// イベントフラグ
+	WAVE_PARAM	*pParam				= nullptr;							// ウェーブのパラメータ保存用
 
-	for (int nCnt = 0; nCnt < ARRANGEMENT_MODEL_MAX; nCnt++)
+	// ファイルを開く
+	pFile = fopen(m_MapModelFileName[WaveNum], "r");
+
+	// 開いているとき
+	if (pFile != NULL)
 	{
-		// マップモデルと障害物以外のとき
-		if (nCnt != ARRANGEMENT_MODEL_MAP && nCnt != ARRANGEMENT_MODEL_OBSTACLE)
+		// SCRIPTが来るまでループ
+		while (strcmp(cHeadText, "SCRIPT") != 0)
 		{
-			// 各モデルファイルのファイルを開く
-			pFile = fopen(WaveFileName(nCnt), "r");
+			fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
+			sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
+		}
 
-			// 開いているとき
-			if (pFile != NULL)
+		// SCRIPTが来たら
+		if (strcmp(cHeadText, "SCRIPT") == 0)
+		{
+			// END_SCRIPTが来るまでループ
+			while (strcmp(cHeadText, "END_SCRIPT") != 0)
 			{
-				// SCRIPTが来るまでループ
-				while (strcmp(cHeadText, "SCRIPT") != 0)
+				fgets(cReadText, sizeof(cReadText), pFile);
+				sscanf(cReadText, "%s", &cHeadText);
+
+				// イベントが起きる位置を保存
+				if (strcmp(cHeadText, "EVENTPOS") == 0)
 				{
-					fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
-					sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
+					sscanf(cReadText, "%s %s %f %f %f", &cDie, &cDie,
+						&m_aWaveInfo[WaveNum].EventPos.x, &m_aWaveInfo[WaveNum].EventPos.y, &m_aWaveInfo[WaveNum].EventPos.z);
 				}
 
-				// SCRIPTが来たら
-				if (strcmp(cHeadText, "SCRIPT") == 0)
+				char cEndSetText[32];			// END_SET
+
+				// 読み込みモデル
+				if (strcmp(cHeadText, "ENEMYSET") == 0)
 				{
-					// END_SCRIPTが来るまでループ
-					while (strcmp(cHeadText, "END_SCRIPT") != 0)
+					sprintf(cEndSetText, "%s", "END_ENEMYSET");
+					nModelType = ARRANGEMENT_MODEL_ENEMY;
+				}
+				else if (strcmp(cHeadText, "PRISONERSET") == 0)
+				{
+					sprintf(cEndSetText, "%s", "END_PRISONERSET");
+					nModelType = ARRANGEMENT_MODEL_PRISONER;
+				}
+
+				if (nModelType >= 0)
+				{
+					pParam = new WAVE_PARAM;
+
+					// END_〇〇SETが来るまでループ
+					while (strcmp(cHeadText, cEndSetText) != 0)
 					{
-						fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
-						sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
+						fgets(cReadText, sizeof(cReadText), pFile);
+						sscanf(cReadText, "%s", &cHeadText);
 
-						// WAVESETが来たら
-						if (strcmp(cHeadText, "WAVESET") == 0)
+						// TYPEが来たら
+						if (strcmp(cHeadText, "TYPE") == 0)
 						{
-							// END_WAVESETが来るまでループ
-							while (strcmp(cHeadText, "END_WAVESET") != 0)
-							{
-								fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
-								sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
+							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &nType);
+						}
+						// POSが来たら
+						else if (strcmp(cHeadText, "POS") == 0)
+						{
+							sscanf(cReadText, "%s %s %f %f %f", &cDie, &cDie, &pos.x, &pos.y, &pos.z);
+						}
+						// FRAMEが来たら
+						else if (strcmp(cHeadText, "FRAME") == 0)
+						{
+							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &nFrame);
+						}
+						// FRAMEが来たら
+						else if (strcmp(cHeadText, "EVENT") == 0)
+						{
+							//sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_aWaveInfo[WaveNum].bEvent);
+						}
+						else if (strcmp(cHeadText, cEndSetText) == 0)
+						{
+							pParam->pos = pos;
+							pParam->nType = nType;
+							pParam->nFrame = nFrame;
 
-								// POSが来たら
-								if (strcmp(cHeadText, "POS") == 0)
-								{
-									sscanf(cReadText, "%s %s %f %f %f", &cDie, &cDie, &pos.x, &pos.y, &pos.z);		// 比較用テキストにPOSを代入
-								}
-								// FRAMEが来たら
-								else if (strcmp(cHeadText, "FRAME") == 0)
-								{
-									sscanf(cReadText, "%s %s %d", &cDie, &cDie, &nFrame);				// 比較用テキストにFRAMEを代入
-								}
-								// PLATOONTYPEが来たら
-								else if (strcmp(cHeadText, "PLATOONTYPE") == 0)
-								{
-									sscanf(cReadText, "%s %s %d ", &cDie, &cDie, &nPlatoonType);		// 比較用テキストにPLATOONTYPEを代入
-								}
-								else if (strcmp(cHeadText, "END_WAVESET") == 0)
-								{
-									// Waveのtxt情報保存
-									m_aWaveInfo[nWaveID].pos			= pos;
-									m_aWaveInfo[nWaveID].nFrame			= nFrame;
-									// カウントアップ
-									nWaveID++;
-								}
+							if (nModelType == ARRANGEMENT_MODEL_ENEMY)
+							{
+								m_aWaveInfo[WaveNum].EnemyWaveInfo.emplace_back(pParam);
 							}
+							else if (nModelType == ARRANGEMENT_MODEL_PRISONER)
+							{
+								m_aWaveInfo[WaveNum].PrisonerWaveInfo.emplace_back(pParam);
+							}
+							nModelType = -1;
 						}
 					}
 				}
-				// ファイルを閉じる
-				fclose(pFile);
-			}
-			else
-			{
-				// 読み込み失敗時の警告表示
-				LoadFailureMessage(nCnt);
 			}
 		}
+		// ファイルを閉じる
+		fclose(pFile);
+	}
+	else
+	{
+		// 読み込み失敗時の警告表示
+		LoadFailureMessage(nModelType);
 	}
 }
 
@@ -738,7 +810,7 @@ void CMap::WaveCreate(WAVE WaveNum, int ModelType, int &frame)
 	// ウェーブ番号
 	m_WaveNum = WaveNum;
 
-	if (m_aWaveInfo[m_nWaveID].nFrame == frame)
+	//if (m_aWaveInfo[m_nWaveID].nFrame == frame)
 	{
 		// カウントアップ
 		m_nWaveID++;
@@ -905,7 +977,9 @@ void CMap::SaveModelHeader(FILE * pFile, int ModelType)
 		fprintf(pFile, COMMENT02);
 		fprintf(pFile, "// PRISONERTYPE情報\n");
 		fprintf(pFile, COMMENT01);
-		fprintf(pFile, "//	[ 0 ]	捕虜\n");
+		fprintf(pFile, "//	[ 0 ]	確定ドロップする捕虜\n");
+		fprintf(pFile, "//	[ 1 ]	範囲ドロップする捕虜\n");
+		fprintf(pFile, "//	[ 2 ]	ランダムドロップする捕虜\n");
 		fprintf(pFile, COMMENT01);
 		fprintf(pFile, COMMENT02);
 		fprintf(pFile, NEWLINE);
@@ -934,12 +1008,6 @@ void CMap::SaveModelHeader(FILE * pFile, int ModelType)
 		fprintf(pFile, COMMENT02);
 		fprintf(pFile, "// 戦車の配置情報\n");
 		fprintf(pFile, COMMENT02);
-		fprintf(pFile, COMMENT02);
-		fprintf(pFile, "// TANKTYPE情報\n");
-		fprintf(pFile, COMMENT01);
-		fprintf(pFile, "//	[ 0 ]	戦車\n");
-		fprintf(pFile, COMMENT01);
-		fprintf(pFile, COMMENT02);
 		fprintf(pFile, NEWLINE);
 		break;
 
@@ -948,12 +1016,6 @@ void CMap::SaveModelHeader(FILE * pFile, int ModelType)
 		fprintf(pFile, COMMENT02);
 		fprintf(pFile, "// 戦闘機の配置情報\n");
 		fprintf(pFile, COMMENT02);
-		fprintf(pFile, COMMENT02);
-		fprintf(pFile, "// BATTLEPLANETYPE情報\n");
-		fprintf(pFile, COMMENT01);
-		fprintf(pFile, "//	[ 0 ]	戦闘機\n");
-		fprintf(pFile, COMMENT01);
-		fprintf(pFile, COMMENT02);
 		fprintf(pFile, NEWLINE);
 		break;
 
@@ -961,12 +1023,6 @@ void CMap::SaveModelHeader(FILE * pFile, int ModelType)
 	case CMap::ARRANGEMENT_MODEL_HELICOPTER:
 		fprintf(pFile, COMMENT02);
 		fprintf(pFile, "// ヘリコプターの配置情報\n");
-		fprintf(pFile, COMMENT02);
-		fprintf(pFile, COMMENT02);
-		fprintf(pFile, "// HELICOPTERTYPE情報\n");
-		fprintf(pFile, COMMENT01);
-		fprintf(pFile, "//	[ 0 ]	ヘリコプター\n");
-		fprintf(pFile, COMMENT01);
 		fprintf(pFile, COMMENT02);
 		break;
 	}
@@ -994,7 +1050,6 @@ void CMap::SaveModelContents(FILE *pFile, int ModelType, int nCnt, int nNum)
 		fprintf(pFile, "ENEMYSET									# %d\n", nNum);
 		fprintf(pFile, "	TYPE	= %d\n", 0 /*m_pEnemy[nCnt]->GetType()*/);
 		fprintf(pFile, "	POS		= %.0f %.0f %.0f\n", m_pEnemy[nCnt]->GetPosition().x, m_pEnemy[nCnt]->GetPosition().y, m_pEnemy[nCnt]->GetPosition().z);
-		fprintf(pFile, "	LIFE	= %d\n", m_pEnemy[nCnt]->GetLife());
 		fprintf(pFile, "END_ENEMYSET\n\n");
 		break;
 
@@ -1011,8 +1066,6 @@ void CMap::SaveModelContents(FILE *pFile, int ModelType, int nCnt, int nNum)
 		fprintf(pFile, "OBSTACLESET									# %d\n", nNum);
 		fprintf(pFile, "	TYPE	= %d\n", m_pObstacle[nCnt]->GetModelCount());
 		fprintf(pFile, "	POS		= %.0f %.0f %.0f\n", m_pObstacle[nCnt]->GetPosition().x, m_pObstacle[nCnt]->GetPosition().y, m_pObstacle[nCnt]->GetPosition().z);
-		fprintf(pFile, "	LIFE	= %d\n", m_pObstacle[nCnt]->GetLife());
-		fprintf(pFile, "	SIZE	= %.0f %.0f %.0f\n", m_pObstacle[nCnt]->GetSize().x, m_pObstacle[nCnt]->GetSize().y, m_pObstacle[nCnt]->GetSize().z);
 		fprintf(pFile, "END_OBSTACLESET\n\n");
 		break;
 
@@ -1044,11 +1097,30 @@ void CMap::SaveModelContents(FILE *pFile, int ModelType, int nCnt, int nNum)
 // セーブするウェーブの情報
 //
 // =====================================================================================================================================================================
-void CMap::SaveWaveContents(FILE * pFile, int ModelType, int nCnt)
+void CMap::SaveWaveContents(FILE * pFile, int ModelType, int nType, int nCnt, int nNum)
 {
-	fprintf(pFile, "	POS				= %.0f %.0f %.0f\n", m_WavePos.x, m_WavePos.y, m_WavePos.z);
-	fprintf(pFile, "	FRAME			= %d\n", 0);
-	fprintf(pFile, "	PLATOONTYPE		= %d\n", 0);
+	switch (ModelType)
+	{
+		/* --- 敵 --- */
+	case CMap::ARRANGEMENT_MODEL_ENEMY:
+		fprintf(pFile, "ENEMYSET									# %d\n", nNum);
+		fprintf(pFile, "	TYPE	= %d\n", 0 /*m_pEnemy[nCnt]->GetType()*/);
+		fprintf(pFile, "	POS		= %.0f %.0f %.0f\n", m_pEnemy[nCnt]->GetPosition().x, m_pEnemy[nCnt]->GetPosition().y, m_pEnemy[nCnt]->GetPosition().z);
+		fprintf(pFile, "	FRAME	= %d\n", 0 /*m_pEnemy[nCnt]->GetType()*/);
+		fprintf(pFile, "	EVENT	= %d\n", 0 /*m_pEnemy[nCnt]->GetType()*/);
+		fprintf(pFile, "END_ENEMYSET\n\n");
+		break;
+
+		/* --- 捕虜 --- */
+	case CMap::ARRANGEMENT_MODEL_PRISONER:
+		fprintf(pFile, "PRISONERSET									# %d\n", nNum);
+		fprintf(pFile, "	TYPE	= %d\n", m_pPrisoner[nCnt]->GetPrisonerDropType());
+		fprintf(pFile, "	POS		= %.0f %.0f %.0f\n", m_pPrisoner[nCnt]->GetPosition().x, m_pPrisoner[nCnt]->GetPosition().y, m_pPrisoner[nCnt]->GetPosition().z);
+		fprintf(pFile, "	FRAME	= %d\n", 0 /*m_pEnemy[nCnt]->GetType()*/);
+		fprintf(pFile, "	EVENT	= %d\n", 0 /*m_pEnemy[nCnt]->GetType()*/);
+		fprintf(pFile, "END_PRISONERSET\n\n");
+		break;
+	}
 }
 
 // =====================================================================================================================================================================
@@ -1529,7 +1601,6 @@ void CMap::MapModelTab()
 			// 障害物
 			if (ImGui::BeginTabItem("Obstacle"))
 			{
-				// 配置するモデル(障害物)
 				m_ArrangmentModel = ARRANGEMENT_MODEL_OBSTACLE;
 
 				// 障害物の設置
@@ -1540,7 +1611,6 @@ void CMap::MapModelTab()
 		// 捕虜
 		if (ImGui::BeginTabItem("Prisoner"))
 		{
-			// 配置するモデル(捕虜)
 			m_ArrangmentModel = ARRANGEMENT_MODEL_PRISONER;
 
 			// 捕虜の設置
@@ -1550,42 +1620,42 @@ void CMap::MapModelTab()
 		// 敵
 		if (ImGui::BeginTabItem("Enemy"))
 		{
-			// 配置するモデル(敵)
 			m_ArrangmentModel = ARRANGEMENT_MODEL_ENEMY;
 
 			// 敵の設置
 			MapModelSet();
 			ImGui::EndTabItem();
 		}
-		// 戦車
-		if (ImGui::BeginTabItem("Tank"))
+		// マップエディタのときのみ
+		if (m_Editor == EDITOR_MAP)
 		{
-			// 配置するモデル(戦車)
-			m_ArrangmentModel = ARRANGEMENT_MODEL_TANK;
+			// 戦車
+			if (ImGui::BeginTabItem("Tank"))
+			{
+				m_ArrangmentModel = ARRANGEMENT_MODEL_TANK;
 
-			// 戦車の設置
-			MapModelSet();
-			ImGui::EndTabItem();
-		}
-		// 戦闘機
-		if (ImGui::BeginTabItem("BattlePlane"))
-		{
-			// 配置するモデル(戦闘機)
-			m_ArrangmentModel = ARRANGEMENT_MODEL_BATTLEPLANE;
+				// 戦車の設置
+				MapModelSet();
+				ImGui::EndTabItem();
+			}
+			// 戦闘機
+			if (ImGui::BeginTabItem("BattlePlane"))
+			{
+				m_ArrangmentModel = ARRANGEMENT_MODEL_BATTLEPLANE;
 
-			// 戦闘機の設置
-			MapModelSet();
-			ImGui::EndTabItem();
-		}
-		// ヘリ
-		if (ImGui::BeginTabItem("Helicopter"))
-		{
-			// 配置するモデル(ヘリ)
-			m_ArrangmentModel = ARRANGEMENT_MODEL_HELICOPTER;
+				// 戦闘機の設置
+				MapModelSet();
+				ImGui::EndTabItem();
+			}
+			// ヘリ
+			if (ImGui::BeginTabItem("Helicopter"))
+			{
+				m_ArrangmentModel = ARRANGEMENT_MODEL_HELICOPTER;
 
-			// ヘリの設置
-			MapModelSet();
-			ImGui::EndTabItem();
+				// ヘリの設置
+				MapModelSet();
+				ImGui::EndTabItem();
+			}
 		}
 		//TabEnd
 		ImGui::EndTabBar();
@@ -1601,7 +1671,6 @@ void CMap::MapModelSet()
 {
 #ifdef _DEBUG
 
-	static int nObstacleType = 0;		// 障害物の種類
 	static int nNowSelect = -1;			// 現在選択している番号
 
 	// オブジェクト番号の選択
@@ -1705,6 +1774,8 @@ void CMap::MapModelSet()
 // =====================================================================================================================================================================
 void CMap::ComboBoxAll(int nNowSelect)
 {
+	static int nSelectType = 0;		// 選んでいる種類
+
 	switch (m_ArrangmentModel)
 	{
 	case CMap::ARRANGEMENT_MODEL_ENEMY:
@@ -1730,33 +1801,32 @@ void CMap::ComboBoxAll(int nNowSelect)
 		break;
 
 	case CMap::ARRANGEMENT_MODEL_PRISONER:
-		//static int nPrisonerType = 0;		// 捕虜の種類
 		// コンボボックス
-		//if (PrisonerComboBox(nPrisonerType))
-		//{
-		//	// NULLチェック
-		//	if (m_pPrisoner[nNowSelect])
-		//	{
-		//		// 捕虜の種類の取得
-		//		CModel::PRISONER_TYPE PrisonerType = (CModel::OBSTACLE_TYPE)m_pPrisoner[nNowSelect]->GetModelCount();
+		if (PrisonerComboBox(nSelectType))
+		{
+			// NULLチェック
+			if (m_pPrisoner[nNowSelect])
+			{
+				// 捕虜の種類の取得
+				CPrisoner::PRISONER_ITEM_DROPTYPE PrisonerType = m_pPrisoner[nNowSelect]->GetPrisonerDropType();
 
-		//		// 前回と違うとき
-		//		if (PrisonerType != nPrisonerType)
-		//		{
-		//			// 種類代入
-		//			PrisonerType = (CModel::PRISONER_TYPE)nPrisonerType;
-		//			// 敵のタイプの設定
-		//			m_pPrisoner[nNowSelect]->SetModelConut(PrisonerType);
-		//		}
-		//	}
-		//}
+				// 前回と違うとき
+				if (PrisonerType != nSelectType)
+				{
+					// 種類代入
+					PrisonerType = (CPrisoner::PRISONER_ITEM_DROPTYPE)nSelectType;
+					// 敵のタイプの設定
+					m_pPrisoner[nNowSelect]->SetPrisonerType(PrisonerType);
+				}
+			}
+		}
 
 		break;
 
 	case CMap::ARRANGEMENT_MODEL_OBSTACLE:
 		static int nObstacleType = 0;		// 障害物の種類
 		// コンボボックス
-		if (ObstacleComboBox(nObstacleType))
+		if (ObstacleComboBox(nSelectType))
 		{
 			// NULLチェック
 			if (m_pObstacle[nNowSelect])
@@ -1765,10 +1835,10 @@ void CMap::ComboBoxAll(int nNowSelect)
 				CModel::OBSTACLE_TYPE ObstacleType = (CModel::OBSTACLE_TYPE)m_pObstacle[nNowSelect]->GetModelCount();
 
 				// 前回と違うとき
-				if (ObstacleType != nObstacleType)
+				if (ObstacleType != nSelectType)
 				{
 					// 種類代入
-					ObstacleType = (CModel::OBSTACLE_TYPE)nObstacleType;
+					ObstacleType = (CModel::OBSTACLE_TYPE)nSelectType;
 					// 障害物のタイプの設定
 					m_pObstacle[nNowSelect]->SetModelConut(ObstacleType);
 				}
@@ -1883,40 +1953,34 @@ bool CMap::PrisonerComboBox(int & nType)
 
 #ifdef _DEBUG
 
-							//// ファイル名格納用
-							//std::vector<std::string > aFileName = {};
+	// 捕虜のドロップの種類
+	const char* aPrisonerType[] = { "DESIGNATE_ONE", "DESIGNATE_RANGE", "ALL"};
 
-							////for
-							//for (int nCnt = 0; nCnt < CModel::ENEMY_TYPE_MAX; nCnt++)
-							//{
-							//	//配列に追加
-							//	aFileName.emplace_back(CModel::GetModelFileName(CModel::MODEL_TYPE::ENEMY_MODEL, nCnt));
-							//}
+	// コンボボックス
+	if (ImGui::BeginCombo("Type", aPrisonerType[nType]))
+	{
+		for (size_t nCnt = 0; nCnt < IM_ARRAYSIZE(aPrisonerType); nCnt++)
+		{
+			//選択番号があってるかどうか
+			bool is_selected = (aPrisonerType[nType] == aPrisonerType[nCnt]);
 
-							//// コンボボックス
-							//if (ImGui::BeginCombo("Type", aFileName[nType].data()))
-							//{
-							//	for (size_t nCnt = 0; nCnt < aFileName.size(); nCnt++)
-							//	{
-							//		//選択番号があってるかどうか
-							//		bool is_selected = (aFileName[nType] == aFileName[nCnt]);
-
-							//		//選択された時の処理
-							//		if (ImGui::Selectable(aFileName[nCnt].data(), is_selected))
-							//		{
-							//			//現在の選択項目設定
-							//			nType = nCnt;
-							//			bSelect = true;
-							//		}
-							//		if (is_selected)
-							//		{
-							//			ImGui::SetItemDefaultFocus();
-							//		}
-							//	}
-							//	ImGui::EndCombo();
-							//}
+			//選択された時の処理
+			if (ImGui::Selectable(aPrisonerType[nCnt], is_selected))
+			{
+				//現在の選択項目設定
+				nType = nCnt;
+				bSelect = true;
+			}
+			if (is_selected)
+			{
+				ImGui::SetItemDefaultFocus();
+			}
+		}
+		ImGui::EndCombo();
+	}
 #endif
-	return bSelect;}
+	return bSelect;
+}
 
 // =====================================================================================================================================================================
 //

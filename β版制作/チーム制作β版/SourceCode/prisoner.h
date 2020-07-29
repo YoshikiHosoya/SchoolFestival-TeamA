@@ -48,7 +48,8 @@ public:
 	{
 		PRISONER_ITEM_DROPTYPE_DESIGNATE_ONE,					// ドロップするアイテムを１種類指定する
 		PRISONER_ITEM_DROPTYPE_DESIGNATE_RANGE,					// ドロップするアイテムの種類を指定する - 武器系かスコア系か
-		PRISONER_ITEM_DROPTYPE_ALL								// 全てのアイテムからランダムでドロップさせる
+		PRISONER_ITEM_DROPTYPE_ALL,								// 全てのアイテムからランダムでドロップさせる
+		PRISONER_ITEM_DROPTYPE_MAX								// 最大数
 	};
 
 	CPrisoner(OBJ_TYPE type);									// コンストラクタ
