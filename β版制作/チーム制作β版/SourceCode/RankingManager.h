@@ -1,11 +1,11 @@
 // =====================================================================================================================================================================
 //
-// リザルトマネージャーの処理 [resultmanager.h]
+// ランキングマネージャーの処理 [ranking.h]
 // Author : fujiwara masato
 //
 // =====================================================================================================================================================================
-#ifndef _RESULTMANAGER_H_
-#define _RESULTMANAGER_H_
+#ifndef _RANKINGMANAGER_H_
+#define _RANKINGMANAGER_H_
 
 // =====================================================================================================================================================================
 // インクルードファイル
@@ -15,53 +15,38 @@
 // =====================================================================================================================================================================
 // 前方宣言
 // =====================================================================================================================================================================
-class CResultUI;
+class CRankingUI;
 // =====================================================================================================================================================================
 // リザルトUIクラス
 // =====================================================================================================================================================================
-class CResultManager
+class CRankingManager
 {
 public:
-	// リザルトの種類
-	enum RESULT_STATE
+	// ランキングの種類
+	enum RANKING_STATE
 	{
-		RESULT_STATE_0,						// 捕虜の数から追加スコアを計算するモード
-		RESULT_STATE_1,						// ミッションクリアを知らせるUIを出し次のモードに移行する
-		RESULT_UI_MAX
+		RANKING_STATE_0,
+		RANKING_STATE_1,
 	};
-	CResultManager();						// コンストラクタ
-	~CResultManager();						// デストラクタ
+	CRankingManager();						// コンストラクタ
+	~CRankingManager();						// デストラクタ
 
-	/* メンバ関数 */
+											/* メンバ関数 */
 	HRESULT					Init(void);		// 初期化
 	void					Uninit(void);	// 終了
 	void					Update(void);	// 更新
 
-	void					SetNextFlag(bool bNext) { m_bNextFlag = bNext; };
-	bool					GetNextFlag()			{ return m_bNextFlag; };
-
-	void					SetNextCount(int nNext) { m_nNextCount = nNext; };
-	int						GetNextCount()			{ return m_nNextCount; };
-
-	RESULT_STATE			GetResultState()		{ return m_ResultState; };
-
-	CResultUI				*GetResultUI()			{ return m_pResultUI; };
-
 	/* 静的メンバ関数 */
 	/* 静的メンバ関数 */
-	static					CResultManager	*Create();						// 生成
+	static					CRankingManager	*Create();						// 生成
 	/* メンバ関数 */
-	void					ResultUiOrder();								// Uiの出現順番
+	void					RankingUiOrder();								// Uiの出現順番
 
 private:
 	/* 静的メンバ変数 */
 	/* メンバ関数 */
-	void					DrawConditions(RESULT_STATE state);				// 描画条件
-	void					NextMode();										// 次の状態に移行
 	/* メンバ変数 */
-	bool					m_bNextFlag;									// 次の状態に移行するフラグ
-	int						m_nNextCount;									// フラグが出てから移行するまでの時間
-	RESULT_STATE			m_ResultState;									// リザルト状態
-	CResultUI				*m_pResultUI;									// リザルトUIのポインタ
+	RANKING_STATE			m_RankingState;									// ランキング状態
+	CRankingUI				*m_pRankingUI;									// ランキングUIのポインタ
 };
 #endif

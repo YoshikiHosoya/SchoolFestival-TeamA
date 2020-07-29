@@ -215,6 +215,7 @@
     <ClCompile Include="SourceCode\playerUI.cpp" />
     <ClCompile Include="SourceCode\prisoner.cpp" />
     <ClCompile Include="SourceCode\ranking.cpp" />
+    <ClCompile Include="SourceCode\RankingManager.cpp" />
     <ClCompile Include="SourceCode\rankingUI.cpp" />
     <ClCompile Include="SourceCode\renderer.cpp" />
     <ClCompile Include="SourceCode\ResultManager.cpp" />
@@ -304,6 +305,7 @@
     <ClInclude Include="SourceCode\playerUI.h" />
     <ClInclude Include="SourceCode\prisoner.h" />
     <ClInclude Include="SourceCode\ranking.h" />
+    <ClInclude Include="SourceCode\RankingManager.h" />
     <ClInclude Include="SourceCode\rankingUI.h" />
     <ClInclude Include="SourceCode\renderer.h" />
     <ClInclude Include="SourceCode\ResultManager.h" />

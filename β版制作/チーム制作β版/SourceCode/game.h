@@ -21,6 +21,7 @@ class CKeyboard;
 class CPlayer;
 class CPause;
 class CMap;
+class CResultManager;
 
 // =====================================================================================================================================================================
 // ゲームクラス
@@ -44,8 +45,13 @@ public:
 	CPlayer		*GetPlayer(void);
 	CMap		*GetMap(void);
 
+	GAME_MODE	GetGameMode()				{ return m_GameMode; };
+	void		SetGameMode(GAME_MODE mode) { m_GameMode = mode; };
+	CResultManager *GetResultManager()		{ return m_pResultManager; };
+
 	void Draw(void);							//描画
 	void ShowDebugInfo(void);					//デバッグ情報表記
+
 
 private:
 	/* メンバ関数 */
@@ -61,5 +67,6 @@ private:
 	/* メンバ変数 */
 	CPause						*m_pPause;
 	GAME_MODE					m_GameMode;
+	CResultManager				*m_pResultManager;
 };
 #endif

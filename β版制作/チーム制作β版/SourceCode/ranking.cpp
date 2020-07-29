@@ -7,10 +7,9 @@
 #include "ranking.h"
 #include "manager.h"
 #include "renderer.h"
-#include "inputKeyboard.h"
-#include "fade.h"
 #include "UIManager.h"
 #include "rankingUI.h"
+#include "rankingmanager.h"
 
 // =====================================================================================================================================================================
 // マクロ定義
@@ -26,6 +25,7 @@
 //==========================================================
 CRanking::CRanking()
 {
+	pRankingManager = nullptr;
 }
 
 //==========================================================
@@ -43,8 +43,8 @@ HRESULT CRanking::Init(void)
 	// UI生成
 	CUIManager::Create();
 
-	// ランキングUIの生成
-	m_pRankingUI = CRankingUI::Create();
+	// ランキングマネージャーの生成
+	pRankingManager = CRankingManager::Create();
 
 	return S_OK;
 }
@@ -54,12 +54,11 @@ HRESULT CRanking::Init(void)
 //==========================================================
 void CRanking::Uninit(void)
 {
-	// ランキングUIのポインタ
-	if (m_pRankingUI)
+	if (pRankingManager != nullptr)
 	{
-		// 終了
-		m_pRankingUI->Uninit();
-		m_pRankingUI = nullptr;
+		// ランキングマネジャーの破棄
+		delete pRankingManager;
+		pRankingManager = nullptr;
 	}
 }
 
@@ -68,15 +67,7 @@ void CRanking::Uninit(void)
 //==========================================================
 void CRanking::Update(void)
 {
-	//キーボード情報取得
-	CKeyboard *key = CManager::GetInputKeyboard();
-
-	// エンターを押したとき
-	if (key->GetKeyboardTrigger(DIK_RETURN))
-	{
-		// ゲームモードへ状態遷移
-		CManager::GetRenderer()->GetFade()->SetFade(CManager::MODE_TITLE);
-	}
+	pRankingManager->Update();
 }
 
 //==========================================================

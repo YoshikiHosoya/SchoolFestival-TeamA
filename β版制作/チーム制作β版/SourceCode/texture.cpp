@@ -49,7 +49,12 @@ FILENAME_LIST CTexture::m_aTexFileName =
 	{ "data/TEXTURE/UI/Result_UI/NOPRISONER.png" },			//評価2
 	{ "data/TEXTURE/UI/Result_UI/MISSION1COMPRLETE.png" },	//ミッションクリア0
 	{ "data/TEXTURE/UI/Result_UI/MISSION2COMPRLETE.png" },	//ミッションクリア1
-	{ "data/TEXTURE/UI/ranking.png" },						//ランキング
+	{ "data/TEXTURE/UI/Ranking_UI/RANKING_NAME.png" },		//ランキング
+	{ "data/TEXTURE/UI/Ranking_UI/1st.png" },				//ランキング
+	{ "data/TEXTURE/UI/Ranking_UI/2nd.png" },				//ランキング
+	{ "data/TEXTURE/UI/Ranking_UI/3rd.png" },				//ランキング
+	{ "data/TEXTURE/UI/Ranking_UI/4th.png" },				//ランキング
+	{ "data/TEXTURE/UI/Ranking_UI/5th.png" },				//ランキング
 };
 
 //テクスチャ名の設定
