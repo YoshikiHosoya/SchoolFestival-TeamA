@@ -79,7 +79,7 @@ void CEnemyAI::Update(void)
 		// マップモデルが存在した時
 		if (pMap != nullptr)
 		{
-			if (pEnemyPass->GetCharacterDirection() == CCharacter::CHARACTER_LEFT)
+			if (pEnemyPass->GetCharacterDirection() == DIRECTION::LEFT)
 			{
 				if (GetCollision()->RayFloorCollision(pMap, pEnemyPass->GetCharacterModelPartsList(0)->GetMatrix(),
 					D3DXVECTOR3(0.0f, -1.0f, 0.0f),
@@ -94,7 +94,7 @@ void CEnemyAI::Update(void)
 					m_castcount = 0;
 				}
 			}
-			else if (pEnemyPass->GetCharacterDirection() == CCharacter::CHARACTER_RIGHT)
+			else if (pEnemyPass->GetCharacterDirection() == DIRECTION::RIGHT)
 			{
 				if (GetCollision()->RayFloorCollision(pMap, pEnemyPass->GetCharacterModelPartsList(0)->GetMatrix(),
 					D3DXVECTOR3(0.0f, -1.0f, 0.0f),
@@ -137,13 +137,13 @@ void CEnemyAI::Update(void)
 			case AI_WALK_LEFT:
 				pEnemyPass->GetMove().x -= 0.5f;
 				pEnemyPass->GetRotDest().y = D3DX_PI * 0.5f;
-				pEnemyPass->SetCharacterDirection(CCharacter::CHARACTER_LEFT);
+				pEnemyPass->SetCharacterDirection(DIRECTION::LEFT);
 				pEnemyPass->SetMotion(CCharacter::ENEMY_MOTION_WALK);
 				break;
 			case AI_WALK_RIGHT:
 				pEnemyPass->GetMove().x += 0.5f;
 				pEnemyPass->GetRotDest().y = D3DX_PI * -0.5f;
-				pEnemyPass->SetCharacterDirection(CCharacter::CHARACTER_RIGHT);
+				pEnemyPass->SetCharacterDirection(DIRECTION::RIGHT);
 				pEnemyPass->SetMotion(CCharacter::ENEMY_MOTION_WALK);
 				break;
 			case AI_SHOT:
@@ -152,12 +152,12 @@ void CEnemyAI::Update(void)
 				if (pEnemyPass->GetPosition().x > pPlayer->GetPosition().x)
 				{
 					pEnemyPass->GetRotDest().y = D3DX_PI * 0.5f;
-					pEnemyPass->SetCharacterDirection(CCharacter::CHARACTER_LEFT);
+					pEnemyPass->SetCharacterDirection(DIRECTION::LEFT);
 				}
 				else
 				{
 					pEnemyPass->GetRotDest().y = D3DX_PI * -0.5f;
-					pEnemyPass->SetCharacterDirection(CCharacter::CHARACTER_RIGHT);
+					pEnemyPass->SetCharacterDirection(DIRECTION::RIGHT);
 				}
 				break;
 			case AI_GRENADE:

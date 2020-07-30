@@ -99,7 +99,7 @@ HRESULT CVehicle::Init(void)
 	// –³“Gó‘Ô‚©‚ç’Êíó‘Ô‚É–ß‚é‚Ü‚Å‚ÌƒJƒEƒ“ƒg
 	m_nStateCnt = 0;
 	// Œü‚«
-	m_VehicleDirection = VEHICLE_RIGHT;
+	m_VehicleDirection = DIRECTION::RIGHT;
 	// ƒWƒƒƒ“ƒv‚µ‚Ä‚¢‚é‚©‚Ìƒtƒ‰ƒO‚ð‰Šú‰»
 	m_bJump = false;
 	// d—Í‰ÁŽZ—pƒJƒEƒ“ƒg
@@ -383,23 +383,23 @@ void CVehicle::ShotDirection()
 {
 	switch (m_VehicleDirection)
 	{
-	case VEHICLE_LEFT:
+	case DIRECTION::LEFT:
 		m_ShotRot.x = 0.0f;
 		m_ShotRot.y = 0.5f * D3DX_PI;
 		m_AddRot.x = 0.0f;
 		break;
 
-	case VEHICLE_RIGHT:
+	case DIRECTION::RIGHT:
 		m_ShotRot.x = 0.0f;
 		m_ShotRot.y = -0.5f * D3DX_PI;
 		m_AddRot.x = 0.0f;
 		break;
-	case VEHICLE_UP:
+	case DIRECTION::UP:
 		m_ShotRot.x = 0.5f * D3DX_PI;
 		m_ShotRot.y = 0.0f;
 		m_AddRot.x = 0.75f;
 		break;
-	case VEHICLE_DOWN:
+	case DIRECTION::DOWN:
 		m_ShotRot.x = -0.5f * D3DX_PI;
 		m_ShotRot.y = 0.5f * D3DX_PI;
 		m_AddRot.x = -0.75f;
@@ -448,22 +448,22 @@ void CVehicle::GunRot(CModel * pModel)
 		// íŽÔ‚ª‘¶Ý‚µ‚½Žž
 		if (pPlayertank != nullptr)
 		{
-			if (pPlayertank->GetVehicleDirection() == VEHICLE_LEFT)
+			if (pPlayertank->GetVehicleDirection() == DIRECTION::LEFT)
 			{
 				// ðŒ‚²‚Æ‰ñ“]‚³‚¹‚é
 				this->VehiclePartsRotLimit(pModel, D3DX_PI * 0.5f);
 			}
-			else if (pPlayertank->GetVehicleDirection() == VEHICLE_RIGHT)
+			else if (pPlayertank->GetVehicleDirection() == DIRECTION::RIGHT)
 			{
 				// ðŒ‚²‚Æ‰ñ“]‚³‚¹‚é
 				this->VehiclePartsRotLimit(pModel, -D3DX_PI * 0.5f);
 			}
-			else if (pPlayertank->GetVehicleDirection() == VEHICLE_UP)
+			else if (pPlayertank->GetVehicleDirection() == DIRECTION::UP)
 			{
 				// ðŒ‚²‚Æ‰ñ“]‚³‚¹‚é
 				this->VehiclePartsRotLimit(pModel, D3DX_PI * 0.0f);
 			}
-			else if (pPlayertank->GetVehicleDirection() == VEHICLE_DOWN)
+			else if (pPlayertank->GetVehicleDirection() == DIRECTION::DOWN)
 			{
 				// ðŒ‚²‚Æ‰ñ“]‚³‚¹‚é
 				this->VehiclePartsRotLimit(pModel, D3DX_PI * 1.0f);
@@ -479,22 +479,22 @@ void CVehicle::GunRot(CModel * pModel)
 		// íŽÔ‚ª‘¶Ý‚µ‚½Žž
 		if (pBattlePlane != nullptr)
 		{
-			if (pBattlePlane->GetVehicleDirection() == VEHICLE_LEFT)
+			if (pBattlePlane->GetVehicleDirection() == DIRECTION::LEFT)
 			{
 				// ðŒ‚²‚Æ‰ñ“]‚³‚¹‚é
 				this->VehiclePartsRotLimit(pModel, D3DX_PI * 0.5f);
 			}
-			else if (pBattlePlane->GetVehicleDirection() == VEHICLE_RIGHT)
+			else if (pBattlePlane->GetVehicleDirection() == DIRECTION::RIGHT)
 			{
 				// ðŒ‚²‚Æ‰ñ“]‚³‚¹‚é
 				this->VehiclePartsRotLimit(pModel, -D3DX_PI * 0.5f);
 			}
-			else if (pBattlePlane->GetVehicleDirection() == VEHICLE_UP)
+			else if (pBattlePlane->GetVehicleDirection() == DIRECTION::UP)
 			{
 				// ðŒ‚²‚Æ‰ñ“]‚³‚¹‚é
 				this->VehiclePartsRotLimit(pModel, D3DX_PI * 0.0f);
 			}
-			else if (pBattlePlane->GetVehicleDirection() == VEHICLE_DOWN)
+			else if (pBattlePlane->GetVehicleDirection() == DIRECTION::DOWN)
 			{
 				// ðŒ‚²‚Æ‰ñ“]‚³‚¹‚é
 				this->VehiclePartsRotLimit(pModel, D3DX_PI * 1.0f);
@@ -510,22 +510,22 @@ void CVehicle::GunRot(CModel * pModel)
 		// íŽÔ‚ª‘¶Ý‚µ‚½Žž
 		if (pHelicopter != nullptr)
 		{
-			if (pHelicopter->GetVehicleDirection() == VEHICLE_LEFT)
+			if (pHelicopter->GetVehicleDirection() == DIRECTION::LEFT)
 			{
 				// ðŒ‚²‚Æ‰ñ“]‚³‚¹‚é
 				this->VehiclePartsRotLimit(pModel, D3DX_PI * 0.5f);
 			}
-			else if (pHelicopter->GetVehicleDirection() == VEHICLE_RIGHT)
+			else if (pHelicopter->GetVehicleDirection() == DIRECTION::RIGHT)
 			{
 				// ðŒ‚²‚Æ‰ñ“]‚³‚¹‚é
 				this->VehiclePartsRotLimit(pModel, -D3DX_PI * 0.5f);
 			}
-			else if (pHelicopter->GetVehicleDirection() == VEHICLE_UP)
+			else if (pHelicopter->GetVehicleDirection() == DIRECTION::UP)
 			{
 				// ðŒ‚²‚Æ‰ñ“]‚³‚¹‚é
 				this->VehiclePartsRotLimit(pModel, D3DX_PI * 0.0f);
 			}
-			else if (pHelicopter->GetVehicleDirection() == VEHICLE_DOWN)
+			else if (pHelicopter->GetVehicleDirection() == DIRECTION::DOWN)
 			{
 				// ðŒ‚²‚Æ‰ñ“]‚³‚¹‚é
 				this->VehiclePartsRotLimit(pModel, D3DX_PI * 1.0f);

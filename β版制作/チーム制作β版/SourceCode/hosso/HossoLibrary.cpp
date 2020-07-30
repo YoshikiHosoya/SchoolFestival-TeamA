@@ -158,6 +158,52 @@ bool CHossoLibrary::ImGui_Combobox(std::vector<std::string> aItemNameList, std::
 }
 
 //------------------------------------------------------------------------------
+//パッドの入力処理
+//------------------------------------------------------------------------------
+bool CHossoLibrary::PadMoveInput(D3DXVECTOR3 & rMove, DIRECTION & direction,bool bJump)
+{
+	bool bInput = false;
+
+	CXInputPad *pad;
+	pad = CManager::GetPad();
+	D3DXVECTOR3 InputValue = ZeroVector3;
+	pad->GetStickLeft(&InputValue.x, &InputValue.y);//パッドの入力値を代入
+	InputValue.x /= STICK_MAX_RANGE;//値の正規化
+	InputValue.y /= STICK_MAX_RANGE;//値の正規化
+
+	CDebugProc::Print("パッドの入力値 X : %2f Y : %2f\n", InputValue.x, InputValue.y);
+
+	//右
+	if (InputValue.x > 0.5f)
+	{
+		rMove = D3DXVECTOR3(-0.5f, -0.5f, 0.0f);
+		direction = DIRECTION::RIGHT;
+		bInput = true;
+
+	}
+	//左
+	else if (InputValue.x < -0.5f)
+	{
+		rMove = D3DXVECTOR3(0.5f, 0.5f, 0.0f);
+		direction = DIRECTION::LEFT;
+		bInput = true;
+
+	}
+	//上
+	if (InputValue.y > 0.6f)
+	{
+		direction = DIRECTION::UP;
+
+	}
+	//下
+	else if (InputValue.y < -0.6f && !bJump)
+	{
+		direction = DIRECTION::DOWN;
+	}
+	return bInput;
+}
+
+//------------------------------------------------------------------------------
 //ビルボード設定 XとZのみ
 //------------------------------------------------------------------------------
 void CHossoLibrary::SetBillboard_XZ_Only(D3DXMATRIX * pMtx)
