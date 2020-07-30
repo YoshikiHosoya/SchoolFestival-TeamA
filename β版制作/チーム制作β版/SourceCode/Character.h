@@ -107,10 +107,10 @@ public:
 	CCharacter() {};
 	CCharacter(OBJ_TYPE type);
 	~CCharacter();
-	HRESULT Init(void);
-	void Uninit(void);
-	void Update(void);
-	void Draw(void);
+	virtual HRESULT Init(void);
+	virtual void Uninit(void);
+	virtual void Update(void);
+	virtual void Draw(void);
 	virtual bool DefaultMotion(void) = 0;
 	void Move(float move, float fdest);
 	void AddDamage(int Damage);
@@ -167,6 +167,7 @@ public:
 	char* GetOffsetFileName(CHARACTER_TYPE type);
 	char* GetMotionFileName(CHARACTER_MOTION_STATE motionstate);
 
+	D3DXVECTOR3 *GetPositionPtr()					{ return &m_pos; };							//座標のポインタ取得
 	bool GetDieFlag()								{ return m_bDieFlag; };						// 死亡フラグの取得
 	void SetDieFlag(bool DieFlag)					{ m_bDieFlag = DieFlag; };					// 死亡フラグの設定
 	bool GetDraw()									{ return m_bDraw; };						// 描画するかどうか取得

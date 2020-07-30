@@ -154,7 +154,7 @@ void CResultManager::NextMode()
 		// ƒ‰ƒ“ƒLƒ“ƒO‚É‘JˆÚ‚·‚é
 		if (CManager::GetBaseMode() != nullptr)
 		{
-			CManager::GetRenderer()->GetFade()->SetFade(CManager::MODE_RANKING);
+			CManager::GetRenderer()->GetFade()->SetFade(CFADE::FADETYPE::FADETYPE_MODE, CManager::MODE_RANKING);
 		}
 	}
 }

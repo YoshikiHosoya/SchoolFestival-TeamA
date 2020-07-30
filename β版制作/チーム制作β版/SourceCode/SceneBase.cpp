@@ -34,6 +34,11 @@ CSceneBase::CSceneBase(OBJ_TYPE type) : CScene(type)
 //==========================================================
 CSceneBase::~CSceneBase()
 {
+	if (m_pVtxBuff)
+	{
+		m_pVtxBuff->Release();
+		m_pVtxBuff = nullptr;
+	}
 }
 //============= =============================================
 // èâä˙âª
@@ -47,11 +52,6 @@ HRESULT CSceneBase::Init(void)
 //==========================================================
 void CSceneBase::Uninit(void)
 {
-	if (m_pVtxBuff != NULL)
-	{
-		m_pVtxBuff->Release();
-		m_pVtxBuff = NULL;
-	}
 }
 //==========================================================
 // êFÇÃê›íË

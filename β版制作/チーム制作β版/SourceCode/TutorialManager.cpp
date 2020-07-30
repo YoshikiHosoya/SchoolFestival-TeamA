@@ -84,7 +84,7 @@ void CTutorialManager::Update(void)
 	if (key->GetKeyboardTrigger(DIK_RETURN))
 	{
 		// ゲームモードへステート遷移
-		CManager::GetRenderer()->GetFade()->SetFade(CManager::MODE_GAME);
+		CManager::GetRenderer()->GetFade()->SetFade(CFADE::FADETYPE::FADETYPE_MODE, CManager::MODE_GAME);
 	}
 
 	// 各ステートごとの関数を管理する

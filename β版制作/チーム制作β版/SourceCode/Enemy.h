@@ -16,10 +16,10 @@ class CEnemy :public CCharacter
 public:
 	CEnemy(OBJ_TYPE type);
 	~CEnemy();
-	HRESULT Init(void);
-	void Uninit(void);
-	void Update(void);
-	void Draw(void);
+	virtual HRESULT Init(void);
+	virtual void Uninit(void);
+	virtual void Update(void);
+	virtual void Draw(void);
 	void DebugInfo(void);
 	static CEnemy *Create(void);
 	bool DefaultMotion(void);

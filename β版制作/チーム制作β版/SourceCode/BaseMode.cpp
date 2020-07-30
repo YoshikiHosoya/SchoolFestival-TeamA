@@ -61,37 +61,37 @@ void CBaseMode::DebugCommand(void)
 		//現在のモード再始動
 		if (key->GetKeyboardTrigger(DIK_NUMPAD0))
 		{
-			CManager::GetRenderer()->GetFade()->SetFade(CManager::GetGameState());
+			CManager::GetRenderer()->GetFade()->SetFade(CFADE::FADETYPE::FADETYPE_MODE, CManager::GetGameState());
 		}
 		//タイトル
 		if (key->GetKeyboardTrigger(DIK_NUMPAD1))
 		{
-			CManager::GetRenderer()->GetFade()->SetFade(CManager::MODE_TITLE);
+			CManager::GetRenderer()->GetFade()->SetFade(CFADE::FADETYPE::FADETYPE_MODE, CManager::MODE_TITLE);
 		}
 		//ゲーム
 		if (key->GetKeyboardTrigger(DIK_NUMPAD2))
 		{
-			CManager::GetRenderer()->GetFade()->SetFade(CManager::MODE_GAME);
+			CManager::GetRenderer()->GetFade()->SetFade(CFADE::FADETYPE::FADETYPE_MODE, CManager::MODE_GAME);
 		}
 		//リザルト
 		if (key->GetKeyboardTrigger(DIK_NUMPAD4))
 		{
-			CManager::GetRenderer()->GetFade()->SetFade(CManager::MODE_RANKING);
+			CManager::GetRenderer()->GetFade()->SetFade(CFADE::FADETYPE::FADETYPE_MODE, CManager::MODE_RANKING);
 		}
 		//マップエディター
 		if (key->GetKeyboardTrigger(DIK_NUMPAD7))
 		{
-			CManager::GetRenderer()->GetFade()->SetFade(CManager::MODE_DEBUG_MAPEDITOR);
+			CManager::GetRenderer()->GetFade()->SetFade(CFADE::FADETYPE::FADETYPE_MODE, CManager::MODE_DEBUG_MAPEDITOR);
 		}
 		//エフェクトビューワ
 		if (key->GetKeyboardTrigger(DIK_NUMPAD8))
 		{
-			CManager::GetRenderer()->GetFade()->SetFade(CManager::MODE_DEBUG_EFFECTVIEWER);
+			CManager::GetRenderer()->GetFade()->SetFade(CFADE::FADETYPE::FADETYPE_MODE, CManager::MODE_DEBUG_EFFECTVIEWER);
 		}
 		//モーションビューワ
 		if (key->GetKeyboardTrigger(DIK_NUMPAD9))
 		{
-			CManager::GetRenderer()->GetFade()->SetFade(CManager::MODE_DEBUG_MODELVIEWER);
+			CManager::GetRenderer()->GetFade()->SetFade(CFADE::FADETYPE::FADETYPE_MODE, CManager::MODE_DEBUG_MODELVIEWER);
 		}
 	}
 

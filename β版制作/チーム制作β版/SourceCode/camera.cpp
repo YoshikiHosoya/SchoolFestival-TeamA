@@ -126,7 +126,7 @@ void CCamera::DebugCommand()
 	CDebugProc::Print("[Ctrl] + [ª] or [Ctrl] + [«] : ƒJƒƒ‰‹——£’²® : Distance>>[%f]\n", m_fDistance);
 
 	CDebugProc::Print("m_posV %.1f %.1f %.1f \n", m_posV.x, m_posV.y, m_posV.z);
-	CDebugProc::Print("m_posV %.1f %.1f %.1f \n", m_posR.x, m_posR.y, m_posR.z);
+	CDebugProc::Print("m_posR %.1f %.1f %.1f \n", m_posR.x, m_posR.y, m_posR.z);
 	CDebugProc::Print("m_rot  %.1f %.1f %.1f \n", m_rot.x, m_rot.y, m_rot.z);
 
 	if (key->GetKeyboardPress(DIK_LCONTROL) || key->GetKeyboardPress(DIK_RCONTROL))
