@@ -46,7 +46,7 @@ HRESULT CEnemy::Init(void)
 	// e‚Ì’e‚ÌŽí—Þ
 	m_pGun->GetTag() = TAG_ENEMY;
 	// “–‚½‚è”»’è¶¬
-	GetCollision()->SetPos(&GetPosition());
+	GetCollision()->SetPos(GetPositionPtr());
 	GetCollision()->SetPosOld(&GetPositionOld());
 	GetCollision()->SetSize2D(ENEMY_SIZE);
 	GetCollision()->SetMove(&GetMove());
