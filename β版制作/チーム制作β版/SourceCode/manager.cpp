@@ -17,13 +17,15 @@
 #include "Debug_MapEditor.h"
 #include "XInputPad.h"
 //他のとこでも使えるようにするメンバ
-CRenderer	*CManager::m_pRenderer		= nullptr;
-CKeyboard	*CManager::m_pInputKeyboard	= nullptr;
-CParticle	*CManager::m_Particle		= nullptr;
-CBaseMode	*CManager::m_pBaseMode		= nullptr;
-CMouse		*CManager::m_pMouse			= nullptr;
-CManager::GAME_MODE CManager::m_mode = CManager::MODE_TITLE;
-CXInputPad	*CManager::m_pPad			= nullptr;
+CRenderer		*CManager::m_pRenderer		= nullptr;
+CKeyboard		*CManager::m_pInputKeyboard	= nullptr;
+CParticle		*CManager::m_Particle		= nullptr;
+CBaseMode		*CManager::m_pBaseMode		= nullptr;
+CMouse			*CManager::m_pMouse			= nullptr;
+CManager::MODE	CManager::m_mode = CManager::MODE_TITLE;
+CXInputPad		*CManager::m_pPad			= nullptr;
+
+
 CManager::CManager()
 {
 }
@@ -51,7 +53,7 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	m_pMouse->Init(hInstance, hWnd);
 	m_pPad->Init(hInstance, hWnd);
 	CBaseMode::BaseLoad(hWnd);
-	CManager::SetGameMode(m_mode);
+	CManager::SetMode(m_mode);
 	return S_OK;
 }
 //===========================================
@@ -101,7 +103,7 @@ void CManager::Draw(void)
 //===========================================
 //モードの設定
 //===========================================
-void CManager::SetGameMode(GAME_MODE mode)
+void CManager::SetMode(MODE mode)
 {
 	//nullcheck
 	if (m_pBaseMode)
@@ -171,7 +173,7 @@ void CManager::SetGameMode(GAME_MODE mode)
 //===========================================
 //ゲームの状態取得
 //===========================================
-CManager::GAME_MODE CManager::GetGameState(void)
+CManager::MODE CManager::GetMode(void)
 {
 	return m_mode;
 }
@@ -219,6 +221,27 @@ CXInputPad * CManager::GetPad(void)
 	if (m_pPad)
 	{
 		return m_pPad;
+	}
+	return nullptr;
+}
+
+//===========================================
+//ゲームの情報取得
+//別のモードの時だとnullptrが返ってくる
+//===========================================
+CGame * CManager::GetGame()
+{
+	//nullcheck
+	if (m_pBaseMode)
+	{
+		//Gameクラスにキャスト
+		CGame *pGame = (CGame*)m_pBaseMode;
+
+		//nullcheck
+		if (pGame)
+		{
+			return pGame;
+		}
 	}
 	return nullptr;
 }

@@ -153,6 +153,19 @@ bool CBoss::DefaultMotion(void)
 	return true;
 }
 //====================================================================
+//死亡時のリアクション
+//====================================================================
+void CBoss::DeathReaction()
+{
+	//nullcheck
+	if(CManager::GetGame())
+	{
+		CManager::GetGame()->SetGameMode(CGame::GAME_MODE_RESULT);
+	}
+
+	CCharacter::DeathReaction();
+}
+//====================================================================
 //ボスの銃の取得
 //====================================================================
 CGun *CBoss::GetGun(void)

@@ -29,7 +29,7 @@ public:
 		MODE_DEBUG_EFFECTVIEWER,	//デバッグ用エフェクトビューワ
 		MODE_DEBUG_MAPEDITOR,		//デバッグ用マップエディター
 		MODE_MAX,
-	}GAME_MODE;
+	}MODE;
 
 	CManager();
 	~CManager();
@@ -37,15 +37,18 @@ public:
 	void Uninit(void);
 	void Update(void);
 	void Draw(void);
-	static void SetGameMode(GAME_MODE mode);
-	static GAME_MODE GetGameState(void);
+	static void SetMode(MODE mode);
+
+	static MODE GetMode(void);
 	static CRenderer *GetRenderer(void);
 	static CKeyboard *GetInputKeyboard(void);
 	static CBaseMode *GetBaseMode(void);
 	static CMouse *GetMouse();
 	static CXInputPad *GetPad(void);
+	static CGame *GetGame();
+
 private:
-	static GAME_MODE m_mode;
+	static MODE m_mode;
 	static CKeyboard *m_pInputKeyboard;
 	static CMouse *m_pMouse;
 	static CRenderer *m_pRenderer;

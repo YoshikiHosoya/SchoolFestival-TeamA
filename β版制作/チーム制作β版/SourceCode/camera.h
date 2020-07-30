@@ -38,6 +38,7 @@ public:
 	void SetCameraPosfromDistance(D3DXVECTOR3 posR,D3DXVECTOR3 rot,float fDistance);
 	void SetCameraPos(D3DXVECTOR3 posR, D3DXVECTOR3 posV);
 	void SetCameraPosRDest(D3DXVECTOR3 posR) { m_posRDest = posR; };	// 注視点の目的地の設定
+	void SetCameraStopMove(bool bStop) { m_bStopMove = bStop; };
 
 	D3DXVECTOR3 GetPosV()			{ return m_posV; };				//視点
 	D3DXVECTOR3 GetPosR()			{ return m_posR; };				//注視点
@@ -47,7 +48,7 @@ public:
 	float GetDistance()				{ return m_fDistance; };		//視点と注視点の距離
 	float GetNear()					{ return m_fNear; };			//Near値
 	float GetFar()					{ return m_fFar; };				//Far値
-
+	bool GetStop()					{ return m_bStopMove; };		//カメラの移動ストップ
 
 private:
 	D3DXVECTOR3 m_posV;							//視点
@@ -69,5 +70,7 @@ private:
 	int m_nCountTimer;							//追従のタイマー
 	int m_nCnt;
 	int m_CameraFollowingType;					// カメラの追従種類
+
+	bool m_bStopMove;							// カメラ移動しない
 };
 #endif

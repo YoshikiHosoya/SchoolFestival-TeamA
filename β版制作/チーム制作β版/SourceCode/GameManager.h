@@ -28,8 +28,8 @@ public:
 	{
 		NORMAL = 0,
 		WAVE,
+		BOSSBUTTLE,
 	};
-
 
 	void Update();
 

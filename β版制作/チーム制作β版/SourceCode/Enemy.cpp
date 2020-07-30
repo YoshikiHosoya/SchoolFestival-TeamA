@@ -112,8 +112,6 @@ void CEnemy::Update(void)
 		//体力が0以下になった時
 		if (this->GetLife() <= 0)
 		{
-			this->SetDieFlag(true);
-			CParticle::CreateFromText(GetPosition(), GetShotDirection(), CParticleParam::EFFECT_BLOOD);
 		}
 		else
 		{
@@ -179,6 +177,20 @@ bool CEnemy::DefaultMotion(void)
 void CEnemy::DamageReaction()
 {
 	SetState(CCharacter::CHARACTER_STATE_DAMAGE_RED);
+}
+//====================================================================
+//死んだ時のリアクション
+//====================================================================
+void CEnemy::DeathReaction()
+{
+	//死亡フラグをたてる
+	this->SetDieFlag(true);
+
+	//血のエフェクト
+	//CParticle::CreateFromText(GetPosition(), GetShotDirection(), CParticleParam::EFFECT_BLOOD);
+
+	CCharacter::DeathReaction();
+
 }
 //====================================================================
 //移動

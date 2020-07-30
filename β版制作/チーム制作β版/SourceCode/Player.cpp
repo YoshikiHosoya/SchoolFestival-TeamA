@@ -70,7 +70,7 @@ HRESULT CPlayer::Init(void)
 	m_bRideVehicle = false;
 
 	// ゲームモードだった時
-	if (CManager::GetGameState() == CManager::MODE_GAME)
+	if (CManager::GetMode() == CManager::MODE_GAME)
 	{
 		// ゲームクラスのポインタ取得
 		CGame *pGame = (CGame*)CManager::GetBaseMode();

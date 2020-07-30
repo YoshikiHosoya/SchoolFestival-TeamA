@@ -20,6 +20,7 @@
 #include "3Dline.h"
 #include "resultUI.h"
 #include "Boss.h"
+#include "GameManager.h"
 #include "ResultManager.h"
 // =====================================================================================================================================================================
 // マクロ定義
@@ -39,13 +40,15 @@ CMap		*CGame::m_pMap		= nullptr;
 CGame::CGame()
 {
 	// ゲームモードの初期状態
-	m_GameMode = GAME_MODE_NORMAL;
+	m_GameState = GAME_MODE_NORMAL;
 }
 //==========================================================
 // デストラクタ
 //==========================================================
 CGame::~CGame()
 {
+	m_pGameManager = nullptr;
+
 }
 //==========================================================
 // 初期化
@@ -61,7 +64,10 @@ HRESULT CGame::Init(void)
 
 	m_pPause->CreatePause();
 	// ゲームモードの初期設定
-	m_GameMode = GAME_MODE_NORMAL;
+	m_GameState = GAME_MODE_NORMAL;
+
+	//ゲームの進行管理クラス作成
+	m_pGameManager = CGameManager::Create();
 
 	//パーティクル生成
 	CParticleManager::Create();
@@ -112,7 +118,7 @@ void CGame::Update(void)
 	m_pMap->UpdateDieFlag();
 
 	// リザルトモードでまだリザルトマネージャーが生成されていなかった時
-	if (m_GameMode == GAME_MODE_RESULT && m_pResultManager == nullptr)
+	if (m_GameState == GAME_MODE_RESULT && m_pResultManager == nullptr)
 	{
 		// リザルト管理クラスの生成
 		m_pResultManager = CResultManager::Create();

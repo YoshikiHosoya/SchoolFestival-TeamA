@@ -173,10 +173,10 @@ bool CCollision::ForPlayerBulletCollision(int nEnemyDamage, int nObstacleDamage,
 				// 敵のライフが0以下になった時
 				if (pEnemy->CCharacter::GetLife() <= 0)
 				{
-					////アイテムを生成
-					//CItem::DropCreate(pEnemy->GetPosition());
-					// 死亡フラグを立てる
-					pEnemy->SetDieFlag(true);
+					//死亡時のリアクション処理
+					//派生クラスがオーバーライド
+					pEnemy->DeathReaction();
+
 					// ポインタをnullにする
 					pEnemy = nullptr;
 				}
@@ -681,7 +681,7 @@ bool CCollision::ForTankCollision()
 			if (this->CharCollision2D(pEnemy->GetCollision()))
 			{
 				bHitFlag = true;
-				pEnemy->AddDamage(100);
+				pEnemy->AddDamage(1);
 			}
 		}
 	}

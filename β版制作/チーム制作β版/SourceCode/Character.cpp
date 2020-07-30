@@ -175,59 +175,6 @@ void CCharacter::Update(void)
 	}
 	//求めた差分だけ追従する計算
 	m_rot.y += diffRot * 0.1f;
-	//ステータスの処理
-	switch (m_state)
-	{
-	case CHARACTER_STATE_NORMAL:
-		break;
-	case CHARACTER_STATE_DAMAGE:
-		m_nStateCnt++;
-		if (m_nStateCnt % 60 == 0)
-		{
-			SetState(CHARACTER_STATE_NORMAL);
-		}
-		else if (m_nStateCnt % 4 == 0 && m_nStateCnt % 8 != 0)
-		{
-			ChangeColor(true, D3DXCOLOR(0.0f, 0.0f, 0.0f, -1.0f));
-		}
-		else if (m_nStateCnt % 8 == 0)
-		{
-			ChangeColor(true, D3DXCOLOR(0.0f, 0.0f,0.0f,1.0f));
-		}
-		break;
-	case CHARACTER_STATE_DAMAGE_RED:
-		m_nStateCnt++;
-
-		//時間経過で
-		if (m_nStateCnt > 3)
-		{
-			//ステートを元に戻す
-			SetState(CHARACTER_STATE_NORMAL);
-		}
-		else
-		{
-			//赤く点滅
-
-			ChangeColor(true, D3DXCOLOR(1.0f, 0.2f, 0.0f, 0.0f));
-		}
-		break;
-	case CHARACTER_STATE_INVINCIBLE:
-		m_nStateCnt++;
-		if (m_nStateCnt % 120 == 0)
-		{
-			SetState(CHARACTER_STATE_NORMAL);
-			ChangeColor(false, D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f));
-		}
-		else if (m_nStateCnt % 4 == 0 && m_nStateCnt % 8 != 0)
-		{
-			ChangeColor(true, D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f));
-		}
-		else if (m_nStateCnt % 8 == 0)
-		{
-			ChangeColor(true, D3DXCOLOR(0.6f, 0.6f, 0.6f, 0.0f));
-		}
-		break;
-	}
 	//撃つ向き
 	if (m_CharacterDirection == DIRECTION::LEFT)
 	{
@@ -279,8 +226,8 @@ void CCharacter::Update(void)
 	CMap *pMap;
 	pMap = CManager::GetBaseMode()->GetMap();
 
-	// マップモデルが存在した時
-	if (pMap != nullptr)
+	// マップモデルが存在した時して当たり判定が存在する時
+	if (pMap && m_pCollision)
 	{
 		m_pCollision->SetHeight(m_vModelList[0]->GetPosition().y);
 		// レイの判定
@@ -398,6 +345,78 @@ void CCharacter::Draw(void)
 void CCharacter::DamageReaction()
 {
 	SetState(CHARACTER_STATE_DAMAGE);
+}
+//====================================================================
+//死亡時のリアクション
+//====================================================================
+void CCharacter::DeathReaction()
+{
+	// 当たり判定の削除
+	if (m_pCollision != nullptr)
+	{
+		delete m_pCollision;
+		m_pCollision = nullptr;
+	}
+}
+//====================================================================
+//ステートに応じた処理
+//====================================================================
+void CCharacter::State()
+{
+	//ステータスの処理
+	switch (m_state)
+	{
+	case CHARACTER_STATE_NORMAL:
+		break;
+	case CHARACTER_STATE_DAMAGE:
+		m_nStateCnt++;
+		if (m_nStateCnt % 60 == 0)
+		{
+			SetState(CHARACTER_STATE_NORMAL);
+		}
+		else if (m_nStateCnt % 4 == 0 && m_nStateCnt % 8 != 0)
+		{
+			ChangeColor(true, D3DXCOLOR(0.0f, 0.0f, 0.0f, -1.0f));
+		}
+		else if (m_nStateCnt % 8 == 0)
+		{
+			ChangeColor(true, D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f));
+		}
+		break;
+	case CHARACTER_STATE_DAMAGE_RED:
+		m_nStateCnt++;
+
+		//時間経過で
+		if (m_nStateCnt > 3)
+		{
+			//ステートを元に戻す
+			SetState(CHARACTER_STATE_NORMAL);
+		}
+		else
+		{
+			//赤く点滅
+
+			ChangeColor(true, D3DXCOLOR(1.0f, 0.2f, 0.0f, 0.0f));
+		}
+		break;
+	case CHARACTER_STATE_INVINCIBLE:
+		m_nStateCnt++;
+		if (m_nStateCnt % 120 == 0)
+		{
+			SetState(CHARACTER_STATE_NORMAL);
+			ChangeColor(false, D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f));
+		}
+		else if (m_nStateCnt % 4 == 0 && m_nStateCnt % 8 != 0)
+		{
+			ChangeColor(true, D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f));
+		}
+		else if (m_nStateCnt % 8 == 0)
+		{
+			ChangeColor(true, D3DXCOLOR(0.6f, 0.6f, 0.6f, 0.0f));
+		}
+		break;
+	}
+
 }
 //====================================================================
 //モデルのムーヴ

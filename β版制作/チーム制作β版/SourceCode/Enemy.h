@@ -23,7 +23,8 @@ public:
 	void DebugInfo(void);
 	static CEnemy *Create(void);
 	bool DefaultMotion(void);
-	void DamageReaction();
+	virtual void DamageReaction();
+	virtual void DeathReaction();
 private:
 	void Move(float move, float fdest);
 	bool m_Attack;									//çUåÇéû

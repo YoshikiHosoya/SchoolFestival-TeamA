@@ -273,7 +273,7 @@ void CFADE::FadeOut()
 	{
 		//モードのフェードの時
 	case CFADE::FADETYPE::FADETYPE_MODE:
-		CManager::SetGameMode((CManager::GAME_MODE)m_NextID);
+		CManager::SetMode((CManager::MODE)m_NextID);
 		break;
 		//マップのフェード時
 	case CFADE::FADETYPE::FADETYPE_MAPMOVE:
