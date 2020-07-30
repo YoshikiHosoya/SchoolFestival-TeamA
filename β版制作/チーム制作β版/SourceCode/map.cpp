@@ -35,6 +35,7 @@ CMap::WAVE_INFO				CMap::m_aWaveInfo[WAVE_MAX] = {};						// ウェーブの情報
 // マップ
 char *CMap::m_MapModelFileName[MAP_MAX] =
 {
+	{ "data/Load/Map/MAP_Tutorial.txt" },
 	{ "data/Load/Map/Map_01.txt" },
 	{ "data/Load/Map/Map_01.txt" },
 };
@@ -621,7 +622,7 @@ void CMap::MapUpdate()
 			// 選択したマップ番号代入
 			m_MapNum = (MAP)nNowMapSelect;
 
-			m_pMapModel[0]->SetModelConut(nNowMapSelect);
+			//m_pMapModel[0]->SetModelConut(nNowMapSelect);
 
 			ImGui::EndTabItem();
 		}
