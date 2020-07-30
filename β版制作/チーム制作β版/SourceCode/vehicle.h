@@ -78,15 +78,6 @@ public:
 		VEHICLE_BEHAVIOR_MAX								// 最大数
 	}VEHICLE_BEHAVIOR_STATE;
 
-	/* 乗り物モデルの向き */
-	typedef enum
-	{
-		VEHICLE_LEFT,										//左向き
-		VEHICLE_RIGHT,										//右向き
-		VEHICLE_UP,											//上向き
-		VEHICLE_DOWN,										//下向き
-	}VEHICLE_DIRECTION;
-
 	/* モデルパーツの回転種類 */
 	typedef enum
 	{
@@ -128,7 +119,7 @@ public:
 	void SetMtxWorld		(D3DXMATRIX mtxWorld)					{ m_mtxWorld = mtxWorld; };				// ワールドマトリックスの設定
 	void SetVehicleType		(VEHICLE_TYPE CharaType)				{ m_VehicleType = CharaType; };			// 乗り物の種類の設定
 	void SetGravity			(bool gravity)							{ m_bGravity = gravity; };//			// 重力の設定
-	void SetVehicleDirection(VEHICLE_DIRECTION direction)			{ m_VehicleDirection = direction; };	// 乗り物の向きの設定
+	void SetVehicleDirection(DIRECTION direction)					{ m_VehicleDirection = direction; };	// 乗り物の向きの設定
 	void SetShotDirection	(D3DXVECTOR3 direction)					{ m_ShotRot = direction; };				// 弾を撃つ方向の設定
 	void SetDieFlag			(bool DieFlag)							{ m_bDieFlag = DieFlag; };				// 死亡フラグの設定
 
@@ -147,7 +138,7 @@ public:
 	VEHICLE_TYPE			GetVehicleType()						{ return m_VehicleType; };				// キャラクターの種類取得
 	std::vector<CModel*>	&GetVehicleModelList()					{ return m_vModelList; };				// キャラクターのモデル取得
 	CModel					*GetVehicleModelPartsList(int nCnt)		{ return m_vModelList[nCnt]; };			// キャラクターのモデルパーツ取得
-	VEHICLE_DIRECTION		GetVehicleDirection()					{ return m_VehicleDirection; };			// 向きの取得
+	DIRECTION				GetVehicleDirection()					{ return m_VehicleDirection; };			// 向きの取得
 	char					*GetOffsetFileName(VEHICLE_TYPE type)	{ return m_LoadOffsetFileName[type]; }; // オフセットのファイル名取得
 	bool					GetDieFlag()							{ return m_bDieFlag; };					// 死亡フラグの取得
 	CCollision				*GetCollision()							{ return m_pCollision; };				// 当たり判定のポインタ取得
@@ -195,7 +186,7 @@ private:
 	VEHICLE_TYPE			m_VehicleType;							// キャラクターのタイプ
 	int						m_nLife;								// 体力
 	int						m_nStateCnt;							// 状態のカウント
-	VEHICLE_DIRECTION		m_VehicleDirection;						// キャラクターの向き
+	DIRECTION				m_VehicleDirection;						// キャラクターの向き
 	PARTS_ROT_TYPE			m_RotType;								// パーツが回転する種類
 	bool					m_bJump;								// ジャンプフラグ
 	bool					m_bGravity;								// 重力をかけるかのフラグ

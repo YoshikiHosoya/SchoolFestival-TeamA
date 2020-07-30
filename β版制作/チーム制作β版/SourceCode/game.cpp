@@ -99,12 +99,12 @@ void CGame::Update(void)
 
 	if (key->GetKeyboardTrigger(DIK_F6))
 	{
-		CManager::GetRenderer()->GetFade()->SetFade(CFADE::FADETYPE::FADETYPE_MAPMOVE, 0);
+		CManager::GetRenderer()->GetFade()->SetFade(CFADE::FADETYPE::FADETYPE_MAPMOVE, CMap::MAP_1_1);
 	}
 
 	if (key->GetKeyboardTrigger(DIK_F7))
 	{
-		CManager::GetRenderer()->GetFade()->SetFade(CFADE::FADETYPE::FADETYPE_MAPMOVE, 1);
+		CManager::GetRenderer()->GetFade()->SetFade(CFADE::FADETYPE::FADETYPE_MAPMOVE, CMap::MAP_1_BOSS);
 	}
 
 
