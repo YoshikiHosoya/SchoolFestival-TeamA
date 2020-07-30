@@ -49,6 +49,7 @@ public:
 
 	/* 静的メンバ関数 */
 	static	CGun		*Create(D3DXMATRIX *mtx);		// 銃の生成
+	void				NoDrawCalcMatrixOnly();			// マトリックスの計算
 
 	/* メンバ関数 */
 	GUN_TYPE			&GetGunType()				{ return m_GunType; };				// 銃の種類の取得
@@ -65,7 +66,7 @@ public:
 	void				SetShotOffsetPos(D3DXVECTOR3 ShotOffsetPos)	{ m_ShotOffsetPos = ShotOffsetPos; };	// 発射位置のオフセットの設定
 	void				SetShotRot(D3DXVECTOR3 ShotRot)				{ m_ShotRot = ShotRot; };				// 撃つときの回転の向きの設定
 	void				SetShotVec(D3DXVECTOR3 ShotVec)				{ m_Shotvector = ShotVec; };			// 撃つときの向きの設定
-	void				SetMtxWorld(D3DXMATRIX *mtx)				{ m_mtx = mtx; };						// マトリックスの設定
+	void				SetMtxWorld(D3DXMATRIX *mtx)				{ m_HasHandMtx = mtx; };				// マトリックスの設定
 	void				AddAmmo(int nAmmo)							{ m_nAmmo += nAmmo; };					// 弾数の加算
 	void				Shot();																				// 銃の発射
 private:
@@ -76,7 +77,7 @@ private:
 	TAG					m_Tag;					// タグ
 	int					m_nAmmo;				// 弾薬数
 	int					m_nInterval;			// インターバル
-	D3DXMATRIX			*m_mtx;					// マトリックス
+	D3DXMATRIX			*m_HasHandMtx;			// 持ち手のマトリックス
 	bool				m_bMultiple;			// 複数撃つフラグ
 	D3DXVECTOR3			m_ShotPos;				// 発射位置
 	D3DXVECTOR3			m_ShotOffsetPos;		// 発射位置のオフセット

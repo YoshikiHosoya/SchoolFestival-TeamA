@@ -205,6 +205,8 @@ public:
 	static CModel *CreateSceneManagement(int type, int modelCount);	// モデルのクリエイト(シーンで管理する)
 	static char* GetModelFileName(int nType, int nModelCount);		// モデルのファイル名取得
 
+	void NotDrawCalcMtxOnly(D3DXMATRIX *pParentMtx);				// 描画せずにマトリックスの計算だけする
+
 	/* メンバ関数 */
 	void SetParent(CModel *pModel)					{ m_pParent = pModel; };							// 親の設定
 	void SetPosition(D3DXVECTOR3 pos)				{ m_pos = pos; };									// モデルのオフセット指定
