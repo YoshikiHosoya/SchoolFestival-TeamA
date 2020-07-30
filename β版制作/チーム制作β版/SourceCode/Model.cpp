@@ -971,6 +971,19 @@ char * CModel::GetModelFileName(int nType, int nModelCount)
 }
 
 //====================================================================
+ //マトリックス計算
+ //====================================================================
+void CModel::NotDrawCalcMtxOnly(D3DXMATRIX * pParentMtx)
+{
+	// マトリックスの計算
+	CHossoLibrary::CalcMatrix(&m_mtxWorld, m_pos, m_rot);
+
+	//親マトリックスの計算
+	D3DXMatrixMultiply(&m_mtxWorld,
+		&m_mtxWorld,
+		pParentMtx);
+}
+//====================================================================
 //描画
 //====================================================================
 void CModel::DrawMesh()

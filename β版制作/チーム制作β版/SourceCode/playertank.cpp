@@ -27,7 +27,7 @@
 #define PLAYERTANK_SIZE			(D3DXVECTOR3(90.0f,65.0f,0.0f)) // プレイヤーの判定のサイズ
 #define PLAYERTANK_JUMP			(60.0f)				// 戦車が飛ぶ移動量
 #define SHOT_BULLET_POS_X		(0.0f)			// 弾の発射位置X
-#define SHOT_BULLET_POS_Y		(25.0f)				// 弾の発射位置Y
+#define SHOT_BULLET_POS_Y		(40.0f)				// 弾の発射位置Y
 #define SHOT_BULLET_POS_Z		(0.0f)			// 弾の発射位置Z
 
 // =====================================================================================================================================================================
@@ -169,7 +169,8 @@ void CPlayertank::Update(void)
 //====================================================================
 void CPlayertank::Draw(void)
 {
-	m_pGun->Draw();
+	//ガンのマトリックスの計算だけ
+	m_pGun->NoDrawCalcMatrixOnly();
 
 	CVehicle::Draw();
 }
