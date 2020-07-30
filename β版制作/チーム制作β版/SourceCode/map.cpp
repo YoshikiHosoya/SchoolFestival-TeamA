@@ -442,7 +442,7 @@ void CMap::MapModelCreate(int ModelType, int nType, D3DXVECTOR3 pos)
 		/* --- ボス --- */
 	case CMap::ARRANGEMENT_MODEL_BOSS:
 		// オブジェクトの生成
-		//m_pEnemy.emplace_back(CBoss::Create());
+		m_pEnemy.emplace_back(CBoss::Create());
 		// 位置の設定
 		m_pEnemy[m_pEnemy.size() - 1]->SetPosition(pos);
 		break;
