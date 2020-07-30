@@ -12,6 +12,8 @@
 // =====================================================================================================================================================================
 #include "main.h"
 #include "UI.h"
+#include "game.h"
+#include "resultmanager.h"
 
 // =====================================================================================================================================================================
 // 前方宣言
@@ -53,23 +55,53 @@ public:
 	void					Draw(void);		// 描画
 
 	/* 静的メンバ関数 */
-	static  CResultUI		*Create();		// リザルトUIの生成
+	static  CResultUI		*Create();									// リザルトUIの生成
+	static	int				GetTotalScore() { return m_nTotalScore; };	// トータルスコアの取得
+	static	void			TotalScoreCalculation();					// ゲームスコアとボーナススコアの計算
 
 	/* メンバ関数 */
 
 private:
 	/* メンバ関数 */
-	void					DrawConditions();								// 描画条件
-	void					ResultUICreate();								// リザルトUIをまとめて生成する
+	void					DrawConditions(CResultManager::RESULT_STATE state);	// 描画条件
+	void					ResultUICreate();									// リザルトUIをまとめて生成する
+	void					AllDraw();											// 全て描画
+	void					AllNotDraw();										// 全て描画しない
+	void					Result0Draw();										// 0番目のリザルトで表示するUIの設定
+	void					Result1Draw();										// 1番目のリザルトで表示するUIの設定
+	void					ScoreCal();											// マルチナンバーに値を代入
+	void					Conditions();										// 条件によって処理を進める
+	void					TargetValue(const int &Target,
+										int &Value,
+										int Add,
+										CMultiNumber *pMultiNumber);			// 目標の値になるまで値を計算する
+
+	void					SetWaitTime(int time) { m_nWaitTime = time; };		// 待ち時間の設定
+	void					WaitTime(int nTime, bool &bFlag,bool &bUse);		// 待ち時間の計算
+	void					ResultUiOrder(bool bUse0, bool bUse1, bool bUse2);	// Uiの出現順番
+	void					Flashing(CScene2D *m_apScene2D);					// 点滅処理
 
 	/* 静的メンバ変数 */
-	static LPDIRECT3DTEXTURE9	m_TexNum[RESULT_UI_MAX];					// バインドするテクスチャの情報
-	static D3DXVECTOR3			m_Pos[RESULT_UI_MAX];						// 座標情報
-	static D3DXVECTOR3			m_Size[RESULT_UI_MAX];						// サイズ情報
+	static LPDIRECT3DTEXTURE9	m_TexNum[RESULT_UI_MAX];						// バインドするテクスチャの情報
+	static D3DXVECTOR3			m_Pos[RESULT_UI_MAX];							// 座標情報
+	static D3DXVECTOR3			m_Size[RESULT_UI_MAX];							// サイズ情報
+	static int					m_nTotalScore;									// スコアとボーナスを加算したスコア
 
 	/* メンバ変数 */
-	CScene2D				*m_apScene2D[RESULT_UI_MAX];					// シーン2Dのポインタ
-	CMultiNumber			*m_pBonusScore;									// ボーナススコア
-	CMultiNumber			*m_pPrisonerNum;								// プレイヤーの残機の数
+	CScene2D				*m_apScene2D[RESULT_UI_MAX];						// シーン2Dのポインタ
+	CMultiNumber			*m_pPrisonerNum;									// プレイヤーの残機の数のUI
+	CMultiNumber			*m_pBonusScore;										// ボーナススコアのUI
+
+	int						m_nPrisonerNum;										// プレイヤーの残機の数
+	int						m_nBonusScore;										// ボーナススコア
+	bool					m_bPrisonerNum;										// 捕虜の数を表示更新していいかどうか
+	bool					m_bBonusScore;										// 追加得点を表示更新していいかどうか
+	bool					m_bEvaluation;										// 評価を表示していいかどうか
+	int						m_nWaitTime;										// 次の処理をするまでの時間
+	bool					m_bWaitFlag;										// 待ち時間が発生した際に使うフラグ
+	int						m_nColCnt;											// カラーカウント
+
+	bool					m_bUseUIFlag[3];									// UIを出現させるためのフラグ 3行程あるため
+	bool					m_bUse_One[3];										// 処理を1度だけ通すためのフラグ
 };
 #endif

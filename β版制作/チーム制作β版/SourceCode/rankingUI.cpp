@@ -1,7 +1,7 @@
 // =====================================================================================================================================================================
 //
 // ランキングUIの処理 [resultUI.cpp]
-// Author : Sato Yoshiki
+// Author : fujiwara masato
 //
 // =====================================================================================================================================================================
 #include "main.h"			// インクルードファイル
@@ -9,14 +9,31 @@
 #include "debugproc.h"
 #include "UIManager.h"
 #include "scene2D.h"
+#include "multinumber.h"
+#include "resultui.h"
 
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
 // =====================================================================================================================================================================
+RANKING_DATA	CRankingUI::m_RankingData				= {};
+int				CRankingUI::m_nRankingScore[SCORE_MAX]	= {};
+
+// =====================================================================================================================================================================
+// テキストファイル名
+// =====================================================================================================================================================================
+char *CRankingUI::m_RankingFileName =
+{
+	"data/Load/Ranking/RankingData.txt" 			// アイテムの情報
+};
 
 // =====================================================================================================================================================================
 // マクロ定義
 // =====================================================================================================================================================================
+#define RANKINGSIZE (D3DXVECTOR3(100.0f, 50.0f, 0.0f))
+#define RANKING_SPACE (10)
+
+#define RANKINGSCORESIZE (D3DXVECTOR3(70.0f, 70.0f, 0.0f))
+#define RANKINGSCOREDIGITS (6)
 
 // =====================================================================================================================================================================
 //
@@ -30,6 +47,12 @@ CRankingUI::CRankingUI()
 	{
 		m_apScene2D[nCnt] = nullptr;
 	}
+
+	for (int nCnt = 0; nCnt < RANKING_NUM; nCnt++)
+	{
+		m_pRankScore[nCnt] = nullptr;
+	}
+	m_nColCnt = 0;
 }
 
 // =====================================================================================================================================================================
@@ -48,22 +71,52 @@ CRankingUI::~CRankingUI()
 // =====================================================================================================================================================================
 HRESULT CRankingUI::Init(void)
 {
+	// スコアの読み込み
+	CRankingUI::RankingLoad();
+	// ランキングの計算
+	RankingCalculation();
+	// ランキングスコアのセーブ
+	RankingSave();
+
 	for (int nCnt = 0; nCnt < RANKING_UI::RANKING_UI_MAX; nCnt++)
 	{
 		if (!m_apScene2D[nCnt])
 		{
-			switch (nCnt)
+			// ランキングタイトルロゴ
+			if (nCnt == RANKING_NAME)
 			{
-			// ランキング
-			case RANKING_UI::RANKING:
 				// シーン2Dの生成
-				m_apScene2D[nCnt] = CScene2D::Create(D3DXVECTOR3((SCREEN_WIDTH * 0.5f), 65.0f, 0.0f), D3DXVECTOR3(70.0f, 65.0f, 0.0f));
+				m_apScene2D[nCnt] = CScene2D::Create(D3DXVECTOR3((SCREEN_WIDTH * 0.5f), 65.0f, 0.0f), D3DXVECTOR3(500.0f, 50.0f, 0.0f));
 				// テクスチャの割り当て
-				m_apScene2D[nCnt]->BindTexture(CTexture::GetTexture(CTexture::TEX_UI_RANKING));
-				break;
+				m_apScene2D[nCnt]->BindTexture(CTexture::GetTexture(CTexture::TEX_UI_RANKING_NAME));
+			}
+
+			// 順位
+			else
+			{
+				// シーン2Dの生成
+				m_apScene2D[nCnt] = CScene2D::Create(D3DXVECTOR3((SCREEN_WIDTH * 0.25f), ((200.0f - 100.0f) + (100.0f * nCnt)) + RANKING_SPACE * nCnt, 0.0f), RANKINGSIZE);
+				// テクスチャの割り当て
+				m_apScene2D[nCnt]->BindTexture(CTexture::GetTexture((CTexture::TEX_TYPE)(CTexture::TEX_UI_RANKING_1st + nCnt - 1)));
 			}
 		}
 	}
+
+	// スコアの生成
+	for (int nCnt = 0; nCnt < RANKING_NUM; nCnt++)
+	{
+		// スコアの生成
+		m_pRankScore[nCnt] = CMultiNumber::Create(
+			D3DXVECTOR3((SCREEN_WIDTH * 0.6f), ((200.0f) + (100.0f * nCnt)) + RANKING_SPACE * nCnt+1, 0.0f),
+			RANKINGSCORESIZE,
+			m_nRankingScore[nCnt],
+			RANKINGSCOREDIGITS,
+			CScene::OBJTYPE_UI);
+
+		// 描画許可
+		m_pRankScore[nCnt]->SetDisp(true);
+	}
+
 	return S_OK;
 }
 
@@ -83,6 +136,15 @@ void CRankingUI::Uninit(void)
 
 			// デリートフラグを有効にする
 			SetDeleteFlag(true);
+		}
+	}
+
+	for (int nCnt = 0; nCnt < RANKING_NUM; nCnt++)
+	{
+		if (m_pRankScore[nCnt] != nullptr)
+		{
+			m_pRankScore[nCnt]->Rerease();
+			m_pRankScore[nCnt] = nullptr;
 		}
 	}
 }
@@ -138,4 +200,219 @@ CRankingUI * CRankingUI::Create()
 	CUIManager::AddUIList(std::move(pRankingUI));
 
 	return pRankingUI;
+}
+
+// =====================================================================================================================================================================
+//
+// ランキング情報の読み込み
+//
+// =====================================================================================================================================================================
+void CRankingUI::RankingLoad()
+{
+	// ファイルポイント
+	FILE *pFile;
+
+	char cReadText[128];			// 文字として読み取る
+	char cHeadText[128];			// 比較用
+	char cDie[128];					// 不要な文字
+
+									// ファイルを開く
+	pFile = fopen(m_RankingFileName, "r");
+
+	// 開いているとき
+	if (pFile != NULL)
+	{
+		// SCRIPTが来るまでループ
+		while (strcmp(cHeadText, "SCRIPT") != 0)
+		{
+			fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
+			sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
+		}
+
+		// SCRIPTが来たら
+		if (strcmp(cHeadText, "SCRIPT") == 0)
+		{
+			// END_SCRIPTが来るまでループ
+			while (strcmp(cHeadText, "END_SCRIPT") != 0)
+			{
+				fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
+				sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
+
+															// ITEMSETが来たら
+				if (strcmp(cHeadText, "RANKINGSET") == 0)
+				{
+					// END_ITEMSETが来るまでループ
+					while (strcmp(cHeadText, "END_RANKINGSET") != 0)
+					{
+						fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
+						sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
+
+																	// SPEEDが来たら
+						if (strcmp(cHeadText, "RANKING_1st") == 0)
+						{
+							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_RankingData.nRankingScore[SCORE_1st]);		// 比較用テキストにRANKIG_1stを代入
+						}
+						else if (strcmp(cHeadText, "RANKING_2nd") == 0)
+						{
+							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_RankingData.nRankingScore[SCORE_2nd]);		// 比較用テキストにRANKIG_2ndを代入
+						}
+						else if (strcmp(cHeadText, "RANKING_3rd") == 0)
+						{
+							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_RankingData.nRankingScore[SCORE_3rd]);		// 比較用テキストにRANKIG_3rdを代入
+						}
+						else if (strcmp(cHeadText, "RANKING_4th") == 0)
+						{
+							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_RankingData.nRankingScore[SCORE_4th]);		// 比較用テキストにRANKIG_4thを代入
+						}
+						else if (strcmp(cHeadText, "RANKING_5th") == 0)
+						{
+							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_RankingData.nRankingScore[SCORE_5th]);		// 比較用テキストにRANKIG_5thを代入
+						}
+
+						else if (strcmp(cHeadText, "END_RANKINGSET") == 0)
+						{
+						}
+					}
+				}
+			}
+		}
+		// ファイルを閉じる
+		fclose(pFile);
+	}
+	else
+	{
+		MessageBox(NULL, "ランキングのデータ読み込み失敗", "警告", MB_ICONWARNING);
+	}
+
+	// 読み込んだ情報の代入
+	SetRankingData();
+}
+
+// =====================================================================================================================================================================
+//
+// ランキングのセーブ
+//
+// =====================================================================================================================================================================
+void CRankingUI::RankingSave()
+{
+	// ファイルポイント
+	FILE	*pFile;
+
+	// 各モデルファイルのファイルを開く
+	pFile = fopen(m_RankingFileName, "w");
+
+	// 開いているとき
+	if (pFile != NULL)
+	{
+		fprintf(pFile, "#------------------------------------------------------------------------------\n");
+		fprintf(pFile, "# ランキングデータの情報\n");
+		fprintf(pFile, "#------------------------------------------------------------------------------\n");
+		fprintf(pFile, "\n");
+
+		fprintf(pFile, "SCRIPT\n\n");
+		fprintf(pFile, "RANKINGSET\n");
+
+		// セーブするランキングの情報
+		fprintf(pFile, "	RANKING_1st	= %d\n", m_nRankingScore[SCORE_1st]);
+		fprintf(pFile, "	RANKING_2nd	= %d\n", m_nRankingScore[SCORE_2nd]);
+		fprintf(pFile, "	RANKING_3rd	= %d\n", m_nRankingScore[SCORE_3rd]);
+		fprintf(pFile, "	RANKING_4th	= %d\n", m_nRankingScore[SCORE_4th]);
+		fprintf(pFile, "	RANKING_5th	= %d\n", m_nRankingScore[SCORE_5th]);
+
+		fprintf(pFile, "END_RANKINGSET\n\n");
+		fprintf(pFile, "END_SCRIPT\n");
+
+		// 読み込み成功時の結果表示
+		MessageBox(NULL, "ランキング情報をセーブしました", "結果", MB_OK | MB_ICONINFORMATION);
+
+		// ファイルを閉じる
+		fclose(pFile);
+	}
+	else
+	{
+		// 読み込み失敗時の警告表示
+		MessageBox(NULL, "ランキング情報の読み込み失敗", "警告", MB_ICONWARNING);
+	}
+}
+
+// =====================================================================================================================================================================
+//
+// ランキング順位の計算
+//
+// =====================================================================================================================================================================
+void CRankingUI::RankingCalculation()
+{
+	// トータルスコアを取得をし書き換え不可能な変数にする
+	const int CurrentScore = CResultUI::GetTotalScore();
+	int nRanking = 0;
+
+	for (int nCnt = 0; nCnt < SCORE_MAX; nCnt++)
+	{
+		if (CurrentScore >= m_nRankingScore[nCnt])
+		{
+			nRanking = nCnt;
+			break;
+		}
+	}
+
+	// 取得したスコアとランキングスコアを1位から比較し
+	// 取得したスコアの方が大きかったら値を書き換える
+	for (int nCnt = 0; nCnt < SCORE_MAX; nCnt++)
+	{
+		if (CurrentScore >= m_nRankingScore[nCnt])
+		{
+			if (nCnt == SCORE_5th)
+			{
+				m_nRankingScore[SCORE_5th] = CurrentScore;
+			}
+			else
+			{
+				int nCntRank = 0;
+				while (nCntRank < SCORE_5th - 1)
+				{
+					m_nRankingScore[SCORE_5th - nCntRank] = m_nRankingScore[SCORE_5th - (nCntRank + 1)];
+					nCntRank++;
+				}
+
+				m_nRankingScore[nRanking] = CurrentScore;
+
+				break;
+			}
+		}
+	}
+}
+
+// =====================================================================================================================================================================
+//
+// 読み込んだスコアの反映
+//
+// =====================================================================================================================================================================
+void CRankingUI::SetRankingData()
+{
+	// ランキングのスコアの情報を代入
+	for (int nCnt = 0; nCnt < SCORE_MAX; nCnt++)
+	{
+		m_nRankingScore[nCnt] = m_RankingData.nRankingScore[nCnt];
+	}
+}
+
+// =====================================================================================================================================================================
+//
+// 点滅処理
+//
+// =====================================================================================================================================================================
+void CRankingUI::Flashing(CScene2D *m_apScene2D)
+{
+	// カウント加算
+	m_nColCnt++;
+	// 余りが0の時透明にする
+	if (m_nColCnt % 60 == 0)
+	{
+		m_apScene2D->SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f));
+	}
+	// 余りが0の時通常状態にする
+	else if (m_nColCnt % 30 == 0)
+	{
+		m_apScene2D->SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+	}
 }

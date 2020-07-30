@@ -55,6 +55,15 @@ public:
 		TEX_UI_TITLE,							//タイトルロゴ
 		TEX_UI_START,							//スタート
 
+		TEX_UI_TUTORIAL_NAME,					// チュートリアル名前ロゴ
+		TEX_UI_TUTORIAL_START,					// 開始宣言
+		TEX_UI_TUTORIAL_ORDER1,					// チュートリアル指示1
+		TEX_UI_TUTORIAL_ORDER2,					// チュートリアル指示2
+		TEX_UI_TUTORIAL_ORDER3,					// チュートリアル指示3
+		TEX_UI_TUTORIAL_ORDER4,					// チュートリアル指示4
+		TEX_UI_TUTORIAL_ORDER5,					// チュートリアル指示5
+		TEX_UI_TUTORIAL_ORDER6,					// チュートリアル指示6
+
 		TEX_UI_RESULT_BG,						//背景
 		TEX_UI_RESULT_NAME,						//名前ロゴ
 		TEX_UI_RESULT_1P,						//1P
@@ -65,7 +74,12 @@ public:
 		TEX_UI_RESULT_MISSION1COMPLETE,			//クリアロゴ0
 		TEX_UI_RESULT_MISSION2COMPLETE,			//クリアロゴ1
 
-		TEX_UI_RANKING,							//ランキング
+		TEX_UI_RANKING_NAME,					//ランキング名前ロゴ
+		TEX_UI_RANKING_1st,						//ランキング1位
+		TEX_UI_RANKING_2nd,						//ランキング2位
+		TEX_UI_RANKING_3rd,						//ランキング3位
+		TEX_UI_RANKING_4th,						//ランキング4位
+		TEX_UI_RANKING_5th,						//ランキング5位
 
 		TEX_MAX									//MAX
 	};

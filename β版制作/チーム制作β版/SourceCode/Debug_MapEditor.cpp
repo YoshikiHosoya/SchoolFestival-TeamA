@@ -54,7 +54,9 @@ CDebugMapEditor::~CDebugMapEditor()
 HRESULT CDebugMapEditor::Init(void)
 {
 	// マップの生成
-	m_pMap		= CMap::MapCreate(CMap::MAP_1);
+	m_pMap		= CMap::MapCreate();
+	// マップのロード
+	m_pMap->MapLoad(CMap::MAP_1);
 
 	//パーティクル生成
 	CParticleManager::Create();

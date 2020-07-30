@@ -27,6 +27,7 @@ class CObstacle;
 class CPlayertank;
 class CBattlePlane;
 class CHelicopter;
+class CVehicle;
 
 // =====================================================================================================================================================================
 // マップクラス
@@ -34,9 +35,28 @@ class CHelicopter;
 class CMap
 {
 public:
+	// ----------- 構造体 -----------
+	// ウェーブのパラメーター
+	typedef struct
+	{
+		int			nType;			// 種類
+		D3DXVECTOR3	pos;			// 位置
+		int			nFrame;			// フレーム
+		bool		bEvent;			// イベントフラグ
+	} WAVE_PARAM;
+
+	// ウェーブの情報
+	typedef struct
+	{
+		std::vector<WAVE_PARAM*> EnemyWaveInfo;			// 敵のウェーブのパラメーター
+		std::vector<WAVE_PARAM*> PrisonerWaveInfo;		// 捕虜のウェーブパラメーター
+		D3DXVECTOR3 EventPos;							// イベントが起きる位置
+	} WAVE_INFO;
+
 	// マップの種類
 	enum MAP
 	{
+		MAP_TUTORIAL,	// 0
 		MAP_1,			// 1
 		MAP_2,			// 2
 		MAP_MAX
@@ -47,7 +67,6 @@ public:
 	{
 		EDITOR_MAP,			// マップエディター
 		EDITOR_WAVE,		// ウェーブエディター
-		EDITOR_PLATOON,		// 小隊エディター
 		EDITOR_MAX
 	};
 
@@ -72,12 +91,26 @@ public:
 		WAVE_3,									// ウェーブ3
 		WAVE_MAX
 	};
+
+	// 小隊の種類
+	enum PLATOON
+	{
+		PLATOON_1,								// 小隊1
+		PLATOON_2,								// 小隊2
+		PLATOON_3,								// 小隊3
+		PLATOON_MAX
+	};
+
 	CMap();																			// コンストラクタ
 	~CMap();																		// デストラクタ
 
 	/* 静的メンバ関数 */
-	static	CMap	*MapCreate(MAP MapNum);											// マップの生成
+	static	CMap	*MapCreate();													// マップの生成
+
 	void	MapUpdate();															// マップの更新
+	void	MapLoad(MAP MapNum);													// マップのロード
+	void	WaveLoad(WAVE WaveNum);													// ウェーブのロード
+	void	WaveCreate(WAVE WaveNum, int ModelType, int &frame);					// ウェーブの生成
 
 	/* メンバ関数 */
 	int				GetMaxModel();													// モデルの最大数取得
@@ -88,7 +121,7 @@ public:
 	int				GetMaxBattlePlane();											// 戦闘機の最大数取得
 	int				GetMaxHelicopter();												// ヘリの最大数取得
 	LPD3DXMESH		GetMesh(int nCnt);												// メッシュの取得
-	CModel			*GetModel(int nCnt)			{ return m_pModel[nCnt]; };			// モデルの取得
+	CModel			*GetModel(int nCnt)			{ return m_pMapModel[nCnt]; };		// モデルの取得
 	CEnemy			*GetEnemy(int nCnt)			{ return m_pEnemy[nCnt]; };			// 敵の取得
 	CPrisoner		*GetPrisoner(int nCnt)		{ return m_pPrisoner[nCnt]; };		// 捕虜の取得
 	CObstacle		*GetObstacle(int nCnt)		{ return m_pObstacle[nCnt]; };		// 障害物の取得
@@ -100,54 +133,67 @@ public:
 
 private:
 	/* メンバ関数 */
-	void			ArrangementModelLoad();													// 配置するモデルのロード
-	void			ArrangementModelCreate(int ModelType, int nType, 
-											D3DXVECTOR3 pos, int nLife, D3DXVECTOR3 size);	// 配置するモデルの生成
+	void			MapModelLoad();													// 配置するモデルのロード
+	void			MapModelSave();													// 配置するモデルのセーブ
+	void			WaveSave();														// ウェーブのセーブ
+
+	void			MapModelCreate(int ModelType, int nType, D3DXVECTOR3 pos);				// 配置するモデルの生成
 	void			LoadFailureMessage(int ModelType);										// 読み込み失敗時の警告表示
 	void			LoadSuccessMessage(int ModelType);										// 読み込み成功時の結果表示
+	char			*WaveFileName(int ModelType);											// 各ウェーブファイル名
 
-	char			*ArrangementModelFileName(int ModelType);								// 配置するモデルファイル名(初期配置)
+	void			SaveModelHeader(FILE *pFile, int ModelType);									// セーブするモデルのヘッダー
+	void			SaveModelContents(FILE *pFile,int ModelType, int nCnt, int nNum);				// セーブするモデルの情報
+	void			SaveWaveContents(FILE *pFile, int ModelType, int nType, int nCnt, int nNum);	// セーブするウェーブの情報
 
-	void			SaveModelHeader(FILE *pFile, int ModelType);							// セーブするモデルのヘッダー
-	void			SaveModelContents(FILE *pFile,int ModelType, int nCnt);					// セーブするモデルの情報
-
-	unsigned int	GetMaxArrangementModel(int ModelType);									// 配置するモデルの最大数取得
-	void			*GetArrangementModel(int ModelType, int nCnt);							// 配置するモデルのポインタ
-	void			ArrangementModelSave(int ModelType);									// 配置するモデルのセーブ
+	unsigned int	GetMaxMapModel(int ModelType);									// 配置するモデルの最大数取得
+	void			*GetMapModel(int ModelType, int nCnt);							// 配置するモデルのポインタ
 
 	void			AllSaveButton();														// 配置したモデルを全てセーブするボタン
+	void			AllLoadButton();														// 配置したモデルを全てロードするボタン
+	void			AllDeleteButton();														// 配置したモデルを全てデリートするボタン
+	void			ModelDeleteButton(int nNowSelect);										// 配置するモデルをデリートするボタン
+	void			ModelCreateButton();													// 配置するモデルを生成するボタン
+	
+	D3DXVECTOR3		GetMapModelPos(int nNowSelect);									// 選択しているモデルの位置の取得
+	void			SetMapModelPos(D3DXVECTOR3 pos, int nNowSelect);				// 選択しているモデルの位置の設定
+	void			SetMapModelColorChangeFlag(bool bFlag, int nNowSelect);			// 選択しているモデルの色を半透明にするフラグの設定
 	void			MapModelTab();															// マップに配置するモデルのタブ
-	void			ObstacleSet();															// 障害物の設置
-	void			EnemySet();																// 敵の設置
-	void			PlayerTankSet();														// 戦車の設置
-	void			BattlePlaneSet();														// 戦闘機の設置
-	void			HelicopterSet();														// ヘリの設置
+	void			MapModelSet();															// マップに配置するモデルの設置
+	void			ComboBoxAll(int nNowSelect);											// 全てのコンボボックス
 	bool			ObstacleComboBox(int &nType);											// 障害物のコンボボックス
-	void			PrisonerSet();															// 捕虜の設置
 	bool			EnemyComboBox(int &nType);												// 敵のコンボボックス
 	bool			PrisonerComboBox(int &nType);											// 捕虜のコンボボックス
 	void			SetSelectMapModelPosRDest(D3DXVECTOR3 posR);							// 選択しているモデルを注視点の目的地に設定
 
 	/* 静的メンバ変数 */
-	static char					*m_MapFileName[MAP_MAX];					// マップファイル名
-	static char					*m_EnemyFileName[MAP_MAX];					// 敵ファイル名
-	static char					*m_PrisonerFileName[MAP_MAX];				// 捕虜ファイル名
-	static char					*m_ObstacleFileName[MAP_MAX];				// 障害物ファイル名
-	static char					*m_PlayerTankFileName[MAP_MAX];				// 戦車ファイル名
-	static char					*m_BattlePlaneFileName[MAP_MAX];			// 戦闘機ファイル名
-	static char					*m_HelicopterFileName[MAP_MAX];				// ヘリファイル名
+	static char					*m_MapModelFileName[MAP_MAX];				// マップモデルファイル名
+	static char					*m_WaveFileName[WAVE_MAX];					// ウェーブファイル名
+
+	static char					*m_EnemyWaveFileName[WAVE_MAX];				// 敵ファイル名
+	static char					*m_PrisonerWaveFileName[WAVE_MAX];			// 捕虜ファイル名
+	static char					*m_PlayerTankWaveFileName[WAVE_MAX];		// 戦車ファイル名
+	static char					*m_BattlePlaneWaveFileName[WAVE_MAX];		// 戦闘機ファイル名
+	static char					*m_HelicopterWaveFileName[WAVE_MAX];		// ヘリファイル名
+
 	static MAP					m_MapNum;									// マップ番号
+	static WAVE					m_WaveNum;									// ウェーブ番号
 	static EDITOR				m_Editor;									// エディターの種類
-	static int					m_ArrangmentModel;							// 配置するモデルの種類
+	static ARRANGEMENT_MODEL	m_ArrangmentModel;							// 配置するモデルの種類
 
 	/* メンバ変数 */
-	std::vector<CModel*>		m_pModel;									// 可変長配列 設置するモデル
+	std::vector<CModel*>		m_pMapModel;								// 可変長配列 設置するモデル
 	std::vector<CEnemy*>		m_pEnemy;									// 可変長配列 設置したエネミー
 	std::vector<CPrisoner*>		m_pPrisoner;								// 可変長配列 設置した捕虜
 	std::vector<CObstacle*>		m_pObstacle;								// 可変長配列 設置した障害物
 	std::vector<CPlayertank*>	m_pPlayerTank;								// 可変長配列 設置した戦車
 	std::vector<CBattlePlane*>	m_pBattlePlane;								// 可変長配列 設置した戦闘機
 	std::vector<CHelicopter*>	m_pHelicopter;								// 可変長配列 設置したヘリ
+	std::vector<CVehicle*>		m_pVehicle;									// 可変長配列 設置した乗り物
+
 	int							m_nOldSelect;								// 前回選択していたモノの番号
+	int							m_nWaveID;									// ウェーブの出現番号
+	static WAVE_INFO			m_aWaveInfo[WAVE_MAX];						// ウェーブの情報
+	D3DXVECTOR3					m_WavePos;									// ウェーブの位置
 };
 #endif

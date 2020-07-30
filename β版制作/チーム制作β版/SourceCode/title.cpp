@@ -67,7 +67,7 @@ void CTitle::Update(void)
 	if (CHossoLibrary::PressAnyButton())
 	{
 		// ƒQ[ƒ€ƒ‚[ƒh‚Öó‘Ô‘JˆÚ
-		CManager::GetRenderer()->GetFade()->SetFade(CManager::MODE_GAME);
+		CManager::GetRenderer()->GetFade()->SetFade(CManager::MODE_TUTORIAL);
 	}
 }
 

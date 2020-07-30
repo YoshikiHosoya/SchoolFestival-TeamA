@@ -420,21 +420,31 @@ void CParticle::ResetVertex()
 //------------------------------------------------------------------------------
 //パーティクル設定
 //------------------------------------------------------------------------------
-void CParticle::SetParticle(D3DXVECTOR3 const & pos, D3DXVECTOR3 const & rot, CParticleParam * pParam)
+void CParticle::SetParticle(D3DXVECTOR3 & pos, D3DXVECTOR3 const & rot, CParticleParam * pParam)
 {
 	//変数宣言
 	float fAngleX, fAngleY;
 	D3DXVECTOR3 move;
 	float fSpeed;
 
+	//ローカル座標加算
+	pos += pParam->GetLocalPos();
+
+	//原点に保存
 	m_posOrigin = pos;
 	m_rotOrigin = rot;
 
 	//生成する個数分
 	for (int nCnt = 0; nCnt < pParam->GetNumber(); nCnt++)
 	{
+		//ランダム座標を計算
+		D3DXVECTOR3 randompos = D3DXVECTOR3(
+			CHossoLibrary::Random(pParam->GetLocalRandomPosRange().x),
+			CHossoLibrary::Random(pParam->GetLocalRandomPosRange().y),
+			CHossoLibrary::Random(pParam->GetLocalRandomPosRange().z));
+
 		//0除算防止
-		if (pParam->GetSpeed() <= 0)
+		if (pParam->GetSpeed() == 0)
 		{
 			move = ZeroVector3;
 		}
@@ -505,15 +515,16 @@ void CParticle::SetParticle(D3DXVECTOR3 const & pos, D3DXVECTOR3 const & rot, CP
 
 		if (pParam->GetType() == CParticleParam::EFFECT_LAZER)
 		{
-			std::unique_ptr<COneParticle>pOneParticle = COneParticle::Create(pos, move, D3DXVECTOR3(0.0f, 0.0f, rot.y));
+			std::unique_ptr<COneParticle>pOneParticle = COneParticle::Create(pos + randompos, move, D3DXVECTOR3(0.0f, 0.0f, rot.y));
 			//配列に追加
 			m_pParticleList.emplace_back(std::move(pOneParticle));
 		}
 		else
 		{
 
+
 			//パーティクル生成
-			std::unique_ptr<COneParticle>pOneParticle = COneParticle::Create(pos, move, D3DXVECTOR3(rot));
+			std::unique_ptr<COneParticle>pOneParticle = COneParticle::Create(pos + randompos, move, D3DXVECTOR3(rot));
 			//配列に追加
 			m_pParticleList.emplace_back(std::move(pOneParticle));
 		}
@@ -548,8 +559,6 @@ void CParticle::SetAnimationParam()
 //------------------------------------------------------------------------------
 void CParticle::SetCollsionParam()
 {
-	m_pCollision = CCollision::Create();
-
 	D3DXMATRIX RotationMatrix;
 
 	//当たり判定生成

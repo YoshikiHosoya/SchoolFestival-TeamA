@@ -53,7 +53,6 @@ HRESULT CPlayer::Init(void)
 	CCharacter::Init();
 	LoadOffset(CCharacter::CHARACTER_TYPE_PLAYER);
 	SetCharacterType(CCharacter::CHARACTER_TYPE_PLAYER);
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
 	m_bAttack = false;
 	m_bKnifeAttack = false;
 	m_bCruch = false;
@@ -68,15 +67,25 @@ HRESULT CPlayer::Init(void)
 
 	// ナイフの生成
 	m_pKnife = CKnife::Create(GetCharacterModelPartsList(CModel::MODEL_PLAYER_LHAND)->GetMatrix());
-	// プレイヤーUIの生成
-	m_pPlayerUI = CPlayerUI::Create();
 	// 乗り物に乗り込んでいるかどうかのフラグ
 	m_bRideVehicle = false;
 
-	// 弾の残数表示
-	m_pPlayerUI->SetBulletAmmo(m_pGun->GetGunAmmo(), m_pGun->GetGunType());
-	// グレネードの残数表示
-	m_pPlayerUI->SetGrenadeAmmo(m_pGrenadeFire->GetGrenadeAmmo());
+	// ゲームモードだった時
+	if (CManager::GetGameState() == CManager::MODE_GAME)
+	{
+		// ゲームクラスのポインタ取得
+		CGame *pGame = (CGame*)CManager::GetBaseMode();
+		if (pGame != nullptr)
+		{
+			// プレイヤーUIの生成
+			m_pPlayerUI = CPlayerUI::Create();
+			// 弾の残数表示
+			m_pPlayerUI->SetBulletAmmo(m_pGun->GetGunAmmo(), m_pGun->GetGunType());
+			// グレネードの残数表示
+			m_pPlayerUI->SetGrenadeAmmo(m_pGrenadeFire->GetGrenadeAmmo());
+		}
+	}
+
 	//初期の向き
 	SetCharacterDirection(CHARACTER_RIGHT);
 	//リスポーン時のカウント
@@ -152,7 +161,11 @@ void CPlayer::Update(void)
 		ReSpawn();
 	}
 	// 体力UIの設定
-	m_pPlayerUI->SetLifeUI(GetLife());
+	if (m_pPlayerUI)
+	{
+		m_pPlayerUI->SetLifeUI(GetLife());
+	}
+
 	CCharacter::Update();
 
 	CDebugProc::Print("時機のライフ %d\n",GetLife());
@@ -172,6 +185,9 @@ void CPlayer::Update(void)
 	{
 		CDebugProc::Print("攻撃してないで\n");
 	}
+
+	//スクリーンの範囲内から出ないように制限
+	CManager::GetRenderer()->ScreenLimitRange(GetPosition());
 }
 //====================================================================
 //描画
@@ -488,10 +504,14 @@ void CPlayer::Ride()
 
 		// 弾を撃つ方向を設定
 		m_pGun->SetShotRot(GetShotDirection());
-		// 弾の残数表示
-		m_pPlayerUI->SetBulletAmmo(m_pGun->GetGunAmmo(), m_pGun->GetGunType());
-		// グレネードの残数表示
-		m_pPlayerUI->SetGrenadeAmmo(m_pGrenadeFire->GetGrenadeAmmo());
+
+		if (m_pPlayerUI)
+		{
+			// 弾の残数表示
+			m_pPlayerUI->SetBulletAmmo(m_pGun->GetGunAmmo(), m_pGun->GetGunType());
+			// グレネードの残数表示
+			m_pPlayerUI->SetGrenadeAmmo(m_pGrenadeFire->GetGrenadeAmmo());
+		}
 	}
 	else
 	{
@@ -504,23 +524,35 @@ void CPlayer::Ride()
 		// 戦車に乗っている時
 		if (pPlayertank != nullptr)
 		{
+			//スクリーンの範囲内から出ないように制限
+			CManager::GetRenderer()->ScreenLimitRange(pPlayertank->GetPosition());
+
 			// プレイヤーの座標を戦車の座標に合わせる
 			this->SetPosition(pPlayertank->GetPosition());
 
-			// 弾の残数表示
-			m_pPlayerUI->SetBulletAmmo(pPlayertank->GetGun()->GetGunAmmo(), pPlayertank->GetGun()->GetGunType());
-			// グレネードの残数表示
-			m_pPlayerUI->SetGrenadeAmmo(pPlayertank->GetGrenadeFire()->GetGrenadeAmmo());
+			if (m_pPlayerUI)
+			{
+				// 弾の残数表示
+				m_pPlayerUI->SetBulletAmmo(pPlayertank->GetGun()->GetGunAmmo(), pPlayertank->GetGun()->GetGunType());
+				// グレネードの残数表示
+				m_pPlayerUI->SetGrenadeAmmo(pPlayertank->GetGrenadeFire()->GetGrenadeAmmo());
+			}
 		}
 
 		// 戦闘機に乗っている時
 		else if (pBattlePlane != nullptr)
 		{
+			//スクリーンの範囲内から出ないように制限
+			CManager::GetRenderer()->ScreenLimitRange(pBattlePlane->GetPosition());
+
 			// プレイヤーの座標を戦闘機の座標に合わせる
 			this->SetPosition(pBattlePlane->GetPosition());
 
-			// 弾の残数表示
-			m_pPlayerUI->SetBulletAmmo(pBattlePlane->GetGun()->GetGunAmmo(), pBattlePlane->GetGun()->GetGunType());
+			if (m_pPlayerUI)
+			{
+				// 弾の残数表示
+				m_pPlayerUI->SetBulletAmmo(pBattlePlane->GetGun()->GetGunAmmo(), pBattlePlane->GetGun()->GetGunType());
+			}
 		}
 
 		// 乗り物に乗っている時にジャンプして戦車から降りる

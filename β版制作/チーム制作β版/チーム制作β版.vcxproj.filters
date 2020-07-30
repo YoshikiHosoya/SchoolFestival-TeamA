@@ -265,6 +265,18 @@
     <ClCompile Include="SourceCode\TrackingGun.cpp">
       <Filter>Wepon</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\RankingManager.cpp">
+      <Filter>ManagerClass</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\tutorial.cpp">
+      <Filter>Mode</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\TutorialManager.cpp">
+      <Filter>ManagerClass</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\tutorialUI.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SourceCode\mesh.h">
@@ -528,6 +540,9 @@
     <ClInclude Include="SourceCode\ResultManager.h">
       <Filter>ManagerClass</Filter>
     </ClInclude>
+    <ClInclude Include="SourceCode\RankingManager.h">
+      <Filter>ManagerClass</Filter>
+    </ClInclude>
     <ClInclude Include="SourceCode\GameManager.h">
       <Filter>ManagerClass</Filter>
     </ClInclude>
@@ -539,6 +554,15 @@
     </ClInclude>
     <ClInclude Include="SourceCode\TrackingGun.h">
       <Filter>Wepon</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\tutorial.h">
+      <Filter>Mode</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\TutorialManager.h">
+      <Filter>ManagerClass</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\tutorialUI.h">
+      <Filter>UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

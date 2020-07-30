@@ -6,6 +6,7 @@
 #include "game.h"
 #include "title.h"
 #include "ranking.h"
+#include "tutorial.h"
 #include "texture.h"
 #include "Xinput.h"
 #include "texture.h"
@@ -126,6 +127,12 @@ void CManager::SetGameMode(GAME_MODE mode)
 		m_pBaseMode->Init();
 		break;
 
+		//Tutorial
+	case MODE_TUTORIAL:
+		m_pBaseMode = new CTutorial;
+		m_pBaseMode->Init();
+		break;
+
 		//Game
 	case MODE_GAME:
 		m_pBaseMode = new CGame;
@@ -137,10 +144,6 @@ void CManager::SetGameMode(GAME_MODE mode)
 		m_pBaseMode = new CRanking;
 		m_pBaseMode->Init();
 		break;
-
-		//Tutorial
-	/*case MODE_TUTORIAL:
-		break;*/
 
 		//MotionViewer
 	case MODE_DEBUG_MODELVIEWER:
