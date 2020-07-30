@@ -48,6 +48,8 @@ private:
 	void				Operation(CKeyboard *key);			// 操作する処理
 	void				Jump();								// ジャンプ処理
 	void				Collision();						// 当たり判定をまとめてする処理
+	void				PadInput();							// ゲームパッドでの入力処理
+
 	/* メンバ変数 */
 	CGun				*m_pGun;							// ガンクラスのポインタ
 	CGrenadeFire		*m_pGrenadeFire;					// グレネード発射クラスのポインタ

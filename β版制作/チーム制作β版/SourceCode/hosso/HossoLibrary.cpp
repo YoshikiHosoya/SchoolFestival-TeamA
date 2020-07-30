@@ -181,7 +181,7 @@ bool CHossoLibrary::PadMoveInput(D3DXVECTOR3 & rMove, DIRECTION & direction,bool
 
 	}
 	//‰º
-	else if (InputValue.y < -0.6f && !bJump)
+	else if (InputValue.y < -0.6f && bJump == false)
 	{
 		direction = DIRECTION::DOWN;
 	}
