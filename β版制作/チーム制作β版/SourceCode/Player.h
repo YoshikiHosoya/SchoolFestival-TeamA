@@ -51,6 +51,8 @@ public:
 	DEBUG_STATE GetDebugState(void);
 	static CPlayer *Create(void);
 	bool DefaultMotion(void);
+	void MapChangePlayerRespawn();
+
 	CGun			*GetGun() { return  m_pGun; };					// 銃のポインタ取得
 	CGrenadeFire	*GetGrenadeFire() { return  m_pGrenadeFire; };	// グレネード発射位置のポインタ取得
 	CPlayerUI		*GetPlayerUI() { return  m_pPlayerUI; };		// プレイヤーUIのポインタ取得

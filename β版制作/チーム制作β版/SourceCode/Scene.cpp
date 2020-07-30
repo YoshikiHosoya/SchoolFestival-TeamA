@@ -270,6 +270,46 @@ void CScene::ShowUpdateGraph()
 }
 
 //==========================================================
+//マップ遷移時に必要ない物を消去
+//==========================================================
+void CScene::MapChangeRelease()
+{
+	//OBJTYPE分回す
+	for (int nCntObjtype = 0; nCntObjtype < TYPE_MAX; nCntObjtype++)
+	{
+		switch (nCntObjtype)
+		{
+		case OBJTYPE_BULLET:
+		case OBJTYPE_EFFECT:
+		case OBJTYPE_ORBIT:
+		case OBJTYPE_EXPROSION:
+		case OBJTYPE_ITEM:
+			//配列が空かどうか
+			if (!m_pSceneList[nCntObjtype].empty())
+			{
+				//Sceneの配列の大きさ分
+				for (size_t nCnt = 0; nCnt < m_pSceneList[nCntObjtype].size(); nCnt++)
+				{
+					//nullcheck
+					if (m_pSceneList[nCntObjtype][nCnt])
+					{
+						//終了処理
+						m_pSceneList[nCntObjtype][nCnt]->Uninit();
+
+						//メモリ開放
+						delete m_pSceneList[nCntObjtype][nCnt];
+						m_pSceneList[nCntObjtype][nCnt] = nullptr;
+					}
+				}
+				//配列を空にする
+				m_pSceneList[nCntObjtype].clear();
+			}
+			break;
+		}
+	}
+}
+
+//==========================================================
 //ストップの状態取得
 //==========================================================
 bool &CScene::GetStopFlag(void)

@@ -20,28 +20,62 @@ class CManager;
 class CFADE
 {
 public:
-	typedef enum
+	enum class FADESTATE
 	{
-		FADE_NONE = 0,		// 何もない状態
-		FADE_IN,			// フェードイン処理
-		FADE_OUT,			// フェードアウト処理
-		FADE_MAX
-	} FADE;
+		FADESTATE_NONE = -1,		// 何もない状態
+		FADESTATE_IN,			// フェードイン処理
+		FADESTATE_OUT,			// フェードアウト処理
+	};
+
+	enum class FADETYPE
+	{
+		FADETYPE_NONE = -1,
+		FADETYPE_MODE,
+		FADETYPE_MAPMOVE,
+	};
 
 	void InitFade(void);
 	void UninitFade(void);
 	void UpdateFade(void);
 	void DrawFade(void);
 	void MakeVertexFade(void);
-	void SetFade(CManager::GAME_MODE modeNext);
-	FADE GetFadeState(void);
+	FADESTATE GetFadeState(void);
 	static CFADE *CreateFade(void);
+
+	template <class ID> void SetFade(FADETYPE type, ID NextID);		//フェードの設定
 private:
 	LPDIRECT3DTEXTURE9		m_pTextureFade = NULL;		// テクスチャへのポインタ
 	LPDIRECT3DVERTEXBUFFER9 m_pVtxBuffFade = NULL;		// 頂点バッファへのポインタ
-	FADE					m_fadeState;				// フェード状態
-	CManager::GAME_MODE		m_modeNext;					// 次の画面（モード）
+	FADESTATE				m_fadeState;				// フェード状態
+	FADETYPE				m_fadeType;					// フェードの種類尾
+	int						m_NextID;					// 次の画面（モード）
+
+	D3DXVECTOR3				m_pos;						// 座標
 	D3DXCOLOR				m_colorFade;				// フェード色
+
+	void ResetFadeParam();								// フェードするのに必要なパラメータ初期化
+	void FadeWhiteOut();
+	void FadeWipe();
+	void FadeOut();
+	void UpdateVertex();
+
 };
 
+
+
+//=============================================================================
+// フェードの状態設定
+// テンプレートなのでインライン関数S
+//=============================================================================
+template<class ID>
+inline void CFADE::SetFade(FADETYPE type, ID NextID)
+{
+	if (m_fadeState == FADESTATE::FADESTATE_NONE)
+	{
+		m_fadeState = FADESTATE::FADESTATE_NONE;
+		m_NextID = NextID;
+		m_fadeType = type;
+		ResetFadeParam();
+	}
+}
 #endif

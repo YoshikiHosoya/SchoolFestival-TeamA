@@ -18,7 +18,7 @@
 //マクロ定義
 //====================================================================
 #define BOSS_SIZE			(D3DXVECTOR3(50.0f,75.0f,0.0f)) //敵のサイズ
-CBoss::CBoss(OBJ_TYPE type) :CCharacter(type)
+CBoss::CBoss(OBJ_TYPE type) :CEnemy(type)
 {
 	SetObjType(OBJTYPE_BOSS);
 	m_pGun = nullptr;
@@ -37,8 +37,13 @@ HRESULT CBoss::Init(void)
 	//キャラの初期化
 	CCharacter::Init();
 	LoadOffset(CCharacter::CHARACTER_TYPE_BOSS);
+	SetPosition(D3DXVECTOR3(0.0f, 300.0f, 0.0f));
+	SetMotion(CCharacter::BOSS_MOTION_NORMAL);
+	CCharacter::SetLife(1);
 	SetCharacterType(CCharacter::CHARACTER_TYPE_BOSS);
 	m_Attack = false;
+	m_AttackCastCnt = 0;
+	m_AttackCnt = 0;
 	//重力無し
 	SetGravity(false);
 	// 銃の生成
@@ -47,14 +52,11 @@ HRESULT CBoss::Init(void)
 	// 銃の弾の種類
 	m_pGun->GetTag() = TAG_ENEMY;
 	// 当たり判定生成
-	GetCollision()->SetPos(&GetPosition());
+	GetCollision()->SetPos(GetPositionPtr());
 	GetCollision()->SetPosOld(&GetPositionOld());
 	GetCollision()->SetSize2D(BOSS_SIZE);
 	GetCollision()->SetMove(&GetMove());
 	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_CHARACTER);
-	SetPosition(D3DXVECTOR3(0.0f, 300.0f, 0.0f));
-	SetMotion(CCharacter::BOSS_MOTION_NORMAL);
-	CCharacter::SetLife(1);
 	return S_OK;
 }
 //====================================================================
@@ -91,11 +93,6 @@ void CBoss::Update(void)
 	//AI関連処理
 	if (m_pAI != nullptr)
 	{
-		m_pGun->SetShotVec(m_pAI->GetTrackingShotRot());
-		if (m_pAI->GetAITypeAttack() == m_pAI->AI_TRACKING)
-		{
-			m_pGun->Shot();
-		}
 		m_pAI->Update();
 	}
 	CCharacter::Update();
@@ -125,10 +122,20 @@ CBoss *CBoss::Create(void)
 	pBoss->m_pAI = CBossAI::CreateAI(pBoss);
 	return pBoss;
 }
+//====================================================================
+//ボスのデフォルトモーション
+//====================================================================
 bool CBoss::DefaultMotion(void)
 {
 	SetMotion(CCharacter::BOSS_MOTION_NORMAL);
 	return true;
+}
+//====================================================================
+//ボスの銃の取得
+//====================================================================
+CGun *CBoss::GetGun(void)
+{
+	return m_pGun;
 }
 //====================================================================
 //移動

@@ -55,7 +55,6 @@ HRESULT CPlayer::Init(void)
 	SetCharacterType(CCharacter::CHARACTER_TYPE_PLAYER);
 	m_bAttack = false;
 	m_bKnifeAttack = false;
-	m_bCruch = false;
 	 // 銃の生成
 	m_pGun = CGun::Create(GetCharacterModelPartsList(CModel::MODEL_PLAYER_RHAND)->GetMatrix());
 	// グレネード放つ位置の生成
@@ -473,6 +472,16 @@ bool CPlayer::DefaultMotion(void)
 	SetMotion(CCharacter::PLAYER_MOTION_NORMAL);
 	}
 	return true;
+}
+//====================================================================
+//プレイヤーリスポーン処理
+//====================================================================
+void CPlayer::MapChangePlayerRespawn()
+{
+	SetState(CCharacter::CHARACTER_STATE_INVINCIBLE);
+	SetPosition(D3DXVECTOR3(100.0f,0.0f,0.0f));
+	m_bRideVehicle = false;
+	m_pKnife->EndMeleeAttack();
 }
 //====================================================================
 //デバッグステータスの取得
