@@ -17,7 +17,8 @@ char *CCharacter::m_LoadOffsetFileName[CHARACTER_TYPE_MAX] =
 	{ "data/Load/Player/PlayerOffset.txt"},
 	{"data/Load/Enemy/EnemyOffset.txt"},
 	{"data/Load/Prisoner/PrisonerOffset.txt"},
-	{"data/Load/Boss/BossOffset.txt"}
+	{"data/Load/Boss/BossOffset.txt"},
+	{"data/Load/PlayerTank/PlayerTankOffset.txt"}
 };
 //モーションの読み込みファイル
 char *CCharacter::m_LoadMotionFileName[CHARACTER_MOTION_MAX] =
@@ -228,7 +229,7 @@ void CCharacter::Update(void)
 		break;
 	}
 	//撃つ向き
-	if (m_CharacterDirection == CHARACTER_LEFT)
+	if (m_CharacterDirection == DIRECTION::LEFT)
 	{
 		m_ShotRot.x = 0.0f;
 		m_ShotRot.y = 0.5f * D3DX_PI;
@@ -236,21 +237,21 @@ void CCharacter::Update(void)
 		m_AddArmRot.x = 0.5f* D3DX_PI;
 
 	}
-	else if (m_CharacterDirection == CHARACTER_RIGHT)
+	else if (m_CharacterDirection == DIRECTION::RIGHT)
 	{
 		m_ShotRot.x = 0.0f;
 		m_ShotRot.y = -0.5f * D3DX_PI;
 		m_AddHeadRot.x = 0.5f;
 		m_AddArmRot.x = 0.5f* D3DX_PI;
 	}
-	else if (m_CharacterDirection == CHARACTER_UP)
+	else if (m_CharacterDirection == DIRECTION::UP)
 	{
 		m_ShotRot.x = 0.5f * D3DX_PI;
 		m_ShotRot.y = 0.0f;
 		m_AddHeadRot.x = 1.0f;
 		m_AddArmRot.x = 1.0f* D3DX_PI;
 	}
-	else if (m_CharacterDirection == CHARACTER_DOWN)
+	else if (m_CharacterDirection == DIRECTION::DOWN)
 	{
 		m_ShotRot.x = -0.5f * D3DX_PI;
 		m_ShotRot.y = D3DX_PI;
@@ -260,18 +261,18 @@ void CCharacter::Update(void)
 
 
 	//下向きながら着地したとき
-	if (m_CharacterDirection == CHARACTER_DOWN && GetJump() == true)
+	if (m_CharacterDirection == DIRECTION::DOWN && GetJump() == true)
 	{
 		if (GetRot().y > 1.5f)
 		{
 			m_ShotRot.x = 0.0f;
-			SetCharacterDirection(CHARACTER_LEFT);
+			SetCharacterDirection(DIRECTION::LEFT);
 		}
 		else if (GetRot().y < -1.5f)
 		{
 			m_ShotRot.x = 0.0f;
 			m_ShotRot.y = -0.5f * D3DX_PI;
-			SetCharacterDirection(CHARACTER_RIGHT);
+			SetCharacterDirection(DIRECTION::RIGHT);
 		}
 	}
 	// マップのポインタ取得
@@ -1062,7 +1063,7 @@ CModel* CCharacter::GetCharacterModelPartsList(int nCnt)
 	return m_vModelList[nCnt];
 }
 
-CCharacter::CHARACTER_DIRECTION CCharacter::GetCharacterDirection(void)
+DIRECTION &CCharacter::GetCharacterDirection(void)
 {
 	return m_CharacterDirection;
 }
@@ -1111,7 +1112,7 @@ void CCharacter::SetGravity(bool gravity)
 //====================================================================
 //キャラクターの向き
 //====================================================================
-void CCharacter::SetCharacterDirection(CHARACTER_DIRECTION direction)
+void CCharacter::SetCharacterDirection(DIRECTION direction)
 {
 	m_CharacterDirection = direction;
 }

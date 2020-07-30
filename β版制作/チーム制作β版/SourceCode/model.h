@@ -113,7 +113,6 @@ public:
 	typedef enum
 	{
 		//===戦車のモデル===
-		MODEL_TANK_TANKHEAD,		// 頭
 		MODEL_TANK_TANKBODY,		// 体
 		MODEL_TANK_TANK_FRONTWHEEL,	// 前タイヤ
 		MODEL_TANK_TANK_BACKWHEEL,	// 後タイヤ
@@ -145,7 +144,6 @@ public:
 	{
 		//===ボスのモデル===
 		MODEL_BOSS_BODY,			// 体
-		MODEL_BOSS_GUN,				// 武器
 		MODEL_BOSS_MAX
 	}BOSS_PARTS_MODEL;
 
