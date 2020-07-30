@@ -514,7 +514,7 @@ bool CPlayer::DefaultMotion(void)
 {
 	if (GetJump() == true)
 	{
-	SetMotion(CCharacter::PLAYER_MOTION_NORMAL);
+		SetMotion(CCharacter::PLAYER_MOTION_NORMAL);
 	}
 	return true;
 }

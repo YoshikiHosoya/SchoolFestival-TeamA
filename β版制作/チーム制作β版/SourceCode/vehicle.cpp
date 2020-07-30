@@ -386,22 +386,26 @@ void CVehicle::ShotDirection()
 	case DIRECTION::LEFT:
 		m_ShotRot.x = 0.0f;
 		m_ShotRot.y = 0.5f * D3DX_PI;
+		m_ShotRot.z = 0.5f * D3DX_PI;
 		m_AddRot.x = 0.0f;
 		break;
 
 	case DIRECTION::RIGHT:
 		m_ShotRot.x = 0.0f;
 		m_ShotRot.y = -0.5f * D3DX_PI;
+		m_ShotRot.z = -D3DX_PI * 0.5f;
 		m_AddRot.x = 0.0f;
 		break;
 	case DIRECTION::UP:
 		m_ShotRot.x = 0.5f * D3DX_PI;
 		m_ShotRot.y = 0.0f;
+		m_ShotRot.z = D3DX_PI * 0.0f;
 		m_AddRot.x = 0.75f;
 		break;
 	case DIRECTION::DOWN:
 		m_ShotRot.x = -0.5f * D3DX_PI;
 		m_ShotRot.y = 0.5f * D3DX_PI;
+		m_ShotRot.z = D3DX_PI;
 		m_AddRot.x = -0.75f;
 		break;
 
@@ -451,22 +455,22 @@ void CVehicle::GunRot(CModel * pModel)
 			if (pPlayertank->GetVehicleDirection() == DIRECTION::LEFT)
 			{
 				// ðŒ‚²‚Æ‰ñ“]‚³‚¹‚é
-				this->VehiclePartsRotLimit(pModel, D3DX_PI * 0.5f);
+				this->VehiclePartsRotLimit(pModel, m_ShotRot.z);
 			}
 			else if (pPlayertank->GetVehicleDirection() == DIRECTION::RIGHT)
 			{
 				// ðŒ‚²‚Æ‰ñ“]‚³‚¹‚é
-				this->VehiclePartsRotLimit(pModel, -D3DX_PI * 0.5f);
+				this->VehiclePartsRotLimit(pModel, m_ShotRot.z);
 			}
 			else if (pPlayertank->GetVehicleDirection() == DIRECTION::UP)
 			{
 				// ðŒ‚²‚Æ‰ñ“]‚³‚¹‚é
-				this->VehiclePartsRotLimit(pModel, D3DX_PI * 0.0f);
+				this->VehiclePartsRotLimit(pModel, m_ShotRot.z);
 			}
 			else if (pPlayertank->GetVehicleDirection() == DIRECTION::DOWN)
 			{
 				// ðŒ‚²‚Æ‰ñ“]‚³‚¹‚é
-				this->VehiclePartsRotLimit(pModel, D3DX_PI * 1.0f);
+				this->VehiclePartsRotLimit(pModel, m_ShotRot.z);
 			}
 		}
 	}
