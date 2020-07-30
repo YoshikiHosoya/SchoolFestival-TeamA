@@ -43,7 +43,7 @@ public:
 	void ShowDebugInfo(void);					// デバッグ情報表記
 
 	/* メンバ関数 */
-	CPlayer* GetPlayer() { return nullptr; };
+	CPlayer* GetPlayer() { return m_pPlayer; };
 	CMap* GetMap() { return m_pMap; };
 private:
 	/* 静的メンバ変数 */
