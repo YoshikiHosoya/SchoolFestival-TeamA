@@ -30,31 +30,29 @@ class CHelicopter;
 class CVehicle;
 
 // =====================================================================================================================================================================
-// ウェーブの情報
-// =====================================================================================================================================================================
-typedef struct
-{
-	D3DXVECTOR3 pos;			// 頂点座標
-	int			nFrame;			// フレーム
-	//bool		bEvent;
-} WAVE_INFO;
-
-typedef struct
-{
-	std::vector<WAVE_INFO> EnemyWaveInfo;
-	std::vector<WAVE_INFO> PrisonerWaveInfo;
-
-} WAVE;
-
-
-
-
-// =====================================================================================================================================================================
 // マップクラス
 // =====================================================================================================================================================================
 class CMap
 {
 public:
+	// ----------- 構造体 -----------
+	// ウェーブのパラメーター
+	typedef struct
+	{
+		int			nType;			// 種類
+		D3DXVECTOR3	pos;			// 位置
+		int			nFrame;			// フレーム
+		bool		bEvent;			// イベントフラグ
+	} WAVE_PARAM;
+
+	// ウェーブの情報
+	typedef struct
+	{
+		std::vector<WAVE_PARAM*> EnemyWaveInfo;			// 敵のウェーブのパラメーター
+		std::vector<WAVE_PARAM*> PrisonerWaveInfo;		// 捕虜のウェーブパラメーター
+		D3DXVECTOR3 EventPos;							// イベントが起きる位置
+	} WAVE_INFO;
+
 	// マップの種類
 	enum MAP
 	{
@@ -137,16 +135,16 @@ private:
 	/* メンバ関数 */
 	void			MapModelLoad();													// 配置するモデルのロード
 	void			MapModelSave();													// 配置するモデルのセーブ
+	void			WaveSave();														// ウェーブのセーブ
 
-	void			MapModelCreate(int ModelType, int nType, 
-											D3DXVECTOR3 pos, int nLife, D3DXVECTOR3 size);	// 配置するモデルの生成
+	void			MapModelCreate(int ModelType, int nType, D3DXVECTOR3 pos);				// 配置するモデルの生成
 	void			LoadFailureMessage(int ModelType);										// 読み込み失敗時の警告表示
 	void			LoadSuccessMessage(int ModelType);										// 読み込み成功時の結果表示
 	char			*WaveFileName(int ModelType);											// 各ウェーブファイル名
 
-	void			SaveModelHeader(FILE *pFile, int ModelType);							// セーブするモデルのヘッダー
-	void			SaveModelContents(FILE *pFile,int ModelType, int nCnt, int nNum);		// セーブするモデルの情報
-	void			SaveWaveContents(FILE *pFile, int ModelType, int nCnt);					// セーブするウェーブの情報
+	void			SaveModelHeader(FILE *pFile, int ModelType);									// セーブするモデルのヘッダー
+	void			SaveModelContents(FILE *pFile,int ModelType, int nCnt, int nNum);				// セーブするモデルの情報
+	void			SaveWaveContents(FILE *pFile, int ModelType, int nType, int nCnt, int nNum);	// セーブするウェーブの情報
 
 	unsigned int	GetMaxMapModel(int ModelType);									// 配置するモデルの最大数取得
 	void			*GetMapModel(int ModelType, int nCnt);							// 配置するモデルのポインタ
@@ -170,6 +168,7 @@ private:
 
 	/* 静的メンバ変数 */
 	static char					*m_MapModelFileName[MAP_MAX];				// マップモデルファイル名
+	static char					*m_WaveFileName[WAVE_MAX];					// ウェーブファイル名
 
 	static char					*m_EnemyWaveFileName[WAVE_MAX];				// 敵ファイル名
 	static char					*m_PrisonerWaveFileName[WAVE_MAX];			// 捕虜ファイル名
@@ -194,7 +193,7 @@ private:
 
 	int							m_nOldSelect;								// 前回選択していたモノの番号
 	int							m_nWaveID;									// ウェーブの出現番号
-	WAVE_INFO					m_aWaveInfo[128];							// ウェーブの情報
+	static WAVE_INFO			m_aWaveInfo[WAVE_MAX];						// ウェーブの情報
 	D3DXVECTOR3					m_WavePos;									// ウェーブの位置
 };
 #endif
