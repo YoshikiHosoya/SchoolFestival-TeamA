@@ -63,7 +63,7 @@ void CEnemy::Uninit(void)
 	if (m_pGun != nullptr)
 	{
 		// 銃の削除
-		m_pGun->Rerease();
+		delete m_pGun;
 		m_pGun = nullptr;
 	}
 	if (m_pAI != nullptr)
@@ -133,6 +133,9 @@ void CEnemy::Update(void)
 	}
 	CCharacter::Update();
 
+	m_pGun->Update();
+
+
 }
 //====================================================================
 //描画
@@ -140,6 +143,9 @@ void CEnemy::Update(void)
 void CEnemy::Draw(void)
 {
 	CCharacter::Draw();
+
+	m_pGun->Draw();
+
 }
 //====================================================================
 //デバッグ
@@ -159,10 +165,20 @@ CEnemy *CEnemy::Create(void)
 	pEnemy->m_pAI = CEnemyAI::CreateAI(pEnemy);
 	return pEnemy;
 }
+//====================================================================
+//デフォルトのモーション設定
+//====================================================================
 bool CEnemy::DefaultMotion(void)
 {
 	SetMotion(CCharacter::ENEMY_MOTION_NORMAL);
 	return true;
+}
+//====================================================================
+//ダメージを受けた時のリアクション
+//====================================================================
+void CEnemy::DamageReaction()
+{
+	SetState(CCharacter::CHARACTER_STATE_DAMAGE_RED);
 }
 //====================================================================
 //移動

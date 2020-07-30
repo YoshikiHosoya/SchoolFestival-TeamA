@@ -160,28 +160,6 @@ void CCamera::DebugCommand()
 //=============================================================================
 void CCamera::CharacterFollowingMoveCamera()
 {
-#ifdef _DEBUG
-
-	CKeyboard *key;
-	key = CManager::GetInputKeyboard();
-	//ƒJƒƒ‰‚Ì‰ñ“]
-	if (key->GetKeyboardPress(DIK_UP))
-	{
-		m_rot.x += CAMERA_ROTATION_SPEED;
-	}
-	if (key->GetKeyboardPress(DIK_DOWN))
-	{
-		m_rot.x -= CAMERA_ROTATION_SPEED;
-	}
-	if (key->GetKeyboardPress(DIK_RIGHT))
-	{
-		m_rot.y += CAMERA_ROTATION_SPEED;
-	}
-	if (key->GetKeyboardPress(DIK_LEFT))
-	{
-		m_rot.y -= CAMERA_ROTATION_SPEED;
-	}
-#endif
 
 	//‰ñ“]‚Ì”’lŽw’è
 	if (m_rot.y > D3DX_PI)
