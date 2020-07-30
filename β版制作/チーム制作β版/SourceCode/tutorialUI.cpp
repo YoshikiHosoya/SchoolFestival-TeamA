@@ -98,7 +98,7 @@ HRESULT CTutorialUI::Init(void)
 			// テクスチャの割り当て
 			m_apScene2D[nCnt]->BindTexture(m_TexNum[nCnt]);
 
-			if (nCnt != UI_NAME && nCnt != UI_ORDER0)
+			if (nCnt != UI_NAME)
 			{
 				m_apScene2D[nCnt]->SetDisp(false);
 			}
@@ -177,6 +177,64 @@ CTutorialUI * CTutorialUI::Create()
 
 	return pTutorialUI;
 }
+
+// =====================================================================================================================================================================
+//
+// 選択したuiを描画し1個目のuiを非表示にする
+//
+// =====================================================================================================================================================================
+void CTutorialUI::SetDrawDisp(TUTORIAL_UI ui)
+{
+	// 最初の1回目は何も非表示にしない
+	if (ui == UI_ORDER0)
+	{
+		// 引数の番号のuiを表示させる
+		if (m_apScene2D[ui])
+		{
+			m_apScene2D[ui]->SetDisp(true);
+		}
+	}
+	else
+	{
+		// nullじゃなかった時
+		if (m_apScene2D[ui - 1])
+		{
+			// 1ステート前に使っていたuiを非表示にする
+			m_apScene2D[ui - 1]->SetDisp(false);
+
+			// 引数の番号のuiを表示させる
+			if (m_apScene2D[ui])
+			{
+				m_apScene2D[ui]->SetDisp(true);
+			}
+		}
+	}
+}
+
+// =====================================================================================================================================================================
+//
+// 今使われているuiの種類の取得
+//
+// =====================================================================================================================================================================
+CTutorialUI::TUTORIAL_UI CTutorialUI::GetTutorialUiType()
+{
+	for (int nCnt = UI_ORDER0,nCntArray = UI_ORDER6; nCnt < TUTORIAL_UI::UI_MAX; nCnt++, nCntArray--)
+	{
+		if (m_apScene2D[nCntArray]->GetDisp() == true)
+		{
+			// 描画されているuiの番号を列挙型に変換し変数に代入
+			return m_TutorialUiType = static_cast<TUTORIAL_UI>(nCntArray+1);
+		}
+
+		else if(m_apScene2D[UI_ORDER0]->GetDisp() == false)
+		{
+			// 一番最初だけはすべてfalseなので一番目のuiの番号を代入
+			return m_TutorialUiType = static_cast<TUTORIAL_UI>(UI_ORDER0);
+		}
+	}
+	return m_TutorialUiType;
+}
+
 // =====================================================================================================================================================================
 //
 // 点滅処理

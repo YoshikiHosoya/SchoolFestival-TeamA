@@ -31,6 +31,8 @@ public:
 		RANKING_STATE_3,
 		RANKING_STATE_4,
 		RANKING_STATE_5,
+		RANKING_STATE_6,
+		RANKING_STATE_FINAL,				// チュートリアルの最後
 	};
 
 	CTutorialManager();						// コンストラクタ
@@ -44,13 +46,20 @@ public:
 	/* 静的メンバ関数 */
 	static					CTutorialManager	*Create();					// 生成
 	/* メンバ関数 */
-	void					TutorialUiOrder();								// Uiの出現順番
+	void					TutorialState();								// チュートリアルの順番管理
 
 private:
 	/* 静的メンバ変数 */
 	/* メンバ関数 */
+	void					WaitTime();										// ステートを切り替える際の時間の管理
+	void					SetWaitTime(int Time);							// ステートを切り替える際の時間の設定
+	void					NextState();									// 次のステートに移行する
+	void					StateManager();									// 各状態ごとの関数を管理する
+
 	/* メンバ変数 */
 	TUTORIAL_STATE			m_TutorialState;								// チュートリアルの状態
 	CTutorialUI				*m_pTutorialUI;									// チュートリアルUIのポインタ
+	int						m_nWaitTime;									// ステートを切り替える際の時間
+	bool					m_bOneFlag;										// 1回だけ処理を通すフラグ
 };
 #endif

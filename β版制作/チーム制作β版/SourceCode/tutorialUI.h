@@ -56,7 +56,8 @@ public:
 	static  CTutorialUI		*Create();							// ランキングUIの生成
 
 	/* メンバ関数 */
-
+	void					SetDrawDisp(TUTORIAL_UI ui);		// 選択したuiを描画し1個目のuiを非表示にする
+	TUTORIAL_UI				GetTutorialUiType();				// 今使われているuiの種類を取得
 private:
 	/* 静的メンバ関数 */
 
@@ -64,12 +65,13 @@ private:
 	void					Flashing(CScene2D *m_apScene2D);	// 点滅処理
 
 	/* 静的メンバ変数 */
-	static LPDIRECT3DTEXTURE9	m_TexNum[UI_MAX];		// バインドするテクスチャの情報
-	static D3DXVECTOR3			m_Pos[UI_MAX];			// 座標情報
-	static D3DXVECTOR3			m_Size[UI_MAX];			// サイズ情報
+	static LPDIRECT3DTEXTURE9	m_TexNum[UI_MAX];				// バインドするテクスチャの情報
+	static D3DXVECTOR3			m_Pos[UI_MAX];					// 座標情報
+	static D3DXVECTOR3			m_Size[UI_MAX];					// サイズ情報
 
 	/* メンバ変数 */
-	CScene2D				*m_apScene2D[UI_MAX];			// シーン2Dのポインタ
+	CScene2D				*m_apScene2D[UI_MAX];				// シーン2Dのポインタ
 	int						m_nColCnt;							// カラーカウント
+	TUTORIAL_UI				m_TutorialUiType;					// uiの種類
 };
 #endif
