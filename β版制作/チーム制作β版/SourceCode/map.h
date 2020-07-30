@@ -56,6 +56,7 @@ public:
 	// マップの種類
 	enum MAP
 	{
+		MAP_TUTORIAL,	// 0
 		MAP_1,			// 1
 		MAP_2,			// 2
 		MAP_MAX
@@ -130,6 +131,7 @@ public:
 	CHelicopter		*GetHelicopter(int nCnt)	{ return m_pHelicopter[nCnt]; };	// ヘリコプターの取得
 
 	void			UpdateDieFlag();												// 死亡フラグ確認関数
+	void			AllDelete();														// 配置しているモデルを全て破棄
 
 private:
 	/* メンバ関数 */
@@ -154,7 +156,7 @@ private:
 	void			AllDeleteButton();														// 配置したモデルを全てデリートするボタン
 	void			ModelDeleteButton(int nNowSelect);										// 配置するモデルをデリートするボタン
 	void			ModelCreateButton();													// 配置するモデルを生成するボタン
-	
+
 	D3DXVECTOR3		GetMapModelPos(int nNowSelect);									// 選択しているモデルの位置の取得
 	void			SetMapModelPos(D3DXVECTOR3 pos, int nNowSelect);				// 選択しているモデルの位置の設定
 	void			SetMapModelColorChangeFlag(bool bFlag, int nNowSelect);			// 選択しているモデルの色を半透明にするフラグの設定

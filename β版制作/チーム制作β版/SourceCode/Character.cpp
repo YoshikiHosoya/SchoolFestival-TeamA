@@ -197,9 +197,18 @@ void CCharacter::Update(void)
 		break;
 	case CHARACTER_STATE_INVINCIBLE:
 		m_nStateCnt++;
-		if (m_nStateCnt % 30 == 0)
+		if (m_nStateCnt % 120 == 0)
 		{
 			m_state = CHARACTER_STATE_NORMAL;
+			ChangeColor(false, D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f));
+		}
+		else if (m_nStateCnt % 4 == 0 && m_nStateCnt % 8 != 0)
+		{
+			ChangeColor(true, D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f));
+		}
+		else if (m_nStateCnt % 8 == 0)
+		{
+			ChangeColor(true, D3DXCOLOR(0.6f, 0.6f, 0.6f, 0.0f));
 		}
 		break;
 	}
@@ -441,6 +450,9 @@ void CCharacter::SetJump(bool bJump)
 void CCharacter::SetState(CHARACTER_STATE state)
 {
 	m_state = state;
+	m_nStateCnt;
+	ChangeColor(false, D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f));
+
 }
 //====================================================================
 //マトリックスの設定

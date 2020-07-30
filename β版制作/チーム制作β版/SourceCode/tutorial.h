@@ -19,6 +19,8 @@
 class CRenderer;
 class CKeyboard;
 class CTutorialManager;
+class CMap;
+class CPlayer;
 
 // =====================================================================================================================================================================
 // マクロ定義
@@ -41,9 +43,13 @@ public:
 	void ShowDebugInfo(void);					// デバッグ情報表記
 
 	/* メンバ関数 */
-	CPlayer* GetPlayer() { return nullptr; };
-	CMap* GetMap() { return nullptr; };
+	CPlayer* GetPlayer() { return m_pPlayer; };
+	CMap* GetMap() { return m_pMap; };
 private:
+	/* 静的メンバ変数 */
+	static CMap					*m_pMap;
+	static CPlayer				*m_pPlayer;
+
 	/* メンバ変数 */
 	CTutorialManager	*m_pTutorialManager;
 };

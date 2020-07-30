@@ -59,6 +59,7 @@ public:
 	static void DebugAll(void);
 	static bool &GetStopFlag(void);
 	static void ShowUpdateGraph();		//デバッグ用　更新や描画にかかる時間をグラフで表記
+	static void MapChangeRelease();		//マップ遷移時に残っているモノを消去
 
 	void SetObjType(OBJ_TYPE type);
 	static CScene *GetScene(OBJ_TYPE type);
