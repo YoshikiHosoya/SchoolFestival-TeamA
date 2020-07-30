@@ -63,7 +63,7 @@ void CEnemy::Uninit(void)
 	if (m_pGun != nullptr)
 	{
 		// 銃の削除
-		m_pGun->Rerease();
+		delete m_pGun;
 		m_pGun = nullptr;
 	}
 	if (m_pAI != nullptr)
@@ -133,6 +133,9 @@ void CEnemy::Update(void)
 	}
 	CCharacter::Update();
 
+	m_pGun->Update();
+
+
 }
 //====================================================================
 //描画
@@ -140,6 +143,9 @@ void CEnemy::Update(void)
 void CEnemy::Draw(void)
 {
 	CCharacter::Draw();
+
+	m_pGun->Draw();
+
 }
 //====================================================================
 //デバッグ

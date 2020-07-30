@@ -23,9 +23,8 @@
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
 // =====================================================================================================================================================================
-CMap::MAP					CMap::m_MapNum				= MAP_1;					// マップ番号
+CMap::MAP					CMap::m_MapNum				= MAP_TUTORIAL;				// マップ番号
 CMap::WAVE					CMap::m_WaveNum				= WAVE_1;					// ウェーブ番号
-CMap::EDITOR				CMap::m_Editor				= EDITOR_MAP;				// マップエディター
 CMap::ARRANGEMENT_MODEL		CMap::m_ArrangmentModel		= ARRANGEMENT_MODEL_MAP;	// 配置するモデルの種類
 CMap::WAVE_INFO				CMap::m_aWaveInfo[WAVE_MAX] = {};						// ウェーブの情報
 
@@ -47,42 +46,6 @@ char *CMap::m_WaveFileName[WAVE_MAX] =
 	{ "data/Load/Wave/Wave_01.txt" },
 	{ "data/Load/Wave/Wave_02.txt" },
 	{ "data/Load/Wave/Wave_03.txt" },
-};
-
-// 敵
-char *CMap::m_EnemyWaveFileName[WAVE_MAX] =
-{
-	{ "data/Load/Enemy/Enemy_Wave_01.txt" },
-	{ "data/Load/Enemy/Enemy_Wave_02.txt" },
-	{ "data/Load/Enemy/Enemy_Wave_03.txt" },
-};
-// 捕虜
-char *CMap::m_PrisonerWaveFileName[WAVE_MAX] =
-{
-	{ "data/Load/Prisoner/Prisoner_Wave_01.txt" },
-	{ "data/Load/Prisoner/Prisoner_Wave_02.txt" },
-	{ "data/Load/Prisoner/Prisoner_Wave_03.txt" },
-};
-// 戦車
-char *CMap::m_PlayerTankWaveFileName[WAVE_MAX] =
-{
-	{ "data/Load/PlayerTank/PlayerTank_Wave_01.txt" },
-	{ "data/Load/PlayerTank/PlayerTank_Wave_02.txt" },
-	{ "data/Load/PlayerTank/PlayerTank_Wave_03.txt" },
-};
-// 戦闘機
-char *CMap::m_BattlePlaneWaveFileName[WAVE_MAX] =
-{
-	{ "data/Load/BattlePlane/BattlePlane_Wave_01.txt" },
-	{ "data/Load/BattlePlane/BattlePlane_Wave_02.txt" },
-	{ "data/Load/BattlePlane/BattlePlane_Wave_03.txt" },
-};
-// ヘリコプター
-char *CMap::m_HelicopterWaveFileName[WAVE_MAX] =
-{
-	{ "data/Load/Helicopter/Helicopter_Wave_01.txt" },
-	{ "data/Load/Helicopter/Helicopter_Wave_02.txt" },
-	{ "data/Load/Helicopter/Helicopter_Wave_03.txt" },
 };
 
 // =====================================================================================================================================================================
@@ -300,71 +263,70 @@ void CMap::MapModelSave()
 	}
 }
 
-// =====================================================================================================================================================================
+//// =====================================================================================================================================================================
+////
+//// ウェーブのセーブ
+////
+//// =====================================================================================================================================================================
+//void CMap::WaveSave()
+//{
+//	int nNum = 0;
 //
-// ウェーブのセーブ
+//	// ファイルポイント
+//	FILE	*pFile = nullptr;
 //
-// =====================================================================================================================================================================
-void CMap::WaveSave()
-{
-	int nNum = 0;
-
-	// ファイルポイント
-	FILE	*pFile = nullptr;
-
-	// ファイルを開く
-	pFile = fopen(m_WaveFileName[m_WaveNum], "w");
-
-	// 開いているとき
-	if (pFile != NULL)
-	{
-		fprintf(pFile, COMMENT02);
-		fprintf(pFile, "// ウェーブの配置情報\n");
-		fprintf(pFile, COMMENT02);
-
-		fprintf(pFile, "SCRIPT\n");
-		fprintf(pFile, NEWLINE);
-		fprintf(pFile, "	EVENTPOS		= %.0f %.0f %.0f\n", m_aWaveInfo[m_WaveNum].EventPos.x, m_aWaveInfo[m_WaveNum].EventPos.y, m_aWaveInfo[m_WaveNum].EventPos.z);
-		fprintf(pFile, NEWLINE);
-
-		for (int nModelType = 0; nModelType < ARRANGEMENT_MODEL_MAX; nModelType++)
-		{
-			if (nModelType == ARRANGEMENT_MODEL_ENEMY || nModelType == ARRANGEMENT_MODEL_PRISONER)
-			{
-				// セーブするモデルのヘッダー
-				SaveModelHeader(pFile, nModelType);
-
-				// 各モデルの種類分回す
-				for (unsigned int nCntModel = 0; nCntModel < GetMaxMapModel(nModelType); nCntModel++)
-				{
-					if (GetMapModel(nModelType, nCntModel))
-					{
-						// セーブするモデルの情報
-						//SaveWaveContents(pFile, nModelType, nCntModel, nNum);
-
-						nNum++;
-					}
-				}
-			}
-		}
-		fprintf(pFile, "END_SCRIPT\n");
-
-		for (int nModelType = 0; nModelType < ARRANGEMENT_MODEL_MAX; nModelType++)
-		{
-			// 読み込み成功時の結果表示
-			LoadSuccessMessage(nModelType);
-		}
-
-		// ファイルを閉じる
-		fclose(pFile);
-	}
-	else
-	{
-		// 読み込み失敗時の警告表示
-		//LoadFailureMessage(ModelType);
-	}
-
-}
+//	// ファイルを開く
+//	pFile = fopen(m_WaveFileName[m_WaveNum], "w");
+//
+//	// 開いているとき
+//	if (pFile != NULL)
+//	{
+//		fprintf(pFile, COMMENT02);
+//		fprintf(pFile, "// ウェーブの配置情報\n");
+//		fprintf(pFile, COMMENT02);
+//
+//		fprintf(pFile, "SCRIPT\n");
+//		fprintf(pFile, NEWLINE);
+//		fprintf(pFile, "	EVENTPOS		= %.0f %.0f %.0f\n", m_aWaveInfo[m_WaveNum].EventPos.x, m_aWaveInfo[m_WaveNum].EventPos.y, m_aWaveInfo[m_WaveNum].EventPos.z);
+//		fprintf(pFile, NEWLINE);
+//
+//		for (int nModelType = 0; nModelType < ARRANGEMENT_MODEL_MAX; nModelType++)
+//		{
+//			if (nModelType == ARRANGEMENT_MODEL_ENEMY || nModelType == ARRANGEMENT_MODEL_PRISONER)
+//			{
+//				// セーブするモデルのヘッダー
+//				SaveModelHeader(pFile, nModelType);
+//
+//				// 各モデルの種類分回す
+//				for (unsigned int nCntModel = 0; nCntModel < GetMaxMapModel(nModelType); nCntModel++)
+//				{
+//					if (GetMapModel(nModelType, nCntModel))
+//					{
+//						// セーブするモデルの情報
+//						//SaveWaveContents(pFile, nModelType, nCntModel, nNum);
+//
+//						nNum++;
+//					}
+//				}
+//			}
+//		}
+//		fprintf(pFile, "END_SCRIPT\n");
+//
+//		for (int nModelType = 0; nModelType < ARRANGEMENT_MODEL_MAX; nModelType++)
+//		{
+//			// 読み込み成功時の結果表示
+//			LoadSuccessMessage(nModelType);
+//		}
+//
+//		// ファイルを閉じる
+//		fclose(pFile);
+//	}
+//	else
+//	{
+//		// 読み込み失敗時の警告表示
+//		//LoadFailureMessage(ModelType);
+//	}
+//}
 
 // =====================================================================================================================================================================
 //
@@ -543,45 +505,6 @@ void CMap::LoadSuccessMessage(int ModelType)
 
 // =====================================================================================================================================================================
 //
-// 各ウェーブファイル名
-//
-// =====================================================================================================================================================================
-char * CMap::WaveFileName(int ModelType)
-{
-	char *cFileName = nullptr;			// ファイル名
-
-	switch (ModelType)
-	{
-		/* --- 敵 --- */
-	case CMap::ARRANGEMENT_MODEL_ENEMY:
-		cFileName = m_EnemyWaveFileName[m_WaveNum];
-		break;
-
-		/* --- 捕虜 --- */
-	case CMap::ARRANGEMENT_MODEL_PRISONER:
-		cFileName = m_PrisonerWaveFileName[m_WaveNum];
-		break;
-
-		/* --- 戦車 --- */
-	case CMap::ARRANGEMENT_MODEL_TANK:
-		cFileName = m_PlayerTankWaveFileName[m_WaveNum];
-		break;
-
-		/* --- 戦闘機 --- */
-	case CMap::ARRANGEMENT_MODEL_BATTLEPLANE:
-		cFileName = m_BattlePlaneWaveFileName[m_WaveNum];
-		break;
-
-		/* --- ヘリコプター --- */
-	case CMap::ARRANGEMENT_MODEL_HELICOPTER:
-		cFileName = m_HelicopterWaveFileName[m_WaveNum];
-		break;
-	}
-	return cFileName;
-}
-
-// =====================================================================================================================================================================
-//
 // マップの生成
 //
 // =====================================================================================================================================================================
@@ -616,52 +539,31 @@ void CMap::MapUpdate()
 		// マップエディター
 		if (ImGui::BeginTabItem("MapEditor"))
 		{
-			// マップエディター
-			m_Editor = EDITOR_MAP;
+			//if (CHossoLibrary::ImGui_Combobox())
+			//{
+			//	AllDelete();
+			//	MapLoad();
 
-			// オブジェクト番号の選択
-			ImGui::InputInt("nowMapNum", &nNowMapSelect, 1, 20, 0);
+			//}
+		
+			//// オブジェクト番号の選択
+			//ImGui::InputInt("nowMapNum", &nNowMapSelect, 1, 20, 0);
 
-			// 範囲制限
-			if (nNowMapSelect <= 0)
-			{
-				nNowMapSelect = 0;
-			}
-			else if (nNowMapSelect >= MAP_MAX)
-			{
-				// 最後の番号にする
-				nNowMapSelect = MAP_MAX - 1;
-			}
+			//// 範囲制限
+			//if (nNowMapSelect <= 0)
+			//{
+			//	nNowMapSelect = 0;
+			//}
+			//else if (nNowMapSelect >= MAP_MAX)
+			//{
+			//	// 最後の番号にする
+			//	nNowMapSelect = MAP_MAX - 1;
+			//}
 
-			// 選択したマップ番号代入
-			m_MapNum = (MAP)nNowMapSelect;
+			//// 選択したマップ番号代入
+			//m_MapNum = (MAP)nNowMapSelect;
 
-			//m_pMapModel[0]->SetModelConut(nNowMapSelect);
-
-			ImGui::EndTabItem();
-		}
-		// ウェーブエディター
-		if (ImGui::BeginTabItem("WaveEditor"))
-		{
-			// ウェーブエディター
-			m_Editor = EDITOR_WAVE;
-
-			// オブジェクト番号の選択
-			ImGui::InputInt("nowWaveNum", &nNowMapSelect, 1, 20, 0);
-
-			// 範囲制限
-			if (nNowMapSelect <= 0)
-			{
-				nNowMapSelect = 0;
-			}
-			else if (nNowMapSelect >= WAVE_MAX)
-			{
-				// 最後の番号にする
-				nNowMapSelect = WAVE_MAX - 1;
-			}
-
-			// 選択したマップ番号代入
-			m_WaveNum = (WAVE)nNowMapSelect;
+			////m_pMapModel[nNowMapSelect]->SetModelConut(nNowMapSelect);
 
 			ImGui::EndTabItem();
 		}
@@ -813,24 +715,6 @@ void CMap::WaveLoad(WAVE WaveNum)
 	{
 		// 読み込み失敗時の警告表示
 		LoadFailureMessage(nModelType);
-	}
-}
-
-// =====================================================================================================================================================================
-//
-// ウェーブの生成
-//
-// =====================================================================================================================================================================
-void CMap::WaveCreate(WAVE WaveNum, int ModelType, int &frame)
-{
-	// ウェーブ番号
-	m_WaveNum = WaveNum;
-
-	//if (m_aWaveInfo[m_nWaveID].nFrame == frame)
-	{
-
-		// 初期化
-		frame = 0;
 	}
 }
 
@@ -1298,6 +1182,13 @@ void CMap::ModelDeleteButton(int nNowSelect)
 	{
 		switch (m_ArrangmentModel)
 		{
+		case CMap::ARRANGEMENT_MODEL_MAP:
+			// 敵
+			m_pMapModel[nNowSelect]->Rerease();
+			m_pMapModel[nNowSelect] = nullptr;
+			m_pMapModel.erase(m_pMapModel.begin() + nNowSelect);
+			break;
+
 		case CMap::ARRANGEMENT_MODEL_ENEMY:
 			// 敵
 			m_pEnemy[nNowSelect]->Rerease();
@@ -1396,6 +1287,12 @@ void CMap::ModelCreateButton()
 void CMap::AllDelete()
 {
 	// 障害物
+	for (unsigned int nCnt = 0; nCnt < m_pMapModel.size(); nCnt++)
+	{
+		m_pMapModel[nCnt]->Rerease();
+		m_pMapModel[nCnt] = nullptr;
+	}
+	// 障害物
 	for (unsigned int nCnt = 0; nCnt < m_pObstacle.size(); nCnt++)
 	{
 		m_pObstacle[nCnt]->Rerease();
@@ -1432,6 +1329,7 @@ void CMap::AllDelete()
 		m_pHelicopter[nCnt] = nullptr;
 	}
 	// 全ての要素の削除
+	m_pMapModel.clear();
 	m_pObstacle.clear();
 	m_pEnemy.clear();
 	m_pPrisoner.clear();
@@ -1612,16 +1510,12 @@ void CMap::MapModelTab()
 	//Tab
 	if (ImGui::BeginTabBar("MapModelType"))
 	{
-		// マップエディタのときのみ
-		if (m_Editor == EDITOR_MAP)
+		// 障害物の設置
+		if (ImGui::BeginTabItem("Obstacle"))
 		{
-			// 障害物の設置
-			if (ImGui::BeginTabItem("Obstacle"))
-			{
-				m_ArrangmentModel = ARRANGEMENT_MODEL_OBSTACLE;
-				MapModelSet();
-				ImGui::EndTabItem();
-			}
+			m_ArrangmentModel = ARRANGEMENT_MODEL_OBSTACLE;
+			MapModelSet();
+			ImGui::EndTabItem();
 		}
 		// 捕虜の設置
 		if (ImGui::BeginTabItem("Prisoner"))
@@ -1637,30 +1531,26 @@ void CMap::MapModelTab()
 			MapModelSet();
 			ImGui::EndTabItem();
 		}
-		// マップエディタのときのみ
-		if (m_Editor == EDITOR_MAP)
+		// 戦車の設置
+		if (ImGui::BeginTabItem("Tank"))
 		{
-			// 戦車の設置
-			if (ImGui::BeginTabItem("Tank"))
-			{
-				m_ArrangmentModel = ARRANGEMENT_MODEL_TANK;
-				MapModelSet();
-				ImGui::EndTabItem();
-			}
-			// 戦闘機の設置
-			if (ImGui::BeginTabItem("BattlePlane"))
-			{
-				m_ArrangmentModel = ARRANGEMENT_MODEL_BATTLEPLANE;
-				MapModelSet();
-				ImGui::EndTabItem();
-			}
-			// ヘリの設置
-			if (ImGui::BeginTabItem("Helicopter"))
-			{
-				m_ArrangmentModel = ARRANGEMENT_MODEL_HELICOPTER;
-				MapModelSet();
-				ImGui::EndTabItem();
-			}
+			m_ArrangmentModel = ARRANGEMENT_MODEL_TANK;
+			MapModelSet();
+			ImGui::EndTabItem();
+		}
+		// 戦闘機の設置
+		if (ImGui::BeginTabItem("BattlePlane"))
+		{
+			m_ArrangmentModel = ARRANGEMENT_MODEL_BATTLEPLANE;
+			MapModelSet();
+			ImGui::EndTabItem();
+		}
+		// ヘリの設置
+		if (ImGui::BeginTabItem("Helicopter"))
+		{
+			m_ArrangmentModel = ARRANGEMENT_MODEL_HELICOPTER;
+			MapModelSet();
+			ImGui::EndTabItem();
 		}
 		//TabEnd
 		ImGui::EndTabBar();
@@ -1720,14 +1610,6 @@ void CMap::MapModelSet()
 			// 選択しているモデルを注視点の目的地に設定
 			SetSelectMapModelPosRDest(GetMapModelPos(nNowSelect));
 
-			if (m_Editor == EDITOR_WAVE)
-			{
-				// フレームの設定
-				ImGui::DragInt("Frame", &nFrame);
-				// イベントフラグ
-				ImGui::Checkbox("Event", &bEvent);
-			}
-
 			// 前回選択していたものと違うとき
 			if (m_nOldSelect != nNowSelect)
 			{
@@ -1764,12 +1646,8 @@ void CMap::MapModelSet()
 		MapModelSave();
 	}
 
-	// マップエディターのとき
-	if (m_Editor == EDITOR_MAP)
-	{
-		// 配置したモデルを全てロードするボタン
-		AllLoadButton();
-	}
+	// 配置したモデルを全てロードするボタン
+	AllLoadButton();
 
 	// 改行キャンセル
 	ImGui::SameLine(ButtonSpace);

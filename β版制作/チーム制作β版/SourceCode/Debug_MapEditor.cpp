@@ -56,7 +56,7 @@ HRESULT CDebugMapEditor::Init(void)
 	// マップの生成
 	m_pMap		= CMap::MapCreate();
 	// マップのロード
-	m_pMap->MapLoad(CMap::MAP_1);
+	m_pMap->MapLoad(CMap::MAP_1_1);
 
 	//パーティクル生成
 	CParticleManager::Create();
@@ -102,7 +102,7 @@ CPlayer * CDebugMapEditor::GetPlayer(void)
 // =====================================================================================================================================================================
 CMap * CDebugMapEditor::GetMap(void)
 {
-	return nullptr;
+	return m_pMap;
 }
 
 // =====================================================================================================================================================================
