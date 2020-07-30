@@ -147,9 +147,10 @@ private:
 	void			MapModelTab();															// マップに配置するモデルのタブ
 	void			MapModelSet();															// マップに配置するモデルの設置
 	void			ComboBoxAll(int nNowSelect);											// 全てのコンボボックス
-	bool			ObstacleComboBox(int &nType);											// 障害物のコンボボックス
-	bool			EnemyComboBox(int &nType);												// 敵のコンボボックス
-	bool			PrisonerComboBox(int &nType);											// 捕虜のコンボボックス
+	void			MapComboBox(int &nSelectType, int nNowSelect);							// 捕虜のコンボボックス
+	void			ObstacleComboBox(int &nSelectType, int nNowSelect);						// 障害物のコンボボックス
+	void			EnemyComboBox(int &nSelectType, int nNowSelect);						// 敵のコンボボックス
+	void			PrisonerComboBox(int &nSelectType, int nNowSelect);						// 捕虜のコンボボックス
 	void			SetSelectMapModelPosRDest(D3DXVECTOR3 posR);							// 選択しているモデルを注視点の目的地に設定
 
 	/* 静的メンバ変数 */
