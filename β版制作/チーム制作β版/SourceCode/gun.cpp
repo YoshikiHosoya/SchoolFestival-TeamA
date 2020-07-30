@@ -247,6 +247,7 @@ void CGun::Shot()
 		case CGun::GUNTYPE_LASERGUN:
 			// レーザーガンの生成
 			pBullet = CLasergun::Create(m_ShotRot);
+			m_bMultiple = true;		// フラグをオン
 			break;
 
 		case CGun::GUNTYPE_ROCKETLAUNCHER:
@@ -278,7 +279,6 @@ void CGun::Shot()
 		}
 		if (pBullet)
 		{
-
 			// 位置の設定
 			pBullet->SetPosition(m_ShotPos);
 
@@ -315,6 +315,9 @@ void CGun::MultipleShot()
 		{
 			// フレームカウント初期化
 			m_nCntFrame = 0;
+
+			// 残弾数を減らす
+			m_nAmmo--;
 
 			// ヘビーマシンガンのとき
 			if (m_GunType == GUNTYPE_HEAVYMACHINEGUN)
