@@ -50,7 +50,10 @@ char *CModel::m_PrisonerFileName[MODEL_PRISONER_MAX] =
 char *CModel::m_MapFileName[MODEL_MAP_MAX] =
 {
 	{ "data/MODEL/map/alphamap.x" },
-	{ "data/MODEL/map/block02.x" },
+	{ "data/MODEL/map/Map1_FirstStage.x" },
+	{ "data/MODEL/map/Map1_Second stage.x" },
+	{ "data/MODEL/map/Map1_Second stage.x" },
+	{ "data/MODEL/map/Map1_Boss stage.x" },
 };
 char *CModel::m_EnemyFileName[MODEL_ENEMY_MAX] =
 {

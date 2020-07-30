@@ -95,7 +95,7 @@ void CPlayertank::Uninit(void)
 	// 銃のポインタ
 	if (m_pGun)
 	{
-		m_pGun->Rerease();
+		delete m_pGun;
 		m_pGun = nullptr;
 	}
 
@@ -153,6 +153,9 @@ void CPlayertank::Update(void)
 	// 判定をまとめて行う
 	Collision();
 
+	m_pGun->Update();
+	
+
 	// 乗り物クラスの更新
 	CVehicle::Update();
 }
@@ -163,6 +166,8 @@ void CPlayertank::Update(void)
 //====================================================================
 void CPlayertank::Draw(void)
 {
+	m_pGun->Draw();
+
 	CVehicle::Draw();
 }
 

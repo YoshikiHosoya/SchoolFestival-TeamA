@@ -89,7 +89,7 @@ void CBattlePlane::Uninit(void)
 	// 銃のポインタ
 	if (m_pGun)
 	{
-		m_pGun->Rerease();
+		delete m_pGun;
 		m_pGun = nullptr;
 	}
 
@@ -133,6 +133,8 @@ void CBattlePlane::Update(void)
 	// 判定をまとめて行う
 	Collision();
 
+	m_pGun->Update();
+
 	// 乗り物クラスの更新
 	CVehicle::Update();
 }
@@ -144,6 +146,9 @@ void CBattlePlane::Update(void)
 void CBattlePlane::Draw(void)
 {
 	CVehicle::Draw();
+
+	m_pGun->Draw();
+
 }
 
 //====================================================================
