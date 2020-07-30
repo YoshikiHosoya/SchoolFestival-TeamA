@@ -1269,55 +1269,7 @@ void CMap::AllDeleteButton()
 	// 全てデリート
 	if (ImGui::Button("AllDelete"))
 	{
-		// 障害物
-		for (unsigned int nCnt = 0; nCnt < m_pObstacle.size(); nCnt++)
-		{
-			m_pObstacle[nCnt]->Rerease();
-			m_pObstacle[nCnt] = nullptr;
-			//m_pObstacle.erase(m_pObstacle.begin() + nCnt);
-		}
-		// 敵
-		for (unsigned int nCnt = 0; nCnt < m_pEnemy.size(); nCnt++)
-		{
-			m_pEnemy[nCnt]->Rerease();
-			m_pEnemy[nCnt] = nullptr;
-			//m_pEnemy.erase(m_pEnemy.begin() + nCnt);
-		}
-		// 捕虜
-		for (unsigned int nCnt = 0; nCnt < m_pPrisoner.size(); nCnt++)
-		{
-			m_pPrisoner[nCnt]->Rerease();
-			m_pPrisoner[nCnt] = nullptr;
-			//m_pPrisoner.erase(m_pPrisoner.begin() + nCnt);
-		}
-		// 戦車
-		for (unsigned int nCnt = 0; nCnt < m_pPlayerTank.size(); nCnt++)
-		{
-			m_pPlayerTank[nCnt]->Rerease();
-			m_pPlayerTank[nCnt] = nullptr;
-			//m_pPlayerTank.erase(m_pPlayerTank.begin() + nCnt);
-		}
-		// 戦闘機
-		for (unsigned int nCnt = 0; nCnt < m_pBattlePlane.size(); nCnt++)
-		{
-			m_pBattlePlane[nCnt]->Rerease();
-			m_pBattlePlane[nCnt] = nullptr;
-			//m_pBattlePlane.erase(m_pBattlePlane.begin() + nCnt);
-		}
-		// ヘリコプター
-		for (unsigned int nCnt = 0; nCnt < m_pHelicopter.size(); nCnt++)
-		{
-			m_pHelicopter[nCnt]->Rerease();
-			m_pHelicopter[nCnt] = nullptr;
-			//m_pHelicopter.erase(m_pHelicopter.begin() + nCnt);
-		}
-		// 全ての要素の削除
-		m_pObstacle.clear();
-		m_pEnemy.clear();
-		m_pPrisoner.clear();
-		m_pPlayerTank.clear();
-		m_pBattlePlane.clear();
-		m_pHelicopter.clear();
+		AllDelete();
 	}
 }
 
@@ -1421,6 +1373,58 @@ void CMap::ModelCreateButton()
 			break;
 		}
 	}
+}
+
+// =====================================================================================================================================================================
+//
+// 配置しているモデルを全て破棄する処理
+//
+// =====================================================================================================================================================================
+void CMap::AllDelete()
+{
+	// 障害物
+	for (unsigned int nCnt = 0; nCnt < m_pObstacle.size(); nCnt++)
+	{
+		m_pObstacle[nCnt]->Rerease();
+		m_pObstacle[nCnt] = nullptr;
+	}
+	// 敵
+	for (unsigned int nCnt = 0; nCnt < m_pEnemy.size(); nCnt++)
+	{
+		m_pEnemy[nCnt]->Rerease();
+		m_pEnemy[nCnt] = nullptr;
+	}
+	// 捕虜
+	for (unsigned int nCnt = 0; nCnt < m_pPrisoner.size(); nCnt++)
+	{
+		m_pPrisoner[nCnt]->Rerease();
+		m_pPrisoner[nCnt] = nullptr;
+	}
+	// 戦車
+	for (unsigned int nCnt = 0; nCnt < m_pPlayerTank.size(); nCnt++)
+	{
+		m_pPlayerTank[nCnt]->Rerease();
+		m_pPlayerTank[nCnt] = nullptr;
+	}
+	// 戦闘機
+	for (unsigned int nCnt = 0; nCnt < m_pBattlePlane.size(); nCnt++)
+	{
+		m_pBattlePlane[nCnt]->Rerease();
+		m_pBattlePlane[nCnt] = nullptr;
+	}
+	// ヘリコプター
+	for (unsigned int nCnt = 0; nCnt < m_pHelicopter.size(); nCnt++)
+	{
+		m_pHelicopter[nCnt]->Rerease();
+		m_pHelicopter[nCnt] = nullptr;
+	}
+	// 全ての要素の削除
+	m_pObstacle.clear();
+	m_pEnemy.clear();
+	m_pPrisoner.clear();
+	m_pPlayerTank.clear();
+	m_pBattlePlane.clear();
+	m_pHelicopter.clear();
 }
 
 // =====================================================================================================================================================================
