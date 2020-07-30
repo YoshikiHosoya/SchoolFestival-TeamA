@@ -28,7 +28,7 @@
 // =====================================================================================================================================================================
 CTutorialManager::CTutorialManager()
 {
-	m_TutorialState = RANKING_STATE_NONE;
+	m_TutorialState = TUTORIAL_STATE_NONE;
 	m_pTutorialUI = nullptr;
 	m_nWaitTime = 0;
 	m_bOneFlag = false;
@@ -127,17 +127,25 @@ void CTutorialManager::TutorialState()
 	// 描画許可順番
 	switch (m_TutorialState)
 	{
-	case CTutorialManager::RANKING_STATE_NONE:
+	case CTutorialManager::TUTORIAL_STATE_NONE:
 		break;
-	case CTutorialManager::RANKING_STATE_1:
+	case CTutorialManager::TUTORIAL_STATE_FIRST:
 		break;
-	case CTutorialManager::RANKING_STATE_2:
+	case CTutorialManager::TUTORIAL_STATE_1:
 		break;
-	case CTutorialManager::RANKING_STATE_3:
+	case CTutorialManager::TUTORIAL_STATE_2:
 		break;
-	case CTutorialManager::RANKING_STATE_4:
+	case CTutorialManager::TUTORIAL_STATE_3:
 		break;
-	case CTutorialManager::RANKING_STATE_FINAL:
+	case CTutorialManager::TUTORIAL_STATE_4:
+		break;
+	case CTutorialManager::TUTORIAL_STATE_5:
+		break;
+	case CTutorialManager::TUTORIAL_STATE_6:
+		break;
+	case CTutorialManager::TUTORIAL_STATE_FINAL:
+		break;
+	default:
 		break;
 	}
 }
@@ -179,7 +187,7 @@ void CTutorialManager::SetWaitTime(int Time)
 void CTutorialManager::NextState()
 {
 	// 次のステートに移行する
-	if (m_TutorialState != RANKING_STATE_FINAL)
+	if (m_TutorialState != TUTORIAL_STATE_END)
 	{
 		m_TutorialState = static_cast<TUTORIAL_STATE>(m_TutorialState + 1);
 		m_bOneFlag = false;
@@ -192,7 +200,7 @@ void CTutorialManager::NextState()
 	else
 	{
 		// ゲームモードへステート遷移
-		//CManager::GetRenderer()->GetFade()->SetFade(CManager::MODE_GAME, 0);
+		CManager::GetRenderer()->GetFade()->SetFade(CFADE::FADETYPE::FADETYPE_MODE, CManager::MODE_GAME);
 	}
 }
 

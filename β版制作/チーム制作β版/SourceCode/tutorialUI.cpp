@@ -11,22 +11,22 @@
 #include "tutorialUI.h"
 #include "tutorialmanager.h"
 #include "scene2D.h"
-
+#include "debugproc.h"
 // =====================================================================================================================================================================
 // É}ÉNÉçíËã`
 // =====================================================================================================================================================================
 #define _CRT_SECURE_NO_WARNINGS // åxçêèúãé
 
 // ÉeÉNÉXÉ`ÉÉÇÃéÌóﬁ
-#define TUTORIAL_UI_TEXTURE (TUTORIAL_UI)
+#define TUTORIAL_UI_TEXTURE		(TUTORIAL_UI)
 
 // UIÇÃç¿ïW
-#define TUTORIAL_UI_NAME_POS (D3DXVECTOR3(SCREEN_WIDTH * 0.5f,80.0f,0.0f))
-#define TUTORIAL_UI_ORDER_POS (D3DXVECTOR3(SCREEN_WIDTH * 0.5f,200.0f,0.0f))
+#define TUTORIAL_UI_NAME_POS	(D3DXVECTOR3(SCREEN_WIDTH * 0.5f,80.0f,0.0f))
+#define TUTORIAL_UI_ORDER_POS	(D3DXVECTOR3(SCREEN_WIDTH * 0.5f,200.0f,0.0f))
 
 // UIÇÃëÂÇ´Ç≥
-#define TUTORIAL_UI_NAME_SIZE (D3DXVECTOR3(SCREEN_WIDTH * 0.45f,50.0f,0.0f))
-#define TUTORIAL_UI_ORDER_SIZE (D3DXVECTOR3(SCREEN_WIDTH * 0.4f,50.0f,0.0f))
+#define TUTORIAL_UI_NAME_SIZE	(D3DXVECTOR3(SCREEN_WIDTH * 0.45f,50.0f,0.0f))
+#define TUTORIAL_UI_ORDER_SIZE	(D3DXVECTOR3(SCREEN_WIDTH * 0.4f,50.0f,0.0f))
 
 // =====================================================================================================================================================================
 // ê√ìIÉÅÉìÉoïœêîÇÃèâä˙âª
@@ -35,6 +35,7 @@ LPDIRECT3DTEXTURE9		CTutorialUI::m_TexNum[UI_MAX] = {};					// ÉoÉCÉìÉhÇ∑ÇÈÉeÉNÉ
 
 D3DXVECTOR3				CTutorialUI::m_Pos[UI_MAX] = {
 	TUTORIAL_UI_NAME_POS,
+	TUTORIAL_UI_ORDER_POS,
 	TUTORIAL_UI_ORDER_POS,
 	TUTORIAL_UI_ORDER_POS,
 	TUTORIAL_UI_ORDER_POS,
@@ -53,11 +54,12 @@ D3DXVECTOR3				CTutorialUI::m_Size[UI_MAX] = {
 	TUTORIAL_UI_ORDER_SIZE,
 	TUTORIAL_UI_ORDER_SIZE,
 	TUTORIAL_UI_ORDER_SIZE,
+	TUTORIAL_UI_ORDER_SIZE,
 };
 
-//==========================================================
+// =====================================================================================================================================================================
 // ÉRÉìÉXÉgÉâÉNÉ^
-//==========================================================
+// =====================================================================================================================================================================
 CTutorialUI::CTutorialUI()
 {
 	// èâä˙âª
@@ -69,23 +71,22 @@ CTutorialUI::CTutorialUI()
 	m_nColCnt = 0;
 }
 
-//==========================================================
+// =====================================================================================================================================================================
 // ÉfÉXÉgÉâÉNÉ^
-//==========================================================
+// =====================================================================================================================================================================
 CTutorialUI::~CTutorialUI()
 {
 }
 
-//==========================================================
+// =====================================================================================================================================================================
 // èâä˙âª
-//==========================================================
+// =====================================================================================================================================================================
 HRESULT CTutorialUI::Init(void)
 {
 	// ÉeÉNÉXÉ`ÉÉÇÃéÊìæ
 	for (int nCntNum = 0 ,nCnt = CTexture::TEX_UI_TUTORIAL_NAME; nCntNum < UI_MAX; nCntNum++,nCnt++)
 	{
-		m_TexNum[nCntNum] = {
-			CTexture::GetTexture((CTexture::TEX_TYPE)nCnt) };	// ÉoÉCÉìÉhÇ∑ÇÈÉeÉNÉXÉ`ÉÉÇÃèÓïÒ
+		m_TexNum[nCntNum] = CTexture::GetTexture((CTexture::TEX_TYPE)nCnt);	// ÉoÉCÉìÉhÇ∑ÇÈÉeÉNÉXÉ`ÉÉÇÃèÓïÒ
 	}
 
 	// UIÇÃê∂ê¨
@@ -108,9 +109,9 @@ HRESULT CTutorialUI::Init(void)
 	return S_OK;
 }
 
-//==========================================================
+// =====================================================================================================================================================================
 // èIóπ
-//==========================================================
+// =====================================================================================================================================================================
 void CTutorialUI::Uninit(void)
 {
 	for (int nCnt = 0; nCnt < TUTORIAL_UI::UI_MAX; nCnt++)
@@ -126,9 +127,9 @@ void CTutorialUI::Uninit(void)
 	}
 }
 
-//==========================================================
+// =====================================================================================================================================================================
 // çXêV
-//==========================================================
+// =====================================================================================================================================================================
 void CTutorialUI::Update(void)
 {
 	for (int nCnt = 0; nCnt < TUTORIAL_UI::UI_MAX; nCnt++)
@@ -140,13 +141,15 @@ void CTutorialUI::Update(void)
 				// çXêV
 				m_apScene2D[nCnt]->Update();
 			}
+
+			CDebugProc::Print("TutorialUI %d,%d\n", m_apScene2D[nCnt]->GetDisp(), nCnt);
 		}
 	}
 }
 
-//==========================================================
+// =====================================================================================================================================================================
 // ï`âÊèàóù
-//==========================================================
+// =====================================================================================================================================================================
 void CTutorialUI::Draw(void)
 {
 	for (int nCnt = 0; nCnt < TUTORIAL_UI::UI_MAX; nCnt++)
@@ -186,7 +189,7 @@ CTutorialUI * CTutorialUI::Create()
 void CTutorialUI::SetDrawDisp(TUTORIAL_UI ui)
 {
 	// ç≈èâÇÃ1âÒñ⁄ÇÕâΩÇ‡îÒï\é¶Ç…ÇµÇ»Ç¢
-	if (ui == UI_ORDER0)
+	if (ui == UI_ORDERFIRST)
 	{
 		// à¯êîÇÃî‘çÜÇÃuiÇï\é¶Ç≥ÇπÇÈ
 		if (m_apScene2D[ui])
@@ -218,7 +221,8 @@ void CTutorialUI::SetDrawDisp(TUTORIAL_UI ui)
 // =====================================================================================================================================================================
 CTutorialUI::TUTORIAL_UI CTutorialUI::GetTutorialUiType()
 {
-	for (int nCnt = UI_ORDER0,nCntArray = UI_ORDER6; nCnt < TUTORIAL_UI::UI_MAX; nCnt++, nCntArray--)
+	int nFlaseCnt = 0;
+	for (int nCnt = UI_ORDERFIRST,nCntArray = UI_ORDERFINAL; nCnt < TUTORIAL_UI::UI_MAX; nCnt++, nCntArray--)
 	{
 		if (m_apScene2D[nCntArray]->GetDisp() == true)
 		{
@@ -226,12 +230,19 @@ CTutorialUI::TUTORIAL_UI CTutorialUI::GetTutorialUiType()
 			return m_TutorialUiType = static_cast<TUTORIAL_UI>(nCntArray+1);
 		}
 
-		else if(m_apScene2D[UI_ORDER0]->GetDisp() == false)
+		// îzóÒÇÃílëSÇƒÇ™falseÇæÇ¡ÇΩéû1î‘ñ⁄ÇtrueÇ…Ç∑ÇÈ
+		else if (m_apScene2D[nCnt]->GetDisp() == false)
 		{
-			// àÍî‘ç≈èâÇæÇØÇÕÇ∑Ç◊ÇƒfalseÇ»ÇÃÇ≈àÍî‘ñ⁄ÇÃuiÇÃî‘çÜÇë„ì¸
-			return m_TutorialUiType = static_cast<TUTORIAL_UI>(UI_ORDER0);
+			nFlaseCnt++;
 		}
 	}
+
+	if (nFlaseCnt >= UI_ORDERFINAL)
+	{
+		// àÍî‘ç≈èâÇæÇØÇÕÇ∑Ç◊ÇƒfalseÇ»ÇÃÇ≈àÍî‘ñ⁄ÇÃuiÇÃî‘çÜÇë„ì¸
+		return m_TutorialUiType = static_cast<TUTORIAL_UI>(UI_ORDERFIRST);
+	}
+
 	return m_TutorialUiType;
 }
 
