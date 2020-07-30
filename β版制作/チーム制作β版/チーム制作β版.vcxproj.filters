@@ -277,6 +277,9 @@
     <ClCompile Include="SourceCode\tutorialUI.cpp">
       <Filter>UI</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\diffusiongun.cpp">
+      <Filter>Wepon</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SourceCode\mesh.h">
@@ -563,6 +566,9 @@
     </ClInclude>
     <ClInclude Include="SourceCode\tutorialUI.h">
       <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\diffusiongun.h">
+      <Filter>Wepon</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

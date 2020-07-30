@@ -34,6 +34,7 @@ public:
 		GUNTYPE_HELIGUN,							// ƒwƒŠ‚Ìe
 		GUNTYPE_GRENADE,							// ƒOƒŒƒl[ƒh
 		GUNTYPE_TRACKINGGUN,						// ’Ç]e
+		GUNTYPE_DIFFUSIONGUN,						// ŠgŽUe
 		GUNTYPE_MAX									// e‚ÌŽí—Þ‚ÌÅ‘å”
 	};
 

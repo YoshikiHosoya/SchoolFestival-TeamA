@@ -38,7 +38,8 @@ char *CBullet::m_BulletFileName[CGun::GUNTYPE_MAX] =
 	{ "data/Load/Gun/PlaneGun.txt" },				// í“¬‹@‚Ìe
 	{ "data/Load/Gun/HeliGun.txt" },				// ƒwƒŠ‚Ìe
 	{ "data/Load/Gun/Grenade.txt" },				// ƒOƒŒƒl[ƒh
-	{ "data/Load/Gun/HandGun.txt" },				// ’Ç]e
+	{ "data/Load/Gun/TrackingGun.txt" },				// ’Ç]e
+	{ "data/Load/Gun/DiffusionGun.txt" },				// ŠgUe
 };
 
 // =====================================================================================================================================================================

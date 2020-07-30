@@ -166,6 +166,7 @@
     <ClCompile Include="SourceCode\debugcollision.cpp" />
     <ClCompile Include="SourceCode\debugproc.cpp" />
     <ClCompile Include="SourceCode\Debug_MapEditor.cpp" />
+    <ClCompile Include="SourceCode\diffusiongun.cpp" />
     <ClCompile Include="SourceCode\Enemy.cpp" />
     <ClCompile Include="SourceCode\EnemyAI.cpp" />
     <ClCompile Include="SourceCode\fade.cpp" />
@@ -260,6 +261,7 @@
     <ClInclude Include="SourceCode\debugcollision.h" />
     <ClInclude Include="SourceCode\debugproc.h" />
     <ClInclude Include="SourceCode\Debug_MapEditor.h" />
+    <ClInclude Include="SourceCode\diffusiongun.h" />
     <ClInclude Include="SourceCode\Enemy.h" />
     <ClInclude Include="SourceCode\EnemyAI.h" />
     <ClInclude Include="SourceCode\fade.h" />
