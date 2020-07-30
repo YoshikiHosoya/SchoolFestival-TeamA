@@ -50,7 +50,10 @@ char *CModel::m_PrisonerFileName[MODEL_PRISONER_MAX] =
 char *CModel::m_MapFileName[MODEL_MAP_MAX] =
 {
 	{ "data/MODEL/map/alphamap.x" },
-	{ "data/MODEL/map/block02.x" },
+	{ "data/MODEL/map/Map1_FirstStage.x" },
+	{ "data/MODEL/map/Map1_Second stage.x" },
+	{ "data/MODEL/map/Map1_Second stage.x" },
+	{ "data/MODEL/map/Map1_Boss stage.x" },
 };
 char *CModel::m_EnemyFileName[MODEL_ENEMY_MAX] =
 {
@@ -124,8 +127,7 @@ char *CModel::m_ObstacleFileName[OBSTACLE_TYPE_MAX] =
 
 char *CModel::m_BossFileName[MODEL_BOSS_MAX] =
 {
-	{ "data/MODEL/Boss/Obstacle_Box.x" },			// ” 
-	{ "data/MODEL/Boss/Obstacle_Barrel.x" },		// ’M
+	{ "data/MODEL/Boss/SolodeRoca.x" },			// ” 
 };
 
 CModel::CModel(OBJ_TYPE type) : CScene(type)

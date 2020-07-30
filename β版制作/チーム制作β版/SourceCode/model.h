@@ -59,8 +59,11 @@ public:
 
 	typedef enum
 	{
-		MODEL_MAP_BLOCK,			//マップの武器
-		MODEL_MAP_ICESWORD,			//マップの武器
+		MODEL_MAP_TUTORIAL,			//チュートリアルマップ
+		MODEL_MAP_STAGE1_1,			//ステージ1-1
+		MODEL_MAP_STAGE1_2,			//ステージ1-2
+		MODEL_MAP_STAGE1_3,			//ステージ1-3
+		MODEL_MAP_STAGE1_BOSS,		//ボスステージ1
 		MODEL_MAP_MAX
 	}CREATE_MAP_MODEL;
 	/*--- 敵のパーツモデル ---*/
@@ -142,7 +145,6 @@ public:
 	{
 		//===ボスのモデル===
 		MODEL_BOSS_BODY,			// 体
-		MODEL_BOSS_GUN,				// 武器
 		MODEL_BOSS_MAX
 	}BOSS_PARTS_MODEL;
 
@@ -185,6 +187,7 @@ public:
 		//D3DXVECTOR3 Dest;
 	} MODEL;
 
+	CModel() {};
 	CModel(OBJ_TYPE type);				// コンストラクタ
 	~CModel();							// デストラクタ
 

@@ -18,6 +18,7 @@ public:
 		CHARACTER_STATE_NONE,
 		CHARACTER_STATE_NORMAL,
 		CHARACTER_STATE_DAMAGE,
+		CHARACTER_STATE_DAMAGE_RED,
 		CHARACTER_STATE_INVINCIBLE,
 		CHARACTER_STATE_MAX
 	}CHARACTER_STATE;
@@ -96,14 +97,6 @@ public:
 		CHARACTER_MOTION_MAX				//最大数
 	}CHARACTER_MOTION_STATE;
 
-	typedef enum
-	{
-		CHARACTER_LEFT,						//左向き
-		CHARACTER_RIGHT,					//右向き
-		CHARACTER_UP,						//上向き
-		CHARACTER_DOWN,						//下向き
-	}CHARACTER_DIRECTION;
-
 	CCharacter() {};
 	CCharacter(OBJ_TYPE type);
 	~CCharacter();
@@ -112,6 +105,7 @@ public:
 	virtual void Update(void);
 	virtual void Draw(void);
 	virtual bool DefaultMotion(void) = 0;
+	virtual void DamageReaction();
 	void Move(float move, float fdest);
 	void AddDamage(int Damage);
 	void Moation(void);
@@ -131,7 +125,7 @@ public:
 	void SetMtxWorld(D3DXMATRIX mtxWorld);
 	void SetCharacterType(CHARACTER_TYPE CharaType);
 	void SetGravity(bool gravity);
-	void SetCharacterDirection(CHARACTER_DIRECTION direction);
+	void SetCharacterDirection(DIRECTION direction);
 	void SetShotDirection(D3DXVECTOR3 direction);
 	//モーション関連
 	void SetMotion(CHARACTER_MOTION_STATE type);
@@ -154,7 +148,7 @@ public:
 	CHARACTER_TYPE GetCharacterType();								//キャラクターの種類取得
 	std::vector<CModel*> &GetCharacterModelList();					//キャラクターのモデル取得
 	CModel* GetCharacterModelPartsList(int nCnt);					//キャラクターのモデルパーツ取得
-	CHARACTER_DIRECTION GetCharacterDirection(void);				//向きの取得
+	DIRECTION &GetCharacterDirection(void);							//向きの取得
 	float GetHeightBet(void);
 	//モーション関連
 	bool &GetMotion();
@@ -197,7 +191,7 @@ private:
 	CHARACTER_TYPE m_CharaType;										//キャラクターのタイプ
 	int m_Life;														//ライフ
 	int m_nStateCnt;												//ステータスのカウント
-	CHARACTER_DIRECTION	m_CharacterDirection;						//キャラクターの向き
+	DIRECTION	m_CharacterDirection;						//キャラクターの向き
 
 	//モーション関連の情報
 	static std::vector<MOTION*>m_CharacterMotion;					//キャラクターのモーション情報

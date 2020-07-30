@@ -47,6 +47,7 @@ public:
 	void MoveUpdate(void);
 	void CollisionUpdate(void);
 	void AttackUpdate(void);
+	void PadMoveUpdate(void);
 	void ReSpawn(void);
 	DEBUG_STATE GetDebugState(void);
 	static CPlayer *Create(void);

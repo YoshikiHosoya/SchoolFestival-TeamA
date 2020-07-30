@@ -81,7 +81,7 @@ void CTutorialManager::Update(void)
 	CKeyboard *key = CManager::GetInputKeyboard();
 
 	// エンターを押したとき
-	if (key->GetKeyboardTrigger(DIK_RETURN))
+	if (CHossoLibrary::PressStartButton())
 	{
 		// ゲームモードへステート遷移
 		CManager::GetRenderer()->GetFade()->SetFade(CFADE::FADETYPE::FADETYPE_MODE, CManager::MODE_GAME);

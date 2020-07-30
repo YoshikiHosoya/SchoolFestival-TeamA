@@ -53,14 +53,13 @@ CGame::~CGame()
 HRESULT CGame::Init(void)
 {
 	m_pMap		= CMap::MapCreate();		// マップの生成
-	m_pMap->MapLoad(CMap::MAP_1);			// マップのロード
+	m_pMap->MapLoad(CMap::MAP_1_1);			// マップのロード
 
 	m_pPlayer	= CPlayer::Create();
 	m_pPlayer->SetLife(30);
 	m_pPlayer->SetPosition(D3DXVECTOR3(50.0f, 100.0f, 0.0f));
 
 	m_pPause->CreatePause();
-	CBoss::Create();
 	// ゲームモードの初期設定
 	m_GameMode = GAME_MODE_NORMAL;
 
@@ -100,12 +99,12 @@ void CGame::Update(void)
 
 	if (key->GetKeyboardTrigger(DIK_F6))
 	{
-		CManager::GetRenderer()->GetFade()->SetFade(CFADE::FADETYPE::FADETYPE_MAPMOVE, 0);
+		CManager::GetRenderer()->GetFade()->SetFade(CFADE::FADETYPE::FADETYPE_MAPMOVE, CMap::MAP_1_1);
 	}
 
 	if (key->GetKeyboardTrigger(DIK_F7))
 	{
-		CManager::GetRenderer()->GetFade()->SetFade(CFADE::FADETYPE::FADETYPE_MAPMOVE, 1);
+		CManager::GetRenderer()->GetFade()->SetFade(CFADE::FADETYPE::FADETYPE_MAPMOVE, CMap::MAP_1_BOSS);
 	}
 
 

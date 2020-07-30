@@ -70,8 +70,10 @@ void CTracking::Update(void)
 	// 更新
 	CBullet::Update();
 
+	float fAngle = atan2f(GetMove().x, GetMove().y);
+
 	//パーティクル発生 軌跡みたいな
-	CParticle::CreateFromText(GetPosition(), ZeroVector3, CParticleParam::EFFECT_HEAVY_MACHINEGUN, CBullet::GetTag());
+	CParticle::CreateFromText(GetPosition(), D3DXVECTOR3(0.0f,0.0f, -fAngle + 1.57f), CParticleParam::EFFECT_HEAVY_MACHINEGUN, CBullet::GetTag());
 
 }
 
@@ -134,7 +136,7 @@ CTracking * CTracking::Create(D3DXVECTOR3 rot)
 	pTracking->Init();
 
 	// 撃つ方向に合わせる
-	pTracking->GetMove() = rot*5;
+	pTracking->GetMove() = rot * 50;
 
 	// モデルタイプの設定
 	pTracking->SetType(BULLET_MODEL);

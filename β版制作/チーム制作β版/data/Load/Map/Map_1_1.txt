@@ -225,13 +225,8 @@ END_ENEMYSET
 
 ENEMYSET									# 40
 	TYPE	= 0
-	POS		= 5043 314 0
+	POS		= 5043 315 0
 END_ENEMYSET
-
-BOSSSET									# 3
-	TYPE	= 0
-	POS		= 0 0 0
-END_BOSSSET
 
 //------------------------------------------------------------
 // ïﬂó∏ÇÃîzíuèÓïÒ

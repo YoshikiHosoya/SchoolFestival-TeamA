@@ -278,6 +278,45 @@ void CDebugcollision::Uninit(void)
 // ----------------------------------------
 void CDebugcollision::Update(void)
 {
+	// 判定の種類が箱型だったら通す
+	if (m_type == COLLISIONTYPE_BOX)
+	{
+		// 座標のポインタをlineの座標に設定
+		for (int nCnt = 0; nCnt < MAX_VERTEX3D; nCnt++)
+		{
+			if (m_p3DLine[nCnt] != nullptr)
+			{
+				m_p3DLine[nCnt]->SetPosColi(*m_pos);
+			}
+		}
+	}
+
+	// 判定の種類が板型だったら通す
+	else if (m_type == COLLISIONTYPE_BOARD)
+	{
+		// 座標のポインタをlineの座標に設定
+		for (int nCnt = 0; nCnt < MAX_VERTEX2D; nCnt++)
+		{
+			if (m_p2DLine[nCnt] != nullptr)
+			{
+				m_p2DLine[nCnt]->SetPosColi(*m_pos);
+			}
+		}
+	}
+
+	// 判定の種類が板型だったら通す
+	else if (m_type == COLLISIONTYPE_BOARDCHARA)
+	{
+		// 座標のポインタをlineの座標に設定
+		for (int nCnt = 0; nCnt < MAX_VERTEX2D; nCnt++)
+		{
+			if (m_p2DLine[nCnt] != nullptr)
+			{
+				m_p2DLine[nCnt]->SetPosColi(*m_pos);
+			}
+		}
+	}
+
 }
 
 // ----------------------------------------

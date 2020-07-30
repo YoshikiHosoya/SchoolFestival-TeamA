@@ -89,7 +89,7 @@ void CBattlePlane::Uninit(void)
 	// 銃のポインタ
 	if (m_pGun)
 	{
-		m_pGun->Rerease();
+		delete m_pGun;
 		m_pGun = nullptr;
 	}
 
@@ -133,6 +133,8 @@ void CBattlePlane::Update(void)
 	// 判定をまとめて行う
 	Collision();
 
+	m_pGun->Update();
+
 	// 乗り物クラスの更新
 	CVehicle::Update();
 }
@@ -144,6 +146,9 @@ void CBattlePlane::Update(void)
 void CBattlePlane::Draw(void)
 {
 	CVehicle::Draw();
+
+	m_pGun->Draw();
+
 }
 
 //====================================================================
@@ -191,13 +196,13 @@ void CBattlePlane::Operation(CKeyboard * key)
 	if (key->GetKeyboardPress(DIK_W))
 	{
 		CVehicle::MovePlane(D3DXVECTOR3(0.0f, 1.0f, 0.0f), -0.5f);
-		SetVehicleDirection(VEHICLE_UP);
+		SetVehicleDirection(DIRECTION::UP);
 	}
 	// 上を向く
 	else if (key->GetKeyboardPress(DIK_S))
 	{
 		CVehicle::MovePlane(D3DXVECTOR3(0.0f, -1.0f, 0.0f), -0.5f);
-		SetVehicleDirection(VEHICLE_DOWN);
+		SetVehicleDirection(DIRECTION::DOWN);
 	}
 
 	// 左に動かせる
@@ -207,21 +212,21 @@ void CBattlePlane::Operation(CKeyboard * key)
 		if (key->GetKeyboardPress(DIK_W))
 		{
 			CVehicle::MovePlane(D3DXVECTOR3(-1.0f, 1.0f, 0.0f), -0.5f);
-			SetVehicleDirection(VEHICLE_UP);
+			SetVehicleDirection(DIRECTION::UP);
 		}
 
 		// 下を向く
 		else if (key->GetKeyboardPress(DIK_S))
 		{
 			CVehicle::MovePlane(D3DXVECTOR3(-1.0f, -1.0f, 0.0f), -0.5f);
-			SetVehicleDirection(VEHICLE_DOWN);
+			SetVehicleDirection(DIRECTION::DOWN);
 		}
 
 		// 左を向く
 		else
 		{
 			CVehicle::MovePlane(D3DXVECTOR3(-1.0f, 0.0f, 0.0f), -0.5f);
-			SetVehicleDirection(VEHICLE_LEFT);
+			SetVehicleDirection(DIRECTION::LEFT);
 		}
 	}
 
@@ -232,21 +237,21 @@ void CBattlePlane::Operation(CKeyboard * key)
 		if (key->GetKeyboardPress(DIK_W))
 		{
 			CVehicle::MovePlane(D3DXVECTOR3(1.0f, 1.0f, 0.0f), -0.5f);
-			SetVehicleDirection(VEHICLE_UP);
+			SetVehicleDirection(DIRECTION::UP);
 		}
 
 		// 下を向く
 		else if (key->GetKeyboardPress(DIK_S))
 		{
 			CVehicle::MovePlane(D3DXVECTOR3(1.0f, -1.0f, 0.0f), -0.5f);
-			SetVehicleDirection(VEHICLE_DOWN);
+			SetVehicleDirection(DIRECTION::DOWN);
 		}
 
 		// 右を向く
 		else
 		{
 			CVehicle::MovePlane(D3DXVECTOR3(1.0f, 0.0f, 0.0f), -0.5f);
-			SetVehicleDirection(VEHICLE_RIGHT);
+			SetVehicleDirection(DIRECTION::RIGHT);
 		}
 	}
 }
