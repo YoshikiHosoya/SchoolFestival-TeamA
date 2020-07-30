@@ -58,6 +58,7 @@ public:
 	// ƒ}ƒbƒv‚ÌŽí—Þ
 	enum MAP
 	{
+		MAP_TUTORIAL,	// 0
 		MAP_1,			// 1
 		MAP_2,			// 2
 		MAP_MAX

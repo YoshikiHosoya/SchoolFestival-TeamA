@@ -34,6 +34,7 @@ CMap::ARRANGEMENT_MODEL		CMap::m_ArrangmentModel = ARRANGEMENT_MODEL_MAP;	// ”z’
 // ƒ}ƒbƒv
 char *CMap::m_MapModelFileName[MAP_MAX] =
 {
+	{ "data/Load/Map/MAP_Tutorial.txt" },
 	{ "data/Load/Map/Map_01.txt" },
 	{ "data/Load/Map/Map_01.txt" },
 };
@@ -578,7 +579,7 @@ void CMap::MapUpdate()
 			// ‘I‘ð‚µ‚½ƒ}ƒbƒv”Ô†‘ã“ü
 			m_MapNum = (MAP)nNowMapSelect;
 
-			m_pMapModel[0]->SetModelConut(nNowMapSelect);
+			//m_pMapModel[0]->SetModelConut(nNowMapSelect);
 
 			ImGui::EndTabItem();
 		}
