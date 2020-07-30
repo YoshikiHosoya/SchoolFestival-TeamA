@@ -183,8 +183,7 @@ void CCharacter::Update(void)
 		m_nStateCnt++;
 		if (m_nStateCnt % 60 == 0)
 		{
-			m_state = CHARACTER_STATE_NORMAL;
-			ChangeColor(false, D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f));
+			SetState(CHARACTER_STATE_NORMAL);
 		}
 		else if (m_nStateCnt % 4 == 0 && m_nStateCnt % 8 != 0)
 		{
@@ -195,11 +194,27 @@ void CCharacter::Update(void)
 			ChangeColor(true, D3DXCOLOR(0.0f, 0.0f,0.0f,1.0f));
 		}
 		break;
+	case CHARACTER_STATE_DAMAGE_RED:
+		m_nStateCnt++;
+
+		//時間経過で
+		if (m_nStateCnt > 3)
+		{
+			//ステートを元に戻す
+			SetState(CHARACTER_STATE_NORMAL);
+		}
+		else
+		{
+			//赤く点滅
+
+			ChangeColor(true, D3DXCOLOR(1.0f, 0.2f, 0.0f, 0.0f));
+		}
+		break;
 	case CHARACTER_STATE_INVINCIBLE:
 		m_nStateCnt++;
 		if (m_nStateCnt % 120 == 0)
 		{
-			m_state = CHARACTER_STATE_NORMAL;
+			SetState(CHARACTER_STATE_NORMAL);
 			ChangeColor(false, D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f));
 		}
 		else if (m_nStateCnt % 4 == 0 && m_nStateCnt % 8 != 0)
@@ -377,6 +392,13 @@ void CCharacter::Draw(void)
 	CDebugProc::Print("腰の高さ%2f\n", m_vModelList[0]->GetPosition().y);
 }
 //====================================================================
+//ダメージを受けた時のリアクション
+//====================================================================
+void CCharacter::DamageReaction()
+{
+	SetState(CHARACTER_STATE_DAMAGE);
+}
+//====================================================================
 //モデルのムーヴ
 //====================================================================
 void CCharacter::Move(float move, float fdest)
@@ -418,10 +440,13 @@ void CCharacter::SetRot(D3DXVECTOR3 rot)
 //====================================================================
 void CCharacter::AddDamage(int Damage)
 {
-	m_state = CHARACTER_STATE_DAMAGE;
 	int Life = GetLife();
 	Life -= Damage;
 	SetLife(Life);
+
+	//ダメージを受けた時のリアクション
+	//オーバーライド
+	DamageReaction();
 }
 //====================================================================
 //回転の差分の設定
@@ -449,10 +474,12 @@ void CCharacter::SetJump(bool bJump)
 //====================================================================
 void CCharacter::SetState(CHARACTER_STATE state)
 {
-	m_state = state;
-	m_nStateCnt;
-	ChangeColor(false, D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f));
-
+	if (m_state != state)
+	{
+		m_state = state;
+		m_nStateCnt = 0;
+		ChangeColor(false, D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f));
+	}
 }
 //====================================================================
 //マトリックスの設定

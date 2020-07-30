@@ -36,8 +36,8 @@ CMap::WAVE_INFO				CMap::m_aWaveInfo[WAVE_MAX] = {};						// ウェーブの情報
 char *CMap::m_MapModelFileName[MAP_MAX] =
 {
 	{ "data/Load/Map/MAP_Tutorial.txt" },
-	{ "data/Load/Map/Map_01.txt" },
-	{ "data/Load/Map/Map_01.txt" },
+	{ "data/Load/Map/Map_1_1.txt" },
+	{ "data/Load/Map/Map_1_1.txt" },
 };
 
 /* ----- ウェーブ ----- */
