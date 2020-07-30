@@ -116,7 +116,7 @@ public:
 	static void CalcRotation(float &fRot);																		//‰ñ“]‚ð360“xˆÈ“à‚É‚·‚éŒvŽZ
 
 	static bool PressAnyButton(void);
-
+	static bool PressStartButton(void);
 	static bool ImGui_Combobox(std::vector<std::string> aItemNameList, std::string aTitle, int &nValue);
 
 	//------------------------------------------------------------------------------
