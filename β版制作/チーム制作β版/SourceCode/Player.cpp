@@ -108,7 +108,7 @@ void CPlayer::Uninit(void)
 	// 銃のポインタ
 	if (m_pGun)
 	{
-		m_pGun->Rerease();
+		delete m_pGun;
 		m_pGun = nullptr;
 	}
 
@@ -145,6 +145,8 @@ void CPlayer::Update(void)
 	static bool trigger2 = false;
 	CKeyboard *key;
 	key = CManager::GetInputKeyboard();
+
+	m_pGun->Update();
 
 	// 特定のボタンを押した時に歩きモーションに変更
 	if (CHossoLibrary::PressAnyButton())
@@ -198,6 +200,9 @@ void CPlayer::Draw(void)
 	{
 		CCharacter::Draw();
 	}
+
+	m_pGun->Draw();
+
 }
 //====================================================================
 //デバッグ

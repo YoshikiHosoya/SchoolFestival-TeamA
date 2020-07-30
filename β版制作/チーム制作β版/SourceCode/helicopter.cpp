@@ -89,7 +89,7 @@ void CHelicopter::Uninit(void)
 	// 銃のポインタ
 	if (m_pGun)
 	{
-		m_pGun->Rerease();
+		delete m_pGun;
 		m_pGun = nullptr;
 	}
 
@@ -122,6 +122,8 @@ void CHelicopter::Update(void)
 	// 判定をまとめて行う
 	Collision();
 
+	m_pGun->Update();
+
 	// 乗り物クラスの更新
 	CVehicle::Update();
 }
@@ -133,6 +135,9 @@ void CHelicopter::Update(void)
 void CHelicopter::Draw(void)
 {
 	CVehicle::Draw();
+
+	m_pGun->Draw();
+
 }
 
 //====================================================================

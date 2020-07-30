@@ -23,7 +23,7 @@
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
 // =====================================================================================================================================================================
-CMap::MAP					CMap::m_MapNum				= MAP_1;					// マップ番号
+CMap::MAP					CMap::m_MapNum				= MAP_TUTORIAL;				// マップ番号
 CMap::WAVE					CMap::m_WaveNum				= WAVE_1;					// ウェーブ番号
 CMap::ARRANGEMENT_MODEL		CMap::m_ArrangmentModel		= ARRANGEMENT_MODEL_MAP;	// 配置するモデルの種類
 CMap::WAVE_INFO				CMap::m_aWaveInfo[WAVE_MAX] = {};						// ウェーブの情報
@@ -539,24 +539,31 @@ void CMap::MapUpdate()
 		// マップエディター
 		if (ImGui::BeginTabItem("MapEditor"))
 		{
-			// オブジェクト番号の選択
-			ImGui::InputInt("nowMapNum", &nNowMapSelect, 1, 20, 0);
+			//if (CHossoLibrary::ImGui_Combobox())
+			//{
+			//	AllDelete();
+			//	MapLoad();
 
-			// 範囲制限
-			if (nNowMapSelect <= 0)
-			{
-				nNowMapSelect = 0;
-			}
-			else if (nNowMapSelect >= MAP_MAX)
-			{
-				// 最後の番号にする
-				nNowMapSelect = MAP_MAX - 1;
-			}
+			//}
+		
+			//// オブジェクト番号の選択
+			//ImGui::InputInt("nowMapNum", &nNowMapSelect, 1, 20, 0);
 
-			// 選択したマップ番号代入
-			m_MapNum = (MAP)nNowMapSelect;
+			//// 範囲制限
+			//if (nNowMapSelect <= 0)
+			//{
+			//	nNowMapSelect = 0;
+			//}
+			//else if (nNowMapSelect >= MAP_MAX)
+			//{
+			//	// 最後の番号にする
+			//	nNowMapSelect = MAP_MAX - 1;
+			//}
 
-			//m_pMapModel[0]->SetModelConut(nNowMapSelect);
+			//// 選択したマップ番号代入
+			//m_MapNum = (MAP)nNowMapSelect;
+
+			////m_pMapModel[nNowMapSelect]->SetModelConut(nNowMapSelect);
 
 			ImGui::EndTabItem();
 		}
@@ -1175,6 +1182,13 @@ void CMap::ModelDeleteButton(int nNowSelect)
 	{
 		switch (m_ArrangmentModel)
 		{
+		case CMap::ARRANGEMENT_MODEL_MAP:
+			// 敵
+			m_pMapModel[nNowSelect]->Rerease();
+			m_pMapModel[nNowSelect] = nullptr;
+			m_pMapModel.erase(m_pMapModel.begin() + nNowSelect);
+			break;
+
 		case CMap::ARRANGEMENT_MODEL_ENEMY:
 			// 敵
 			m_pEnemy[nNowSelect]->Rerease();
@@ -1273,6 +1287,12 @@ void CMap::ModelCreateButton()
 void CMap::AllDelete()
 {
 	// 障害物
+	for (unsigned int nCnt = 0; nCnt < m_pMapModel.size(); nCnt++)
+	{
+		m_pMapModel[nCnt]->Rerease();
+		m_pMapModel[nCnt] = nullptr;
+	}
+	// 障害物
 	for (unsigned int nCnt = 0; nCnt < m_pObstacle.size(); nCnt++)
 	{
 		m_pObstacle[nCnt]->Rerease();
@@ -1309,6 +1329,7 @@ void CMap::AllDelete()
 		m_pHelicopter[nCnt] = nullptr;
 	}
 	// 全ての要素の削除
+	m_pMapModel.clear();
 	m_pObstacle.clear();
 	m_pEnemy.clear();
 	m_pPrisoner.clear();
