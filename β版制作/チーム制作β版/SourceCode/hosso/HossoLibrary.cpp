@@ -107,6 +107,21 @@ bool CHossoLibrary::PressAnyButton(void)
 	}
 	return false;
 }
+//------------------------------------------------------------------------------
+//スタートボタンを押したとき
+//------------------------------------------------------------------------------
+bool CHossoLibrary::PressStartButton(void)
+{
+	CKeyboard *Keyboard;
+	Keyboard = CManager::GetInputKeyboard();
+	CXInputPad *InpudPad;
+	InpudPad = CManager::GetPad();
+	if (Keyboard->GetKeyboardTrigger(DIK_RETURN) || InpudPad->GetTrigger(CXInputPad::JOYPADKEY_START, 1))
+	{
+		return true;
+	}
+	return false;
+}
 
 //------------------------------------------------------------------------------
 //ImGuiのコンボボックス
