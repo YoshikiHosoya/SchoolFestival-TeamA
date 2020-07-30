@@ -94,6 +94,21 @@ void CGame::Uninit(void)
 //==========================================================
 void CGame::Update(void)
 {
+	//キーボード情報取得
+	CKeyboard *key = CManager::GetInputKeyboard();
+
+
+	if (key->GetKeyboardTrigger(DIK_F6))
+	{
+		CManager::GetRenderer()->GetFade()->SetFade(CFADE::FADETYPE::FADETYPE_MAPMOVE, 0);
+	}
+
+	if (key->GetKeyboardTrigger(DIK_F7))
+	{
+		CManager::GetRenderer()->GetFade()->SetFade(CFADE::FADETYPE::FADETYPE_MAPMOVE, 1);
+	}
+
+
 	// 死亡判定が出ているかの確認
 	m_pMap->UpdateDieFlag();
 
@@ -169,6 +184,10 @@ void CGame::DebugCollision(CKeyboard *key)
 	{
 		CDebugProc::Print("デバッグ用当たり判定ラインを描画していません\n");
 	}
+
+
+
+
 
 	// 当たり判定ラインの表示非表示
 	if (key->GetKeyboardPress(DIK_LCONTROL))

@@ -217,10 +217,10 @@ void CRenderer::Update(void)
 
 #endif // _DEBUG
 
+	CScene::UpdateAll();
 	m_pLight->UpdateLight();
 	m_pCamera->UpdateCamera();
 	m_pFade->UpdateFade();
-	CScene::UpdateAll();
 
 #ifdef _DEBUG
 

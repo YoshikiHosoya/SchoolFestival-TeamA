@@ -82,7 +82,7 @@ void CTutorialManager::Update(void)
 	if (key->GetKeyboardTrigger(DIK_RETURN))
 	{
 		// ƒQ[ƒ€ƒ‚[ƒh‚Öó‘Ô‘JˆÚ
-		CManager::GetRenderer()->GetFade()->SetFade(CManager::MODE_GAME);
+		CManager::GetRenderer()->GetFade()->SetFade(CFADE::FADETYPE::FADETYPE_MODE, CManager::MODE_GAME);
 	}
 }
 

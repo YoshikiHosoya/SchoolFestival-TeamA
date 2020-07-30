@@ -18,6 +18,7 @@
 #include "Player.h"
 #include "BaseMode.h"
 #include "item.h"
+#include "Boss.h"
 
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
@@ -35,6 +36,7 @@ CMap::WAVE_INFO				CMap::m_aWaveInfo[WAVE_MAX] = {};						// ウェーブの情報
 // マップ
 char *CMap::m_MapModelFileName[MAP_MAX] =
 {
+	{ "data/Load/Map/MAP_Tutorial.txt" },
 	{ "data/Load/Map/Map_01.txt" },
 	{ "data/Load/Map/Map_01.txt" },
 };
@@ -106,8 +108,8 @@ CMap::CMap()
 	m_pHelicopter.clear();
 	m_pVehicle.clear();
 	m_nOldSelect = 0;
-	m_nWaveID = 0;
 	m_WavePos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_ModelPosOld = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 }
 
 // =====================================================================================================================================================================
@@ -193,6 +195,11 @@ void CMap::MapModelLoad()
 				{
 					sprintf(cEndSetText, "%s", "END_HELICOPTERSET");
 					nModelType = ARRANGEMENT_MODEL_HELICOPTER;
+				}
+				else if (strcmp(cHeadText, "BOSSSET") == 0)
+				{
+					sprintf(cEndSetText, "%s", "END_BOSSSET");
+					nModelType = ARRANGEMENT_MODEL_BOSS;
 				}
 
 				if (nModelType >= 0)
@@ -322,7 +329,7 @@ void CMap::WaveSave()
 
 		for (int nModelType = 0; nModelType < ARRANGEMENT_MODEL_MAX; nModelType++)
 		{
-			if (nModelType == ARRANGEMENT_MODEL_HELICOPTER || nModelType == ARRANGEMENT_MODEL_PRISONER)
+			if (nModelType == ARRANGEMENT_MODEL_ENEMY || nModelType == ARRANGEMENT_MODEL_PRISONER)
 			{
 				// セーブするモデルのヘッダー
 				SaveModelHeader(pFile, nModelType);
@@ -430,6 +437,14 @@ void CMap::MapModelCreate(int ModelType, int nType, D3DXVECTOR3 pos)
 		//m_pHelicopter[m_pHelicopter.size() - 1]->SetPosition(pos);
 		//// 種類の設定
 		//m_pHelicopter[m_pHelicopter.size() - 1]->SetVehicleType((CVehicle::VEHICLE_TYPE)nType);
+		break;
+
+		/* --- ボス --- */
+	case CMap::ARRANGEMENT_MODEL_BOSS:
+		// オブジェクトの生成
+		m_pEnemy.emplace_back(CBoss::Create());
+		// 位置の設定
+		m_pEnemy[m_pEnemy.size() - 1]->SetPosition(pos);
 		break;
 	}
 }
@@ -621,7 +636,7 @@ void CMap::MapUpdate()
 			// 選択したマップ番号代入
 			m_MapNum = (MAP)nNowMapSelect;
 
-			m_pMapModel[0]->SetModelConut(nNowMapSelect);
+			//m_pMapModel[0]->SetModelConut(nNowMapSelect);
 
 			ImGui::EndTabItem();
 		}
@@ -813,8 +828,6 @@ void CMap::WaveCreate(WAVE WaveNum, int ModelType, int &frame)
 
 	//if (m_aWaveInfo[m_nWaveID].nFrame == frame)
 	{
-		// カウントアップ
-		m_nWaveID++;
 
 		// 初期化
 		frame = 0;
@@ -1269,55 +1282,7 @@ void CMap::AllDeleteButton()
 	// 全てデリート
 	if (ImGui::Button("AllDelete"))
 	{
-		// 障害物
-		for (unsigned int nCnt = 0; nCnt < m_pObstacle.size(); nCnt++)
-		{
-			m_pObstacle[nCnt]->Rerease();
-			m_pObstacle[nCnt] = nullptr;
-			//m_pObstacle.erase(m_pObstacle.begin() + nCnt);
-		}
-		// 敵
-		for (unsigned int nCnt = 0; nCnt < m_pEnemy.size(); nCnt++)
-		{
-			m_pEnemy[nCnt]->Rerease();
-			m_pEnemy[nCnt] = nullptr;
-			//m_pEnemy.erase(m_pEnemy.begin() + nCnt);
-		}
-		// 捕虜
-		for (unsigned int nCnt = 0; nCnt < m_pPrisoner.size(); nCnt++)
-		{
-			m_pPrisoner[nCnt]->Rerease();
-			m_pPrisoner[nCnt] = nullptr;
-			//m_pPrisoner.erase(m_pPrisoner.begin() + nCnt);
-		}
-		// 戦車
-		for (unsigned int nCnt = 0; nCnt < m_pPlayerTank.size(); nCnt++)
-		{
-			m_pPlayerTank[nCnt]->Rerease();
-			m_pPlayerTank[nCnt] = nullptr;
-			//m_pPlayerTank.erase(m_pPlayerTank.begin() + nCnt);
-		}
-		// 戦闘機
-		for (unsigned int nCnt = 0; nCnt < m_pBattlePlane.size(); nCnt++)
-		{
-			m_pBattlePlane[nCnt]->Rerease();
-			m_pBattlePlane[nCnt] = nullptr;
-			//m_pBattlePlane.erase(m_pBattlePlane.begin() + nCnt);
-		}
-		// ヘリコプター
-		for (unsigned int nCnt = 0; nCnt < m_pHelicopter.size(); nCnt++)
-		{
-			m_pHelicopter[nCnt]->Rerease();
-			m_pHelicopter[nCnt] = nullptr;
-			//m_pHelicopter.erase(m_pHelicopter.begin() + nCnt);
-		}
-		// 全ての要素の削除
-		m_pObstacle.clear();
-		m_pEnemy.clear();
-		m_pPrisoner.clear();
-		m_pPlayerTank.clear();
-		m_pBattlePlane.clear();
-		m_pHelicopter.clear();
+		AllDelete();
 	}
 }
 
@@ -1425,6 +1390,58 @@ void CMap::ModelCreateButton()
 
 // =====================================================================================================================================================================
 //
+// 配置しているモデルを全て破棄する処理
+//
+// =====================================================================================================================================================================
+void CMap::AllDelete()
+{
+	// 障害物
+	for (unsigned int nCnt = 0; nCnt < m_pObstacle.size(); nCnt++)
+	{
+		m_pObstacle[nCnt]->Rerease();
+		m_pObstacle[nCnt] = nullptr;
+	}
+	// 敵
+	for (unsigned int nCnt = 0; nCnt < m_pEnemy.size(); nCnt++)
+	{
+		m_pEnemy[nCnt]->Rerease();
+		m_pEnemy[nCnt] = nullptr;
+	}
+	// 捕虜
+	for (unsigned int nCnt = 0; nCnt < m_pPrisoner.size(); nCnt++)
+	{
+		m_pPrisoner[nCnt]->Rerease();
+		m_pPrisoner[nCnt] = nullptr;
+	}
+	// 戦車
+	for (unsigned int nCnt = 0; nCnt < m_pPlayerTank.size(); nCnt++)
+	{
+		m_pPlayerTank[nCnt]->Rerease();
+		m_pPlayerTank[nCnt] = nullptr;
+	}
+	// 戦闘機
+	for (unsigned int nCnt = 0; nCnt < m_pBattlePlane.size(); nCnt++)
+	{
+		m_pBattlePlane[nCnt]->Rerease();
+		m_pBattlePlane[nCnt] = nullptr;
+	}
+	// ヘリコプター
+	for (unsigned int nCnt = 0; nCnt < m_pHelicopter.size(); nCnt++)
+	{
+		m_pHelicopter[nCnt]->Rerease();
+		m_pHelicopter[nCnt] = nullptr;
+	}
+	// 全ての要素の削除
+	m_pObstacle.clear();
+	m_pEnemy.clear();
+	m_pPrisoner.clear();
+	m_pPlayerTank.clear();
+	m_pBattlePlane.clear();
+	m_pHelicopter.clear();
+}
+
+// =====================================================================================================================================================================
+//
 // 選択しているモデルの位置の取得
 //
 // =====================================================================================================================================================================
@@ -1479,32 +1496,32 @@ void CMap::SetMapModelPos(D3DXVECTOR3 pos, int nNowSelect)
 	{
 	case CMap::ARRANGEMENT_MODEL_ENEMY:
 		// 敵
-		m_pEnemy[nNowSelect]->SetPosition(D3DXVECTOR3(pos.x, pos.y, pos.z));
+		m_pEnemy[nNowSelect]->SetPosition(pos);
 		break;
 
 	case CMap::ARRANGEMENT_MODEL_PRISONER:
 		// 捕虜
-		m_pPrisoner[nNowSelect]->SetPosition(D3DXVECTOR3(pos.x, pos.y, pos.z));
+		m_pPrisoner[nNowSelect]->SetPosition(pos);
 		break;
 
 	case CMap::ARRANGEMENT_MODEL_OBSTACLE:
 		// 障害物
-		m_pObstacle[nNowSelect]->SetPosition(D3DXVECTOR3(pos.x, pos.y, pos.z));
+		m_pObstacle[nNowSelect]->SetPosition(pos);
 		break;
 
 	case CMap::ARRANGEMENT_MODEL_TANK:
 		// 戦車
-		m_pPlayerTank[nNowSelect]->SetPosition(D3DXVECTOR3(pos.x, pos.y, pos.z));
+		m_pPlayerTank[nNowSelect]->SetPosition(pos);
 		break;
 
 	case CMap::ARRANGEMENT_MODEL_BATTLEPLANE:
 		// 戦闘機
-		m_pBattlePlane[nNowSelect]->SetPosition(D3DXVECTOR3(pos.x, pos.y, pos.z));
+		m_pBattlePlane[nNowSelect]->SetPosition(pos);
 		break;
 
 	case CMap::ARRANGEMENT_MODEL_HELICOPTER:
 		// ヘリコプター
-		m_pHelicopter[nNowSelect]->SetPosition(D3DXVECTOR3(pos.x, pos.y, pos.z));
+		m_pHelicopter[nNowSelect]->SetPosition(pos);
 		break;
 	}
 }
@@ -1598,61 +1615,49 @@ void CMap::MapModelTab()
 		// マップエディタのときのみ
 		if (m_Editor == EDITOR_MAP)
 		{
-			// 障害物
+			// 障害物の設置
 			if (ImGui::BeginTabItem("Obstacle"))
 			{
 				m_ArrangmentModel = ARRANGEMENT_MODEL_OBSTACLE;
-
-				// 障害物の設置
 				MapModelSet();
 				ImGui::EndTabItem();
 			}
 		}
-		// 捕虜
+		// 捕虜の設置
 		if (ImGui::BeginTabItem("Prisoner"))
 		{
 			m_ArrangmentModel = ARRANGEMENT_MODEL_PRISONER;
-
-			// 捕虜の設置
 			MapModelSet();
 			ImGui::EndTabItem();
 		}
-		// 敵
+		// 敵の設置
 		if (ImGui::BeginTabItem("Enemy"))
 		{
 			m_ArrangmentModel = ARRANGEMENT_MODEL_ENEMY;
-
-			// 敵の設置
 			MapModelSet();
 			ImGui::EndTabItem();
 		}
 		// マップエディタのときのみ
 		if (m_Editor == EDITOR_MAP)
 		{
-			// 戦車
+			// 戦車の設置
 			if (ImGui::BeginTabItem("Tank"))
 			{
 				m_ArrangmentModel = ARRANGEMENT_MODEL_TANK;
-
-				// 戦車の設置
 				MapModelSet();
 				ImGui::EndTabItem();
 			}
-			// 戦闘機
+			// 戦闘機の設置
 			if (ImGui::BeginTabItem("BattlePlane"))
 			{
 				m_ArrangmentModel = ARRANGEMENT_MODEL_BATTLEPLANE;
-
-				// 戦闘機の設置
 				MapModelSet();
 				ImGui::EndTabItem();
 			}
-			// ヘリ
+			// ヘリの設置
 			if (ImGui::BeginTabItem("Helicopter"))
 			{
 				m_ArrangmentModel = ARRANGEMENT_MODEL_HELICOPTER;
-
-				// ヘリの設置
 				MapModelSet();
 				ImGui::EndTabItem();
 			}
@@ -1672,6 +1677,8 @@ void CMap::MapModelSet()
 #ifdef _DEBUG
 
 	static int nNowSelect = -1;			// 現在選択している番号
+	static int nFrame = 0;
+	static bool bEvent = false;
 
 	// オブジェクト番号の選択
 	ImGui::InputInt("nowSelect", &nNowSelect, 1, 20, 0);
@@ -1707,8 +1714,19 @@ void CMap::MapModelSet()
 			// 選択しているモデルの位置の設定
 			SetMapModelPos(D3DXVECTOR3((float)x, (float)y, (float)z), nNowSelect);
 
+			// モデルの前回の位置保存
+			m_ModelPosOld = GetMapModelPos(nNowSelect);
+
 			// 選択しているモデルを注視点の目的地に設定
 			SetSelectMapModelPosRDest(GetMapModelPos(nNowSelect));
+
+			if (m_Editor == EDITOR_WAVE)
+			{
+				// フレームの設定
+				ImGui::DragInt("Frame", &nFrame);
+				// イベントフラグ
+				ImGui::Checkbox("Event", &bEvent);
+			}
 
 			// 前回選択していたものと違うとき
 			if (m_nOldSelect != nNowSelect)
@@ -1745,9 +1763,6 @@ void CMap::MapModelSet()
 		// セーブ
 		MapModelSave();
 	}
-
-	// 配置したモデルを全てセーブするボタン
-	AllSaveButton();
 
 	// マップエディターのとき
 	if (m_Editor == EDITOR_MAP)

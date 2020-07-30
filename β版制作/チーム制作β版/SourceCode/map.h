@@ -56,6 +56,7 @@ public:
 	// マップの種類
 	enum MAP
 	{
+		MAP_TUTORIAL,	// 0
 		MAP_1,			// 1
 		MAP_2,			// 2
 		MAP_MAX
@@ -79,6 +80,7 @@ public:
 		ARRANGEMENT_MODEL_TANK,					// 戦車
 		ARRANGEMENT_MODEL_BATTLEPLANE,			// 戦闘機
 		ARRANGEMENT_MODEL_HELICOPTER,			// ヘリコプター
+		ARRANGEMENT_MODEL_BOSS,					// ボス
 		ARRANGEMENT_MODEL_MAX
 	};
 
@@ -120,15 +122,16 @@ public:
 	int				GetMaxBattlePlane();											// 戦闘機の最大数取得
 	int				GetMaxHelicopter();												// ヘリの最大数取得
 	LPD3DXMESH		GetMesh(int nCnt);												// メッシュの取得
-	CModel			*GetModel(int nCnt)			{ return m_pMapModel[nCnt]; };		// モデルの取得
-	CEnemy			*GetEnemy(int nCnt)			{ return m_pEnemy[nCnt]; };			// 敵の取得
-	CPrisoner		*GetPrisoner(int nCnt)		{ return m_pPrisoner[nCnt]; };		// 捕虜の取得
-	CObstacle		*GetObstacle(int nCnt)		{ return m_pObstacle[nCnt]; };		// 障害物の取得
-	CPlayertank		*GetPlayertank(int nCnt)	{ return m_pPlayerTank[nCnt]; };	// 戦車の取得
-	CBattlePlane	*GetBattlePlane(int nCnt)	{ return m_pBattlePlane[nCnt]; };	// 戦闘機の取得
-	CHelicopter		*GetHelicopter(int nCnt)	{ return m_pHelicopter[nCnt]; };	// ヘリコプターの取得
+	CModel			*GetModel(int nCnt) { return m_pMapModel[nCnt]; };		// モデルの取得
+	CEnemy			*GetEnemy(int nCnt) { return m_pEnemy[nCnt]; };			// 敵の取得
+	CPrisoner		*GetPrisoner(int nCnt) { return m_pPrisoner[nCnt]; };		// 捕虜の取得
+	CObstacle		*GetObstacle(int nCnt) { return m_pObstacle[nCnt]; };		// 障害物の取得
+	CPlayertank		*GetPlayertank(int nCnt) { return m_pPlayerTank[nCnt]; };	// 戦車の取得
+	CBattlePlane	*GetBattlePlane(int nCnt) { return m_pBattlePlane[nCnt]; };	// 戦闘機の取得
+	CHelicopter		*GetHelicopter(int nCnt) { return m_pHelicopter[nCnt]; };	// ヘリコプターの取得
 
 	void			UpdateDieFlag();												// 死亡フラグ確認関数
+	void			AllDelete();														// 配置しているモデルを全て破棄
 
 private:
 	/* メンバ関数 */
@@ -142,7 +145,7 @@ private:
 	char			*WaveFileName(int ModelType);											// 各ウェーブファイル名
 
 	void			SaveModelHeader(FILE *pFile, int ModelType);									// セーブするモデルのヘッダー
-	void			SaveModelContents(FILE *pFile,int ModelType, int nCnt, int nNum);				// セーブするモデルの情報
+	void			SaveModelContents(FILE *pFile, int ModelType, int nCnt, int nNum);				// セーブするモデルの情報
 	void			SaveWaveContents(FILE *pFile, int ModelType, int nType, int nCnt, int nNum);	// セーブするウェーブの情報
 
 	unsigned int	GetMaxMapModel(int ModelType);									// 配置するモデルの最大数取得
@@ -153,7 +156,7 @@ private:
 	void			AllDeleteButton();														// 配置したモデルを全てデリートするボタン
 	void			ModelDeleteButton(int nNowSelect);										// 配置するモデルをデリートするボタン
 	void			ModelCreateButton();													// 配置するモデルを生成するボタン
-	
+
 	D3DXVECTOR3		GetMapModelPos(int nNowSelect);									// 選択しているモデルの位置の取得
 	void			SetMapModelPos(D3DXVECTOR3 pos, int nNowSelect);				// 選択しているモデルの位置の設定
 	void			SetMapModelColorChangeFlag(bool bFlag, int nNowSelect);			// 選択しているモデルの色を半透明にするフラグの設定
@@ -191,8 +194,9 @@ private:
 	std::vector<CVehicle*>		m_pVehicle;									// 可変長配列 設置した乗り物
 
 	int							m_nOldSelect;								// 前回選択していたモノの番号
-	int							m_nWaveID;									// ウェーブの出現番号
 	static WAVE_INFO			m_aWaveInfo[WAVE_MAX];						// ウェーブの情報
 	D3DXVECTOR3					m_WavePos;									// ウェーブの位置
+	D3DXVECTOR3					m_ModelPosOld;								// モデルの前回の位置
 };
+
 #endif
