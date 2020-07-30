@@ -313,7 +313,7 @@ void CPlayer::MoveUpdate(void)
 						SetMotion(PLAYER_MOTION_NORMAL);
 					}
 					//S‚ð‰Ÿ‚µ‚½‚ç‚µ‚á‚ª‚Ýƒ‚[ƒVƒ‡ƒ“
-					if (key->GetKeyboardPress(DIK_S) && GetJump() == true && y < -0.6f)
+					if (key->GetKeyboardPress(DIK_S)|| y < -0.6f && GetJump() == true)
 					{
 						if (m_bCruch == false && GetMotionType() != PLAYER_MOTION_WALK)
 						{
