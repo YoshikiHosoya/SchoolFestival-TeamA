@@ -68,7 +68,7 @@ void CBoss::Uninit(void)
 	if (m_pGun != nullptr)
 	{
 		// 銃の削除
-		m_pGun->Rerease();
+		delete m_pGun;
 		m_pGun = nullptr;
 	}
 	if (m_pAI != nullptr)
@@ -96,6 +96,9 @@ void CBoss::Update(void)
 		m_pAI->Update();
 	}
 	CCharacter::Update();
+
+	m_pGun->Update();
+
 }
 //====================================================================
 //描画
@@ -103,6 +106,9 @@ void CBoss::Update(void)
 void CBoss::Draw(void)
 {
 	CCharacter::Draw();
+
+	m_pGun->Draw();
+
 }
 //====================================================================
 //デバッグ
