@@ -17,7 +17,8 @@ char *CCharacter::m_LoadOffsetFileName[CHARACTER_TYPE_MAX] =
 	{ "data/Load/Player/PlayerOffset.txt"},
 	{"data/Load/Enemy/EnemyOffset.txt"},
 	{"data/Load/Prisoner/PrisonerOffset.txt"},
-	{"data/Load/Boss/BossOffset.txt"}
+	{"data/Load/Boss/BossOffset.txt"},
+	{"data/Load/PlayerTank/PlayerTankOffset.txt"}
 };
 //モーションの読み込みファイル
 char *CCharacter::m_LoadMotionFileName[CHARACTER_MOTION_MAX] =
