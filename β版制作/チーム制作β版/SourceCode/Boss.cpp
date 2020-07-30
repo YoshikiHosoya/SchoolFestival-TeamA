@@ -18,12 +18,20 @@
 //マクロ定義
 //====================================================================
 #define BOSS_SIZE			(D3DXVECTOR3(50.0f,75.0f,0.0f)) //敵のサイズ
+#define BOSS_LIFE			(1000)
+
+
+//====================================================================
+//コンストラクタ
+//====================================================================
 CBoss::CBoss(OBJ_TYPE type) :CEnemy(type)
 {
 	SetObjType(OBJTYPE_BOSS);
 	m_pGun = nullptr;
 }
-
+//====================================================================
+//デストラクタ
+//====================================================================
 CBoss::~CBoss()
 {
 
@@ -39,18 +47,24 @@ HRESULT CBoss::Init(void)
 	LoadOffset(CCharacter::CHARACTER_TYPE_BOSS);
 	SetPosition(D3DXVECTOR3(0.0f, 300.0f, 0.0f));
 	SetMotion(CCharacter::BOSS_MOTION_NORMAL);
-	CCharacter::SetLife(1);
+
+	CCharacter::SetLife(BOSS_LIFE);
 	SetCharacterType(CCharacter::CHARACTER_TYPE_BOSS);
+
 	m_Attack = false;
 	m_AttackCastCnt = 0;
 	m_AttackCnt = 0;
+
 	//重力無し
 	SetGravity(false);
+
 	// 銃の生成
 	m_pGun = CGun::Create(GetCharacterModelPartsList(CModel::MODEL_BOSS_BODY)->GetMatrix());
 	m_pGun->SetGunType(CGun::GUNTYPE_TRACKINGGUN);
+
 	// 銃の弾の種類
 	m_pGun->GetTag() = TAG_ENEMY;
+
 	// 当たり判定生成
 	GetCollision()->SetPos(GetPositionPtr());
 	GetCollision()->SetPosOld(&GetPositionOld());

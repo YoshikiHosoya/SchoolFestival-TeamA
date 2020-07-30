@@ -18,6 +18,7 @@ public:
 		CHARACTER_STATE_NONE,
 		CHARACTER_STATE_NORMAL,
 		CHARACTER_STATE_DAMAGE,
+		CHARACTER_STATE_DAMAGE_RED,
 		CHARACTER_STATE_INVINCIBLE,
 		CHARACTER_STATE_MAX
 	}CHARACTER_STATE;
@@ -112,6 +113,7 @@ public:
 	virtual void Update(void);
 	virtual void Draw(void);
 	virtual bool DefaultMotion(void) = 0;
+	virtual void DamageReaction();
 	void Move(float move, float fdest);
 	void AddDamage(int Damage);
 	void Moation(void);

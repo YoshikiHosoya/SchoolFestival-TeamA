@@ -159,10 +159,20 @@ CEnemy *CEnemy::Create(void)
 	pEnemy->m_pAI = CEnemyAI::CreateAI(pEnemy);
 	return pEnemy;
 }
+//====================================================================
+//デフォルトのモーション設定
+//====================================================================
 bool CEnemy::DefaultMotion(void)
 {
 	SetMotion(CCharacter::ENEMY_MOTION_NORMAL);
 	return true;
+}
+//====================================================================
+//ダメージを受けた時のリアクション
+//====================================================================
+void CEnemy::DamageReaction()
+{
+	SetState(CCharacter::CHARACTER_STATE_DAMAGE_RED);
 }
 //====================================================================
 //移動

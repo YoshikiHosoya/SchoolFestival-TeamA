@@ -60,7 +60,6 @@ HRESULT CGame::Init(void)
 	m_pPlayer->SetPosition(D3DXVECTOR3(50.0f, 100.0f, 0.0f));
 
 	m_pPause->CreatePause();
-	CBoss::Create();
 	// ƒQ[ƒ€ƒ‚[ƒh‚Ì‰Šúİ’è
 	m_GameMode = GAME_MODE_NORMAL;
 
