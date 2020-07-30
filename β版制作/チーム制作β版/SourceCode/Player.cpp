@@ -280,7 +280,7 @@ void CPlayer::MoveUpdate(void)
 		}
 
 		//ƒWƒƒƒ“ƒv
-		if (key->GetKeyboardTrigger(DIK_SPACE)|| pad->GetTrigger(pad->JOYPADKEY_A, 1) && GetJump() == true && m_DebugState == DEBUG_NORMAL)
+		if ((key->GetKeyboardTrigger(DIK_SPACE)|| pad->GetTrigger(pad->JOYPADKEY_A, 1)) && GetJump() == true && m_DebugState == DEBUG_NORMAL)
 		{
 			GetMove().y += 27;
 			SetMotion(PLAYER_MOTION_JUMP);
