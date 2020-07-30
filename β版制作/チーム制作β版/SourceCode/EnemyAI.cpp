@@ -10,6 +10,7 @@
 #include "BaseMode.h"
 #include "map.h"
 #include "collision.h"
+#define MAX_RECASTTIME (120)
 CEnemyAI::CEnemyAI()
 {
 }

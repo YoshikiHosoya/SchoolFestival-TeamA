@@ -14,6 +14,7 @@
 #define RIGHT_POS		(D3DXVECTOR3(300.0f,200.0f,0.0f))
 #define LEFT_POS		(D3DXVECTOR3(-300.0f,200.0f,0.0f))
 #define MOVE_SPEED		(0.1f)
+#define MAX_RECASTTIME (60)
 CBossAI::CBossAI()
 {
 }

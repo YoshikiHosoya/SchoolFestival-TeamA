@@ -10,7 +10,6 @@
 #include "main.h"
 #include "scene.h"
 
-#define MAX_RECASTTIME (60)
 class CBoss;
 class CGun;
 class CCollision;

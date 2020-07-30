@@ -186,7 +186,7 @@ void CPlayer::Update(void)
 	{
 		CDebugProc::Print("攻撃してないで\n");
 	}
-
+	PadMoveUpdate();//パッドの更新
 	//スクリーンの範囲内から出ないように制限
 	CManager::GetRenderer()->ScreenLimitRange(GetPosition());
 }
@@ -238,6 +238,13 @@ void CPlayer::MoveUpdate(void)
 {
 	CKeyboard *key;
 	key = CManager::GetInputKeyboard();
+	CXInputPad *pad;
+	pad = CManager::GetPad();
+	float x, y;
+	pad->GetStickLeft(&x, &y);//パッドの入力値を代入
+	x /= STICK_MAX_RANGE;//値の正規化
+	y /= STICK_MAX_RANGE;//値の正規化
+
 	if (m_bRespawn == false)
 	{
 		if (key->GetKeyboardPress(DIK_W))
@@ -273,7 +280,7 @@ void CPlayer::MoveUpdate(void)
 		}
 
 		//ジャンプ
-		if (key->GetKeyboardTrigger(DIK_SPACE) && GetJump() == true && m_DebugState == DEBUG_NORMAL)
+		if (key->GetKeyboardTrigger(DIK_SPACE)|| pad->GetTrigger(pad->JOYPADKEY_A, 1) && GetJump() == true && m_DebugState == DEBUG_NORMAL)
 		{
 			GetMove().y += 27;
 			SetMotion(PLAYER_MOTION_JUMP);
@@ -300,13 +307,13 @@ void CPlayer::MoveUpdate(void)
 						SetMotion(PLAYER_MOTION_WALK);
 						m_bCruch = false;
 					}
-					//移動してない時かつしゃがみストップじゃない時
-					else if (GetMotionType() != PLAYER_MOTION_SQUATSTOP&& m_bCruch == false)
+					//しゃがんでない時
+					else if (m_bCruch == false)
 					{
 						SetMotion(PLAYER_MOTION_NORMAL);
 					}
 					//Sを押したらしゃがみモーション
-					if (key->GetKeyboardPress(DIK_S) && GetJump() == true)
+					if (key->GetKeyboardPress(DIK_S) && GetJump() == true && y < -0.6f)
 					{
 						if (m_bCruch == false && GetMotionType() != PLAYER_MOTION_WALK)
 						{
@@ -314,7 +321,7 @@ void CPlayer::MoveUpdate(void)
 							m_bCruch = true;
 						}
 					}
-					else if (GetJump() == true && GetMotionType() != PLAYER_MOTION_WALK)
+					else if (GetJump() == true && GetMotionType() != PLAYER_MOTION_WALK && y > -0.6f)
 					{
 						m_bCruch = false;
 						SetMotion(PLAYER_MOTION_NORMAL);
@@ -343,6 +350,7 @@ void CPlayer::MoveUpdate(void)
 		{
 			SetCharacterDirection(CHARACTER_DOWN);
 		}
+
 	}
 }
 //====================================================================
@@ -414,10 +422,12 @@ void CPlayer::AttackUpdate(void)
 {
 	CKeyboard *key;
 	key = CManager::GetInputKeyboard();
+	CXInputPad *pad;
+	pad = CManager::GetPad();
 	if (m_bRespawn == false)
 	{
 		// 銃を撃つ or 近接攻撃
-		if (key->GetKeyboardTrigger(DIK_P))
+		if (key->GetKeyboardTrigger(DIK_P)|| pad->GetTrigger(pad->JOYPADKEY_X,1))
 		{
 			// 銃を撃てる状態だった時
 			if (m_bAttack == false && m_bKnifeAttack == false)
@@ -436,7 +446,7 @@ void CPlayer::AttackUpdate(void)
 			}
 		}
 		// グレネードを投げる
-		if (key->GetKeyboardTrigger(DIK_O))
+		if (key->GetKeyboardTrigger(DIK_O)|| pad->GetTrigger(pad->JOYPADKEY_Y, 1))
 		{
 			// グレネードの弾数が残っているとき
 			if (m_pGrenadeFire->GetGrenadeAmmo() > 0)
@@ -455,6 +465,48 @@ void CPlayer::AttackUpdate(void)
 			m_pKnife->EndMeleeAttack();
 		}
 	}
+}
+//====================================================================
+//パッドの移動関連更新
+//====================================================================
+void CPlayer::PadMoveUpdate(void)
+{
+	CXInputPad *pad;
+	pad = CManager::GetPad();
+	float x, y;
+	pad->GetStickLeft(&x, &y);//パッドの入力値を代入
+	x /= STICK_MAX_RANGE;//値の正規化
+	y /= STICK_MAX_RANGE;//値の正規化
+	//GetMove().x += x;
+
+	if (x > 0.5f)
+	{
+		CPlayer::Move(-0.5f, -0.5f);
+		SetCharacterDirection(CHARACTER_RIGHT);
+	}
+	else if (x < -0.5f)
+	{
+		CPlayer::Move(0.5f, 0.5f);
+		SetCharacterDirection(CHARACTER_LEFT);
+	}
+	if (y > 0.6f)
+	{
+		SetCharacterDirection(CHARACTER_UP);
+	}
+	else if (y < -0.6f&& GetJump() == false)
+	{
+		SetCharacterDirection(CHARACTER_DOWN);
+	}
+	//Sを押したらしゃがみモーション
+	if (y < -0.6f && GetJump() == true)
+	{
+		if (m_bCruch == false && GetMotionType() != PLAYER_MOTION_WALK)
+		{
+			SetMotion(PLAYER_MOTION_SQUATSTOP);
+			m_bCruch = true;
+		}
+	}
+	CDebugProc::Print("パッドの入力値 X : %2f Y : %2f\n", x, y);
 }
 //====================================================================
 //モデルのクリエイト
@@ -571,13 +623,13 @@ void CPlayer::Ride()
 
 		// 乗り物に乗っている時にジャンプして戦車から降りる
 		CKeyboard *key = CManager::GetInputKeyboard();
-		if (key->GetKeyboardTrigger(DIK_SPACE) && GetJump() == false)
+		CXInputPad *pad = CManager::GetPad();
+		//プレイヤーが乗り物から降りるとき
+		if (key->GetKeyboardTrigger(DIK_SPACE)|| pad->GetTrigger(pad->JOYPADKEY_A,1) && GetJump() == false)
 		{
 			m_bRideVehicle = false;
 			GetMove().y += 40;
 			SetMotion(PLAYER_MOTION_JUMP);
-
-			// 無敵判定
 		}
 	}
 }
