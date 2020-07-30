@@ -145,7 +145,6 @@ public:
 	{
 		//===ƒ{ƒX‚Ìƒ‚ƒfƒ‹===
 		MODEL_BOSS_BODY,			// ‘Ì
-		MODEL_BOSS_GUN,				// •Ší
 		MODEL_BOSS_MAX
 	}BOSS_PARTS_MODEL;
 
