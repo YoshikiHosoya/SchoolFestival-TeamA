@@ -89,6 +89,14 @@ enum TAG
 	TAG_MAX,
 };
 
+enum class DIRECTION
+{
+	LEFT,
+	RIGHT,
+	UP,
+	DOWN,
+};
+
 //------------------------------------------------------------------------------
 //エイリアス宣言
 //------------------------------------------------------------------------------
@@ -116,8 +124,10 @@ public:
 	static void CalcRotation(float &fRot);																		//回転を360度以内にする計算
 
 	static bool PressAnyButton(void);
-
+	static bool PressStartButton(void);
 	static bool ImGui_Combobox(std::vector<std::string> aItemNameList, std::string aTitle, int &nValue);
+
+	static bool PadMoveInput(D3DXVECTOR3 & rMove, DIRECTION & direction,bool bJump);
 
 	//------------------------------------------------------------------------------
 	//範囲内の値に修正する関数

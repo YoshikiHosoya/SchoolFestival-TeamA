@@ -86,7 +86,7 @@ HRESULT CPlayer::Init(void)
 	}
 
 	//初期の向き
-	SetCharacterDirection(CHARACTER_RIGHT);
+	SetCharacterDirection(DIRECTION::RIGHT);
 	//リスポーン時のカウント
 	m_nRespawnCnt = 0;
 	//プレイヤーの状態ステータス
@@ -249,7 +249,7 @@ void CPlayer::MoveUpdate(void)
 	{
 		if (key->GetKeyboardPress(DIK_W))
 		{
-			SetCharacterDirection(CHARACTER_UP);
+			SetCharacterDirection(DIRECTION::UP);
 		}
 
 		// Aの処理
@@ -258,11 +258,11 @@ void CPlayer::MoveUpdate(void)
 			CPlayer::Move(0.5f, 0.5f);
 			if (key->GetKeyboardPress(DIK_W))
 			{
-				SetCharacterDirection(CHARACTER_UP);
+				SetCharacterDirection(DIRECTION::UP);
 			}
 			else
 			{
-				SetCharacterDirection(CHARACTER_LEFT);
+				SetCharacterDirection(DIRECTION::LEFT);
 			}
 		}
 		// Dの処理
@@ -271,16 +271,16 @@ void CPlayer::MoveUpdate(void)
 			CPlayer::Move(-0.5f, -0.5f);
 			if (key->GetKeyboardPress(DIK_W))
 			{
-				SetCharacterDirection(CHARACTER_UP);
+				SetCharacterDirection(DIRECTION::UP);
 			}
 			else
 			{
-				SetCharacterDirection(CHARACTER_RIGHT);
+				SetCharacterDirection(DIRECTION::RIGHT);
 			}
 		}
 
 		//ジャンプ
-		if (key->GetKeyboardTrigger(DIK_SPACE)|| pad->GetTrigger(pad->JOYPADKEY_A, 1) && GetJump() == true && m_DebugState == DEBUG_NORMAL)
+		if ((key->GetKeyboardTrigger(DIK_SPACE)|| pad->GetTrigger(pad->JOYPADKEY_A, 1)) && GetJump() == true && m_DebugState == DEBUG_NORMAL)
 		{
 			GetMove().y += 27;
 			SetMotion(PLAYER_MOTION_JUMP);
@@ -313,7 +313,7 @@ void CPlayer::MoveUpdate(void)
 						SetMotion(PLAYER_MOTION_NORMAL);
 					}
 					//Sを押したらしゃがみモーション
-					if (key->GetKeyboardPress(DIK_S) && GetJump() == true && y < -0.6f)
+					if (key->GetKeyboardPress(DIK_S)|| y < -0.6f && GetJump() == true)
 					{
 						if (m_bCruch == false && GetMotionType() != PLAYER_MOTION_WALK)
 						{
@@ -348,7 +348,7 @@ void CPlayer::MoveUpdate(void)
 		//ジャンプしたときの下向発射
 		if (key->GetKeyboardPress(DIK_S) && GetJump() == false)
 		{
-			SetCharacterDirection(CHARACTER_DOWN);
+			SetCharacterDirection(DIRECTION::DOWN);
 		}
 
 	}
@@ -471,34 +471,23 @@ void CPlayer::AttackUpdate(void)
 //====================================================================
 void CPlayer::PadMoveUpdate(void)
 {
-	CXInputPad *pad;
-	pad = CManager::GetPad();
-	float x, y;
-	pad->GetStickLeft(&x, &y);//パッドの入力値を代入
-	x /= STICK_MAX_RANGE;//値の正規化
-	y /= STICK_MAX_RANGE;//値の正規化
-	//GetMove().x += x;
+	D3DXVECTOR3 MoveValue = ZeroVector3;
 
-	if (x > 0.5f)
+	if (CHossoLibrary::PadMoveInput(MoveValue, GetCharacterDirection(),GetJump()))
 	{
-		CPlayer::Move(-0.5f, -0.5f);
-		SetCharacterDirection(CHARACTER_RIGHT);
+		Move(MoveValue.x, MoveValue.y);
 	}
-	else if (x < -0.5f)
-	{
-		CPlayer::Move(0.5f, 0.5f);
-		SetCharacterDirection(CHARACTER_LEFT);
-	}
-	if (y > 0.6f)
-	{
-		SetCharacterDirection(CHARACTER_UP);
-	}
-	else if (y < -0.6f&& GetJump() == false)
-	{
-		SetCharacterDirection(CHARACTER_DOWN);
-	}
-	//Sを押したらしゃがみモーション
-	if (y < -0.6f && GetJump() == true)
+
+	CXInputPad *pad = CManager::GetPad();
+	D3DXVECTOR3 InputValue = ZeroVector3;
+	pad->GetStickLeft(&InputValue.x, &InputValue.y);//パッドの入力値を代入
+
+	InputValue.x /= STICK_MAX_RANGE;//値の正規化
+	InputValue.y /= STICK_MAX_RANGE;//値の正規化
+
+
+		//Sを押したらしゃがみモーション
+	if (InputValue.y < -0.6f && GetJump() == true)
 	{
 		if (m_bCruch == false && GetMotionType() != PLAYER_MOTION_WALK)
 		{
@@ -506,7 +495,6 @@ void CPlayer::PadMoveUpdate(void)
 			m_bCruch = true;
 		}
 	}
-	CDebugProc::Print("パッドの入力値 X : %2f Y : %2f\n", x, y);
 }
 //====================================================================
 //モデルのクリエイト
@@ -526,7 +514,7 @@ bool CPlayer::DefaultMotion(void)
 {
 	if (GetJump() == true)
 	{
-	SetMotion(CCharacter::PLAYER_MOTION_NORMAL);
+		SetMotion(CCharacter::PLAYER_MOTION_NORMAL);
 	}
 	return true;
 }

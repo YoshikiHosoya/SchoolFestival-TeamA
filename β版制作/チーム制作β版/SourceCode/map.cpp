@@ -37,7 +37,10 @@ char *CMap::m_MapModelFileName[MAP_MAX] =
 {
 	{ "data/Load/Map/MAP_Tutorial.txt" },
 	{ "data/Load/Map/Map_1_1.txt" },
-	{ "data/Load/Map/Map_1_1.txt" },
+	{ "data/Load/Map/Map_1_2.txt" },
+	{ "data/Load/Map/Map_1_3.txt" },
+	{ "data/Load/Map/Map_1_BOSS.txt" },
+
 };
 
 /* ----- ウェーブ ----- */
@@ -545,7 +548,7 @@ void CMap::MapUpdate()
 			//	MapLoad();
 
 			//}
-		
+
 			//// オブジェクト番号の選択
 			//ImGui::InputInt("nowMapNum", &nNowMapSelect, 1, 20, 0);
 
@@ -1005,7 +1008,7 @@ void CMap::SaveWaveContents(FILE * pFile, int ModelType, int nType, int nCnt, in
 		fprintf(pFile, "	TYPE	= %d\n", 0 /*m_pEnemy[nCnt]->GetType()*/);
 		fprintf(pFile, "	POS		= %.0f %.0f %.0f\n", m_pEnemy[nCnt]->GetPosition().x, m_pEnemy[nCnt]->GetPosition().y, m_pEnemy[nCnt]->GetPosition().z);
 		fprintf(pFile, "	FRAME	= %d\n", 0 /*m_pEnemy[nCnt]->GetType()*/);
-		fprintf(pFile, "	EVENT	= %d\n", 0 /*m_pEnemy[nCnt]->GetType()*/); 
+		fprintf(pFile, "	EVENT	= %d\n", 0 /*m_pEnemy[nCnt]->GetType()*/);
 		fprintf(pFile, "END_ENEMYSET\n\n");
 		break;
 

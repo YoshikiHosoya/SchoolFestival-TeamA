@@ -196,13 +196,13 @@ void CBattlePlane::Operation(CKeyboard * key)
 	if (key->GetKeyboardPress(DIK_W))
 	{
 		CVehicle::MovePlane(D3DXVECTOR3(0.0f, 1.0f, 0.0f), -0.5f);
-		SetVehicleDirection(VEHICLE_UP);
+		SetVehicleDirection(DIRECTION::UP);
 	}
 	// ã‚ðŒü‚­
 	else if (key->GetKeyboardPress(DIK_S))
 	{
 		CVehicle::MovePlane(D3DXVECTOR3(0.0f, -1.0f, 0.0f), -0.5f);
-		SetVehicleDirection(VEHICLE_DOWN);
+		SetVehicleDirection(DIRECTION::DOWN);
 	}
 
 	// ¶‚É“®‚©‚¹‚é
@@ -212,21 +212,21 @@ void CBattlePlane::Operation(CKeyboard * key)
 		if (key->GetKeyboardPress(DIK_W))
 		{
 			CVehicle::MovePlane(D3DXVECTOR3(-1.0f, 1.0f, 0.0f), -0.5f);
-			SetVehicleDirection(VEHICLE_UP);
+			SetVehicleDirection(DIRECTION::UP);
 		}
 
 		// ‰º‚ðŒü‚­
 		else if (key->GetKeyboardPress(DIK_S))
 		{
 			CVehicle::MovePlane(D3DXVECTOR3(-1.0f, -1.0f, 0.0f), -0.5f);
-			SetVehicleDirection(VEHICLE_DOWN);
+			SetVehicleDirection(DIRECTION::DOWN);
 		}
 
 		// ¶‚ðŒü‚­
 		else
 		{
 			CVehicle::MovePlane(D3DXVECTOR3(-1.0f, 0.0f, 0.0f), -0.5f);
-			SetVehicleDirection(VEHICLE_LEFT);
+			SetVehicleDirection(DIRECTION::LEFT);
 		}
 	}
 
@@ -237,21 +237,21 @@ void CBattlePlane::Operation(CKeyboard * key)
 		if (key->GetKeyboardPress(DIK_W))
 		{
 			CVehicle::MovePlane(D3DXVECTOR3(1.0f, 1.0f, 0.0f), -0.5f);
-			SetVehicleDirection(VEHICLE_UP);
+			SetVehicleDirection(DIRECTION::UP);
 		}
 
 		// ‰º‚ðŒü‚­
 		else if (key->GetKeyboardPress(DIK_S))
 		{
 			CVehicle::MovePlane(D3DXVECTOR3(1.0f, -1.0f, 0.0f), -0.5f);
-			SetVehicleDirection(VEHICLE_DOWN);
+			SetVehicleDirection(DIRECTION::DOWN);
 		}
 
 		// ‰E‚ðŒü‚­
 		else
 		{
 			CVehicle::MovePlane(D3DXVECTOR3(1.0f, 0.0f, 0.0f), -0.5f);
-			SetVehicleDirection(VEHICLE_RIGHT);
+			SetVehicleDirection(DIRECTION::RIGHT);
 		}
 	}
 }

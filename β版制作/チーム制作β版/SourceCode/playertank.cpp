@@ -138,6 +138,9 @@ void CPlayertank::Update(void)
 			// 戦車を操作する処理
 			Operation(key);
 
+			// 戦車の操作
+			PadInput();
+
 			// パーツの回転処理
 			VehiclePartsRotCondition(GetVehicleModelPartsList(CModel::MODEL_TANK_TANK_FRONTWHEEL), MODEL_ROT_TYPE_MOVING);
 			VehiclePartsRotCondition(GetVehicleModelPartsList(CModel::MODEL_TANK_TANK_BACKWHEEL), MODEL_ROT_TYPE_MOVING);
@@ -154,7 +157,7 @@ void CPlayertank::Update(void)
 	Collision();
 
 	m_pGun->Update();
-	
+
 
 	// 乗り物クラスの更新
 	CVehicle::Update();
@@ -197,8 +200,10 @@ CPlayertank *CPlayertank::Create(void)
 //====================================================================
 void CPlayertank::Shot(CKeyboard *key)
 {
+	CXInputPad *pXInput = CManager::GetPad();
+
 	// マシンガンを撃つ
-	if (key->GetKeyboardTrigger(DIK_P))
+	if (key->GetKeyboardTrigger(DIK_P) || pXInput->GetTrigger(CXInputPad::JOYPADKEY_X, 1))
 	{
 		// ガンのモデルの発射口から弾を生成
 		m_pGun->Shot();
@@ -207,7 +212,7 @@ void CPlayertank::Shot(CKeyboard *key)
 	m_pGun->SetShotRot(GetVehicleModelPartsList(CModel::MODEL_TANK_TANKGUN)->GetRot());
 
 	// グレネードを撃つ
-	if (key->GetKeyboardTrigger(DIK_O))
+	if (key->GetKeyboardTrigger(DIK_O) || pXInput->GetTrigger(CXInputPad::JOYPADKEY_Y, 1))
 	{
 		// グレネードの弾数が残っているとき
 		if (m_pGrenadeFire->GetGrenadeAmmo() > 0)
@@ -219,19 +224,35 @@ void CPlayertank::Shot(CKeyboard *key)
 }
 
 //====================================================================
+// パッドの入力
+//====================================================================
+void CPlayertank::PadInput()
+{
+	D3DXVECTOR3 MoveValue = ZeroVector3;
+
+	if (CHossoLibrary::PadMoveInput(MoveValue, GetVehicleDirection(), false))
+	{
+		Move(MoveValue.x, -0.5f);
+	}
+
+}
+
+//====================================================================
 // 操作処理
 //====================================================================
 void CPlayertank::Operation(CKeyboard * key)
 {
+	CXInputPad *pXInput = CManager::GetPad();
+
 	// 上を向く
 	if (key->GetKeyboardPress(DIK_W))
 	{
-		SetVehicleDirection(VEHICLE_UP);
+		SetVehicleDirection(DIRECTION::UP);
 	}
 	// 上を向く
 	else if (key->GetKeyboardPress(DIK_S))
 	{
-		SetVehicleDirection(VEHICLE_DOWN);
+		SetVehicleDirection(DIRECTION::DOWN);
 	}
 
 	// 左に動かせる
@@ -249,19 +270,19 @@ void CPlayertank::Operation(CKeyboard * key)
 		// 上を向く
 		if (key->GetKeyboardPress(DIK_W))
 		{
-			SetVehicleDirection(VEHICLE_UP);
+			SetVehicleDirection(DIRECTION::UP);
 		}
 
 		// 下を向く
 		else if (key->GetKeyboardPress(DIK_S))
 		{
-			SetVehicleDirection(VEHICLE_DOWN);
+			SetVehicleDirection(DIRECTION::DOWN);
 		}
 
 		// 左を向く
 		else
 		{
-			SetVehicleDirection(VEHICLE_LEFT);
+			SetVehicleDirection(DIRECTION::LEFT);
 		}
 	}
 
@@ -279,24 +300,24 @@ void CPlayertank::Operation(CKeyboard * key)
 		// 上を向く
 		if (key->GetKeyboardPress(DIK_W))
 		{
-			SetVehicleDirection(VEHICLE_UP);
+			SetVehicleDirection(DIRECTION::UP);
 		}
 
 		// 下を向く
 		else if (key->GetKeyboardPress(DIK_S))
 		{
-			SetVehicleDirection(VEHICLE_DOWN);
+			SetVehicleDirection(DIRECTION::DOWN);
 		}
 
 		// 右を向く
 		else
 		{
-			SetVehicleDirection(VEHICLE_RIGHT);
+			SetVehicleDirection(DIRECTION::RIGHT);
 		}
 	}
 
 	// ジャンプ処理
-	if (key->GetKeyboardTrigger(DIK_UP))
+	if (key->GetKeyboardTrigger(DIK_UP) || pXInput->GetTrigger(CXInputPad::JOYPADKEY_A, 1))
 	{
 		// 1回ジャンプさせる
 		Jump();

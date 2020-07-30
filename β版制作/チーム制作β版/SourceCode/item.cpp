@@ -278,11 +278,11 @@ void CItem::SetDropPos(D3DXVECTOR3 &characterpos)
 	if (pPlayer != nullptr)
 	{
 		// ƒvƒŒƒCƒ„[‚ÌŒü‚«‚ðŽæ“¾
-		if (pPlayer->GetCharacterDirection() == CPlayer::CHARACTER_LEFT)
+		if (pPlayer->GetCharacterDirection() == DIRECTION::LEFT)
 		{
 			characterpos.x -= 50;
 		}
-		else if(pPlayer->GetCharacterDirection() == CPlayer::CHARACTER_RIGHT)
+		else if(pPlayer->GetCharacterDirection() == DIRECTION::RIGHT)
 		{
 			characterpos.x += 50;
 		}

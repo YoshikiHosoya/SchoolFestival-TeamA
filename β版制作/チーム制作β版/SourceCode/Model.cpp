@@ -126,8 +126,7 @@ char *CModel::m_ObstacleFileName[OBSTACLE_TYPE_MAX] =
 
 char *CModel::m_BossFileName[MODEL_BOSS_MAX] =
 {
-	{ "data/MODEL/Boss/Obstacle_Box.x" },			// ” 
-	{ "data/MODEL/Boss/Obstacle_Barrel.x" },		// ’M
+	{ "data/MODEL/Boss/SolodeRoca.x" },			// ” 
 };
 
 CModel::CModel(OBJ_TYPE type) : CScene(type)
