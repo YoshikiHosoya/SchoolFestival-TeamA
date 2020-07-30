@@ -79,6 +79,7 @@ public:
 		ARRANGEMENT_MODEL_TANK,					// 戦車
 		ARRANGEMENT_MODEL_BATTLEPLANE,			// 戦闘機
 		ARRANGEMENT_MODEL_HELICOPTER,			// ヘリコプター
+		ARRANGEMENT_MODEL_BOSS,					// ボス
 		ARRANGEMENT_MODEL_MAX
 	};
 
@@ -191,8 +192,8 @@ private:
 	std::vector<CVehicle*>		m_pVehicle;									// 可変長配列 設置した乗り物
 
 	int							m_nOldSelect;								// 前回選択していたモノの番号
-	int							m_nWaveID;									// ウェーブの出現番号
 	static WAVE_INFO			m_aWaveInfo[WAVE_MAX];						// ウェーブの情報
 	D3DXVECTOR3					m_WavePos;									// ウェーブの位置
+	D3DXVECTOR3					m_ModelPosOld;								// モデルの前回の位置
 };
 #endif
