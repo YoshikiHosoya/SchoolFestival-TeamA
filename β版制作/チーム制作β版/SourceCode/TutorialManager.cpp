@@ -192,7 +192,7 @@ void CTutorialManager::NextState()
 	else
 	{
 		// ゲームモードへステート遷移
-		CManager::GetRenderer()->GetFade()->SetFade(CManager::MODE_GAME);
+		//CManager::GetRenderer()->GetFade()->SetFade(CManager::MODE_GAME, 0);
 	}
 }
 
