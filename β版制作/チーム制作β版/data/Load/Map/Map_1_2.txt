@@ -4,12 +4,22 @@
 SCRIPT
 
 //------------------------------------------------------------
+// 遷移するための情報
+//------------------------------------------------------------
+TRANSITION_POS_X		= 0
+TRANSITION_MAP_ID		= 0
+
+//------------------------------------------------------------
 // マップモデルの配置情報
 //------------------------------------------------------------
 //------------------------------------------------------------
 // MAPTYPE情報
 //
-//	[ 0 ]	床
+//	[ 0 ]	チュートリアル
+//	[ 1 ]	ステージ1_1
+//	[ 2 ]	ステージ1_2
+//	[ 3 ]	ステージ1_3
+//	[ 4 ]	ステージ1_BOSS
 //
 //------------------------------------------------------------
 
@@ -143,6 +153,126 @@ ENEMYSET									# 23
 	POS		= 3979 53 0
 END_ENEMYSET
 
+ENEMYSET									# 24
+	TYPE	= 0
+	POS		= 4287 53 0
+END_ENEMYSET
+
+ENEMYSET									# 25
+	TYPE	= 0
+	POS		= 4374 53 0
+END_ENEMYSET
+
+ENEMYSET									# 26
+	TYPE	= 0
+	POS		= 4462 53 0
+END_ENEMYSET
+
+ENEMYSET									# 27
+	TYPE	= 0
+	POS		= 4552 53 0
+END_ENEMYSET
+
+ENEMYSET									# 28
+	TYPE	= 0
+	POS		= 4738 53 0
+END_ENEMYSET
+
+ENEMYSET									# 29
+	TYPE	= 0
+	POS		= 4818 53 0
+END_ENEMYSET
+
+ENEMYSET									# 30
+	TYPE	= 0
+	POS		= 4893 53 0
+END_ENEMYSET
+
+ENEMYSET									# 31
+	TYPE	= 0
+	POS		= 4973 53 0
+END_ENEMYSET
+
+ENEMYSET									# 32
+	TYPE	= 0
+	POS		= 5663 53 0
+END_ENEMYSET
+
+ENEMYSET									# 33
+	TYPE	= 0
+	POS		= 5753 53 0
+END_ENEMYSET
+
+ENEMYSET									# 34
+	TYPE	= 0
+	POS		= 5841 53 0
+END_ENEMYSET
+
+ENEMYSET									# 35
+	TYPE	= 0
+	POS		= 5933 53 0
+END_ENEMYSET
+
+ENEMYSET									# 36
+	TYPE	= 0
+	POS		= 6122 53 0
+END_ENEMYSET
+
+ENEMYSET									# 37
+	TYPE	= 0
+	POS		= 6204 53 0
+END_ENEMYSET
+
+ENEMYSET									# 38
+	TYPE	= 0
+	POS		= 6288 53 0
+END_ENEMYSET
+
+ENEMYSET									# 39
+	TYPE	= 0
+	POS		= 6363 53 0
+END_ENEMYSET
+
+ENEMYSET									# 40
+	TYPE	= 0
+	POS		= 5236 192 0
+END_ENEMYSET
+
+ENEMYSET									# 41
+	TYPE	= 0
+	POS		= 5406 192 0
+END_ENEMYSET
+
+ENEMYSET									# 42
+	TYPE	= 0
+	POS		= 4433 330 0
+END_ENEMYSET
+
+ENEMYSET									# 43
+	TYPE	= 0
+	POS		= 4512 330 0
+END_ENEMYSET
+
+ENEMYSET									# 44
+	TYPE	= 0
+	POS		= 4806 330 0
+END_ENEMYSET
+
+ENEMYSET									# 45
+	TYPE	= 0
+	POS		= 4883 330 0
+END_ENEMYSET
+
+ENEMYSET									# 46
+	TYPE	= 0
+	POS		= 4960 330 0
+END_ENEMYSET
+
+ENEMYSET									# 47
+	TYPE	= 0
+	POS		= 4346 330 0
+END_ENEMYSET
+
 //------------------------------------------------------------
 // 捕虜の配置情報
 //------------------------------------------------------------
@@ -155,29 +285,54 @@ END_ENEMYSET
 //
 //------------------------------------------------------------
 
-PRISONERSET									# 24
+PRISONERSET									# 48
 	TYPE	= 0
 	POS		= 1127 202 0
 END_PRISONERSET
 
-PRISONERSET									# 25
+PRISONERSET									# 49
 	TYPE	= 0
 	POS		= 2250 197 0
 END_PRISONERSET
 
-PRISONERSET									# 26
+PRISONERSET									# 50
 	TYPE	= 0
 	POS		= 1658 53 0
 END_PRISONERSET
 
-PRISONERSET									# 27
+PRISONERSET									# 51
 	TYPE	= 0
 	POS		= 2848 53 0
 END_PRISONERSET
 
-PRISONERSET									# 28
+PRISONERSET									# 52
 	TYPE	= 0
 	POS		= 3432 197 0
+END_PRISONERSET
+
+PRISONERSET									# 53
+	TYPE	= 0
+	POS		= 5294 192 0
+END_PRISONERSET
+
+PRISONERSET									# 54
+	TYPE	= 0
+	POS		= 5349 192 0
+END_PRISONERSET
+
+PRISONERSET									# 55
+	TYPE	= 0
+	POS		= 4595 330 0
+END_PRISONERSET
+
+PRISONERSET									# 56
+	TYPE	= 0
+	POS		= 4663 330 0
+END_PRISONERSET
+
+PRISONERSET									# 57
+	TYPE	= 0
+	POS		= 4731 330 0
 END_PRISONERSET
 
 //------------------------------------------------------------
@@ -194,69 +349,79 @@ END_PRISONERSET
 //
 //------------------------------------------------------------
 
-OBSTACLESET									# 29
+OBSTACLESET									# 58
 	TYPE	= 4
 	POS		= 493 89 4
 END_OBSTACLESET
 
-OBSTACLESET									# 30
+OBSTACLESET									# 59
 	TYPE	= 4
 	POS		= 1043 237 0
 END_OBSTACLESET
 
-OBSTACLESET									# 31
+OBSTACLESET									# 60
 	TYPE	= 4
 	POS		= 1217 232 0
 END_OBSTACLESET
 
-OBSTACLESET									# 32
+OBSTACLESET									# 61
 	TYPE	= 4
 	POS		= 2171 229 0
 END_OBSTACLESET
 
-OBSTACLESET									# 33
+OBSTACLESET									# 62
 	TYPE	= 4
 	POS		= 2334 228 0
 END_OBSTACLESET
 
-OBSTACLESET									# 34
+OBSTACLESET									# 63
 	TYPE	= 4
 	POS		= 2636 89 0
 END_OBSTACLESET
 
-OBSTACLESET									# 35
+OBSTACLESET									# 64
 	TYPE	= 4
 	POS		= 3041 93 0
 END_OBSTACLESET
 
-OBSTACLESET									# 36
+OBSTACLESET									# 65
 	TYPE	= 4
 	POS		= 4181 90 0
 END_OBSTACLESET
 
-OBSTACLESET									# 37
+OBSTACLESET									# 66
 	TYPE	= 4
 	POS		= 4646 88 0
 END_OBSTACLESET
 
-OBSTACLESET									# 38
+OBSTACLESET									# 67
 	TYPE	= 4
 	POS		= 5060 85 0
 END_OBSTACLESET
 
-OBSTACLESET									# 39
+OBSTACLESET									# 68
 	TYPE	= 4
 	POS		= 5568 86 0
 END_OBSTACLESET
 
-OBSTACLESET									# 40
+OBSTACLESET									# 69
 	TYPE	= 4
 	POS		= 6033 85 0
 END_OBSTACLESET
 
-OBSTACLESET									# 41
+OBSTACLESET									# 70
 	TYPE	= 4
 	POS		= 6453 89 0
+END_OBSTACLESET
+
+OBSTACLESET									# 71
+	TYPE	= 4
+	POS		= 4646 145 0
+END_OBSTACLESET
+
+OBSTACLESET									# 72
+	TYPE	= 4
+	POS		= 6033 140 0
 END_OBSTACLESET
 
 //------------------------------------------------------------

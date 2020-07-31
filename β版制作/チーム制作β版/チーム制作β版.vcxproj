@@ -231,6 +231,7 @@
     <ClCompile Include="SourceCode\SceneBase.cpp" />
     <ClCompile Include="SourceCode\SceneX.cpp" />
     <ClCompile Include="SourceCode\shotgun.cpp" />
+    <ClCompile Include="SourceCode\sound.cpp" />
     <ClCompile Include="SourceCode\tankgun.cpp" />
     <ClCompile Include="SourceCode\TexAnimation2D.cpp" />
     <ClCompile Include="SourceCode\TexAnimation3D.cpp" />
@@ -329,6 +330,7 @@
     <ClInclude Include="SourceCode\SceneBase.h" />
     <ClInclude Include="SourceCode\SceneX.h" />
     <ClInclude Include="SourceCode\shotgun.h" />
+    <ClInclude Include="SourceCode\sound.h" />
     <ClInclude Include="SourceCode\tankgun.h" />
     <ClInclude Include="SourceCode\TexAnimation2D.h" />
     <ClInclude Include="SourceCode\TexAnimation3D.h" />
