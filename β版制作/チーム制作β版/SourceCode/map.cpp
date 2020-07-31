@@ -591,8 +591,17 @@ void CMap::MapLoad(MAP MapNum)
 
 	if (MapNum == CMap::MAP_1_BOSS)
 	{
+		CManager::GetRenderer()->GetCamera()->SetCameraStopMove(true);
+		CManager::GetRenderer()->GetCamera()->SetPosR(D3DXVECTOR3(0.0f, 200.0f, 0.0f));
 
 	}
+	if (MapNum == CMap::MAP_TUTORIAL)
+	{
+		CManager::GetRenderer()->GetCamera()->SetCameraStopMove(true);
+		CManager::GetRenderer()->GetCamera()->SetPosR(D3DXVECTOR3(0.0f, 200.0f, 0.0f));
+
+	}
+
 }
 
 // =====================================================================================================================================================================

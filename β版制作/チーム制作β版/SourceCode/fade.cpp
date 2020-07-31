@@ -281,6 +281,12 @@ void CFADE::FadeOut()
 		//マップのポインタ取得
 		CMap *pMap = CManager::GetBaseMode()->GetMap();
 
+		//プレイヤーのマップ遷移時の処理
+		CManager::GetBaseMode()->GetPlayer()->MapChangePlayerRespawn();
+
+		//レンダラー設定初期化
+		CManager::GetRenderer()->ResetRenderer();
+
 		//nullcheck
 		if (pMap)
 		{
@@ -288,11 +294,6 @@ void CFADE::FadeOut()
 			pMap->AllDelete();
 			pMap->MapLoad((CMap::MAP)m_NextID);
 		}
-		//プレイヤーのマップ遷移時の処理
-		CManager::GetBaseMode()->GetPlayer()->MapChangePlayerRespawn();
-
-		//レンダラー設定初期化
-		CManager::GetRenderer()->ResetRenderer();
 
 		//シーン管理にあるマップ変更時に必要ないものを消去
 		CScene::MapChangeRelease();

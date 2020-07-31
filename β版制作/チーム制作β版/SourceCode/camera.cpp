@@ -366,6 +366,18 @@ void CCamera::MouseMoveCamera()
 }
 
 //-----------------------------------------------------------------------------
+//íçéãì_Çê›íË
+//-----------------------------------------------------------------------------
+void CCamera::SetPosR(D3DXVECTOR3 posR)
+{
+	m_posCameraEndLine = m_posR = m_posRDest = posR;
+
+	m_posV.x = m_posVDest.x = m_posRDest.x - sinf(m_rot.y) * cosf(m_rot.x) * m_fDistance;
+	m_posV.y = m_posVDest.y = m_posRDest.y + sinf(m_rot.x)	* m_fDistance;
+	m_posV.z = m_posVDest.z = m_posRDest.z - cosf(m_rot.y) * cosf(m_rot.x) * m_fDistance;
+}
+
+//-----------------------------------------------------------------------------
 //ÉJÉÅÉâÇèâä˙ç¿ïWÇ…ê›íË
 //-----------------------------------------------------------------------------
 void CCamera::ResetCamera()
