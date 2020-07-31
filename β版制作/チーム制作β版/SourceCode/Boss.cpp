@@ -121,7 +121,8 @@ void CBoss::Draw(void)
 {
 	CCharacter::Draw();
 
-	m_pGun->Draw();
+	//ガンのマトリックスの計算だけ
+	m_pGun->NoDrawCalcMatrixOnly();
 
 }
 //====================================================================
@@ -129,6 +130,7 @@ void CBoss::Draw(void)
 //====================================================================
 void CBoss::DebugInfo(void)
 {
+
 }
 //====================================================================
 //モデルのクリエイト
@@ -149,6 +151,19 @@ bool CBoss::DefaultMotion(void)
 {
 	SetMotion(CCharacter::BOSS_MOTION_NORMAL);
 	return true;
+}
+//====================================================================
+//死亡時のリアクション
+//====================================================================
+void CBoss::DeathReaction()
+{
+	//nullcheck
+	if(CManager::GetGame())
+	{
+		CManager::GetGame()->SetGameMode(CGame::GAME_MODE_RESULT);
+	}
+
+	CCharacter::DeathReaction();
 }
 //====================================================================
 //ボスの銃の取得

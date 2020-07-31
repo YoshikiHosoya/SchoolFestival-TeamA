@@ -136,7 +136,7 @@ CTracking * CTracking::Create(D3DXVECTOR3 rot)
 	pTracking->Init();
 
 	// 撃つ方向に合わせる
-	pTracking->GetMove() = rot * 50;
+	pTracking->GetMove() = rot * pBulletParam->fBulletSpeed;
 
 	// モデルタイプの設定
 	pTracking->SetType(BULLET_MODEL);

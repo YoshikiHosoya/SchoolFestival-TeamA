@@ -20,6 +20,7 @@
 #include "Character.h"
 #include "TexAnimation3D.h"
 #include "TrackingGun.h"
+#include "diffusiongun.h"
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
 // =====================================================================================================================================================================
@@ -126,9 +127,11 @@ void CGun::Draw(void)
 	if (m_bDraw == false)
 	{
 		// 描画
-		CModel::Draw(*m_mtx);
+		CModel::Draw(*m_HasHandMtx);
 	}
 }
+
+
 // =====================================================================================================================================================================
 //
 // デバッグ
@@ -155,7 +158,7 @@ CGun * CGun::Create(D3DXMATRIX *mtx)
 	pGun->Init();
 
 	// マトリックス代入
-	pGun->m_mtx = mtx;
+	pGun->m_HasHandMtx = mtx;
 
 	// モデルタイプの設定
 	pGun->SetType(GUN_MODEL);
@@ -164,6 +167,16 @@ CGun * CGun::Create(D3DXMATRIX *mtx)
 	pGun->SetModelConut(MODEL_GUN_HANDGUN);
 
 	return pGun;
+}
+
+// =====================================================================================================================================================================
+//
+// マトリックスの計算だけする
+//
+// =====================================================================================================================================================================
+void CGun::NoDrawCalcMatrixOnly()
+{
+	CModel::NotDrawCalcMtxOnly(m_HasHandMtx);
 }
 
 // =====================================================================================================================================================================
@@ -235,6 +248,7 @@ void CGun::Shot()
 		case CGun::GUNTYPE_LASERGUN:
 			// レーザーガンの生成
 			pBullet = CLasergun::Create(m_ShotRot);
+			m_bMultiple = true;		// フラグをオン
 			break;
 
 		case CGun::GUNTYPE_ROCKETLAUNCHER:
@@ -263,10 +277,14 @@ void CGun::Shot()
 			pBullet = CTracking::Create(m_Shotvector);
 			m_bMultiple = true;		// 複数発撃つフラグをオン
 			break;
+		case CGun::GUNTYPE_DIFFUSIONGUN:
+			// 戦車の銃の生成
+			pBullet = CDiffusion::Create(m_Shotvector);
+			m_bMultiple = true;		// 複数発撃つフラグをオン
+			break;
 		}
 		if (pBullet)
 		{
-
 			// 位置の設定
 			pBullet->SetPosition(m_ShotPos);
 
@@ -303,6 +321,9 @@ void CGun::MultipleShot()
 		{
 			// フレームカウント初期化
 			m_nCntFrame = 0;
+
+			// 残弾数を減らす
+			m_nAmmo--;
 
 			// ヘビーマシンガンのとき
 			if (m_GunType == GUNTYPE_HEAVYMACHINEGUN)

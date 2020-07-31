@@ -230,7 +230,7 @@ void CResultUI::Update(void)
 	}
 
 	// ゲームモードだった時
-	if (CManager::GetGameState() == CManager::MODE_GAME)
+	if (CManager::GetMode() == CManager::MODE_GAME)
 	{
 		// ゲームクラスのポインタ取得
 		CGame *pGame = (CGame*)CManager::GetBaseMode();
@@ -435,7 +435,7 @@ void CResultUI::Result1Draw()
 
 
 		// ゲームモードだった時
-		if (CManager::GetGameState() == CManager::MODE_GAME)
+		if (CManager::GetMode() == CManager::MODE_GAME)
 		{
 			// ゲームクラスのポインタ取得
 			CGame *pGame = (CGame*)CManager::GetBaseMode();
@@ -501,7 +501,7 @@ void CResultUI::ScoreCal()
 void CResultUI::Conditions()
 {
 	// ゲームモードだった時
-	if (CManager::GetGameState() == CManager::MODE_GAME)
+	if (CManager::GetMode() == CManager::MODE_GAME)
 	{
 		// ゲームクラスのポインタ取得
 		CGame *pGame = (CGame*)CManager::GetBaseMode();
@@ -686,7 +686,7 @@ void CResultUI::Flashing(CScene2D *m_apScene2D)
 void CResultUI::TotalScoreCalculation()
 {
 	// ゲームモードだった時
-	if (CManager::GetGameState() == CManager::MODE_GAME)
+	if (CManager::GetMode() == CManager::MODE_GAME)
 	{
 		// ゲームクラスのポインタ取得
 		CGame *pGame = (CGame*)CManager::GetBaseMode();

@@ -17,10 +17,10 @@
 #define MAX_LENGTH (-100) //カメラの距離
 #define CAMERA_MOVE_SPEED (10.0f)
 #define CAMERA_ROTATION_SPEED (0.05f)
-#define CAMETA_POSR_OFFSET (D3DXVECTOR3(0.0f,50.0f,0.0f))
+#define CAMETA_POSR_OFFSET (D3DXVECTOR3(0.0f,200.0f,0.0f))
 
-#define DEFAULT_DISTANCE (1000.0f)
-#define DEFAULT_CAMERA_ROTATION (D3DXVECTOR3(0.2f,0.0f,0.0f))
+#define DEFAULT_DISTANCE (850.0f)
+#define DEFAULT_CAMERA_ROTATION (D3DXVECTOR3(0.17f,0.0f,0.0f))
 
 #define CAMERA_LENGTH_NEAR (10.0f)
 #define CAMERA_LENGTH_FAR (3000.0f)
@@ -35,6 +35,7 @@ void CCamera::InitCamera(void)
 	m_posCameraEndLine = ZeroVector3;
 	m_fNear = CAMERA_LENGTH_NEAR;
 	m_fFar = CAMERA_LENGTH_FAR;
+	m_bStopMove = false;
 
 	//カメラ初期化
 	ResetCamera();
@@ -160,48 +161,40 @@ void CCamera::DebugCommand()
 //=============================================================================
 void CCamera::CharacterFollowingMoveCamera()
 {
-
 	//回転の数値指定
-	if (m_rot.y > D3DX_PI)
-	{
-		m_rot.y += -D3DX_PI * 2;
-	}
-	if (m_rot.y < -D3DX_PI)
-	{
-		m_rot.y += D3DX_PI * 2;
-	}
-	if (m_rot.x > D3DX_PI*0.5f)
-	{
-		m_rot.x = D3DX_PI*0.5f;
-	}
-	if (m_rot.x < -D3DX_PI*0.5f)
-	{
-		m_rot.x = -D3DX_PI*0.5f;
-	}
-	//追従処理
-	CBaseMode *pBaseMode = CManager::GetBaseMode();
+	CHossoLibrary::CalcRotation(m_rot.x);
+	CHossoLibrary::CalcRotation(m_rot.y);
 
-	//nullcheck
-	if (pBaseMode)
+	//カメラの移動とめるかどうか
+	if (!m_bStopMove)
 	{
-		//プレイヤーのポインタ取得
-		CPlayer *pPlayer = pBaseMode->GetPlayer();
+		//追従処理
+		CBaseMode *pBaseMode = CManager::GetBaseMode();
 
 		//nullcheck
-		if (pPlayer)
+		if (pBaseMode)
 		{
-			//座標取得
-			//カメラ最終目的地
-			m_posRDest = pPlayer->GetPosition() + CAMETA_POSR_OFFSET;
+			//プレイヤーのポインタ取得
+			CPlayer *pPlayer = pBaseMode->GetPlayer();
 
-			if (m_posCameraEndLine.x > pPlayer->GetPosition().x)
+			//nullcheck
+			if (pPlayer)
 			{
-				m_posRDest.x = m_posCameraEndLine.x;
-			}
-			else
-			{
-				m_posCameraEndLine = m_posRDest;
+				//座標取得
+				//カメラ最終目的地
+				m_posRDest.x = pPlayer->GetPosition().x;
+				m_posRDest.y = CAMETA_POSR_OFFSET.y;
 
+				if (m_posCameraEndLine.x > pPlayer->GetPosition().x)
+				{
+					m_posRDest.x = m_posCameraEndLine.x;
+				}
+				else
+				{
+					m_posCameraEndLine.x = m_posRDest.x;
+					//m_posCameraEndLine.y = m_posRDest.y;
+
+				}
 			}
 		}
 	}
@@ -391,6 +384,7 @@ void CCamera::ResetCamera()
 
 	// カメラをプレイや追従にする
 	m_CameraFollowingType = CAMERA_FOLLOWING_TYPE_PLAYER;
+	m_bStopMove = false;
 }
 //-----------------------------------------------------------------------------
 //カメラ座標設定 角度と距離を基に算出

@@ -94,7 +94,7 @@ void CXInputPad::Update(void)
 		}
 
 		//振動するのはゲーム中のみ
-		if (CManager::GetGameState() == CManager::MODE_GAME)
+		if (CManager::GetMode() == CManager::MODE_GAME)
 		{
 			//振動のパラメータ設定
 			vibration.wLeftMotorSpeed = 65535;

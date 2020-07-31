@@ -229,7 +229,7 @@ void CKnife::EndMeleeAttack()
 // =====================================================================================================================================================================
 void CKnife::CollisionKnife()
 {
-	if (CManager::GetGameState() == CManager::MODE_GAME)
+	if (CManager::GetMode() == CManager::MODE_GAME)
 	{
 		if (m_pCollision)
 		{

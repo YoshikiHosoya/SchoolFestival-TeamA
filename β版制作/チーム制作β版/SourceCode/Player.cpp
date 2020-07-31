@@ -70,7 +70,7 @@ HRESULT CPlayer::Init(void)
 	m_bRideVehicle = false;
 
 	// ゲームモードだった時
-	if (CManager::GetGameState() == CManager::MODE_GAME)
+	if (CManager::GetMode() == CManager::MODE_GAME)
 	{
 		// ゲームクラスのポインタ取得
 		CGame *pGame = (CGame*)CManager::GetBaseMode();
@@ -280,7 +280,7 @@ void CPlayer::MoveUpdate(void)
 		}
 
 		//ジャンプ
-		if (key->GetKeyboardTrigger(DIK_SPACE)|| pad->GetTrigger(pad->JOYPADKEY_A, 1) && GetJump() == true && m_DebugState == DEBUG_NORMAL)
+		if ((key->GetKeyboardTrigger(DIK_SPACE)|| pad->GetTrigger(pad->JOYPADKEY_A, 1)) && GetJump() == true && m_DebugState == DEBUG_NORMAL)
 		{
 			GetMove().y += 27;
 			SetMotion(PLAYER_MOTION_JUMP);
@@ -514,7 +514,7 @@ bool CPlayer::DefaultMotion(void)
 {
 	if (GetJump() == true)
 	{
-	SetMotion(CCharacter::PLAYER_MOTION_NORMAL);
+		SetMotion(CCharacter::PLAYER_MOTION_NORMAL);
 	}
 	return true;
 }

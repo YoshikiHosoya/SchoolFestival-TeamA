@@ -648,7 +648,7 @@ void CParticle::Collision()
 		//プレイヤーの攻撃だった場合
 		if (m_Tag == TAG_PLAYER)
 		{
-			if (CManager::GetGameState() == CManager::MODE_GAME)
+			if (CManager::GetMode() == CManager::MODE_GAME)
 			{
 				//当たり判定　敵、捕虜、オブジェクトに対して　貫通有
 				m_pCollision->ForPlayerBulletCollision(m_pParticleParam->GetCollisionAttackValue(), m_pParticleParam->GetCollisionAttackValue(), true);

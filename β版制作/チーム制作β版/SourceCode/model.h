@@ -65,7 +65,7 @@ public:
 		MODEL_MAP_STAGE1_3,			//ステージ1-3
 		MODEL_MAP_STAGE1_BOSS,		//ボスステージ1
 		MODEL_MAP_MAX
-	}CREATE_MAP_MODEL;
+	}MAP_MODEL;
 	/*--- 敵のパーツモデル ---*/
 	typedef enum
 	{
@@ -113,7 +113,6 @@ public:
 	typedef enum
 	{
 		//===戦車のモデル===
-		MODEL_TANK_TANKHEAD,		// 頭
 		MODEL_TANK_TANKBODY,		// 体
 		MODEL_TANK_TANK_FRONTWHEEL,	// 前タイヤ
 		MODEL_TANK_TANK_BACKWHEEL,	// 後タイヤ
@@ -206,6 +205,8 @@ public:
 	static CModel *CreateSceneManagement(int type, int modelCount);	// モデルのクリエイト(シーンで管理する)
 	static char* GetModelFileName(int nType, int nModelCount);		// モデルのファイル名取得
 
+	void NotDrawCalcMtxOnly(D3DXMATRIX *pParentMtx);				// 描画せずにマトリックスの計算だけする
+
 	/* メンバ関数 */
 	void SetParent(CModel *pModel)					{ m_pParent = pModel; };							// 親の設定
 	void SetPosition(D3DXVECTOR3 pos)				{ m_pos = pos; };									// モデルのオフセット指定
@@ -220,8 +221,8 @@ public:
 	D3DXVECTOR3 &GetPosition(void)					{ return m_pos; };									// 位置の取得
 	D3DXVECTOR3 &GetRot(void)						{ return m_rot; };									// 回転の取得
 	D3DXVECTOR3 &GetSize(void)						{ return m_size; };									// サイズの取得
-	D3DXVECTOR3 GetvtxMax(int nCnt)					{ return m_Model[MAP_MODEL][nCnt].vtxMax;};			// 頂点情報のMAX取得
-	D3DXVECTOR3 GetvtxMin(int nCnt)					{ return m_Model[MAP_MODEL][nCnt].vtxMin; };		// 頂点情報のMIN取得
+	D3DXVECTOR3 GetvtxMax(int nCnt)					{ return m_Model[MODEL_TYPE::MAP_MODEL][nCnt].vtxMax;};			// 頂点情報のMAX取得
+	D3DXVECTOR3 GetvtxMin(int nCnt)					{ return m_Model[MODEL_TYPE::MAP_MODEL][nCnt].vtxMin; };		// 頂点情報のMIN取得
 	int GetType()									{ return m_type; };									// モデルタイプの取得
 	int &GetModelCount()							{ return m_modelCount; };							// モデルカウントの取得
 	int &GetParentIdx()								{ return m_nParentIdx; };							// 親番号取得

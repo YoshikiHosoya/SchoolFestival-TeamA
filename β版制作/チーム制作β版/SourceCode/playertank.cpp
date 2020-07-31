@@ -27,7 +27,7 @@
 #define PLAYERTANK_SIZE			(D3DXVECTOR3(90.0f,65.0f,0.0f)) // プレイヤーの判定のサイズ
 #define PLAYERTANK_JUMP			(60.0f)				// 戦車が飛ぶ移動量
 #define SHOT_BULLET_POS_X		(0.0f)			// 弾の発射位置X
-#define SHOT_BULLET_POS_Y		(25.0f)				// 弾の発射位置Y
+#define SHOT_BULLET_POS_Y		(40.0f)				// 弾の発射位置Y
 #define SHOT_BULLET_POS_Z		(0.0f)			// 弾の発射位置Z
 
 // =====================================================================================================================================================================
@@ -66,7 +66,7 @@ HRESULT CPlayertank::Init(void)
 	// 銃の生成
 	m_pGun = CGun::Create(GetVehicleModelPartsList(CModel::MODEL_TANK_TANKGUN)->GetMatrix());
 	// グレネード放つ位置の生成
-	m_pGrenadeFire = CGrenadeFire::Create(GetVehicleModelPartsList(CModel::MODEL_TANK_TANKHEAD)->GetMatrix());
+	m_pGrenadeFire = CGrenadeFire::Create(GetVehicleModelPartsList(CModel::MODEL_TANK_TANKBODY)->GetMatrix());
 	// 銃の弾の種類
 	m_pGun->GetTag() = TAG_PLAYER;
 	// 銃の弾の種類
@@ -138,6 +138,9 @@ void CPlayertank::Update(void)
 			// 戦車を操作する処理
 			Operation(key);
 
+			// 戦車の操作
+			PadInput();
+
 			// パーツの回転処理
 			VehiclePartsRotCondition(GetVehicleModelPartsList(CModel::MODEL_TANK_TANK_FRONTWHEEL), MODEL_ROT_TYPE_MOVING);
 			VehiclePartsRotCondition(GetVehicleModelPartsList(CModel::MODEL_TANK_TANK_BACKWHEEL), MODEL_ROT_TYPE_MOVING);
@@ -166,7 +169,8 @@ void CPlayertank::Update(void)
 //====================================================================
 void CPlayertank::Draw(void)
 {
-	m_pGun->Draw();
+	//ガンのマトリックスの計算だけ
+	m_pGun->NoDrawCalcMatrixOnly();
 
 	CVehicle::Draw();
 }
@@ -197,8 +201,10 @@ CPlayertank *CPlayertank::Create(void)
 //====================================================================
 void CPlayertank::Shot(CKeyboard *key)
 {
+	CXInputPad *pXInput = CManager::GetPad();
+
 	// マシンガンを撃つ
-	if (key->GetKeyboardTrigger(DIK_P))
+	if (key->GetKeyboardTrigger(DIK_P) || pXInput->GetTrigger(CXInputPad::JOYPADKEY_X, 1))
 	{
 		// ガンのモデルの発射口から弾を生成
 		m_pGun->Shot();
@@ -207,7 +213,7 @@ void CPlayertank::Shot(CKeyboard *key)
 	m_pGun->SetShotRot(GetVehicleModelPartsList(CModel::MODEL_TANK_TANKGUN)->GetRot());
 
 	// グレネードを撃つ
-	if (key->GetKeyboardTrigger(DIK_O))
+	if (key->GetKeyboardTrigger(DIK_O) || pXInput->GetTrigger(CXInputPad::JOYPADKEY_Y, 1))
 	{
 		// グレネードの弾数が残っているとき
 		if (m_pGrenadeFire->GetGrenadeAmmo() > 0)
@@ -219,10 +225,26 @@ void CPlayertank::Shot(CKeyboard *key)
 }
 
 //====================================================================
+// パッドの入力
+//====================================================================
+void CPlayertank::PadInput()
+{
+	D3DXVECTOR3 MoveValue = ZeroVector3;
+
+	if (CHossoLibrary::PadMoveInput(MoveValue, GetVehicleDirection(), false))
+	{
+		Move(MoveValue.x, -0.5f);
+	}
+
+}
+
+//====================================================================
 // 操作処理
 //====================================================================
 void CPlayertank::Operation(CKeyboard * key)
 {
+	CXInputPad *pXInput = CManager::GetPad();
+
 	// 上を向く
 	if (key->GetKeyboardPress(DIK_W))
 	{
@@ -296,7 +318,7 @@ void CPlayertank::Operation(CKeyboard * key)
 	}
 
 	// ジャンプ処理
-	if (key->GetKeyboardTrigger(DIK_UP))
+	if (key->GetKeyboardTrigger(DIK_UP) || pXInput->GetTrigger(CXInputPad::JOYPADKEY_A, 1))
 	{
 		// 1回ジャンプさせる
 		Jump();

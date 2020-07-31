@@ -138,7 +138,7 @@ public:
 	VEHICLE_TYPE			GetVehicleType()						{ return m_VehicleType; };				// キャラクターの種類取得
 	std::vector<CModel*>	&GetVehicleModelList()					{ return m_vModelList; };				// キャラクターのモデル取得
 	CModel					*GetVehicleModelPartsList(int nCnt)		{ return m_vModelList[nCnt]; };			// キャラクターのモデルパーツ取得
-	DIRECTION				GetVehicleDirection()					{ return m_VehicleDirection; };			// 向きの取得
+	DIRECTION				&GetVehicleDirection()					{ return m_VehicleDirection; };			// 向きの取得
 	char					*GetOffsetFileName(VEHICLE_TYPE type)	{ return m_LoadOffsetFileName[type]; }; // オフセットのファイル名取得
 	bool					GetDieFlag()							{ return m_bDieFlag; };					// 死亡フラグの取得
 	CCollision				*GetCollision()							{ return m_pCollision; };				// 当たり判定のポインタ取得

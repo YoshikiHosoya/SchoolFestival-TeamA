@@ -95,8 +95,7 @@ char *CModel::m_BulletFileName[MODEL_BULLET_MAX] =
 
 char *CModel::m_TankFileName[MODEL_TANK_MAX] =
 {
-	{ "data/MODEL/Tank/Tankbody.x" },				// 戦車の頭
-	{ "data/MODEL/Tank/Tankhead.x" },				// 戦車の体
+	{ "data/MODEL/Tank/Tankbody.x" },				// 戦車の体
 	{ "data/MODEL/Tank/Tank_frontwheel.x" },		// 戦車の前タイヤ
 	{ "data/MODEL/Tank/Tank_backwheel.x" },			// 戦車の後タイヤ
 	{ "data/MODEL/Tank/Tankgun.x" },				// 戦車の銃
@@ -971,6 +970,19 @@ char * CModel::GetModelFileName(int nType, int nModelCount)
 	return nullptr;
 }
 
+//====================================================================
+ //マトリックス計算
+ //====================================================================
+void CModel::NotDrawCalcMtxOnly(D3DXMATRIX * pParentMtx)
+{
+	// マトリックスの計算
+	CHossoLibrary::CalcMatrix(&m_mtxWorld, m_pos, m_rot);
+
+	//親マトリックスの計算
+	D3DXMatrixMultiply(&m_mtxWorld,
+		&m_mtxWorld,
+		pParentMtx);
+}
 //====================================================================
 //描画
 //====================================================================

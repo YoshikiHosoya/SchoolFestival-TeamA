@@ -103,7 +103,7 @@ CGrenadeFire * CGrenadeFire::Create(D3DXMATRIX * mtx)
 	CGrenadeFire *pGrenadeFire;
 
 	// ƒƒ‚ƒŠ‚ÌŠm•Û
-	pGrenadeFire = new CGrenadeFire(OBJTYPE_BULLET);
+	pGrenadeFire = new CGrenadeFire(OBJTYPE_MODEL);
 
 	// ‰Šú‰»
 	pGrenadeFire->Init();

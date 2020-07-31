@@ -10,9 +10,9 @@
 #include "BaseMode.h"
 #include "collision.h"
 #include "gun.h"
-#define CENTER_POS		(D3DXVECTOR3(0.0f,400.0f,0.0f))
-#define RIGHT_POS		(D3DXVECTOR3(300.0f,200.0f,0.0f))
-#define LEFT_POS		(D3DXVECTOR3(-300.0f,200.0f,0.0f))
+#define CENTER_POS		(D3DXVECTOR3(0.0f,450.0f,0.0f))
+#define RIGHT_POS		(D3DXVECTOR3(300.0f,400.0f,0.0f))
+#define LEFT_POS		(D3DXVECTOR3(-300.0f,400.0f,0.0f))
 #define MOVE_SPEED		(0.1f)
 #define MAX_RECASTTIME (60)
 CBossAI::CBossAI()
@@ -75,14 +75,14 @@ void CBossAI::Update(void)
 		{
 			m_recast = (rand() % MAX_RECASTTIME) + 30;	//30フレーム分のリキャスト
 			m_random = (rand() % AI_MAX);				//行動のランダム
-			m_BossAItype = (AI_BOSS_STATE)m_random;				//ランダムの形式をAI_STATEに変換
+			m_BossAItype = (AI_BOSS_STATE)m_random;		//ランダムの形式をAI_STATEに変換
 			m_castcount = 0;
 			m_bShot = false;
 		}
 		else if (m_bReStartFlag == true)
 		{
 			m_random = (rand() % AI_MAX);				//行動のランダム
-			m_BossAItype = (AI_BOSS_STATE)m_random;				//ランダムの形式をAI_STATEに変換
+			m_BossAItype = (AI_BOSS_STATE)m_random;		//ランダムの形式をAI_STATEに変換
 			m_recast = (rand() % MAX_RECASTTIME) + 30;	//30フレーム分のリキャスト
 			if (m_BossAItype != m_BossAItypeOld)
 			{
@@ -168,6 +168,7 @@ void CBossAI::UpdateAttackAI(void)
 	{
 		if (AI_TRACKING == m_BossAItype)//プレイヤー追従弾
 		{
+			pBossPass->GetGun()->SetGunType(pBossPass->GetGun()->GUNTYPE_TRACKINGGUN);
 			m_ShotVec = pPlayer->GetPosition() - pBossPass->GetPosition();//射撃方向の計算
 			D3DXVec3Normalize(&m_ShotVec, &m_ShotVec);//値の正規化
 			//撃つ向きの設定
@@ -184,7 +185,7 @@ void CBossAI::UpdateAttackAI(void)
 			{
 				m_AttackCnt++;
 				//120フレームより小さいとき射撃
-				if (m_AttackCnt < 60 && m_Attacks < 3)
+				if (m_AttackCnt < 60 && m_Attacks < 3 && m_AttackCnt % 10 == 0)
 				{
 					pBossPass->GetGun()->Shot();
 				}
@@ -203,6 +204,7 @@ void CBossAI::UpdateAttackAI(void)
 	
 		else if (AI_DIFFUSION == m_BossAItype)//拡散射撃
 		{
+			pBossPass->GetGun()->SetGunType(pBossPass->GetGun()->GUNTYPE_DIFFUSIONGUN);
 			m_ShotVec = pPlayer->GetPosition() - pBossPass->GetPosition();//射撃方向の計算
 			D3DXVec3Normalize(&m_ShotVec, &m_ShotVec);//値の正規化
 			fAngle = float(rand() % 157) / 100.0f - float(rand() % 157) / 100.0f;
@@ -222,7 +224,7 @@ void CBossAI::UpdateAttackAI(void)
 			{
 				m_AttackCnt++;
 				//120フレームより小さいとき射撃
-				if (m_AttackCnt < 180)
+				if (m_AttackCnt < 180 && m_AttackCnt % 5 == 0)
 				{
 					pBossPass->GetGun()->Shot();
 				}

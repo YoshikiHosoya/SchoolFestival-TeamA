@@ -343,7 +343,7 @@ void CMap::MapModelCreate(int ModelType, int nType, D3DXVECTOR3 pos)
 	/* --- マップ --- */
 	case CMap::ARRANGEMENT_MODEL_MAP:
 		// オブジェクトの生成
-		m_pMapModel.emplace_back(CModel::CreateSceneManagement(CModel::MAP_MODEL, nType));
+		m_pMapModel.emplace_back(CModel::CreateSceneManagement(CModel::MODEL_TYPE::MAP_MODEL, nType));
 		// 位置の設定
 		m_pMapModel[m_pMapModel.size() - 1]->SetPosition(pos);
 		break;
@@ -542,12 +542,7 @@ void CMap::MapUpdate()
 		// マップエディター
 		if (ImGui::BeginTabItem("MapEditor"))
 		{
-			//if (CHossoLibrary::ImGui_Combobox())
-			//{
-			//	AllDelete();
-			//	MapLoad();
-
-			//}
+			MapComboBox(nNowMapSelect, nNowMapSelect);
 
 			//// オブジェクト番号の選択
 			//ImGui::InputInt("nowMapNum", &nNowMapSelect, 1, 20, 0);
@@ -593,6 +588,11 @@ void CMap::MapLoad(MAP MapNum)
 
 	// マップで配置するモデルのロード
 	MapModelLoad();
+
+	if (MapNum == CMap::MAP_1_BOSS)
+	{
+
+	}
 }
 
 // =====================================================================================================================================================================
@@ -1675,71 +1675,18 @@ void CMap::ComboBoxAll(int nNowSelect)
 	switch (m_ArrangmentModel)
 	{
 	case CMap::ARRANGEMENT_MODEL_ENEMY:
-		//static int nEnemyType = 0;		// 捕虜の種類
-		//if (EnemyComboBox(nEnemyType))
-		//{
-		//	// NULLチェック
-		//	if (m_pEnemy[nNowSelect])
-		//	{
-		//		// 敵の種類の取得
-		//		CModel::ENEMY_TYPE EnemyType = (CModel::OBSTACLE_TYPE)m_pEnemy[nNowSelect]->GetModelCount();
-
-		//		// 前回と違うとき
-		//		if (EnemyType != nEnemyType)
-		//		{
-		//			// 種類代入
-		//			EnemyType = (CModel::ENEMY_TYPE)nEnemyType;
-		//			// 敵のタイプの設定
-		//			m_pEnemy[nNowSelect]->SetModelConut(EnemyType);
-		//		}
-		//	}
-		//}
+		//// 敵の種類選択
+		//EnemyComboBox(nSelectType, nNowSelect);
 		break;
 
 	case CMap::ARRANGEMENT_MODEL_PRISONER:
-		// コンボボックス
-		if (PrisonerComboBox(nSelectType))
-		{
-			// NULLチェック
-			if (m_pPrisoner[nNowSelect])
-			{
-				// 捕虜の種類の取得
-				CPrisoner::PRISONER_ITEM_DROPTYPE PrisonerType = m_pPrisoner[nNowSelect]->GetPrisonerDropType();
-
-				// 前回と違うとき
-				if (PrisonerType != nSelectType)
-				{
-					// 種類代入
-					PrisonerType = (CPrisoner::PRISONER_ITEM_DROPTYPE)nSelectType;
-					// 敵のタイプの設定
-					m_pPrisoner[nNowSelect]->SetPrisonerType(PrisonerType);
-				}
-			}
-		}
-
+		// 捕虜の種類選択
+		PrisonerComboBox(nSelectType, nNowSelect);
 		break;
 
 	case CMap::ARRANGEMENT_MODEL_OBSTACLE:
-		static int nObstacleType = 0;		// 障害物の種類
-		// コンボボックス
-		if (ObstacleComboBox(nSelectType))
-		{
-			// NULLチェック
-			if (m_pObstacle[nNowSelect])
-			{
-				// 障害物の種類の取得
-				CModel::OBSTACLE_TYPE ObstacleType = (CModel::OBSTACLE_TYPE)m_pObstacle[nNowSelect]->GetModelCount();
-
-				// 前回と違うとき
-				if (ObstacleType != nSelectType)
-				{
-					// 種類代入
-					ObstacleType = (CModel::OBSTACLE_TYPE)nSelectType;
-					// 障害物のタイプの設定
-					m_pObstacle[nNowSelect]->SetModelConut(ObstacleType);
-				}
-			}
-		}
+		// 障害物の種類選択
+		ObstacleComboBox(nSelectType, nNowSelect);
 		break;
 	}
 }
@@ -1749,12 +1696,50 @@ void CMap::ComboBoxAll(int nNowSelect)
 // 障害物のコンボボックス
 //
 // =====================================================================================================================================================================
-bool CMap::ObstacleComboBox(int &nType)
+void CMap::MapComboBox(int & nSelectType, int nNowSelect)
 {
-	bool bSelect = false;	// 選択
+	// ファイル名格納用
+	std::vector<std::string > aFileName = {};
 
+	//for
+	for (int nCnt = 0; nCnt < CModel::OBSTACLE_TYPE_MAX; nCnt++)
+	{
+		//配列に追加
+		aFileName.emplace_back(CModel::GetModelFileName(CModel::MODEL_TYPE::MAP_MODEL, nCnt));
+	}
+
+	if (CHossoLibrary::ImGui_Combobox(aFileName, "MapType", nSelectType))
+	{
+		// マップのロード
+		AllDelete();
+		MapLoad((MAP)nSelectType);
+
+		//// NULLチェック
+		//if (m_pMapModel[nNowSelect])
+		//{
+		//	// 捕虜の種類の取得
+		//	int MapType = m_pMapModel[nNowSelect]->GetModelCount();
+
+		//	// 前回と違うとき
+		//	if (MapType != nSelectType)
+		//	{
+		//		// 種類代入
+		//		MapType = nSelectType;
+		//		// 敵のタイプの設定
+		//		m_pMapModel[nNowSelect]->SetModelConut(MapType);
+		//	}
+		//}
+	}
+}
+
+// =====================================================================================================================================================================
+//
+// 障害物のコンボボックス
+//
+// =====================================================================================================================================================================
+void CMap::ObstacleComboBox(int &nSelectType, int nNowSelect)
+{
 #ifdef _DEBUG
-
 	// ファイル名格納用
 	std::vector<std::string > aFileName = {};
 
@@ -1765,30 +1750,25 @@ bool CMap::ObstacleComboBox(int &nType)
 		aFileName.emplace_back(CModel::GetModelFileName(CModel::MODEL_TYPE::OBSTACLE_MODEL, nCnt));
 	}
 
-	// コンボボックス
-	if (ImGui::BeginCombo("Type", aFileName[nType].data()))
+	if (CHossoLibrary::ImGui_Combobox(aFileName, "Type", nSelectType))
 	{
-		for (size_t nCnt = 0; nCnt < aFileName.size(); nCnt++)
+		// NULLチェック
+		if (m_pObstacle[nNowSelect])
 		{
-			//選択番号があってるかどうか
-			bool is_selected = (aFileName[nType] == aFileName[nCnt]);
+			// 捕虜の種類の取得
+			CModel::OBSTACLE_TYPE ObstacleType = (CModel::OBSTACLE_TYPE)m_pObstacle[nNowSelect]->GetModelCount();
 
-			//選択された時の処理
-			if (ImGui::Selectable(aFileName[nCnt].data(), is_selected))
+			// 前回と違うとき
+			if (ObstacleType != nSelectType)
 			{
-				//現在の選択項目設定
-				nType = nCnt;
-				bSelect = true;
-			}
-			if (is_selected)
-			{
-				ImGui::SetItemDefaultFocus();
+				// 種類代入
+				ObstacleType = (CModel::OBSTACLE_TYPE)nSelectType;
+				// 敵のタイプの設定
+				m_pObstacle[nNowSelect]->SetModelConut(ObstacleType);
 			}
 		}
-		ImGui::EndCombo();
 	}
 #endif
-	return bSelect;
 }
 
 // =====================================================================================================================================================================
@@ -1796,46 +1776,30 @@ bool CMap::ObstacleComboBox(int &nType)
 // 敵のコンボボックス
 //
 // =====================================================================================================================================================================
-bool CMap::EnemyComboBox(int & nType)
+void CMap::EnemyComboBox(int &nSelectType, int nNowSelect)
 {
-	bool bSelect = false;	// 選択
-
 #ifdef _DEBUG
+	//std::vector<std::string > aEnemyType = { "DESIGNATE_ONE", "DESIGNATE_RANGE", "ALL" };
 
-	//// ファイル名格納用
-	//std::vector<std::string > aFileName = {};
-
-	////for
-	//for (int nCnt = 0; nCnt < CModel::ENEMY_TYPE_MAX; nCnt++)
+	//if (CHossoLibrary::ImGui_Combobox(aEnemyType, "Type", nSelectType))
 	//{
-	//	//配列に追加
-	//	aFileName.emplace_back(CModel::GetModelFileName(CModel::MODEL_TYPE::ENEMY_MODEL, nCnt));
-	//}
-
-	//// コンボボックス
-	//if (ImGui::BeginCombo("Type", aFileName[nType].data()))
-	//{
-	//	for (size_t nCnt = 0; nCnt < aFileName.size(); nCnt++)
+	//	// NULLチェック
+	//	if (m_pPrisoner[nNowSelect])
 	//	{
-	//		//選択番号があってるかどうか
-	//		bool is_selected = (aFileName[nType] == aFileName[nCnt]);
+	//		// 捕虜の種類の取得
+	//		CPrisoner::PRISONER_ITEM_DROPTYPE PrisonerType = m_pPrisoner[nNowSelect]->GetPrisonerDropType();
 
-	//		//選択された時の処理
-	//		if (ImGui::Selectable(aFileName[nCnt].data(), is_selected))
+	//		// 前回と違うとき
+	//		if (PrisonerType != nSelectType)
 	//		{
-	//			//現在の選択項目設定
-	//			nType = nCnt;
-	//			bSelect = true;
-	//		}
-	//		if (is_selected)
-	//		{
-	//			ImGui::SetItemDefaultFocus();
+	//			// 種類代入
+	//			PrisonerType = (CPrisoner::PRISONER_ITEM_DROPTYPE)nSelectType;
+	//			// 敵のタイプの設定
+	//			m_pPrisoner[nNowSelect]->SetPrisonerType(PrisonerType);
 	//		}
 	//	}
-	//	ImGui::EndCombo();
 	//}
 #endif
-	return bSelect;
 }
 
 // =====================================================================================================================================================================
@@ -1843,39 +1807,30 @@ bool CMap::EnemyComboBox(int & nType)
 // 捕虜のコンボボックス
 //
 // =====================================================================================================================================================================
-bool CMap::PrisonerComboBox(int & nType)
+void CMap::PrisonerComboBox(int &nSelectType, int nNowSelect)
 {
-	bool bSelect = false;	// 選択
-
 #ifdef _DEBUG
+	std::vector<std::string > aPrisonerType = { "DESIGNATE_ONE", "DESIGNATE_RANGE", "ALL" };
 
-	// 捕虜のドロップの種類
-	const char* aPrisonerType[] = { "DESIGNATE_ONE", "DESIGNATE_RANGE", "ALL"};
-
-	// コンボボックス
-	if (ImGui::BeginCombo("Type", aPrisonerType[nType]))
+	if (CHossoLibrary::ImGui_Combobox(aPrisonerType, "Type", nSelectType))
 	{
-		for (size_t nCnt = 0; nCnt < IM_ARRAYSIZE(aPrisonerType); nCnt++)
+		// NULLチェック
+		if (m_pPrisoner[nNowSelect])
 		{
-			//選択番号があってるかどうか
-			bool is_selected = (aPrisonerType[nType] == aPrisonerType[nCnt]);
+			// 捕虜の種類の取得
+			CPrisoner::PRISONER_ITEM_DROPTYPE PrisonerType = m_pPrisoner[nNowSelect]->GetPrisonerDropType();
 
-			//選択された時の処理
-			if (ImGui::Selectable(aPrisonerType[nCnt], is_selected))
+			// 前回と違うとき
+			if (PrisonerType != nSelectType)
 			{
-				//現在の選択項目設定
-				nType = nCnt;
-				bSelect = true;
-			}
-			if (is_selected)
-			{
-				ImGui::SetItemDefaultFocus();
+				// 種類代入
+				PrisonerType = (CPrisoner::PRISONER_ITEM_DROPTYPE)nSelectType;
+				// 敵のタイプの設定
+				m_pPrisoner[nNowSelect]->SetPrisonerType(PrisonerType);
 			}
 		}
-		ImGui::EndCombo();
 	}
 #endif
-	return bSelect;
 }
 
 // =====================================================================================================================================================================

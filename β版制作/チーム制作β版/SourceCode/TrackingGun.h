@@ -32,12 +32,10 @@ public:
 	void						DeleteBullet();						// 弾を消す処理
 	void						BulletReaction(D3DXVECTOR3 rot);	// 弾の反応
 	void						DebugInfo();						//デバッグ
-
 																	/* 静的メンバ関数 */
 	static	CTracking			*Create(D3DXVECTOR3 rot);			// 追従銃の生成
 
 private:
 	/* 静的メンバ変数 */
-
 };
 #endif

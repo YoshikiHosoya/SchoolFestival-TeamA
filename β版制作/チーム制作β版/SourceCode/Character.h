@@ -29,6 +29,7 @@ public:
 		CHARACTER_TYPE_ENEMY,			// エネミー
 		CHARACTER_TYPE_PRISONER,		// 捕虜
 		CHARACTER_TYPE_BOSS,			// ボス
+		CHARACTER_TYPE_TANK,			// 戦車
 		CHARACTER_TYPE_MAX
 	}CHARACTER_TYPE;
 
@@ -105,7 +106,10 @@ public:
 	virtual void Update(void);
 	virtual void Draw(void);
 	virtual bool DefaultMotion(void) = 0;
-	virtual void DamageReaction();
+	virtual void DamageReaction();			//ダメージ時のリアクション
+	virtual void DeathReaction();			//死亡時のリアクション
+	virtual void State();					//ステートに応じた処理
+
 	void Move(float move, float fdest);
 	void AddDamage(int Damage);
 	void Moation(void);

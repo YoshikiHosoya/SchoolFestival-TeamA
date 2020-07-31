@@ -61,7 +61,7 @@ void CBaseMode::DebugCommand(void)
 		//現在のモード再始動
 		if (key->GetKeyboardTrigger(DIK_NUMPAD0))
 		{
-			CManager::GetRenderer()->GetFade()->SetFade(CFADE::FADETYPE::FADETYPE_MODE, CManager::GetGameState());
+			CManager::GetRenderer()->GetFade()->SetFade(CFADE::FADETYPE::FADETYPE_MODE, CManager::GetMode());
 		}
 		//タイトル
 		if (key->GetKeyboardTrigger(DIK_NUMPAD1))

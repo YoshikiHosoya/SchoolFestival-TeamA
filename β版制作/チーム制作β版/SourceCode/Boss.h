@@ -23,6 +23,7 @@ public:
 	void DebugInfo(void);
 	static CBoss *Create(void);
 	bool DefaultMotion(void);
+	void DeathReaction();
 	CGun *GetGun(void);
 private:
 	void Move(float move, float fdest);
