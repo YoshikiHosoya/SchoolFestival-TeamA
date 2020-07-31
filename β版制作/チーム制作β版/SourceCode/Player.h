@@ -28,15 +28,6 @@ public:
 		DEBUG_CREATE_ENEMY,			//エネミー作成
 		DEBUG_MAX					//最大数
 	}DEBUG_STATE;
-
-	typedef enum
-	{
-		PLAYER_STATE_NORMAL = 0,	//通常
-		PLAYER_STATE_RESPAWN,		//復活時
-		PLAYER_STATE_DIE,			//死亡時
-		PLAYER_STATE_MAX			//最大数
-	}PLAYER_STATE;
-
 	CPlayer(OBJ_TYPE type);
 	~CPlayer();
 	HRESULT Init(void);
@@ -68,7 +59,6 @@ private:
 	void Ride();
 
 		DEBUG_STATE m_DebugState;						//デバッグのステータス
-		PLAYER_STATE m_PlayerState;						//プレイヤーの状態ステータス
 		bool m_bAttack;									//近接攻撃できるかどうか
 		bool m_bKnifeAttack;							//攻撃をしているかどうか
 		bool m_bRespawn;

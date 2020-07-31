@@ -205,7 +205,6 @@ void CCharacter::Update(void)
 		m_AddHeadRot.x = -0.5f;
 		m_AddArmRot.x = -0.3f* D3DX_PI;
 	}
-
 	//ステートに応じた処理
 	State();
 
