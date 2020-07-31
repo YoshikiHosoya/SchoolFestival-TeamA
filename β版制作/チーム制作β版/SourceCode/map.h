@@ -109,6 +109,7 @@ public:
 	int				GetMaxPlayerTank();												// 戦車の最大数取得
 	int				GetMaxBattlePlane();											// 戦闘機の最大数取得
 	int				GetMaxHelicopter();												// ヘリの最大数取得
+	MAP				GetMapNum() { return m_MapNum; };								// マップ番号取得
 	LPD3DXMESH		GetMesh(int nCnt);												// メッシュの取得
 	CModel			*GetModel(int nCnt) { return m_pMapModel[nCnt]; };				// モデルの取得
 	CEnemy			*GetEnemy(int nCnt) { return m_pEnemy[nCnt]; };					// 敵の取得

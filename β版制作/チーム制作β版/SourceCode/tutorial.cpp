@@ -57,8 +57,6 @@ HRESULT CTutorial::Init(void)
 	//パーティクル生成
 	CParticleManager::Create();
 
-
-
 	// チュートリアルマネージャーの生成
 	m_pTutorialManager = CTutorialManager::Create();
 

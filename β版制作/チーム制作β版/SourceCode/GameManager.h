@@ -32,6 +32,7 @@ public:
 	};
 
 	void Update();
+	void Draw();
 
 	CGameManager();
 	~CGameManager();

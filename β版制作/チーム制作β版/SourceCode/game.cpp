@@ -59,7 +59,7 @@ HRESULT CGame::Init(void)
 	m_pMap->MapLoad(CMap::MAP_1_1);			// マップのロード
 
 	m_pPlayer	= CPlayer::Create();
-	m_pPlayer->SetLife(30);
+	m_pPlayer->SetLife(10);
 	m_pPlayer->SetPosition(D3DXVECTOR3(50.0f, 100.0f, 0.0f));
 
 	m_pPause->CreatePause();
@@ -160,6 +160,7 @@ CMap * CGame::GetMap(void)
 //==========================================================
 void CGame::Draw(void)
 {
+	m_pGameManager->Draw();
 }
 //==========================================================
 // デバッグ情報表記
