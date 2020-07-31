@@ -277,7 +277,7 @@ void CMap::MapModelSave()
 	else
 	{
 		// 読み込み失敗時の警告表示
-		MessageBox(NULL, "マップモデルの読み込み失敗", m_MapModelFileName[m_MapNum], MB_ICONWARNING);
+		MessageBox(NULL, "読み込み失敗", m_MapModelFileName[m_MapNum], MB_ICONWARNING);
 	}
 }
 
@@ -330,11 +330,8 @@ void CMap::MapModelSave()
 //		}
 //		fprintf(pFile, "END_SCRIPT\n");
 //
-//		for (int nModelType = 0; nModelType < ARRANGEMENT_MODEL_MAX; nModelType++)
-//		{
-//			// 読み込み成功時の結果表示
-//			LoadSuccessMessage(nModelType);
-//		}
+//		// 読み込み成功時の結果表示
+//		//MessageBox(NULL, "セーブしました", m_WaveFileName[m_WaveNum], MB_OK | MB_ICONINFORMATION);
 //
 //		// ファイルを閉じる
 //		fclose(pFile);
@@ -342,7 +339,7 @@ void CMap::MapModelSave()
 //	else
 //	{
 //		// 読み込み失敗時の警告表示
-//		//LoadFailureMessage(ModelType);
+//		MessageBox(NULL, "マップモデルの読み込み失敗", m_WaveFileName[m_WaveNum], MB_ICONWARNING);
 //	}
 //}
 
