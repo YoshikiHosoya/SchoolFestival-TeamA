@@ -25,11 +25,13 @@
 #include "playerUI.h"
 #include "playertank.h"
 #include "battleplane.h"
+#include "resultmanager.h"
 
 //====================================================================
 //マクロ定義
 //====================================================================
-#define PLAYER_SIZE			(D3DXVECTOR3(50.0f,65.0f,0.0f)) //敵のサイズ
+#define PLAYER_SIZE			(D3DXVECTOR3(50.0f,65.0f,0.0f)) //プレイヤーのサイズ
+#define PLAYER_SIZE_CRUCH	(D3DXVECTOR3(50.0f,34.0f,0.0f)) //しゃがんだ時のサイズ
 // 貫通させるかのフラグ
 #define ATTACK_PENETRATION		(true)			// プレイヤーの判定が貫通するかどうか
 #define ATTACK_DAMAGE_ENEMY		(50)			// エネミーへのダメージ
@@ -89,9 +91,6 @@ HRESULT CPlayer::Init(void)
 	SetCharacterDirection(DIRECTION::RIGHT);
 	//リスポーン時のカウント
 	m_nRespawnCnt = 0;
-	//プレイヤーの状態ステータス
-	m_PlayerState = PLAYER_STATE_NORMAL;
-
 	// 当たり判定生成
 	GetCollision()->SetPos(&GetPosition());
 	GetCollision()->SetSize2D(PLAYER_SIZE);
@@ -311,6 +310,7 @@ void CPlayer::MoveUpdate(void)
 					else if (m_bCruch == false)
 					{
 						SetMotion(PLAYER_MOTION_NORMAL);
+						GetCollision()->SetSize2D(PLAYER_SIZE_CRUCH);
 					}
 					//Sを押したらしゃがみモーション
 					if (key->GetKeyboardPress(DIK_S)|| y < -0.6f && GetJump() == true)
@@ -318,6 +318,7 @@ void CPlayer::MoveUpdate(void)
 						if (m_bCruch == false && GetMotionType() != PLAYER_MOTION_WALK)
 						{
 							SetMotion(PLAYER_MOTION_SQUATSTOP);
+							GetCollision()->SetSize2D(PLAYER_SIZE_CRUCH);
 							m_bCruch = true;
 						}
 					}
@@ -325,6 +326,7 @@ void CPlayer::MoveUpdate(void)
 					{
 						m_bCruch = false;
 						SetMotion(PLAYER_MOTION_NORMAL);
+						GetCollision()->SetSize2D(PLAYER_SIZE);
 					}
 				}
 			}
@@ -473,7 +475,7 @@ void CPlayer::PadMoveUpdate(void)
 {
 	D3DXVECTOR3 MoveValue = ZeroVector3;
 
-	if (CHossoLibrary::PadMoveInput(MoveValue, GetCharacterDirection(),GetJump()))
+	if (CHossoLibrary::PadMoveInput(MoveValue, GetCharacterDirection(), GetJump()))
 	{
 		Move(MoveValue.x, MoveValue.y);
 	}
@@ -485,14 +487,24 @@ void CPlayer::PadMoveUpdate(void)
 	InputValue.x /= STICK_MAX_RANGE;//値の正規化
 	InputValue.y /= STICK_MAX_RANGE;//値の正規化
 
-
-		//Sを押したらしゃがみモーション
-	if (InputValue.y < -0.6f && GetJump() == true)
+	//ジャンプモーションじゃない時
+	if (GetMotionType() != PLAYER_MOTION_JUMP)
 	{
-		if (m_bCruch == false && GetMotionType() != PLAYER_MOTION_WALK)
+		//ジャンプストップモーションじゃない時
+		if (GetMotionType() != PLAYER_MOTION_JUMPSTOP)
 		{
-			SetMotion(PLAYER_MOTION_SQUATSTOP);
-			m_bCruch = true;
+			if (GetMotionType() != PLAYER_MOTION_ATTACK01)
+			{
+				//Sを押したらしゃがみモーション
+				if (InputValue.y < -0.6f && GetJump() == true)
+				{
+					if (m_bCruch == false && GetMotionType() != PLAYER_MOTION_WALK)
+					{
+						SetMotion(PLAYER_MOTION_SQUATSTOP);
+						m_bCruch = true;
+					}
+				}
+			}
 		}
 	}
 }
@@ -602,10 +614,16 @@ void CPlayer::Ride()
 	{
 		MoveUpdate();
 		AttackUpdate();
-
+		if (m_pGun->GetGunType() != m_pGun->GUNTYPE_HEAVYMACHINEGUN)
+		{
 		// 弾を撃つ方向を設定
 		m_pGun->SetShotRot(GetShotDirection());
-
+		}
+		else
+		{
+			// 弾を撃つ方向を設定
+			m_pGun->SetShotRot(GetShotDirection());
+		}
 		if (m_pPlayerUI)
 		{
 			// 弾の残数表示
@@ -663,7 +681,7 @@ void CPlayer::Ride()
 		if (key->GetKeyboardTrigger(DIK_SPACE)|| pad->GetTrigger(pad->JOYPADKEY_B,1) && GetJump() == false)
 		{
 			m_bRideVehicle = false;
-			GetMove().y += 40;
+			GetMove().y += 20;
 			SetMotion(PLAYER_MOTION_JUMP);
 		}
 	}
@@ -674,13 +692,14 @@ void CPlayer::Ride()
 void CPlayer::ReSpawn(void)
 {
 	m_nRespawnCnt++;
-	m_PlayerState = PLAYER_STATE_RESPAWN;
+	SetState(CHARACTER_STATE_INVINCIBLE);
 
 	if (m_nRespawnCnt == 120)
 	{
 		m_nRespawnCnt = 0;
 		m_bRespawn = false;
 		m_pGun->SetGunType(CGun::GUNTYPE_HANDGUN);
+		SetState(CHARACTER_STATE_NORMAL);
 		SetLife(10);
 	}
 }

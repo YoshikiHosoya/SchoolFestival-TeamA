@@ -206,7 +206,6 @@ void CCharacter::Update(void)
 		m_AddHeadRot.x = -0.5f;
 		m_AddArmRot.x = -0.3f* D3DX_PI;
 	}
-
 	//ステートに応じた処理
 	State();
 
@@ -372,6 +371,7 @@ void CCharacter::State()
 	case CHARACTER_STATE_NORMAL:
 		break;
 	case CHARACTER_STATE_DAMAGE:
+
 		m_nStateCnt--;
 		if (m_nStateCnt <= 0)
 		{
@@ -387,9 +387,11 @@ void CCharacter::State()
 		}
 		break;
 	case CHARACTER_STATE_DAMAGE_RED:
+
 		m_nStateCnt--;
 
 		//時間経過で
+
 		if (m_nStateCnt <= 0)
 		{
 			//ステートを元に戻す
@@ -403,6 +405,7 @@ void CCharacter::State()
 		}
 		break;
 	case CHARACTER_STATE_INVINCIBLE:
+
 		m_nStateCnt--;
 
 		if (m_nStateCnt <= 0)
@@ -519,6 +522,7 @@ void CCharacter::AddDamage(int Damage)
 	int Life = GetLife();
 	Life -= Damage;
 	SetLife(Life);
+
 
 	if (GetLife() <= 0)
 	{

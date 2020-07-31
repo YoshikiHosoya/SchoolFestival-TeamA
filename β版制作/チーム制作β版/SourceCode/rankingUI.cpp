@@ -322,16 +322,21 @@ void CRankingUI::RankingSave()
 		fprintf(pFile, "END_RANKINGSET\n\n");
 		fprintf(pFile, "END_SCRIPT\n");
 
+
+#ifdef _DEBUG
 		// 読み込み成功時の結果表示
 		MessageBox(NULL, "ランキング情報をセーブしました", "結果", MB_OK | MB_ICONINFORMATION);
+#endif // DEBUG
 
 		// ファイルを閉じる
 		fclose(pFile);
 	}
 	else
 	{
+#ifdef _DEBUG
 		// 読み込み失敗時の警告表示
 		MessageBox(NULL, "ランキング情報の読み込み失敗", "警告", MB_ICONWARNING);
+#endif // DEBUG
 	}
 }
 
