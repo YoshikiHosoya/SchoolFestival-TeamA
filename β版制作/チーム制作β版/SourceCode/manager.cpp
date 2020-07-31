@@ -68,11 +68,25 @@ void CManager::Uninit(void)
 {
 	//ƒx[ƒX‚Ì‘fÞ”jŠü
 	CBaseMode::BaseUnload();
-	m_pRenderer->Uninit();
-	m_pMouse->Uninit();
-	m_pPad->Uninit();
-
 	//nullcheck
+	if (m_pRenderer)
+	{
+		m_pRenderer->Uninit();
+		delete m_pRenderer;
+		m_pRenderer = nullptr;
+	}
+	if (m_pMouse)
+	{
+		m_pMouse->Uninit();
+		delete m_pMouse;
+		m_pMouse = nullptr;
+	}
+	if (m_pPad)
+	{
+		m_pPad->Uninit();
+		delete m_pPad;
+		m_pPad = nullptr;
+	}
 	if (m_pBaseMode)
 	{
 		m_pBaseMode->Uninit();
