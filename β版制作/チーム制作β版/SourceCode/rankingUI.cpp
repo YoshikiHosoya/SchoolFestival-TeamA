@@ -16,8 +16,10 @@
 // 静的メンバ変数の初期化
 // =====================================================================================================================================================================
 RANKING_DATA	CRankingUI::m_RankingData				= {};
-int				CRankingUI::m_nRankingScore[SCORE_MAX]	= {};
+RANKING_SCORE_DATA	CRankingUI::m_ScoreData = {};
 
+int				CRankingUI::m_nRankingScore[SCORE_MAX]	= {};
+int				CRankingUI::m_nScore = 0;
 // =====================================================================================================================================================================
 // テキストファイル名
 // =====================================================================================================================================================================
@@ -25,6 +27,11 @@ char *CRankingUI::m_RankingFileName =
 {
 	"data/Load/Ranking/RankingData.txt" 			// アイテムの情報
 };
+char *CRankingUI::m_SaveScoreFileName =
+{
+	"data/Load/Ranking/SaveScoreData.txt" 			// アイテムの情報
+};
+
 
 // =====================================================================================================================================================================
 // マクロ定義
@@ -348,7 +355,9 @@ void CRankingUI::RankingSave()
 void CRankingUI::RankingCalculation()
 {
 	// トータルスコアを取得をし書き換え不可能な変数にする
-	const int CurrentScore = CResultUI::GetTotalScore();
+	//m_nGetRankingScore = CResultUI::GetTotalScore();
+	ScoreLoad();
+	const int CurrentScore = m_nScore;
 	int nRanking = 0;
 
 	for (int nCnt = 0; nCnt < SCORE_MAX; nCnt++)
@@ -385,6 +394,120 @@ void CRankingUI::RankingCalculation()
 			}
 		}
 	}
+}
+
+// =====================================================================================================================================================================
+//
+//
+//
+// =====================================================================================================================================================================
+void CRankingUI::ScoreSave()
+{
+	// ファイルポイント
+	FILE	*pFile;
+
+	// 各モデルファイルのファイルを開く
+	pFile = fopen(m_SaveScoreFileName, "w");
+
+	// 開いているとき
+	if (pFile != NULL)
+	{
+		fprintf(pFile, "#------------------------------------------------------------------------------\n");
+		fprintf(pFile, "# スコアの情報\n");
+		fprintf(pFile, "#------------------------------------------------------------------------------\n");
+		fprintf(pFile, "\n");
+
+		fprintf(pFile, "SCRIPT\n\n");
+		fprintf(pFile, "SCORESET\n");
+
+		// セーブするランキングの情報
+		fprintf(pFile, "	SCORE	= %d\n", CResultUI::GetTotalScore());
+
+		fprintf(pFile, "END_SCORESET\n\n");
+		fprintf(pFile, "END_SCRIPT\n");
+
+
+#ifdef _DEBUG
+		// 読み込み成功時の結果表示
+		MessageBox(NULL, "ランキング情報をセーブしました", "結果", MB_OK | MB_ICONINFORMATION);
+#endif // DEBUG
+
+		// ファイルを閉じる
+		fclose(pFile);
+	}
+	else
+	{
+#ifdef _DEBUG
+		// 読み込み失敗時の警告表示
+		MessageBox(NULL, "ランキング情報の読み込み失敗", "警告", MB_ICONWARNING);
+#endif // DEBUG
+	}
+}
+
+// =====================================================================================================================================================================
+//
+//
+//
+// =====================================================================================================================================================================
+void CRankingUI::ScoreLoad()
+{
+	// ファイルポイント
+	FILE *pFile;
+
+	char cReadText[128];			// 文字として読み取る
+	char cHeadText[128];			// 比較用
+	char cDie[128];					// 不要な文字
+
+									// ファイルを開く
+	pFile = fopen(m_SaveScoreFileName, "r");
+
+	// 開いているとき
+	if (pFile != NULL)
+	{
+		// SCRIPTが来るまでループ
+		while (strcmp(cHeadText, "SCRIPT") != 0)
+		{
+			fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
+			sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
+		}
+
+		// SCRIPTが来たら
+		if (strcmp(cHeadText, "SCRIPT") == 0)
+		{
+			// END_SCRIPTが来るまでループ
+			while (strcmp(cHeadText, "END_SCRIPT") != 0)
+			{
+				fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
+				sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
+
+															// ITEMSETが来たら
+				if (strcmp(cHeadText, "SCORESET") == 0)
+				{
+					// END_ITEMSETが来るまでループ
+					while (strcmp(cHeadText, "END_SCORESET") != 0)
+					{
+						fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
+						sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
+
+																	// SPEEDが来たら
+						if (strcmp(cHeadText, "SCORE") == 0)
+						{
+							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_ScoreData.nScore);		// 比較用テキストにRANKIG_1stを代入
+						}
+					}
+				}
+			}
+		}
+		// ファイルを閉じる
+		fclose(pFile);
+	}
+	else
+	{
+		MessageBox(NULL, "ランキングのデータ読み込み失敗", "警告", MB_ICONWARNING);
+	}
+
+
+	m_nScore = m_ScoreData.nScore;
 }
 
 // =====================================================================================================================================================================

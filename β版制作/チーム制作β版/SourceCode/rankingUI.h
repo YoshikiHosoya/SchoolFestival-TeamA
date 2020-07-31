@@ -28,6 +28,11 @@ typedef struct
 	//int					nRankingScore[RANKING_NUM];	// 上位5位のランキング情報
 }RANKING_DATA;
 
+typedef struct
+{
+	int	nScore;
+}RANKING_SCORE_DATA;
+
 // =====================================================================================================================================================================
 // 前方宣言
 // =====================================================================================================================================================================
@@ -77,6 +82,12 @@ public:
 	static	void			RankingLoad();						// ランキングのロード
 	static	void			RankingSave();						// ランキングのセーブ
 	static	void			RankingCalculation();				// 順位の計算
+	static	void			SetTotalScore(int nScore) { m_nScore = nScore; }; // スコアの設定
+	static	int				GetTotalScore() { return m_nScore; }; // スコアの設定
+	static	void			ScoreSave();						// ランキングのセーブ
+	static	void			ScoreLoad();						// ランキングのロード
+
+
 
 	/* メンバ関数 */
 
@@ -90,8 +101,10 @@ private:
 	/* 静的メンバ変数 */
 	static int				m_nRankingScore[RANKING_NUM];		// 上位5位のランキング情報
 	static char				*m_RankingFileName;					// ランキングのファイル名
+	static char				*m_SaveScoreFileName;				// ランキングのファイル名
 	static RANKING_DATA		m_RankingData;						// ランキングのデータ
-
+	static RANKING_SCORE_DATA m_ScoreData;
+	static int				m_nScore;					// リザルトから取得した数値
 
 	/* メンバ変数 */
 	CScene2D				*m_apScene2D[RANKING_UI_MAX];		// シーン2Dのポインタ

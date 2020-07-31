@@ -37,7 +37,6 @@ public:
 	void					Update(void);	// 更新
 
 	/* 静的メンバ関数 */
-	/* 静的メンバ関数 */
 	static					CRankingManager	*Create();						// 生成
 	/* メンバ関数 */
 	void					RankingUiOrder();								// Uiの出現順番

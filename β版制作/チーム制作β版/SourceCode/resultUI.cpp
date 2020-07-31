@@ -16,6 +16,7 @@
 #include "player.h"
 #include "playerui.h"
 #include "resultmanager.h"
+#include "rankingui.h"
 #include <iostream>
 #include <mutex>
 #include <thread>
@@ -696,6 +697,7 @@ void CResultUI::TotalScoreCalculation()
 			// ゲームスコアとボーナススコアの計算
 			m_nTotalScore = pGame->GetResultManager()->GetResultUI()->m_nBonusScore;
 			//m_nTotalScore = pGame->GetResultManager()->GetResultUI()->m_nBonusScore + pGame->GetPlayer()->GetPlayerUI()->GetScore() + pGame->GetResultManager()->GetResultUI()->m_nBonusScore;
+			CRankingUI::ScoreSave();
 		}
 	}
 }
