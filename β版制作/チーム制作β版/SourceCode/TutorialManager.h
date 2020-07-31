@@ -25,12 +25,15 @@ public:
 	// チュートリアルの行程
 	enum TUTORIAL_STATE
 	{
-		RANKING_STATE_NONE = -1,
-		RANKING_STATE_1,
-		RANKING_STATE_2,
-		RANKING_STATE_3,
-		RANKING_STATE_4,
-		RANKING_STATE_5,
+		TUTORIAL_STATE_NONE = -1,
+		TUTORIAL_STATE_FIRST,
+		TUTORIAL_STATE_1,
+		TUTORIAL_STATE_2,
+		TUTORIAL_STATE_3,
+		TUTORIAL_STATE_4,
+		TUTORIAL_STATE_5,
+		TUTORIAL_STATE_6,
+		TUTORIAL_STATE_FINAL,				// チュートリアルの最後
 	};
 
 	CTutorialManager();						// コンストラクタ
@@ -44,13 +47,23 @@ public:
 	/* 静的メンバ関数 */
 	static					CTutorialManager	*Create();					// 生成
 	/* メンバ関数 */
-	void					TutorialUiOrder();								// Uiの出現順番
+	void					TutorialState();								// チュートリアルの順番管理
 
 private:
 	/* 静的メンバ変数 */
 	/* メンバ関数 */
+	void					WaitTime();										// ステートを切り替える際の時間の管理
+	void					SetWaitTime(int Time);							// ステートを切り替える際の時間の設定
+	void					NextState();									// 次のステートに移行する
+	void					StateManager();									// 各状態ごとの関数を管理する
+	void					JudgPushButton();								// 指定したボタンを押されたかどうか
+
 	/* メンバ変数 */
 	TUTORIAL_STATE			m_TutorialState;								// チュートリアルの状態
 	CTutorialUI				*m_pTutorialUI;									// チュートリアルUIのポインタ
+	int						m_nWaitTime;									// ステートを切り替える際の時間
+	bool					m_bOneFlag;										// 1回だけ処理を通すフラグ
+	bool					m_bPushButton;									// ボタンを押したかどうか
+	TUTORIAL_STATE			m_OldState;										// 1つ前のステート
 };
 #endif

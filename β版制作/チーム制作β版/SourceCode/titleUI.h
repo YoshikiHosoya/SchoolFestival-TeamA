@@ -45,12 +45,13 @@ public:
 	static  CTitleUI		*Create();		// タイトルUIの生成
 
 	/* メンバ関数 */
-
+	void					Flashing(CScene2D *m_apScene2D);	// 点滅処理
 private:
 	/* メンバ関数 */
 	/* 静的メンバ変数 */
 
 	/* メンバ変数 */
 	CScene2D				*m_apScene2D[TITLE_UI_MAX];		// シーン2Dのポインタ
+	int						m_nColCnt;						// カラーカウント
 };
 #endif

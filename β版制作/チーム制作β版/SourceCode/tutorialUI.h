@@ -33,13 +33,14 @@ public:
 	enum TUTORIAL_UI
 	{
 		UI_NAME,			// 名前ロゴ HOW TO PLAY
-		UI_ORDER0,			// 操作について
+		UI_ORDERFIRST,		// 操作について
 		UI_ORDER1,			// 指令1
 		UI_ORDER2,			// 指令2
 		UI_ORDER3,			// 指令3
 		UI_ORDER4,			// 指令4
 		UI_ORDER5,			// 指令5
 		UI_ORDER6,			// 指令6
+		UI_ORDERFINAL,		// 説明終了
 		UI_MAX
 	};
 
@@ -53,23 +54,22 @@ public:
 	void					Draw(void);		// 描画
 
 	/* 静的メンバ関数 */
-	static  CTutorialUI		*Create();							// ランキングUIの生成
-
+	static  CTutorialUI			*Create();							// ランキングUIの生成
 	/* メンバ関数 */
-
+	void						SetDrawDisp(TUTORIAL_UI ui);		// 選択したuiを描画し1個目のuiを非表示にする
+	TUTORIAL_UI					GetTutorialUiType();				// 今使われているuiの種類を取得
 private:
 	/* 静的メンバ関数 */
-
 	/* メンバ関数 */
-	void					Flashing(CScene2D *m_apScene2D);	// 点滅処理
-
+	void						Flashing(CScene2D *m_apScene2D);	// 点滅処理
 	/* 静的メンバ変数 */
-	static LPDIRECT3DTEXTURE9	m_TexNum[UI_MAX];		// バインドするテクスチャの情報
-	static D3DXVECTOR3			m_Pos[UI_MAX];			// 座標情報
-	static D3DXVECTOR3			m_Size[UI_MAX];			// サイズ情報
+	static LPDIRECT3DTEXTURE9	m_TexNum[UI_MAX];					// バインドするテクスチャの情報
+	static D3DXVECTOR3			m_Pos[UI_MAX];						// 座標情報
+	static D3DXVECTOR3			m_Size[UI_MAX];						// サイズ情報
 
 	/* メンバ変数 */
-	CScene2D				*m_apScene2D[UI_MAX];			// シーン2Dのポインタ
-	int						m_nColCnt;							// カラーカウント
+	CScene2D					*m_apScene2D[UI_MAX];				// シーン2Dのポインタ
+	int							m_nColCnt;							// カラーカウント
+	TUTORIAL_UI					m_TutorialUiType;					// uiの種類
 };
 #endif

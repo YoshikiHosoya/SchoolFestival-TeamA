@@ -34,6 +34,7 @@ public:
 	void CharacterFollowingMoveCamera();		//キャラクター追従カメラ
 	void MouseMoveCamera();						//マウス操作カメラ
 
+	void SetPosR(D3DXVECTOR3 posR);
 	void ResetCamera();
 	void SetCameraPosfromDistance(D3DXVECTOR3 posR,D3DXVECTOR3 rot,float fDistance);
 	void SetCameraPos(D3DXVECTOR3 posR, D3DXVECTOR3 posV);
