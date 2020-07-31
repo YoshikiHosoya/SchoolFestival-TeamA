@@ -11,6 +11,17 @@
 #include "fade.h"
 #include "UIManager.h"
 #include "titleUI.h"
+#include "Xinput.h"
+#include "XInputPad.h"
+
+// =====================================================================================================================================================================
+// マクロ定義
+// =====================================================================================================================================================================
+// パッドボタン
+#define PAD_A (pad->GetTrigger(pad->JOYPADKEY_A, 1))	// ジャンプ
+#define PAD_B (pad->GetTrigger(pad->JOYPADKEY_B, 1))	// 乗り物から降りる
+#define PAD_X (pad->GetTrigger(pad->JOYPADKEY_X, 1))	// 弾
+#define PAD_Y (pad->GetTrigger(pad->JOYPADKEY_Y, 1))	// グレネード
 
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
@@ -63,8 +74,15 @@ void CTitle::Uninit(void)
 //==========================================================
 void CTitle::Update(void)
 {
+	// パッド取得
+	CXInputPad *pad = CManager::GetPad();
+
 	// エンターを押したとき
-	if (CHossoLibrary::PressAnyButton())
+	if (CHossoLibrary::PressAnyButton() ||
+		PAD_X ||
+		PAD_Y ||
+		PAD_A ||
+		PAD_B)
 	{
 		// ゲームモードへ状態遷移
 		CManager::GetRenderer()->GetFade()->SetFade(CFADE::FADETYPE::FADETYPE_MODE, CManager::MODE_TUTORIAL);

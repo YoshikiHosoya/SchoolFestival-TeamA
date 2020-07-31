@@ -613,7 +613,7 @@ void CPlayer::Ride()
 		CKeyboard *key = CManager::GetInputKeyboard();
 		CXInputPad *pad = CManager::GetPad();
 		//ƒvƒŒƒCƒ„[‚ªæ‚è•¨‚©‚ç~‚è‚é‚Æ‚«
-		if (key->GetKeyboardTrigger(DIK_SPACE)|| pad->GetTrigger(pad->JOYPADKEY_A,1) && GetJump() == false)
+		if (key->GetKeyboardTrigger(DIK_SPACE)|| pad->GetTrigger(pad->JOYPADKEY_B,1) && GetJump() == false)
 		{
 			m_bRideVehicle = false;
 			GetMove().y += 40;

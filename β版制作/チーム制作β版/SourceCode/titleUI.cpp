@@ -30,6 +30,7 @@ CTitleUI::CTitleUI()
 	{
 		m_apScene2D[nCnt] = nullptr;
 	}
+	m_nColCnt = 0;
 }
 
 // =====================================================================================================================================================================
@@ -58,7 +59,7 @@ HRESULT CTitleUI::Init(void)
 			// タイトルロゴ
 			case TITLE_UI::TITLE_LOGO:
 				// シーン2Dの生成
-				m_apScene2D[nCnt] = CScene2D::Create(D3DXVECTOR3((SCREEN_WIDTH * 0.5f), 200.0f, 0.0f), D3DXVECTOR3(400.0f, 300.0f, 0.0f));
+				m_apScene2D[nCnt] = CScene2D::Create(D3DXVECTOR3((SCREEN_WIDTH * 0.5f), 325.0f, 0.0f), D3DXVECTOR3(400.0f, 300.0f, 0.0f));
 				// テクスチャの割り当て
 				m_apScene2D[nCnt]->BindTexture(CTexture::GetTexture(CTexture::TEX_UI_TITLE));
 				break;
@@ -66,7 +67,7 @@ HRESULT CTitleUI::Init(void)
 			// スタート
 			case TITLE_UI::UI_START:
 				// シーン2Dの生成
-				m_apScene2D[nCnt] = CScene2D::Create(D3DXVECTOR3((SCREEN_WIDTH * 0.5f), 680.0f, 0.0f), D3DXVECTOR3(100.0f, 20.0f, 0.0f));
+				m_apScene2D[nCnt] = CScene2D::Create(D3DXVECTOR3((SCREEN_WIDTH * 0.5f), 600.0f, 0.0f), D3DXVECTOR3(250.0f, 30.0f, 0.0f));
 				// テクスチャの割り当て
 				m_apScene2D[nCnt]->BindTexture(CTexture::GetTexture(CTexture::TEX_UI_START));
 				break;
@@ -107,10 +108,16 @@ void CTitleUI::Update(void)
 	{
 		if (m_apScene2D[nCnt])
 		{
+			// スタートロゴだった時
+			if (nCnt == UI_START)
+			{
+				Flashing(m_apScene2D[nCnt]);
+			}
 			// 更新
 			m_apScene2D[nCnt]->Update();
 		}
 	}
+
 }
 
 // =====================================================================================================================================================================
@@ -147,4 +154,24 @@ CTitleUI * CTitleUI::Create()
 	CUIManager::AddUIList(std::move(pTitleUI));
 
 	return pTitleUI;
+}
+// =====================================================================================================================================================================
+//
+// 点滅処理
+//
+// =====================================================================================================================================================================
+void CTitleUI::Flashing(CScene2D *m_apScene2D)
+{
+	// カウント加算
+	m_nColCnt++;
+	// 余りが0の時透明にする
+	if (m_nColCnt % 60 == 0)
+	{
+		m_apScene2D->SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f));
+	}
+	// 余りが0の時通常状態にする
+	else if (m_nColCnt % 30 == 0)
+	{
+		m_apScene2D->SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+	}
 }
