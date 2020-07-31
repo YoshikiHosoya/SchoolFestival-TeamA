@@ -63,6 +63,7 @@ public:
 		TEX_UI_TUTORIAL_ORDER4,					// チュートリアル指示4
 		TEX_UI_TUTORIAL_ORDER5,					// チュートリアル指示5
 		TEX_UI_TUTORIAL_ORDER6,					// チュートリアル指示6
+		TEX_UI_TUTORIAL_FINAL,					// 終了宣言
 
 		TEX_UI_RESULT_BG,						//背景
 		TEX_UI_RESULT_NAME,						//名前ロゴ
