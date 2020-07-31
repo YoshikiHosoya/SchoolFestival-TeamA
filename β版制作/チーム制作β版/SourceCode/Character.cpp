@@ -206,6 +206,8 @@ void CCharacter::Update(void)
 		m_AddArmRot.x = -0.3f* D3DX_PI;
 	}
 
+	//ステートに応じた処理
+	State();
 
 	//下向きながら着地したとき
 	if (m_CharacterDirection == DIRECTION::DOWN && GetJump() == true)
@@ -1011,6 +1013,8 @@ void CCharacter::CharacterUnLoad(void)
 void CCharacter::DebugInfo(void)
 {
 	CDebug_ModelViewer::OffsetViewer(m_vModelList);
+
+	CDebugProc::Print("state >>%d\n", GetCharacterState());
 
 	//CDebugProc::Print("");
 }
