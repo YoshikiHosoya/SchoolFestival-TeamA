@@ -56,11 +56,11 @@ public:
 	// マップの種類
 	enum MAP
 	{
-		MAP_TUTORIAL,		// 0
-		MAP_1_1,			// 1
-		MAP_1_2,			// 2
-		MAP_1_3,			// 3
-		MAP_1_BOSS,			// 1
+		MAP_TUTORIAL,		// チュートリアル
+		MAP_1_1,			// 1_1
+		MAP_1_2,			// 1_2
+		MAP_1_3,			// 1_3
+		MAP_1_BOSS,			// 1_BOSS
 
 		MAP_MAX
 	};

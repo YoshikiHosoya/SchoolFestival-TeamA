@@ -54,7 +54,7 @@ char *CMap::m_WaveFileName[WAVE_MAX] =
 // =====================================================================================================================================================================
 // マクロ定義
 // =====================================================================================================================================================================
-#define TranslucentColor			(D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.5f))		//半透明
+#define TranslucentColor			(D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.5f))		// 半透明
 #define ButtonSpace					(250)									// ボタンの間隔
 
 // =====================================================================================================================================================================
@@ -850,7 +850,11 @@ void CMap::SaveModelHeader(FILE * pFile, int ModelType)
 		fprintf(pFile, COMMENT02);
 		fprintf(pFile, "// MAPTYPE情報\n");
 		fprintf(pFile, COMMENT01);
-		fprintf(pFile, "//	[ 0 ]	床\n");
+		fprintf(pFile, "//	[ 0 ]	チュートリアル\n");
+		fprintf(pFile, "//	[ 1 ]	ステージ1_1\n");
+		fprintf(pFile, "//	[ 2 ]	ステージ1_2\n");
+		fprintf(pFile, "//	[ 3 ]	ステージ1_3\n");
+		fprintf(pFile, "//	[ 4 ]	ステージ1_BOSS\n");
 		fprintf(pFile, COMMENT01);
 		fprintf(pFile, COMMENT02);
 		fprintf(pFile, NEWLINE);
@@ -1693,7 +1697,7 @@ void CMap::ComboBoxAll(int nNowSelect)
 
 // =====================================================================================================================================================================
 //
-// 障害物のコンボボックス
+// マップのコンボボックス
 //
 // =====================================================================================================================================================================
 void CMap::MapComboBox(int & nSelectType, int nNowSelect)
@@ -1713,22 +1717,6 @@ void CMap::MapComboBox(int & nSelectType, int nNowSelect)
 		// マップのロード
 		AllDelete();
 		MapLoad((MAP)nSelectType);
-
-		//// NULLチェック
-		//if (m_pMapModel[nNowSelect])
-		//{
-		//	// 捕虜の種類の取得
-		//	int MapType = m_pMapModel[nNowSelect]->GetModelCount();
-
-		//	// 前回と違うとき
-		//	if (MapType != nSelectType)
-		//	{
-		//		// 種類代入
-		//		MapType = nSelectType;
-		//		// 敵のタイプの設定
-		//		m_pMapModel[nNowSelect]->SetModelConut(MapType);
-		//	}
-		//}
 	}
 }
 
@@ -1756,13 +1744,13 @@ void CMap::ObstacleComboBox(int &nSelectType, int nNowSelect)
 		if (m_pObstacle[nNowSelect])
 		{
 			// 捕虜の種類の取得
-			CModel::OBSTACLE_TYPE ObstacleType = (CModel::OBSTACLE_TYPE)m_pObstacle[nNowSelect]->GetModelCount();
+			int ObstacleType = m_pObstacle[nNowSelect]->GetModelCount();
 
 			// 前回と違うとき
 			if (ObstacleType != nSelectType)
 			{
 				// 種類代入
-				ObstacleType = (CModel::OBSTACLE_TYPE)nSelectType;
+				ObstacleType = nSelectType;
 				// 敵のタイプの設定
 				m_pObstacle[nNowSelect]->SetModelConut(ObstacleType);
 			}
