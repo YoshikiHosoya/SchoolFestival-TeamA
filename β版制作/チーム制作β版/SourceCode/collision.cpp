@@ -164,35 +164,28 @@ bool CCollision::ForPlayerBulletCollision(int nEnemyDamage, int nObstacleDamage,
 		CEnemy *pEnemy = CManager::GetBaseMode()->GetMap()->GetEnemy(nCnt);
 		if (pEnemy != nullptr)
 		{
-			// 判定関数
-			if (this->OtherCollision2D(pEnemy->GetCollision()))
+			//死亡してない時
+			if (pEnemy->GetCharacterState() != CCharacter::CHARACTER_STATE_DEATH)
 			{
-				// 敵のライフ減衰
-				pEnemy->CCharacter::AddDamage(nEnemyDamage);
-
-				// 敵のライフが0以下になった時
-				if (pEnemy->CCharacter::GetLife() <= 0)
+				// 判定関数
+				if (this->OtherCollision2D(pEnemy->GetCollision()))
 				{
-					//死亡時のリアクション処理
-					//派生クラスがオーバーライド
-					pEnemy->DeathReaction();
+					// 敵のライフ減衰
+					pEnemy->CCharacter::AddDamage(nEnemyDamage);
 
-					// ポインタをnullにする
-					pEnemy = nullptr;
+					// 当たり範囲フラグをtrueにする
+					bHitFlag = true;
+
+					if (Penetration == false)
+					{
+						return bHitFlag;
+					}
 				}
-
-				// 当たり範囲フラグをtrueにする
-				bHitFlag = true;
-
-				if (Penetration == false)
+				else
 				{
-					return bHitFlag;
+					// 当たり範囲フラグをfalseにする
+					bHitFlag = false;
 				}
-			}
-			else
-			{
-				// 当たり範囲フラグをfalseにする
-				bHitFlag = false;
 			}
 
 		}
@@ -326,16 +319,7 @@ bool CCollision::ForEnemyCollision(int nPlayerDamage, int nPlayerTankDamage, boo
 					if (pPlayer->GetCharacterState() == CCharacter::CHARACTER_STATE_NORMAL)
 					{
 					// プレイヤーのライフ減衰
-					pPlayer->CCharacter::AddDamage(nPlayerDamage);
-					}
-
-					// プレイヤーのライフが0以下になった時
-					if (pPlayer->CCharacter::GetLife() <= 0)
-					{
-						//pPlayer->SetDieFlag(true);
-						// ポインタをnullにする
-						//pPlayer = nullptr;
-						pPlayer->SetRespawnFlag(true);
+						pPlayer->CCharacter::AddDamage(nPlayerDamage);
 					}
 
 					// 当たり範囲フラグをtrueにする

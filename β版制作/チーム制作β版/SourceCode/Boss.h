@@ -24,6 +24,9 @@ public:
 	static CBoss *Create(void);
 	bool DefaultMotion(void);
 	void DeathReaction();
+	void State();
+	void StateChangeReaction();				//ステート変更処理
+
 	CGun *GetGun(void);
 private:
 	void Move(float move, float fdest);

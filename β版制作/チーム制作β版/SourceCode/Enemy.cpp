@@ -186,9 +186,6 @@ void CEnemy::DeathReaction()
 	//死亡フラグをたてる
 	this->SetDieFlag(true);
 
-	//血のエフェクト
-	//CParticle::CreateFromText(GetPosition(), GetShotDirection(), CParticleParam::EFFECT_BLOOD);
-
 	CCharacter::DeathReaction();
 
 }
