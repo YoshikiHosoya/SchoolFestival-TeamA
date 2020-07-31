@@ -71,12 +71,6 @@ void CParticle::Update()
 	//ライフを減らす
 	m_pParticleParam->UpdateParam();
 
-	if (m_pParticleParam->GetAnimation())
-	{
-		//アニメーション更新処理
-		UpdateAnimation();
-	}
-
 	//当たり判定
 	if (m_pParticleParam->GetCollision())
 	{
@@ -95,6 +89,13 @@ void CParticle::Update()
 			}
 		}
 	}
+
+	if (m_pParticleParam->GetAnimation())
+	{
+		//アニメーション更新処理
+		UpdateAnimation();
+	}
+
 
 	//ライフが0以下になった時かアニメーションが終了した時
 	if (m_pParticleParam->GetLife() <= 0 || CTexAnimationBase::GetEndFlag())
@@ -531,7 +532,10 @@ void CParticle::SetParticle(D3DXVECTOR3 & pos, D3DXVECTOR3 const & rot, CParticl
 	}
 
 	//アニメーションのパラメータ設定
-	SetAnimationParam();
+	if (m_pParticleParam->GetAnimation())
+	{
+		SetAnimationParam();
+	}
 
 	//判定があるときは当たり判定のポインタ作成
 	if (m_pParticleParam->GetCollision())

@@ -528,6 +528,53 @@ void CPlayer::MapChangePlayerRespawn()
 	m_bRideVehicle = false;
 	m_pKnife->EndMeleeAttack();
 }
+
+//====================================================================
+//ダメージ時のリアクション
+//====================================================================
+void CPlayer::DamageReaction()
+{
+	CCharacter::DamageReaction();
+}
+
+//====================================================================
+//死亡時のリアクション
+//====================================================================
+void CPlayer::DeathReaction()
+{
+	CCharacter::DeathReaction();
+}
+//====================================================================
+//ステートが切り替わった時のリアクション
+//====================================================================
+void CPlayer::StateChangeReaction()
+{
+	CCharacter::StateChangeReaction();
+
+	switch (CCharacter::GetCharacterState())
+	{
+	case CHARACTER_STATE_NORMAL:
+
+		break;
+
+	case CHARACTER_STATE_DAMAGE:
+
+
+		break;
+	case CHARACTER_STATE_DAMAGE_RED:
+
+
+		break;
+	case CHARACTER_STATE_INVINCIBLE:
+
+
+		break;
+	case CHARACTER_STATE_DEATH:
+		SetRespawnFlag(true);
+
+		break;
+	}
+}
 //====================================================================
 //デバッグステータスの取得
 //====================================================================
@@ -637,3 +684,4 @@ void CPlayer::ReSpawn(void)
 		SetLife(10);
 	}
 }
+
