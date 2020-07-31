@@ -18,9 +18,9 @@ SCRIPT
 		ANIMATION_LOOP = 0				//アニメーションループするか
 		ANIMATION_CNTSWITCH = 3			//切替のカウント
 		COLLISION_SIZE_CALC = 0				//コリジョンのサイズの計算
-		COLLISION_ATTACK_VALUE = 40			//攻撃力
+		COLLISION_ATTACK_VALUE = 30			//攻撃力
 		COLLISION_COUNT = 10			//判定のカウント
-		COLLISION_SIZE = 80.00 110.00 0.00		//コリジョンのサイズ
+		COLLISION_SIZE = 60.00 70.00 0.00		//コリジョンのサイズ
 		SHAPE = 0						//パーティクルの出し方
 		LIFE = 60						//ライフ
 		NUMBER = 1						//個数
@@ -28,7 +28,7 @@ SCRIPT
 		RANGE = 0.5						//範囲
 		ALPHADAMPING = 1.00				//アルファ値の減衰値
 		GRAVITYPOWER = 0.80				//重力の強さ
-		SIZE = 80.00 110.00 0.00		//サイズ
+		SIZE = 60.00 70.00 0.00			//サイズ
 		SIZEDAMPING = 1.00 1.00 0.00	//サイズ減衰量
 		COLOR = 1.0 1.0 1.0 1.0			//色
 		ROT = 0.00 0.00 0.00			//回転量
