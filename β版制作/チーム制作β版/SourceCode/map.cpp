@@ -76,6 +76,8 @@ CMap::CMap()
 	m_nOldSelect = 0;
 	m_WavePos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_ModelPosOld = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_TransitionPos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_TransitionMapID = 0;
 }
 
 // =====================================================================================================================================================================
@@ -125,12 +127,14 @@ void CMap::MapModelLoad()
 				fgets(cReadText, sizeof(cReadText), pFile);
 				sscanf(cReadText, "%s", &cHeadText);
 
-				//if (strcmp(cHeadText, "MAPSET") == 0)
-				//{
-				//	strcpy(cEndSetText, "END_MAPSET");
-				//	nModelType = ARRANGEMENT_MODEL_MAP;
-				//}
-
+				if (strcmp(cHeadText, "TRANSITION_POS_X") == 0)
+				{
+					sscanf(cReadText, "%s %s %f", &cDie, &cDie,&m_TransitionPos.x);
+				}
+				if (strcmp(cHeadText, "TRANSITION_MAP_ID") == 0)
+				{
+					sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_TransitionMapID);
+				}
 
 				char cEndSetText[32];			// END_SET
 
@@ -238,6 +242,13 @@ void CMap::MapModelSave()
 		fprintf(pFile, "SCRIPT\n");
 		fprintf(pFile, NEWLINE);
 
+		fprintf(pFile, COMMENT02);
+		fprintf(pFile, "// 遷移するための情報\n");
+		fprintf(pFile, COMMENT02);
+		fprintf(pFile, "TRANSITION_POS_X		= %.0f\n", m_TransitionPos.x);
+		fprintf(pFile, "TRANSITION_MAP_ID		= %d\n", m_TransitionMapID);
+		fprintf(pFile, NEWLINE);
+
 		for (int nModelType = 0; nModelType < ARRANGEMENT_MODEL_MAX; nModelType++)
 		{
 			// セーブするモデルのヘッダー
@@ -257,11 +268,8 @@ void CMap::MapModelSave()
 		}
 		fprintf(pFile, "END_SCRIPT\n");
 
-		for (int nModelType = 0; nModelType < ARRANGEMENT_MODEL_MAX; nModelType++)
-		{
-			// 読み込み成功時の結果表示
-			LoadSuccessMessage(nModelType);
-		}
+		// 読み込み成功時の結果表示
+		MessageBox(NULL, "セーブしました", m_MapModelFileName[m_MapNum], MB_OK | MB_ICONINFORMATION);
 
 		// ファイルを閉じる
 		fclose(pFile);
@@ -269,7 +277,7 @@ void CMap::MapModelSave()
 	else
 	{
 		// 読み込み失敗時の警告表示
-		//LoadFailureMessage(ModelType);
+		MessageBox(NULL, "マップモデルの読み込み失敗", m_MapModelFileName[m_MapNum], MB_ICONWARNING);
 	}
 }
 
