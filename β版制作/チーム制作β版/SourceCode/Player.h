@@ -49,6 +49,9 @@ public:
 	void AttackUpdate(void);
 	void PadMoveUpdate(void);
 	void ReSpawn(void);
+	void DamageReaction();
+	void DeathReaction();
+	void StateChangeReaction();
 	DEBUG_STATE GetDebugState(void);
 	static CPlayer *Create(void);
 	bool DefaultMotion(void);
