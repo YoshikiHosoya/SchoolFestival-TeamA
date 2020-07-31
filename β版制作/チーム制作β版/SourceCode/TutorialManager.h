@@ -34,7 +34,6 @@ public:
 		TUTORIAL_STATE_5,
 		TUTORIAL_STATE_6,
 		TUTORIAL_STATE_FINAL,				// チュートリアルの最後
-		TUTORIAL_STATE_END,					// チュートリアルの終了状態
 	};
 
 	CTutorialManager();						// コンストラクタ
@@ -57,11 +56,14 @@ private:
 	void					SetWaitTime(int Time);							// ステートを切り替える際の時間の設定
 	void					NextState();									// 次のステートに移行する
 	void					StateManager();									// 各状態ごとの関数を管理する
+	void					JudgPushButton();								// 指定したボタンを押されたかどうか
 
 	/* メンバ変数 */
 	TUTORIAL_STATE			m_TutorialState;								// チュートリアルの状態
 	CTutorialUI				*m_pTutorialUI;									// チュートリアルUIのポインタ
 	int						m_nWaitTime;									// ステートを切り替える際の時間
 	bool					m_bOneFlag;										// 1回だけ処理を通すフラグ
+	bool					m_bPushButton;									// ボタンを押したかどうか
+	TUTORIAL_STATE			m_OldState;										// 1つ前のステート
 };
 #endif

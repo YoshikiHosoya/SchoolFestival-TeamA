@@ -12,6 +12,8 @@
 #include "renderer.h"
 #include "fade.h"
 #include "inputKeyboard.h"
+#include "player.h"
+#include "debugproc.h"
 
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
@@ -29,9 +31,11 @@
 CTutorialManager::CTutorialManager()
 {
 	m_TutorialState = TUTORIAL_STATE_NONE;
+	m_OldState = TUTORIAL_STATE_NONE;
 	m_pTutorialUI = nullptr;
 	m_nWaitTime = 0;
 	m_bOneFlag = false;
+	m_bPushButton = false;
 }
 
 // =====================================================================================================================================================================
@@ -91,13 +95,36 @@ void CTutorialManager::Update(void)
 	StateManager();
 	// チュートリアルの順番管理
 	TutorialState();
-	// プレイヤーがチュートリアル通りにボタンを押したら
-	// タイマー開始
-	//if ()
-	//{
-		// 待ち時間の管理
+
+	// 最初の1回目は無条件に通す
+	if (m_TutorialState == TUTORIAL_STATE_NONE)
+	{
+		// 現在のステートを保存
+		m_OldState = m_TutorialState;
+		// タイマー開始
 		WaitTime();
-	//}
+	}
+
+	// 1回目以降
+	else
+	{
+		// 今のステートと1つ前のステートが別だった時
+		if (m_TutorialState != static_cast<TUTORIAL_STATE>(m_OldState - 1))
+		{
+			// ボタンが押されているかチェック
+			JudgPushButton();
+			// プレイヤーがチュートリアル通りにボタンを押したら
+			if (m_bPushButton)
+			{
+				// タイマー開始
+				WaitTime();
+			}
+		}
+	}
+
+	CDebugProc::Print("Tutorialのステート %d\n", m_TutorialState);
+	CDebugProc::Print("Oldのステート %d\n", m_OldState);
+
 }
 
 // =====================================================================================================================================================================
@@ -165,6 +192,10 @@ void CTutorialManager::WaitTime()
 	{
 		// 次のステートに移行する
 		NextState();
+		//
+		m_bPushButton = false;
+		// 現在のステートを保存
+		m_OldState = m_TutorialState;
 	}
 }
 
@@ -187,7 +218,7 @@ void CTutorialManager::SetWaitTime(int Time)
 void CTutorialManager::NextState()
 {
 	// 次のステートに移行する
-	if (m_TutorialState != TUTORIAL_STATE_END)
+	if (m_TutorialState != TUTORIAL_STATE_FINAL)
 	{
 		m_TutorialState = static_cast<TUTORIAL_STATE>(m_TutorialState + 1);
 		m_bOneFlag = false;
@@ -218,5 +249,21 @@ void CTutorialManager::StateManager()
 		SetWaitTime(60);
 		// この処理を次に許可が出るまで通さない
 		m_bOneFlag = true;
+	}
+}
+
+// =====================================================================================================================================================================
+//
+// 指定したボタンを押されたかどうか
+//
+// =====================================================================================================================================================================
+void CTutorialManager::JudgPushButton()
+{
+	//キーボード取得
+	CKeyboard *key = CManager::GetInputKeyboard();
+
+	if (key->GetKeyboardTrigger(DIK_L))
+	{
+		m_bPushButton = true;
 	}
 }
