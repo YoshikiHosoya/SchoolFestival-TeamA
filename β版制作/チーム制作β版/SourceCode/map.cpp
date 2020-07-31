@@ -125,6 +125,13 @@ void CMap::MapModelLoad()
 				fgets(cReadText, sizeof(cReadText), pFile);
 				sscanf(cReadText, "%s", &cHeadText);
 
+				//if (strcmp(cHeadText, "MAPSET") == 0)
+				//{
+				//	strcpy(cEndSetText, "END_MAPSET");
+				//	nModelType = ARRANGEMENT_MODEL_MAP;
+				//}
+
+
 				char cEndSetText[32];			// END_SET
 
 				if (strcmp(cHeadText, "MAPSET") == 0)
@@ -343,7 +350,7 @@ void CMap::MapModelCreate(int ModelType, int nType, D3DXVECTOR3 pos)
 	/* --- マップ --- */
 	case CMap::ARRANGEMENT_MODEL_MAP:
 		// オブジェクトの生成
-		m_pMapModel.emplace_back(CModel::CreateSceneManagement(CModel::MODEL_TYPE::MAP_MODEL, nType));
+		m_pMapModel.emplace_back(CModel::CreateSceneManagement(CModel::MODEL_TYPE::MAP_MODEL, m_MapNum));
 		// 位置の設定
 		m_pMapModel[m_pMapModel.size() - 1]->SetPosition(pos);
 		break;
@@ -542,26 +549,8 @@ void CMap::MapUpdate()
 		// マップエディター
 		if (ImGui::BeginTabItem("MapEditor"))
 		{
+			// マップのコンボボックス
 			MapComboBox(nNowMapSelect, nNowMapSelect);
-
-			//// オブジェクト番号の選択
-			//ImGui::InputInt("nowMapNum", &nNowMapSelect, 1, 20, 0);
-
-			//// 範囲制限
-			//if (nNowMapSelect <= 0)
-			//{
-			//	nNowMapSelect = 0;
-			//}
-			//else if (nNowMapSelect >= MAP_MAX)
-			//{
-			//	// 最後の番号にする
-			//	nNowMapSelect = MAP_MAX - 1;
-			//}
-
-			//// 選択したマップ番号代入
-			//m_MapNum = (MAP)nNowMapSelect;
-
-			////m_pMapModel[nNowMapSelect]->SetModelConut(nNowMapSelect);
 
 			ImGui::EndTabItem();
 		}
