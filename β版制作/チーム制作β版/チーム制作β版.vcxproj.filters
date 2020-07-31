@@ -280,6 +280,9 @@
     <ClCompile Include="SourceCode\diffusiongun.cpp">
       <Filter>Wepon</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\sound.cpp">
+      <Filter>Option</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SourceCode\mesh.h">
@@ -569,6 +572,9 @@
     </ClInclude>
     <ClInclude Include="SourceCode\diffusiongun.h">
       <Filter>Wepon</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\sound.h">
+      <Filter>Option</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

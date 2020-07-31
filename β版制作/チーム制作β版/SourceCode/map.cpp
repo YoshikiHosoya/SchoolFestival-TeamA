@@ -54,7 +54,7 @@ char *CMap::m_WaveFileName[WAVE_MAX] =
 // =====================================================================================================================================================================
 // マクロ定義
 // =====================================================================================================================================================================
-#define TranslucentColor			(D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.5f))		//半透明
+#define TranslucentColor			(D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.5f))		// 半透明
 #define ButtonSpace					(250)									// ボタンの間隔
 
 // =====================================================================================================================================================================
@@ -76,6 +76,8 @@ CMap::CMap()
 	m_nOldSelect = 0;
 	m_WavePos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_ModelPosOld = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_TransitionPos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_TransitionMapID = 0;
 }
 
 // =====================================================================================================================================================================
@@ -124,6 +126,15 @@ void CMap::MapModelLoad()
 			{
 				fgets(cReadText, sizeof(cReadText), pFile);
 				sscanf(cReadText, "%s", &cHeadText);
+
+				if (strcmp(cHeadText, "TRANSITION_POS_X") == 0)
+				{
+					sscanf(cReadText, "%s %s %f", &cDie, &cDie,&m_TransitionPos.x);
+				}
+				if (strcmp(cHeadText, "TRANSITION_MAP_ID") == 0)
+				{
+					sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_TransitionMapID);
+				}
 
 				char cEndSetText[32];			// END_SET
 
@@ -231,6 +242,13 @@ void CMap::MapModelSave()
 		fprintf(pFile, "SCRIPT\n");
 		fprintf(pFile, NEWLINE);
 
+		fprintf(pFile, COMMENT02);
+		fprintf(pFile, "// 遷移するための情報\n");
+		fprintf(pFile, COMMENT02);
+		fprintf(pFile, "TRANSITION_POS_X		= %.0f\n", m_TransitionPos.x);
+		fprintf(pFile, "TRANSITION_MAP_ID		= %d\n", m_TransitionMapID);
+		fprintf(pFile, NEWLINE);
+
 		for (int nModelType = 0; nModelType < ARRANGEMENT_MODEL_MAX; nModelType++)
 		{
 			// セーブするモデルのヘッダー
@@ -250,11 +268,8 @@ void CMap::MapModelSave()
 		}
 		fprintf(pFile, "END_SCRIPT\n");
 
-		for (int nModelType = 0; nModelType < ARRANGEMENT_MODEL_MAX; nModelType++)
-		{
-			// 読み込み成功時の結果表示
-			LoadSuccessMessage(nModelType);
-		}
+		// 読み込み成功時の結果表示
+		MessageBox(NULL, "セーブしました", m_MapModelFileName[m_MapNum], MB_OK | MB_ICONINFORMATION);
 
 		// ファイルを閉じる
 		fclose(pFile);
@@ -262,7 +277,7 @@ void CMap::MapModelSave()
 	else
 	{
 		// 読み込み失敗時の警告表示
-		//LoadFailureMessage(ModelType);
+		MessageBox(NULL, "マップモデルの読み込み失敗", m_MapModelFileName[m_MapNum], MB_ICONWARNING);
 	}
 }
 
@@ -343,7 +358,7 @@ void CMap::MapModelCreate(int ModelType, int nType, D3DXVECTOR3 pos)
 	/* --- マップ --- */
 	case CMap::ARRANGEMENT_MODEL_MAP:
 		// オブジェクトの生成
-		m_pMapModel.emplace_back(CModel::CreateSceneManagement(CModel::MODEL_TYPE::MAP_MODEL, nType));
+		m_pMapModel.emplace_back(CModel::CreateSceneManagement(CModel::MODEL_TYPE::MAP_MODEL, m_MapNum));
 		// 位置の設定
 		m_pMapModel[m_pMapModel.size() - 1]->SetPosition(pos);
 		break;
@@ -542,26 +557,8 @@ void CMap::MapUpdate()
 		// マップエディター
 		if (ImGui::BeginTabItem("MapEditor"))
 		{
+			// マップのコンボボックス
 			MapComboBox(nNowMapSelect, nNowMapSelect);
-
-			//// オブジェクト番号の選択
-			//ImGui::InputInt("nowMapNum", &nNowMapSelect, 1, 20, 0);
-
-			//// 範囲制限
-			//if (nNowMapSelect <= 0)
-			//{
-			//	nNowMapSelect = 0;
-			//}
-			//else if (nNowMapSelect >= MAP_MAX)
-			//{
-			//	// 最後の番号にする
-			//	nNowMapSelect = MAP_MAX - 1;
-			//}
-
-			//// 選択したマップ番号代入
-			//m_MapNum = (MAP)nNowMapSelect;
-
-			////m_pMapModel[nNowMapSelect]->SetModelConut(nNowMapSelect);
 
 			ImGui::EndTabItem();
 		}
@@ -859,7 +856,11 @@ void CMap::SaveModelHeader(FILE * pFile, int ModelType)
 		fprintf(pFile, COMMENT02);
 		fprintf(pFile, "// MAPTYPE情報\n");
 		fprintf(pFile, COMMENT01);
-		fprintf(pFile, "//	[ 0 ]	床\n");
+		fprintf(pFile, "//	[ 0 ]	チュートリアル\n");
+		fprintf(pFile, "//	[ 1 ]	ステージ1_1\n");
+		fprintf(pFile, "//	[ 2 ]	ステージ1_2\n");
+		fprintf(pFile, "//	[ 3 ]	ステージ1_3\n");
+		fprintf(pFile, "//	[ 4 ]	ステージ1_BOSS\n");
 		fprintf(pFile, COMMENT01);
 		fprintf(pFile, COMMENT02);
 		fprintf(pFile, NEWLINE);
@@ -1702,7 +1703,7 @@ void CMap::ComboBoxAll(int nNowSelect)
 
 // =====================================================================================================================================================================
 //
-// 障害物のコンボボックス
+// マップのコンボボックス
 //
 // =====================================================================================================================================================================
 void CMap::MapComboBox(int & nSelectType, int nNowSelect)
@@ -1722,22 +1723,6 @@ void CMap::MapComboBox(int & nSelectType, int nNowSelect)
 		// マップのロード
 		AllDelete();
 		MapLoad((MAP)nSelectType);
-
-		//// NULLチェック
-		//if (m_pMapModel[nNowSelect])
-		//{
-		//	// 捕虜の種類の取得
-		//	int MapType = m_pMapModel[nNowSelect]->GetModelCount();
-
-		//	// 前回と違うとき
-		//	if (MapType != nSelectType)
-		//	{
-		//		// 種類代入
-		//		MapType = nSelectType;
-		//		// 敵のタイプの設定
-		//		m_pMapModel[nNowSelect]->SetModelConut(MapType);
-		//	}
-		//}
 	}
 }
 
@@ -1765,13 +1750,13 @@ void CMap::ObstacleComboBox(int &nSelectType, int nNowSelect)
 		if (m_pObstacle[nNowSelect])
 		{
 			// 捕虜の種類の取得
-			CModel::OBSTACLE_TYPE ObstacleType = (CModel::OBSTACLE_TYPE)m_pObstacle[nNowSelect]->GetModelCount();
+			int ObstacleType = m_pObstacle[nNowSelect]->GetModelCount();
 
 			// 前回と違うとき
 			if (ObstacleType != nSelectType)
 			{
 				// 種類代入
-				ObstacleType = (CModel::OBSTACLE_TYPE)nSelectType;
+				ObstacleType = nSelectType;
 				// 敵のタイプの設定
 				m_pObstacle[nNowSelect]->SetModelConut(ObstacleType);
 			}

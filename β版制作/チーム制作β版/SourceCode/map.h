@@ -57,11 +57,11 @@ public:
 	// マップの種類
 	enum MAP
 	{
-		MAP_TUTORIAL,		// 0
-		MAP_1_1,			// 1
-		MAP_1_2,			// 2
-		MAP_1_3,			// 3
-		MAP_1_BOSS,			// 1
+		MAP_TUTORIAL,		// チュートリアル
+		MAP_1_1,			// 1_1
+		MAP_1_2,			// 1_2
+		MAP_1_3,			// 1_3
+		MAP_1_BOSS,			// 1_BOSS
 
 		MAP_MAX
 	};
@@ -95,11 +95,13 @@ public:
 	/* 静的メンバ関数 */
 	static	CMap	*MapCreate();													// マップの生成
 
-	void	MapUpdate();															// マップの更新
-	void	MapLoad(MAP MapNum);													// マップのロード
-	void	WaveLoad(WAVE WaveNum);													// ウェーブのロード
-
 	/* メンバ関数 */
+	void			MapUpdate();													// マップの更新
+	void			MapLoad(MAP MapNum);											// マップのロード
+	void			WaveLoad(WAVE WaveNum);											// ウェーブのロード
+	void			UpdateDieFlag();												// 死亡フラグ確認関数
+	void			AllDelete();													// 配置しているモデルを全て破棄
+
 	int				GetMaxModel();													// モデルの最大数取得
 	int				GetMaxEnemy();													// 敵の最大数取得
 	int				GetMaxPrisoner();												// 捕虜の最大数取得
@@ -107,6 +109,7 @@ public:
 	int				GetMaxPlayerTank();												// 戦車の最大数取得
 	int				GetMaxBattlePlane();											// 戦闘機の最大数取得
 	int				GetMaxHelicopter();												// ヘリの最大数取得
+	MAP				GetMapNum() { return m_MapNum; };								// マップ番号取得
 	LPD3DXMESH		GetMesh(int nCnt);												// メッシュの取得
 	CModel			*GetModel(int nCnt) { return m_pMapModel[nCnt]; };				// モデルの取得
 	CEnemy			*GetEnemy(int nCnt) { return m_pEnemy[nCnt]; };					// 敵の取得
@@ -116,8 +119,8 @@ public:
 	CBattlePlane	*GetBattlePlane(int nCnt) { return m_pBattlePlane[nCnt]; };		// 戦闘機の取得
 	CHelicopter		*GetHelicopter(int nCnt) { return m_pHelicopter[nCnt]; };		// ヘリコプターの取得
 	WAVE_INFO		GetWaveInfo(int nWaveNum) { return m_aWaveInfo[nWaveNum]; };	// ウェーブ情報の取得
-	void			UpdateDieFlag();													// 死亡フラグ確認関数
-	void			AllDelete();														// 配置しているモデルを全て破棄
+	D3DXVECTOR3		GetTransitionPos() { return m_TransitionPos; };					// 遷移するための位置の取得
+	int				GetTransitionMapID() { return m_TransitionMapID; }				// 次に遷移するためのマップ番号の取得
 
 private:
 	/* メンバ関数 */
@@ -176,6 +179,8 @@ private:
 	static WAVE_INFO			m_aWaveInfo[WAVE_MAX];						// ウェーブの情報
 	D3DXVECTOR3					m_WavePos;									// ウェーブの位置
 	D3DXVECTOR3					m_ModelPosOld;								// モデルの前回の位置
+	D3DXVECTOR3					m_TransitionPos;							// 遷移する位置
+	int							m_TransitionMapID;							// 次に遷移するマップの番号
 };
 
 #endif
