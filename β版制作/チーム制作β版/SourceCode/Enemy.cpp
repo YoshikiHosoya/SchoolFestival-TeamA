@@ -13,6 +13,7 @@
 #include "EnemyAI.h"
 #include "gun.h"
 #include "particle.h"
+#include "sound.h"
 //====================================================================
 //マクロ定義
 //====================================================================
@@ -177,6 +178,8 @@ bool CEnemy::DefaultMotion(void)
 void CEnemy::DamageReaction()
 {
 	SetState(CCharacter::CHARACTER_STATE_DAMAGE_RED);
+
+	CManager::GetSound()->Play(CSound::LABEL_SE_HIT);
 }
 //====================================================================
 //死んだ時のリアクション

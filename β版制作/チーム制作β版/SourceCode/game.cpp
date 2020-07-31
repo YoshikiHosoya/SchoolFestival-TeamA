@@ -59,7 +59,7 @@ HRESULT CGame::Init(void)
 	m_pMap->MapLoad(CMap::MAP_1_1);			// マップのロード
 
 	m_pPlayer	= CPlayer::Create();
-	m_pPlayer->SetLife(30);
+	m_pPlayer->SetLife(10);
 	m_pPlayer->SetPosition(D3DXVECTOR3(50.0f, 100.0f, 0.0f));
 
 	m_pPause->CreatePause();
@@ -101,18 +101,6 @@ void CGame::Update(void)
 {
 	//キーボード情報取得
 	CKeyboard *key = CManager::GetInputKeyboard();
-
-
-	if (key->GetKeyboardTrigger(DIK_F6))
-	{
-		CManager::GetRenderer()->GetFade()->SetFade(CFADE::FADETYPE::FADETYPE_MAPMOVE, CMap::MAP_1_1);
-	}
-
-	if (key->GetKeyboardTrigger(DIK_F7))
-	{
-		CManager::GetRenderer()->GetFade()->SetFade(CFADE::FADETYPE::FADETYPE_MAPMOVE, CMap::MAP_1_BOSS);
-	}
-
 
 	// 死亡判定が出ているかの確認
 	m_pMap->UpdateDieFlag();
@@ -160,6 +148,7 @@ CMap * CGame::GetMap(void)
 //==========================================================
 void CGame::Draw(void)
 {
+	m_pGameManager->Draw();
 }
 //==========================================================
 // デバッグ情報表記
@@ -194,8 +183,11 @@ void CGame::DebugCollision(CKeyboard *key)
 	}
 
 
-
-
+	//ボスマップ
+	if (key->GetKeyboardTrigger(DIK_F7))
+	{
+		CManager::GetRenderer()->GetFade()->SetFade(CFADE::FADETYPE::FADETYPE_MAPMOVE, CMap::MAP_1_BOSS);
+	}
 
 	// 当たり判定ラインの表示非表示
 	if (key->GetKeyboardPress(DIK_LCONTROL))

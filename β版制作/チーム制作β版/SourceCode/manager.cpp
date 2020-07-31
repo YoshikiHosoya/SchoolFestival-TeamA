@@ -16,6 +16,7 @@
 #include "hosso/Debug_EffectViewer.h"
 #include "Debug_MapEditor.h"
 #include "XInputPad.h"
+#include "sound.h"
 //他のとこでも使えるようにするメンバ
 CRenderer		*CManager::m_pRenderer		= nullptr;
 CKeyboard		*CManager::m_pInputKeyboard	= nullptr;
@@ -24,6 +25,7 @@ CBaseMode		*CManager::m_pBaseMode		= nullptr;
 CMouse			*CManager::m_pMouse			= nullptr;
 CManager::MODE	CManager::m_mode = CManager::MODE_TITLE;
 CXInputPad		*CManager::m_pPad			= nullptr;
+CSound			*CManager::m_pSound = nullptr;
 
 
 CManager::CManager()
@@ -43,7 +45,8 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	m_pInputKeyboard = new CKeyboard;
 	m_pMouse = new CMouse;
 	m_pPad = new CXInputPad;
-	//m_pMouse = new CMouse;
+	m_pSound = new CSound;
+
 	//初期化処理
 	if (FAILED(m_pRenderer->Init(hWnd, TRUE)))
 	{
@@ -52,6 +55,8 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	m_pInputKeyboard->InitInput(hInstance, hWnd);
 	m_pMouse->Init(hInstance, hWnd);
 	m_pPad->Init(hInstance, hWnd);
+
+	m_pSound->Init(hWnd);
 	CBaseMode::BaseLoad(hWnd);
 	CManager::SetMode(m_mode);
 	return S_OK;
@@ -63,16 +68,39 @@ void CManager::Uninit(void)
 {
 	//ベースの素材破棄
 	CBaseMode::BaseUnload();
-	m_pRenderer->Uninit();
-	m_pMouse->Uninit();
-	m_pPad->Uninit();
 	//nullcheck
+	if (m_pRenderer)
+	{
+		m_pRenderer->Uninit();
+		delete m_pRenderer;
+		m_pRenderer = nullptr;
+	}
+	if (m_pMouse)
+	{
+		m_pMouse->Uninit();
+		delete m_pMouse;
+		m_pMouse = nullptr;
+	}
+	if (m_pPad)
+	{
+		m_pPad->Uninit();
+		delete m_pPad;
+		m_pPad = nullptr;
+	}
 	if (m_pBaseMode)
 	{
 		m_pBaseMode->Uninit();
 
 		delete m_pBaseMode;
 		m_pBaseMode = nullptr;
+	}
+	if (m_pSound)
+	{
+		m_pSound->Uninit();
+
+		delete m_pSound;
+		m_pSound = nullptr;
+
 	}
 }
 //===========================================
@@ -88,6 +116,7 @@ void CManager::Update(void)
 	{	//モード
 		m_pBaseMode->Update();
 	}
+
 }
 //===========================================
 //描画
@@ -115,6 +144,9 @@ void CManager::SetMode(MODE mode)
 		m_pBaseMode = nullptr;
 	}
 
+	//音源ストップ
+	m_pSound->StopAll();
+
 	//モード切替
 	m_mode = mode;
 
@@ -126,24 +158,27 @@ void CManager::SetMode(MODE mode)
 		//Title
 	case MODE_TITLE:
 		m_pBaseMode = new CTitle;
-		m_pBaseMode->Init();
+		m_pSound->Play(CSound::LABEL_BGM_TITLE);
 		break;
 
 		//Tutorial
 	case MODE_TUTORIAL:
 		m_pBaseMode = new CTutorial;
-		m_pBaseMode->Init();
+		m_pSound->Play(CSound::LABEL_BGM_TUTORIAL);
 		break;
 
 		//Game
 	case MODE_GAME:
 		m_pBaseMode = new CGame;
-		m_pBaseMode->Init();
+		m_pSound->Play(CSound::LABEL_BGM_GAME);
+
 		break;
 
 		//Ranking
 	case MODE_RANKING:
 		m_pBaseMode = new CRanking;
+		m_pSound->Play(CSound::LABEL_BGM_RESULT);
+
 		m_pBaseMode->Init();
 		break;
 
@@ -167,6 +202,13 @@ void CManager::SetMode(MODE mode)
 		m_pBaseMode->Init();
 
 		break;
+	}
+
+	//nullcheck
+	if (m_pBaseMode)
+	{
+		//初期化
+		m_pBaseMode->Init();
 	}
 }
 
@@ -244,4 +286,12 @@ CGame * CManager::GetGame()
 		}
 	}
 	return nullptr;
+}
+
+//===========================================
+//サウンド取得
+//===========================================
+CSound * CManager::GetSound()
+{
+	return m_pSound;
 }

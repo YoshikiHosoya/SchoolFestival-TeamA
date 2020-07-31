@@ -474,34 +474,37 @@ void CPlayer::AttackUpdate(void)
 void CPlayer::PadMoveUpdate(void)
 {
 	D3DXVECTOR3 MoveValue = ZeroVector3;
-
-	if (CHossoLibrary::PadMoveInput(MoveValue, GetCharacterDirection(), GetJump()))
+	if (m_bRespawn == false)
 	{
-		Move(MoveValue.x, MoveValue.y);
-	}
 
-	CXInputPad *pad = CManager::GetPad();
-	D3DXVECTOR3 InputValue = ZeroVector3;
-	pad->GetStickLeft(&InputValue.x, &InputValue.y);//パッドの入力値を代入
-
-	InputValue.x /= STICK_MAX_RANGE;//値の正規化
-	InputValue.y /= STICK_MAX_RANGE;//値の正規化
-
-	//ジャンプモーションじゃない時
-	if (GetMotionType() != PLAYER_MOTION_JUMP)
-	{
-		//ジャンプストップモーションじゃない時
-		if (GetMotionType() != PLAYER_MOTION_JUMPSTOP)
+		if (CHossoLibrary::PadMoveInput(MoveValue, GetCharacterDirection(), GetJump()))
 		{
-			if (GetMotionType() != PLAYER_MOTION_ATTACK01)
+			Move(MoveValue.x, MoveValue.y);
+		}
+
+		CXInputPad *pad = CManager::GetPad();
+		D3DXVECTOR3 InputValue = ZeroVector3;
+		pad->GetStickLeft(&InputValue.x, &InputValue.y);//パッドの入力値を代入
+
+		InputValue.x /= STICK_MAX_RANGE;//値の正規化
+		InputValue.y /= STICK_MAX_RANGE;//値の正規化
+
+		//ジャンプモーションじゃない時
+		if (GetMotionType() != PLAYER_MOTION_JUMP)
+		{
+			//ジャンプストップモーションじゃない時
+			if (GetMotionType() != PLAYER_MOTION_JUMPSTOP)
 			{
-				//Sを押したらしゃがみモーション
-				if (InputValue.y < -0.6f && GetJump() == true)
+				if (GetMotionType() != PLAYER_MOTION_ATTACK01)
 				{
-					if (m_bCruch == false && GetMotionType() != PLAYER_MOTION_WALK)
+					//Sを押したらしゃがみモーション
+					if (InputValue.y < -0.6f && GetJump() == true)
 					{
-						SetMotion(PLAYER_MOTION_SQUATSTOP);
-						m_bCruch = true;
+						if (m_bCruch == false && GetMotionType() != PLAYER_MOTION_WALK)
+						{
+							SetMotion(PLAYER_MOTION_SQUATSTOP);
+							m_bCruch = true;
+						}
 					}
 				}
 			}
@@ -536,7 +539,7 @@ bool CPlayer::DefaultMotion(void)
 void CPlayer::MapChangePlayerRespawn()
 {
 	SetState(CCharacter::CHARACTER_STATE_INVINCIBLE);
-	SetPosition(D3DXVECTOR3(100.0f,0.0f,0.0f));
+	SetPosition(ZeroVector3);
 	m_bRideVehicle = false;
 	m_pKnife->EndMeleeAttack();
 }

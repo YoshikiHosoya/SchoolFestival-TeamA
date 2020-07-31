@@ -96,6 +96,7 @@ private:
 	void SetAnimationParam();										//アニメーションのパラメータ設定
 	void Collision();												//判定
 	void RendererSetting();											//描画の設定
+	void SetSound();												//エフェクトに応じた音再生
 };
 
 #endif

@@ -95,8 +95,7 @@ void CRocketlauncher::DeleteBullet()
 {
 	CBullet::DeleteBullet();
 
-	CTexAnimation3D_Collision::Create(GetPosition(), D3DXVECTOR3(60.0f, 80.0f, 0.0f), ZeroVector3,
-		CTexture::SEPARATE_TEX_EFFECT_EXPLOSION01, 2, OBJTYPE_EXPROSION, GetTag(), GetBulletParam(CGun::GUNTYPE_ROCKETLAUNCHER)->nPower, 1, true);
+	CParticle::CreateFromText(GetPosition(), ZeroVector3, CParticleParam::EFFECT_EXPLOSION, GetTag(), GetBulletParam(CGun::GUNTYPE_ROCKETLAUNCHER)->nPower);
 
 }
 

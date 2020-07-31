@@ -13,6 +13,7 @@ class CBaseMode;
 class CMouse;
 class CXInputPad;
 class CTutorial;
+class CSound;
 
 class CManager
 {
@@ -46,6 +47,8 @@ public:
 	static CMouse *GetMouse();
 	static CXInputPad *GetPad(void);
 	static CGame *GetGame();
+	static CSound *GetSound();
+
 
 private:
 	static MODE m_mode;
@@ -55,5 +58,6 @@ private:
 	static CParticle *m_Particle;
 	static CBaseMode *m_pBaseMode;
 	static CXInputPad *m_pPad;
+	static CSound *m_pSound;
 };
 #endif

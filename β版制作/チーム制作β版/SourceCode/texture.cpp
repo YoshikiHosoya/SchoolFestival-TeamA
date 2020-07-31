@@ -33,11 +33,11 @@ FILENAME_LIST CTexture::m_aTexFileName =
 	{ "data/TEXTURE/Mesh/Grass.jpg" },						//草
 	{ "data/TEXTURE/Mesh/Block.jpg" },						//ブロック
 	{ "data/TEXTURE/Mesh/Water.jpg" },						//水
-	{ "data/TEXTURE/UI/remain.png" },						//残機のUI
-	{ "data/TEXTURE/UI/arms.png" },							//弾の残数のUI
-	{ "data/TEXTURE/UI/bomb.png" },							//グレネードの残数のUI
-	{ "data/TEXTURE/UI/infinity.png" },						//弾数無限のUI
-	{ "data/TEXTURE/UI/frame.png" },						//枠のUI
+	{ "data/TEXTURE/UI/Player_UI/stock.png" },				//残機のUI
+	{ "data/TEXTURE/UI/Player_UI/arms.png" },				//弾の残数のUI
+	{ "data/TEXTURE/UI/Player_UI/bomb.png" },				//グレネードの残数のUI
+	{ "data/TEXTURE/UI/Player_UI/infinity.png" },			//弾数無限のUI
+	{ "data/TEXTURE/UI/Player_UI/frame.png" },				//枠のUI
 	{ "data/TEXTURE/UI/title.png" },						//タイトルロゴ
 	{ "data/TEXTURE/UI/start.png" },						//スタート
 
@@ -84,7 +84,7 @@ FILENAME_LIST CTexture::m_aSeparateTexFileNameList =
 	{ "data/TEXTURE/Effect/Fire01.png" },						//ファイア
 	{ "data/TEXTURE/Effect/Fire02.png" },						//ファイア
 	{ "data/TEXTURE/UI/num.png" },								//ナンバー
-	{ "data/TEXTURE/UI/life.png" },								//体力のUI
+	{ "data/TEXTURE/UI/Player_UI/life.png" },					//体力のUI
 };
 
 

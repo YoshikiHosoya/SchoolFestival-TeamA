@@ -21,6 +21,7 @@
 #include "TexAnimation3D.h"
 #include "TrackingGun.h"
 #include "diffusiongun.h"
+#include "sound.h"
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
 // =====================================================================================================================================================================
@@ -300,6 +301,9 @@ void CGun::Shot()
 			//ノズルフラッシュ
 			CTexAnimation3D::Create(m_ShotPos, D3DXVECTOR3(30.0f, 30.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),
 				CTexture::SEPARATE_TEX_EFFECT_SHOTFLASH, 1, CScene::OBJTYPE_EFFECT);
+
+			//音再生
+			CManager::GetSound()->Play(CSound::LABEL_SE_SHOT);
 		}
 	}
 }
@@ -362,6 +366,9 @@ void CGun::MultipleShot()
 
 				// 弾の反応
 				pBullet->BulletReaction(m_ShotRot);
+
+				//音再生
+				CManager::GetSound()->Play(CSound::LABEL_SE_SHOT);
 
 				//ノズルフラッシュ
 				CTexAnimation3D::Create(m_ShotPos, D3DXVECTOR3(30.0f, 30.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),
