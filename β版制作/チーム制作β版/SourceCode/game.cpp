@@ -117,6 +117,9 @@ void CGame::Update(void)
 	// 死亡判定が出ているかの確認
 	m_pMap->UpdateDieFlag();
 
+	//ゲームの進行管理の更新
+	m_pGameManager->Update();
+
 	// リザルトモードでまだリザルトマネージャーが生成されていなかった時
 	if (m_GameState == GAME_MODE_RESULT && m_pResultManager == nullptr)
 	{

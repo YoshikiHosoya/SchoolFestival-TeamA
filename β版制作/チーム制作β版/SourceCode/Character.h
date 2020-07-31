@@ -19,6 +19,7 @@ public:
 		CHARACTER_STATE_NORMAL,
 		CHARACTER_STATE_DAMAGE,
 		CHARACTER_STATE_DAMAGE_RED,
+		CHARACTER_STATE_DEATH,
 		CHARACTER_STATE_INVINCIBLE,
 		CHARACTER_STATE_MAX
 	}CHARACTER_STATE;
@@ -106,9 +107,10 @@ public:
 	virtual void Update(void);
 	virtual void Draw(void);
 	virtual bool DefaultMotion(void) = 0;
-	virtual void DamageReaction();			//ダメージ時のリアクション
-	virtual void DeathReaction();			//死亡時のリアクション
-	virtual void State();					//ステートに応じた処理
+	virtual void DamageReaction();					//ダメージ時のリアクション
+	virtual void DeathReaction();					//死亡のリアクション
+	virtual void State();							//ステートに応じた処理
+	virtual void StateChangeReaction();				//ステート変更処理
 
 	void Move(float move, float fdest);
 	void AddDamage(int Damage);
@@ -126,6 +128,7 @@ public:
 	void SetLife(int Life);
 	void SetJump(bool bJump);
 	void SetState(CHARACTER_STATE state);
+	void SetStateCount(int nCntState);
 	void SetMtxWorld(D3DXMATRIX mtxWorld);
 	void SetCharacterType(CHARACTER_TYPE CharaType);
 	void SetGravity(bool gravity);
