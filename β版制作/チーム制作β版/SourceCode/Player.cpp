@@ -25,6 +25,7 @@
 #include "playerUI.h"
 #include "playertank.h"
 #include "battleplane.h"
+#include "resultmanager.h"
 
 //====================================================================
 //ƒ}ƒNƒ’è‹`
