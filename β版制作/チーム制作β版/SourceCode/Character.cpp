@@ -10,6 +10,7 @@
 #include "Xinput.h"
 #include "collision.h"
 #include "hosso\/Debug_ModelViewer.h"
+#include "particle.h"
 
 //オフセットの読み込みファイル
 char *CCharacter::m_LoadOffsetFileName[CHARACTER_TYPE_MAX] =
@@ -370,8 +371,9 @@ void CCharacter::State()
 	case CHARACTER_STATE_NORMAL:
 		break;
 	case CHARACTER_STATE_DAMAGE:
-		m_nStateCnt++;
-		if (m_nStateCnt % 60 == 0)
+
+		m_nStateCnt--;
+		if (m_nStateCnt <= 0)
 		{
 			SetState(CHARACTER_STATE_NORMAL);
 		}
@@ -385,10 +387,12 @@ void CCharacter::State()
 		}
 		break;
 	case CHARACTER_STATE_DAMAGE_RED:
-		m_nStateCnt++;
+
+		m_nStateCnt--;
 
 		//時間経過で
-		if (m_nStateCnt > 3)
+
+		if (m_nStateCnt <= 0)
 		{
 			//ステートを元に戻す
 			SetState(CHARACTER_STATE_NORMAL);
@@ -401,8 +405,10 @@ void CCharacter::State()
 		}
 		break;
 	case CHARACTER_STATE_INVINCIBLE:
-		m_nStateCnt++;
-		if (m_nStateCnt % 120 == 0)
+
+		m_nStateCnt--;
+
+		if (m_nStateCnt <= 0)
 		{
 			SetState(CHARACTER_STATE_NORMAL);
 			ChangeColor(false, D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f));
@@ -416,8 +422,60 @@ void CCharacter::State()
 			ChangeColor(true, D3DXCOLOR(0.6f, 0.6f, 0.6f, 0.0f));
 		}
 		break;
+
+	case CHARACTER_STATE_DEATH:
+		m_nStateCnt--;
+
+		if (m_nStateCnt > 5)
+		{
+			//血のエフェクト
+			CParticle::CreateFromText(GetPosition(), GetShotDirection(), CParticleParam::EFFECT_BLOOD);
+		}
+
+		if (m_nStateCnt <= 0)
+		{
+			SetState(CHARACTER_STATE_NORMAL);
+
+			//死亡時のリアクション処理
+			//派生クラスがオーバーライド
+			DeathReaction();
+		}
+
+		break;
 	}
 
+}
+
+//====================================================================
+//ステートが変更した瞬間
+//どれくらいそのステートが続くか
+//オーバーライドで上書きして
+//====================================================================
+void CCharacter::StateChangeReaction()
+{
+	switch (m_state)
+	{
+	case CHARACTER_STATE_NORMAL:
+		m_nStateCnt = 0;
+		break;
+
+	case CHARACTER_STATE_DAMAGE:
+		m_nStateCnt = 60;
+
+		break;
+	case CHARACTER_STATE_DAMAGE_RED:
+		m_nStateCnt = 3;
+
+		break;
+	case CHARACTER_STATE_INVINCIBLE:
+		m_nStateCnt = 120;
+
+		break;
+	case CHARACTER_STATE_DEATH:
+		m_nStateCnt = 10;
+
+		break;
+	}
 }
 //====================================================================
 //モデルのムーヴ
@@ -465,9 +523,18 @@ void CCharacter::AddDamage(int Damage)
 	Life -= Damage;
 	SetLife(Life);
 
-	//ダメージを受けた時のリアクション
-	//オーバーライド
-	DamageReaction();
+
+	if (GetLife() <= 0)
+	{
+		SetState(CHARACTER_STATE_DEATH);
+	}
+	else
+	{
+
+		//ダメージを受けた時のリアクション
+		//オーバーライド
+		DamageReaction();
+	}
 }
 //====================================================================
 //回転の差分の設定
@@ -500,7 +567,17 @@ void CCharacter::SetState(CHARACTER_STATE state)
 		m_state = state;
 		m_nStateCnt = 0;
 		ChangeColor(false, D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f));
+
+		//ステートが変更した時のリアクション
+		StateChangeReaction();
 	}
+}
+//====================================================================
+//ステートのカウント設定
+//====================================================================
+void CCharacter::SetStateCount(int nCntState)
+{
+	m_nStateCnt = nCntState;
 }
 //====================================================================
 //マトリックスの設定

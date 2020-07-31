@@ -9,29 +9,31 @@
 SCRIPT
 	PARAMSET
 
-		SPEEDRANDOM = 1							//速度がランダムかどうか
-		GRAVITY = 1								//重力をつけるか
+		SPEEDRANDOM = 0							//速度がランダムかどうか
+		GRAVITY = 0								//重力をつけるか
 		ALPHABLEND_ADD = 1							//加算合成するか
 		ALPHABLEND_SUB = 0							//減算合成するか
 		ZTEST = 0							//Zテストするか
 		ZWRITE = 1							//Zライティングするか
 		BILLBOARD = 1							//ビルボードするか
-		ANIMATION = 0							//アニメーションするか
+		ANIMATION = 1							//アニメーションするか
 		COLLISION = 0							//当たり判定があるかどうか
 		TEXTURE = 1								//テクスチャ
-		SHAPE = 1								//パーティクルの出し方
+		ANIMATION_LOOP = 0						//アニメーションループするか
+		ANIMATION_CNTSWITCH = 2					//切替のカウント
+		SHAPE = 0								//パーティクルの出し方
 		LIFE = 60								//ライフ
-		NUMBER = 6								//個数
-		SPEED = 17.5								//速度
-		RANGE = 0.3								//範囲
-		ALPHADAMPING = 0.91						//アルファ値の減衰値
-		GRAVITYPOWER = 0.29						//重力の強さ
+		NUMBER = 1								//個数
+		SPEED = 0.0								//速度
+		RANGE = 0.5								//範囲
+		ALPHADAMPING = 1.00						//アルファ値の減衰値
+		GRAVITYPOWER = 0.80						//重力の強さ
 		LOCALPOS = 0.00 0.00 0.00				//ローカル座標
 		LOCALPOS_RANGE = 0.00 0.00 0.00				//ローカル座標がランダム時の値の範囲
-		SIZE = 35.50 35.50 0.00				//サイズ
+		SIZE = 80.00 110.00 0.00				//サイズ
 		SIZEDAMPING = 1.00 1.00 0.00			//サイズ減衰量
-		COLOR = 1.0 0.0 0.0 1.0					//色
-		ROT = 0.81 0.00 0.00					//回転量
+		COLOR = 1.0 1.0 1.0 1.0					//色
+		ROT = 0.00 0.00 0.00					//回転量
 
 	END_PARAMSET
 END_SCRIPT

@@ -13,6 +13,8 @@
 #include "renderer.h"
 #include "fade.h"
 #include "inputKeyboard.h"
+#include "Xinput.h"
+#include "XInputPad.h"
 
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
@@ -78,9 +80,15 @@ void CRankingManager::Update(void)
 {
 	//キーボード情報取得
 	CKeyboard *key = CManager::GetInputKeyboard();
-
+	// パッド取得
+	CXInputPad *pad = CManager::GetPad();
 	// エンターを押したとき
-	if (key->GetKeyboardTrigger(DIK_RETURN))
+
+	if (key->GetKeyboardTrigger(DIK_RETURN) ||
+		pad->GetTrigger(pad->JOYPADKEY_B, 1) ||
+		pad->GetTrigger(pad->JOYPADKEY_A, 1) ||
+		pad->GetTrigger(pad->JOYPADKEY_X, 1) ||
+		pad->GetTrigger(pad->JOYPADKEY_Y, 1))
 	{
 		// ゲームモードへ状態遷移
 		CManager::GetRenderer()->GetFade()->SetFade(CFADE::FADETYPE::FADETYPE_MODE, CManager::MODE_TITLE);

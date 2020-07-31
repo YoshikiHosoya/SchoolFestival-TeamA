@@ -10,6 +10,11 @@
 //------------------------------------------------------------------------------
 #include "GameManager.h"
 #include "scene2D.h"
+#include "map.h"
+#include "fade.h"
+#include "Player.h"
+#include "game.h"
+#include "camera.h"
 
 //------------------------------------------------------------------------------
 //Ã“Iƒƒ“ƒo•Ï”‚Ì‰Šú‰»
@@ -39,6 +44,15 @@ CGameManager::~CGameManager()
 //------------------------------------------------------------------------------
 void CGameManager::Update()
 {
+	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
+
+	if (pPlayer)
+	{
+		if(pPlayer->GetPosition().x >= 8500.0f)
+		{
+			CManager::GetRenderer()->GetFade()->SetFade(CFADE::FADETYPE::FADETYPE_MAPMOVE, CMap::MAP_1_BOSS);
+		}
+	}
 }
 
 //------------------------------------------------------------------------------

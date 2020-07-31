@@ -40,6 +40,7 @@ public:
 	typedef struct
 	{
 		int			nType;			// 種類
+		int			nItemType;		// 確定ドロップするアイテムのタイプ
 		D3DXVECTOR3	pos;			// 位置
 		int			nFrame;			// フレーム
 		bool		bEvent;			// イベントフラグ
