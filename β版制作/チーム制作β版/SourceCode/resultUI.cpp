@@ -297,30 +297,31 @@ void CResultUI::ResultUICreate()
 			// シーン2Dの生成
 			m_apScene2D[nCnt] = CScene2D::Create(m_Pos[nCnt], m_Size[nCnt]);
 
-			if (nCnt == RESULT_UI_EVALUATION02P)
+			if (nCnt == RESULT_UI_EVALUATION01P)
 			{
 				// テクスチャの割り当て
-				m_apScene2D[nCnt]->BindTexture(CTexture::GetTexture((CTexture::TEX_TYPE)(RESULT_UI_EVALUATION01P)));
+				m_apScene2D[nCnt]->BindTexture(CTexture::GetTexture((CTexture::TEX_TYPE)(nCnt + CTexture::TEX_UI_RESULT_GOOD-3)));
 			}
-			else if (nCnt == RESULT_UI_EVALUATION12P)
+			else if (nCnt == RESULT_UI_EVALUATION11P)
 			{
 				// テクスチャの割り当て
-				m_apScene2D[nCnt]->BindTexture(CTexture::GetTexture((CTexture::TEX_TYPE)(RESULT_UI_EVALUATION11P)));
+				m_apScene2D[nCnt]->BindTexture(CTexture::GetTexture((CTexture::TEX_TYPE)(nCnt + CTexture::TEX_UI_RESULT_GREATE)));
 			}
-			else if (nCnt == RESULT_UI_EVALUATION22P)
+			else if (nCnt == RESULT_UI_EVALUATION21P)
 			{
 				// テクスチャの割り当て
-				m_apScene2D[nCnt]->BindTexture(CTexture::GetTexture((CTexture::TEX_TYPE)(RESULT_UI_EVALUATION21P)));
+				m_apScene2D[nCnt]->BindTexture(CTexture::GetTexture((CTexture::TEX_TYPE)(nCnt + CTexture::TEX_UI_RESULT_NOPRISONER)));
 			}
+
 			else if (nCnt >= RESULT_UI_MISSIONCOMP1)
 			{
 				// テクスチャの割り当て
-				m_apScene2D[nCnt]->BindTexture(CTexture::GetTexture((CTexture::TEX_TYPE)(nCnt + 25 - 3)));
+				m_apScene2D[nCnt]->BindTexture(CTexture::GetTexture((CTexture::TEX_TYPE)(CTexture::TEX_UI_RESULT_MISSION1COMPLETE)));
 			}
 			else
 			{
 				// テクスチャの割り当て
-				m_apScene2D[nCnt]->BindTexture(CTexture::GetTexture((CTexture::TEX_TYPE)(nCnt + 25)));
+				m_apScene2D[nCnt]->BindTexture(CTexture::GetTexture((CTexture::TEX_TYPE)(nCnt + CTexture::TEX_UI_RESULT_BG)));
 			}
 		}
 	}

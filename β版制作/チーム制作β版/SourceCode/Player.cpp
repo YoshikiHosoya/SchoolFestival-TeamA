@@ -25,6 +25,7 @@
 #include "playerUI.h"
 #include "playertank.h"
 #include "battleplane.h"
+#include "resultmanager.h"
 
 //====================================================================
 //ƒ}ƒNƒ’è‹`
@@ -535,7 +536,7 @@ bool CPlayer::DefaultMotion(void)
 void CPlayer::MapChangePlayerRespawn()
 {
 	SetState(CCharacter::CHARACTER_STATE_INVINCIBLE);
-	SetPosition(D3DXVECTOR3(100.0f,0.0f,0.0f));
+	SetPosition(ZeroVector3);
 	m_bRideVehicle = false;
 	m_pKnife->EndMeleeAttack();
 }
