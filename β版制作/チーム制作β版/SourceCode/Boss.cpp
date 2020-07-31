@@ -98,12 +98,6 @@ void CBoss::Uninit(void)
 //====================================================================
 void CBoss::Update(void)
 {
-	//体力が0以下になった時
-	if (this->GetLife() <= 0)
-	{
-		this->SetDieFlag(true);
-		CParticle::CreateFromText(GetPosition(), GetShotDirection(), CParticleParam::EFFECT_BLOOD);
-	}
 	//AI関連処理
 	if (m_pAI != nullptr)
 	{
@@ -157,13 +151,52 @@ bool CBoss::DefaultMotion(void)
 //====================================================================
 void CBoss::DeathReaction()
 {
+	CCharacter::DeathReaction();
+
 	//nullcheck
 	if(CManager::GetGame())
 	{
 		CManager::GetGame()->SetGameMode(CGame::GAME_MODE_RESULT);
 	}
 
-	CCharacter::DeathReaction();
+	SetDieFlag(true);
+}
+//====================================================================
+//ステートに応じた処理
+//====================================================================
+void CBoss::State()
+{
+	CCharacter::State();
+
+	//ステータスの処理
+	switch (CCharacter::GetCharacterState())
+	{
+	case CHARACTER_STATE_DEATH:
+		//爆発
+		CParticle::CreateFromText(GetPosition() + CHossoLibrary::RandomVector3(150.0f), ZeroVector3, CParticleParam::EFFECT_NO_COLLISION_EXPLOSION);
+		break;
+	}
+}
+//====================================================================
+//ステート切り替え時のリアクション
+//====================================================================
+void CBoss::StateChangeReaction()
+{
+	CCharacter::StateChangeReaction();
+
+	//ステータスの処理
+	switch (CCharacter::GetCharacterState())
+	{
+	case CHARACTER_STATE_DEATH:
+ 		SetStateCount(300);
+
+		if (m_pAI != nullptr)
+		{
+			delete m_pAI;
+			m_pAI = nullptr;
+		}
+		break;
+	}
 }
 //====================================================================
 //ボスの銃の取得
