@@ -102,18 +102,6 @@ void CGame::Update(void)
 	//キーボード情報取得
 	CKeyboard *key = CManager::GetInputKeyboard();
 
-
-	if (key->GetKeyboardTrigger(DIK_F6))
-	{
-		CManager::GetRenderer()->GetFade()->SetFade(CFADE::FADETYPE::FADETYPE_MAPMOVE, CMap::MAP_1_1);
-	}
-
-	if (key->GetKeyboardTrigger(DIK_F7))
-	{
-		CManager::GetRenderer()->GetFade()->SetFade(CFADE::FADETYPE::FADETYPE_MAPMOVE, CMap::MAP_1_BOSS);
-	}
-
-
 	// 死亡判定が出ているかの確認
 	m_pMap->UpdateDieFlag();
 
@@ -195,8 +183,11 @@ void CGame::DebugCollision(CKeyboard *key)
 	}
 
 
-
-
+	//ボスマップ
+	if (key->GetKeyboardTrigger(DIK_F7))
+	{
+		CManager::GetRenderer()->GetFade()->SetFade(CFADE::FADETYPE::FADETYPE_MAPMOVE, CMap::MAP_1_BOSS);
+	}
 
 	// 当たり判定ラインの表示非表示
 	if (key->GetKeyboardPress(DIK_LCONTROL))

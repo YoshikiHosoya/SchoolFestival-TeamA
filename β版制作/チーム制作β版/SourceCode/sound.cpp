@@ -36,6 +36,7 @@ HRESULT CSound::Init(HWND hWnd)
 {
 	HRESULT hr;
 	int nCntSound;
+	m_bMute = false;
 
 	// COMライブラリの初期化
 	CoInitializeEx(NULL, COINIT_MULTITHREADED);
@@ -216,33 +217,37 @@ void CSound::Uninit(void)
 //------------------------------------------------------------------------------
 HRESULT CSound::Play(LABEL label)
 {
-	XAUDIO2_VOICE_STATE xa2state;
-	XAUDIO2_BUFFER buffer;
+	//ミュートがかかっていない場合
+	if (!m_bMute)
+	{
+		XAUDIO2_VOICE_STATE xa2state;
+		XAUDIO2_BUFFER buffer;
 
-	// バッファの値設定
-	memset(&buffer, 0, sizeof(XAUDIO2_BUFFER));
-	buffer.AudioBytes = m_aSizeAudio[label];
-	buffer.pAudioData = m_apDataAudio[label];
-	buffer.Flags = XAUDIO2_END_OF_STREAM;
-	buffer.LoopCount = m_aParam[label].nCntLoop;
+		// バッファの値設定
+		memset(&buffer, 0, sizeof(XAUDIO2_BUFFER));
+		buffer.AudioBytes = m_aSizeAudio[label];
+		buffer.pAudioData = m_apDataAudio[label];
+		buffer.Flags = XAUDIO2_END_OF_STREAM;
+		buffer.LoopCount = m_aParam[label].nCntLoop;
 
-	// 状態取得
-	m_apSourceVoice[label]->GetState(&xa2state);
-	if (xa2state.BuffersQueued != 0)
-	{ // 再生中
-	  // 一時停止
-		m_apSourceVoice[label]->Stop(0);
+		// 状態取得
+		m_apSourceVoice[label]->GetState(&xa2state);
+		if (xa2state.BuffersQueued != 0)
+		{ // 再生中
+		  // 一時停止
+			m_apSourceVoice[label]->Stop(0);
 
-		// オーディオバッファの削除
-		m_apSourceVoice[label]->FlushSourceBuffers();
+			// オーディオバッファの削除
+			m_apSourceVoice[label]->FlushSourceBuffers();
+		}
+
+		// オーディオバッファの登録
+		m_apSourceVoice[label]->SubmitSourceBuffer(&buffer);
+
+		// 再生
+		m_apSourceVoice[label]->Start(0);
+
 	}
-
-	// オーディオバッファの登録
-	m_apSourceVoice[label]->SubmitSourceBuffer(&buffer);
-
-	// 再生
-	m_apSourceVoice[label]->Start(0);
-
 	return S_OK;
 }
 //------------------------------------------------------------------------------

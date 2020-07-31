@@ -130,6 +130,9 @@ void CManager::SetMode(MODE mode)
 		m_pBaseMode = nullptr;
 	}
 
+	//音源ストップ
+	m_pSound->StopAll();
+
 	//モード切替
 	m_mode = mode;
 
@@ -141,24 +144,27 @@ void CManager::SetMode(MODE mode)
 		//Title
 	case MODE_TITLE:
 		m_pBaseMode = new CTitle;
-		m_pBaseMode->Init();
+		m_pSound->Play(CSound::LABEL_BGM_TITLE);
 		break;
 
 		//Tutorial
 	case MODE_TUTORIAL:
 		m_pBaseMode = new CTutorial;
-		m_pBaseMode->Init();
+		m_pSound->Play(CSound::LABEL_BGM_TUTORIAL);
 		break;
 
 		//Game
 	case MODE_GAME:
 		m_pBaseMode = new CGame;
-		m_pBaseMode->Init();
+		m_pSound->Play(CSound::LABEL_BGM_GAME);
+
 		break;
 
 		//Ranking
 	case MODE_RANKING:
 		m_pBaseMode = new CRanking;
+		m_pSound->Play(CSound::LABEL_BGM_RESULT);
+
 		m_pBaseMode->Init();
 		break;
 
@@ -182,6 +188,13 @@ void CManager::SetMode(MODE mode)
 		m_pBaseMode->Init();
 
 		break;
+	}
+
+	//nullcheck
+	if (m_pBaseMode)
+	{
+		//初期化
+		m_pBaseMode->Init();
 	}
 }
 
@@ -266,5 +279,5 @@ CGame * CManager::GetGame()
 //===========================================
 CSound * CManager::GetSound()
 {
-	return nullptr;
+	return m_pSound;
 }

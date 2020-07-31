@@ -13,6 +13,7 @@
 #include "renderer.h"
 #include "ParticleManager.h"
 #include "collision.h"
+#include "sound.h"
 //------------------------------------------------------------------------------
 //静的メンバ変数の初期化
 //------------------------------------------------------------------------------
@@ -544,6 +545,9 @@ void CParticle::SetParticle(D3DXVECTOR3 & pos, D3DXVECTOR3 const & rot, CParticl
 	}
 	//頂点の更新
 	UpdateVertex();
+
+	//音再生
+	SetSound();
 }
 
 //------------------------------------------------------------------------------
@@ -697,4 +701,26 @@ void CParticle::RendererSetting()
 		CManager::GetRenderer()->SetRendererCommand(CRenderer::RENDERER_ZTEST_OFF);
 	}
 
+}
+
+//------------------------------------------------------------------------------
+//エフェクトに合わせた音再生
+//------------------------------------------------------------------------------
+void CParticle::SetSound()
+{
+	switch (m_pParticleParam->GetType())
+	{
+	case CParticleParam::PARTICLE_TEXT::EFFECT_EXPLOSION:
+	case CParticleParam::PARTICLE_TEXT::EFFECT_NO_COLLISION_EXPLOSION:
+		CManager::GetSound()->Play(CSound::LABEL_SE_EXPLOSION);
+		break;
+	case CParticleParam::PARTICLE_TEXT::EFFECT_BLOOD:
+		break;
+	case CParticleParam::PARTICLE_TEXT::EFFECT_LAZER:
+		break;
+	case CParticleParam::PARTICLE_TEXT::EFFECT_FIRE:
+
+		break;
+
+	}
 }

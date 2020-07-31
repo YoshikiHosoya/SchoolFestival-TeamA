@@ -12,6 +12,7 @@
 #include "texture.h"
 #include "Player.h"
 #include "TexAnimation3D_Collision.h"
+#include "particle.h"
 // =====================================================================================================================================================================
 // Ã“Iƒƒ“ƒo•Ï”‚Ì‰Šú‰»
 // =====================================================================================================================================================================
@@ -106,8 +107,7 @@ void CGrenade::Draw(void)
 // =====================================================================================================================================================================
 void CGrenade::DeleteBullet()
 {
-	CTexAnimation3D_Collision::Create(GetPosition(), D3DXVECTOR3(60.0f, 80.0f, 0.0f), ZeroVector3,
-		CTexture::SEPARATE_TEX_EFFECT_EXPLOSION01, 2, OBJTYPE_EXPROSION, GetTag(), GetBulletParam(CGun::GUNTYPE_SHOTGUN)->nPower, 1, true);
+	CParticle::CreateFromText(GetPosition(), ZeroVector3, CParticleParam::EFFECT_EXPLOSION, GetTag(), GetBulletParam(CGun::GUNTYPE_ROCKETLAUNCHER)->nPower);
 
 	CBullet::DeleteBullet();
 }

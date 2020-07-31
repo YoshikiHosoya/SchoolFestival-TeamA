@@ -31,8 +31,7 @@ public:
 		LABEL_BGM_RAIN,								//雨音
 
 		//キャラクターアクション
-		LABEL_SE_SLASH,								//斬撃
-		LABEL_SE_SLASH_STAN,						//斬撃 スタン時
+		LABEL_SE_HIT,								//斬撃
 		LABEL_SE_SLASH_PLAYER,						//斬撃　プレイヤーヒット
 		LABEL_SE_SWING,								//素振り
 		LABEL_SE_WALK,								//歩く
@@ -43,10 +42,7 @@ public:
 
 		//エフェクト
 		LABEL_SE_EXPLOSION,							//爆発
-		LABEL_SE_SPARK,								//電撃
-		LABEL_SE_START_CHAIN,						//連鎖開始の雷
-		LABEL_SE_CHAINING_SPARK,					//連鎖中の電撃
-		LABEL_SE_THUNDER,							//落雷
+		LABEL_SE_SHOT,								//電撃
 
 		//タイトル用
 		LABEL_SE_TITLE_SPARKING,					//タイトル　ビリビリー
@@ -71,6 +67,9 @@ public:
 	void Stop(LABEL label);
 	void StopAll(void);
 
+	void SetMute(bool bMute)	{ m_bMute = bMute; };
+	bool GetMute()				{ return m_bMute; };
+
 private:
 
 	HRESULT CheckChunk(HANDLE hFile, DWORD format, DWORD *pChunkSize, DWORD *pChunkDataPosition);
@@ -82,6 +81,7 @@ private:
 	BYTE *m_apDataAudio[LABEL_MAX] = {};					// オーディオデータ
 	DWORD m_aSizeAudio[LABEL_MAX] = {};						// オーディオデータサイズ
 
+	bool m_bMute;											//ミュート
 
 	typedef struct
 	{
@@ -100,8 +100,7 @@ private:
 		{ "data/BGM/rain.wav", -1 },							//BGM
 
 		//キャラクターアクション
-		{ "data/SE/CharacterAction/slash.wav", 0 },				//SE 斬撃
-		{ "data/SE/CharacterAction/slash_stan.wav", 0 },		//SE 斬撃
+		{ "data/SE/CharacterAction/hit.wav", 0 },				//SE 斬撃
 		{ "data/SE/CharacterAction/player_hit.wav", 0 },		//SE 斬撃　プレイヤーヒット
 		{ "data/SE/CharacterAction/swing.wav", 0 },				//SE 素振り
 		{ "data/SE/CharacterAction/walking.wav", 0 },			//SE 歩く
@@ -111,10 +110,7 @@ private:
 
 		//エフェクト
 		{ "data/SE/Effect/explosion.wav", 0 },					//SE 爆発
-		{ "data/SE/Effect/spark.wav", 0 },						//SE 電撃
-		{ "data/SE/Effect/ChainStartThunder.wav", 0 },			//SE 電撃
-		{ "data/SE/Effect/ChainingSpark.wav", 0 },				//SE 電撃
-		{ "data/SE/Effect/Thunder.wav", 0 },					//SE 落雷
+		{ "data/SE/Effect/shot.wav", 0 },						//SE 電撃
 
 		//タイトル用
 		{ "data/SE/Title/Sparking.wav", 0 },					//SE ビリビリ

@@ -13,6 +13,7 @@
 #include "../renderer.h"
 #include "../inputKeyboard.h"
 #include "../XInputPad.h"
+#include "../sound.h"
 //------------------------------------------------------------------------------
 //ƒ}ƒNƒ
 //------------------------------------------------------------------------------
@@ -103,6 +104,8 @@ bool CHossoLibrary::PressAnyButton(void)
 		InpudPad->GetTrigger(CXInputPad::JOYPADKEY_START,1)||
 		InpudPad->GetTrigger(CXInputPad::JOYPADKEY_A, 1))
 	{
+		//CManager::GetSound()->Play(CSound::LABEL_SE_DECISION);
+
 		return true;
 	}
 	return false;
