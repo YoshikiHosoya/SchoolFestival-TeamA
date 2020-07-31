@@ -109,7 +109,7 @@ void CGame::Update(void)
 	m_pGameManager->Update();
 
 	// リザルトモードでまだリザルトマネージャーが生成されていなかった時
-	if (m_GameState == GAME_MODE_NORMAL && m_pResultManager == nullptr)
+	if (m_GameState == GAME_MODE_RESULT && m_pResultManager == nullptr)
 	{
 		// リザルト管理クラスの生成
 		m_pResultManager = CResultManager::Create();
