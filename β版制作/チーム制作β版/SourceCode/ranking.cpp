@@ -43,8 +43,11 @@ HRESULT CRanking::Init(void)
 	// UI生成
 	CUIManager::Create();
 
-	// ランキングマネージャーの生成
-	pRankingManager = CRankingManager::Create();
+	if (!pRankingManager)
+	{
+		// ランキングマネージャーの生成
+		pRankingManager = CRankingManager::Create();
+	}
 
 	return S_OK;
 }

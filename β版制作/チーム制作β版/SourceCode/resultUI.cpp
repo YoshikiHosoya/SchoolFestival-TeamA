@@ -119,6 +119,8 @@ D3DXVECTOR3				CResultUI::m_Size[RESULT_UI_MAX] = {
 };
 
 int				CResultUI::m_nTotalScore = 0;
+int				CResultUI::m_nBonusScore = 0;
+int				CResultUI::m_PlayerScore = 0;
 
 // =====================================================================================================================================================================
 //
@@ -150,6 +152,7 @@ CResultUI::CResultUI()
 	m_bWaitFlag = false;
 	m_nColCnt = 0;
 	m_nTotalScore = 0;
+	m_PlayerScore = 0;
 }
 
 // =====================================================================================================================================================================
@@ -168,6 +171,14 @@ CResultUI::~CResultUI()
 // =====================================================================================================================================================================
 HRESULT CResultUI::Init(void)
 {
+	// ゲームクラスのポインタ取得
+	CGame *pGame = (CGame*)CManager::GetBaseMode();
+	if (pGame->GetPlayer()->GetPlayerUI() != nullptr)
+	{
+		// スコアの取得
+		m_PlayerScore = pGame->GetPlayer()->GetPlayerUI()->GetScore();
+	}
+
 	// UIをまとめて生成する
 	ResultUICreate();
 	// α値を設定
@@ -687,17 +698,7 @@ void CResultUI::Flashing(CScene2D *m_apScene2D)
 // =====================================================================================================================================================================
 void CResultUI::TotalScoreCalculation()
 {
-	// ゲームモードだった時
-	if (CManager::GetMode() == CManager::MODE_GAME)
-	{
-		// ゲームクラスのポインタ取得
-		CGame *pGame = (CGame*)CManager::GetBaseMode();
-		if (pGame != nullptr && pGame->GetResultManager() != nullptr && pGame->GetPlayer() != nullptr && pGame->GetPlayer()->GetPlayerUI() != nullptr)
-		{
-			// ゲームスコアとボーナススコアの計算
-			m_nTotalScore = pGame->GetResultManager()->GetResultUI()->m_nBonusScore;
-			//m_nTotalScore = pGame->GetResultManager()->GetResultUI()->m_nBonusScore + pGame->GetPlayer()->GetPlayerUI()->GetScore() + pGame->GetResultManager()->GetResultUI()->m_nBonusScore;
-			CRankingUI::ScoreSave();
-		}
-	}
+	// ゲームスコアとボーナススコアの計算
+	m_nTotalScore = m_nBonusScore + m_PlayerScore;
+	CRankingUI::ScoreSave();
 }

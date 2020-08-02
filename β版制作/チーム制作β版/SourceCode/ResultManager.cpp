@@ -12,6 +12,8 @@
 #include "resultui.h"
 #include "renderer.h"
 #include "fade.h"
+#include "player.h"
+#include "playerui.h"
 
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
@@ -45,7 +47,6 @@ CResultManager::~CResultManager()
 	if (m_pResultUI)
 	{
 		m_pResultUI->Uninit();
-		//delete m_pResultUI;
 		m_pResultUI = nullptr;
 	}
 }
@@ -59,6 +60,7 @@ HRESULT CResultManager::Init(void)
 {
 	// リザルトUIの生成
 	m_pResultUI = CResultUI::Create();
+
 	return S_OK;
 }
 

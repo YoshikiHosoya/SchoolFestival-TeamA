@@ -40,7 +40,7 @@ char *CRankingUI::m_SaveScoreFileName =
 #define RANKING_SPACE (10)
 
 #define RANKINGSCORESIZE (D3DXVECTOR3(70.0f, 70.0f, 0.0f))
-#define RANKINGSCOREDIGITS (6)
+#define RANKINGSCOREDIGITS (7)
 
 // =====================================================================================================================================================================
 //
@@ -134,12 +134,14 @@ HRESULT CRankingUI::Init(void)
 // =====================================================================================================================================================================
 void CRankingUI::Uninit(void)
 {
+
 	for (int nCnt = 0; nCnt < RANKING_UI::RANKING_UI_MAX; nCnt++)
 	{
 		if (m_apScene2D[nCnt])
 		{
 			// 終了
-			m_apScene2D[nCnt]->Uninit();
+			m_apScene2D[nCnt]->Rerease();
+			m_apScene2D[nCnt] = nullptr;
 
 			// デリートフラグを有効にする
 			SetDeleteFlag(true);
@@ -154,6 +156,7 @@ void CRankingUI::Uninit(void)
 			m_pRankScore[nCnt] = nullptr;
 		}
 	}
+
 }
 
 // =====================================================================================================================================================================
@@ -355,41 +358,28 @@ void CRankingUI::RankingSave()
 void CRankingUI::RankingCalculation()
 {
 	// トータルスコアを取得をし書き換え不可能な変数にする
-	//m_nGetRankingScore = CResultUI::GetTotalScore();
-	ScoreLoad();
+	BonusScoreLoad();
 	const int CurrentScore = m_nScore;
-	int nRanking = 0;
-
-	for (int nCnt = 0; nCnt < SCORE_MAX; nCnt++)
-	{
-		if (CurrentScore >= m_nRankingScore[nCnt])
-		{
-			nRanking = nCnt;
-			break;
-		}
-	}
+	int nCnt = SCORE_5th;
 
 	// 取得したスコアとランキングスコアを1位から比較し
 	// 取得したスコアの方が大きかったら値を書き換える
-	for (int nCnt = 0; nCnt < SCORE_MAX; nCnt++)
+	for (int nRank = 0; nRank < SCORE_MAX; nRank++)
 	{
-		if (CurrentScore >= m_nRankingScore[nCnt])
+		if (CurrentScore >= m_nRankingScore[nRank])
 		{
-			if (nCnt == SCORE_5th)
+			if (nRank >= SCORE_5th)
 			{
 				m_nRankingScore[SCORE_5th] = CurrentScore;
 			}
 			else
 			{
-				int nCntRank = 0;
-				while (nCntRank < SCORE_5th - 1)
+				while (nRank < nCnt)
 				{
-					m_nRankingScore[SCORE_5th - nCntRank] = m_nRankingScore[SCORE_5th - (nCntRank + 1)];
-					nCntRank++;
+					m_nRankingScore[nCnt] = m_nRankingScore[nCnt - 1];
+					nCnt--;
 				}
-
-				m_nRankingScore[nRanking] = CurrentScore;
-
+				m_nRankingScore[nRank] = CurrentScore;
 				break;
 			}
 		}
@@ -429,7 +419,7 @@ void CRankingUI::ScoreSave()
 
 #ifdef _DEBUG
 		// 読み込み成功時の結果表示
-		MessageBox(NULL, "ランキング情報をセーブしました", "結果", MB_OK | MB_ICONINFORMATION);
+		MessageBox(NULL, "スコア情報をセーブしました", "結果", MB_OK | MB_ICONINFORMATION);
 #endif // DEBUG
 
 		// ファイルを閉じる
@@ -439,7 +429,7 @@ void CRankingUI::ScoreSave()
 	{
 #ifdef _DEBUG
 		// 読み込み失敗時の警告表示
-		MessageBox(NULL, "ランキング情報の読み込み失敗", "警告", MB_ICONWARNING);
+		MessageBox(NULL, "スコア情報の読み込み失敗", "警告", MB_ICONWARNING);
 #endif // DEBUG
 	}
 }
@@ -449,7 +439,7 @@ void CRankingUI::ScoreSave()
 //
 //
 // =====================================================================================================================================================================
-void CRankingUI::ScoreLoad()
+void CRankingUI::BonusScoreLoad()
 {
 	// ファイルポイント
 	FILE *pFile;
@@ -492,7 +482,7 @@ void CRankingUI::ScoreLoad()
 																	// SPEEDが来たら
 						if (strcmp(cHeadText, "SCORE") == 0)
 						{
-							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_ScoreData.nScore);		// 比較用テキストにRANKIG_1stを代入
+							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_ScoreData.nTotalScore);		// 比較用テキストにRANKIG_1stを代入
 						}
 					}
 				}
@@ -503,11 +493,11 @@ void CRankingUI::ScoreLoad()
 	}
 	else
 	{
-		MessageBox(NULL, "ランキングのデータ読み込み失敗", "警告", MB_ICONWARNING);
+		MessageBox(NULL, "スコアのデータ読み込み失敗", "警告", MB_ICONWARNING);
 	}
 
 
-	m_nScore = m_ScoreData.nScore;
+	m_nScore = m_ScoreData.nTotalScore;
 }
 
 // =====================================================================================================================================================================

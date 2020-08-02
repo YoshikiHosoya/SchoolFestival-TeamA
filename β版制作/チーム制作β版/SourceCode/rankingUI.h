@@ -30,8 +30,9 @@ typedef struct
 
 typedef struct
 {
-	int	nScore;
+	int	nTotalScore;
 }RANKING_SCORE_DATA;
+
 
 // =====================================================================================================================================================================
 // 前方宣言
@@ -85,9 +86,8 @@ public:
 	static	void			SetTotalScore(int nScore) { m_nScore = nScore; }; // スコアの設定
 	static	int				GetTotalScore() { return m_nScore; }; // スコアの設定
 	static	void			ScoreSave();						// ランキングのセーブ
-	static	void			ScoreLoad();						// ランキングのロード
-
-
+	static	void			BonusScoreLoad();						// ランキングのロード
+	static	void			PlayerScoreLoad();						// ランキングのロード
 
 	/* メンバ関数 */
 

@@ -8,6 +8,7 @@
 #include "manager.h"
 #include "renderer.h"
 #include "player.h"
+#include "playerui.h"
 #include "inputKeyboard.h"
 #include "fade.h"
 #include "map.h"

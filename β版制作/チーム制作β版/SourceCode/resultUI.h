@@ -86,6 +86,8 @@ private:
 	static D3DXVECTOR3			m_Pos[RESULT_UI_MAX];							// 座標情報
 	static D3DXVECTOR3			m_Size[RESULT_UI_MAX];							// サイズ情報
 	static int					m_nTotalScore;									// スコアとボーナスを加算したスコア
+	static int					m_nBonusScore;									// ボーナススコア
+	static int					m_PlayerScore;									// ゲームモードで稼いだスコア
 
 	/* メンバ変数 */
 	CScene2D				*m_apScene2D[RESULT_UI_MAX];						// シーン2Dのポインタ
@@ -93,7 +95,6 @@ private:
 	CMultiNumber			*m_pBonusScore;										// ボーナススコアのUI
 
 	int						m_nPrisonerNum;										// プレイヤーの残機の数
-	int						m_nBonusScore;										// ボーナススコア
 	bool					m_bPrisonerNum;										// 捕虜の数を表示更新していいかどうか
 	bool					m_bBonusScore;										// 追加得点を表示更新していいかどうか
 	bool					m_bEvaluation;										// 評価を表示していいかどうか
