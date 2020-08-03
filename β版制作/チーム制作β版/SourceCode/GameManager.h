@@ -41,9 +41,10 @@ public:
 	static std::unique_ptr<CGameManager> Create();
 
 private:
-	int m_nCnt;							//カウント
-	CScene2D *m_pScene2D_GoSign;		//2Dポリゴン　Goサイン
-	GAMESTATE m_state;					//ゲームの状態
+	int			m_nCnt;					//カウント
+	CScene2D	*m_pScene2D_GoSign;		//2Dポリゴン　Goサイン
+	GAMESTATE	m_state;				//ゲームの状態
+	int			m_nTimeCnt;				//時間のカウント
 };
 
 #endif
