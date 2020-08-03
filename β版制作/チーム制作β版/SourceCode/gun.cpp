@@ -58,6 +58,7 @@ HRESULT CGun::Init()
 {
 	m_bMultiple		= false;										// ÉtÉâÉOÇÉIÉt
 	m_GunType		= GUN_TYPE::GUNTYPE_HANDGUN;					// ÉnÉìÉhÉKÉìÇ…ê›íË
+	m_GunTypeOld	= GUN_TYPE::GUNTYPE_HANDGUN;					// ëOâÒÇÃèeÇÃéÌóﬁÇÉnÉìÉhÉKÉìÇ…ê›íË
 	m_nCntFrame		= 0;											// ÉtÉåÅ[ÉÄÉJÉEÉìÉg
 	m_nCntBullet	= 0;											// íeÇÃÉJÉEÉìÉg
 	m_nAmmo			= CBullet::GetBulletParam(m_GunType)->nAmmo;	// écíeêî
@@ -192,11 +193,33 @@ void CGun::SetGunType(GUN_TYPE type)
 	// ÉÇÉfÉãÇÃç∑Çµë÷Ç¶
 	SetModelConut(type);
 
+	// ëOâÒÇÃèeÇÃéÌóﬁÇï€ë∂
+	m_GunTypeOld = m_GunType;
+
 	// éÌóﬁÇÃê›íË
 	m_GunType = type;
 
-	// íeñÚêî
-	m_nAmmo = pBulletParam->nAmmo;
+	// ëOâÒÇ∆éÌóﬁÇ™à·Ç§Ç∆Ç´
+	if (m_GunType != m_GunTypeOld)
+	{
+		// íeñÚêî
+		m_nAmmo = pBulletParam->nAmmo;
+	}
+	else
+	{
+		// íeñÚêîï‚è[
+		m_nAmmo += pBulletParam->nAmmo;
+	}
+}
+
+// =====================================================================================================================================================================
+//
+// íeêîÇÃâ¡éZ
+//
+// =====================================================================================================================================================================
+void CGun::GunAddAmmo(int nAmmo)
+{
+	m_nAmmo += nAmmo;
 }
 
 // =====================================================================================================================================================================
