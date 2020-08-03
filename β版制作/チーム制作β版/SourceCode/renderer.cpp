@@ -147,10 +147,6 @@ HRESULT  CRenderer::Init(HWND hWnd, BOOL bWindow)
 //=============================================================================
 void CRenderer::Uninit(void)
 {
-	m_pCamera->UninitCamera();
-	m_pDebug->Uninit();
-	m_pFade->UninitFade();
-
 	CScene::RereaseAll();
 	if (m_pD3DDevice != NULL)
 	{
@@ -163,28 +159,30 @@ void CRenderer::Uninit(void)
 		m_pD3D->Release();
 		m_pD3D = NULL;
 	}
-	if (m_pCamera)
+	if (m_pCamera != nullptr)
 	{
+		m_pCamera->UninitCamera();
 		delete m_pCamera;
 		m_pCamera = nullptr;
 	}
-	if (m_pLight)
+	if (m_pFade != nullptr)
 	{
-		delete m_pLight;
-		m_pLight = nullptr;
-	}
-	if (m_pFade)
-	{
+		m_pFade->UninitFade();
 		delete m_pFade;
 		m_pFade = nullptr;
 	}
-	if (m_pDebug)
+	if (m_pDebug != nullptr)
 	{
-		// ƒƒ‚ƒŠ‚ÌŠJ•ú
+		m_pDebug->Uninit();
 		delete m_pDebug;
 		m_pDebug = nullptr;
 	}
-
+	if (m_pLight != nullptr)
+	{
+		m_pLight->UninitLight();
+		delete m_pLight;
+		m_pLight = nullptr;
+	}
 #ifdef _DEBUG
 	if (g_pFont != NULL)
 	{

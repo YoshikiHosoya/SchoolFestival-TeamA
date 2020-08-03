@@ -37,7 +37,8 @@ char *CCharacter::m_LoadMotionFileName[CHARACTER_MOTION_MAX] =
 	{ "data/Load/Enemy/Motion/EnemyNeutral.txt" },
 	{ "data/Load/Enemy/Motion/EnemyWalk.txt" },
 	{ "data/Load/Enemy/Motion/EnemySquatStop.txt" },
-	{ "data/Load/Enemy/Motion/EnemyDead.txt" },
+	{ "data/Load/Enemy/Motion/EnemyDead_1.txt" },
+	{ "data/Load/Enemy/Motion/EnemyDead_2.txt" },
 	{ "data/Load/Boss/Motion/Neutral.txt" },
 	{ "data/Load/Prisoner/Motion/PrisonerStay.txt" },
 	{ "data/Load/Prisoner/Motion/PrisonerRelease.txt" },
@@ -113,6 +114,14 @@ HRESULT CCharacter::Init(void)
 //====================================================================
 void CCharacter::Uninit(void)
 {
+	for (int nCnt = 0; nCnt < m_vModelList.size(); nCnt++)
+	{
+		if (m_vModelList[nCnt] != nullptr)
+		{
+			m_vModelList[nCnt]->Rerease();
+			m_vModelList[nCnt] = nullptr;
+		}
+	}
 }
 //====================================================================
 //çXêV
@@ -183,6 +192,7 @@ void CCharacter::Update(void)
 	{
 		m_ShotRot.x = 0.0f;
 		m_ShotRot.y = 0.5f * D3DX_PI;
+		m_ShotRot.z = 0.5f;
 		m_AddHeadRot.x = 0.5f;
 		m_AddArmRot.x = 0.5f* D3DX_PI;
 
@@ -191,6 +201,7 @@ void CCharacter::Update(void)
 	{
 		m_ShotRot.x = 0.0f;
 		m_ShotRot.y = -0.5f * D3DX_PI;
+		m_ShotRot.z = -0.5f;
 		m_AddHeadRot.x = 0.5f;
 		m_AddArmRot.x = 0.5f* D3DX_PI;
 	}
@@ -198,6 +209,7 @@ void CCharacter::Update(void)
 	{
 		m_ShotRot.x = 0.5f * D3DX_PI;
 		m_ShotRot.y = 0.0f;
+		m_ShotRot.z = 0.0f;
 		m_AddHeadRot.x = 1.0f;
 		m_AddArmRot.x = 1.0f* D3DX_PI;
 	}
@@ -205,6 +217,7 @@ void CCharacter::Update(void)
 	{
 		m_ShotRot.x = -0.5f * D3DX_PI;
 		m_ShotRot.y = D3DX_PI;
+		m_ShotRot.z = 1.0f;
 		m_AddHeadRot.x = -0.5f;
 		m_AddArmRot.x = -0.3f* D3DX_PI;
 	}
