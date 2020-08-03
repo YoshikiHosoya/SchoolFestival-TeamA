@@ -114,6 +114,14 @@ HRESULT CCharacter::Init(void)
 //====================================================================
 void CCharacter::Uninit(void)
 {
+	for (int nCnt = 0; nCnt < m_vModelList.size(); nCnt++)
+	{
+		if (m_vModelList[nCnt] != nullptr)
+		{
+			m_vModelList[nCnt]->Rerease();
+			m_vModelList[nCnt] = nullptr;
+		}
+	}
 }
 //====================================================================
 //çXêV
@@ -184,6 +192,7 @@ void CCharacter::Update(void)
 	{
 		m_ShotRot.x = 0.0f;
 		m_ShotRot.y = 0.5f * D3DX_PI;
+		m_ShotRot.z = 0.5f;
 		m_AddHeadRot.x = 0.5f;
 		m_AddArmRot.x = 0.5f* D3DX_PI;
 
@@ -192,6 +201,7 @@ void CCharacter::Update(void)
 	{
 		m_ShotRot.x = 0.0f;
 		m_ShotRot.y = -0.5f * D3DX_PI;
+		m_ShotRot.z = -0.5f;
 		m_AddHeadRot.x = 0.5f;
 		m_AddArmRot.x = 0.5f* D3DX_PI;
 	}
@@ -199,6 +209,7 @@ void CCharacter::Update(void)
 	{
 		m_ShotRot.x = 0.5f * D3DX_PI;
 		m_ShotRot.y = 0.0f;
+		m_ShotRot.z = 0.0f;
 		m_AddHeadRot.x = 1.0f;
 		m_AddArmRot.x = 1.0f* D3DX_PI;
 	}
@@ -206,6 +217,7 @@ void CCharacter::Update(void)
 	{
 		m_ShotRot.x = -0.5f * D3DX_PI;
 		m_ShotRot.y = D3DX_PI;
+		m_ShotRot.z = 1.0f;
 		m_AddHeadRot.x = -0.5f;
 		m_AddArmRot.x = -0.3f* D3DX_PI;
 	}
