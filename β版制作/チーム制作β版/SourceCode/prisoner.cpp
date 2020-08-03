@@ -257,17 +257,16 @@ void CPrisoner::PrisonerState()
 		// アイテムを落とすモーション
 		SetMotion(CCharacter::PRISONER_MOTION_RELEASE);
 
-			CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
-		if (pPlayer)
-		{
-			pPlayer->GetPlayerUI()->SetScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_RESCUE_PRISONER));
-			// 体力の加算
-			pPlayer->SetLife(pPlayer->GetLife() + 1);
-		}
-
 		m_StateTime--;
 		if (m_StateTime <= 0)
 		{
+			CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
+			if (pPlayer)
+			{
+				pPlayer->GetPlayerUI()->SetScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_RESCUE_PRISONER));
+				// 体力の加算
+				pPlayer->SetLife(pPlayer->GetLife() + 1);
+			}
 			SetStateTime(40);
 			// 捕虜の状態の変更
 			// 捕虜のタイプ別ドロップ処理
