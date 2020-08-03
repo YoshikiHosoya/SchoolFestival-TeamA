@@ -151,7 +151,6 @@ void CRenderer::Uninit(void)
 	m_pDebug->Uninit();
 	m_pFade->UninitFade();
 
-
 	CScene::RereaseAll();
 	if (m_pD3DDevice != NULL)
 	{
@@ -159,12 +158,33 @@ void CRenderer::Uninit(void)
 		m_pD3DDevice->Release();
 		m_pD3DDevice = NULL;
 	}
-
 	if (m_pD3D != NULL)
 	{
 		m_pD3D->Release();
 		m_pD3D = NULL;
 	}
+	if (m_pCamera)
+	{
+		delete m_pCamera;
+		m_pCamera = nullptr;
+	}
+	if (m_pLight)
+	{
+		delete m_pLight;
+		m_pLight = nullptr;
+	}
+	if (m_pFade)
+	{
+		delete m_pFade;
+		m_pFade = nullptr;
+	}
+	if (m_pDebug)
+	{
+		// ƒƒ‚ƒŠ‚ÌŠJ•ú
+		delete m_pDebug;
+		m_pDebug = nullptr;
+	}
+
 #ifdef _DEBUG
 	if (g_pFont != NULL)
 	{

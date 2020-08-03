@@ -164,4 +164,3 @@ void CUIManager::AddUIList(CUI *pUI)
 	//”z—ñ‚É’Ç‰Á
 	m_pUIList.emplace_back(std::move(pUI));
 }
-

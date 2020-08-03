@@ -87,6 +87,12 @@ void CManager::Uninit(void)
 		delete m_pPad;
 		m_pPad = nullptr;
 	}
+	if (m_pInputKeyboard)
+	{
+		m_pInputKeyboard->UninitInput();
+		delete m_pInputKeyboard;
+		m_pInputKeyboard = nullptr;
+	}
 	if (m_pBaseMode)
 	{
 		m_pBaseMode->Uninit();
@@ -100,7 +106,6 @@ void CManager::Uninit(void)
 
 		delete m_pSound;
 		m_pSound = nullptr;
-
 	}
 }
 //===========================================
