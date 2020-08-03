@@ -41,6 +41,7 @@
 CPlayer::CPlayer(OBJ_TYPE type) :CCharacter(type)
 {
 	SetObjType(OBJTYPE_PLAYER);
+	SetPosition(D3DXVECTOR3(50.0f, 300.0f, 0.0f));
 }
 
 CPlayer::~CPlayer()
@@ -51,6 +52,8 @@ CPlayer::~CPlayer()
 //====================================================================
 HRESULT CPlayer::Init(void)
 {
+	SetLife(10);
+
 	//ƒLƒƒƒ‰‚Ì‰Šú‰»
 	CCharacter::Init();
 	LoadOffset(CCharacter::CHARACTER_TYPE_PLAYER);
@@ -516,10 +519,10 @@ void CPlayer::PadMoveUpdate(void)
 //====================================================================
 CPlayer *CPlayer::Create(void)
 {
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
 	CPlayer*pPlayer;
 	pPlayer = new CPlayer(OBJTYPE_PLAYER);
 	pPlayer->Init();
+	pPlayer->SetPosition(D3DXVECTOR3(50.0f, 100.0f, 0.0f));
 	return pPlayer;
 }
 //====================================================================
