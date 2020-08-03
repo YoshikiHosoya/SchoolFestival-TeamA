@@ -87,7 +87,8 @@ public:
 		ENEMY_MOTION_NORMAL,				//ニュートラル
 		ENEMY_MOTION_WALK,					//歩き
 		ENEMY_MOTION_SQUAT,					//通常攻撃1
-		ENEMY_MOTION_DEAD,					//死んだ
+		ENEMY_MOTION_DEAD_1,				//死んだ
+		ENEMY_MOTION_DEAD_2,				//死んだ2
 
 		BOSS_MOTION_NORMAL,				//ニュートラル
 
