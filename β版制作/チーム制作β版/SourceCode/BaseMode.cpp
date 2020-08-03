@@ -14,6 +14,7 @@
 #include "item.h"
 #include "prisoner.h"
 #include "sound.h"
+#include "scoremanager.h"
 
 //==========================================================
 //デバッグコマンド
@@ -131,6 +132,8 @@ void CBaseMode::BaseLoad(HWND hWnd)
 	CItem::ItemLoad();
 	// 捕虜のデータの読み込み
 	CPrisoner::PrisonerLoad();
+	// スコアのデータの読み込み
+	CScoreManager::ScoreLoad();
 }
 //==========================================================
 //生成したものを全て破棄

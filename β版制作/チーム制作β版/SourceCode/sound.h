@@ -57,6 +57,9 @@ public:
 		LABEL_SE_GAMEOVER,							//ゲームオーバー
 		LABEL_SE_GAMECLEAR,							//ゲームクリア
 
+		//武器系アイテム取得時
+		LABEL_SE_ITEM_HMG,							//ヘビーマシンガン
+
 		LABEL_MAX,
 	} LABEL;
 
@@ -124,6 +127,9 @@ private:
 		{ "data/SE/System/pause.wav", 0 },						//SE ポーズ
 		{ "data/SE/System/gameover.wav", 0 },					//SE ゲームオーバー
 		{ "data/SE/System/gameclear.wav", 0 },					//SE ゲームクリア
+
+		//武器系アイテム取得時
+		{ "data/SE/Weapon/HeavyMachineGun.wav", 0 },			//SE HMG
 
 	};
 
