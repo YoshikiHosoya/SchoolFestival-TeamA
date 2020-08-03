@@ -13,6 +13,7 @@
 #include "main.h"
 #include "Scene.h"
 #include "Character.h"
+#include "item.h"
 
 // =====================================================================================================================================================================
 // 捕虜のデータ
@@ -28,6 +29,8 @@ typedef struct
 // 前方宣言
 // =====================================================================================================================================================================
 class CModel;
+//class CItem;
+
 // =====================================================================================================================================================================
 // 捕虜クラス
 // =====================================================================================================================================================================
@@ -71,26 +74,23 @@ public:
 	void				DebugInfo(void);						// デバッグ
 	bool				DefaultMotion(void);					// デフォルトモーション
 
-	PRISONER_STATE		GetPrisonerState()
-	{
-		return m_PrisonerState;
-	};															// 捕虜の状態の取得
+	PRISONER_STATE				GetPrisonerState()
+	{return m_PrisonerState;};									// 捕虜の状態の取得
 
 	PRISONER_ITEM_DROPTYPE		GetPrisonerDropType()
-	{
-		return m_PrisonerDropType;
-	};															// 捕虜の種類
+	{return m_PrisonerDropType;};								// 捕虜の種類
 
-	void				SetPrisonerState(PRISONER_STATE state)
-	{
-		m_PrisonerState = state;
-	};															// 捕虜の状態の設定
+	void						SetPrisonerState(PRISONER_STATE state)
+	{m_PrisonerState = state;};									// 捕虜の状態の設定
 
 	void				SetPrisonerType(PRISONER_ITEM_DROPTYPE type)
-	{
-		m_PrisonerDropType = type;
-	};															// 捕虜の種類の設定
+	{m_PrisonerDropType = type;};								// 捕虜の種類の設定
 
+	CItem::ITEMTYPE		GetPrisonerDropItem()
+	{return m_DropItem;};										// ドロップするアイテムの取得
+
+	void				SetPrisonerItem(CItem::ITEMTYPE type)
+	{m_DropItem = type;};										// ドロップするアイテムの設定
 private:
 	/* 静的メンバ変数 */
 	static char				*m_PrisonerFileName;				// 捕虜のファイル名
@@ -108,9 +108,11 @@ private:
 	/* メンバ変数 */
 	PRISONER_STATE			m_PrisonerState;					// デバッグのステータス
 	PRISONER_ITEM_DROPTYPE	m_PrisonerDropType;					// 捕虜の種類
+
 	void					Move(float move, float fdest);		// 捕虜の移動
 	int						m_nDieCount;						// 捕虜が消滅するまでのカウント
 	bool					m_bUse;								// ポインタを使用できるかどうか
 	int						m_StateTime;						// ステートが切り替わるまでの時間
+	CItem::ITEMTYPE			m_DropItem;							// 確定ドロップの種類
 };
 #endif

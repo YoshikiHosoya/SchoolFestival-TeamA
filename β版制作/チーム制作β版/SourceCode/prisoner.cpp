@@ -330,7 +330,7 @@ void CPrisoner::PrisonerDropType()
 			GetPosition(),
 			CItem::ITEMDROP_NONE,
 			CItem::ITEMDROP_PATTERN_DESIGNATE,
-			CItem::ITEMTYPE_COIN);
+			GetPrisonerDropItem());
 		break;
 
 		// ドロップするアイテムを範囲で指定してドロップさせる
