@@ -199,8 +199,6 @@ void CManager::SetMode(MODE mode)
 		//MapEditor
 	case MODE_DEBUG_MAPEDITOR:
 		m_pBaseMode = new CDebugMapEditor;
-		m_pBaseMode->Init();
-
 		break;
 	}
 
