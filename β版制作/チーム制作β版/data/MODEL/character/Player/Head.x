@@ -1955,7 +1955,7 @@ Mesh {
   1,
   1,
   1,
-  3,
+  2,
   1,
   2,
   2,
@@ -2535,7 +2535,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "data\\Texture\\Modelマテリアル用\\clothes.jpg";
+    "C:\\Users\\game314\\Desktop\\SchoolFestival-TeamA\\β版制作\\チーム制作β版\\data\\Texture\\Modelマテリアル用\\clothes.jpg";
    }
   }
   Material {

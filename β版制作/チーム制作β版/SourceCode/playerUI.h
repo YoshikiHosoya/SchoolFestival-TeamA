@@ -19,7 +19,6 @@
 // =====================================================================================================================================================================
 class CScene2D;
 class CMultiNumber;
-
 // =====================================================================================================================================================================
 // プレイヤーUIクラス
 // =====================================================================================================================================================================
@@ -57,7 +56,9 @@ public:
 	void				SetLifeUI(int nLife);				// 体力UIの設定
 	void				SetStockUI(int nStock);				// 残機の数の設定
 	int					GetScore() { return m_nScore; };	// スコアの取得
-
+	void				SetTimeUI(int nTime);				// 残り時間の設定
+	int					GetTime() { return m_nTime; };		// 時間の取得
+	void				DecrementTime();					// 時間の減少
 private:
 	/* メンバ関数 */
 	void				PlayerUICreate();						// プレイヤーUIの生成
@@ -70,11 +71,13 @@ private:
 	CMultiNumber				*m_pGrenadeAmmo;				// グレネードの残数のポインタ
 	CMultiNumber				*m_pLife;						// 体力の残数のポインタ
 	CMultiNumber				*m_pStock;						// 残機の数のポインタ
+	CMultiNumber				*m_pTime;						// ゲームの残り時間
 
 	int							m_nScore;						// スコア
 	int							m_nBulletAmmo;					// 弾の残数
 	int							m_nGrenadeAmmo;					// グレネードの残数
 	int							m_nLife;						// 体力
 	int							m_nStock;						// 残機の数
+	int							m_nTime;						// 残り時間
 };
 #endif

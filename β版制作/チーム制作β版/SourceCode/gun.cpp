@@ -58,6 +58,7 @@ HRESULT CGun::Init()
 {
 	m_bMultiple		= false;										// ƒtƒ‰ƒO‚ðƒIƒt
 	m_GunType		= GUN_TYPE::GUNTYPE_HANDGUN;					// ƒnƒ“ƒhƒKƒ“‚ÉÝ’è
+	m_GunTypeOld	= GUN_TYPE::GUNTYPE_HANDGUN;					// ‘O‰ñ‚Ìe‚ÌŽí—Þ‚ðƒnƒ“ƒhƒKƒ“‚ÉÝ’è
 	m_nCntFrame		= 0;											// ƒtƒŒ[ƒ€ƒJƒEƒ“ƒg
 	m_nCntBullet	= 0;											// ’e‚ÌƒJƒEƒ“ƒg
 	m_nAmmo			= CBullet::GetBulletParam(m_GunType)->nAmmo;	// Žc’e”
@@ -192,11 +193,23 @@ void CGun::SetGunType(GUN_TYPE type)
 	// ƒ‚ƒfƒ‹‚Ì·‚µ‘Ö‚¦
 	SetModelConut(type);
 
+	// ‘O‰ñ‚Ìe‚ÌŽí—Þ‚ð•Û‘¶
+	m_GunTypeOld = m_GunType;
+
 	// Ží—Þ‚ÌÝ’è
 	m_GunType = type;
 
-	// ’e–ò”
-	m_nAmmo = pBulletParam->nAmmo;
+	// ‘O‰ñ‚ÆŽí—Þ‚ªˆá‚¤‚Æ‚«
+	if (m_GunType != m_GunTypeOld)
+	{
+		// ’e–ò”
+		m_nAmmo = pBulletParam->nAmmo;
+	}
+	else
+	{
+		// ’e–ò”•â[
+		m_nAmmo += pBulletParam->nAmmo;
+	}
 }
 
 // =====================================================================================================================================================================

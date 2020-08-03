@@ -16,7 +16,6 @@ class CGrenadeFire;
 class CPrisoner;
 class CKnife;
 class CPlayerUI;
-
 //レンダリングクラス
 class CPlayer :public CCharacter
 {
