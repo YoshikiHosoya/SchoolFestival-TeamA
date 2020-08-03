@@ -56,6 +56,7 @@ char *CMap::m_WaveFileName[WAVE_MAX] =
 // =====================================================================================================================================================================
 #define TranslucentColor			(D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.5f))		// 半透明
 #define ButtonSpace					(250)									// ボタンの間隔
+#define CameraMoveSpeed				(25.0f)									// カメラの移動速度
 
 // =====================================================================================================================================================================
 //
@@ -65,19 +66,20 @@ char *CMap::m_WaveFileName[WAVE_MAX] =
 CMap::CMap()
 {
 	// 初期化
-	m_pMapModel.clear();
-	m_pEnemy.clear();
-	m_pPrisoner.clear();
-	m_pObstacle.clear();
-	m_pPlayerTank.clear();
-	m_pBattlePlane.clear();
-	m_pHelicopter.clear();
-	m_pVehicle.clear();
-	m_nOldSelect = 0;
-	m_WavePos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	m_ModelPosOld = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	m_TransitionPos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	m_TransitionMapID = 0;
+	m_pMapModel.clear();											// マップモデル
+	m_pEnemy.clear();												// 敵
+	m_pPrisoner.clear();											// 捕虜
+	m_pObstacle.clear();											// 障害物
+	m_pPlayerTank.clear();											// 戦車
+	m_pBattlePlane.clear();											// 戦闘機
+	m_pHelicopter.clear();											// ヘリコプター
+	m_pVehicle.clear();												// (乗り物)
+	m_nOldSelect			= 0;									// 前回選択していたもの
+	m_WavePos				= D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// ウェーブの位置
+	m_TransitionPos			= D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// 遷移する位置
+	m_CameraPos				= D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// カメラの位置
+	m_TransitionMapID		= 0;									// 次に遷移するための番号
+	m_bCameraFollowing		= false;								// カメラを追従するフラグ
 }
 
 // =====================================================================================================================================================================
@@ -213,7 +215,7 @@ void CMap::MapModelLoad()
 	else
 	{
 		// 読み込み失敗時の警告表示
-		LoadFailureMessage(nModelType);
+		MessageBox(NULL, "読み込み失敗", m_MapModelFileName[m_MapNum], MB_ICONWARNING);
 	}
 }
 
@@ -255,7 +257,7 @@ void CMap::MapModelSave()
 			SaveModelHeader(pFile, nModelType);
 
 			// 各モデルの種類分回す
-			for (unsigned int nCntModel = 0; nCntModel < GetMaxMapModel(nModelType); nCntModel++)
+			for (size_t nCntModel = 0; nCntModel < GetMaxMapModel(nModelType); nCntModel++)
 			{
 				if (GetMapModel(nModelType, nCntModel))
 				{
@@ -280,68 +282,6 @@ void CMap::MapModelSave()
 		MessageBox(NULL, "読み込み失敗", m_MapModelFileName[m_MapNum], MB_ICONWARNING);
 	}
 }
-
-//// =====================================================================================================================================================================
-////
-//// ウェーブのセーブ
-////
-//// =====================================================================================================================================================================
-//void CMap::WaveSave()
-//{
-//	int nNum = 0;
-//
-//	// ファイルポイント
-//	FILE	*pFile = nullptr;
-//
-//	// ファイルを開く
-//	pFile = fopen(m_WaveFileName[m_WaveNum], "w");
-//
-//	// 開いているとき
-//	if (pFile != NULL)
-//	{
-//		fprintf(pFile, COMMENT02);
-//		fprintf(pFile, "// ウェーブの配置情報\n");
-//		fprintf(pFile, COMMENT02);
-//
-//		fprintf(pFile, "SCRIPT\n");
-//		fprintf(pFile, NEWLINE);
-//		fprintf(pFile, "	EVENTPOS		= %.0f %.0f %.0f\n", m_aWaveInfo[m_WaveNum].EventPos.x, m_aWaveInfo[m_WaveNum].EventPos.y, m_aWaveInfo[m_WaveNum].EventPos.z);
-//		fprintf(pFile, NEWLINE);
-//
-//		for (int nModelType = 0; nModelType < ARRANGEMENT_MODEL_MAX; nModelType++)
-//		{
-//			if (nModelType == ARRANGEMENT_MODEL_ENEMY || nModelType == ARRANGEMENT_MODEL_PRISONER)
-//			{
-//				// セーブするモデルのヘッダー
-//				SaveModelHeader(pFile, nModelType);
-//
-//				// 各モデルの種類分回す
-//				for (unsigned int nCntModel = 0; nCntModel < GetMaxMapModel(nModelType); nCntModel++)
-//				{
-//					if (GetMapModel(nModelType, nCntModel))
-//					{
-//						// セーブするモデルの情報
-//						//SaveWaveContents(pFile, nModelType, nCntModel, nNum);
-//
-//						nNum++;
-//					}
-//				}
-//			}
-//		}
-//		fprintf(pFile, "END_SCRIPT\n");
-//
-//		// 読み込み成功時の結果表示
-//		//MessageBox(NULL, "セーブしました", m_WaveFileName[m_WaveNum], MB_OK | MB_ICONINFORMATION);
-//
-//		// ファイルを閉じる
-//		fclose(pFile);
-//	}
-//	else
-//	{
-//		// 読み込み失敗時の警告表示
-//		MessageBox(NULL, "マップモデルの読み込み失敗", m_WaveFileName[m_WaveNum], MB_ICONWARNING);
-//	}
-//}
 
 // =====================================================================================================================================================================
 //
@@ -422,52 +362,6 @@ void CMap::MapModelCreate(int ModelType, int nType, D3DXVECTOR3 pos)
 		m_pEnemy.emplace_back(CBoss::Create());
 		// 位置の設定
 		m_pEnemy[m_pEnemy.size() - 1]->SetPosition(pos);
-		break;
-	}
-}
-
-// =====================================================================================================================================================================
-//
-// 読み込み失敗時の警告表示
-//
-// =====================================================================================================================================================================
-void CMap::LoadFailureMessage(int ModelType)
-{
-	switch (ModelType)
-	{
-		/* --- マップ --- */
-	case CMap::ARRANGEMENT_MODEL_MAP:
-		MessageBox(NULL, "マップモデルの読み込み失敗", "警告", MB_ICONWARNING);
-		break;
-
-		/* --- 敵 --- */
-	case CMap::ARRANGEMENT_MODEL_ENEMY:
-		MessageBox(NULL, "敵の読み込み失敗", "警告", MB_ICONWARNING);
-		break;
-
-		/* --- 捕虜 --- */
-	case CMap::ARRANGEMENT_MODEL_PRISONER:
-		MessageBox(NULL, "捕虜の読み込み失敗", "警告", MB_ICONWARNING);
-		break;
-
-		/* --- 障害物 --- */
-	case CMap::ARRANGEMENT_MODEL_OBSTACLE:
-		MessageBox(NULL, "障害物の読み込み失敗", "警告", MB_ICONWARNING);
-		break;
-
-		/* --- 戦車 --- */
-	case CMap::ARRANGEMENT_MODEL_TANK:
-		MessageBox(NULL, "戦車の読み込み失敗", "警告", MB_ICONWARNING);
-		break;
-
-		/* --- 戦闘機 --- */
-	case CMap::ARRANGEMENT_MODEL_BATTLEPLANE:
-		MessageBox(NULL, "戦闘機の読み込み失敗", "警告", MB_ICONWARNING);
-		break;
-
-		/* --- ヘリコプター --- */
-	case CMap::ARRANGEMENT_MODEL_HELICOPTER:
-		MessageBox(NULL, "ヘリコプターの読み込み失敗", "警告", MB_ICONWARNING);
 		break;
 	}
 }
@@ -621,7 +515,7 @@ void CMap::WaveLoad(WAVE WaveNum)
 	WAVE_PARAM	*pParam				= nullptr;							// ウェーブのパラメータ保存用
 
 	// ファイルを開く
-	pFile = fopen(m_MapModelFileName[WaveNum], "r");
+	pFile = fopen(m_WaveFileName[WaveNum], "r");
 
 	// 開いているとき
 	if (pFile != NULL)
@@ -720,7 +614,7 @@ void CMap::WaveLoad(WAVE WaveNum)
 	else
 	{
 		// 読み込み失敗時の警告表示
-		LoadFailureMessage(nModelType);
+		MessageBox(NULL, "読み込み失敗", m_WaveFileName[m_MapNum], MB_ICONWARNING);
 	}
 }
 
@@ -1035,7 +929,7 @@ void CMap::SaveWaveContents(FILE * pFile, int ModelType, int nType, int nCnt, in
 // 配置するモデルの最大数取得
 //
 // =====================================================================================================================================================================
-unsigned int CMap::GetMaxMapModel(int ModelType)
+size_t CMap::GetMaxMapModel(int ModelType)
 {
 	switch (ModelType)
 	{
@@ -1147,24 +1041,6 @@ void CMap::AllSaveButton()
 
 // =====================================================================================================================================================================
 //
-// 配置したモデルを全てロードするボタン
-//
-// =====================================================================================================================================================================
-void CMap::AllLoadButton()
-{
-	// 改行キャンセル
-	ImGui::SameLine();
-
-	// セーブ
-	if (ImGui::Button("AllLoad"))
-	{
-		// マップで配置するモデルのロード
-		MapModelLoad();
-	}
-}
-
-// =====================================================================================================================================================================
-//
 // 配置したモデルを全てデリートするボタン
 //
 // =====================================================================================================================================================================
@@ -1249,43 +1125,40 @@ void CMap::ModelDeleteButton(int nNowSelect)
 // 配置したモデルを生成するボタン
 //
 // =====================================================================================================================================================================
-void CMap::ModelCreateButton()
+void CMap::ModelCreat()
 {
 	// 生成
-	if (ImGui::Button("Crate"))
+	switch (m_ArrangmentModel)
 	{
-		switch (m_ArrangmentModel)
-		{
-		case CMap::ARRANGEMENT_MODEL_ENEMY:
-			// 敵
-			m_pEnemy.emplace_back(CEnemy::Create());
-			break;
+	case CMap::ARRANGEMENT_MODEL_ENEMY:
+		// 敵
+		m_pEnemy.emplace_back(CEnemy::Create());
+		break;
 
-		case CMap::ARRANGEMENT_MODEL_PRISONER:
-			// 捕虜
-			m_pPrisoner.emplace_back(CPrisoner::Create());
-			break;
+	case CMap::ARRANGEMENT_MODEL_PRISONER:
+		// 捕虜
+		m_pPrisoner.emplace_back(CPrisoner::Create());
+		break;
 
-		case CMap::ARRANGEMENT_MODEL_OBSTACLE:
-			// 障害物
-			m_pObstacle.emplace_back(CObstacle::Create());
-			break;
+	case CMap::ARRANGEMENT_MODEL_OBSTACLE:
+		// 障害物
+		m_pObstacle.emplace_back(CObstacle::Create());
+		break;
 
-		case CMap::ARRANGEMENT_MODEL_TANK:
-			// 戦車
-			m_pPlayerTank.emplace_back(CPlayertank::Create());
-			break;
+	case CMap::ARRANGEMENT_MODEL_TANK:
+		// 戦車
+		m_pPlayerTank.emplace_back(CPlayertank::Create());
+		break;
 
-		case CMap::ARRANGEMENT_MODEL_BATTLEPLANE:
-			// 戦闘機
-			m_pBattlePlane.emplace_back(CBattlePlane::Create());
-			break;
+	case CMap::ARRANGEMENT_MODEL_BATTLEPLANE:
+		// 戦闘機
+		m_pBattlePlane.emplace_back(CBattlePlane::Create());
+		break;
 
-		case CMap::ARRANGEMENT_MODEL_HELICOPTER:
-			// ヘリコプター
-			m_pHelicopter.emplace_back(CHelicopter::Create());
-			break;
-		}
+	case CMap::ARRANGEMENT_MODEL_HELICOPTER:
+		// ヘリコプター
+		m_pHelicopter.emplace_back(CHelicopter::Create());
+		break;
 	}
 }
 
@@ -1297,43 +1170,43 @@ void CMap::ModelCreateButton()
 void CMap::AllDelete()
 {
 	// 障害物
-	for (unsigned int nCnt = 0; nCnt < m_pMapModel.size(); nCnt++)
+	for (size_t nCnt = 0; nCnt < m_pMapModel.size(); nCnt++)
 	{
 		m_pMapModel[nCnt]->Rerease();
 		m_pMapModel[nCnt] = nullptr;
 	}
 	// 障害物
-	for (unsigned int nCnt = 0; nCnt < m_pObstacle.size(); nCnt++)
+	for (size_t nCnt = 0; nCnt < m_pObstacle.size(); nCnt++)
 	{
 		m_pObstacle[nCnt]->Rerease();
 		m_pObstacle[nCnt] = nullptr;
 	}
 	// 敵
-	for (unsigned int nCnt = 0; nCnt < m_pEnemy.size(); nCnt++)
+	for (size_t nCnt = 0; nCnt < m_pEnemy.size(); nCnt++)
 	{
 		m_pEnemy[nCnt]->Rerease();
 		m_pEnemy[nCnt] = nullptr;
 	}
 	// 捕虜
-	for (unsigned int nCnt = 0; nCnt < m_pPrisoner.size(); nCnt++)
+	for (size_t nCnt = 0; nCnt < m_pPrisoner.size(); nCnt++)
 	{
 		m_pPrisoner[nCnt]->Rerease();
 		m_pPrisoner[nCnt] = nullptr;
 	}
 	// 戦車
-	for (unsigned int nCnt = 0; nCnt < m_pPlayerTank.size(); nCnt++)
+	for (size_t nCnt = 0; nCnt < m_pPlayerTank.size(); nCnt++)
 	{
 		m_pPlayerTank[nCnt]->Rerease();
 		m_pPlayerTank[nCnt] = nullptr;
 	}
 	// 戦闘機
-	for (unsigned int nCnt = 0; nCnt < m_pBattlePlane.size(); nCnt++)
+	for (size_t nCnt = 0; nCnt < m_pBattlePlane.size(); nCnt++)
 	{
 		m_pBattlePlane[nCnt]->Rerease();
 		m_pBattlePlane[nCnt] = nullptr;
 	}
 	// ヘリコプター
-	for (unsigned int nCnt = 0; nCnt < m_pHelicopter.size(); nCnt++)
+	for (size_t nCnt = 0; nCnt < m_pHelicopter.size(); nCnt++)
 	{
 		m_pHelicopter[nCnt]->Rerease();
 		m_pHelicopter[nCnt] = nullptr;
@@ -1582,6 +1455,8 @@ void CMap::MapModelSet()
 
 	// オブジェクト番号の選択
 	ImGui::InputInt("nowSelect", &nNowSelect, 1, 20, 0);
+	// カメラを追従するフラグの切り替え
+	ImGui::Checkbox("CameraFollowing", &m_bCameraFollowing);
 
 	// 範囲制限
 	if (nNowSelect <= -1)
@@ -1614,11 +1489,13 @@ void CMap::MapModelSet()
 			// 選択しているモデルの位置の設定
 			SetMapModelPos(D3DXVECTOR3((float)x, (float)y, (float)z), nNowSelect);
 
-			// モデルの前回の位置保存
-			m_ModelPosOld = GetMapModelPos(nNowSelect);
-
-			// 選択しているモデルを注視点の目的地に設定
-			SetSelectMapModelPosRDest(GetMapModelPos(nNowSelect));
+			if (m_bCameraFollowing)
+			{
+				// 選択しているモデルを注視点の目的地に設定
+				SetSelectMapModelPosRDest(GetMapModelPos(nNowSelect));
+				// カメラの現在地
+				m_CameraPos = GetMapModelPos(nNowSelect);
+			}
 
 			// 前回選択していたものと違うとき
 			if (m_nOldSelect != nNowSelect)
@@ -1640,11 +1517,23 @@ void CMap::MapModelSet()
 		}
 	}
 
+	if (!m_bCameraFollowing)
+	{
+		// モデルを追従せずカメラのみの移動
+		SetSelectMapModelPosRDest(m_CameraPos);
+	}
+
 	// 改行
 	ImGui::Separator();
 
 	// 配置したモデルを生成するボタン
-	ModelCreateButton();
+	if (ImGui::Button("Crate"))
+	{
+		ModelCreat();
+
+		// 新しく生成したモデルを現在選択しているモデルと同じ位置に生成する
+		SetMapModelPos(GetMapModelPos(nNowSelect), (int)GetMaxMapModel(m_ArrangmentModel) - 1);
+	}
 
 	// 改行キャンセル
 	ImGui::SameLine();
@@ -1652,14 +1541,17 @@ void CMap::MapModelSet()
 	// 配置したモデルをセーブするボタン
 	if (ImGui::Button("Save"))
 	{
-		// セーブ
 		MapModelSave();
 	}
 
-	// 配置したモデルを全てロードするボタン
-	AllLoadButton();
+	ImGui::SameLine();
 
-	// 改行キャンセル
+	// 配置したモデルを全てロードするボタン
+	if (ImGui::Button("AllLoad"))
+	{
+		MapModelLoad();
+	}
+
 	ImGui::SameLine(ButtonSpace);
 
 	// 配置したモデルをデリートするボタン
@@ -1831,11 +1723,46 @@ void CMap::PrisonerComboBox(int &nSelectType, int nNowSelect)
 // =====================================================================================================================================================================
 void CMap::SetSelectMapModelPosRDest(D3DXVECTOR3 posR)
 {
+	D3DXVECTOR3 pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	// カメラの取得
 	CCamera *pCamera = CManager::GetRenderer()->GetCamera();
+	// キーボードの取得
+	CKeyboard *pKeyboard = CManager::GetInputKeyboard();
 
+	if (m_bCameraFollowing)
+	{
+		pos = posR;
+	}
+	else
+	{
+		//[W]キーを押した時
+		if (pKeyboard->GetKeyboardPress(DIK_W))
+		{
+			//奥
+			m_CameraPos.y += CameraMoveSpeed;
+		}
+		//[S]キーを押した時
+		if (pKeyboard->GetKeyboardPress(DIK_S))
+		{
+			//前
+			m_CameraPos.y += -CameraMoveSpeed;
+		}
+		//[A]キーを押した時
+		if (pKeyboard->GetKeyboardPress(DIK_A))
+		{
+			//左
+			m_CameraPos.x += -CameraMoveSpeed;
+		}
+		//[D]キーを押した時
+		if (pKeyboard->GetKeyboardPress(DIK_D))
+		{
+			//右
+			m_CameraPos.x += CameraMoveSpeed;
+		}
+		pos = m_CameraPos;
+	}
 	// 注視点の目的地の設定
-	pCamera->SetCameraPosRDest(posR);
+	pCamera->SetCameraPosRDest(pos);
 }
 
 // =====================================================================================================================================================================
