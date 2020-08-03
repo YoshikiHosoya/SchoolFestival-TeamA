@@ -19,7 +19,7 @@
 //マクロ定義
 //====================================================================
 #define PRISONER_COLLISION_SIZE			(D3DXVECTOR3(50.0f,65.0f,0.0f))			 //捕虜のサイズ
-#define PRISONER_DIETIME				(180)									 //捕虜が消滅するまでの時間
+#define PRISONER_DIETIME				(120)									 //捕虜が消滅するまでの時間
 
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
@@ -50,6 +50,8 @@ CPrisoner::CPrisoner(OBJ_TYPE type) :CCharacter(type)
 	m_nDieCount			= 0;
 	// ポインタを検索する際使えるかどうか
 	m_bUse				= false;
+	// ステートが切り替わるまでの時間
+	m_StateTime			= 60;
 }
 // =====================================================================================================================================================================
 //
@@ -74,6 +76,9 @@ HRESULT CPrisoner::Init(void)
 	// キャラクタータイプの設定
 	SetCharacterType(CCharacter::CHARACTER_TYPE_PRISONER);
 
+	SetMotion(CCharacter::PRISONER_MOTION_STAY);
+
+	Move(0.0f, -1.57f);
 	// 当たり判定生成
 	GetCollision()->SetPos(&GetPosition());
 	GetCollision()->SetSize2D(PRISONER_COLLISION_SIZE);
@@ -246,43 +251,68 @@ void CPrisoner::PrisonerState()
 {
 	switch (m_PrisonerState)
 	{
-		// 捕虜の状態アイテムを落とす状態になったら
-	case PRISONER_STATE_DROPITEM:
+		// アイテムをドロップするステート
+	case CPrisoner::PRISONER_STATE_DROPITEM:
 	{
-		CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
+		// アイテムを落とすモーション
+		SetMotion(CCharacter::PRISONER_MOTION_RELEASE);
+
+			CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
 		if (pPlayer)
 		{
 			pPlayer->GetPlayerUI()->SetScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_RESCUE_PRISONER));
 			// 体力の加算
 			pPlayer->SetLife(pPlayer->GetLife() + 1);
 		}
-		// アイテムを落とすモーション
-		//
 
-		// 捕虜のタイプ別ドロップ処理
-		PrisonerDropType();
-
-		// 捕虜の状態の変更
-		this->SetPrisonerState(PRISONER_STATE_RUN);
-	}
-	break;
-
-	case PRISONER_STATE_RUN:
-	{
-		// 横に歩く
-		SetMove(D3DXVECTOR3(-1.0f, 0.0f, 1.0f));
-		Move(-1.0f, -1.57f);
-
-		// 消滅までのカウントを加算
-		m_nDieCount++;
-		// カウントが一致値を超えたら
-		if (m_nDieCount >= PRISONER_DIETIME)
+		m_StateTime--;
+		if (m_StateTime <= 0)
 		{
-			SetDieFlag(true);
+			SetStateTime(40);
+			// 捕虜の状態の変更
+			// 捕虜のタイプ別ドロップ処理
+			PrisonerDropType();
+			this->SetPrisonerState(PRISONER_STATE_SALUTE);
+		}
+	}
+		break;
+
+		// 暴れるする
+	case CPrisoner::PRISONER_STATE_SALUTE:
+
+		SetMotion(CCharacter::PRISONER_MOTION_SALUTE);
+
+		m_StateTime--;
+		if (m_StateTime <= 0)
+		{
+			SetStateTime(120);
+			// 捕虜の状態の変更
+			this->SetPrisonerState(PRISONER_STATE_RUN);
+		}
+		break;
+
+		// 走る
+	case CPrisoner::PRISONER_STATE_RUN:
+
+		if (GetFallFlag())
+		{
+			SetMotion(CCharacter::PRISONER_MOTION_FALL);
+		}
+		else
+		{
+			// 横に走る
+			SetMotion(CCharacter::PRISONER_MOTION_RUN);
+			SetMove(D3DXVECTOR3(-10.0f, 0.0f, 1.0f));
+
+			// 消滅までのカウントを加算
+			m_nDieCount++;
+			// カウントが一致値を超えたら
+			if (m_nDieCount >= PRISONER_DIETIME)
+			{
+				SetDieFlag(true);
+			}
 		}
 
-	}
-	default:
 		break;
 	}
 }

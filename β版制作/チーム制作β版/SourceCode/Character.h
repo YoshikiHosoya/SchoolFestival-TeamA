@@ -172,6 +172,10 @@ public:
 	bool GetDieFlag()								{ return m_bDieFlag; };						// 死亡フラグの取得
 	void SetDieFlag(bool DieFlag)					{ m_bDieFlag = DieFlag; };					// 死亡フラグの設定
 	bool GetDraw()									{ return m_bDraw; };						// 描画するかどうか取得
+
+	bool GetFallFlag()								{ return m_bFall; };						// 落下フラグの取得
+	void SetFallFlag(bool bFall)					{ m_bFall = bFall; };						// 落下フラグの設定
+
 	void ChangeColor(bool ColorChangeFlag, D3DXCOLOR AddColor);									// 色変更
 	void CheckDrawRange();
 
