@@ -1230,6 +1230,11 @@ D3DXVECTOR3 CMap::GetMapModelPos(int nNowSelect)
 {
 	D3DXVECTOR3 pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
+	if (nNowSelect < 0)
+	{
+		nNowSelect = 0;
+	}
+
 	switch (m_ArrangmentModel)
 	{
 	case CMap::ARRANGEMENT_MODEL_ENEMY:
