@@ -30,6 +30,10 @@
 #include "playertank.h"
 #include "BattlePlane.h"
 #include "Character.h"
+#include "scoremanager.h"
+#include "player.h"
+#include "playerui.h"
+
 //======================================================================================================================
 //
 // マクロ定義
@@ -170,6 +174,12 @@ bool CCollision::ForPlayerBulletCollision(int nEnemyDamage, int nObstacleDamage,
 				// 判定関数
 				if (this->OtherCollision2D(pEnemy->GetCollision()))
 				{
+					CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
+					if (pPlayer != nullptr)
+					{
+						pPlayer->GetPlayerUI()->SetScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_DAMAGE_BULLET));
+					}
+
 					// 敵のライフ減衰
 					pEnemy->CCharacter::AddDamage(nEnemyDamage);
 

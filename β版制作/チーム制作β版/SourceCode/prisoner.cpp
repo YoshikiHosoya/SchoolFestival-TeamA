@@ -11,8 +11,9 @@
 #include "manager.h"
 #include "map.h"
 #include "item.h"
-#include "debugproc.h"
 #include "player.h"
+#include "playerui.h"
+#include "scoremanager.h"
 
 //====================================================================
 //マクロ定義
@@ -248,16 +249,15 @@ void CPrisoner::PrisonerState()
 		// 捕虜の状態アイテムを落とす状態になったら
 	case PRISONER_STATE_DROPITEM:
 	{
-		// アイテムを落とすモーション
-		//
-
 		CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
-		// NULLチェック
 		if (pPlayer)
 		{
+			pPlayer->GetPlayerUI()->SetScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_RESCUE_PRISONER));
 			// 体力の加算
 			pPlayer->SetLife(pPlayer->GetLife() + 1);
 		}
+		// アイテムを落とすモーション
+		//
 
 		// 捕虜のタイプ別ドロップ処理
 		PrisonerDropType();
