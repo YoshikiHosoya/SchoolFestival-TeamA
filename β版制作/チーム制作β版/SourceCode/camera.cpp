@@ -65,8 +65,6 @@ void CCamera::UpdateCamera(void)
 		// キャラクター追従カメラ
 		CharacterFollowingMoveCamera();
 		break;
-	case CCamera::CAMERA_FOLLOWING_TYPE_MAPEDITOR:
-		break;
 	case CCamera::CAMERA_FOLLOWING_TYPE_MOUSE:
 		// マウスによるカメラ操作
 		MouseMoveCamera();
@@ -136,7 +134,7 @@ void CCamera::DebugCommand()
 		{
 			//カメラ切り替え
 			m_CameraFollowingType += 1;
-
+			
 			if (m_CameraFollowingType >= CAMERA_FOLLOWING_TYPE_MAX)
 			{
 				m_CameraFollowingType = CAMERA_FOLLOWING_TYPE_PLAYER;

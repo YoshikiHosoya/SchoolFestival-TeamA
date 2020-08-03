@@ -173,6 +173,7 @@
     <ClCompile Include="SourceCode\flameshot.cpp" />
     <ClCompile Include="SourceCode\game.cpp" />
     <ClCompile Include="SourceCode\GameManager.cpp" />
+    <ClCompile Include="SourceCode\gameover.cpp" />
     <ClCompile Include="SourceCode\grenade.cpp" />
     <ClCompile Include="SourceCode\grenadefire.cpp" />
     <ClCompile Include="SourceCode\gun.cpp" />
@@ -231,6 +232,7 @@
     <ClCompile Include="SourceCode\SceneBase.cpp" />
     <ClCompile Include="SourceCode\SceneX.cpp" />
     <ClCompile Include="SourceCode\ScoreManager.cpp" />
+    <ClCompile Include="SourceCode\selectcharacter.cpp" />
     <ClCompile Include="SourceCode\shotgun.cpp" />
     <ClCompile Include="SourceCode\sound.cpp" />
     <ClCompile Include="SourceCode\tankgun.cpp" />
@@ -270,6 +272,7 @@
     <ClInclude Include="SourceCode\flameshot.h" />
     <ClInclude Include="SourceCode\game.h" />
     <ClInclude Include="SourceCode\GameManager.h" />
+    <ClInclude Include="SourceCode\gameover.h" />
     <ClInclude Include="SourceCode\grenade.h" />
     <ClInclude Include="SourceCode\grenadefire.h" />
     <ClInclude Include="SourceCode\gun.h" />
@@ -331,6 +334,7 @@
     <ClInclude Include="SourceCode\SceneBase.h" />
     <ClInclude Include="SourceCode\SceneX.h" />
     <ClInclude Include="SourceCode\ScoreManager.h" />
+    <ClInclude Include="SourceCode\selectcharacter.h" />
     <ClInclude Include="SourceCode\shotgun.h" />
     <ClInclude Include="SourceCode\sound.h" />
     <ClInclude Include="SourceCode\tankgun.h" />

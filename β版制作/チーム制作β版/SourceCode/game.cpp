@@ -94,6 +94,13 @@ void CGame::Uninit(void)
 		delete m_pResultManager;
 		m_pResultManager = nullptr;
 	}
+
+	if (m_pMap)
+	{
+		// マップの破棄
+		delete m_pMap;
+		m_pMap = nullptr;
+	}
 }
 //==========================================================
 // 更新

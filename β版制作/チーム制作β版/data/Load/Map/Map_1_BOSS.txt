@@ -47,36 +47,36 @@ END_BOSSSET
 
 PRISONERSET									# 41
 	TYPE	= 2
-	POS		= 300 0 0
+	POS		= 300 100 0
 END_PRISONERSET
 
 PRISONERSET									# 41
 	TYPE	= 2
-	POS		= 200 0 0
+	POS		= 200 100 0
 END_PRISONERSET
 
 PRISONERSET									# 41
 	TYPE	= 2
-	POS		= 100 0 0
+	POS		= 100 100 0
 END_PRISONERSET
 
 PRISONERSET									# 41
 	TYPE	= 2
-	POS		= 0 0 0
+	POS		= 0 100 0
 END_PRISONERSET
 PRISONERSET									# 41
 	TYPE	= 2
-	POS		= -300 0 0
-END_PRISONERSET
-
-PRISONERSET									# 41
-	TYPE	= 2
-	POS		= -200 0 0
+	POS		= -300 100 0
 END_PRISONERSET
 
 PRISONERSET									# 41
 	TYPE	= 2
-	POS		= -100 0 0
+	POS		= -200 100 0
+END_PRISONERSET
+
+PRISONERSET									# 41
+	TYPE	= 2
+	POS		= -100 100 0
 END_PRISONERSET
 
 //------------------------------------------------------------

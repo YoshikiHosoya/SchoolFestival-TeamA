@@ -75,6 +75,7 @@ private:
 	void				MultipleShot();			// 複数発撃つ処理
 	/* メンバ変数 */
 	GUN_TYPE			m_GunType;				// ガンの種類
+	GUN_TYPE			m_GunTypeOld;			// 前回のガンの種類
 	TAG					m_Tag;					// タグ
 	int					m_nAmmo;				// 弾薬数
 	int					m_nInterval;			// インターバル
