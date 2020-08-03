@@ -178,22 +178,16 @@ void CManager::SetMode(MODE mode)
 	case MODE_RANKING:
 		m_pBaseMode = new CRanking;
 		m_pSound->Play(CSound::LABEL_BGM_RESULT);
-
-		m_pBaseMode->Init();
 		break;
 
 		//MotionViewer
 	case MODE_DEBUG_MODELVIEWER:
 		m_pBaseMode = new CDebug_ModelViewer;
-		m_pBaseMode->Init();
-
 		break;
 
 		//EffectViewer
 	case MODE_DEBUG_EFFECTVIEWER:
 		m_pBaseMode = new CDebug_EffectViewer;
-		m_pBaseMode->Init();
-
 		break;
 
 		//MapEditor

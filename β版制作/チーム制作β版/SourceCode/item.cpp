@@ -16,6 +16,8 @@
 #include "gun.h"
 #include <random>
 #include "inputKeyboard.h"
+#include "sound.h"
+#include "scoremanager.h"
 
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
@@ -30,6 +32,7 @@ int			CItem::m_nJewelryScore	 = 0;
 int			CItem::m_nMedalScore	 = 0;
 D3DXVECTOR3 CItem::m_CollisionSize	 = D3DXVECTOR3(0,0,0);
 int			CItem::m_nAddCnt		 = 0;
+
 // =====================================================================================================================================================================
 // テキストファイル名
 // =====================================================================================================================================================================
@@ -182,6 +185,8 @@ void CItem::ItemType(ITEMTYPE type)
 	{
 		// ヘビーマシンガン
 	case (ITEMTYPE_HEAVYMACHINEGUN): {
+		// SEを鳴らす
+		CManager::GetSound()->Play(CSound::LABEL_SE_ITEM_HMG);
 		pPlayer->GetGun()->SetGunType(CGun::GUNTYPE_HEAVYMACHINEGUN);
 	}break;
 
@@ -208,23 +213,23 @@ void CItem::ItemType(ITEMTYPE type)
 		// 熊
 	case (ITEMTYPE_BEAR): {
 		// スコアアップ
-		pPlayer->GetPlayerUI()->SetScore(m_nBearScore);
+		pPlayer->GetPlayerUI()->SetScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_BEAR));
 	}break;
 
 		// コイン
 	case (ITEMTYPE_COIN): {
 		// コインを取るたびにコインのスコアアップ
-		pPlayer->GetPlayerUI()->SetScore(AddCoinScore(m_nCoinScore));
+		pPlayer->GetPlayerUI()->SetScore(AddCoinScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_COIN)));
 	}break;
 		// 宝石
 	case (ITEMTYPE_JEWELRY): {
 		// スコアアップ
-		pPlayer->GetPlayerUI()->SetScore(m_nJewelryScore);
+		pPlayer->GetPlayerUI()->SetScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_JEWELRY));
 	}break;
 		// メダル
 	case (ITEMTYPE_MEDAL): {
 		// スコアアップ
-		pPlayer->GetPlayerUI()->SetScore(m_nMedalScore);
+		pPlayer->GetPlayerUI()->SetScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_MEDAL));
 	}break;
 
 		// 爆弾の数を増やす

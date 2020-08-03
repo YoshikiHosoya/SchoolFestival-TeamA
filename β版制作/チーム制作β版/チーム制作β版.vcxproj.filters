@@ -283,6 +283,9 @@
     <ClCompile Include="SourceCode\sound.cpp">
       <Filter>Option</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\ScoreManager.cpp">
+      <Filter>ManagerClass</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SourceCode\mesh.h">
@@ -575,6 +578,9 @@
     </ClInclude>
     <ClInclude Include="SourceCode\sound.h">
       <Filter>Option</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\ScoreManager.h">
+      <Filter>ManagerClass</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

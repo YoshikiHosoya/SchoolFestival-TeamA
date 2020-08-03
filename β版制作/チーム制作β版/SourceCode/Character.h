@@ -78,14 +78,16 @@ public:
 		PLAYER_MOTION_ATTACK01,				//通常攻撃1
 		PLAYER_MOTION_GRENADE,				//グレネード
 		PLAYER_MOTION_JUMP,					//ジャンプ
-		PLAYER_MOTION_JUMPSTOP,
+		PLAYER_MOTION_JUMPSTOP,				//ジャンプしている状態
 		PLAYER_MOTION_SHOOT,				//撃つ
 		PLAYER_MOTION_SQUAT,				//しゃがむ
 		PLAYER_MOTION_SQUATSTOP,			//しゃがんでる状態
+		PLAYER_MOTION_DEAD,					//死んだ
 
 		ENEMY_MOTION_NORMAL,				//ニュートラル
 		ENEMY_MOTION_WALK,					//歩き
 		ENEMY_MOTION_SQUAT,					//通常攻撃1
+		ENEMY_MOTION_DEAD,					//死んだ
 
 		BOSS_MOTION_NORMAL,				//ニュートラル
 
@@ -172,6 +174,10 @@ public:
 	bool GetDieFlag()								{ return m_bDieFlag; };						// 死亡フラグの取得
 	void SetDieFlag(bool DieFlag)					{ m_bDieFlag = DieFlag; };					// 死亡フラグの設定
 	bool GetDraw()									{ return m_bDraw; };						// 描画するかどうか取得
+
+	bool GetFallFlag()								{ return m_bFall; };						// 落下フラグの取得
+	void SetFallFlag(bool bFall)					{ m_bFall = bFall; };						// 落下フラグの設定
+
 	void ChangeColor(bool ColorChangeFlag, D3DXCOLOR AddColor);									// 色変更
 	void CheckDrawRange();
 

@@ -39,6 +39,7 @@ public:
 	{
 		PRISONER_STATE_STAY,									// 縛られている初期状態
 		PRISONER_STATE_DROPITEM,								// アイテムを落とす
+		PRISONER_STATE_SALUTE,									// 敬礼
 		PRISONER_STATE_RUN,										// 走って消える
 		PRISONER_STATE_MAX										// 最大数
 	};
@@ -101,6 +102,8 @@ private:
 	/* メンバ関数 */
 	void					PrisonerState();					// 捕虜の状態別処理
 	void					PrisonerDropType();					// 捕虜のタイプ別処理
+	void					SetStateTime(int time)
+							{m_StateTime = time;};				// ステートが切り替わるまでの時間の設定
 
 	/* メンバ変数 */
 	PRISONER_STATE			m_PrisonerState;					// デバッグのステータス
@@ -108,5 +111,6 @@ private:
 	void					Move(float move, float fdest);		// 捕虜の移動
 	int						m_nDieCount;						// 捕虜が消滅するまでのカウント
 	bool					m_bUse;								// ポインタを使用できるかどうか
+	int						m_StateTime;						// ステートが切り替わるまでの時間
 };
 #endif
