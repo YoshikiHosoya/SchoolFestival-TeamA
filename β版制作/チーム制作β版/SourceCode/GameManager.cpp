@@ -13,6 +13,7 @@
 #include "map.h"
 #include "fade.h"
 #include "Player.h"
+#include "Playerui.h"
 #include "game.h"
 #include "camera.h"
 
@@ -29,7 +30,7 @@
 //------------------------------------------------------------------------------
 CGameManager::CGameManager()
 {
-
+	m_nTimeCnt = 0;
 }
 //------------------------------------------------------------------------------
 //デストラクタ
@@ -65,6 +66,37 @@ void CGameManager::Update()
 				m_pScene2D_GoSign->SetDisp(m_pScene2D_GoSign->GetDisp() ^ 1);
 			}
 		}
+	}
+
+	// ゲームクラスのポインタ取得
+	CGame *pGame = (CGame*)CManager::GetBaseMode();
+
+	// ゲームモードでプレイ操作可能なタイミングの時
+	if (pGame->GetGameMode() == CGame::GAME_MODE_NORMAL)
+	{
+		// カウント加算
+		m_nTimeCnt++;
+	}
+
+	// 5秒経過した時
+	if (m_nTimeCnt >= 300)
+	{
+		if (CManager::GetBaseMode()->GetPlayer()->GetPlayerUI())
+		{
+			// 体力が0より大きかった時
+			if (CManager::GetBaseMode()->GetPlayer()->GetPlayerUI()->GetTime() > 0)
+			{
+				// タイマーの値を減少する
+				CManager::GetBaseMode()->GetPlayer()->GetPlayerUI()->DecrementTime();
+			}
+			// タイマーが0以下になった時
+			else
+			{
+			}
+		}
+
+		// タイマーカウントをリセットする
+		m_nTimeCnt = 0;
 	}
 }
 

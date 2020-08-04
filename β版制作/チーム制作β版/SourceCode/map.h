@@ -126,24 +126,21 @@ private:
 	/* メンバ関数 */
 	void			MapModelLoad();															// 配置するモデルのロード
 	void			MapModelSave();															// 配置するモデルのセーブ
-	//void			WaveSave();																// ウェーブのセーブ
 
-	void			MapModelCreate(int ModelType, int nType, D3DXVECTOR3 pos);				// 配置するモデルの生成
-	void			LoadFailureMessage(int ModelType);										// 読み込み失敗時の警告表示
+	void			MapModelCreate(int ModelType, int nType, D3DXVECTOR3 pos, int nType2);	// 配置するモデルの生成
 	void			LoadSuccessMessage(int ModelType);										// 読み込み成功時の結果表示
 
 	void			SaveModelHeader(FILE *pFile, int ModelType);									// セーブするモデルのヘッダー
 	void			SaveModelContents(FILE *pFile, int ModelType, int nCnt, int nNum);				// セーブするモデルの情報
 	void			SaveWaveContents(FILE *pFile, int ModelType, int nType, int nCnt, int nNum);	// セーブするウェーブの情報
 
-	unsigned int	GetMaxMapModel(int ModelType);											// 配置するモデルの最大数取得
+	size_t			GetMaxMapModel(int ModelType);											// 配置するモデルの最大数取得
 	void			*GetMapModel(int ModelType, int nCnt);									// 配置するモデルのポインタ
 
 	void			AllSaveButton();														// 配置したモデルを全てセーブするボタン
-	void			AllLoadButton();														// 配置したモデルを全てロードするボタン
 	void			AllDeleteButton();														// 配置したモデルを全てデリートするボタン
 	void			ModelDeleteButton(int nNowSelect);										// 配置するモデルをデリートするボタン
-	void			ModelCreateButton();													// 配置するモデルを生成するボタン
+	void			ModelCreat();															// 配置するモデルを生成
 
 	D3DXVECTOR3		GetMapModelPos(int nNowSelect);											// 選択しているモデルの位置の取得
 	void			SetMapModelPos(D3DXVECTOR3 pos, int nNowSelect);						// 選択しているモデルの位置の設定
@@ -155,6 +152,7 @@ private:
 	void			ObstacleComboBox(int &nSelectType, int nNowSelect);						// 障害物のコンボボックス
 	void			EnemyComboBox(int &nSelectType, int nNowSelect);						// 敵のコンボボックス
 	void			PrisonerComboBox(int &nSelectType, int nNowSelect);						// 捕虜のコンボボックス
+	void			PrisonerComboBox2(int &nSelectType, int nNowSelect);					// 捕虜のコンボボックス
 	void			SetSelectMapModelPosRDest(D3DXVECTOR3 posR);							// 選択しているモデルを注視点の目的地に設定
 
 	/* 静的メンバ変数 */
@@ -164,9 +162,10 @@ private:
 	static MAP					m_MapNum;									// マップ番号
 	static WAVE					m_WaveNum;									// ウェーブ番号
 	static ARRANGEMENT_MODEL	m_ArrangmentModel;							// 配置するモデルの種類
+	static WAVE_INFO			m_aWaveInfo[WAVE_MAX];						// ウェーブの情報
 
 	/* メンバ変数 */
-	std::vector<CModel*>		m_pMapModel;								// 可変長配列 設置するモデル
+	std::vector<CModel*>		m_pMapModel;								// 可変長配列 設置するマップモデル
 	std::vector<CEnemy*>		m_pEnemy;									// 可変長配列 設置したエネミー
 	std::vector<CPrisoner*>		m_pPrisoner;								// 可変長配列 設置した捕虜
 	std::vector<CObstacle*>		m_pObstacle;								// 可変長配列 設置した障害物
@@ -176,11 +175,11 @@ private:
 	std::vector<CVehicle*>		m_pVehicle;									// 可変長配列 設置した乗り物
 
 	int							m_nOldSelect;								// 前回選択していたモノの番号
-	static WAVE_INFO			m_aWaveInfo[WAVE_MAX];						// ウェーブの情報
 	D3DXVECTOR3					m_WavePos;									// ウェーブの位置
-	D3DXVECTOR3					m_ModelPosOld;								// モデルの前回の位置
 	D3DXVECTOR3					m_TransitionPos;							// 遷移する位置
+	D3DXVECTOR3					m_CameraPos;								// カメラの位置
 	int							m_TransitionMapID;							// 次に遷移するマップの番号
+	bool						m_bCameraFollowing;							// カメラを追従するフラグ
 };
 
 #endif

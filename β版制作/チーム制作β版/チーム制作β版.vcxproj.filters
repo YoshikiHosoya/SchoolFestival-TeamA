@@ -286,6 +286,12 @@
     <ClCompile Include="SourceCode\ScoreManager.cpp">
       <Filter>ManagerClass</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\selectcharacter.cpp">
+      <Filter>Mode</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\gameover.cpp">
+      <Filter>Mode</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SourceCode\mesh.h">
@@ -581,6 +587,12 @@
     </ClInclude>
     <ClInclude Include="SourceCode\ScoreManager.h">
       <Filter>ManagerClass</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\selectcharacter.h">
+      <Filter>Mode</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\gameover.h">
+      <Filter>Mode</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

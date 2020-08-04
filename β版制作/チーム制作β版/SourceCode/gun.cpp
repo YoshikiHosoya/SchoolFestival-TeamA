@@ -22,6 +22,7 @@
 #include "TrackingGun.h"
 #include "diffusiongun.h"
 #include "sound.h"
+#include "particle.h"
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
 // =====================================================================================================================================================================
@@ -58,6 +59,7 @@ HRESULT CGun::Init()
 {
 	m_bMultiple		= false;										// フラグをオフ
 	m_GunType		= GUN_TYPE::GUNTYPE_HANDGUN;					// ハンドガンに設定
+	m_GunTypeOld	= GUN_TYPE::GUNTYPE_HANDGUN;					// 前回の銃の種類をハンドガンに設定
 	m_nCntFrame		= 0;											// フレームカウント
 	m_nCntBullet	= 0;											// 弾のカウント
 	m_nAmmo			= CBullet::GetBulletParam(m_GunType)->nAmmo;	// 残弾数
@@ -192,11 +194,33 @@ void CGun::SetGunType(GUN_TYPE type)
 	// モデルの差し替え
 	SetModelConut(type);
 
+	// 前回の銃の種類を保存
+	m_GunTypeOld = m_GunType;
+
 	// 種類の設定
 	m_GunType = type;
 
-	// 弾薬数
-	m_nAmmo = pBulletParam->nAmmo;
+	// 前回と種類が違うとき
+	if (m_GunType != m_GunTypeOld)
+	{
+		// 弾薬数
+		m_nAmmo = pBulletParam->nAmmo;
+	}
+	else
+	{
+		// 弾薬数補充
+		m_nAmmo += pBulletParam->nAmmo;
+	}
+}
+
+// =====================================================================================================================================================================
+//
+// 弾数の加算
+//
+// =====================================================================================================================================================================
+void CGun::GunAddAmmo(int nAmmo)
+{
+	m_nAmmo += nAmmo;
 }
 
 // =====================================================================================================================================================================
@@ -248,7 +272,8 @@ void CGun::Shot()
 
 		case CGun::GUNTYPE_LASERGUN:
 			// レーザーガンの生成
-			pBullet = CLasergun::Create(m_ShotRot);
+			//pBullet = CLasergun::Create(m_ShotRot);
+			CParticle::CreateFromText(m_ShotPos, m_ShotRot, CParticleParam::EFFECT_LAZER, GetTag(), CBullet::GetBulletParam((int)CGun::GUNTYPE_LASERGUN)->nPower, GetShotPosPtr());
 			m_bMultiple = true;		// フラグをオン
 			break;
 

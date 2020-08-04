@@ -480,7 +480,7 @@ void CResultUI::ScoreCal()
 		// 基準となるプレイヤーの残機数の値
 		const int nReferenceValue_PrisonerNum = pPlayer->GetLife();
 		// 基準となる追加得点の値
-		const int nReferenceValue_BonusScore = pPlayer->GetLife() * CScoreManager::GetScorePoint(CScoreManager::SCORE_RESCUE_PRISONER);
+		const int nReferenceValue_BonusScore = pPlayer->GetLife() * CScoreManager::GetScorePoint(CScoreManager::SCORE_BONUS);
 
 		// 描画許可が出たら処理を通す
 		if (m_bPrisonerNum)

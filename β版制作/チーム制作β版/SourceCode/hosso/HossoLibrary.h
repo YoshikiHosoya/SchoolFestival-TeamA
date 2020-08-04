@@ -114,7 +114,6 @@ public:
 
 	static float Vec2Cross(D3DXVECTOR2 const &rVecA, D3DXVECTOR2 const &rVecB);									//2D 外積計算
 	static void CalcMatrix(D3DXMATRIX *pMtx,D3DXVECTOR3 const &rPos, D3DXVECTOR3 const &rRot);					//ワールドマトリックス計算
-	static void CalcMatrixAndBillboard(D3DXMATRIX *pMtx, D3DXVECTOR3 const &rPos, D3DXVECTOR3 const &rRot);		//ワールドマトリックス計算とビルボード
 	static void SetBillboard(D3DXMATRIX *pMtx);																	//ビルボード設定
 	static void SetBillboard_XZ_Only(D3DXMATRIX *pMtx);															//ビルボード設定　XとZのみ
 
