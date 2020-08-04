@@ -72,7 +72,7 @@ public:
 	static void ResetVertexID();					//頂点IDリセット　画面が停止してもパーティクルの処理を行う為
 
 	static void CreateFromParam(D3DXVECTOR3 pos, D3DXVECTOR3 rot, CParticleParam *pInputParam);
-	static void CreateFromText(D3DXVECTOR3 pos, D3DXVECTOR3 rot, CParticleParam::PARTICLE_TEXT type,TAG tag = TAG_PLAYER,int nAttack = -1);
+	static void CreateFromText(D3DXVECTOR3 pos, D3DXVECTOR3 rot, CParticleParam::PARTICLE_TEXT type, TAG tag = TAG_PLAYER, int nAttack = -1, D3DXVECTOR3 *PosPtr = nullptr);
 
 	bool GetDeleteFlag() { return m_bDeleteFlag; };
 
@@ -82,6 +82,8 @@ private:
 
 	D3DXVECTOR3 m_posOrigin;										//原点座標
 	D3DXVECTOR3 m_rotOrigin;										//原点回転量
+	D3DXMATRIX m_WorldMtx;											//ワールドマトリックス
+	D3DXVECTOR3 *m_pPosOriginPtr;									//原点座標のポインタ 追従する時はこれを使う
 
 	CCollision *m_pCollision;										//コリジョンのポインタ
 	std::unique_ptr<CParticleParam> m_pParticleParam;				//パーティクルの現在のパラメータのポインタ

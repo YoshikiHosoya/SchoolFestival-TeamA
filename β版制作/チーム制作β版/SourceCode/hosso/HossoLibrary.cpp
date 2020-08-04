@@ -49,27 +49,6 @@ void CHossoLibrary::CalcMatrix(D3DXMATRIX *pMtx, D3DXVECTOR3 const &rPos, D3DXVE
 	D3DXMatrixTranslation(&mtxTrans, rPos.x, rPos.y, rPos.z);
 	D3DXMatrixMultiply(pMtx, pMtx, &mtxTrans);
 }
-//------------------------------------------------------------------------------
-//ビルボード設定
-//------------------------------------------------------------------------------
-void CHossoLibrary::CalcMatrixAndBillboard(D3DXMATRIX * pMtx, D3DXVECTOR3 const & rPos, D3DXVECTOR3 const & rRot)
-{
-	D3DXMATRIX	mtxRot, mtxTrans;			//計算用
-
-	//ワールドマトリックスの初期化
-	D3DXMatrixIdentity(pMtx);
-
-
-	// 回転を反映
-	D3DXMatrixRotationYawPitchRoll(&mtxRot, rRot.y, rRot.x, rRot.z);
-	D3DXMatrixMultiply(pMtx, pMtx, &mtxRot);
-
-	// 位置を反映
-	D3DXMatrixTranslation(&mtxTrans, rPos.x, rPos.y, rPos.z);
-	D3DXMatrixMultiply(pMtx, pMtx, &mtxTrans);
-	//ビルボード設定
-	//SetBillboard(pMtx);
-}
 
 //------------------------------------------------------------------------------
 //回転の計算　360度以内にする

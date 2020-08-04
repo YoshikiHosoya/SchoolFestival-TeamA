@@ -60,6 +60,7 @@ public:
 	D3DXVECTOR3			GetShotOffsetPos()			{ return m_ShotOffsetPos; };		// 発射位置のオフセットの取得
 	D3DXVECTOR3			GetShotRot()				{ return m_ShotRot; };				// 撃つときの回転の向きの取得
 	D3DXVECTOR3			GetShotVec()				{ return m_Shotvector; };			// 撃つときの向きの取得
+	D3DXVECTOR3			*GetShotPosPtr()			{ return &m_ShotPos; };				// 撃つときの座標のポインタ取得
 
 	void				SetGunType(GUN_TYPE type);															// 銃の種類の設定
 	void				SetDrawFlag(bool bflag)						{ m_bDraw = bflag; };					// 描画フラグの設定

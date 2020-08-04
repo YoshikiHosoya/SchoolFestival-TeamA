@@ -219,6 +219,7 @@ public:
 	void SetColorChangeFlag(bool ColorChangeFlag)	{ m_bColorChangeFlag = ColorChangeFlag; };			// 色変更フラグの設定
 	void SetAddColor(D3DXCOLOR AddColor)			{ m_AddColor = AddColor; };							// 加算する色の設定
 	D3DXVECTOR3 &GetPosition(void)					{ return m_pos; };									// 位置の取得
+	D3DXVECTOR3 *GetPositionPtr()					{ return &m_pos; };									// 位置の取得　ポインタで
 	D3DXVECTOR3 &GetRot(void)						{ return m_rot; };									// 回転の取得
 	D3DXVECTOR3 &GetSize(void)						{ return m_size; };									// サイズの取得
 	D3DXVECTOR3 GetvtxMax(int nCnt)					{ return m_Model[MODEL_TYPE::MAP_MODEL][nCnt].vtxMax;};			// 頂点情報のMAX取得
