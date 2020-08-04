@@ -660,7 +660,8 @@ void CPlayer::Ride()
 		else
 		{
 		// ’e‚ðŒ‚‚Â•ûŒü‚ðÝ’è
-		m_pGun->SetShotRot(GetShotDirection());
+		m_pGun->SetShotRot(GetAddShotRot());
+		CDebugProc::Print("ŽËŒ‚•ûŒü’l:%2f\n", GetAddShotRot().z);
 		}
 		if (m_pPlayerUI)
 		{
