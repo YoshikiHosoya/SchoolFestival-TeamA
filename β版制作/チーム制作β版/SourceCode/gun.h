@@ -63,14 +63,15 @@ public:
 	D3DXVECTOR3			*GetShotPosPtr()			{ return &m_ShotPos; };				// 撃つときの座標のポインタ取得
 
 	void				SetGunType(GUN_TYPE type);															// 銃の種類の設定
+	void				GunAddAmmo(int nAmmo);																// 弾数の加算
 	void				SetDrawFlag(bool bflag)						{ m_bDraw = bflag; };					// 描画フラグの設定
 	void				SetTag(TAG type)							{ m_Tag = type; };						// タグの設定
 	void				SetShotOffsetPos(D3DXVECTOR3 ShotOffsetPos)	{ m_ShotOffsetPos = ShotOffsetPos; };	// 発射位置のオフセットの設定
 	void				SetShotRot(D3DXVECTOR3 ShotRot)				{ m_ShotRot = ShotRot; };				// 撃つときの回転の向きの設定
 	void				SetShotVec(D3DXVECTOR3 ShotVec)				{ m_Shotvector = ShotVec; };			// 撃つときの向きの設定
 	void				SetMtxWorld(D3DXMATRIX *mtx)				{ m_HasHandMtx = mtx; };				// マトリックスの設定
-	void				AddAmmo(int nAmmo)							{ m_nAmmo += nAmmo; };					// 弾数の加算
 	void				Shot();																				// 銃の発射
+
 private:
 	/* メンバ関数 */
 	void				MultipleShot();			// 複数発撃つ処理

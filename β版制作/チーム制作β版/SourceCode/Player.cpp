@@ -1,6 +1,9 @@
-//====================================================================
-// プレイヤー処理 [player.cpp]: NORI
-//====================================================================
+// =====================================================================================================================================================================
+//
+// プレイヤーの処理 [player.cpp]
+// Author : NORI
+//
+// =====================================================================================================================================================================
 #include "Player.h"
 #include "inputKeyboard.h"
 #include "model.h"
@@ -27,6 +30,25 @@
 #include "battleplane.h"
 #include "resultmanager.h"
 
+// =====================================================================================================================================================================
+// 静的メンバ変数の初期化
+// =====================================================================================================================================================================
+PLAYER_DATA		CPlayer::m_PlayerData	 = {};
+int				CPlayer::m_nLife[2] = {};
+int				CPlayer::m_nRespawnCnt	 = 0;
+float			CPlayer::m_fRunSpeed	 = 0.0f;
+float			CPlayer::m_fCrouchSpeed	 = 0.0f;
+float			CPlayer::m_fJump		 = 0.0f;
+float			CPlayer::m_fRideJump	 = 0.0f;
+D3DXVECTOR3		CPlayer::m_pos[2] = {};
+// =====================================================================================================================================================================
+// テキストファイル名
+// =====================================================================================================================================================================
+char *CPlayer::m_PlayerFileName =
+{
+	"data/Load/Player/PlayerData.txt" 			// プレイヤーの情報
+};
+
 //====================================================================
 //マクロ定義
 //====================================================================
@@ -38,11 +60,21 @@
 #define SHOT_BULLET_POS_Y		(-15.0f)		// 弾の発射位置Y
 #define SHOT_BULLET_POS_Z		(-5.0f)			// 弾の発射位置Z
 
+// =====================================================================================================================================================================
+//
+// コンストラクタ
+//
+// =====================================================================================================================================================================
 CPlayer::CPlayer(OBJ_TYPE type) :CCharacter(type)
 {
 	SetObjType(OBJTYPE_PLAYER);
 }
 
+// =====================================================================================================================================================================
+//
+// デストラクタ
+//
+// =====================================================================================================================================================================
 CPlayer::~CPlayer()
 {
 }
@@ -51,6 +83,9 @@ CPlayer::~CPlayer()
 //====================================================================
 HRESULT CPlayer::Init(void)
 {
+	// 読み込んだ情報の代入
+	SetPlayerData();
+
 	//キャラの初期化
 	CCharacter::Init();
 	LoadOffset(CCharacter::CHARACTER_TYPE_PLAYER);
@@ -87,10 +122,21 @@ HRESULT CPlayer::Init(void)
 		}
 	}
 
+	// チュートリアルモードだった時
+	if (CManager::GetMode() == CManager::MODE_TUTORIAL)
+	{
+		SetPosition(D3DXVECTOR3(50.0f, 100.0f, 0.0f));
+		SetLife(5);
+	}
+	// ゲームモードだった時
+	else if(CManager::GetMode() == CManager::MODE_GAME)
+	{
+		SetPosition(m_pos[0]);
+		SetLife(m_nLife[0]);
+	}
+
 	//初期の向き
 	SetCharacterDirection(DIRECTION::RIGHT);
-	//リスポーン時のカウント
-	m_nRespawnCnt = 0;
 	// 当たり判定生成
 	GetCollision()->SetPos(&GetPosition());
 	GetCollision()->SetSize2D(PLAYER_SIZE);
@@ -254,7 +300,7 @@ void CPlayer::MoveUpdate(void)
 		// Aの処理
 		if (key->GetKeyboardPress(DIK_A))
 		{
-			CPlayer::Move(0.5f, 0.5f);
+			CPlayer::Move(m_fRunSpeed, 0.5f);
 			if (key->GetKeyboardPress(DIK_W))
 			{
 				SetCharacterDirection(DIRECTION::UP);
@@ -267,7 +313,7 @@ void CPlayer::MoveUpdate(void)
 		// Dの処理
 		else if (key->GetKeyboardPress(DIK_D))
 		{
-			CPlayer::Move(-0.5f, -0.5f);
+			CPlayer::Move(-m_fRunSpeed, -0.5f);
 			if (key->GetKeyboardPress(DIK_W))
 			{
 				SetCharacterDirection(DIRECTION::UP);
@@ -281,7 +327,7 @@ void CPlayer::MoveUpdate(void)
 		//ジャンプ
 		if ((key->GetKeyboardTrigger(DIK_SPACE)|| pad->GetTrigger(pad->JOYPADKEY_A, 1)) && GetJump() == true && m_DebugState == DEBUG_NORMAL)
 		{
-			GetMove().y += 27;
+			GetMove().y += m_fJump;
 			SetMotion(PLAYER_MOTION_JUMP);
 		}
 		else if (GetJump() == false && GetMove().y < 0 && GetMotionType() != PLAYER_MOTION_JUMPSTOP)
@@ -512,17 +558,6 @@ void CPlayer::PadMoveUpdate(void)
 	}
 }
 //====================================================================
-//モデルのクリエイト
-//====================================================================
-CPlayer *CPlayer::Create(void)
-{
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
-	CPlayer*pPlayer;
-	pPlayer = new CPlayer(OBJTYPE_PLAYER);
-	pPlayer->Init();
-	return pPlayer;
-}
-//====================================================================
 //デフォルトモーションに戻る
 //====================================================================
 bool CPlayer::DefaultMotion(void)
@@ -684,7 +719,7 @@ void CPlayer::Ride()
 		if (key->GetKeyboardTrigger(DIK_SPACE)|| pad->GetTrigger(pad->JOYPADKEY_B,1) && GetJump() == false)
 		{
 			m_bRideVehicle = false;
-			GetMove().y += 20;
+			GetMove().y += m_fRideJump;
 			SetMotion(PLAYER_MOTION_JUMP);
 		}
 	}
@@ -697,13 +732,136 @@ void CPlayer::ReSpawn(void)
 	m_nRespawnCnt++;
 	SetState(CHARACTER_STATE_INVINCIBLE);
 
-	if (m_nRespawnCnt == 120)
+	if (m_nRespawnCnt == m_nRespawnCnt)
 	{
 		m_nRespawnCnt = 0;
 		m_bRespawn = false;
 		m_pGun->SetGunType(CGun::GUNTYPE_HANDGUN);
 		SetState(CHARACTER_STATE_NORMAL);
-		SetLife(10);
+		SetLife(m_nLife[0]);
 	}
 }
 
+//====================================================================
+//モデルのクリエイト
+//====================================================================
+CPlayer *CPlayer::Create(void)
+{
+	CPlayer*pPlayer;
+	pPlayer = new CPlayer(OBJTYPE_PLAYER);
+	pPlayer->Init();
+	return pPlayer;
+}
+
+//====================================================================
+//プレイヤーのデータの読み込み
+//====================================================================
+void CPlayer::PlayerLoad()
+{
+	// ファイルポイント
+	FILE *pFile;
+
+	char cReadText[128];			// 文字として読み取る
+	char cHeadText[128];			// 比較用
+	char cDie[128];					// 不要な文字
+
+									// ファイルを開く
+	pFile = fopen(m_PlayerFileName, "r");
+
+	// 開いているとき
+	if (pFile != NULL)
+	{
+		// SCRIPTが来るまでループ
+		while (strcmp(cHeadText, "SCRIPT") != 0)
+		{
+			fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
+			sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
+		}
+
+		// SCRIPTが来たら
+		if (strcmp(cHeadText, "SCRIPT") == 0)
+		{
+			// END_SCRIPTが来るまでループ
+			while (strcmp(cHeadText, "END_SCRIPT") != 0)
+			{
+				fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
+				sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
+
+															// ITEMSETが来たら
+				if (strcmp(cHeadText, "PLAYERSET") == 0)
+				{
+					// END_ITEMSETが来るまでループ
+					while (strcmp(cHeadText, "END_PLAYERSET") != 0)
+					{
+						fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
+						sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
+
+																	// SPEEDが来たら
+						if (strcmp(cHeadText, "LIFE") == 0)
+						{
+							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_PlayerData.nLife);			// 比較用テキストにLIFEを代入
+						}
+						else if (strcmp(cHeadText, "RESPAEN") == 0)
+						{
+							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_PlayerData.nRespawnCnt);		// 比較用テキストにRESPAENを代入
+						}
+						else if (strcmp(cHeadText, "RUNSPEED") == 0)
+						{
+							sscanf(cReadText, "%s %s %f", &cDie, &cDie, &m_PlayerData.fRunSpeed);		// 比較用テキストにRUNSPEEDを代入
+						}
+						else if (strcmp(cHeadText, "CROUCHSPEED") == 0)
+						{
+							sscanf(cReadText, "%s %s %f", &cDie, &cDie, &m_PlayerData.fCrouchSpeed);	// 比較用テキストにCROUCHSPEEDを代入
+						}
+						else if (strcmp(cHeadText, "RIDEJUMP") == 0)
+						{
+							sscanf(cReadText, "%s %s %f", &cDie, &cDie, &m_PlayerData.fRideJump);		// 比較用テキストにRIDEJUMPを代入
+						}
+						else if (strcmp(cHeadText, "JUMP") == 0)
+						{
+							sscanf(cReadText, "%s %s %f", &cDie, &cDie, &m_PlayerData.fJump);			// 比較用テキストにJUMPを代入
+						}
+						else if (strcmp(cHeadText, "POS") == 0)
+						{
+							sscanf(cReadText, "%s %s %f %f %f", &cDie, &cDie,
+								&m_PlayerData.pos.x,
+								&m_PlayerData.pos.y,
+								&m_PlayerData.pos.z);													// 比較用テキストにPOSを代入
+						}
+
+						else if (strcmp(cHeadText, "END_PLAYERSET") == 0)
+						{
+						}
+					}
+				}
+			}
+		}
+		// ファイルを閉じる
+		fclose(pFile);
+	}
+	else
+	{
+		MessageBox(NULL, "プレイヤーのデータ読み込み失敗", "警告", MB_ICONWARNING);
+	}
+}
+
+//====================================================================
+//プレイヤーのデータの設定
+//====================================================================
+void CPlayer::SetPlayerData()
+{
+	// 体力の情報を取得
+	m_nLife[0] = m_PlayerData.nLife;
+	// 初期座標の情報を取得
+	m_pos[0] = m_PlayerData.pos;
+	// 復活時間の情報を取得
+	m_nRespawnCnt = m_PlayerData.nRespawnCnt;
+	// 移動速度の情報を取得
+	m_fRunSpeed = m_PlayerData.fRunSpeed;
+	// しゃがみ時の移動速度の情報を取得
+	m_fCrouchSpeed = m_PlayerData.fCrouchSpeed;
+	// 通常時のジャンプ量
+	m_fJump = m_PlayerData.fJump;
+	// 乗り物から降りる時のジャンプ量
+	m_fRideJump = m_PlayerData.fRideJump;
+}

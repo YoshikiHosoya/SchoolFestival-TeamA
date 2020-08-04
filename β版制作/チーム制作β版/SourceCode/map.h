@@ -127,7 +127,7 @@ private:
 	void			MapModelLoad();															// 配置するモデルのロード
 	void			MapModelSave();															// 配置するモデルのセーブ
 
-	void			MapModelCreate(int ModelType, int nType, D3DXVECTOR3 pos);				// 配置するモデルの生成
+	void			MapModelCreate(int ModelType, int nType, D3DXVECTOR3 pos, int nType2);	// 配置するモデルの生成
 	void			LoadSuccessMessage(int ModelType);										// 読み込み成功時の結果表示
 
 	void			SaveModelHeader(FILE *pFile, int ModelType);									// セーブするモデルのヘッダー
@@ -152,6 +152,7 @@ private:
 	void			ObstacleComboBox(int &nSelectType, int nNowSelect);						// 障害物のコンボボックス
 	void			EnemyComboBox(int &nSelectType, int nNowSelect);						// 敵のコンボボックス
 	void			PrisonerComboBox(int &nSelectType, int nNowSelect);						// 捕虜のコンボボックス
+	void			PrisonerComboBox2(int &nSelectType, int nNowSelect);					// 捕虜のコンボボックス
 	void			SetSelectMapModelPosRDest(D3DXVECTOR3 posR);							// 選択しているモデルを注視点の目的地に設定
 
 	/* 静的メンバ変数 */
