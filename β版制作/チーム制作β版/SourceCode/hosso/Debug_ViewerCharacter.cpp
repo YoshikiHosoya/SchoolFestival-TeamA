@@ -54,7 +54,7 @@ HRESULT CDebug_ViewerCharacter::Init()
 	CCharacter::Init();
 
 	//オフセット設定
-	CCharacter::LoadOffset(CCharacter::CHARACTER_TYPE_ENEMY);
+	CCharacter::LoadOffset(CCharacter::CHARACTER_TYPE_PRISONER);
 
 	//初期化
 	SetRotDest(ZeroVector3);
