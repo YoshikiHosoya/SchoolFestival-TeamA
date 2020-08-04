@@ -1,0 +1,30 @@
+//------------------------------------------------------------
+//
+//ParticleParamater
+//読み込み用のテキストにコピーしてください
+//Author:Yoshiki Hosoya
+//
+//------------------------------------------------------------
+
+SCRIPT
+	PARAMSET
+
+		SPEEDRANDOM = 0					//速度がランダムかどうか
+		GRAVITY = 0						//重力をつけるか
+		ALPHABLEND = 1					//αブレンドするか
+		ANIMATION = 0					//アニメーションするか
+		TEXTURE = 1						//テクスチャ
+		SHAPE = 0						//パーティクルの出し方
+		LIFE = 3						//ライフ
+		NUMBER = 3						//個数
+		SPEED = 0.0						//速度
+		RANGE = 0.5						//範囲
+		ALPHADAMPING = 0.82				//アルファ値の減衰値
+		GRAVITYPOWER = 0.80				//重力の強さ
+		SIZE = 40.00 7.50 0.00		//サイズ
+		SIZEDAMPING = 0.99 0.99 0.00	//サイズ減衰量
+		COLOR = 0.3 0.9 0.7 1.0			//色
+		ROT = 0.00 0.00 0.00			//回転量
+
+	END_PARAMSET
+END_SCRIPT
