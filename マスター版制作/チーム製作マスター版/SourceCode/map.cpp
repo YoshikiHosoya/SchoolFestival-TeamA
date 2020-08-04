@@ -1806,7 +1806,7 @@ void CMap::PrisonerItemTypeComboBox2(int & nSelectType, int nNowSelect)
 			// 前回と違うとき
 			if (PrisonerItem != nSelectType)
 			{
-				const CItem::ITEMTYPE Item = (CItem::ITEMTYPE)nSelectType;
+				CItem::ITEMTYPE Item = (CItem::ITEMTYPE)nSelectType;
 				// 種類代入
 				PrisonerItem = static_cast<CItem::ITEMTYPE>(Item - 1);
 				// 敵のタイプの設定
