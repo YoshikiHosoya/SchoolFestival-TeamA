@@ -175,7 +175,7 @@ bool CCollision::ForPlayerBulletCollision(int nEnemyDamage, int nObstacleDamage,
 				if (this->OtherCollision2D(pEnemy->GetCollision()))
 				{
 					CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
-					if (pPlayer != nullptr)
+					if (pPlayer != nullptr && pPlayer->GetPlayerUI())
 					{
 						pPlayer->GetPlayerUI()->SetScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_DAMAGE_BULLET));
 					}

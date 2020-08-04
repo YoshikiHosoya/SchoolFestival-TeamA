@@ -261,7 +261,7 @@ void CPrisoner::PrisonerState()
 		if (m_StateTime <= 0)
 		{
 			CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
-			if (pPlayer)
+			if (pPlayer && pPlayer->GetPlayerUI())
 			{
 				pPlayer->GetPlayerUI()->SetScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_RESCUE_PRISONER));
 				// ‘Ì—Í‚Ì‰ÁŽZ
