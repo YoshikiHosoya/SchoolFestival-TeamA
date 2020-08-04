@@ -261,7 +261,7 @@ void CPrisoner::PrisonerState()
 		if (m_StateTime <= 0)
 		{
 			CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
-			if (pPlayer)
+			if (pPlayer && pPlayer->GetPlayerUI())
 			{
 				pPlayer->GetPlayerUI()->SetScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_RESCUE_PRISONER));
 				// 体力の加算
@@ -330,7 +330,7 @@ void CPrisoner::PrisonerDropType()
 			GetPosition(),
 			CItem::ITEMDROP_NONE,
 			CItem::ITEMDROP_PATTERN_DESIGNATE,
-			CItem::ITEMTYPE_COIN);
+			GetPrisonerDropItem());
 		break;
 
 		// ドロップするアイテムを範囲で指定してドロップさせる

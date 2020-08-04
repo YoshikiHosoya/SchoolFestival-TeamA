@@ -62,7 +62,7 @@ CItem::CItem(OBJ_TYPE type) :CScene3D(type)
 	m_nColCnt = 0;
 
 	// アイテムの種類
-	m_Type = ITEMTYPE_HEAVYMACHINEGUN;
+	m_Type = ITEMTYPE_NONE;
 
 	// アイテムをドロップさせる種類
 	m_Drop = ITEMDROP_WEAPON;
@@ -443,6 +443,12 @@ CItem::ITEMTYPE CItem::RandomRange(ITEMTYPE min, ITEMTYPE max)
 // =====================================================================================================================================================================
 void CItem::DropPattern(ITEMDROP_PATTERN pattern , ITEMDROP drop, ITEMTYPE type)
 {
+	// NONEのエラーを避けるため
+	if (pattern == ITEMDROP_PATTERN_DESIGNATE && type == ITEMTYPE_NONE)
+	{
+		drop = ITEMDROP_ALL;
+		pattern = ITEMDROP_PATTERN_RANDOM;
+	}
 	// 条件ごとにドロップさせる条件を変える
 	switch (pattern)
 	{

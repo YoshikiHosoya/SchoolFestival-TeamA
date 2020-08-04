@@ -104,6 +104,7 @@ void CMap::MapModelLoad()
 	char			cDie[128];											// 不要な文字
 	D3DXVECTOR3		pos				= D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 位置
 	int				nType			= 0;								// 種類
+	int				nType2			= 0;
 	char			*cFileName		= nullptr;							// ファイル名
 	int				nModelType		= -1;								// モデルの種類
 
@@ -194,6 +195,11 @@ void CMap::MapModelLoad()
 						{
 							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &nType);		// 比較用テキストにTYPEを代入
 						}
+						// TYPEが来たら
+						else if (strcmp(cHeadText, "TYPE2") == 0)
+						{
+							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &nType2);		// 比較用テキストにTYPE2を代入
+						}
 						// POSが来たら
 						else if (strcmp(cHeadText, "POS") == 0)
 						{
@@ -202,7 +208,7 @@ void CMap::MapModelLoad()
 						else if (strcmp(cHeadText, cEndSetText) == 0)
 						{
 							// 配置するモデルの生成
-							MapModelCreate(nModelType, nType, pos);
+							MapModelCreate(nModelType, nType, pos, nType2);
 							nModelType = -1;
 						}
 					}
@@ -288,7 +294,7 @@ void CMap::MapModelSave()
 // 配置するモデルの生成
 //
 // =====================================================================================================================================================================
-void CMap::MapModelCreate(int ModelType, int nType, D3DXVECTOR3 pos)
+void CMap::MapModelCreate(int ModelType, int nType, D3DXVECTOR3 pos,int nType2)
 {
 	switch (ModelType)
 	{
@@ -316,6 +322,9 @@ void CMap::MapModelCreate(int ModelType, int nType, D3DXVECTOR3 pos)
 		m_pPrisoner[m_pPrisoner.size() - 1]->SetPosition(pos);
 		// 種類の設定
 		m_pPrisoner[m_pPrisoner.size() - 1]->SetPrisonerType((CPrisoner::PRISONER_ITEM_DROPTYPE)nType);
+		// 種類の設定
+		m_pPrisoner[m_pPrisoner.size() - 1]->SetPrisonerItem((CItem::ITEMTYPE)nType2);
+
 		break;
 
 	/* --- 障害物 --- */
@@ -860,6 +869,7 @@ void CMap::SaveModelContents(FILE *pFile, int ModelType, int nCnt, int nNum)
 		fprintf(pFile, "PRISONERSET									# %d\n", nNum);
 		fprintf(pFile, "	TYPE	= %d\n", m_pPrisoner[nCnt]->GetPrisonerDropType());
 		fprintf(pFile, "	POS		= %.0f %.0f %.0f\n", m_pPrisoner[nCnt]->GetPosition().x, m_pPrisoner[nCnt]->GetPosition().y, m_pPrisoner[nCnt]->GetPosition().z);
+		fprintf(pFile, "	TYPE2	= %d\n", m_pPrisoner[nCnt]->GetPrisonerDropItem());
 		fprintf(pFile, "END_PRISONERSET\n\n");
 		break;
 
@@ -1575,6 +1585,7 @@ void CMap::MapModelSet()
 void CMap::ComboBoxAll(int nNowSelect)
 {
 	static int nSelectType = 0;		// 選んでいる種類
+	static int nSelectType1 = 0;		// 選んでいる種類
 
 	switch (m_ArrangmentModel)
 	{
@@ -1586,6 +1597,8 @@ void CMap::ComboBoxAll(int nNowSelect)
 	case CMap::ARRANGEMENT_MODEL_PRISONER:
 		// 捕虜の種類選択
 		PrisonerComboBox(nSelectType, nNowSelect);
+		// 確定ドロップアイテム選択
+		PrisonerComboBox2(nSelectType1, nNowSelect);
 		break;
 
 	case CMap::ARRANGEMENT_MODEL_OBSTACLE:
@@ -1715,6 +1728,39 @@ void CMap::PrisonerComboBox(int &nSelectType, int nNowSelect)
 				PrisonerType = (CPrisoner::PRISONER_ITEM_DROPTYPE)nSelectType;
 				// 敵のタイプの設定
 				m_pPrisoner[nNowSelect]->SetPrisonerType(PrisonerType);
+			}
+		}
+	}
+
+#endif
+}
+
+// =====================================================================================================================================================================
+//
+// 捕虜のコンボボックス
+//
+// =====================================================================================================================================================================
+void CMap::PrisonerComboBox2(int & nSelectType, int nNowSelect)
+{
+#ifdef _DEBUG
+	std::vector<std::string > aPrisonerItem = { "NONE","HMG","SG","LG","RL","FS","BEAR","COIN","JEWELRY","MEDAL","BOMBUP","ENERGYUP","BULLETUP" };
+
+	if (CHossoLibrary::ImGui_Combobox(aPrisonerItem, "Item", nSelectType))
+	{
+		// NULLチェック
+		if (m_pPrisoner[nNowSelect])
+		{
+			// 捕虜の種類の取得
+			CItem::ITEMTYPE PrisonerItem = m_pPrisoner[nNowSelect]->GetPrisonerDropItem();
+
+			// 前回と違うとき
+			if (PrisonerItem != nSelectType)
+			{
+				const CItem::ITEMTYPE Item = (CItem::ITEMTYPE)nSelectType;
+				// 種類代入
+				PrisonerItem = static_cast<CItem::ITEMTYPE>(Item - 1);
+				// 敵のタイプの設定
+				m_pPrisoner[nNowSelect]->SetPrisonerItem(PrisonerItem);
 			}
 		}
 	}

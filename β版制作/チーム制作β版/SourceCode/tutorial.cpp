@@ -48,9 +48,6 @@ HRESULT CTutorial::Init(void)
 	m_pMap->MapLoad(CMap::MAP_TUTORIAL);			// マップのロード
 
 	m_pPlayer = CPlayer::Create();
-	m_pPlayer->SetLife(30);
-	m_pPlayer->SetPosition(D3DXVECTOR3(50.0f, 100.0f, 0.0f));
-
 	// UI生成
 	CUIManager::Create();
 
