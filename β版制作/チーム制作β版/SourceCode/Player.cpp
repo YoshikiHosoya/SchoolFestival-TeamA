@@ -620,12 +620,12 @@ void CPlayer::Ride()
 		if (m_pGun->GetGunType() != m_pGun->GUNTYPE_HEAVYMACHINEGUN)
 		{
 		// ’e‚ðŒ‚‚Â•ûŒü‚ðÝ’è
-		m_pGun->SetShotRot(GetShotDirection());
+			m_pGun->SetShotRot(GetShotDirection());
 		}
 		else
 		{
-			// ’e‚ðŒ‚‚Â•ûŒü‚ðÝ’è
-			m_pGun->SetShotRot(GetShotDirection());
+		// ’e‚ðŒ‚‚Â•ûŒü‚ðÝ’è
+		m_pGun->SetShotRot(GetShotDirection());
 		}
 		if (m_pPlayerUI)
 		{

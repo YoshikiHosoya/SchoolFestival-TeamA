@@ -153,6 +153,7 @@ public:
 	D3DXMATRIX *GetMtxWorld(void);
 	D3DXVECTOR3 GetShotDirection(void);
 	int GetLife(void);
+	D3DXVECTOR3 GetAddShotRot(void);
 	bool GetJump(void);
 	bool GetGravity(void);
 	CHARACTER_TYPE GetCharacterType();								//キャラクターの種類取得
@@ -198,6 +199,7 @@ private:
 	D3DXVECTOR3 m_rot;												//回転
 	D3DXVECTOR3 m_rotDest;											//回転する差分
 	D3DXVECTOR3 m_ShotRot;											//撃つ向き
+	D3DXVECTOR3 m_AddShotRot;										//撃つ向きの加算用回転値
 	D3DXVECTOR3 m_AddHeadRot;
 	D3DXVECTOR3 m_AddArmRot;
 	D3DXMATRIX  m_mtxWorld;											//マトリックス

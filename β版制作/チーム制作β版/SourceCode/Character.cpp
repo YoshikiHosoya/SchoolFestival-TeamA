@@ -192,7 +192,7 @@ void CCharacter::Update(void)
 	{
 		m_ShotRot.x = 0.0f;
 		m_ShotRot.y = 0.5f * D3DX_PI;
-		m_ShotRot.z = 0.5f;
+		m_ShotRot.z = 0.5f*D3DX_PI;
 		m_AddHeadRot.x = 0.5f;
 		m_AddArmRot.x = 0.5f* D3DX_PI;
 
@@ -201,7 +201,7 @@ void CCharacter::Update(void)
 	{
 		m_ShotRot.x = 0.0f;
 		m_ShotRot.y = -0.5f * D3DX_PI;
-		m_ShotRot.z = -0.5f;
+		m_ShotRot.z = -0.5f*D3DX_PI;
 		m_AddHeadRot.x = 0.5f;
 		m_AddArmRot.x = 0.5f* D3DX_PI;
 	}
@@ -209,7 +209,7 @@ void CCharacter::Update(void)
 	{
 		m_ShotRot.x = 0.5f * D3DX_PI;
 		m_ShotRot.y = 0.0f;
-		m_ShotRot.z = 0.0f;
+		m_ShotRot.z = 0.0f*D3DX_PI;
 		m_AddHeadRot.x = 1.0f;
 		m_AddArmRot.x = 1.0f* D3DX_PI;
 	}
@@ -217,10 +217,32 @@ void CCharacter::Update(void)
 	{
 		m_ShotRot.x = -0.5f * D3DX_PI;
 		m_ShotRot.y = D3DX_PI;
-		m_ShotRot.z = 1.0f;
+		m_ShotRot.z = 1.0f*D3DX_PI;
 		m_AddHeadRot.x = -0.5f;
 		m_AddArmRot.x = -0.3f* D3DX_PI;
 	}
+	////目標点と現在の差分（回転）
+	//float diffShotRot = m_ShotRot.z - m_AddShotRot.x;
+	////3.14の超過分の初期化（回転）
+	//if (m_AddShotRot.x > D3DX_PI)
+	//{
+	//	m_AddShotRot.x -= D3DX_PI * 2;
+	//}
+	//else if (m_AddShotRot.x < -D3DX_PI)
+	//{
+	//	m_AddShotRot.x += D3DX_PI * 2;
+	//}
+	//if (diffShotRot > D3DX_PI)
+	//{
+	//	diffShotRot -= D3DX_PI * 2;
+	//}
+	//else if (diffShotRot < -D3DX_PI)
+	//{
+	//	diffShotRot += D3DX_PI * 2;
+	//}
+	////求めた差分だけ追従する計算
+	//m_AddShotRot.x += diffShotRot * 0.2f;
+
 	//ステートに応じた処理
 	State();
 
@@ -661,6 +683,10 @@ D3DXVECTOR3 &CCharacter::GetRot(void)
 int CCharacter::GetLife(void)
 {
 	return m_Life;
+}
+D3DXVECTOR3 CCharacter::GetAddShotRot(void)
+{
+	return m_AddShotRot;
 }
 //====================================================================
 //ジャンプの取得
