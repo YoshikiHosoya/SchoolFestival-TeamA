@@ -35,6 +35,7 @@ CParticle::CParticle()
 	m_bDeleteFlag = false;
 	m_posOrigin = ZeroVector3;
 	m_rotOrigin = ZeroVector3;
+	m_pPosOriginPtr = nullptr;
 }
 //------------------------------------------------------------------------------
 //デストラクタ
@@ -129,11 +130,17 @@ void CParticle::Draw()
 		pDevice->SetTexture(0, CTexture::GetSeparateTexture(m_pParticleParam->GetSeparateTex())) :
 		pDevice->SetTexture(0, CTexture::GetTexture(m_pParticleParam->GetTex()));
 
+	//ワールドマトリックス計算
+	CHossoLibrary::CalcMatrix(&m_WorldMtx, m_posOrigin, ZeroVector3);
+
 	//パーティクルのリストの数分
 	for (size_t nCnt = 0; nCnt < m_pParticleList.size(); nCnt++)
 	{
 		//マトリック計算
-		CHossoLibrary::CalcMatrixAndBillboard(&m_pParticleList[nCnt]->m_Mtx, m_pParticleList[nCnt]->m_pos, m_pParticleList[nCnt]->m_rot);
+		CHossoLibrary::CalcMatrix(&m_pParticleList[nCnt]->m_Mtx, m_pParticleList[nCnt]->m_pos, m_pParticleList[nCnt]->m_rot);
+
+		//原点のマトリックスを掛け合わせる
+		m_pParticleList[nCnt]->m_Mtx *= m_WorldMtx;
 
 		if (m_pParticleParam->GetBillboard())
 		{
@@ -181,6 +188,26 @@ void CParticle::ShowDebugInfo()
 //------------------------------------------------------------------------------
 void CParticle::UpdateVertex()
 {
+	//nullcheck
+	if (m_pPosOriginPtr)
+	{
+		CDebugProc::Print("PosOriginPtr >> %.2f %.2f %.2f", m_pPosOriginPtr->x, m_pPosOriginPtr->y, m_pPosOriginPtr->z);
+
+		if (m_pParticleParam->GetCollisionSizeCalc())
+		{
+			//マトリックス計算
+			CHossoLibrary::CalcMatrix(&m_WorldMtx, *m_pPosOriginPtr, m_rotOrigin);
+
+			//当たり判定用の原点作成　ちょっとキャラクター側とかに寄せる
+			D3DXVec3TransformCoord(&m_posOrigin, &ZeroVector]+3, &m_WorldMtx);
+
+		}
+		else
+		{
+			m_posOrigin = *m_pPosOriginPtr;
+		}
+	}
+
 	//頂点情報へのポインタ
 	VERTEX_3D *pVtx;
 
@@ -318,7 +345,7 @@ void CParticle::ResetVertexID()
 //------------------------------------------------------------------------------
 //テキスト情報を元にパーティクル作成
 //------------------------------------------------------------------------------
-void CParticle::CreateFromText(D3DXVECTOR3 pos, D3DXVECTOR3 rot, CParticleParam::PARTICLE_TEXT type,TAG tag, int nAttack)
+void CParticle::CreateFromText(D3DXVECTOR3 pos, D3DXVECTOR3 rot, CParticleParam::PARTICLE_TEXT type,TAG tag, int nAttack, D3DXVECTOR3 *PosPtr)
 {
 	//メモリ確保
 	std::unique_ptr<CParticle> pParticle(new CParticle);
@@ -348,6 +375,9 @@ void CParticle::CreateFromText(D3DXVECTOR3 pos, D3DXVECTOR3 rot, CParticleParam:
 
 			//メンバのポインタに格納
 			pParticle->m_pParticleParam.reset(std::move(pParam));
+
+			//原点のポインタ
+			pParticle->m_pPosOriginPtr = PosPtr;
 
 			//パーティクルの設定
 			pParticle->SetParticle(pos, rot, pParam);
@@ -517,7 +547,7 @@ void CParticle::SetParticle(D3DXVECTOR3 & pos, D3DXVECTOR3 const & rot, CParticl
 
 		if (pParam->GetType() == CParticleParam::EFFECT_LAZER)
 		{
-			std::unique_ptr<COneParticle>pOneParticle = COneParticle::Create(pos + randompos, move, D3DXVECTOR3(0.0f, 0.0f, rot.y));
+			std::unique_ptr<COneParticle>pOneParticle = COneParticle::Create(randompos, move, D3DXVECTOR3(0.0f, 0.0f, rot.y));
 			//配列に追加
 			m_pParticleList.emplace_back(std::move(pOneParticle));
 		}
@@ -526,7 +556,7 @@ void CParticle::SetParticle(D3DXVECTOR3 & pos, D3DXVECTOR3 const & rot, CParticl
 
 
 			//パーティクル生成
-			std::unique_ptr<COneParticle>pOneParticle = COneParticle::Create(pos + randompos, move, D3DXVECTOR3(rot));
+			std::unique_ptr<COneParticle>pOneParticle = COneParticle::Create(randompos, move, D3DXVECTOR3(rot));
 			//配列に追加
 			m_pParticleList.emplace_back(std::move(pOneParticle));
 		}
@@ -628,10 +658,10 @@ void CParticle::SetCollsionParam()
 			}
 
 			//マトリックス計算
-			CHossoLibrary::CalcMatrix(&RotationMatrix, m_posOrigin, m_rotOrigin);
+			CHossoLibrary::CalcMatrix(&m_WorldMtx, m_posOrigin, m_rotOrigin);
 
 			//当たり判定用の原点作成　ちょっとキャラクター側とかに寄せる
-			D3DXVec3TransformCoord(&m_posOrigin, &D3DXVECTOR3(0.0f, m_pParticleParam->GetCollisionSize().y, 0.0f), &RotationMatrix);
+			D3DXVec3TransformCoord(&m_posOrigin, &D3DXVECTOR3(0.0f, m_pParticleParam->GetCollisionSize().y, 0.0f), &m_WorldMtx);
 
 			//当たり判定の設定
 			m_pCollision->SetPos(&m_posOrigin);

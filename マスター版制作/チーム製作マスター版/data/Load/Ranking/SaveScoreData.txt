@@ -1,15 +1,11 @@
 #------------------------------------------------------------------------------
-# ランキングデータの情報
+# スコアの情報
 #------------------------------------------------------------------------------
 
 SCRIPT
 
-RANKINGSET
-	RANKING_1st	= 0
-	RANKING_2nd	= 0
-	RANKING_3rd	= 0
-	RANKING_4th	= 0
-	RANKING_5th	= 0
-END_RANKINGSET
+SCORESET
+	SCORE	= 99200
+END_SCORESET
 
 END_SCRIPT
