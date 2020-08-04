@@ -449,19 +449,26 @@ void CMap::MapUpdate()
 	static int nNowMapSelect = 0;		// 現在選択しているマップ番号
 
 	// オブジェクトウィンドウ
-	ImGui::Begin("MapModel", nullptr, ImGuiWindowFlags_MenuBar);
+	ImGui::Begin("MapEditor", nullptr, ImGuiWindowFlags_MenuBar);
 
 	//Tab
 	if (ImGui::BeginTabBar("EditorType"))
 	{
-		// マップエディター
 		if (ImGui::BeginTabItem("MapEditor"))
 		{
 			// マップのコンボボックス
 			MapComboBox(nNowMapSelect, nNowMapSelect);
-
+			ImGui::Separator();
 			ImGui::EndTabItem();
 		}
+		if (ImGui::BeginTabItem("MapModelType"))
+		{
+			// マップモデルの変更
+			MapTypeComboBox();
+			ImGui::Separator();
+			ImGui::EndTabItem();
+		}
+
 		//TabEnd
 		ImGui::EndTabBar();
 	}
@@ -1406,7 +1413,7 @@ void CMap::SetMapModelColorChangeFlag(bool bFlag, int nNowSelect)
 void CMap::MapModelTab()
 {
 	//Tab
-	if (ImGui::BeginTabBar("MapModelType"))
+	if (ImGui::BeginTabBar("MapType"))
 	{
 		// 障害物の設置
 		if (ImGui::BeginTabItem("Obstacle"))
@@ -1596,14 +1603,14 @@ void CMap::ComboBoxAll(int nNowSelect)
 
 	case CMap::ARRANGEMENT_MODEL_PRISONER:
 		// 捕虜の種類選択
-		PrisonerComboBox(nSelectType, nNowSelect);
+		PrisonerDropTypeComboBox(nSelectType, nNowSelect);
 		// 確定ドロップアイテム選択
-		PrisonerComboBox2(nSelectType1, nNowSelect);
+		PrisonerItemTypeComboBox2(nSelectType1, nNowSelect);
 		break;
 
 	case CMap::ARRANGEMENT_MODEL_OBSTACLE:
 		// 障害物の種類選択
-		ObstacleComboBox(nSelectType, nNowSelect);
+		ObstacleTypeComboBox(nSelectType, nNowSelect);
 		break;
 	}
 }
@@ -1615,30 +1622,73 @@ void CMap::ComboBoxAll(int nNowSelect)
 // =====================================================================================================================================================================
 void CMap::MapComboBox(int & nSelectType, int nNowSelect)
 {
+#ifdef _DEBUG
 	// ファイル名格納用
 	std::vector<std::string > aFileName = {};
 
 	//for
-	for (int nCnt = 0; nCnt < CModel::OBSTACLE_TYPE_MAX; nCnt++)
+	for (int nCnt = 0; nCnt < MAP::MAP_MAX; nCnt++)
 	{
 		//配列に追加
-		aFileName.emplace_back(CModel::GetModelFileName(CModel::MODEL_TYPE::MAP_MODEL, nCnt));
+		aFileName.emplace_back(m_MapModelFileName[nCnt]);
 	}
 
-	if (CHossoLibrary::ImGui_Combobox(aFileName, "MapType", nSelectType))
+	if (CHossoLibrary::ImGui_Combobox(aFileName, "MapTxt", nSelectType))
 	{
 		// マップのロード
 		AllDelete();
 		MapLoad((MAP)nSelectType);
 	}
+#endif
 }
 
 // =====================================================================================================================================================================
 //
-// 障害物のコンボボックス
+// マップの種類のコンボボックス
 //
 // =====================================================================================================================================================================
-void CMap::ObstacleComboBox(int &nSelectType, int nNowSelect)
+void CMap::MapTypeComboBox()
+{
+#ifdef _DEBUG
+	static int nSelectType = 0;		// 選んでいる種類
+	int nNowSelect = 0;
+	// ファイル名格納用
+	std::vector<std::string > aFileName = {};
+
+	//for
+	for (int nCnt = 0; nCnt < CModel::MODEL_MAP_MAX; nCnt++)
+	{
+		//配列に追加
+		aFileName.emplace_back(CModel::GetModelFileName(CModel::MODEL_TYPE::MAP_MODEL, nCnt));
+	}
+
+	if (CHossoLibrary::ImGui_Combobox(aFileName, "MapModelType", nSelectType))
+	{
+		// NULLチェック
+		if (m_pMapModel[nNowSelect])
+		{
+			// 捕虜の種類の取得
+			int MapType = m_pMapModel[nNowSelect]->GetModelCount();
+
+			// 前回と違うとき
+			if (MapType != nSelectType)
+			{
+				// 種類代入
+				MapType = nSelectType;
+				// 敵のタイプの設定
+				m_pMapModel[nNowSelect]->SetModelConut(MapType);
+			}
+		}
+	}
+#endif
+}
+
+// =====================================================================================================================================================================
+//
+// 障害物の種類のコンボボックス
+//
+// =====================================================================================================================================================================
+void CMap::ObstacleTypeComboBox(int &nSelectType, int nNowSelect)
 {
 #ifdef _DEBUG
 	// ファイル名格納用
@@ -1674,10 +1724,10 @@ void CMap::ObstacleComboBox(int &nSelectType, int nNowSelect)
 
 // =====================================================================================================================================================================
 //
-// 敵のコンボボックス
+// 敵の種類のコンボボックス
 //
 // =====================================================================================================================================================================
-void CMap::EnemyComboBox(int &nSelectType, int nNowSelect)
+void CMap::EnemyTypeComboBox(int &nSelectType, int nNowSelect)
 {
 #ifdef _DEBUG
 	//std::vector<std::string > aEnemyType = { "DESIGNATE_ONE", "DESIGNATE_RANGE", "ALL" };
@@ -1705,15 +1755,15 @@ void CMap::EnemyComboBox(int &nSelectType, int nNowSelect)
 
 // =====================================================================================================================================================================
 //
-// 捕虜のコンボボックス
+// 捕虜のドロップタイプのコンボボックス
 //
 // =====================================================================================================================================================================
-void CMap::PrisonerComboBox(int &nSelectType, int nNowSelect)
+void CMap::PrisonerDropTypeComboBox(int &nSelectType, int nNowSelect)
 {
 #ifdef _DEBUG
 	std::vector<std::string > aPrisonerType = { "DESIGNATE_ONE", "DESIGNATE_RANGE", "ALL" };
 
-	if (CHossoLibrary::ImGui_Combobox(aPrisonerType, "Type", nSelectType))
+	if (CHossoLibrary::ImGui_Combobox(aPrisonerType, "DropType", nSelectType))
 	{
 		// NULLチェック
 		if (m_pPrisoner[nNowSelect])
@@ -1737,15 +1787,15 @@ void CMap::PrisonerComboBox(int &nSelectType, int nNowSelect)
 
 // =====================================================================================================================================================================
 //
-// 捕虜のコンボボックス
+// 捕虜のアイテムタイプのコンボボックス
 //
 // =====================================================================================================================================================================
-void CMap::PrisonerComboBox2(int & nSelectType, int nNowSelect)
+void CMap::PrisonerItemTypeComboBox2(int & nSelectType, int nNowSelect)
 {
 #ifdef _DEBUG
 	std::vector<std::string > aPrisonerItem = { "NONE","HMG","SG","LG","RL","FS","BEAR","COIN","JEWELRY","MEDAL","BOMBUP","ENERGYUP","BULLETUP" };
 
-	if (CHossoLibrary::ImGui_Combobox(aPrisonerItem, "Item", nSelectType))
+	if (CHossoLibrary::ImGui_Combobox(aPrisonerItem, "ItemType", nSelectType))
 	{
 		// NULLチェック
 		if (m_pPrisoner[nNowSelect])

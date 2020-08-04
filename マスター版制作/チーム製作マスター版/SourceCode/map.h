@@ -62,7 +62,6 @@ public:
 		MAP_1_2,			// 1_2
 		MAP_1_3,			// 1_3
 		MAP_1_BOSS,			// 1_BOSS
-
 		MAP_MAX
 	};
 
@@ -148,11 +147,12 @@ private:
 	void			MapModelTab();															// マップに配置するモデルのタブ
 	void			MapModelSet();															// マップに配置するモデルの設置
 	void			ComboBoxAll(int nNowSelect);											// 全てのコンボボックス
-	void			MapComboBox(int &nSelectType, int nNowSelect);							// 捕虜のコンボボックス
-	void			ObstacleComboBox(int &nSelectType, int nNowSelect);						// 障害物のコンボボックス
-	void			EnemyComboBox(int &nSelectType, int nNowSelect);						// 敵のコンボボックス
-	void			PrisonerComboBox(int &nSelectType, int nNowSelect);						// 捕虜のコンボボックス
-	void			PrisonerComboBox2(int &nSelectType, int nNowSelect);					// 捕虜のコンボボックス
+	void			MapComboBox(int &nSelectType, int nNowSelect);							// マップのコンボボックス
+	void			MapTypeComboBox();						// マップの種類のコンボボックス
+	void			ObstacleTypeComboBox(int &nSelectType, int nNowSelect);					// 障害物の種類のコンボボックス
+	void			EnemyTypeComboBox(int &nSelectType, int nNowSelect);					// 敵の種類のコンボボックス
+	void			PrisonerDropTypeComboBox(int &nSelectType, int nNowSelect);				// 捕虜のドロップタイプのコンボボックス
+	void			PrisonerItemTypeComboBox2(int &nSelectType, int nNowSelect);			// 捕虜のアイテムタイプのコンボボックス
 	void			SetSelectMapModelPosRDest(D3DXVECTOR3 posR);							// 選択しているモデルを注視点の目的地に設定
 
 	/* 静的メンバ変数 */
