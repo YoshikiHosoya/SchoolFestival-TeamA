@@ -527,7 +527,7 @@ void CMap::WaveLoad(WAVE WaveNum)
 	char		cDie[128];												// 不要な文字
 	int			nModelType			= -1;								// モデルの種類
 	int			nType				= 0;								// 種類
-	int			nEvent				= 0;								//boolに変換するようの格納
+	int			nEvent				= 0;								// boolに変換するようの格納
 	WAVE_PARAM	*pParam				= nullptr;							// ウェーブのパラメータ保存用
 
 	// ファイルを開く
@@ -555,8 +555,7 @@ void CMap::WaveLoad(WAVE WaveNum)
 				// イベントが起きる位置を保存
 				if (strcmp(cHeadText, "EVENTPOS") == 0)
 				{
-					sscanf(cReadText, "%s %s %f %f %f", &cDie, &cDie,
-						&m_aWaveInfo[WaveNum].EventPos.x, &m_aWaveInfo[WaveNum].EventPos.y, &m_aWaveInfo[WaveNum].EventPos.z);
+					sscanf(cReadText, "%s %s %f", &cDie, &cDie, &m_aWaveInfo[WaveNum].EventPos.x);
 				}
 
 				char cEndSetText[32];			// END_SET
@@ -598,7 +597,7 @@ void CMap::WaveLoad(WAVE WaveNum)
 						{
 							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &nFrame);
 						}
-						// FRAMEが来たら
+						// EVENTが来たら
 						else if (strcmp(cHeadText, "EVENT") == 0)
 						{
 							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &nEvent);
@@ -610,6 +609,7 @@ void CMap::WaveLoad(WAVE WaveNum)
 							pParam->nFrame = nFrame;
 							pParam->bEvent = nEvent ? true : false;
 
+							// 情報保存
 							if (nModelType == ARRANGEMENT_MODEL_ENEMY)
 							{
 								m_aWaveInfo[WaveNum].EnemyWaveInfo.emplace_back(pParam);
@@ -907,36 +907,6 @@ void CMap::SaveModelContents(FILE *pFile, int ModelType, int nCnt, int nNum)
 		fprintf(pFile, "HELICOPTERSET									# %d\n", nNum);
 		fprintf(pFile, "	POS		= %.0f %.0f %.0f\n", m_pHelicopter[nCnt]->GetPosition().x, m_pHelicopter[nCnt]->GetPosition().y, m_pHelicopter[nCnt]->GetPosition().z);
 		fprintf(pFile, "END_HELICOPTERSET\n\n");
-		break;
-	}
-}
-
-// =====================================================================================================================================================================
-//
-// セーブするウェーブの情報
-//
-// =====================================================================================================================================================================
-void CMap::SaveWaveContents(FILE * pFile, int ModelType, int nType, int nCnt, int nNum)
-{
-	switch (ModelType)
-	{
-		/* --- 敵 --- */
-	case CMap::ARRANGEMENT_MODEL_ENEMY:
-		fprintf(pFile, "ENEMYSET									# %d\n", nNum);
-		fprintf(pFile, "	TYPE	= %d\n", 0 /*m_pEnemy[nCnt]->GetType()*/);
-		fprintf(pFile, "	POS		= %.0f %.0f %.0f\n", m_pEnemy[nCnt]->GetPosition().x, m_pEnemy[nCnt]->GetPosition().y, m_pEnemy[nCnt]->GetPosition().z);
-		fprintf(pFile, "	FRAME	= %d\n", 0 /*m_pEnemy[nCnt]->GetType()*/);
-		fprintf(pFile, "	EVENT	= %d\n", 0 /*m_pEnemy[nCnt]->GetType()*/);
-		fprintf(pFile, "END_ENEMYSET\n\n");
-		break;
-
-		/* --- 捕虜 --- */
-	case CMap::ARRANGEMENT_MODEL_PRISONER:
-		fprintf(pFile, "PRISONERSET									# %d\n", nNum);
-		fprintf(pFile, "	TYPE	= %d\n", m_pPrisoner[nCnt]->GetPrisonerDropType());
-		fprintf(pFile, "	POS		= %.0f %.0f %.0f\n", m_pPrisoner[nCnt]->GetPosition().x, m_pPrisoner[nCnt]->GetPosition().y, m_pPrisoner[nCnt]->GetPosition().z);
-		fprintf(pFile, "	FRAME	= %d\n", 0 /*m_pEnemy[nCnt]->GetType()*/);
-		fprintf(pFile, "END_PRISONERSET\n\n");
 		break;
 	}
 }

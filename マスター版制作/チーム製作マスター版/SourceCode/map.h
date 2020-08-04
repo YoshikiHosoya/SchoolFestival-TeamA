@@ -129,9 +129,8 @@ private:
 	void			MapModelCreate(int ModelType, int nType, D3DXVECTOR3 pos, int nType2);	// 配置するモデルの生成
 	void			LoadSuccessMessage(int ModelType);										// 読み込み成功時の結果表示
 
-	void			SaveModelHeader(FILE *pFile, int ModelType);									// セーブするモデルのヘッダー
-	void			SaveModelContents(FILE *pFile, int ModelType, int nCnt, int nNum);				// セーブするモデルの情報
-	void			SaveWaveContents(FILE *pFile, int ModelType, int nType, int nCnt, int nNum);	// セーブするウェーブの情報
+	void			SaveModelHeader(FILE *pFile, int ModelType);							// セーブするモデルのヘッダー
+	void			SaveModelContents(FILE *pFile, int ModelType, int nCnt, int nNum);		// セーブするモデルの情報
 
 	size_t			GetMaxMapModel(int ModelType);											// 配置するモデルの最大数取得
 	void			*GetMapModel(int ModelType, int nCnt);									// 配置するモデルのポインタ
@@ -148,7 +147,7 @@ private:
 	void			MapModelSet();															// マップに配置するモデルの設置
 	void			ComboBoxAll(int nNowSelect);											// 全てのコンボボックス
 	void			MapComboBox(int &nSelectType, int nNowSelect);							// マップのコンボボックス
-	void			MapTypeComboBox();						// マップの種類のコンボボックス
+	void			MapTypeComboBox();														// マップの種類のコンボボックス
 	void			ObstacleTypeComboBox(int &nSelectType, int nNowSelect);					// 障害物の種類のコンボボックス
 	void			EnemyTypeComboBox(int &nSelectType, int nNowSelect);					// 敵の種類のコンボボックス
 	void			PrisonerDropTypeComboBox(int &nSelectType, int nNowSelect);				// 捕虜のドロップタイプのコンボボックス
