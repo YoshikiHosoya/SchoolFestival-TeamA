@@ -133,7 +133,10 @@ CHeavyMachinegun * CHeavyMachinegun::Create(D3DXVECTOR3 rot)
 	pHeavyMachinegun->Init();
 
 	// Œ‚‚Â•ûŒü‚É‡‚í‚¹‚é
-	pHeavyMachinegun->GetMove() = D3DXVECTOR3(-sinf(rot.y) * cosf(rot.x) * pBulletParam->fBulletSpeed, sinf(rot.x) * pBulletParam->fBulletSpeed, -cosf(rot.y) * cosf(rot.x) * pBulletParam->fBulletSpeed);
+	//pHeavyMachinegun->GetMove() = D3DXVECTOR3(-sinf(rot.y) * cosf(rot.x) * pBulletParam->fBulletSpeed, sinf(rot.x) * pBulletParam->fBulletSpeed, -cosf(rot.y) * cosf(rot.x) * pBulletParam->fBulletSpeed);
+	pHeavyMachinegun->GetMove() = D3DXVECTOR3(-sinf(rot.x) * pBulletParam->fBulletSpeed,
+		cosf(rot.x) * cosf(rot.y) * pBulletParam->fBulletSpeed,
+		sinf(rot.y) * cosf(rot.x) * pBulletParam->fBulletSpeed);
 
 	pHeavyMachinegun->GetRot() = rot;
 
