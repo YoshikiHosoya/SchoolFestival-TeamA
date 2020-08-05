@@ -46,13 +46,15 @@ END_BOSSSET
 //------------------------------------------------------------
 
 PRISONERSET									# 41
-	TYPE	= 2
+	TYPE	= 0
 	POS		= 300 100 0
+	TYPE2	= 5
 END_PRISONERSET
 
 PRISONERSET									# 41
-	TYPE	= 2
+	TYPE	= 0
 	POS		= 200 100 0
+	TYPE2	= 5
 END_PRISONERSET
 
 PRISONERSET									# 41

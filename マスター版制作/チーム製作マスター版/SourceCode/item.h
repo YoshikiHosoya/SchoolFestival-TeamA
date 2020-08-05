@@ -134,7 +134,7 @@ private:
 	/* 静的メンバ変数 */
 	static char					*m_ItemFileName;								// アイテムのファイル名
 	static ITEM_DATA			m_ItemData;										// アイテムのデータ
-	static int					m_nAddCnt;										// コインの加算用
+	static int					m_nAddCoin;										// コインの加算用
 
 	// ロードする変数 //
 	static int					m_nDropRate;									// ドロップ率

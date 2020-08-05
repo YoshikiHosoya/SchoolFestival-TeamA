@@ -13,6 +13,7 @@
 #include "debugproc.h"
 #include "player.h"
 #include "playerui.h"
+#include "playergetscoreui.h"
 #include "gun.h"
 #include <random>
 #include "inputKeyboard.h"
@@ -31,7 +32,7 @@ int			CItem::m_nCoinScore		 = 0;
 int			CItem::m_nJewelryScore	 = 0;
 int			CItem::m_nMedalScore	 = 0;
 D3DXVECTOR3 CItem::m_CollisionSize	 = D3DXVECTOR3(0,0,0);
-int			CItem::m_nAddCnt		 = 0;
+int			CItem::m_nAddCoin		 = 1;
 
 // =====================================================================================================================================================================
 // テキストファイル名
@@ -213,23 +214,23 @@ void CItem::ItemType(ITEMTYPE type)
 		// 熊
 	case (ITEMTYPE_BEAR): {
 		// スコアアップ
-		pPlayer->GetPlayerUI()->SetScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_BEAR));
+		pPlayer->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_BEAR));
 	}break;
 
 		// コイン
 	case (ITEMTYPE_COIN): {
 		// コインを取るたびにコインのスコアアップ
-		pPlayer->GetPlayerUI()->SetScore(AddCoinScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_COIN)));
+		pPlayer->GetPlayerUI()->SetItemScore(AddCoinScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_COIN)));
 	}break;
 		// 宝石
 	case (ITEMTYPE_JEWELRY): {
 		// スコアアップ
-		pPlayer->GetPlayerUI()->SetScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_JEWELRY));
+		pPlayer->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_JEWELRY));
 	}break;
 		// メダル
 	case (ITEMTYPE_MEDAL): {
 		// スコアアップ
-		pPlayer->GetPlayerUI()->SetScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_MEDAL));
+		pPlayer->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_MEDAL));
 	}break;
 
 		// 爆弾の数を増やす
@@ -400,22 +401,11 @@ uint64_t CItem::get_rand_range(uint64_t min_val, uint64_t max_val)
 // =====================================================================================================================================================================
 int CItem::AddCoinScore(int nScore)
 {
-	// コインを取得するごとにコインのスコアを倍にする
-	for (int nAdd = 0; nAdd < m_nAddCnt;nAdd++)
-	{
-		// 一回目は処理しない
-		if (m_nAddCnt == 0)
-		{
-			// スキップ
-			continue;
-		}
+	// スコアとカウントをかける
+	nScore *= m_nAddCoin;
 
-		// スコアの値を倍にする
-		nScore += nScore;
-	}
-
-	// カウント加算
-	m_nAddCnt++;
+	// カウントを倍にする
+	m_nAddCoin += m_nAddCoin;
 
 	// スコアの値を返す
 	return nScore;
@@ -564,7 +554,7 @@ void CItem::DebugItemCommand(CKeyboard *key)
 void CItem::InitVariable()
 {
 	// コインのカウント加算用変数の初期化
-	m_nAddCnt = 0;
+	m_nAddCoin = 1;
 }
 
 // =====================================================================================================================================================================

@@ -1124,7 +1124,7 @@ void CCharacter::DebugInfo(void)
 {
 	CDebug_ModelViewer::OffsetViewer(m_vModelList);
 
-	CDebugProc::Print("state >>%d\n", GetCharacterState());
+	//CDebugProc::Print("state >>%d\n", GetCharacterState());
 
 	//CDebugProc::Print("");
 }

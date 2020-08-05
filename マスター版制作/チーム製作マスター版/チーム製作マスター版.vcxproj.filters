@@ -292,6 +292,15 @@
     <ClCompile Include="SourceCode\gameover.cpp">
       <Filter>Mode</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\PlayerGetScoreUI_.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\3Dnumber.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\3Dmultinumber.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SourceCode\mesh.h">
@@ -593,6 +602,15 @@
     </ClInclude>
     <ClInclude Include="SourceCode\gameover.h">
       <Filter>Mode</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\PlayerGetScoreUI.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\3Dnumber.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\3Dmultinumber.h">
+      <Filter>UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

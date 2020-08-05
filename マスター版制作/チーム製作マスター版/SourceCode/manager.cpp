@@ -176,7 +176,6 @@ void CManager::SetMode(MODE mode)
 	case MODE_GAME:
 		m_pBaseMode = new CGame;
 		m_pSound->Play(CSound::LABEL_BGM_GAME);
-
 		break;
 
 		//Ranking

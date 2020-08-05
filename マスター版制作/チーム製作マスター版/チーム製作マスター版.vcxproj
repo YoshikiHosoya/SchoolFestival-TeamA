@@ -155,6 +155,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="SourceCode\3Dline.cpp" />
+    <ClCompile Include="SourceCode\3Dmultinumber.cpp" />
+    <ClCompile Include="SourceCode\3Dnumber.cpp" />
     <ClCompile Include="SourceCode\BaseMode.cpp" />
     <ClCompile Include="SourceCode\BattlePlane.cpp" />
     <ClCompile Include="SourceCode\Boss.cpp" />
@@ -216,6 +218,7 @@
     <ClCompile Include="SourceCode\pause.cpp" />
     <ClCompile Include="SourceCode\planegun.cpp" />
     <ClCompile Include="SourceCode\Player.cpp" />
+    <ClCompile Include="SourceCode\PlayerGetScoreUI_.cpp" />
     <ClCompile Include="SourceCode\playertank.cpp" />
     <ClCompile Include="SourceCode\playerUI.cpp" />
     <ClCompile Include="SourceCode\prisoner.cpp" />
@@ -254,6 +257,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SourceCode\3Dline.h" />
+    <ClInclude Include="SourceCode\3Dmultinumber.h" />
+    <ClInclude Include="SourceCode\3Dnumber.h" />
     <ClInclude Include="SourceCode\BaseMode.h" />
     <ClInclude Include="SourceCode\BattlePlane.h" />
     <ClInclude Include="SourceCode\Boss.h" />
@@ -318,6 +323,7 @@
     <ClInclude Include="SourceCode\pause.h" />
     <ClInclude Include="SourceCode\planegun.h" />
     <ClInclude Include="SourceCode\Player.h" />
+    <ClInclude Include="SourceCode\PlayerGetScoreUI.h" />
     <ClInclude Include="SourceCode\playertank.h" />
     <ClInclude Include="SourceCode\playerUI.h" />
     <ClInclude Include="SourceCode\prisoner.h" />
