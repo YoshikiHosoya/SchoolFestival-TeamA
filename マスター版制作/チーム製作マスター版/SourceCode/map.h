@@ -123,36 +123,36 @@ public:
 
 private:
 	/* メンバ関数 */
-	void			MapModelLoad();															// 配置するモデルのロード
-	void			MapModelSave();															// 配置するモデルのセーブ
+	void			MapModelLoad();																// 配置するモデルのロード
+	void			MapModelSave();																// 配置するモデルのセーブ
 
-	void			MapModelCreate(int ModelType, int nType, D3DXVECTOR3 pos, int nType2);	// 配置するモデルの生成
-	void			LoadSuccessMessage(int ModelType);										// 読み込み成功時の結果表示
+	void			MapModelCreate(int ModelType, int nType, D3DXVECTOR3 pos, int nItemType);	// 配置するモデルの生成
+	void			LoadSuccessMessage(int ModelType);											// 読み込み成功時の結果表示
 
-	void			SaveModelHeader(FILE *pFile, int ModelType);							// セーブするモデルのヘッダー
-	void			SaveModelContents(FILE *pFile, int ModelType, int nCnt, int nNum);		// セーブするモデルの情報
+	void			SaveModelHeader(FILE *pFile, int ModelType);								// セーブするモデルのヘッダー
+	void			SaveModelContents(FILE *pFile, int ModelType, int nCnt, int nNum);			// セーブするモデルの情報
 
-	size_t			GetMaxMapModel(int ModelType);											// 配置するモデルの最大数取得
-	void			*GetMapModel(int ModelType, int nCnt);									// 配置するモデルのポインタ
+	size_t			GetMaxMapModel(int ModelType);												// 配置するモデルの最大数取得
+	void			*GetMapModel(int ModelType, int nCnt);										// 配置するモデルのポインタ
 
-	void			AllSaveButton();														// 配置したモデルを全てセーブするボタン
-	void			AllDeleteButton();														// 配置したモデルを全てデリートするボタン
-	void			ModelDeleteButton(int nNowSelect);										// 配置するモデルをデリートするボタン
-	void			ModelCreat();															// 配置するモデルを生成
+	void			AllSaveButton();															// 配置したモデルを全てセーブするボタン
+	void			AllDeleteButton();															// 配置したモデルを全てデリートするボタン
+	void			ModelDeleteButton(int nNowSelect);											// 配置するモデルをデリートするボタン
+	void			ModelCreat();																// 配置するモデルを生成
 
-	D3DXVECTOR3		GetMapModelPos(int nNowSelect);											// 選択しているモデルの位置の取得
-	void			SetMapModelPos(D3DXVECTOR3 pos, int nNowSelect);						// 選択しているモデルの位置の設定
-	void			SetMapModelColorChangeFlag(bool bFlag, int nNowSelect);					// 選択しているモデルの色を半透明にするフラグの設定
-	void			MapModelTab();															// マップに配置するモデルのタブ
-	void			MapModelSet();															// マップに配置するモデルの設置
-	void			ComboBoxAll(int nNowSelect);											// 全てのコンボボックス
-	void			MapComboBox(int &nSelectType, int nNowSelect);							// マップのコンボボックス
-	void			MapTypeComboBox();														// マップの種類のコンボボックス
-	void			ObstacleTypeComboBox(int &nSelectType, int nNowSelect);					// 障害物の種類のコンボボックス
-	void			EnemyTypeComboBox(int &nSelectType, int nNowSelect);					// 敵の種類のコンボボックス
-	void			PrisonerDropTypeComboBox(int &nSelectType, int nNowSelect);				// 捕虜のドロップタイプのコンボボックス
-	void			PrisonerItemTypeComboBox2(int &nSelectType, int nNowSelect);			// 捕虜のアイテムタイプのコンボボックス
-	void			SetSelectMapModelPosRDest(D3DXVECTOR3 posR);							// 選択しているモデルを注視点の目的地に設定
+	D3DXVECTOR3		GetMapModelPos(int nNowSelect);												// 選択しているモデルの位置の取得
+	void			SetMapModelPos(D3DXVECTOR3 pos, int nNowSelect);							// 選択しているモデルの位置の設定
+	void			SetMapModelColorChangeFlag(bool bFlag, int nNowSelect);						// 選択しているモデルの色を半透明にするフラグの設定
+	void			MapModelTab();																// マップに配置するモデルのタブ
+	void			MapModelSet();																// マップに配置するモデルの設置
+	void			ComboBoxAll(int nNowSelect);												// 全てのコンボボックス
+	void			MapComboBox(int &nSelectType, int nNowSelect);								// マップのコンボボックス
+	void			MapTypeComboBox();															// マップの種類のコンボボックス
+	void			ObstacleTypeComboBox(int &nSelectType, int nNowSelect);						// 障害物の種類のコンボボックス
+	void			EnemyTypeComboBox(int &nSelectType, int nNowSelect);						// 敵の種類のコンボボックス
+	void			PrisonerDropTypeComboBox(int &nSelectType, int nNowSelect);					// 捕虜のドロップタイプのコンボボックス
+	void			PrisonerItemTypeComboBox2(int &nSelectType, int nNowSelect);				// 捕虜のアイテムタイプのコンボボックス
+	void			SetSelectMapModelPosRDest(D3DXVECTOR3 posR);								// 選択しているモデルを注視点の目的地に設定
 
 	/* 静的メンバ変数 */
 	static char					*m_MapModelFileName[MAP_MAX];				// マップモデルファイル名
