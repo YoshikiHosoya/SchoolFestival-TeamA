@@ -59,7 +59,7 @@ HRESULT CGun::Init()
 {
 	m_bMultiple		= false;										// フラグをオフ
 	m_GunType		= GUN_TYPE::GUNTYPE_HANDGUN;					// ハンドガンに設定
-	m_GunTypeOld	= GUN_TYPE::GUNTYPE_HANDGUN;					// 前回の銃の種類をハンドガンに設定
+	m_GunTypeOld	= GUN_TYPE::GUNTYPE_HANDGUN;					// 前回の銃の種類
 	m_nCntFrame		= 0;											// フレームカウント
 	m_nCntBullet	= 0;											// 弾のカウント
 	m_nAmmo			= CBullet::GetBulletParam(m_GunType)->nAmmo;	// 残弾数

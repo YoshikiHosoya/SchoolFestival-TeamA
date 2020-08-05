@@ -40,7 +40,6 @@ char *CMap::m_MapModelFileName[MAP_MAX] =
 	{ "data/Load/Map/Map_1_2.txt" },
 	{ "data/Load/Map/Map_1_3.txt" },
 	{ "data/Load/Map/Map_1_BOSS.txt" },
-
 };
 
 /* ----- ウェーブ ----- */
@@ -80,6 +79,7 @@ CMap::CMap()
 	m_CameraPos				= D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// カメラの位置
 	m_TransitionMapID		= 0;									// 次に遷移するための番号
 	m_bCameraFollowing		= false;								// カメラを追従するフラグ
+	m_bMapExclusion			= false;								// マップモデル以外適用するフラグ
 }
 
 // =====================================================================================================================================================================
@@ -1030,103 +1030,61 @@ void * CMap::GetMapModel(int ModelType, int nCnt)
 
 // =====================================================================================================================================================================
 //
-// 配置したモデルを全てセーブするボタン
+// 配置したモデルをデリート
 //
 // =====================================================================================================================================================================
-void CMap::AllSaveButton()
+void CMap::ModelDelete(int nNowSelect)
 {
-	// 改行キャンセル
-	ImGui::SameLine();
-
-	// セーブ
-	if (ImGui::Button("AllSave"))
+	switch (m_ArrangmentModel)
 	{
-		for (int nCnt = 0; nCnt < ARRANGEMENT_MODEL_MAX; nCnt++)
-		{
-			// 配置するモデルのセーブ
-			MapModelSave();
-		}
-	}
-}
+	case CMap::ARRANGEMENT_MODEL_MAP:
+		// マップ
+		m_pMapModel[nNowSelect]->Rerease();
+		m_pMapModel[nNowSelect] = nullptr;
+		m_pMapModel.erase(m_pMapModel.begin() + nNowSelect);
+		break;
 
-// =====================================================================================================================================================================
-//
-// 配置したモデルを全てデリートするボタン
-//
-// =====================================================================================================================================================================
-void CMap::AllDeleteButton()
-{
-	// 改行キャンセル
-	ImGui::SameLine();
+	case CMap::ARRANGEMENT_MODEL_ENEMY:
+		// 敵
+		m_pEnemy[nNowSelect]->Rerease();
+		m_pEnemy[nNowSelect] = nullptr;
+		m_pEnemy.erase(m_pEnemy.begin() + nNowSelect);
+		break;
 
-	// 全てデリート
-	if (ImGui::Button("AllDelete"))
-	{
-		AllDelete();
-	}
-}
+	case CMap::ARRANGEMENT_MODEL_PRISONER:
+		// 捕虜
+		m_pPrisoner[nNowSelect]->Rerease();
+		m_pPrisoner[nNowSelect] = nullptr;
+		m_pPrisoner.erase(m_pPrisoner.begin() + nNowSelect);
+		break;
 
-// =====================================================================================================================================================================
-//
-// 配置したモデルをデリートするボタン
-//
-// =====================================================================================================================================================================
-void CMap::ModelDeleteButton(int nNowSelect)
-{
-	// 消去
-	if (ImGui::Button("Delete"))
-	{
-		switch (m_ArrangmentModel)
-		{
-		case CMap::ARRANGEMENT_MODEL_MAP:
-			// 敵
-			m_pMapModel[nNowSelect]->Rerease();
-			m_pMapModel[nNowSelect] = nullptr;
-			m_pMapModel.erase(m_pMapModel.begin() + nNowSelect);
-			break;
+	case CMap::ARRANGEMENT_MODEL_OBSTACLE:
+		// 障害物
+		m_pObstacle[nNowSelect]->Rerease();
+		m_pObstacle[nNowSelect] = nullptr;
+		m_pObstacle.erase(m_pObstacle.begin() + nNowSelect);
+		break;
 
-		case CMap::ARRANGEMENT_MODEL_ENEMY:
-			// 敵
-			m_pEnemy[nNowSelect]->Rerease();
-			m_pEnemy[nNowSelect] = nullptr;
-			m_pEnemy.erase(m_pEnemy.begin() + nNowSelect);
-			break;
+	case CMap::ARRANGEMENT_MODEL_TANK:
+		// 戦車
+		m_pPlayerTank[nNowSelect]->Rerease();
+		m_pPlayerTank[nNowSelect] = nullptr;
+		m_pPlayerTank.erase(m_pPlayerTank.begin() + nNowSelect);
+		break;
 
-		case CMap::ARRANGEMENT_MODEL_PRISONER:
-			// 捕虜
-			m_pPrisoner[nNowSelect]->Rerease();
-			m_pPrisoner[nNowSelect] = nullptr;
-			m_pPrisoner.erase(m_pPrisoner.begin() + nNowSelect);
-			break;
+	case CMap::ARRANGEMENT_MODEL_BATTLEPLANE:
+		// 戦闘機
+		m_pBattlePlane[nNowSelect]->Rerease();
+		m_pBattlePlane[nNowSelect] = nullptr;
+		m_pBattlePlane.erase(m_pBattlePlane.begin() + nNowSelect);
+		break;
 
-		case CMap::ARRANGEMENT_MODEL_OBSTACLE:
-			// 障害物
-			m_pObstacle[nNowSelect]->Rerease();
-			m_pObstacle[nNowSelect] = nullptr;
-			m_pObstacle.erase(m_pObstacle.begin() + nNowSelect);
-			break;
-
-		case CMap::ARRANGEMENT_MODEL_TANK:
-			// 戦車
-			m_pPlayerTank[nNowSelect]->Rerease();
-			m_pPlayerTank[nNowSelect] = nullptr;
-			m_pPlayerTank.erase(m_pPlayerTank.begin() + nNowSelect);
-			break;
-
-		case CMap::ARRANGEMENT_MODEL_BATTLEPLANE:
-			// 戦闘機
-			m_pBattlePlane[nNowSelect]->Rerease();
-			m_pBattlePlane[nNowSelect] = nullptr;
-			m_pBattlePlane.erase(m_pBattlePlane.begin() + nNowSelect);
-			break;
-
-		case CMap::ARRANGEMENT_MODEL_HELICOPTER:
-			// ヘリコプター
-			m_pHelicopter[nNowSelect]->Rerease();
-			m_pHelicopter[nNowSelect] = nullptr;
-			m_pHelicopter.erase(m_pHelicopter.begin() + nNowSelect);
-			break;
-		}
+	case CMap::ARRANGEMENT_MODEL_HELICOPTER:
+		// ヘリコプター
+		m_pHelicopter[nNowSelect]->Rerease();
+		m_pHelicopter[nNowSelect] = nullptr;
+		m_pHelicopter.erase(m_pHelicopter.begin() + nNowSelect);
+		break;
 	}
 }
 
@@ -1179,11 +1137,14 @@ void CMap::ModelCreat()
 // =====================================================================================================================================================================
 void CMap::AllDelete()
 {
-	// 障害物
-	for (size_t nCnt = 0; nCnt < m_pMapModel.size(); nCnt++)
+	if (!m_bMapExclusion)
 	{
-		m_pMapModel[nCnt]->Rerease();
-		m_pMapModel[nCnt] = nullptr;
+		// マップモデル
+		for (size_t nCnt = 0; nCnt < m_pMapModel.size(); nCnt++)
+		{
+			m_pMapModel[nCnt]->Rerease();
+			m_pMapModel[nCnt] = nullptr;
+		}
 	}
 	// 障害物
 	for (size_t nCnt = 0; nCnt < m_pObstacle.size(); nCnt++)
@@ -1229,6 +1190,8 @@ void CMap::AllDelete()
 	m_pPlayerTank.clear();
 	m_pBattlePlane.clear();
 	m_pHelicopter.clear();
+
+	m_bMapExclusion = false;
 }
 
 // =====================================================================================================================================================================
@@ -1541,9 +1504,9 @@ void CMap::MapModelSet()
 	// 改行
 	ImGui::Separator();
 
-	// 配置したモデルを生成するボタン
 	if (ImGui::Button("Crate"))
 	{
+		//モデルを生成する
 		ModelCreat();
 
 		// 新しく生成したモデルを現在選択しているモデルと同じ位置に生成する
@@ -1553,27 +1516,37 @@ void CMap::MapModelSet()
 	// 改行キャンセル
 	ImGui::SameLine();
 
-	// 配置したモデルをセーブするボタン
 	if (ImGui::Button("Save"))
 	{
+		// 配置したモデルをセーブする
 		MapModelSave();
 	}
 
 	ImGui::SameLine();
 
-	// 配置したモデルを全てロードするボタン
 	if (ImGui::Button("AllLoad"))
 	{
+		// 配置したモデルを全てロードする
 		MapModelLoad();
 	}
 
 	ImGui::SameLine(ButtonSpace);
 
-	// 配置したモデルをデリートするボタン
-	ModelDeleteButton(nNowSelect);
+	if (ImGui::Button("Delete"))
+	{
+		// 配置したモデルをデリートする
+		ModelDelete(nNowSelect);
+	}
 
-	// 配置したモデルを全てデリートするボタン
-	AllDeleteButton();
+	ImGui::SameLine();
+
+	if (ImGui::Button("AllDelete"))
+	{
+		// マップモデルを除く
+		m_bMapExclusion = true;
+		// 配置したモデルを全てデリートする
+		AllDelete();
+	}
 #endif
 }
 
@@ -1660,7 +1633,7 @@ void CMap::MapTypeComboBox()
 		// NULLチェック
 		if (m_pMapModel[nNowSelect])
 		{
-			// 捕虜の種類の取得
+			// マップの種類の取得
 			int MapType = m_pMapModel[nNowSelect]->GetModelCount();
 
 			// 前回と違うとき
@@ -1668,7 +1641,7 @@ void CMap::MapTypeComboBox()
 			{
 				// 種類代入
 				MapType = nSelectType;
-				// 敵のタイプの設定
+				// マップのの種類の設定
 				m_pMapModel[nNowSelect]->SetModelConut(MapType);
 			}
 		}
@@ -1699,7 +1672,7 @@ void CMap::ObstacleTypeComboBox(int &nSelectType, int nNowSelect)
 		// NULLチェック
 		if (m_pObstacle[nNowSelect])
 		{
-			// 捕虜の種類の取得
+			// 障害物の種類の取得
 			int ObstacleType = m_pObstacle[nNowSelect]->GetModelCount();
 
 			// 前回と違うとき
@@ -1707,7 +1680,7 @@ void CMap::ObstacleTypeComboBox(int &nSelectType, int nNowSelect)
 			{
 				// 種類代入
 				ObstacleType = nSelectType;
-				// 敵のタイプの設定
+				// 障害物の種類の設定
 				m_pObstacle[nNowSelect]->SetModelConut(ObstacleType);
 			}
 		}
@@ -1730,7 +1703,7 @@ void CMap::EnemyTypeComboBox(int &nSelectType, int nNowSelect)
 	//	// NULLチェック
 	//	if (m_pPrisoner[nNowSelect])
 	//	{
-	//		// 捕虜の種類の取得
+	//		// 敵の種類の取得
 	//		CPrisoner::PRISONER_ITEM_DROPTYPE PrisonerType = m_pPrisoner[nNowSelect]->GetPrisonerDropType();
 
 	//		// 前回と違うとき
@@ -1738,7 +1711,7 @@ void CMap::EnemyTypeComboBox(int &nSelectType, int nNowSelect)
 	//		{
 	//			// 種類代入
 	//			PrisonerType = (CPrisoner::PRISONER_ITEM_DROPTYPE)nSelectType;
-	//			// 敵のタイプの設定
+	//			// 敵の種類の設定
 	//			m_pPrisoner[nNowSelect]->SetPrisonerType(PrisonerType);
 	//		}
 	//	}
@@ -1761,7 +1734,7 @@ void CMap::PrisonerDropTypeComboBox(int &nSelectType, int nNowSelect)
 		// NULLチェック
 		if (m_pPrisoner[nNowSelect])
 		{
-			// 捕虜の種類の取得
+			// 捕虜のドロップタイプの取得
 			CPrisoner::PRISONER_ITEM_DROPTYPE PrisonerType = m_pPrisoner[nNowSelect]->GetPrisonerDropType();
 
 			// 前回と違うとき
@@ -1769,7 +1742,7 @@ void CMap::PrisonerDropTypeComboBox(int &nSelectType, int nNowSelect)
 			{
 				// 種類代入
 				PrisonerType = (CPrisoner::PRISONER_ITEM_DROPTYPE)nSelectType;
-				// 敵のタイプの設定
+				// 捕虜のドロップタイプの設定
 				m_pPrisoner[nNowSelect]->SetPrisonerType(PrisonerType);
 			}
 		}
@@ -1793,7 +1766,7 @@ void CMap::PrisonerItemTypeComboBox2(int & nSelectType, int nNowSelect)
 		// NULLチェック
 		if (m_pPrisoner[nNowSelect])
 		{
-			// 捕虜の種類の取得
+			// 捕虜が落とすアイテムの種類の取得
 			CItem::ITEMTYPE PrisonerItem = m_pPrisoner[nNowSelect]->GetPrisonerDropItem();
 
 			// 前回と違うとき
@@ -1802,7 +1775,7 @@ void CMap::PrisonerItemTypeComboBox2(int & nSelectType, int nNowSelect)
 				CItem::ITEMTYPE Item = (CItem::ITEMTYPE)nSelectType;
 				// 種類代入
 				PrisonerItem = static_cast<CItem::ITEMTYPE>(Item - 1);
-				// 敵のタイプの設定
+				// 捕虜が落とすアイテムの種類の設定
 				m_pPrisoner[nNowSelect]->SetPrisonerItem(PrisonerItem);
 			}
 		}
@@ -1823,6 +1796,7 @@ void CMap::SetSelectMapModelPosRDest(D3DXVECTOR3 posR)
 	// キーボードの取得
 	CKeyboard *pKeyboard = CManager::GetInputKeyboard();
 
+	// 追従フラグ
 	if (m_bCameraFollowing)
 	{
 		pos = posR;

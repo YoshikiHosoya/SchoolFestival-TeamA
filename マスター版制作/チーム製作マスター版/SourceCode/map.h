@@ -135,9 +135,7 @@ private:
 	size_t			GetMaxMapModel(int ModelType);												// 配置するモデルの最大数取得
 	void			*GetMapModel(int ModelType, int nCnt);										// 配置するモデルのポインタ
 
-	void			AllSaveButton();															// 配置したモデルを全てセーブするボタン
-	void			AllDeleteButton();															// 配置したモデルを全てデリートするボタン
-	void			ModelDeleteButton(int nNowSelect);											// 配置するモデルをデリートするボタン
+	void			ModelDelete(int nNowSelect);												// 配置するモデルをデリート
 	void			ModelCreat();																// 配置するモデルを生成
 
 	D3DXVECTOR3		GetMapModelPos(int nNowSelect);												// 選択しているモデルの位置の取得
@@ -179,6 +177,7 @@ private:
 	D3DXVECTOR3					m_CameraPos;								// カメラの位置
 	int							m_TransitionMapID;							// 次に遷移するマップの番号
 	bool						m_bCameraFollowing;							// カメラを追従するフラグ
+	bool						m_bMapExclusion;							// マップモデル以外適用するフラグ
 };
 
 #endif
