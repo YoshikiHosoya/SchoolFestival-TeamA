@@ -214,6 +214,9 @@ void CPlayer::Update(void)
 
 	CCharacter::Update();
 
+
+	CDebugProc::Print("座標------------------------------------------%f,%f,%f\n", m_pos[0].x, m_pos[0].y, m_pos[0].z);
+
 	CDebugProc::Print("時機のライフ %d\n",GetLife());
 	if (m_bAttack == true)
 	{
