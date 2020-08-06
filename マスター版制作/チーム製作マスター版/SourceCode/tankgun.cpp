@@ -135,10 +135,8 @@ CTankGun * CTankGun::Create(D3DXVECTOR3 rot)
 	// ‰Šú‰»
 	pTankGun->Init();
 
-	// Œ‚‚Â•ûŒü‚É‡‚í‚¹‚é
-	pTankGun->GetMove() = D3DXVECTOR3(-sinf(rot.x) * pBulletParam->fBulletSpeed,
-										cosf(rot.x) * cosf(rot.y) * pBulletParam->fBulletSpeed,
-										sinf(rot.y) * cosf(rot.x) * pBulletParam->fBulletSpeed);
+	// ’e‚ÌˆÚ“®—ÊŒvŽZ
+	pTankGun->CalcBulletMove(rot, CGun::GUNTYPE_TANKGUN);
 
 	pTankGun->GetRot() = rot;
 

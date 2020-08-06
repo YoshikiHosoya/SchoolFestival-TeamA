@@ -35,6 +35,7 @@ CParticle::CParticle()
 	m_bDeleteFlag = false;
 	m_posOrigin = ZeroVector3;
 	m_rotOrigin = ZeroVector3;
+	m_CollisionOrigin = ZeroVector3;
 	m_pPosOriginPtr = nullptr;
 }
 //------------------------------------------------------------------------------
@@ -134,6 +135,7 @@ void CParticle::Draw()
 	CHossoLibrary::CalcMatrix(&m_WorldMtx, m_posOrigin, ZeroVector3);
 
 	//パーティクルのリストの数分
+
 	for (size_t nCnt = 0; nCnt < m_pParticleList.size(); nCnt++)
 	{
 		//マトリック計算
@@ -463,7 +465,7 @@ void CParticle::SetParticle(D3DXVECTOR3 & pos, D3DXVECTOR3 const & rot, CParticl
 	pos += pParam->GetLocalPos();
 
 	//原点に保存
-	m_posOrigin = pos;
+	m_CollisionOrigin = m_posOrigin = pos;
 	m_rotOrigin = rot;
 
 	//生成する個数分
@@ -535,9 +537,14 @@ void CParticle::SetParticle(D3DXVECTOR3 & pos, D3DXVECTOR3 const & rot, CParticl
 				fAngleX += rot.x;
 				fAngleY += rot.y;
 
-				move = D3DXVECTOR3(-sinf(fAngleY) * cosf(fAngleX) * fSpeed,
-					sinf(fAngleX) * fSpeed,
-					-cosf(fAngleY) * cosf(fAngleX) * fSpeed);
+				//move = D3DXVECTOR3(-sinf(fAngleY) * cosf(fAngleX) * fSpeed,
+				//	sinf(fAngleX) * fSpeed,
+				//	-cosf(fAngleY) * cosf(fAngleX) * fSpeed);
+
+
+				move = D3DXVECTOR3(-sinf(rot.z) * fSpeed,
+									cosf(rot.z) * fSpeed,
+									0.0f);
 
 				break;
 			default:
@@ -545,21 +552,11 @@ void CParticle::SetParticle(D3DXVECTOR3 & pos, D3DXVECTOR3 const & rot, CParticl
 			}
 		}
 
-		if (pParam->GetType() == CParticleParam::EFFECT_LAZER)
-		{
-			std::unique_ptr<COneParticle>pOneParticle = COneParticle::Create(randompos, move, D3DXVECTOR3(0.0f, 0.0f, rot.y));
-			//配列に追加
-			m_pParticleList.emplace_back(std::move(pOneParticle));
-		}
-		else
-		{
 
-
-			//パーティクル生成
-			std::unique_ptr<COneParticle>pOneParticle = COneParticle::Create(randompos, move, D3DXVECTOR3(rot));
-			//配列に追加
-			m_pParticleList.emplace_back(std::move(pOneParticle));
-		}
+		//パーティクル生成
+		std::unique_ptr<COneParticle>pOneParticle = COneParticle::Create(randompos, move, rot);
+		//配列に追加
+		m_pParticleList.emplace_back(std::move(pOneParticle));
 	}
 
 	//アニメーションのパラメータ設定
@@ -613,20 +610,13 @@ void CParticle::SetCollsionParam()
 		}
 		else
 		{
-			//角度調整
-			m_rotOrigin.z = m_rotOrigin.y;
-			m_rotOrigin.y = 0.0f;
-			m_rotOrigin.x = 0.0f;
-
 			//マトリックス計算
-			CHossoLibrary::CalcMatrix(&RotationMatrix, ZeroVector3, m_rotOrigin);
+			CHossoLibrary::CalcMatrix(&RotationMatrix, m_posOrigin, m_rotOrigin);
 
 			//頂点座標
 			D3DXVECTOR3 VtxPos[4] = {};
 
-			//ローカル　当たり判定の中心
-			D3DXVECTOR3 LocalPosOrigin = ZeroVector3;
-
+			//サイズ
 			D3DXVECTOR3 size = m_pParticleParam->GetCollisionSize();
 
 			//頂点座標算出
@@ -636,7 +626,7 @@ void CParticle::SetCollsionParam()
 			D3DXVec3TransformCoord(&VtxPos[3], &D3DXVECTOR3(+size.x, 0.0f, 0.0f), &RotationMatrix);
 
 			//当たり判定用のローカル座標計算
-			D3DXVec3TransformCoord(&LocalPosOrigin, &D3DXVECTOR3(0.0f, m_pParticleParam->GetCollisionSize().y, 0.0f), &RotationMatrix);
+			D3DXVec3TransformCoord(&m_CollisionOrigin, &D3DXVECTOR3(0.0f, m_pParticleParam->GetCollisionSize().y, 0.0f), &RotationMatrix);
 
 			//計算用の変数　当たり判定のサイズ
 			D3DXVECTOR3 Max = D3DXVECTOR3(-1000.0f, -1000.0f, -0.0f);
@@ -657,16 +647,9 @@ void CParticle::SetCollsionParam()
 				}
 			}
 
-			//マトリックス計算
-			CHossoLibrary::CalcMatrix(&m_WorldMtx, m_posOrigin, m_rotOrigin);
-
-			//当たり判定用の原点作成　ちょっとキャラクター側とかに寄せる
-			D3DXVec3TransformCoord(&m_posOrigin, &D3DXVECTOR3(0.0f, m_pParticleParam->GetCollisionSize().y, 0.0f), &m_WorldMtx);
-
 			//当たり判定の設定
-			m_pCollision->SetPos(&m_posOrigin);
-			m_pCollision->SetSize(D3DXVECTOR3(fabsf(LocalPosOrigin.x - Max.x), fabsf(LocalPosOrigin.y - Max.y), 0.0f) * 2.0f);
-			//m_pParticleParam->GetSize() = D3DXVECTOR3(fabsf(LocalPosOrigin.x - Max.x), fabsf(LocalPosOrigin.y - Max.y), 0.0f) * 2.0f;
+			m_pCollision->SetPos(&m_CollisionOrigin);
+			m_pCollision->SetSize(D3DXVECTOR3(fabsf(m_CollisionOrigin.x - Max.x), fabsf(m_CollisionOrigin.y - Max.y), 0.0f) * 2.0f);
 		}
 
 		//デバッグの線表示

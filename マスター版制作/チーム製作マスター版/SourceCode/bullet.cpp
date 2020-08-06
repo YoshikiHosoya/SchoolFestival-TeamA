@@ -107,23 +107,27 @@ void CBullet::Uninit(void)
 // =====================================================================================================================================================================
 void CBullet::Update(void)
 {
-	// 位置の取得
-	D3DXVECTOR3 pos		= CModel::GetPosition();
-
-	// 位置更新
-	pos += m_move;
-
-	// 体力減少
-	m_nLife--;
 
 	// 体力が0になったら
-	if (m_nLife <= 0)
+	if (m_nLife-- <= 0)
 	{
+		//弾を消す
 		Rerease();
+		return;
 	}
 
-	// 位置の設定
-	CModel::SetPosition(pos);
+	// 位置の取得
+	D3DXVECTOR3 &rPos		= CModel::GetPosition();
+	// 位置更新
+	rPos += m_move;
+
+	//スクリーンの中にあるかどうか
+	if (!CManager::GetRenderer()->CheckScreenRange(rPos))
+	{
+		//弾を消す
+		Rerease();
+		return;
+	}
 
 	// ------------- 当たり判定 ------------- //
 	if (GetCollision() != nullptr)
@@ -308,6 +312,16 @@ void CBullet::BulletLoad()
 			MessageBox(NULL, "弾のパラメーター読み込み失敗", "警告", MB_ICONWARNING);
 		}
 	}
+}
+
+// =====================================================================================================================================================================
+//
+// 弾の発射方向計算
+//
+// =====================================================================================================================================================================
+void CBullet::CalcBulletMove(D3DXVECTOR3 ShotRot, int Guntype)
+{
+	m_move = D3DXVECTOR3(-sinf(ShotRot.z) * m_BulletParam[Guntype].fBulletSpeed, cosf(ShotRot.z) * m_BulletParam[Guntype].fBulletSpeed, 0.0f);
 }
 
 // =====================================================================================================================================================================

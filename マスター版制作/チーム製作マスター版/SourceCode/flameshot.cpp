@@ -162,8 +162,8 @@ CFlameshot * CFlameshot::Create(D3DXVECTOR3 rot)
 	// 初期化
 	pFlameshot->Init();
 
-	// 撃つ方向に合わせる
-	pFlameshot->GetMove() = D3DXVECTOR3(-sinf(rot.y) * cosf(rot.x) * pBulletParam->fBulletSpeed, sinf(rot.x) * pBulletParam->fBulletSpeed, -cosf(rot.y) * cosf(rot.x) * pBulletParam->fBulletSpeed);
+	// 弾の移動量計算
+	pFlameshot->CalcBulletMove(rot, CGun::GUNTYPE_FLAMESHOT);
 
 	// モデルタイプの設定
 	pFlameshot->SetType(BULLET_MODEL);

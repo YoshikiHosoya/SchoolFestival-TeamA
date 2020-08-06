@@ -133,8 +133,8 @@ CLasergun * CLasergun::Create(D3DXVECTOR3 rot)
 	// 初期化
 	pLasergun->Init();
 
-	// 撃つ方向に合わせる
-	pLasergun->GetMove() = D3DXVECTOR3(-sinf(rot.y) * cosf(rot.x) * pBulletParam->fBulletSpeed, sinf(rot.x) * pBulletParam->fBulletSpeed, -cosf(rot.y) * cosf(rot.x) * pBulletParam->fBulletSpeed);
+	// 弾の移動量計算
+	pLasergun->CalcBulletMove(rot, CGun::GUNTYPE_LASERGUN);
 
 	// モデルタイプの設定
 	pLasergun->SetType(BULLET_MODEL);

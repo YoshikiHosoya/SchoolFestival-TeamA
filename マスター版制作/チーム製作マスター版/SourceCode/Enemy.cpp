@@ -88,46 +88,38 @@ void CEnemy::Update(void)
 		return;
 	}
 
-	CKeyboard *key;
-	key = CManager::GetInputKeyboard();
-	if (GetCollision() != nullptr)
+	//死亡していない時
+	if (CCharacter::GetCharacterState() != CCharacter::CHARACTER_STATE_DEATH)
 	{
-
 		CKeyboard *key;
 		key = CManager::GetInputKeyboard();
-
-		if (key->GetKeyboardTrigger(DIK_8))
-		{
-			SetMotion(CCharacter::ENEMY_MOTION_NORMAL);
-		}
-		if (key->GetKeyboardTrigger(DIK_9))
-		{
-			SetMotion(CCharacter::ENEMY_MOTION_WALK);
-		}
 		if (GetCollision() != nullptr)
 		{
-
-			//座標の更新
-			GetCollision()->SetPos(&GetPosition());
-		}
-		//体力が0以下になった時
-		if (this->GetLife() <= 0)
-		{
-		}
-		else
-		{
-			// 弾を撃つ方向を設定
-			m_pGun->SetShotRot(GetShotDirection());
-		}
-		//AI関連処理
-		if (m_pAI != nullptr)
-		{
-			if (m_pAI->GetAIType() == m_pAI->AI_SHOT && m_pAI->GetShot() == true)
+			if (GetCollision() != nullptr)
 			{
-				m_pGun->Shot();
-			}
 
-			m_pAI->Update();
+				//座標の更新
+				GetCollision()->SetPos(&GetPosition());
+			}
+			//体力が0以下になった時
+			if (this->GetLife() <= 0)
+			{
+			}
+			else
+			{
+				// 弾を撃つ方向を設定
+				m_pGun->SetShotRot(GetShotDirection());
+			}
+			//AI関連処理
+			if (m_pAI != nullptr)
+			{
+				if (m_pAI->GetAIType() == m_pAI->AI_SHOT && m_pAI->GetShot() == true)
+				{
+					m_pGun->Shot();
+				}
+
+				m_pAI->Update();
+			}
 		}
 	}
 	CCharacter::Update();
@@ -151,6 +143,17 @@ void CEnemy::Draw(void)
 //====================================================================
 void CEnemy::DebugInfo(void)
 {
+	CKeyboard *key;
+	key = CManager::GetInputKeyboard();
+
+	if (key->GetKeyboardTrigger(DIK_8))
+	{
+		SetMotion(CCharacter::ENEMY_MOTION_NORMAL);
+	}
+	if (key->GetKeyboardTrigger(DIK_9))
+	{
+		SetMotion(CCharacter::ENEMY_MOTION_WALK);
+	}
 }
 //====================================================================
 //モデルのクリエイト
@@ -191,6 +194,35 @@ void CEnemy::DeathReaction()
 
 	CCharacter::DeathReaction();
 
+}
+//====================================================================
+//ステートが変更した瞬間の処理
+//====================================================================
+void CEnemy::StateChangeReaction()
+{
+
+	CCharacter::StateChangeReaction();
+
+	switch (CCharacter::GetCharacterState())
+	{
+	case CHARACTER_STATE_NORMAL:
+		break;
+
+	case CHARACTER_STATE_DAMAGE:
+
+		break;
+	case CHARACTER_STATE_DAMAGE_RED:
+
+		break;
+	case CHARACTER_STATE_INVINCIBLE:
+
+		break;
+	case CHARACTER_STATE_DEATH:
+		SetStateCount(60);
+		SetMotion(CCharacter::ENEMY_MOTION_DEAD_1);
+
+		break;
+	}
 }
 //====================================================================
 //移動

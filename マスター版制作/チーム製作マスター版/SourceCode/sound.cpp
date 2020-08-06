@@ -35,9 +35,14 @@
 HRESULT CSound::Init(HWND hWnd)
 {
 	HRESULT hr;
-	int nCntSound;
+
+	//ミュートしない
 	m_bMute = false;
 
+#ifdef _DEBUG
+	//デバッグ時はミュートする
+	m_bMute = true;
+#endif
 	// COMライブラリの初期化
 	CoInitializeEx(NULL, COINIT_MULTITHREADED);
 
@@ -73,7 +78,7 @@ HRESULT CSound::Init(HWND hWnd)
 	}
 
 	// サウンドデータの初期化
-	for (nCntSound = 0; nCntSound < LABEL_MAX; nCntSound++)
+	for (int nCntSound = 0; nCntSound < LABEL_MAX; nCntSound++)
 	{
 		HANDLE hFile;
 		DWORD dwChunkSize = 0;

@@ -10,7 +10,7 @@
 #include "game.h"
 #include "debugproc.h"
 #include "texture.h"
-#include "TexAnimation3D_Collision.h"
+#include "particle.h"
 
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
@@ -103,8 +103,7 @@ void CShotgun::DeleteBullet()
 // =====================================================================================================================================================================
 void CShotgun::BulletReaction(D3DXVECTOR3 rot)
 {
-	CTexAnimation3D_Collision::Create(GetPosition(), D3DXVECTOR3(100.0f, 200.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, rot.y),
-		CTexture::SEPARATE_TEX_EFFECT_SHOTGUN, 2, OBJTYPE_EXPROSION, GetTag(), GetBulletParam(CGun::GUNTYPE_SHOTGUN)->nPower, 1, false);
+	CParticle::CreateFromText(GetPosition(), rot, CParticleParam::EFFECT_SHOTGUN, GetTag(), GetBulletParam(CGun::GUNTYPE_SHOTGUN)->nPower);
 
 	//実弾の方は消去
 	CBullet::Rerease();
@@ -138,8 +137,8 @@ CShotgun * CShotgun::Create(D3DXVECTOR3 rot)
 	// 初期化
 	pShotGun->Init();
 
-	// 撃つ方向に合わせる
-	pShotGun->GetMove() = D3DXVECTOR3(-sinf(rot.y) * cosf(rot.x) * pBulletParam->fBulletSpeed, sinf(rot.x) * pBulletParam->fBulletSpeed, -cosf(rot.y) * cosf(rot.x) * pBulletParam->fBulletSpeed);
+	// 弾の移動量計算
+	pShotGun->CalcBulletMove(rot, CGun::GUNTYPE_SHOTGUN);
 
 	// モデルタイプの設定
 	pShotGun->SetType(BULLET_MODEL);

@@ -70,7 +70,7 @@ void CHeavyMachinegun::Update(void)
 	CBullet::Update();
 
 	//パーティクル発生 軌跡みたいな
-	CParticle::CreateFromText(GetPosition(), D3DXVECTOR3(0.0f, 0.0f, GetRot().x), CParticleParam::EFFECT_HEAVY_MACHINEGUN, CBullet::GetTag());
+	CParticle::CreateFromText(GetPosition(), GetRot(), CParticleParam::EFFECT_HEAVY_MACHINEGUN, CBullet::GetTag());
 
 }
 
@@ -132,12 +132,10 @@ CHeavyMachinegun * CHeavyMachinegun::Create(D3DXVECTOR3 rot)
 	// 初期化
 	pHeavyMachinegun->Init();
 
-	// 撃つ方向に合わせる
-	//pHeavyMachinegun->GetMove() = D3DXVECTOR3(-sinf(rot.y) * cosf(rot.x) * pBulletParam->fBulletSpeed, sinf(rot.x) * pBulletParam->fBulletSpeed, -cosf(rot.y) * cosf(rot.x) * pBulletParam->fBulletSpeed);
-	pHeavyMachinegun->GetMove() = D3DXVECTOR3(-sinf(rot.x) * pBulletParam->fBulletSpeed,
-		cosf(rot.x) * cosf(rot.y) * pBulletParam->fBulletSpeed,
-		sinf(rot.y) * cosf(rot.x) * pBulletParam->fBulletSpeed);
+	// 弾の移動量計算
+	pHeavyMachinegun->CalcBulletMove(rot, CGun::GUNTYPE_HEAVYMACHINEGUN);
 
+	// 回転量設定
 	pHeavyMachinegun->GetRot() = rot;
 
 	// モデルタイプの設定

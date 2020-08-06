@@ -193,15 +193,12 @@ void CPlayer::Update(void)
 
 	m_pGun->Update();
 
-	// 特定のボタンを押した時に歩きモーションに変更
-	if (CHossoLibrary::PressAnyButton())
-	{
-		//SetMotion(CCharacter::PLAYER_MOTION_WALK);
-	}
 	// 乗り物に乗っていない時といない時の判定
 	Ride();
 
+	//当たり判定処理
 	CollisionUpdate();
+
 	if (m_bRespawn == true)
 	{
 		ReSpawn();
@@ -214,23 +211,6 @@ void CPlayer::Update(void)
 
 	CCharacter::Update();
 
-	CDebugProc::Print("時機のライフ %d\n",GetLife());
-	if (m_bAttack == true)
-	{
-		CDebugProc::Print("攻撃可能\n");
-	}
-	else
-	{
-		CDebugProc::Print("攻撃不可能\n");
-	}
-	if (m_bKnifeAttack == true)
-	{
-		CDebugProc::Print("攻撃ちゅううう\n");
-	}
-	else
-	{
-		CDebugProc::Print("攻撃してないで\n");
-	}
 	PadMoveUpdate();//パッドの更新
 	//スクリーンの範囲内から出ないように制限
 	CManager::GetRenderer()->ScreenLimitRange(GetPosition());
@@ -258,6 +238,36 @@ void CPlayer::DebugInfo(void)
 	static bool trigger2 = false;
 	CKeyboard *key;
 	key = CManager::GetInputKeyboard();
+
+	CDebugProc::Print("ShotRot >> %.2f %.2f %.2f\n", GetShotDirection().x, GetShotDirection().y, GetShotDirection().z);
+	CDebugProc::Print("PlayerState >> %d\n", GetCharacterState());
+
+
+
+	CDebugProc::Print("時機のライフ %d\n", GetLife());
+	if (m_bAttack == true)
+	{
+		CDebugProc::Print("攻撃可能\n");
+	}
+	else
+	{
+		CDebugProc::Print("攻撃不可能\n");
+	}
+	if (m_bKnifeAttack == true)
+	{
+		CDebugProc::Print("攻撃ちゅううう\n");
+	}
+	else
+	{
+		CDebugProc::Print("攻撃してないで\n");
+	}
+
+	// 特定のボタンを押した時に歩きモーションに変更
+	if (CHossoLibrary::PressAnyButton())
+	{
+		//SetMotion(CCharacter::PLAYER_MOTION_WALK);
+	}
+
 
 	//デバッグモードの切り替え
 	if (key->GetKeyboardTrigger(DIK_F2))
@@ -292,36 +302,26 @@ void CPlayer::MoveUpdate(void)
 
 	if (m_bRespawn == false)
 	{
-		if (key->GetKeyboardPress(DIK_W))
-		{
-			SetCharacterDirection(DIRECTION::UP);
-		}
-
 		// Aの処理
 		if (key->GetKeyboardPress(DIK_A))
 		{
 			CPlayer::Move(m_fRunSpeed, 0.5f);
-			if (key->GetKeyboardPress(DIK_W))
-			{
-				SetCharacterDirection(DIRECTION::UP);
-			}
-			else
-			{
 				SetCharacterDirection(DIRECTION::LEFT);
-			}
+
 		}
+
 		// Dの処理
 		else if (key->GetKeyboardPress(DIK_D))
 		{
 			CPlayer::Move(-m_fRunSpeed, -0.5f);
-			if (key->GetKeyboardPress(DIK_W))
-			{
-				SetCharacterDirection(DIRECTION::UP);
-			}
-			else
-			{
-				SetCharacterDirection(DIRECTION::RIGHT);
-			}
+
+			SetCharacterDirection(DIRECTION::RIGHT);
+		}
+
+		// W押してたら上むく
+		if (key->GetKeyboardPress(DIK_W))
+		{
+			SetCharacterDirection(DIRECTION::UP);
 		}
 
 		//ジャンプ
@@ -519,12 +519,16 @@ void CPlayer::AttackUpdate(void)
 //====================================================================
 void CPlayer::PadMoveUpdate(void)
 {
+	//移動量
 	D3DXVECTOR3 MoveValue = ZeroVector3;
+
+	//リスポーンしていない時
 	if (m_bRespawn == false)
 	{
-
+		//パッドによる入力処理
 		if (CHossoLibrary::PadMoveInput(MoveValue, GetCharacterDirection(), GetJump()))
 		{
+			//移動量計算
 			Move(MoveValue.x, MoveValue.y);
 		}
 
@@ -535,25 +539,20 @@ void CPlayer::PadMoveUpdate(void)
 		InputValue.x /= STICK_MAX_RANGE;//値の正規化
 		InputValue.y /= STICK_MAX_RANGE;//値の正規化
 
-		//ジャンプモーションじゃない時
-		if (GetMotionType() != PLAYER_MOTION_JUMP)
+		//ジャンプモーションじゃない時かつジャンプストップモーションじゃない時
+
+		if (GetMotionType() != PLAYER_MOTION_JUMP && GetMotionType() != PLAYER_MOTION_JUMPSTOP && GetMotionType() != PLAYER_MOTION_ATTACK01)
 		{
-			//ジャンプストップモーションじゃない時
-			if (GetMotionType() != PLAYER_MOTION_JUMPSTOP)
+			//Sを押したらしゃがみモーション
+			if (InputValue.y < -0.6f && GetJump() == true)
 			{
-				if (GetMotionType() != PLAYER_MOTION_ATTACK01)
+				if (m_bCruch == false && GetMotionType() != PLAYER_MOTION_WALK)
 				{
-					//Sを押したらしゃがみモーション
-					if (InputValue.y < -0.6f && GetJump() == true)
-					{
-						if (m_bCruch == false && GetMotionType() != PLAYER_MOTION_WALK)
-						{
-							SetMotion(PLAYER_MOTION_SQUATSTOP);
-							m_bCruch = true;
-						}
-					}
+					SetMotion(PLAYER_MOTION_SQUATSTOP);
+					m_bCruch = true;
 				}
 			}
+
 		}
 	}
 }
@@ -599,8 +598,10 @@ void CPlayer::DeathReaction()
 //====================================================================
 void CPlayer::StateChangeReaction()
 {
+	//ステート切り替えた時のリアクション
 	CCharacter::StateChangeReaction();
 
+	//Player側でオーバーライド
 	switch (CCharacter::GetCharacterState())
 	{
 	case CHARACTER_STATE_NORMAL:
@@ -616,7 +617,6 @@ void CPlayer::StateChangeReaction()
 
 		break;
 	case CHARACTER_STATE_INVINCIBLE:
-
 
 		break;
 	case CHARACTER_STATE_DEATH:
@@ -650,19 +650,42 @@ void CPlayer::Ride()
 	// 乗り物に乗っていない時に更新する
 	if (m_bRideVehicle == false)
 	{
+		//移動の更新
 		MoveUpdate();
+
+		//攻撃の更新
 		AttackUpdate();
-		if (m_pGun->GetGunType() != m_pGun->GUNTYPE_HEAVYMACHINEGUN)
+
+
+		//ヘビーマシンガンのとき
+		if (m_pGun->GetGunType() == CGun::GUNTYPE_HEAVYMACHINEGUN)
 		{
-		// 弾を撃つ方向を設定
-			m_pGun->SetShotRot(GetShotDirection());
+			//斜め方向にも弾を撃てるようにすこしゆっくり回転させる
+			D3DXVECTOR3 ShotRotDif = GetShotDirection() - m_ShotRot;
+
+			//3.14以内に抑える
+			CHossoLibrary::CalcRotation(ShotRotDif.z);
+
+			//徐々に回転
+			m_ShotRot += ShotRotDif * 0.2f;
 		}
+		//それ以外のとき
 		else
 		{
-		// 弾を撃つ方向を設定
-		m_pGun->SetShotRot(GetAddShotRot());
-		CDebugProc::Print("射撃方向値:%2f\n", GetAddShotRot().z);
+			//射角設定
+			m_ShotRot = GetShotDirection();
 		}
+
+		// 弾を撃つ方向を設定
+		m_pGun->SetShotRot(m_ShotRot);
+
+
+		if (m_pGun->GetGunType() != m_pGun->GUNTYPE_HEAVYMACHINEGUN)
+		{
+
+		}
+
+		//nullcheck
 		if (m_pPlayerUI)
 		{
 			// 弾の残数表示

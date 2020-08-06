@@ -16,21 +16,27 @@ SCRIPT
 		ZTEST = 0							//Zテストするか
 		ZWRITE = 1							//Zライティングするか
 		BILLBOARD = 0							//ビルボードするか
-		ANIMATION = 0							//アニメーションするか
-		COLLISION = 0							//当たり判定があるかどうか
-		TEXTURE = 1								//テクスチャ
+		ANIMATION = 1							//アニメーションするか
+		COLLISION = 1							//当たり判定があるかどうか
+		TEXTURE = 6								//テクスチャ
+		ANIMATION_LOOP = 0						//アニメーションループするか
+		ANIMATION_CNTSWITCH = 2					//切替のカウント
+		COLLISION_SIZE_CALC = 1					//コリジョンのサイズの計算
+		COLLISION_ATTACK_VALUE = 30				//攻撃力
+		COLLISION_COUNT = 1					//判定のカウント
+		COLLISION_SIZE = 100.50 176.50 0.00		//コリジョンのサイズ
 		SHAPE = 0								//パーティクルの出し方
-		LIFE = 3								//ライフ
-		NUMBER = 3								//個数
+		LIFE = 60								//ライフ
+		NUMBER = 1								//個数
 		SPEED = 0.0								//速度
 		RANGE = 0.5								//範囲
-		ALPHADAMPING = 0.77						//アルファ値の減衰値
+		ALPHADAMPING = 1.00						//アルファ値の減衰値
 		GRAVITYPOWER = 0.80						//重力の強さ
 		LOCALPOS = 0.00 0.00 0.00				//ローカル座標
 		LOCALPOS_RANGE = 0.00 0.00 0.00				//ローカル座標がランダム時の値の範囲
-		SIZE = 6.00 36.00 0.00				//サイズ
-		SIZEDAMPING = 0.99 0.99 0.00			//サイズ減衰量
-		COLOR = 0.7 0.7 0.1 1.0					//色
+		SIZE = 100.50 176.50 0.00				//サイズ
+		SIZEDAMPING = 1.00 1.00 0.00			//サイズ減衰量
+		COLOR = 1.0 1.0 1.0 1.0					//色
 		ROT = 0.00 0.00 0.00					//回転量
 
 	END_PARAMSET

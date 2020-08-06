@@ -25,6 +25,8 @@ public:
 	bool DefaultMotion(void);
 	virtual void DamageReaction();
 	virtual void DeathReaction();
+	virtual void StateChangeReaction();
+
 private:
 	void Move(float move, float fdest);
 	bool m_Attack;									//çUåÇéû
