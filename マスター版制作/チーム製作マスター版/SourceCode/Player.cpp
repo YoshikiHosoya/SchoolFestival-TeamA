@@ -242,6 +242,8 @@ void CPlayer::DebugInfo(void)
 	CDebugProc::Print("ShotRot >> %.2f %.2f %.2f\n", GetShotDirection().x, GetShotDirection().y, GetShotDirection().z);
 	CDebugProc::Print("PlayerState >> %d\n", GetCharacterState());
 
+	CDebugProc::Print("座標------------------------------------------%f,%f,%f\n", m_pos[0].x, m_pos[0].y, m_pos[0].z);
+
 
 
 	CDebugProc::Print("時機のライフ %d\n", GetLife());

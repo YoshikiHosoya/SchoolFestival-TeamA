@@ -60,7 +60,7 @@ HRESULT CGame::Init(void)
 	m_pMap->MapLoad(CMap::MAP_1_1);			// マップのロード
 
 	m_pPlayer	= CPlayer::Create();
-	
+
 
 	m_pPause->CreatePause();
 	// ゲームモードの初期設定
