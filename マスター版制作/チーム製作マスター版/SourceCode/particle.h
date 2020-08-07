@@ -82,6 +82,7 @@ private:
 
 	D3DXVECTOR3 m_posOrigin;										//原点座標
 	D3DXVECTOR3 m_rotOrigin;										//原点回転量
+	D3DXVECTOR3 m_CollisionOrigin;									//当たり判定用の原点
 	D3DXMATRIX m_WorldMtx;											//ワールドマトリックス
 	D3DXVECTOR3 *m_pPosOriginPtr;									//原点座標のポインタ 追従する時はこれを使う
 

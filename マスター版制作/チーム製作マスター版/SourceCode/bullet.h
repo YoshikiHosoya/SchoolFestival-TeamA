@@ -42,15 +42,16 @@ public:
 	~CBullet();						// デストラクタ
 
 	/* メンバ関数 */
-	virtual HRESULT				Init();								// 初期化
-	virtual void				Uninit();							// 終了
-	virtual void				Update();							// 更新
-	virtual void				Draw();								// 描画
-	virtual void				DeleteBullet();						// 弾消去
-	virtual void				BulletReaction(D3DXVECTOR3 rot);	// 弾の反応
+	virtual HRESULT				Init();													// 初期化
+	virtual void				Uninit();												// 終了
+	virtual void				Update();												// 更新
+	virtual void				Draw();													// 描画
+	virtual void				DeleteBullet();											// 弾消去
+	virtual void				BulletReaction(D3DXVECTOR3 rot);						// 弾の反応
 
 	/* 静的メンバ関数 */
-	static	void				BulletLoad();			// 弾のロード
+	static	void				BulletLoad();											// 弾のロード
+	void						CalcBulletMove(D3DXVECTOR3 ShotRot,int Guntype);		// 弾の発射方向計算
 
 	/* メンバ関数 */
 	D3DXVECTOR3					&GetMove()						{ return m_move; };					// 移動値の取得

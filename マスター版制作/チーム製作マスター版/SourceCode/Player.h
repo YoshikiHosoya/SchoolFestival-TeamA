@@ -111,6 +111,7 @@ private:
 	static			D3DXVECTOR3						m_pos[2];				// 初期座標
 
 	/* メンバ変数 */
+	D3DXVECTOR3		m_ShotRot;							//撃つ向き
 	DEBUG_STATE		m_DebugState;						// デバッグのステータス
 	bool			m_bAttack;							// 近接攻撃できるかどうか
 	bool			m_bKnifeAttack;						// 攻撃をしているかどうか

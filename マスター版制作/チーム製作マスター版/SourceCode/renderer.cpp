@@ -510,7 +510,9 @@ bool CRenderer::CheckScreenRange(D3DXVECTOR3 const &pos)
 	//‰æ–Ê‚Ì”ÍˆÍ“à‚Å‚ ‚ê‚Î•`‰æ
 	//‚»‚êˆÈŠO‚Í•`‰æ‚µ‚È‚¢
 	if (pos.x > m_MinScreenPos.x - SCREEN_LIMIT_COMPLEMENT_VALUE &&
-		pos.x < m_MaxScreenPos.x + SCREEN_LIMIT_COMPLEMENT_VALUE)
+		pos.x < m_MaxScreenPos.x + SCREEN_LIMIT_COMPLEMENT_VALUE &&
+		pos.y > m_MinScreenPos.y - SCREEN_LIMIT_COMPLEMENT_VALUE &&
+		pos.y < m_MaxScreenPos.y + SCREEN_LIMIT_COMPLEMENT_VALUE)
 	{
 		return true;
 	}

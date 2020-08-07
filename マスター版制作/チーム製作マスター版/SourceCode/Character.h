@@ -122,6 +122,7 @@ public:
 	void LoadOffset(CHARACTER_TYPE nType);
 	void ForcedUpdate();						//強制的にモーションチェンジ
 	static void CharacterUnLoad(void);
+
 	//セッツ
 	void SetPosition(D3DXVECTOR3 pos);
 	void SetPotisionOld(D3DXVECTOR3 posOld);
@@ -137,6 +138,7 @@ public:
 	void SetGravity(bool gravity);
 	void SetCharacterDirection(DIRECTION direction);
 	void SetShotDirection(D3DXVECTOR3 direction);
+
 	//モーション関連
 	void SetMotion(CHARACTER_MOTION_STATE type);
 	void SetMotionOldType(CHARACTER_MOTION_STATE type);
@@ -149,18 +151,18 @@ public:
 	D3DXVECTOR3 &GetMove(void);					//参照渡し
 	D3DXVECTOR3 &GetRot(void);					//参照渡し
 	D3DXVECTOR3 &GetRotDest(void);				//参照渡し
-	CHARACTER_STATE GetCharacterState(void);
-	D3DXMATRIX *GetMtxWorld(void);
 	D3DXVECTOR3 GetShotDirection(void);
-	int GetLife(void);
-	D3DXVECTOR3 GetAddShotRot(void);
+	D3DXMATRIX *GetMtxWorld(void);
+	CHARACTER_STATE GetCharacterState(void);
+	int &GetLife(void);
 	bool GetJump(void);
 	bool GetGravity(void);
+	float GetHeightBet(void);
 	CHARACTER_TYPE GetCharacterType();								//キャラクターの種類取得
-	std::vector<CModel*> &GetCharacterModelList();					//キャラクターのモデル取得
 	CModel* GetCharacterModelPartsList(int nCnt);					//キャラクターのモデルパーツ取得
 	DIRECTION &GetCharacterDirection(void);							//向きの取得
-	float GetHeightBet(void);
+	std::vector<CModel*> &GetCharacterModelList();					//キャラクターのモデル取得
+
 	//モーション関連
 	bool &GetMotion();
 	int &GetKeySet(void);											//キーセットの取得
@@ -184,7 +186,7 @@ public:
 	void CheckDrawRange();
 
 	CCollision *GetCollision() { return m_pCollision; };			// 当たり判定のポインタ取得
-	void					DebugInfo(void);						// デバッグ用関数
+	virtual void		DebugInfo(void);						// デバッグ用関数
 
 private:
 	static char *m_LoadOffsetFileName[CHARACTER_TYPE_MAX];			//読み込むファイル名
@@ -198,8 +200,7 @@ private:
 	D3DXVECTOR3 m_move;												//移動量
 	D3DXVECTOR3 m_rot;												//回転
 	D3DXVECTOR3 m_rotDest;											//回転する差分
-	D3DXVECTOR3 m_ShotRot;											//撃つ向き
-	D3DXVECTOR3 m_AddShotRot;										//撃つ向きの加算用回転値
+	D3DXVECTOR3 m_ShotRotDest;										//撃つ向きの決定地　ヘビーマシンガン用
 	D3DXVECTOR3 m_AddHeadRot;
 	D3DXVECTOR3 m_AddArmRot;
 	D3DXMATRIX  m_mtxWorld;											//マトリックス
@@ -207,7 +208,7 @@ private:
 	CHARACTER_TYPE m_CharaType;										//キャラクターのタイプ
 	int m_Life;														//ライフ
 	int m_nStateCnt;												//ステータスのカウント
-	DIRECTION	m_CharacterDirection;						//キャラクターの向き
+	DIRECTION	m_CharacterDirection;								//キャラクターの向き
 
 	//モーション関連の情報
 	static std::vector<MOTION*>m_CharacterMotion;					//キャラクターのモーション情報
@@ -215,8 +216,8 @@ private:
 	CHARACTER_MOTION_STATE m_MotionOld;								//前のモーション
 	int m_CntKeySet;												//キーセットのカウント
 	int m_Fram;														//フレーム
-	bool m_bJump;
-	bool m_bGravity;
+	bool m_bGravity;												//ジャンプしているか
+	bool m_bJump;													//重力がかかっているか
 	bool m_bDieFlag;												// 死亡フラグ
 	bool m_bMotion;													//モーションするかどうか
 	bool m_bFall;													//モーションするかどうか

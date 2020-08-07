@@ -87,22 +87,22 @@ CCharacter::~CCharacter()
 //====================================================================
 HRESULT CCharacter::Init(void)
 {
-	m_pos				= D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// 位置
-	m_move				= D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// 移動量
-	m_rot				= D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// 回転
-	m_AddArmRot			= D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//
-	m_AddHeadRot		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//
-	m_Life				= 50;									// 体力
-	m_state				= CHARACTER_STATE_NORMAL;				// 状態
-	m_rotDest.y			= -0.5f*  D3DX_PI;						// 回転する差分
-	m_bJump				= false;								// ジャンプフラグ
-	m_bGravity			= true;									//
-	m_bDieFlag			= false;								// 死亡フラグ
-	m_bMotion			= true;									// モーションするかどうか
-	m_ShotRot			= D3DXVECTOR3(0.0f, 0.5f, 0.0f);		// 撃つ向き
-	m_HeightBet			= 0.0f;									//
-	m_bFall				= false;								//
-	m_bDraw				= false;								//描画するかどうか
+	m_pos				= D3DXVECTOR3(0.0f, 0.0f, 0.0f);					// 位置
+	m_move				= D3DXVECTOR3(0.0f, 0.0f, 0.0f);					// 移動量
+	m_rot				= D3DXVECTOR3(0.0f, 0.0f, 0.0f);					// 回転
+	m_AddArmRot			= D3DXVECTOR3(0.0f, 0.0f, 0.0f);					//
+	m_AddHeadRot		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);					//
+	m_Life				= 50;												// 体力
+	m_state				= CHARACTER_STATE_NORMAL;							// 状態
+	m_rotDest.y			= -0.5f*  D3DX_PI;									// 回転する差分
+	m_bJump				= false;											// ジャンプフラグ
+	m_bGravity			= true;												//
+	m_bDieFlag			= false;											// 死亡フラグ
+	m_bMotion			= true;												// モーションするかどうか
+	m_ShotRotDest		= D3DXVECTOR3(0.0f, 0.0f, 0.5f*  D3DX_PI);			// 撃つ向き
+	m_HeightBet			= 0.0f;												//
+	m_bFall				= false;											//
+	m_bDraw				= false;											//描画するかどうか
 	// 当たり判定生成
 	m_pCollision = CCollision::Create();
 	//マトリックス初期化
@@ -131,17 +131,26 @@ void CCharacter::Update(void)
 
 	CKeyboard *key;
 	key = CManager::GetInputKeyboard();
+
+	//前Fの情報保存
 	m_posold = m_pos;
 	m_MotionOld = m_MotionType;
+
 	//慣性の抵抗
 	m_move.x += (0 - m_move.x)* 0.2f;
 	m_move.z += (0 - m_move.z)* 0.2f;
 	m_move.y += m_move.y * -0.1f;
+
+	//重力が効くとき
 	if (m_bGravity == true)
 	{
-	m_move.y -= 0.5f;
+		//重力加算
+		m_move.y -= 0.5f;
 	}
+
+	//移動処理
 	m_pos += m_move;
+
 	if (m_bFall == false)
 	{
 		m_posfall = m_pos;
@@ -150,7 +159,7 @@ void CCharacter::Update(void)
 	{
 		if (m_pos.x < m_posfall.x)
 		{
-		m_pos.x = m_posfall.x + 50;
+			m_pos.x = m_posfall.x + 50;
 		}
 		else
 		{
@@ -161,80 +170,43 @@ void CCharacter::Update(void)
 	}
 	//目標点と現在の差分（回転）
 	float diffRot = m_rotDest.y - m_rot.y;
+
 	//3.14の超過分の初期化（回転）
-	if (m_rot.y > D3DX_PI)
-	{
-		m_rot.y -= D3DX_PI * 2;
-	}
-	else if (m_rot.y < -D3DX_PI)
-	{
-		m_rot.y += D3DX_PI * 2;
-	}
-	if (diffRot > D3DX_PI)
-	{
-		diffRot -= D3DX_PI * 2;
-	}
-	else if (diffRot < -D3DX_PI)
-	{
-		diffRot += D3DX_PI * 2;
-	}
+	CHossoLibrary::CalcRotation(m_rot.y);
+	CHossoLibrary::CalcRotation(diffRot);
+
 	//求めた差分だけ追従する計算
 	m_rot.y += diffRot * 0.1f;
+
 	//撃つ向き
 	if (m_CharacterDirection == DIRECTION::LEFT)
 	{
-		m_ShotRot.x = 0.0f;
-		m_ShotRot.y = 0.5f * D3DX_PI;
-		m_ShotRot.z = 0.5f*D3DX_PI;
+		m_ShotRotDest.z = 0.5f*D3DX_PI;
 		m_AddHeadRot.x = 0.5f;
 		m_AddArmRot.x = 0.5f* D3DX_PI;
 
 	}
 	else if (m_CharacterDirection == DIRECTION::RIGHT)
 	{
-		m_ShotRot.x = 0.0f;
-		m_ShotRot.y = -0.5f * D3DX_PI;
-		m_ShotRot.z = -0.5f*D3DX_PI;
+		m_ShotRotDest.z = -0.5f*D3DX_PI;
 		m_AddHeadRot.x = 0.5f;
 		m_AddArmRot.x = 0.5f* D3DX_PI;
 	}
 	else if (m_CharacterDirection == DIRECTION::UP)
 	{
-		m_ShotRot.x = 0.5f * D3DX_PI;
-		m_ShotRot.y = 0.0f;
-		m_ShotRot.z = 0.0f*D3DX_PI;
+		m_ShotRotDest.z = 0.0f*D3DX_PI;
 		m_AddHeadRot.x = 1.0f;
 		m_AddArmRot.x = 1.0f* D3DX_PI;
 	}
 	else if (m_CharacterDirection == DIRECTION::DOWN)
 	{
-		m_ShotRot.x = -0.5f * D3DX_PI;
-		m_ShotRot.y = D3DX_PI;
-		m_ShotRot.z = D3DX_PI;
+		m_ShotRotDest.z = D3DX_PI;
 		m_AddHeadRot.x = -0.5f;
 		m_AddArmRot.x = -0.3f* D3DX_PI;
 	}
-	//目標点と現在の差分（回転）
-	float diffShotRot = m_ShotRot.z - m_AddShotRot.x;
-	//3.14の超過分の初期化（回転）
-	if (m_AddShotRot.x > D3DX_PI)
-	{
-		m_AddShotRot.x -= D3DX_PI * 2;
-	}
-	else if (m_AddShotRot.x < -D3DX_PI)
-	{
-		m_AddShotRot.x += D3DX_PI * 2;
-	}
-	if (diffShotRot > D3DX_PI)
-	{
-		diffShotRot -= D3DX_PI * 2;
-	}
-	else if (diffShotRot < -D3DX_PI)
-	{
-		diffShotRot += D3DX_PI * 2;
-	}
-	//求めた差分だけ追従する計算
-	m_AddShotRot.x += diffShotRot * 0.2f;
+
+	//3.14の範囲内に抑える
+	CHossoLibrary::CalcRotation(m_ShotRotDest.x);
 
 	//ステートに応じた処理
 	State();
@@ -242,15 +214,14 @@ void CCharacter::Update(void)
 	//下向きながら着地したとき
 	if (m_CharacterDirection == DIRECTION::DOWN && GetJump() == true)
 	{
-		if (GetRot().y > 1.5f)
+		if (GetRot().y > D3DX_PI * 0.5f)
 		{
-			m_ShotRot.x = 0.0f;
+			m_ShotRotDest.z = 0.0f;
 			SetCharacterDirection(DIRECTION::LEFT);
 		}
-		else if (GetRot().y < -1.5f)
+		else if (GetRot().y < -D3DX_PI * 0.5f)
 		{
-			m_ShotRot.x = 0.0f;
-			m_ShotRot.y = -0.5f * D3DX_PI;
+			m_ShotRotDest.z = 0.0f;
 			SetCharacterDirection(DIRECTION::RIGHT);
 		}
 	}
@@ -456,7 +427,7 @@ void CCharacter::State()
 	case CHARACTER_STATE_DEATH:
 		m_nStateCnt--;
 
-		if (m_nStateCnt > 5)
+		if (m_nStateCnt > 50)
 		{
 			//血のエフェクト
 			CParticle::CreateFromText(GetPosition(), GetShotDirection(), CParticleParam::EFFECT_BLOOD);
@@ -549,18 +520,17 @@ void CCharacter::SetRot(D3DXVECTOR3 rot)
 //====================================================================
 void CCharacter::AddDamage(int Damage)
 {
-	int Life = GetLife();
-	Life -= Damage;
-	SetLife(Life);
+	//ライフを減らす
+	GetLife() -= Damage;
 
-
+	//HPが0になった時
 	if (GetLife() <= 0)
 	{
+		//死亡状態にする
 		SetState(CHARACTER_STATE_DEATH);
 	}
 	else
 	{
-
 		//ダメージを受けた時のリアクション
 		//オーバーライド
 		DamageReaction();
@@ -673,14 +643,11 @@ D3DXVECTOR3 &CCharacter::GetRot(void)
 //====================================================================
 //体力の取得
 //====================================================================
-int CCharacter::GetLife(void)
+int &CCharacter::GetLife(void)
 {
 	return m_Life;
 }
-D3DXVECTOR3 CCharacter::GetAddShotRot(void)
-{
-	return m_AddShotRot;
-}
+
 //====================================================================
 //ジャンプの取得
 //====================================================================
@@ -707,7 +674,7 @@ D3DXMATRIX *CCharacter::GetMtxWorld(void)
 //====================================================================
 D3DXVECTOR3 CCharacter::GetShotDirection(void)
 {
-	return m_ShotRot;
+	return m_ShotRotDest;
 }
 //====================================================================
 //モーション情報の取得
@@ -1254,5 +1221,5 @@ void CCharacter::SetCharacterDirection(DIRECTION direction)
 //====================================================================
 void CCharacter::SetShotDirection(D3DXVECTOR3 direction)
 {
-	m_ShotRot = direction;
+	m_ShotRotDest = direction;
 }

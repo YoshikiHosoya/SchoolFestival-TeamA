@@ -130,10 +130,8 @@ CPlaneGun * CPlaneGun::Create(D3DXVECTOR3 rot)
 	// 初期化
 	pPlaneGun->Init();
 
-	// 撃つ方向に合わせる
-	pPlaneGun->GetMove() = D3DXVECTOR3(-sinf(rot.x) * pBulletParam->fBulletSpeed,
-		cosf(rot.x) * cosf(rot.y) * pBulletParam->fBulletSpeed,
-		sinf(rot.y) * cosf(rot.x) * pBulletParam->fBulletSpeed);
+	// 弾の移動量計算
+	pPlaneGun->CalcBulletMove(rot, CGun::GUNTYPE_PLANEGUN);
 
 	// モデルタイプの設定
 	pPlaneGun->SetType(BULLET_MODEL);
