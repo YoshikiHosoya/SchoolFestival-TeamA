@@ -279,7 +279,7 @@ void CGun::Shot()
 		case CGun::GUNTYPE_LASERGUN:
 			// ƒŒ[ƒU[ƒKƒ“‚Ì¶¬
 			//pBullet = CLasergun::Create(m_ShotRot);
-			CParticle::CreateFromText(m_ShotPos, m_ShotRot, CParticleParam::EFFECT_LAZER, GetTag(), CBullet::GetBulletParam((int)CGun::GUNTYPE_LASERGUN)->nPower, GetShotPosPtr());
+			CParticle::CreateFromText(m_ShotPos, m_ShotRot, CParticleParam::EFFECT_LAZER, GetTag(), CBullet::GetBulletParam((int)CGun::GUNTYPE_LASERGUN)->nPower, D3DXCOLOR(0.0f,0.0f,0.0f,-1.0f),GetShotPosPtr());
 			m_bMultiple = true;		// ƒtƒ‰ƒO‚ðƒIƒ“
 			break;
 
@@ -305,14 +305,16 @@ void CGun::Shot()
 			m_bMultiple = true;		// •¡””­Œ‚‚Âƒtƒ‰ƒO‚ðƒIƒ“
 			break;
 		case CGun::GUNTYPE_TRACKINGGUN:
-			// íŽÔ‚Ìe‚Ì¶¬
-			pBullet = CTracking::Create(m_Shotvector);
-			m_bMultiple = true;		// •¡””­Œ‚‚Âƒtƒ‰ƒO‚ðƒIƒ“
+			// ’Ç]’e
+			pBullet = CTracking::Create(m_ShotRot);
 			break;
 		case CGun::GUNTYPE_DIFFUSIONGUN:
-			// íŽÔ‚Ìe‚Ì¶¬
-			pBullet = CDiffusion::Create(m_Shotvector);
-			m_bMultiple = true;		// •¡””­Œ‚‚Âƒtƒ‰ƒO‚ðƒIƒ“
+			// ŠgŽU’e
+			pBullet = CTracking::Create(m_ShotRot);
+			break;
+		case CGun::GUNTYPE_BOSSLASERGUN:
+			// ŠgŽU’e
+			CParticle::CreateFromText(m_ShotPos, m_ShotRot, CParticleParam::EFFECT_BOSSLAZER, GetTag(), CBullet::GetBulletParam((int)CGun::GUNTYPE_BOSSLASERGUN)->nPower, D3DXCOLOR(0.0f, 0.0f, 0.0f, -1.0f), GetShotPosPtr());
 			break;
 		}
 		if (pBullet)

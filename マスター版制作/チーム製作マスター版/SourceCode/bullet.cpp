@@ -40,6 +40,8 @@ char *CBullet::m_BulletFileName[CGun::GUNTYPE_MAX] =
 	{ "data/Load/Gun/Grenade.txt" },				// ÉOÉåÉlÅ[Éh
 	{ "data/Load/Gun/TrackingGun.txt" },				// í«è]èe
 	{ "data/Load/Gun/DiffusionGun.txt" },				// ägéUèe
+	{ "data/Load/Gun/BossLazerGun.txt" },				// ägéUèe
+
 };
 
 // =====================================================================================================================================================================

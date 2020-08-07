@@ -87,7 +87,7 @@ HRESULT CVehicle::Init(void)
 	// Ž€–Sƒtƒ‰ƒO‚Ì‰Šú‰»
 	m_bDieFlag		= false;
 	// ’e‚Ì‰ñ“]‚Ì‰Šú‰»
-	m_ShotRot		= D3DXVECTOR3(0.0f, 0.5f, 0.0f);
+	m_ShotRot		= D3DXVECTOR3(0.0f, 0.0f, -0.5f*  D3DX_PI);
 	// “–‚½‚è”»’è¶¬
 	m_pCollision	= CCollision::Create();
 	// ƒ}ƒgƒŠƒbƒNƒX‰Šú‰»
@@ -257,22 +257,10 @@ void CVehicle::VehiclePartsRotLimit(CModel * pModel, float fRot)
 	float diffRot = fRot - pModel->GetRot().x;
 
 	//3.14‚Ì’´‰ß•ª‚Ì‰Šú‰»i‰ñ“]j
-	if (pModel->GetRot().x > D3DX_PI)
-	{
-		pModel->GetRot().x -= D3DX_PI * 2;
-	}
-	else if (pModel->GetRot().x < -D3DX_PI)
-	{
-		pModel->GetRot().x += D3DX_PI * 2;
-	}
-	if (diffRot > D3DX_PI)
-	{
-		diffRot -= D3DX_PI * 2;
-	}
-	else if (diffRot < -D3DX_PI)
-	{
-		diffRot += D3DX_PI * 2;
-	}
+	CHossoLibrary::CalcRotation(pModel->GetRot().x);
+
+	//3.14‚Ì’´‰ß•ª‚Ì‰Šú‰»i‰ñ“]j
+	CHossoLibrary::CalcRotation(diffRot);
 
 	//‹‚ß‚½·•ª‚¾‚¯‰ñ“]‚·‚éŒvŽZ
 	pModel->GetRot().x += diffRot * 0.1f;
@@ -384,27 +372,19 @@ void CVehicle::ShotDirection()
 	switch (m_VehicleDirection)
 	{
 	case DIRECTION::LEFT:
-		m_ShotRot.x = 0.0f;
-		m_ShotRot.y = 0.5f * D3DX_PI;
 		m_ShotRot.z = 0.5f * D3DX_PI;
 		m_AddRot.x = 0.0f;
 		break;
 
 	case DIRECTION::RIGHT:
-		m_ShotRot.x = 0.0f;
-		m_ShotRot.y = -0.5f * D3DX_PI;
 		m_ShotRot.z = -D3DX_PI * 0.5f;
 		m_AddRot.x = 0.0f;
 		break;
 	case DIRECTION::UP:
-		m_ShotRot.x = 0.5f * D3DX_PI;
-		m_ShotRot.y = 0.0f;
-		m_ShotRot.z = D3DX_PI * 0.0f;
+		m_ShotRot.z = 0.0f;
 		m_AddRot.x = 0.75f;
 		break;
 	case DIRECTION::DOWN:
-		m_ShotRot.x = -0.5f * D3DX_PI;
-		m_ShotRot.y = 0.5f * D3DX_PI;
 		m_ShotRot.z = D3DX_PI;
 		m_AddRot.x = -0.75f;
 		break;

@@ -203,15 +203,16 @@ void CPlayertank::Shot(CKeyboard *key)
 {
 	CXInputPad *pXInput = CManager::GetPad();
 
+	// ’e‚ðŒ‚‚Â•ûŒü‚ðÝ’è
+	// ƒ‚ƒfƒ‹‚Ì‰ñ“]‚ÌŒü‚«‚Æ’e‚Ì”­ŽË•ûŒü‚ÌŒvŽZ‚Ì‰ñ“]‚ð‡‚í‚¹‚é
+	m_pGun->SetShotRot(D3DXVECTOR3(0.0f, 0.0f, (GetVehicleModelPartsList(CModel::MODEL_TANK_TANKGUN)->GetRot().x)));
+
 	// ƒ}ƒVƒ“ƒKƒ“‚ðŒ‚‚Â
 	if (key->GetKeyboardTrigger(DIK_P) || pXInput->GetTrigger(CXInputPad::JOYPADKEY_X, 1))
 	{
 		// ƒKƒ“‚Ìƒ‚ƒfƒ‹‚Ì”­ŽËŒû‚©‚ç’e‚ð¶¬
 		m_pGun->Shot();
 	}
-	// ’e‚ðŒ‚‚Â•ûŒü‚ðÝ’è
-	m_pGun->SetShotRot(GetVehicleModelPartsList(CModel::MODEL_TANK_TANKGUN)->GetRot());
-
 	// ƒOƒŒƒl[ƒh‚ðŒ‚‚Â
 	if (key->GetKeyboardTrigger(DIK_O) || pXInput->GetTrigger(CXInputPad::JOYPADKEY_Y, 1))
 	{

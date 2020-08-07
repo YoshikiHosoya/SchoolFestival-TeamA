@@ -1026,9 +1026,6 @@ void CCharacter::CalcShotDirection()
 		m_AddHeadRot.x = -0.5f;
 		m_AddArmRot.x = -0.3f* D3DX_PI;
 	}
-
-	//3.14‚Ì”ÍˆÍ“à‚É—}‚¦‚é
-	CHossoLibrary::CalcRotation(m_ShotRotDest.x);
 }
 //====================================================================
 //ˆÚ“®‚ÌŒvŽZ
