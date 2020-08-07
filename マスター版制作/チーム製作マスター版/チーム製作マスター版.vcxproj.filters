@@ -301,6 +301,9 @@
     <ClCompile Include="SourceCode\3Dmultinumber.cpp">
       <Filter>UI</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\Boss_One.cpp">
+      <Filter>Model</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SourceCode\mesh.h">
@@ -611,6 +614,9 @@
     </ClInclude>
     <ClInclude Include="SourceCode\3Dmultinumber.h">
       <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Boss_One.h">
+      <Filter>Model</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

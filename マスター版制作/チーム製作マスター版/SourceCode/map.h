@@ -28,6 +28,7 @@ class CPlayertank;
 class CBattlePlane;
 class CHelicopter;
 class CVehicle;
+class CBoss;
 
 // =====================================================================================================================================================================
 // マップクラス
@@ -76,6 +77,7 @@ public:
 		ARRANGEMENT_MODEL_BATTLEPLANE,			// 戦闘機
 		ARRANGEMENT_MODEL_HELICOPTER,			// ヘリコプター
 		ARRANGEMENT_MODEL_BOSS,					// ボス
+		ARRANGEMENT_MODEL_BOSS_ONE,				// ボス1
 		ARRANGEMENT_MODEL_MAX
 	};
 

@@ -1,40 +1,33 @@
 // =====================================================================================================================================================================
 //
-// 捕虜の処理 [prisoner.h]
+// ボス1の処理 [boss_one.cpp]
 // Author : fujiwara masato
 //
 // =====================================================================================================================================================================
-#include "prisoner.h"
+#include "Boss_One.h"
 #include "model.h"
 #include "collision.h"
 #include "game.h"
 #include "manager.h"
 #include "map.h"
-#include "item.h"
-#include "player.h"
-#include "playerui.h"
-#include "scoremanager.h"
 
 //====================================================================
 //マクロ定義
 //====================================================================
-#define PRISONER_COLLISION_SIZE			(D3DXVECTOR3(50.0f,65.0f,0.0f))			 //捕虜のサイズ
-#define PRISONER_DIETIME				(120)									 //捕虜が消滅するまでの時間
 
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
 // =====================================================================================================================================================================
-PRISONER_DATA		CPrisoner::m_PrisonerData	= {};
-int					CPrisoner::m_nDeleteTime	= 0;
-float				CPrisoner::m_fMoveSpeed		= 0.0f;
-D3DXVECTOR3			CPrisoner::m_CollisionSize	= D3DXVECTOR3(0, 0, 0);
+BOSS_ONE_DATA		CBoss_One::m_BossOneData = {};
+float				CBoss_One::m_fMoveSpeed = 0.0f;
+D3DXVECTOR3			CBoss_One::m_CollisionSize = D3DXVECTOR3(200, 100, 0);
 
 // =====================================================================================================================================================================
 // テキストファイル名
 // =====================================================================================================================================================================
-char *CPrisoner::m_PrisonerFileName =
+char *CBoss_One::m_BossOneFileName =
 {
-	"data/Load/Prisoner/PrisonerData.txt" 			// 捕虜の情報
+	"data/Load/DragonNosuke/Boss_OneData.txt" 			// 捕虜の情報
 };
 
 // =====================================================================================================================================================================
@@ -42,23 +35,18 @@ char *CPrisoner::m_PrisonerFileName =
 // コンストラクタ
 //
 // =====================================================================================================================================================================
-CPrisoner::CPrisoner(OBJ_TYPE type) :CCharacter(type)
+CBoss_One::CBoss_One(OBJ_TYPE type) :CEnemy(type)
 {
+
 	// 捕虜の初期状態
-	m_PrisonerState		= PRISONER_STATE_STAY;
-	// 捕虜が消滅するまでのカウントを初期化
-	m_nDieCount			= 0;
-	// ポインタを検索する際使えるかどうか
-	m_bUse				= false;
-	// ステートが切り替わるまでの時間
-	m_StateTime			= 60;
+	m_BossOneState = BOSS_ONE_STATE_NONE;
 }
 // =====================================================================================================================================================================
 //
 // デストラクタ
 //
 // =====================================================================================================================================================================
-CPrisoner::~CPrisoner()
+CBoss_One::~CBoss_One()
 {
 }
 
@@ -67,21 +55,26 @@ CPrisoner::~CPrisoner()
 // 初期化処理
 //
 // =====================================================================================================================================================================
-HRESULT CPrisoner::Init(void)
+HRESULT CBoss_One::Init(void)
 {
 	// キャラの初期化
 	CCharacter::Init();
 	// オフセットの取得
-	LoadOffset(CCharacter::CHARACTER_TYPE_PRISONER);
+	LoadOffset(CCharacter::CHARACTER_TYPE_BOSS_ONE);
 	// キャラクタータイプの設定
-	SetCharacterType(CCharacter::CHARACTER_TYPE_PRISONER);
-
-	SetMotion(CCharacter::PRISONER_MOTION_STAY);
-
-	Move(0.0f, -1.57f);
+	SetCharacterType(CCharacter::CHARACTER_TYPE_BOSS_ONE);
+	//重力無し
+	SetGravity(false);
+	// 角度の設定
+	SetRotDest(D3DXVECTOR3(0.0f, 1.2f, 0.0f));
+	//SetRotDest(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+	// 体力の初期値
+	CCharacter::SetLife(5000);
+	// モーションさせない設定
+	SetMotion(CCharacter::CHARACTER_MOTION_STATE_NONE);
 	// 当たり判定生成
 	GetCollision()->SetPos(&GetPosition());
-	GetCollision()->SetSize2D(PRISONER_COLLISION_SIZE);
+	GetCollision()->SetSize2D(m_CollisionSize);
 	GetCollision()->SetMove(&GetMove());
 	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_CHARACTER);
 
@@ -90,14 +83,14 @@ HRESULT CPrisoner::Init(void)
 //====================================================================
 //終了
 //====================================================================
-void CPrisoner::Uninit(void)
+void CBoss_One::Uninit(void)
 {
 	CCharacter::Uninit();
 }
 //====================================================================
 //更新
 //====================================================================
-void CPrisoner::Update(void)
+void CBoss_One::Update(void)
 {
 	// 当たり判定
 	if (GetCollision() != nullptr)
@@ -106,23 +99,35 @@ void CPrisoner::Update(void)
 		GetCollision()->SetPos(&GetPosition());
 	}
 
-	// 捕虜の状態別処理
-	this->PrisonerState();
+	GetCharacterModelPartsList(CModel::MODEL_BOSSONE_BODY)->SetRot(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+	GetCharacterModelPartsList(CModel::MODEL_BOSSONE_HEAD)->SetRot(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+	GetCharacterModelPartsList(CModel::MODEL_BOSSONE_THIGH_L_FRONT)->SetRot(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+	GetCharacterModelPartsList(CModel::MODEL_BOSSONE_THIGH_L_REAR)->SetRot(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+	GetCharacterModelPartsList(CModel::MODEL_BOSSONE_THIGH_R_FRONT)->SetRot(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+	GetCharacterModelPartsList(CModel::MODEL_BOSSONE_THIGH_R_REAR)->SetRot(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 
 	// キャラクターの更新
 	CCharacter::Update();
+
+	for (int nCnt = 0; nCnt < CModel::MODEL_BOSSONE_MAX;nCnt++)
+	{
+		CDebugProc::Print("rrroottt %f, %f, %f\n",
+			GetCharacterModelPartsList(nCnt)->GetRot().x,
+			GetCharacterModelPartsList(nCnt)->GetRot().y,
+			GetCharacterModelPartsList(nCnt)->GetRot().z);
+	}
 }
 //====================================================================
 //描画
 //====================================================================
-void CPrisoner::Draw(void)
+void CBoss_One::Draw(void)
 {
 	CCharacter::Draw();
 }
 //====================================================================
 //デバッグ
 //====================================================================
-void CPrisoner::DebugInfo(void)
+void CBoss_One::DebugInfo(void)
 {
 	//CDebugProc::Print("");
 	//CCharacter::DebugInfo();
@@ -130,22 +135,22 @@ void CPrisoner::DebugInfo(void)
 //====================================================================
 //モデルのクリエイト
 //====================================================================
-CPrisoner *CPrisoner::Create()
+CBoss_One *CBoss_One::Create()
 {
 	// メモリを確保
-	CPrisoner*pPrisoner = new CPrisoner(OBJTYPE_PRISONER);
+	CBoss_One*pBoss_One = new CBoss_One(OBJTYPE_BOSS);
 	// 初期化
-	pPrisoner->Init();
+	pBoss_One->Init();
 	// 値を返す
-	return pPrisoner;
+	return pBoss_One;
 }
 
 // =====================================================================================================================================================================
 //
-// 捕虜の情報の読み込み
+// ボスの情報の読み込み
 //
 // =====================================================================================================================================================================
-void CPrisoner::PrisonerLoad()
+void CBoss_One::Boss_One_DataLoad()
 {
 	// ファイルポイント
 	FILE *pFile;
@@ -155,7 +160,7 @@ void CPrisoner::PrisonerLoad()
 	char cDie[128];					// 不要な文字
 
 									// ファイルを開く
-	pFile = fopen(m_PrisonerFileName, "r");
+	pFile = fopen(m_BossOneFileName, "r");
 
 	// 開いているとき
 	if (pFile != NULL)
@@ -185,23 +190,23 @@ void CPrisoner::PrisonerLoad()
 						fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
 						sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
 
-						// DELETEが来たら
-						if (strcmp(cHeadText, "DELETE") == 0)
+																	// DELETEが来たら
+						if (strcmp(cHeadText, "LIFE") == 0)
 						{
-							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_PrisonerData.nDeleteTime);	// 比較用テキストにDELETEを代入
+							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_BossOneData.nLife);	// 比較用テキストにDELETEを代入
 						}
 						// SPEEDが来たら
-						else if (strcmp(cHeadText, "SPEED") == 0)
+						else if (strcmp(cHeadText, "COOLTIME") == 0)
 						{
-							sscanf(cReadText, "%s %s %f", &cDie, &cDie, &m_PrisonerData.fMoveSpeed);	// 比較用テキストにSPEEDを代入
+							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_BossOneData.nCoolTime);	// 比較用テキストにSPEEDを代入
 						}
 						// COLLISIONSIZEが来たら
 						else if (strcmp(cHeadText, "COLLISIONSIZE") == 0)
 						{
 							sscanf(cReadText, "%s %s %f %f %f", &cDie, &cDie,
-								&m_PrisonerData.CollisionSize.x,
-								&m_PrisonerData.CollisionSize.y,
-								&m_PrisonerData.CollisionSize.z);										// 比較用テキストにCOLLISIONSIZEを代入
+								&m_BossOneData.CollisionSize.x,
+								&m_BossOneData.CollisionSize.y,
+								&m_BossOneData.CollisionSize.z);										// 比較用テキストにCOLLISIONSIZEを代入
 						}
 						else if (strcmp(cHeadText, "END_PRISONERSET") == 0)
 						{
@@ -215,152 +220,33 @@ void CPrisoner::PrisonerLoad()
 	}
 	else
 	{
-		MessageBox(NULL, "捕虜のデータ読み込み失敗", "警告", MB_ICONWARNING);
+		MessageBox(NULL, "ボス1のデータ読み込み失敗", "警告", MB_ICONWARNING);
 	}
 
 	// 読み込んだ情報の代入
-	SetPrisonerData();
+	SetBoss_OneData();
 }
 
 //====================================================================
-//捕虜の読み込んだ情報の設定
+//ボスの読み込んだ情報の設定
 //====================================================================
-void CPrisoner::SetPrisonerData()
+void CBoss_One::SetBoss_OneData()
 {
-	// 捕虜が消滅するまでの時間
-	m_nDeleteTime = m_PrisonerData.nDeleteTime;
-	// 捕虜の移動速度
-	m_fMoveSpeed = m_PrisonerData.fMoveSpeed;
-	// 当たり判定の大きさ
-	m_CollisionSize = m_PrisonerData.CollisionSize;
 }
 
 //====================================================================
-// 捕虜のデフォルトモーション
+// ボスのデフォルトモーション
 //====================================================================
-bool CPrisoner::DefaultMotion(void)
+bool CBoss_One::Motion(void)
 {
-	SetMotion(CCharacter::PRISONER_MOTION_STAY);
 	return false;
 }
 
-//====================================================================
-// 捕虜の状態別処理
-//====================================================================
-void CPrisoner::PrisonerState()
+bool CBoss_One::DefaultMotion(void)
 {
-	switch (m_PrisonerState)
-	{
-		// アイテムをドロップするステート
-	case CPrisoner::PRISONER_STATE_DROPITEM:
-	{
-		// アイテムを落とすモーション
-		SetMotion(CCharacter::PRISONER_MOTION_RELEASE);
-
-		m_StateTime--;
-		if (m_StateTime <= 0)
-		{
-			CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
-			if (pPlayer && pPlayer->GetPlayerUI())
-			{
-				pPlayer->GetPlayerUI()->SetScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_RESCUE_PRISONER));
-				// 体力の加算
-				pPlayer->SetLife(pPlayer->GetLife() + 1);
-			}
-			SetStateTime(40);
-			// 捕虜の状態の変更
-			// 捕虜のタイプ別ドロップ処理
-			PrisonerDropType();
-			this->SetPrisonerState(PRISONER_STATE_SALUTE);
-		}
-	}
-		break;
-
-		// 暴れるする
-	case CPrisoner::PRISONER_STATE_SALUTE:
-
-		SetMotion(CCharacter::PRISONER_MOTION_SALUTE);
-
-		m_StateTime--;
-		if (m_StateTime <= 0)
-		{
-			SetStateTime(120);
-			// 捕虜の状態の変更
-			this->SetPrisonerState(PRISONER_STATE_RUN);
-		}
-		break;
-
-		// 走る
-	case CPrisoner::PRISONER_STATE_RUN:
-
-		if (GetFallFlag())
-		{
-			SetMotion(CCharacter::PRISONER_MOTION_FALL);
-		}
-		else
-		{
-			// 横に走る
-			SetMotion(CCharacter::PRISONER_MOTION_RUN);
-			SetMove(D3DXVECTOR3(-10.0f, 0.0f, 1.0f));
-
-			// 消滅までのカウントを加算
-			m_nDieCount++;
-			// カウントが一致値を超えたら
-			if (m_nDieCount >= PRISONER_DIETIME)
-			{
-				SetDieFlag(true);
-			}
-		}
-
-		break;
-	}
+	return false;
 }
 
-//====================================================================
-// 捕虜のタイプ別処理
-//====================================================================
-void CPrisoner::PrisonerDropType()
+void CBoss_One::BossOneState()
 {
-	switch (this->GetPrisonerDropType())
-	{
-		// アイテムを1種類指定して確定でドロップさせる
-	case CPrisoner::PRISONER_ITEM_DROPTYPE_DESIGNATE_ONE:
-		// アイテムの生成
-		CItem::DropCreate(
-			GetPosition(),
-			CItem::ITEMDROP_NONE,
-			CItem::ITEMDROP_PATTERN_DESIGNATE,
-			GetPrisonerDropItem());
-		break;
-
-		// ドロップするアイテムを範囲で指定してドロップさせる
-	case CPrisoner::PRISONER_ITEM_DROPTYPE_DESIGNATE_RANGE:
-		CItem::DropCreate(
-			GetPosition(),
-			CItem::ITEMDROP_WEAPON,
-			CItem::ITEMDROP_PATTERN_RANDOM,
-			CItem::ITEMTYPE_NONE);
-		break;
-
-		// 全てのアイテムの中からランダムでアイテムをドロップさせる
-	case CPrisoner::PRISONER_ITEM_DROPTYPE_ALL:
-		CItem::DropCreate(
-			GetPosition(),
-			CItem::ITEMDROP_ALL,
-			CItem::ITEMDROP_PATTERN_RANDOM,
-			CItem::ITEMTYPE_NONE);
-		break;
-	default:
-		break;
-	}
-}
-
-//====================================================================
-// 移動
-//====================================================================
-void CPrisoner::Move(float move, float fdest)
-{
-	GetMove().x += sinf(move * -D3DX_PI) * 1.0f;
-	GetMove().z += cosf(move * -D3DX_PI) * 1.0f;
-	GetRotDest().y = fdest *  D3DX_PI;
 }

@@ -19,6 +19,7 @@
 #include "BaseMode.h"
 #include "item.h"
 #include "Boss.h"
+#include "Boss_One.h"
 
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
@@ -180,6 +181,11 @@ void CMap::MapModelLoad()
 				{
 					sprintf(cEndSetText, "%s", "END_BOSSSET");
 					nModelType = ARRANGEMENT_MODEL_BOSS;
+				}
+				else if (strcmp(cHeadText, "BOSSONESET") == 0)
+				{
+					sprintf(cEndSetText, "%s", "END_BOSSONESET");
+					nModelType = ARRANGEMENT_MODEL_BOSS_ONE;
 				}
 
 				if (nModelType >= 0)
@@ -369,6 +375,14 @@ void CMap::MapModelCreate(int ModelType, int nType, D3DXVECTOR3 pos,int nItemTyp
 	case CMap::ARRANGEMENT_MODEL_BOSS:
 		// オブジェクトの生成
 		m_pEnemy.emplace_back(CBoss::Create());
+		// 位置の設定
+		m_pEnemy[m_pEnemy.size() - 1]->SetPosition(pos);
+		break;
+
+		/* --- ボス1 --- */
+	case CMap::ARRANGEMENT_MODEL_BOSS_ONE:
+		// オブジェクトの生成
+		m_pEnemy.emplace_back(CBoss_One::Create());
 		// 位置の設定
 		m_pEnemy[m_pEnemy.size() - 1]->SetPosition(pos);
 		break;

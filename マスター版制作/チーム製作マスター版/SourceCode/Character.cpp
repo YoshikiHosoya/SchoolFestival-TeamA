@@ -19,7 +19,7 @@ char *CCharacter::m_LoadOffsetFileName[CHARACTER_TYPE_MAX] =
 	{"data/Load/Enemy/EnemyOffset.txt"},
 	{"data/Load/Prisoner/PrisonerOffset.txt"},
 	{"data/Load/Boss/BossOffset.txt"},
-	{"data/Load/PlayerTank/PlayerTankOffset.txt"}
+	{ "data/Load/DragonNosuke/Boss_OneOffset.txt" },
 };
 //モーションの読み込みファイル
 char *CCharacter::m_LoadMotionFileName[CHARACTER_MOTION_MAX] =
@@ -364,10 +364,10 @@ void CCharacter::Draw(void)
 		}
 		m_vModelList[nCnt]->Draw(m_mtxWorld);
 
-		if (nCnt == 2 || nCnt == 3 || nCnt == 4)
+		/*if (nCnt == 2 || nCnt == 3 || nCnt == 4)
 		{
 			m_vModelList[nCnt]->SetRot(m_vModelList[nCnt]->GetRot());
-		}
+		}*/
 	}
 	CDebugProc::Print("腰の高さ%2f\n", m_vModelList[0]->GetPosition().y);
 }

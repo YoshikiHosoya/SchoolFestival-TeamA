@@ -147,6 +147,23 @@ public:
 		MODEL_BOSS_MAX
 	}BOSS_PARTS_MODEL;
 
+	// モデルの種類
+	typedef enum
+	{
+		//===ボス ドラゴンノスケのモデル===
+		MODEL_BOSSONE_BODY,				// 体
+		MODEL_BOSSONE_HEAD,				// 頭
+		MODEL_BOSSONE_THIGH_L_FRONT,	// 左前大腿
+		MODEL_BOSSONE_THIGH_L_REAR,		// 左後大腿
+		MODEL_BOSSONE_THIGH_R_FRONT,	// 右前大腿
+		MODEL_BOSSONE_THIGH_R_REAR,		// 右後大腿
+		MODEL_BOSSONE_LEG_L_FRONT,		// 左前下腿
+		MODEL_BOSSONE_LEG_L_REAR,		// 左後下腿
+		MODEL_BOSSONE_LEG_R_FRONT,		// 右前下腿
+		MODEL_BOSSONE_LEG_R_REAR,		// 右後下腿
+		MODEL_BOSSONE_MAX
+	}BOSSONE_PARTS_MODEL;
+
 	//全モデルの種類
 	typedef enum
 	{
@@ -161,6 +178,7 @@ public:
 		PLANE_MODEL,
 		HELI_MODEL,
 		BOSS_MODEL,
+		BOSS_ONE_MODEL,
 		TYPE_MAX
 	}MODEL_TYPE;
 
@@ -250,6 +268,7 @@ private:
 	static char *m_PlaneFileName[MODEL_PLANE_MAX];
 	static char *m_HeliFileName[MODEL_HELI_MAX];
 	static char *m_BossFileName[MODEL_BOSS_MAX];
+	static char *m_BossOneFileName[MODEL_BOSSONE_MAX];
 
 	D3DXVECTOR3		m_pos;					//位置
 	D3DXVECTOR3		m_size;					//サイズ

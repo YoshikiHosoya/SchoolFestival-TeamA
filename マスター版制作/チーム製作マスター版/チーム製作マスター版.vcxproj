@@ -161,6 +161,7 @@
     <ClCompile Include="SourceCode\BattlePlane.cpp" />
     <ClCompile Include="SourceCode\Boss.cpp" />
     <ClCompile Include="SourceCode\BossAI.cpp" />
+    <ClCompile Include="SourceCode\Boss_One.cpp" />
     <ClCompile Include="SourceCode\bullet.cpp" />
     <ClCompile Include="SourceCode\camera.cpp" />
     <ClCompile Include="SourceCode\Character.cpp" />
@@ -263,6 +264,7 @@
     <ClInclude Include="SourceCode\BattlePlane.h" />
     <ClInclude Include="SourceCode\Boss.h" />
     <ClInclude Include="SourceCode\BossAI.h" />
+    <ClInclude Include="SourceCode\Boss_One.h" />
     <ClInclude Include="SourceCode\bullet.h" />
     <ClInclude Include="SourceCode\camera.h" />
     <ClInclude Include="SourceCode\Character.h" />
