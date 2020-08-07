@@ -229,7 +229,7 @@ void CEnemy::StateChangeReaction()
 //====================================================================
 void CEnemy::Move(float move, float fdest)
 {
-	GetMove().x += sinf(move * -D3DX_PI) * 1.0f;
-	GetMove().z += cosf(move * -D3DX_PI) * 1.0f;
+	GetMove().x += sinf(move * -D3DX_PI) * 3.0f;
+	GetMove().z += cosf(move * -D3DX_PI) * 3.0f;
 	//m_rotDest.y = fdest *  D3DX_PI;
 }

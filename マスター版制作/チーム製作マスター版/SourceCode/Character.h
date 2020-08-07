@@ -117,10 +117,10 @@ public:
 
 	void Move(float move, float fdest);
 	void AddDamage(int Damage);
-	void Moation(void);
 	static void LoadMotion(void);
 	void LoadOffset(CHARACTER_TYPE nType);
 	void ForcedUpdate();						//強制的にモーションチェンジ
+	void ResetCharacterDirection();				//回転量を基に向きを設定しなおす
 	static void CharacterUnLoad(void);
 
 	//セッツ
@@ -161,6 +161,7 @@ public:
 	CHARACTER_TYPE GetCharacterType();								//キャラクターの種類取得
 	CModel* GetCharacterModelPartsList(int nCnt);					//キャラクターのモデルパーツ取得
 	DIRECTION &GetCharacterDirection(void);							//向きの取得
+	DIRECTION &GetCharacterDirectionOld(void);						//1F前の向きの取得
 	std::vector<CModel*> &GetCharacterModelList();					//キャラクターのモデル取得
 
 	//モーション関連
@@ -209,6 +210,7 @@ private:
 	int m_Life;														//ライフ
 	int m_nStateCnt;												//ステータスのカウント
 	DIRECTION	m_CharacterDirection;								//キャラクターの向き
+	DIRECTION	m_CharacterDirectionOld;							//1F前のキャラクターの向き
 
 	//モーション関連の情報
 	static std::vector<MOTION*>m_CharacterMotion;					//キャラクターのモーション情報
@@ -216,13 +218,19 @@ private:
 	CHARACTER_MOTION_STATE m_MotionOld;								//前のモーション
 	int m_CntKeySet;												//キーセットのカウント
 	int m_Fram;														//フレーム
-	bool m_bGravity;												//ジャンプしているか
-	bool m_bJump;													//重力がかかっているか
+	bool m_bGravity;												//重力がかかっているか
+	bool m_bCanJump;												//ジャンプしているかどうか
 	bool m_bDieFlag;												// 死亡フラグ
 	bool m_bMotion;													//モーションするかどうか
 	bool m_bFall;													//モーションするかどうか
 	bool m_bDraw;													//描画するかどうか
 	CCollision				*m_pCollision;							//当たり判定のポインタ
+
+	void CalcShotDirection();										//撃つ方向決める
+	void CalcMove();												//移動の計算
+	void CalcRotation();											//回転の計算
+	void Motion(void);												//モーション処理
+	virtual void Collision();										//当たり判定処理
 
 };
 #endif

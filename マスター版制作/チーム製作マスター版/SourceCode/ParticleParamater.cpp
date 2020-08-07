@@ -25,6 +25,7 @@ FILENAME_LIST CParticleParam::m_aFileNameList =
 	{ "data/Load/Effect/Paramater/Sumple.txt" },
 	{ "data/Load/Effect/Paramater/Handgun.txt" },
 	{ "data/Load/Effect/Paramater/HeavyMachinegun.txt" },
+	{ "data/Load/Effect/Paramater/TrackingGun.txt" },
 	{ "data/Load/Effect/Paramater/TankGun.txt" },
 	{ "data/Load/Effect/Paramater/ShotGun.txt" },
 	{ "data/Load/Effect/Paramater/Lazer.txt" },

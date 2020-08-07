@@ -53,7 +53,7 @@ char *CPlayer::m_PlayerFileName =
 //マクロ定義
 //====================================================================
 #define PLAYER_SIZE			(D3DXVECTOR3(50.0f,65.0f,0.0f)) //プレイヤーのサイズ
-#define PLAYER_SIZE_CRUCH	(D3DXVECTOR3(50.0f,34.0f,0.0f)) //しゃがんだ時のサイズ
+#define PLAYER_SIZE_CRUCH	(D3DXVECTOR3(50.0f,30.0f,0.0f)) //しゃがんだ時のサイズ
 // 貫通させるかのフラグ
 #define ATTACK_PENETRATION		(true)			// プレイヤーの判定が貫通するかどうか
 #define ATTACK_DAMAGE_ENEMY		(50)			// エネミーへのダメージ
@@ -92,6 +92,7 @@ HRESULT CPlayer::Init(void)
 	SetCharacterType(CCharacter::CHARACTER_TYPE_PLAYER);
 	m_bAttack = false;
 	m_bKnifeAttack = false;
+
 	 // 銃の生成
 	m_pGun = CGun::Create(GetCharacterModelPartsList(CModel::MODEL_PLAYER_RHAND)->GetMatrix());
 	// グレネード放つ位置の生成
@@ -241,6 +242,9 @@ void CPlayer::DebugInfo(void)
 
 	CDebugProc::Print("ShotRot >> %.2f %.2f %.2f\n", GetShotDirection().x, GetShotDirection().y, GetShotDirection().z);
 	CDebugProc::Print("PlayerState >> %d\n", GetCharacterState());
+	CDebugProc::Print("Direction >> %d\n", GetCharacterDirection());
+	CDebugProc::Print("DirectionOld >> %d\n", GetCharacterDirectionOld());
+
 
 	CDebugProc::Print("座標------------------------------------------%f,%f,%f\n", m_pos[0].x, m_pos[0].y, m_pos[0].z);
 
@@ -297,10 +301,10 @@ void CPlayer::MoveUpdate(void)
 	key = CManager::GetInputKeyboard();
 	CXInputPad *pad;
 	pad = CManager::GetPad();
-	float x, y;
-	pad->GetStickLeft(&x, &y);//パッドの入力値を代入
-	x /= STICK_MAX_RANGE;//値の正規化
-	y /= STICK_MAX_RANGE;//値の正規化
+	float Pad_X, Pad_Y;
+	pad->GetStickLeft(&Pad_X, &Pad_Y);//パッドの入力値を代入
+	Pad_X /= STICK_MAX_RANGE;//値の正規化
+	Pad_Y /= STICK_MAX_RANGE;//値の正規化
 
 	if (m_bRespawn == false)
 	{
@@ -308,7 +312,7 @@ void CPlayer::MoveUpdate(void)
 		if (key->GetKeyboardPress(DIK_A))
 		{
 			CPlayer::Move(m_fRunSpeed, 0.5f);
-				SetCharacterDirection(DIRECTION::LEFT);
+			SetCharacterDirection(DIRECTION::LEFT);
 
 		}
 
@@ -327,67 +331,57 @@ void CPlayer::MoveUpdate(void)
 		}
 
 		//ジャンプ
-		if ((key->GetKeyboardTrigger(DIK_SPACE)|| pad->GetTrigger(pad->JOYPADKEY_A, 1)) && GetJump() == true && m_DebugState == DEBUG_NORMAL)
+		if ((key->GetKeyboardTrigger(DIK_SPACE) || pad->GetTrigger(pad->JOYPADKEY_A, 1)) && GetJump() == true && m_DebugState == DEBUG_NORMAL)
 		{
 			GetMove().y += m_fJump;
 			SetMotion(PLAYER_MOTION_JUMP);
 		}
-		else if (GetJump() == false && GetMove().y < 0 && GetMotionType() != PLAYER_MOTION_JUMPSTOP)
+		//ジャンプ中はジャンプモーション
+		else if (GetJump() == false && GetMotionType() != PLAYER_MOTION_JUMPSTOP)
 		{
 			SetMotion(PLAYER_MOTION_JUMP);
 		}
+
+		//デバッグ用
 		else if (key->GetKeyboardPress(DIK_SPACE) && m_DebugState != DEBUG_NORMAL)
 		{
 			GetMove().y += 2;
 		}
-		//ジャンプモーションじゃない時
-		if (GetMotionType() != PLAYER_MOTION_JUMP)
+
+		//ジャンプしてない時
+		if (GetJump())
 		{
-			//ジャンプストップモーションじゃない時
-			if (GetMotionType() != PLAYER_MOTION_JUMPSTOP)
+			//攻撃してない時
+			if (GetMotionType() != PLAYER_MOTION_ATTACK01)
 			{
-				if (GetMotionType() != PLAYER_MOTION_ATTACK01)
+				//移動したらウォークモーション
+				if (fabsf(GetMove().x) > 0.3f)
 				{
-					//移動したらウォークモーション
-					if (GetMove().x > 0.2f || GetMove().x < -0.2f)
-					{
-						SetMotion(PLAYER_MOTION_WALK);
-						m_bCruch = false;
-					}
-					//しゃがんでない時
-					else if (m_bCruch == false)
-					{
-						SetMotion(PLAYER_MOTION_NORMAL);
-						GetCollision()->SetSize2D(PLAYER_SIZE_CRUCH);
-					}
-					//Sを押したらしゃがみモーション
-					if (key->GetKeyboardPress(DIK_S)|| y < -0.6f && GetJump() == true)
-					{
-						if (m_bCruch == false && GetMotionType() != PLAYER_MOTION_WALK)
-						{
-							SetMotion(PLAYER_MOTION_SQUATSTOP);
-							GetCollision()->SetSize2D(PLAYER_SIZE_CRUCH);
-							m_bCruch = true;
-						}
-					}
-					else if (GetJump() == true && GetMotionType() != PLAYER_MOTION_WALK && y > -0.6f)
-					{
-						m_bCruch = false;
-						SetMotion(PLAYER_MOTION_NORMAL);
-						GetCollision()->SetSize2D(PLAYER_SIZE);
-					}
+					SetMotion(PLAYER_MOTION_WALK);
+					m_bCruch = false;
+				}
+				//Sを押したらしゃがみモーション
+				else if ((key->GetKeyboardPress(DIK_S) || Pad_Y < -0.6f) && GetJump() == true)
+				{
+					SetMotion(PLAYER_MOTION_SQUATSTOP);
+					GetCollision()->SetSize2D(PLAYER_SIZE_CRUCH);
+					m_bCruch = true;
+				}
+				//ジャンプ、しゃがみをしてなかったらニュートラル
+				else
+				{
+					SetMotion(PLAYER_MOTION_NORMAL);
+					GetCollision()->SetSize2D(PLAYER_SIZE);
+					m_bCruch = false;
 				}
 			}
-			//ジャンプ、しゃがみをしてなかったらニュートラル
-			else if (GetJump() == true && m_bCruch == false && GetMotionType() != PLAYER_MOTION_ATTACK01)
-			{
-				SetMotion(PLAYER_MOTION_NORMAL);
-			}
 		}
+
 		//ジャンプしたとき
 		else if (GetMotionType() == PLAYER_MOTION_JUMP)
 		{
 			m_bCruch = false;
+
 			//キーセットが３になったらストップモーションへ
 			if (GetKeySet() == 3)
 			{
@@ -401,6 +395,13 @@ void CPlayer::MoveUpdate(void)
 			SetCharacterDirection(DIRECTION::DOWN);
 		}
 
+	}
+
+	//上も下も入力されていない時は正面を向く
+	if (!(key->GetKeyboardPress(DIK_S) || key->GetKeyboardPress(DIK_W)))
+	{
+		//正面を向く
+		ResetCharacterDirection();
 	}
 }
 //====================================================================
@@ -565,7 +566,7 @@ bool CPlayer::DefaultMotion(void)
 {
 	if (GetJump() == true)
 	{
-		SetMotion(CCharacter::PLAYER_MOTION_NORMAL);
+SetMotion(CCharacter::PLAYER_MOTION_NORMAL);
 	}
 	return true;
 }
@@ -639,8 +640,8 @@ CPlayer::DEBUG_STATE CPlayer::GetDebugState(void)
 //====================================================================
 void CPlayer::Move(float move, float fdest)
 {
-	GetMove().x += sinf(move * -D3DX_PI) * 1.3f;
-	GetMove().z += cosf(move * -D3DX_PI) * 1.3f;
+	GetMove().x += sinf(move * -D3DX_PI) * 3.0f;
+	GetMove().z += cosf(move * -D3DX_PI) * 3.0f;
 	GetRotDest().y = fdest *  D3DX_PI;
 }
 
@@ -662,14 +663,24 @@ void CPlayer::Ride()
 		//ヘビーマシンガンのとき
 		if (m_pGun->GetGunType() == CGun::GUNTYPE_HEAVYMACHINEGUN)
 		{
-			//斜め方向にも弾を撃てるようにすこしゆっくり回転させる
-			D3DXVECTOR3 ShotRotDif = GetShotDirection() - m_ShotRot;
+			//左から右　あるいは右から左に方向転換した時
+			if ((CCharacter::GetCharacterDirection() == DIRECTION::LEFT && CCharacter::GetCharacterDirectionOld() == DIRECTION::RIGHT) ||
+				(CCharacter::GetCharacterDirection() == DIRECTION::RIGHT && CCharacter::GetCharacterDirectionOld() == DIRECTION::LEFT))
+			{
+				//射角設定
+				m_ShotRot = GetShotDirection();
+			}
+			else
+			{
+				//斜め方向にも弾を撃てるようにすこしゆっくり回転させる
+				D3DXVECTOR3 ShotRotDif = GetShotDirection() - m_ShotRot;
 
-			//3.14以内に抑える
-			CHossoLibrary::CalcRotation(ShotRotDif.z);
+				//3.14以内に抑える
+				CHossoLibrary::CalcRotation(ShotRotDif.z);
 
-			//徐々に回転
-			m_ShotRot += ShotRotDif * 0.2f;
+				//徐々に回転
+				m_ShotRot += ShotRotDif * 0.15f;
+			}
 		}
 		//それ以外のとき
 		else

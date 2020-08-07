@@ -133,7 +133,7 @@ CGrenade * CGrenade::Create(D3DXVECTOR3 rot)
 	pGrenade->Init();
 
 	// 放つ方向に合わせる
-	pGrenade->GetMove() = D3DXVECTOR3(-sinf(rot.y) * cosf(rot.x) * pGrenade->m_move.x, pGrenade->m_move.y, 0.0f);
+	pGrenade->GetMove() = D3DXVECTOR3(-sinf(rot.z)  * pGrenade->m_move.x, pGrenade->m_move.y, 0.0f);
 
 	// モデルタイプの設定
 	pGrenade->SetType(BULLET_MODEL);
