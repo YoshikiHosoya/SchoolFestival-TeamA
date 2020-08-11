@@ -28,6 +28,7 @@ typedef struct
 // 前方宣言
 // =====================================================================================================================================================================
 class CModel;
+class CGun;
 
 // =====================================================================================================================================================================
 // 捕虜クラス
@@ -61,6 +62,15 @@ public:
 		POSTURETYPE_STAND,											// 起立
 		POSTURETYPE_SQUAT,											// しゃがみ
 		POSTURETYPE_MAX												// 最大数
+	};
+
+	// 武器の種類
+	enum BOSS_ONE_WEAPONTYPE
+	{
+		WEAPONTYPE_BALKAN,											// バルカン
+		WEAPONTYPE_FLAMETHROWER,									// 火炎放射器
+		WEAPONTYPE_INCENDIARY,										// 焼夷弾
+		WEAPONTYPE_MAX												// 最大数
 	};
 
 	CBoss_One(OBJ_TYPE type);										// コンストラクタ
@@ -112,5 +122,6 @@ private:
 	BOSS_ONE_ATTACKTYPE		m_BossOneType;						// ボスの種類
 
 	int						m_StateTime;						// ステートが切り替わるまでの時間
+	CGun					*m_pGun[WEAPONTYPE_MAX];			// ガンクラスのポインタ
 };
 #endif

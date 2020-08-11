@@ -85,6 +85,9 @@ char *CModel::m_GunFileName[MODEL_GUN_MAX] =
 	{ "data/MODEL/Gun/TankGun.x" },					// 戦車の銃
 	{ "data/MODEL/Gun/PlaneGun.x" },				// 戦闘機の銃
 	{ "data/MODEL/Gun/HeliGun.x" },					// ヘリの銃
+	{ "data/MODEL/Gun/Balkan.x" },					// バルカン
+	{ "data/MODEL/Gun/Flamethrower.x" },			// 火炎放射器
+	{ "data/MODEL/Gun/Incendiary.x" },				// 焼夷弾
 	{ "data/MODEL/Gun/Knife.x" },					// ナイフ
 };
 char *CModel::m_BulletFileName[MODEL_BULLET_MAX] =

@@ -98,6 +98,9 @@ public:
 		MODEL_GUN_TANKGUN,				// 戦車の銃
 		MODEL_GUN_PLANEGUN,				// 戦闘機の銃
 		MODEL_GUN_HELIGUN,				// ヘリの銃
+		MODEL_GUN_BALKAN,				// バルカン
+		MODEL_GUN_FLAMETHROWER,			// 火炎放射器
+		MODEL_GUN_INCENDIARY,			// 焼夷弾
 		MODEL_KNIFE,					// ナイフ
 		MODEL_GUN_MAX
 	}GUN_MODEL;

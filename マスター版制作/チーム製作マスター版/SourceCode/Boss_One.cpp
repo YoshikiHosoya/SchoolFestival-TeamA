@@ -10,6 +10,7 @@
 #include "game.h"
 #include "manager.h"
 #include "map.h"
+#include "gun.h"
 
 //====================================================================
 //マクロ定義
@@ -39,6 +40,7 @@ CBoss_One::CBoss_One(OBJ_TYPE type) :CCharacter(type)
 {
 	// ボスの初期状態
 	m_BossOneState = BOSS_ONE_STATE_NONE;
+
 }
 // =====================================================================================================================================================================
 //
@@ -70,6 +72,17 @@ HRESULT CBoss_One::Init(void)
 	CCharacter::SetLife(m_nLife);
 	// モーションさせない設定
 	SetMotion(CCharacter::CHARACTER_MOTION_STATE_NONE);
+
+	// 銃の生成
+	for (int nCnt = 0; nCnt < WEAPONTYPE_MAX;nCnt++)
+	{
+		m_pGun[nCnt] = CGun::Create(GetCharacterModelPartsList(CModel::MODEL_BOSSONE_HEAD)->GetMatrix());
+		// 銃の弾の種類
+		m_pGun[nCnt]->GetTag() = TAG_ENEMY;
+		// 発射位置のオフセットの設定
+		m_pGun[nCnt]->SetShotOffsetPos(D3DXVECTOR3(0.0f, 20, 20));
+	}
+
 	// 当たり判定生成
 	GetCollision()->SetPos((D3DXVECTOR3*)GetCharacterModelPartsList(CModel::MODEL_BOSSONE_HEAD)->GetMatrix());
 	GetCollision()->SetSize2D(m_CollisionSize[0]);
@@ -82,6 +95,16 @@ HRESULT CBoss_One::Init(void)
 //====================================================================
 void CBoss_One::Uninit(void)
 {
+	for(int nCnt = 0; nCnt < WEAPONTYPE_MAX; nCnt++)
+	{
+		// 銃のポインタ
+		if (m_pGun[nCnt])
+		{
+			delete m_pGun[nCnt];
+			m_pGun[nCnt] = nullptr;
+		}
+	}
+
 	CCharacter::Uninit();
 }
 //====================================================================
@@ -89,6 +112,11 @@ void CBoss_One::Uninit(void)
 //====================================================================
 void CBoss_One::Update(void)
 {
+	for (int nCnt = 0; nCnt < WEAPONTYPE_MAX; nCnt++)
+	{
+		m_pGun[nCnt]->Update();
+	}
+
 	// 当たり判定
 	if (GetCollision() != nullptr)
 	{
@@ -110,6 +138,11 @@ void CBoss_One::Update(void)
 void CBoss_One::Draw(void)
 {
 	CCharacter::Draw();
+
+	for (int nCnt = 0; nCnt < WEAPONTYPE_MAX; nCnt++)
+	{
+		m_pGun[nCnt]->Draw();
+	}
 }
 //====================================================================
 //デバッグ
