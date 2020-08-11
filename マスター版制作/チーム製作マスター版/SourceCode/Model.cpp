@@ -77,11 +77,11 @@ char *CModel::m_EnemyFileName[MODEL_ENEMY_MAX] =
 char *CModel::m_GunFileName[MODEL_GUN_MAX] =
 {
 	{ "data/MODEL/Gun/Gun.x" },						// ハンドガン
-	{ "data/MODEL/Gun/Gun.x" },						// ヘビーマシンガン
-	{ "data/MODEL/Gun/Gun.x" },						// ショットガン
-	{ "data/MODEL/Gun/Gun.x" },						// レーザーガン
-	{ "data/MODEL/Gun/Gun.x" },						// ロケットランチャー
-	{ "data/MODEL/Gun/Gun.x" },						// フレイムショット
+	{ "data/MODEL/Gun/Assaultrifle.x" },			// ヘビーマシンガン
+	{ "data/MODEL/Gun/Shootgun.x" },				// ショットガン
+	{ "data/MODEL/Gun/Chargerifle.x" },				// レーザーガン
+	{ "data/MODEL/Gun/Rocketlauncher.x" },			// ロケットランチャー
+	{ "data/MODEL/Gun/Flameshoot.x" },				// フレイムショット
 	{ "data/MODEL/Gun/TankGun.x" },					// 戦車の銃
 	{ "data/MODEL/Gun/PlaneGun.x" },				// 戦闘機の銃
 	{ "data/MODEL/Gun/HeliGun.x" },					// ヘリの銃
