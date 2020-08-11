@@ -21,15 +21,15 @@ SCRIPT
 		TEXTURE = 1								//テクスチャ
 		SHAPE = 1								//パーティクルの出し方
 		LIFE = 60								//ライフ
-		NUMBER = 6								//個数
+		NUMBER = 28								//個数
 		SPEED = 17.5								//速度
 		RANGE = 0.3								//範囲
-		ALPHADAMPING = 0.91						//アルファ値の減衰値
+		ALPHADAMPING = 0.95						//アルファ値の減衰値
 		GRAVITYPOWER = 0.29						//重力の強さ
 		LOCALPOS = 0.00 0.00 0.00				//ローカル座標
 		LOCALPOS_RANGE = 0.00 0.00 0.00				//ローカル座標がランダム時の値の範囲
-		SIZE = 35.50 35.50 0.00				//サイズ
-		SIZEDAMPING = 1.00 1.00 0.00			//サイズ減衰量
+		SIZE = 11.00 11.00 0.00				//サイズ
+		SIZEDAMPING = 0.99 0.99 0.00			//サイズ減衰量
 		COLOR = 1.0 0.0 0.0 1.0					//色
 		ROT = 0.81 0.00 0.00					//回転量
 

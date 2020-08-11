@@ -19,7 +19,7 @@
 //マクロ定義
 //====================================================================
 #define PRISONER_COLLISION_SIZE			(D3DXVECTOR3(50.0f,65.0f,0.0f))			 //捕虜のサイズ
-#define PRISONER_DIETIME				(120)									 //捕虜が消滅するまでの時間
+#define PRISONER_DIETIME				(150)									 //捕虜が消滅するまでの時間
 
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
@@ -301,7 +301,7 @@ void CPrisoner::PrisonerState()
 		{
 			// 横に走る
 			SetMotion(CCharacter::PRISONER_MOTION_RUN);
-			SetMove(D3DXVECTOR3(-10.0f, 0.0f, 1.0f));
+			SetMove(D3DXVECTOR3(-15.0f, 0.0f, 1.0f));
 
 			// 消滅までのカウントを加算
 			m_nDieCount++;
@@ -360,7 +360,7 @@ void CPrisoner::PrisonerDropType()
 //====================================================================
 void CPrisoner::Move(float move, float fdest)
 {
-	GetMove().x += sinf(move * -D3DX_PI) * 1.0f;
-	GetMove().z += cosf(move * -D3DX_PI) * 1.0f;
+	GetMove().x += sinf(move * -D3DX_PI) * 3.0f;
+	GetMove().z += cosf(move * -D3DX_PI) * 3.0f;
 	GetRotDest().y = fdest *  D3DX_PI;
 }

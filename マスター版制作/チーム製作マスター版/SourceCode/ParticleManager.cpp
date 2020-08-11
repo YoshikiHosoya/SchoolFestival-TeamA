@@ -86,6 +86,9 @@ void CParticleManager::Update()
 			}
 		}
 
+		//頂点番号リセット
+		CParticle::ResetVertexID();
+
 		for (size_t nCnt = 0; nCnt < m_pParticleList.size(); nCnt++)
 		{
 			//頂点バッファ更新処理
