@@ -74,6 +74,10 @@ CMap::CMap()
 	m_pBattlePlane.clear();											// 戦闘機
 	m_pHelicopter.clear();											// ヘリコプター
 	m_pVehicle.clear();												// (乗り物)
+
+	// 今だけ 仮
+	m_pBoss_One.clear();
+
 	m_nOldSelect			= 0;									// 前回選択していたもの
 	m_WavePos				= D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// ウェーブの位置
 	m_TransitionPos			= D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// 遷移する位置
@@ -382,9 +386,9 @@ void CMap::MapModelCreate(int ModelType, int nType, D3DXVECTOR3 pos,int nItemTyp
 		/* --- ボス1 --- */
 	case CMap::ARRANGEMENT_MODEL_BOSS_ONE:
 		// オブジェクトの生成
-		m_pEnemy.emplace_back(CBoss_One::Create());
+		m_pBoss_One.emplace_back(CBoss_One::Create());
 		// 位置の設定
-		m_pEnemy[m_pEnemy.size() - 1]->SetPosition(pos);
+		m_pBoss_One[m_pBoss_One.size() - 1]->SetPosition(pos);
 		break;
 	}
 }
@@ -749,6 +753,20 @@ int CMap::GetMaxHelicopter()
 	if (!m_pHelicopter.empty())
 	{
 		return m_pHelicopter.size();
+	}
+	return 0;
+}
+
+// =====================================================================================================================================================================
+//
+// ボス1の最大数取得 仮
+//
+// =====================================================================================================================================================================
+int CMap::GetMaxBoss_One()
+{
+	if (!m_pBoss_One.empty())
+	{
+		return m_pBoss_One.size();
 	}
 	return 0;
 }

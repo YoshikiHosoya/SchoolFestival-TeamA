@@ -35,6 +35,8 @@ public:
 		GUNTYPE_GRENADE,							// グレネード
 		GUNTYPE_TRACKINGGUN,						// 追従銃
 		GUNTYPE_DIFFUSIONGUN,						// 拡散銃
+
+
 		GUNTYPE_MAX									// 銃の種類の最大数
 	};
 

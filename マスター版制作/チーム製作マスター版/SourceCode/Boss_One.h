@@ -13,7 +13,6 @@
 #include "main.h"
 #include "Scene.h"
 #include "Character.h"
-#include "Enemy.h"
 
 // =====================================================================================================================================================================
 // ボス1のデータ
@@ -33,7 +32,7 @@ class CModel;
 // =====================================================================================================================================================================
 // 捕虜クラス
 // =====================================================================================================================================================================
-class CBoss_One :public CEnemy
+class CBoss_One :public CCharacter
 {
 public:
 	// ボス1の状態
@@ -50,7 +49,7 @@ public:
 	enum BOSS_ONE_ATTACKTYPE
 	{
 		ATTACKTYPE_BALKAN,											// バルカン砲
-		ATTACKTYPE_FLAME,											// 火炎放射 立ち時のみ
+		ATTACKTYPE_FLAMETHROWER,									// 火炎放射 立ち時のみ
 		ATTACKTYPE_INCENDIARY,										// 焼夷弾
 		ATTACKTYPE_SQUAT,											// しゃがみ
 		ATTACKTYPE_MAX												// 最大数
@@ -99,9 +98,9 @@ private:
 
 	/* メンバ関数 */
 	void					BossOneState();						// ボスの状態別処理
-	/*void					DamageReaction();
+	void					DamageReaction();
 	void					DeathReaction();
-	void					StateChangeReaction();*/
+	void					StateChangeReaction();
 
 	void					SetStateTime(int time)
 	{

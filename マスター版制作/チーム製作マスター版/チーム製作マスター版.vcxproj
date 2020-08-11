@@ -157,6 +157,7 @@
     <ClCompile Include="SourceCode\3Dline.cpp" />
     <ClCompile Include="SourceCode\3Dmultinumber.cpp" />
     <ClCompile Include="SourceCode\3Dnumber.cpp" />
+    <ClCompile Include="SourceCode\balkan.cpp" />
     <ClCompile Include="SourceCode\BaseMode.cpp" />
     <ClCompile Include="SourceCode\BattlePlane.cpp" />
     <ClCompile Include="SourceCode\Boss.cpp" />
@@ -174,6 +175,7 @@
     <ClCompile Include="SourceCode\EnemyAI.cpp" />
     <ClCompile Include="SourceCode\fade.cpp" />
     <ClCompile Include="SourceCode\flameshot.cpp" />
+    <ClCompile Include="SourceCode\flamethrower.cpp" />
     <ClCompile Include="SourceCode\game.cpp" />
     <ClCompile Include="SourceCode\GameManager.cpp" />
     <ClCompile Include="SourceCode\gameover.cpp" />
@@ -194,6 +196,7 @@
     <ClCompile Include="SourceCode\ImGui\imgui_impl_dx9.cpp" />
     <ClCompile Include="SourceCode\ImGui\imgui_impl_win32.cpp" />
     <ClCompile Include="SourceCode\ImGui\imgui_widgets.cpp" />
+    <ClCompile Include="SourceCode\incendiary.cpp" />
     <ClCompile Include="SourceCode\inputKeyboard.cpp" />
     <ClCompile Include="SourceCode\item.cpp" />
     <ClCompile Include="SourceCode\Knife.cpp" />
@@ -260,6 +263,7 @@
     <ClInclude Include="SourceCode\3Dline.h" />
     <ClInclude Include="SourceCode\3Dmultinumber.h" />
     <ClInclude Include="SourceCode\3Dnumber.h" />
+    <ClInclude Include="SourceCode\balkan.h" />
     <ClInclude Include="SourceCode\BaseMode.h" />
     <ClInclude Include="SourceCode\BattlePlane.h" />
     <ClInclude Include="SourceCode\Boss.h" />
@@ -277,6 +281,7 @@
     <ClInclude Include="SourceCode\EnemyAI.h" />
     <ClInclude Include="SourceCode\fade.h" />
     <ClInclude Include="SourceCode\flameshot.h" />
+    <ClInclude Include="SourceCode\flamethrower.h" />
     <ClInclude Include="SourceCode\game.h" />
     <ClInclude Include="SourceCode\GameManager.h" />
     <ClInclude Include="SourceCode\gameover.h" />
@@ -300,6 +305,7 @@
     <ClInclude Include="SourceCode\ImGui\imstb_rectpack.h" />
     <ClInclude Include="SourceCode\ImGui\imstb_textedit.h" />
     <ClInclude Include="SourceCode\ImGui\imstb_truetype.h" />
+    <ClInclude Include="SourceCode\incendiary.h" />
     <ClInclude Include="SourceCode\inputKeyboard.h" />
     <ClInclude Include="SourceCode\item.h" />
     <ClInclude Include="SourceCode\Knife.h" />

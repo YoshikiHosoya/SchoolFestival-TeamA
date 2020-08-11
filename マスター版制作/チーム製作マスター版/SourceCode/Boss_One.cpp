@@ -35,9 +35,8 @@ char *CBoss_One::m_BossOneFileName =
 // コンストラクタ
 //
 // =====================================================================================================================================================================
-CBoss_One::CBoss_One(OBJ_TYPE type) :CEnemy(type)
+CBoss_One::CBoss_One(OBJ_TYPE type) :CCharacter(type)
 {
-
 	// ボスの初期状態
 	m_BossOneState = BOSS_ONE_STATE_NONE;
 }
@@ -66,14 +65,13 @@ HRESULT CBoss_One::Init(void)
 	//重力無し
 	SetGravity(false);
 	// 角度の設定
-	SetRotDest(D3DXVECTOR3(0.0f, 1.2f, 0.0f));
-	//SetRotDest(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+	SetRotDest(D3DXVECTOR3(0.0f, 1.57f, 0.0f));
 	// 体力の初期値
 	CCharacter::SetLife(m_nLife);
 	// モーションさせない設定
 	SetMotion(CCharacter::CHARACTER_MOTION_STATE_NONE);
 	// 当たり判定生成
-	GetCollision()->SetPos(&GetPosition());
+	GetCollision()->SetPos((D3DXVECTOR3*)GetCharacterModelPartsList(CModel::MODEL_BOSSONE_HEAD)->GetMatrix());
 	GetCollision()->SetSize2D(m_CollisionSize[0]);
 	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_CHARACTER);
 
@@ -98,21 +96,13 @@ void CBoss_One::Update(void)
 		GetCollision()->SetPos(&GetPosition());
 	}
 
-	for (int nCnt = 0; nCnt < CModel::MODEL_BOSSONE_MAX; nCnt++)
+	/*for (int nCnt = 0; nCnt < CModel::MODEL_BOSSONE_MAX; nCnt++)
 	{
 		GetCharacterModelPartsList(nCnt)->SetRot(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
-	}
+	}*/
 
 	// キャラクターの更新
 	CCharacter::Update();
-
-	for (int nCnt = 0; nCnt < CModel::MODEL_BOSSONE_MAX;nCnt++)
-	{
-		CDebugProc::Print("rrroottt %f, %f, %f\n",
-			GetCharacterModelPartsList(nCnt)->GetRot().x,
-			GetCharacterModelPartsList(nCnt)->GetRot().y,
-			GetCharacterModelPartsList(nCnt)->GetRot().z);
-	}
 }
 //====================================================================
 //描画
@@ -256,53 +246,53 @@ bool CBoss_One::DefaultMotion(void){return false;}
 void CBoss_One::BossOneState()
 {
 }
-////====================================================================
-////ダメージを受けた時のリアクション
-////====================================================================
-//void CBoss_One::DamageReaction()
-//{
-//	SetState(CCharacter::CHARACTER_STATE_DAMAGE_RED);
-//
-//	//CManager::GetSound()->Play(CSound::LABEL_SE_HIT);
-//}
-////====================================================================
-////死んだ時のリアクション
-////====================================================================
-//void CBoss_One::DeathReaction()
-//{
-//	//死亡フラグをたてる
-//	this->SetDieFlag(true);
-//
-//	CCharacter::DeathReaction();
-//
-//}
-//
-////====================================================================
-////ステートが変更した瞬間の処理
-////====================================================================
-//void CBoss_One::StateChangeReaction()
-//{
-//
-//	CCharacter::StateChangeReaction();
-//
-//	switch (CCharacter::GetCharacterState())
-//	{
-//	case CHARACTER_STATE_NORMAL:
-//		break;
-//
-//	case CHARACTER_STATE_DAMAGE:
-//
-//		break;
-//	case CHARACTER_STATE_DAMAGE_RED:
-//
-//		break;
-//	case CHARACTER_STATE_INVINCIBLE:
-//
-//		break;
-//	case CHARACTER_STATE_DEATH:
-//		SetStateCount(60);
-//		SetMotion(CCharacter::ENEMY_MOTION_DEAD_1);
-//
-//		break;
-//	}
-//}
+//====================================================================
+//ダメージを受けた時のリアクション
+//====================================================================
+void CBoss_One::DamageReaction()
+{
+	SetState(CCharacter::CHARACTER_STATE_DAMAGE_RED);
+
+	//CManager::GetSound()->Play(CSound::LABEL_SE_HIT);
+}
+//====================================================================
+//死んだ時のリアクション
+//====================================================================
+void CBoss_One::DeathReaction()
+{
+	//死亡フラグをたてる
+	this->SetDieFlag(true);
+
+	CCharacter::DeathReaction();
+
+}
+
+//====================================================================
+//ステートが変更した瞬間の処理
+//====================================================================
+void CBoss_One::StateChangeReaction()
+{
+
+	CCharacter::StateChangeReaction();
+
+	switch (CCharacter::GetCharacterState())
+	{
+	case CHARACTER_STATE_NORMAL:
+		break;
+
+	case CHARACTER_STATE_DAMAGE:
+
+		break;
+	case CHARACTER_STATE_DAMAGE_RED:
+
+		break;
+	case CHARACTER_STATE_INVINCIBLE:
+
+		break;
+	case CHARACTER_STATE_DEATH:
+		SetStateCount(60);
+		SetMotion(CCharacter::ENEMY_MOTION_DEAD_1);
+
+		break;
+	}
+}
