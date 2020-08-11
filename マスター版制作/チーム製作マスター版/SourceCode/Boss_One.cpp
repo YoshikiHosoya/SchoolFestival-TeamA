@@ -18,16 +18,16 @@
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
 // =====================================================================================================================================================================
-BOSS_ONE_DATA		CBoss_One::m_BossOneData = {};
-float				CBoss_One::m_fMoveSpeed = 0.0f;
-D3DXVECTOR3			CBoss_One::m_CollisionSize = D3DXVECTOR3(200, 100, 0);
+BOSS_ONE_DATA		CBoss_One::m_BossOneData = {};									// データ
+int					CBoss_One::m_nLife;												// 体力
+D3DXVECTOR3			CBoss_One::m_CollisionSize[POSTURETYPE_MAX] = {};				// 当たり判定の大きさ
 
 // =====================================================================================================================================================================
 // テキストファイル名
 // =====================================================================================================================================================================
 char *CBoss_One::m_BossOneFileName =
 {
-	"data/Load/DragonNosuke/Boss_OneData.txt" 			// 捕虜の情報
+	"data/Load/DragonNosuke/Boss_OneData.txt" 			// ボスの情報
 };
 
 // =====================================================================================================================================================================
@@ -38,7 +38,7 @@ char *CBoss_One::m_BossOneFileName =
 CBoss_One::CBoss_One(OBJ_TYPE type) :CEnemy(type)
 {
 
-	// 捕虜の初期状態
+	// ボスの初期状態
 	m_BossOneState = BOSS_ONE_STATE_NONE;
 }
 // =====================================================================================================================================================================
@@ -69,13 +69,12 @@ HRESULT CBoss_One::Init(void)
 	SetRotDest(D3DXVECTOR3(0.0f, 1.2f, 0.0f));
 	//SetRotDest(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 	// 体力の初期値
-	CCharacter::SetLife(5000);
+	CCharacter::SetLife(m_nLife);
 	// モーションさせない設定
 	SetMotion(CCharacter::CHARACTER_MOTION_STATE_NONE);
 	// 当たり判定生成
 	GetCollision()->SetPos(&GetPosition());
-	GetCollision()->SetSize2D(m_CollisionSize);
-	GetCollision()->SetMove(&GetMove());
+	GetCollision()->SetSize2D(m_CollisionSize[0]);
 	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_CHARACTER);
 
 	return S_OK;
@@ -99,12 +98,10 @@ void CBoss_One::Update(void)
 		GetCollision()->SetPos(&GetPosition());
 	}
 
-	GetCharacterModelPartsList(CModel::MODEL_BOSSONE_BODY)->SetRot(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
-	GetCharacterModelPartsList(CModel::MODEL_BOSSONE_HEAD)->SetRot(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
-	GetCharacterModelPartsList(CModel::MODEL_BOSSONE_THIGH_L_FRONT)->SetRot(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
-	GetCharacterModelPartsList(CModel::MODEL_BOSSONE_THIGH_L_REAR)->SetRot(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
-	GetCharacterModelPartsList(CModel::MODEL_BOSSONE_THIGH_R_FRONT)->SetRot(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
-	GetCharacterModelPartsList(CModel::MODEL_BOSSONE_THIGH_R_REAR)->SetRot(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+	for (int nCnt = 0; nCnt < CModel::MODEL_BOSSONE_MAX; nCnt++)
+	{
+		GetCharacterModelPartsList(nCnt)->SetRot(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+	}
 
 	// キャラクターの更新
 	CCharacter::Update();
@@ -130,7 +127,7 @@ void CBoss_One::Draw(void)
 void CBoss_One::DebugInfo(void)
 {
 	//CDebugProc::Print("");
-	//CCharacter::DebugInfo();
+	CCharacter::DebugInfo();
 }
 //====================================================================
 //モデルのクリエイト
@@ -138,7 +135,7 @@ void CBoss_One::DebugInfo(void)
 CBoss_One *CBoss_One::Create()
 {
 	// メモリを確保
-	CBoss_One*pBoss_One = new CBoss_One(OBJTYPE_BOSS);
+	CBoss_One*pBoss_One = new CBoss_One(OBJTYPE_BOSSONE);
 	// 初期化
 	pBoss_One->Init();
 	// 値を返す
@@ -152,9 +149,7 @@ CBoss_One *CBoss_One::Create()
 // =====================================================================================================================================================================
 void CBoss_One::Boss_One_DataLoad()
 {
-	// ファイルポイント
-	FILE *pFile;
-
+	FILE *pFile;					// ファイルポイント
 	char cReadText[128];			// 文字として読み取る
 	char cHeadText[128];			// 比較用
 	char cDie[128];					// 不要な文字
@@ -182,10 +177,10 @@ void CBoss_One::Boss_One_DataLoad()
 				sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
 
 															// ITEMSETが来たら
-				if (strcmp(cHeadText, "PRISONERSET") == 0)
+				if (strcmp(cHeadText, "BOSSONESET") == 0)
 				{
 					// END_ITEMSETが来るまでループ
-					while (strcmp(cHeadText, "END_PRISONERSET") != 0)
+					while (strcmp(cHeadText, "END_BOSSONESET") != 0)
 					{
 						fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
 						sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
@@ -201,14 +196,22 @@ void CBoss_One::Boss_One_DataLoad()
 							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_BossOneData.nCoolTime);	// 比較用テキストにSPEEDを代入
 						}
 						// COLLISIONSIZEが来たら
-						else if (strcmp(cHeadText, "COLLISIONSIZE") == 0)
+						else if (strcmp(cHeadText, "COLLISIONSIZE_0") == 0)
 						{
 							sscanf(cReadText, "%s %s %f %f %f", &cDie, &cDie,
-								&m_BossOneData.CollisionSize.x,
-								&m_BossOneData.CollisionSize.y,
-								&m_BossOneData.CollisionSize.z);										// 比較用テキストにCOLLISIONSIZEを代入
+								&m_BossOneData.CollisionSize[POSTURETYPE_STAND].x,
+								&m_BossOneData.CollisionSize[POSTURETYPE_STAND].y,
+								&m_BossOneData.CollisionSize[POSTURETYPE_STAND].z);										// 比較用テキストにCOLLISIONSIZEを代入
 						}
-						else if (strcmp(cHeadText, "END_PRISONERSET") == 0)
+						// COLLISIONSIZEが来たら
+						else if (strcmp(cHeadText, "COLLISIONSIZE_1") == 0)
+						{
+							sscanf(cReadText, "%s %s %f %f %f", &cDie, &cDie,
+								&m_BossOneData.CollisionSize[POSTURETYPE_SQUAT].x,
+								&m_BossOneData.CollisionSize[POSTURETYPE_SQUAT].y,
+								&m_BossOneData.CollisionSize[POSTURETYPE_SQUAT].z);										// 比較用テキストにCOLLISIONSIZEを代入
+						}
+						else if (strcmp(cHeadText, "END_BOSSONESET") == 0)
 						{
 						}
 					}
@@ -232,6 +235,13 @@ void CBoss_One::Boss_One_DataLoad()
 //====================================================================
 void CBoss_One::SetBoss_OneData()
 {
+	// 体力の設定
+	m_nLife = m_BossOneData.nLife;
+	// 当たり判定の設定
+	for (int nCnt = 0; nCnt < POSTURETYPE_MAX; nCnt++)
+	{
+		m_CollisionSize[nCnt] = m_BossOneData.CollisionSize[nCnt];
+	}
 }
 
 //====================================================================
@@ -242,11 +252,57 @@ bool CBoss_One::Motion(void)
 	return false;
 }
 
-bool CBoss_One::DefaultMotion(void)
-{
-	return false;
-}
-
+bool CBoss_One::DefaultMotion(void){return false;}
 void CBoss_One::BossOneState()
 {
 }
+////====================================================================
+////ダメージを受けた時のリアクション
+////====================================================================
+//void CBoss_One::DamageReaction()
+//{
+//	SetState(CCharacter::CHARACTER_STATE_DAMAGE_RED);
+//
+//	//CManager::GetSound()->Play(CSound::LABEL_SE_HIT);
+//}
+////====================================================================
+////死んだ時のリアクション
+////====================================================================
+//void CBoss_One::DeathReaction()
+//{
+//	//死亡フラグをたてる
+//	this->SetDieFlag(true);
+//
+//	CCharacter::DeathReaction();
+//
+//}
+//
+////====================================================================
+////ステートが変更した瞬間の処理
+////====================================================================
+//void CBoss_One::StateChangeReaction()
+//{
+//
+//	CCharacter::StateChangeReaction();
+//
+//	switch (CCharacter::GetCharacterState())
+//	{
+//	case CHARACTER_STATE_NORMAL:
+//		break;
+//
+//	case CHARACTER_STATE_DAMAGE:
+//
+//		break;
+//	case CHARACTER_STATE_DAMAGE_RED:
+//
+//		break;
+//	case CHARACTER_STATE_INVINCIBLE:
+//
+//		break;
+//	case CHARACTER_STATE_DEATH:
+//		SetStateCount(60);
+//		SetMotion(CCharacter::ENEMY_MOTION_DEAD_1);
+//
+//		break;
+//	}
+//}

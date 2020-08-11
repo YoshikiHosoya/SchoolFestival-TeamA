@@ -16,6 +16,7 @@
 #include "sound.h"
 #include "scoremanager.h"
 #include "player.h"
+#include "boss_one.h"
 
 //==========================================================
 //デバッグコマンド
@@ -137,6 +138,8 @@ void CBaseMode::BaseLoad(HWND hWnd)
 	CScoreManager::ScoreLoad();
 	// プレイヤーのデータの読み込み
 	CPlayer::PlayerLoad();
+	// ボス1のデータの読み込み ドラゴンノスケ
+	CBoss_One::Boss_One_DataLoad();
 }
 //==========================================================
 //生成したものを全て破棄

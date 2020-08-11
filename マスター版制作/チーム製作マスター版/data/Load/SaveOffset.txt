@@ -16,7 +16,7 @@ SET_START ---------[1]----------
 	MODEL_TYPE = 11
 	INDEX = 1
 	PARENT = 0
-	POS = 0.0 50.9 0.0
+	POS = 0.0 60.8 0.0
 SET_END
 
 SET_START ---------[2]----------
@@ -50,29 +50,29 @@ SET_END
 SET_START ---------[6]----------
 	MODEL_TYPE = 11
 	INDEX = 6
-	PARENT = 0
-	POS = 120.0 -50.0 50.0
+	PARENT = 2
+	POS = 40.0 -50.0 0.0
 SET_END
 
 SET_START ---------[7]----------
 	MODEL_TYPE = 11
 	INDEX = 7
-	PARENT = 0
-	POS = 120.0 -50.0 -50.0
+	PARENT = 3
+	POS = 40.0 -50.0 0.0
 SET_END
 
 SET_START ---------[8]----------
 	MODEL_TYPE = 11
 	INDEX = 8
-	PARENT = 0
-	POS = -120.0 -50.0 50.0
+	PARENT = 4
+	POS = -40.0 -50.0 0.0
 SET_END
 
 SET_START ---------[9]----------
 	MODEL_TYPE = 11
 	INDEX = 9
-	PARENT = 0
-	POS = -120.0 -50.0 -50.0
+	PARENT = 5
+	POS = -40.0 -50.0 0.0
 SET_END
 
 MODEL_OFFSET_END
