@@ -63,7 +63,7 @@ public:
 	void Uninit(void);
 	void Update(void);
 	void Draw(void);
-
+	void DrawWepon(void);
 	void DebugInfo(void);
 	void MoveUpdate(void);
 	void CollisionUpdate(void);
