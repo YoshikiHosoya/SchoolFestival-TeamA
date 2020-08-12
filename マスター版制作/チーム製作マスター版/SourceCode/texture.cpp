@@ -67,6 +67,8 @@ FILENAME_LIST CTexture::m_aTexFileName =
 	{ "data/TEXTURE/UI/Ranking_UI/3rd.png" },				//ランキング
 	{ "data/TEXTURE/UI/Ranking_UI/4th.png" },				//ランキング
 	{ "data/TEXTURE/UI/Ranking_UI/5th.png" },				//ランキング
+
+	{ "data/TEXTURE/BG/sky.jpg" },							//空の背景
 };
 
 //テクスチャ名の設定

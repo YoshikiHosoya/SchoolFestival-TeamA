@@ -82,6 +82,8 @@ public:
 		TEX_UI_RANKING_4th,						//ランキング4位
 		TEX_UI_RANKING_5th,						//ランキング5位
 
+		TEX_BG_SKY,								//空の背景
+
 		TEX_MAX									//MAX
 	};
 

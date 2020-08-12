@@ -16,6 +16,7 @@ public:
 	typedef enum
 	{
 		TYPE_NONE = 0,
+		OBJTYPE_BG,
 		OBJTYPE_FIELD,
 		OBJTYPE_PLAYER,
 		OBJTYPE_BULLET,

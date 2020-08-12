@@ -57,11 +57,20 @@ CGame::~CGame()
 //==========================================================
 HRESULT CGame::Init(void)
 {
+	m_nFrame = 0;
+	m_nCntNum = 0;
+	m_bEventFlag = false;
+
 	m_pMap		= CMap::MapCreate();		// マップの生成
 	m_pMap->MapLoad(CMap::MAP_1_1);			// マップのロード
 
 	m_pPlayer	= CPlayer::Create();
 	CShield::Create(nullptr);
+
+	for (int nCnt = 0; nCnt < CMap::WAVE_MAX; nCnt++)
+	{
+		m_pMap->WaveLoad((CMap::WAVE)nCnt);
+	}
 
 	m_pPause->CreatePause();
 	// ゲームモードの初期設定
@@ -130,6 +139,41 @@ void CGame::Update(void)
 			// リザルトマネージャー更新
 			m_pResultManager->Update();
 		}
+	}
+
+	if (key->GetKeyboardTrigger(DIK_L))
+	{
+		m_bEventFlag = !m_bEventFlag;
+	}
+
+	if (m_bEventFlag)
+	{
+		m_nFrame++;
+
+		if(m_nCntNum < (int)m_pMap->GetWaveInfo(CMap::WAVE_1).EnemyWaveInfo.size())
+		{
+			if (m_nFrame == m_pMap->GetWaveInfo(CMap::WAVE_1).EnemyWaveInfo[m_nCntNum]->nFrame)
+			{
+				m_pMap->WaveCreate(CMap::ARRANGEMENT_MODEL_ENEMY, m_pMap->GetWaveInfo(CMap::WAVE_1).EnemyWaveInfo[m_nCntNum]->nType, 0,
+									m_pMap->GetWaveInfo(CMap::WAVE_1).EnemyWaveInfo[m_nCntNum]->pos + m_pMap->GetWaveInfo(CMap::WAVE_1).EventPos);
+				m_nCntNum++;
+				m_nFrame = 0;
+			}
+		}
+		if (m_nCntNum < (int)m_pMap->GetWaveInfo(CMap::WAVE_1).PrisonerWaveInfo.size())
+		{
+			if (m_nFrame == m_pMap->GetWaveInfo(CMap::WAVE_1).PrisonerWaveInfo[m_nCntNum]->nFrame)
+			{
+				m_pMap->WaveCreate(CMap::ARRANGEMENT_MODEL_PRISONER, m_pMap->GetWaveInfo(CMap::WAVE_1).PrisonerWaveInfo[m_nCntNum]->nType, 0,
+					m_pMap->GetWaveInfo(CMap::WAVE_1).PrisonerWaveInfo[m_nCntNum]->pos + m_pMap->GetWaveInfo(CMap::WAVE_1).EventPos);
+				m_nCntNum++;
+				m_nFrame = 0;
+			}
+		}
+	}
+	else
+	{
+		m_nCntNum = 0;
 	}
  }
 //==========================================================
