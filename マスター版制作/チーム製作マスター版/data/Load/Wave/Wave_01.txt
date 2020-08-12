@@ -3,19 +3,55 @@
 #------------------------------------------------------------------------------
 SCRIPT
 
-EVENTPOS	= 0
+EVENTPOS	= 3000
 
 ENEMYSET									# 0
 	TYPE			= 0
 	POS 			= 200 0 0
-	FRAME 			= 30
+	FRAME 			= 60
+	EVENT			= 0
+END_ENEMYSET
+
+ENEMYSET									# 0
+	TYPE			= 0
+	POS 			= 100 0 0
+	FRAME 			= 60
+	EVENT			= 0
+END_ENEMYSET
+
+ENEMYSET									# 0
+	TYPE			= 0
+	POS 			= 300 0 0
+	FRAME 			= 60
+	EVENT			= 0
+END_ENEMYSET
+
+ENEMYSET									# 0
+	TYPE			= 0
+	POS 			= 100 0 0
+	FRAME 			= 60
+	EVENT			= 0
+END_ENEMYSET
+
+ENEMYSET									# 0
+	TYPE			= 0
+	POS 			= 300 0 0
+	FRAME 			= 60
+	EVENT			= 0
+END_ENEMYSET
+
+ENEMYSET									# 0
+	TYPE			= 0
+	POS 			= 100 0 0
+	FRAME 			= 60
 	EVENT			= 0
 END_ENEMYSET
 
 PRISONERSET									# 1
 	TYPE			= 0
+	ITEMTYPE		= -1
 	POS 			= 400 0 0
-	FRAME 			= 30
+	FRAME 			= 60
 END_PRISONERSET
 
 END_SCRIPT

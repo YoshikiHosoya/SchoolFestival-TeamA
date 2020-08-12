@@ -80,8 +80,12 @@ void CScene2D::Draw(void)
 		// 頂点バッファをデバイスのデータストリームにバインド
 		pDevice->SetStreamSource(0, GetVtxBuff(), 0, sizeof(VERTEX_2D));
 
+		CManager::GetRenderer()->SetRendererCommand(CRenderer::RENDERER_ZTEST_ON_ZWRITING_OFF);
+
 		// ポリゴンの描画
 		pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP, 0, 2);
+
+		CManager::GetRenderer()->SetRendererCommand(CRenderer::RENDERER_ZTEST_DEFAULT);
 	}
 }
 //==========================================================
