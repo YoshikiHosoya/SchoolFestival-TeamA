@@ -69,5 +69,8 @@ private:
 	GAME_STATE							m_GameState;
 	CResultManager						*m_pResultManager;
 	std::unique_ptr<CGameManager>		m_pGameManager;			//ƒQ[ƒ€‚ÌisŠÇ—
+	int									m_nFrame;
+	int									m_nCntNum;
+	bool								m_bEventFlag;
 };
 #endif
