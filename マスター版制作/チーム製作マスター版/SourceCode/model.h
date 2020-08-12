@@ -6,7 +6,7 @@
 #include "renderer.h"
 #include "Scene.h"
 
-#define MAX_ALLMODEL (100)
+#define MAX_ALLMODEL (130)
 // =====================================================================================================================================================================
 // ëOï˚êÈåæ
 // =====================================================================================================================================================================
@@ -147,6 +147,24 @@ public:
 		MODEL_BOSS_MAX
 	}BOSS_PARTS_MODEL;
 
+	// è·äQï®ÇÃéÌóﬁ
+	typedef enum
+	{
+		OBSTACLE_TYPE_BOX = 0,								// ÉnÉR
+		OBSTACLE_TYPE_BARREL,								// íM
+		OBSTACLE_TYPE_TREE,									// ñÿ
+		OBSTACLE_TYPE_CHEST,								// ã‡å…
+		OBSTACLE_TYPE_SANDBAGS,								// ìyîX
+		OBSTACLE_TYPE_MAX,									// è·äQï®
+	}OBSTACLE_TYPE;
+
+	// ì¡éÍïêäÌÇÃéÌóﬁ
+	typedef enum
+	{
+		MODEL_WEPON_SHIELD,			// èÇ
+		MODEL_WEPON_MAX
+	}SPECIAL_WEPON_MODEL;
+
 	//ëSÉÇÉfÉãÇÃéÌóﬁ
 	typedef enum
 	{
@@ -161,19 +179,9 @@ public:
 		PLANE_MODEL,
 		HELI_MODEL,
 		BOSS_MODEL,
+		WEPON_MODEL,
 		TYPE_MAX
 	}MODEL_TYPE;
-
-	// è·äQï®ÇÃéÌóﬁ
-	typedef enum
-	{
-		OBSTACLE_TYPE_BOX = 0,								// ÉnÉR
-		OBSTACLE_TYPE_BARREL,								// íM
-		OBSTACLE_TYPE_TREE,									// ñÿ
-		OBSTACLE_TYPE_CHEST,								// ã‡å…
-		OBSTACLE_TYPE_SANDBAGS,								// ìyîX
-		OBSTACLE_TYPE_MAX,									// è·äQï®
-	}OBSTACLE_TYPE;
 
 	typedef struct
 	{
@@ -250,6 +258,7 @@ private:
 	static char *m_PlaneFileName[MODEL_PLANE_MAX];
 	static char *m_HeliFileName[MODEL_HELI_MAX];
 	static char *m_BossFileName[MODEL_BOSS_MAX];
+	static char *m_WeponFileName[MODEL_WEPON_MAX];
 
 	D3DXVECTOR3		m_pos;					//à íu
 	D3DXVECTOR3		m_size;					//ÉTÉCÉY

@@ -28,7 +28,7 @@ class CPlayertank;
 class CBattlePlane;
 class CHelicopter;
 class CVehicle;
-
+class CShield;
 // =====================================================================================================================================================================
 // マップクラス
 // =====================================================================================================================================================================
@@ -120,7 +120,7 @@ public:
 	WAVE_INFO		GetWaveInfo(int nWaveNum) { return m_aWaveInfo[nWaveNum]; };	// ウェーブ情報の取得
 	D3DXVECTOR3		GetTransitionPos() { return m_TransitionPos; };					// 遷移するための位置の取得
 	int				GetTransitionMapID() { return m_TransitionMapID; }				// 次に遷移するためのマップ番号の取得
-
+	CShield			*GetShield(int nCnt) { return m_pShield[nCnt]; };				// shieldの取得
 private:
 	/* メンバ関数 */
 	void			MapModelLoad();																// 配置するモデルのロード
@@ -170,7 +170,7 @@ private:
 	std::vector<CBattlePlane*>	m_pBattlePlane;								// 可変長配列 設置した戦闘機
 	std::vector<CHelicopter*>	m_pHelicopter;								// 可変長配列 設置したヘリ
 	std::vector<CVehicle*>		m_pVehicle;									// 可変長配列 設置した乗り物
-
+	std::vector<CShield*>		m_pShield;
 	int							m_nOldSelect;								// 前回選択していたモノの番号
 	D3DXVECTOR3					m_WavePos;									// ウェーブの位置
 	D3DXVECTOR3					m_TransitionPos;							// 遷移する位置

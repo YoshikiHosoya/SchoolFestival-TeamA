@@ -236,6 +236,7 @@
     <ClCompile Include="SourceCode\SceneX.cpp" />
     <ClCompile Include="SourceCode\ScoreManager.cpp" />
     <ClCompile Include="SourceCode\selectcharacter.cpp" />
+    <ClCompile Include="SourceCode\shield.cpp" />
     <ClCompile Include="SourceCode\shotgun.cpp" />
     <ClCompile Include="SourceCode\sound.cpp" />
     <ClCompile Include="SourceCode\tankgun.cpp" />
@@ -341,6 +342,7 @@
     <ClInclude Include="SourceCode\SceneX.h" />
     <ClInclude Include="SourceCode\ScoreManager.h" />
     <ClInclude Include="SourceCode\selectcharacter.h" />
+    <ClInclude Include="SourceCode\shield.h" />
     <ClInclude Include="SourceCode\shotgun.h" />
     <ClInclude Include="SourceCode\sound.h" />
     <ClInclude Include="SourceCode\tankgun.h" />
