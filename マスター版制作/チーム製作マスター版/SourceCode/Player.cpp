@@ -209,7 +209,10 @@ void CPlayer::Update(void)
 	{
 		m_pPlayerUI->SetLifeUI(GetLife());
 	}
-
+	if (m_pGun->GetGunType() == m_pGun->GUNTYPE_HEAVYMACHINEGUN)
+	{
+		m_pGun->SetModelConut(m_pGun->GUNTYPE_HEAVYMACHINEGUN);
+	}
 	CCharacter::Update();
 
 	PadMoveUpdate();//パッドの更新
@@ -226,9 +229,40 @@ void CPlayer::Draw(void)
 	{
 		CCharacter::Draw();
 	}
-
+	DrawWepon();
 	m_pGun->Draw();
 
+}
+//====================================================================
+//武器の見た目変更
+//====================================================================
+void CPlayer::DrawWepon(void)
+{
+	//ハンドガン
+	if (m_pGun->GetGunType() == m_pGun->GUNTYPE_HANDGUN)
+	{
+		m_pGun->SetModelConut(m_pGun->GUNTYPE_HANDGUN);
+	}
+	//ヘビーマシンガン
+	else if (m_pGun->GetGunType() == m_pGun->GUNTYPE_HEAVYMACHINEGUN)
+	{
+		m_pGun->SetModelConut(m_pGun->GUNTYPE_HEAVYMACHINEGUN);
+	}
+	//ショットガン
+	else if (m_pGun->GetGunType() == m_pGun->GUNTYPE_SHOTGUN)
+	{
+		m_pGun->SetModelConut(m_pGun->GUNTYPE_SHOTGUN);
+	}
+	//フレイム
+	else if (m_pGun->GetGunType() == m_pGun->GUNTYPE_FLAMESHOT)
+	{
+		m_pGun->SetModelConut(m_pGun->GUNTYPE_FLAMESHOT);
+	}
+	//レーザー
+	else if (m_pGun->GetGunType() == m_pGun->GUNTYPE_LASERGUN)
+	{
+		m_pGun->SetModelConut(m_pGun->GUNTYPE_LASERGUN);
+	}
 }
 //====================================================================
 //デバッグ
