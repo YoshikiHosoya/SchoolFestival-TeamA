@@ -19,6 +19,7 @@
 #include "BaseMode.h"
 #include "item.h"
 #include "Boss.h"
+#include "scene2D.h"
 
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
@@ -56,6 +57,7 @@ char *CMap::m_WaveFileName[WAVE_MAX] =
 #define TranslucentColor			(D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.5f))		// 半透明
 #define ButtonSpace					(250)									// ボタンの間隔
 #define CameraMoveSpeed				(25.0f)									// カメラの移動速度
+#define BG_ID						(100)									// 背景の認識ID
 
 // =====================================================================================================================================================================
 //
@@ -78,6 +80,7 @@ CMap::CMap()
 	m_TransitionPos			= D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// 遷移する位置
 	m_CameraPos				= D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// カメラの位置
 	m_TransitionMapID		= 0;									// 次に遷移するための番号
+	m_nBGTexID				= 0;									// 背景のテクスチャ番号
 	m_bCameraFollowing		= false;								// カメラを追従するフラグ
 	m_bMapExclusion			= false;								// マップモデル以外適用するフラグ
 }
@@ -107,6 +110,7 @@ void CMap::MapModelLoad()
 	int				nItemType		= 0;								// アイテムの種類
 	char			*cFileName		= nullptr;							// ファイル名
 	int				nModelType		= -1;								// モデルの種類
+	int				nBGTexID		= 0;								// 背景のテクスチャ番号
 
 	// ファイルを開く
 	pFile = fopen(m_MapModelFileName[m_MapNum], "r");
@@ -181,6 +185,11 @@ void CMap::MapModelLoad()
 					sprintf(cEndSetText, "%s", "END_BOSSSET");
 					nModelType = ARRANGEMENT_MODEL_BOSS;
 				}
+				else if (strcmp(cHeadText, "BGSET") == 0)
+				{
+					sprintf(cEndSetText, "%s", "END_BGSET");
+					nModelType = BG_ID;
+				}
 
 				if (nModelType >= 0)
 				{
@@ -193,22 +202,36 @@ void CMap::MapModelLoad()
 						// TYPEが来たら
 						if (strcmp(cHeadText, "TYPE") == 0)
 						{
-							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &nType);		// 比較用テキストにTYPEを代入
+							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &nType);
 						}
 						// ITEMTYPEが来たら
 						else if (strcmp(cHeadText, "ITEMTYPE") == 0)
 						{
-							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &nItemType);		// 比較用テキストにITEMTYPEを代入
+							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &nItemType);
 						}
 						// POSが来たら
 						else if (strcmp(cHeadText, "POS") == 0)
 						{
-							sscanf(cReadText, "%s %s %f %f %f", &cDie, &cDie, &pos.x, &pos.y, &pos.z);		// 比較用テキストにPOSを代入
+							sscanf(cReadText, "%s %s %f %f %f", &cDie, &cDie, &pos.x, &pos.y, &pos.z);
+						}
+						// BG_TEX_IDが来たら
+						else if (strcmp(cHeadText, "BG_TEX_ID") == 0)
+						{
+							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &nBGTexID);
 						}
 						else if (strcmp(cHeadText, cEndSetText) == 0)
 						{
-							// 配置するモデルの生成
-							MapModelCreate(nModelType, nType, pos, nItemType);
+							if (nModelType < ARRANGEMENT_MODEL_MAX)
+							{
+								// 配置するモデルの生成
+								MapModelCreate(nModelType, nType, pos, nItemType);
+							}
+							else if (nModelType == BG_ID)
+							{
+								// 背景の生成とテクスチャの設定
+								CScene2D *pScene2D = CScene2D::CreateSceneManagement(SCREEN_CENTER_POS, SCREEN_SIZE, CScene::OBJTYPE_BG);;
+								pScene2D->BindTexture(CTexture::GetTexture((CTexture::TEX_TYPE)nBGTexID));
+							}
 							nModelType = -1;
 						}
 					}
@@ -274,6 +297,9 @@ void CMap::MapModelSave()
 				}
 			}
 		}
+		// セーブする背景の情報
+		SaveBGContents(pFile);
+
 		fprintf(pFile, "END_SCRIPT\n");
 
 		// 読み込み成功時の結果表示
@@ -320,9 +346,9 @@ void CMap::MapModelCreate(int ModelType, int nType, D3DXVECTOR3 pos,int nItemTyp
 		m_pPrisoner.emplace_back(CPrisoner::Create());
 		// 位置の設定
 		m_pPrisoner[m_pPrisoner.size() - 1]->SetPosition(pos);
-		// 種類の設定
+		// ドロップタイプの設定
 		m_pPrisoner[m_pPrisoner.size() - 1]->SetPrisonerType((CPrisoner::PRISONER_ITEM_DROPTYPE)nType);
-		// 種類の設定
+		// アイテムの種類の設定
 		m_pPrisoner[m_pPrisoner.size() - 1]->SetPrisonerItem((CItem::ITEMTYPE)nItemType);
 
 		break;
@@ -767,7 +793,6 @@ void CMap::SaveModelHeader(FILE * pFile, int ModelType)
 		fprintf(pFile, COMMENT02);
 		fprintf(pFile, "// マップモデルの配置情報\n");
 		fprintf(pFile, COMMENT02);
-		fprintf(pFile, COMMENT02);
 		fprintf(pFile, "// マップの種類 ( TYPE )\n");
 		fprintf(pFile, COMMENT01);
 		fprintf(pFile, "//	[ 0 ]	チュートリアル\n");
@@ -785,7 +810,6 @@ void CMap::SaveModelHeader(FILE * pFile, int ModelType)
 		fprintf(pFile, COMMENT02);
 		fprintf(pFile, "// 敵の配置情報\n");
 		fprintf(pFile, COMMENT02);
-		fprintf(pFile, COMMENT02);
 		fprintf(pFile, "// 敵の種類 ( TYPE )\n");
 		fprintf(pFile, COMMENT01);
 		fprintf(pFile, "//	[ 0 ]	兵士\n");
@@ -798,7 +822,6 @@ void CMap::SaveModelHeader(FILE * pFile, int ModelType)
 	case CMap::ARRANGEMENT_MODEL_PRISONER:
 		fprintf(pFile, COMMENT02);
 		fprintf(pFile, "// 捕虜の配置情報\n");
-		fprintf(pFile, COMMENT02);
 		fprintf(pFile, COMMENT02);
 		fprintf(pFile, "// 捕虜の種類 ( TYPE )\n");
 		fprintf(pFile, COMMENT01);
@@ -830,7 +853,6 @@ void CMap::SaveModelHeader(FILE * pFile, int ModelType)
 	case CMap::ARRANGEMENT_MODEL_OBSTACLE:
 		fprintf(pFile, COMMENT02);
 		fprintf(pFile, "// 障害物の配置情報\n");
-		fprintf(pFile, COMMENT02);
 		fprintf(pFile, COMMENT02);
 		fprintf(pFile, "// 障害物の種類 ( TYPE )\n");
 		fprintf(pFile, COMMENT01);
@@ -865,6 +887,7 @@ void CMap::SaveModelHeader(FILE * pFile, int ModelType)
 		fprintf(pFile, COMMENT02);
 		fprintf(pFile, "// ヘリコプターの配置情報\n");
 		fprintf(pFile, COMMENT02);
+		fprintf(pFile, NEWLINE);
 		break;
 	}
 }
@@ -932,6 +955,26 @@ void CMap::SaveModelContents(FILE *pFile, int ModelType, int nCnt, int nNum)
 		fprintf(pFile, "END_HELICOPTERSET\n\n");
 		break;
 	}
+}
+
+// =====================================================================================================================================================================
+//
+// セーブする背景の情報
+//
+// =====================================================================================================================================================================
+void CMap::SaveBGContents(FILE * pFile)
+{
+	fprintf(pFile, COMMENT02);
+	fprintf(pFile, "// 背景のテクスチャ情報\n");
+	fprintf(pFile, COMMENT02);
+	fprintf(pFile, COMMENT01);
+	fprintf(pFile, "//	[ %d ]	空の背景\n", CTexture::TEX_BG_SKY);
+	fprintf(pFile, COMMENT01);
+	fprintf(pFile, COMMENT02);
+	fprintf(pFile, "BGSET\n");
+	fprintf(pFile, "	BG_TEX_ID			= %d\n", CTexture::TEX_BG_SKY);
+	fprintf(pFile, "END_BGSET\n");
+	fprintf(pFile, NEWLINE);
 }
 
 // =====================================================================================================================================================================
@@ -1090,7 +1133,7 @@ void CMap::ModelDelete(int nNowSelect)
 
 // =====================================================================================================================================================================
 //
-// 配置したモデルを生成するボタン
+// 配置したモデルを生成する
 //
 // =====================================================================================================================================================================
 void CMap::ModelCreat()
@@ -1192,6 +1235,29 @@ void CMap::AllDelete()
 	m_pHelicopter.clear();
 
 	m_bMapExclusion = false;
+}
+
+// =====================================================================================================================================================================
+//
+// Waveの生成
+//
+// =====================================================================================================================================================================
+void CMap::WaveCreate(int nModelType, int nType, int nItemType, D3DXVECTOR3 pos)
+{
+	if (nModelType == ARRANGEMENT_MODEL_ENEMY)
+	{
+		// 敵
+		m_pEnemy.emplace_back(CEnemy::Create());
+		m_pEnemy[m_pEnemy.size() - 1]->SetPosition(pos);
+	}
+	else if (nModelType == ARRANGEMENT_MODEL_PRISONER)
+	{
+		// 捕虜
+		m_pPrisoner.emplace_back(CPrisoner::Create());
+		m_pPrisoner[m_pEnemy.size() - 1]->SetPosition(pos);
+		m_pPrisoner[m_pEnemy.size() - 1]->SetPrisonerType((CPrisoner::PRISONER_ITEM_DROPTYPE)nType);
+		m_pPrisoner[m_pEnemy.size() - 1]->SetPrisonerItem((CItem::ITEMTYPE)nItemType);
+	}
 }
 
 // =====================================================================================================================================================================
@@ -1568,10 +1634,10 @@ void CMap::ComboBoxAll(int nNowSelect)
 		break;
 
 	case CMap::ARRANGEMENT_MODEL_PRISONER:
-		// 捕虜の種類選択
+		// 捕虜のドロップタイプ選択
 		PrisonerDropTypeComboBox(nSelectType, nNowSelect);
-		// 確定ドロップアイテム選択
-		PrisonerItemTypeComboBox2(nSelectType1, nNowSelect);
+		// 捕虜のアイテムタイプ選択
+		PrisonerItemTypeComboBox(nSelectType1, nNowSelect);
 		break;
 
 	case CMap::ARRANGEMENT_MODEL_OBSTACLE:
@@ -1756,7 +1822,7 @@ void CMap::PrisonerDropTypeComboBox(int &nSelectType, int nNowSelect)
 // 捕虜のアイテムタイプのコンボボックス
 //
 // =====================================================================================================================================================================
-void CMap::PrisonerItemTypeComboBox2(int & nSelectType, int nNowSelect)
+void CMap::PrisonerItemTypeComboBox(int & nSelectType, int nNowSelect)
 {
 #ifdef _DEBUG
 	std::vector<std::string > aPrisonerItem = { "NONE","HMG","SG","LG","RL","FS","BEAR","COIN","JEWELRY","MEDAL","BOMBUP","ENERGYUP","BULLETUP" };

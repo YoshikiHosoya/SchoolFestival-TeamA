@@ -51,9 +51,9 @@ void CGameManager::Update()
 
 	if (pPlayer)
 	{
-		if(pPlayer->GetPosition().x >= 8500.0f)
+		if(pPlayer->GetPosition().x >= CManager::GetGame()->GetMap()->GetTransitionPos().x)
 		{
-			CManager::GetRenderer()->GetFade()->SetFade(CFADE::FADETYPE::FADETYPE_MAPMOVE, CMap::MAP_1_BOSS);
+			CManager::GetRenderer()->GetFade()->SetFade(CFADE::FADETYPE::FADETYPE_MAPMOVE, CManager::GetGame()->GetMap()->GetTransitionMapID());
 		}
 	}
 

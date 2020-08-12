@@ -44,6 +44,7 @@ char *CCharacter::m_LoadMotionFileName[CHARACTER_MOTION_MAX] =
 	{ "data/Load/Enemy/Motion/EnemySquatStop.txt" },
 	{ "data/Load/Enemy/Motion/EnemyDead_1.txt" },
 	{ "data/Load/Enemy/Motion/EnemyDead_2.txt" },
+	{ "data/Load/Enemy/Motion/EnemyGrenade.txt" },
 	{ "data/Load/Boss/Motion/Neutral.txt" },
 	{ "data/Load/Prisoner/Motion/PrisonerStay.txt" },
 	{ "data/Load/Prisoner/Motion/PrisonerRelease.txt" },

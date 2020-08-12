@@ -241,7 +241,7 @@ void CBossAI::UpdateAttackAI(void)
 		else if (AI_LASER == m_BossAItype)//レーザー
 		{
 			//ガンのタイプ変更
-			pBossPass->GetGun()->SetGunType(pBossPass->GetGun()->GUNTYPE_LASERGUN);
+			pBossPass->GetGun()->SetGunType(pBossPass->GetGun()->GUNTYPE_BOSSLASERGUN);
 
 			//撃つ向きの設定
 			pBossPass->GetGun()->SetShotRot(D3DXVECTOR3(0.0f, 0.0f, D3DX_PI));

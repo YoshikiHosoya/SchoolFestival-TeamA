@@ -22,7 +22,7 @@ SCRIPT
 		COLLISION_SIZE_CALC = 1					//コリジョンのサイズの計算
 		COLLISION_ATTACK_VALUE = 1				//攻撃力
 		COLLISION_COUNT = 5					//判定のカウント
-		COLLISION_SIZE = 10.00 500.00 0.00		//コリジョンのサイズ
+		COLLISION_SIZE = 5.00 500.00 0.00		//コリジョンのサイズ
 		SHAPE = 3								//パーティクルの出し方
 		LIFE = 50								//ライフ
 		NUMBER = 50								//個数
@@ -32,10 +32,10 @@ SCRIPT
 		GRAVITYPOWER = 0.80						//重力の強さ
 		LOCALPOS = 0.00 0.00 0.00				//ローカル座標
 		LOCALPOS_RANGE = 0.00 0.00 0.00				//ローカル座標がランダム時の値の範囲
-		SIZE = 10.00 223.50 0.00				//サイズ
+		SIZE = 5.00 200.00 0.00				//サイズ
 		SIZEDAMPING = 0.98 0.98 0.00			//サイズ減衰量
 		COLOR = 0.7 1.0 0.8 1.0					//色
-		ROT = 1.57 0.00 0.00					//回転量
+		ROT = 0.00 0.00 0.00					//回転量
 
 	END_PARAMSET
 END_SCRIPT

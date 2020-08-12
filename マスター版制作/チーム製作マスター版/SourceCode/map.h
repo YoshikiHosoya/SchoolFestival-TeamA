@@ -28,7 +28,7 @@ class CPlayertank;
 class CBattlePlane;
 class CHelicopter;
 class CVehicle;
-
+class CShield;
 // =====================================================================================================================================================================
 // マップクラス
 // =====================================================================================================================================================================
@@ -100,6 +100,7 @@ public:
 	void			WaveLoad(WAVE WaveNum);											// ウェーブのロード
 	void			UpdateDieFlag();												// 死亡フラグ確認関数
 	void			AllDelete();													// 配置しているモデルを全て破棄
+	void			WaveCreate(int nModelType, int nType, int nItemType, D3DXVECTOR3 pos);	// Waveの生成
 
 	int				GetMaxModel();													// モデルの最大数取得
 	int				GetMaxEnemy();													// 敵の最大数取得
@@ -120,7 +121,7 @@ public:
 	WAVE_INFO		GetWaveInfo(int nWaveNum) { return m_aWaveInfo[nWaveNum]; };	// ウェーブ情報の取得
 	D3DXVECTOR3		GetTransitionPos() { return m_TransitionPos; };					// 遷移するための位置の取得
 	int				GetTransitionMapID() { return m_TransitionMapID; }				// 次に遷移するためのマップ番号の取得
-
+	CShield			*GetShield(int nCnt) { return m_pShield[nCnt]; };				// shieldの取得
 private:
 	/* メンバ関数 */
 	void			MapModelLoad();																// 配置するモデルのロード
@@ -131,6 +132,7 @@ private:
 
 	void			SaveModelHeader(FILE *pFile, int ModelType);								// セーブするモデルのヘッダー
 	void			SaveModelContents(FILE *pFile, int ModelType, int nCnt, int nNum);			// セーブするモデルの情報
+	void			SaveBGContents(FILE *pFile);												// セーブする背景の情報
 
 	size_t			GetMaxMapModel(int ModelType);												// 配置するモデルの最大数取得
 	void			*GetMapModel(int ModelType, int nCnt);										// 配置するモデルのポインタ
@@ -149,7 +151,7 @@ private:
 	void			ObstacleTypeComboBox(int &nSelectType, int nNowSelect);						// 障害物の種類のコンボボックス
 	void			EnemyTypeComboBox(int &nSelectType, int nNowSelect);						// 敵の種類のコンボボックス
 	void			PrisonerDropTypeComboBox(int &nSelectType, int nNowSelect);					// 捕虜のドロップタイプのコンボボックス
-	void			PrisonerItemTypeComboBox2(int &nSelectType, int nNowSelect);				// 捕虜のアイテムタイプのコンボボックス
+	void			PrisonerItemTypeComboBox(int &nSelectType, int nNowSelect);					// 捕虜のアイテムタイプのコンボボックス
 	void			SetSelectMapModelPosRDest(D3DXVECTOR3 posR);								// 選択しているモデルを注視点の目的地に設定
 
 	/* 静的メンバ変数 */
@@ -170,12 +172,13 @@ private:
 	std::vector<CBattlePlane*>	m_pBattlePlane;								// 可変長配列 設置した戦闘機
 	std::vector<CHelicopter*>	m_pHelicopter;								// 可変長配列 設置したヘリ
 	std::vector<CVehicle*>		m_pVehicle;									// 可変長配列 設置した乗り物
-
+	std::vector<CShield*>		m_pShield;
 	int							m_nOldSelect;								// 前回選択していたモノの番号
 	D3DXVECTOR3					m_WavePos;									// ウェーブの位置
 	D3DXVECTOR3					m_TransitionPos;							// 遷移する位置
 	D3DXVECTOR3					m_CameraPos;								// カメラの位置
 	int							m_TransitionMapID;							// 次に遷移するマップの番号
+	int							m_nBGTexID;									// 背景のテクスチャ番号
 	bool						m_bCameraFollowing;							// カメラを追従するフラグ
 	bool						m_bMapExclusion;							// マップモデル以外適用するフラグ
 };

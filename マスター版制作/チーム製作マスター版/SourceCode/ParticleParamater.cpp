@@ -384,7 +384,7 @@ HRESULT CParticleParam::SaveParticleDefaultParam(CParticleParam *pSaveParam)
 		fputs(cWriteText, pFile);
 		fputs(NEWLINE, pFile);
 
-		sprintf(cWriteText, "		%s %s %d							%s", "BILLBOARD", &EQUAL, pSaveParam->m_bZWrite, "//ビルボードするか");
+		sprintf(cWriteText, "		%s %s %d							%s", "BILLBOARD", &EQUAL, pSaveParam->m_bBillboard, "//ビルボードするか");
 		fputs(cWriteText, pFile);
 		fputs(NEWLINE, pFile);
 
