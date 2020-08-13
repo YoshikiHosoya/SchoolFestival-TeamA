@@ -36,6 +36,9 @@ public:
 		GUNTYPE_TRACKINGGUN,						// 追従銃
 		GUNTYPE_DIFFUSIONGUN,						// 拡散銃
 		GUNTYPE_BOSSLASERGUN,						// ボス用のレーザーガン
+		GUNTYPE_BALKAN,								// バルカン
+		GUNTYPE_FLAMETHROWER,						// 火炎放射器
+		GUNTYPE_INCENDIARY,							// 焼夷弾
 		GUNTYPE_MAX									// 銃の種類の最大数
 	};
 

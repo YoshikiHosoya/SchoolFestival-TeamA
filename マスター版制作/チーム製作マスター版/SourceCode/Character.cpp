@@ -24,7 +24,7 @@ char *CCharacter::m_LoadOffsetFileName[CHARACTER_TYPE_MAX] =
 	{"data/Load/Enemy/EnemyOffset.txt"},
 	{"data/Load/Prisoner/PrisonerOffset.txt"},
 	{"data/Load/Boss/BossOffset.txt"},
-	{"data/Load/PlayerTank/PlayerTankOffset.txt"}
+	{ "data/Load/DragonNosuke/Boss_OneOffset.txt" },
 };
 //モーションの読み込みファイル
 char *CCharacter::m_LoadMotionFileName[CHARACTER_MOTION_MAX] =
@@ -194,42 +194,45 @@ void CCharacter::Draw(void)
 	//モデルの描画
 	for (unsigned int nCnt = 0; nCnt < m_vModelList.size(); nCnt++)
 	{
-		if (nCnt == 2)
+		if (m_CharaType != CHARACTER_TYPE_BOSS_ONE)
 		{
-			//目標点と現在の差分（回転）
-			D3DXVECTOR3 diffHeadRot = m_AddHeadRot - m_vModelList[nCnt]->GetRot();
+			if (nCnt == 2)
+			{
+				//目標点と現在の差分（回転）
+				D3DXVECTOR3 diffHeadRot = m_AddHeadRot - m_vModelList[nCnt]->GetRot();
 
-			//3.14の超過分の初期化（回転）
-			CHossoLibrary::CalcRotation(m_vModelList[nCnt]->GetRot().x);
+				//3.14の超過分の初期化（回転）
+				CHossoLibrary::CalcRotation(m_vModelList[nCnt]->GetRot().x);
 
-			//3.14の超過分の初期化（回転）
-			CHossoLibrary::CalcRotation(diffHeadRot.x);
+				//3.14の超過分の初期化（回転）
+				CHossoLibrary::CalcRotation(diffHeadRot.x);
 
-			//求めた差分だけ追従する計算
-			m_vModelList[nCnt]->GetRot().x += diffHeadRot.x * ADD_ROTATION_SPEED;
-		}
-		else if (nCnt == 3 || nCnt == 4)
-		{
-			//目標点と現在の差分（回転）
-			D3DXVECTOR3 diffArmRot = m_AddArmRot - m_vModelList[nCnt]->GetRot();
+				//求めた差分だけ追従する計算
+				m_vModelList[nCnt]->GetRot().x += diffHeadRot.x * ADD_ROTATION_SPEED;
+			}
+			else if (nCnt == 3 || nCnt == 4)
+			{
+				//目標点と現在の差分（回転）
+				D3DXVECTOR3 diffArmRot = m_AddArmRot - m_vModelList[nCnt]->GetRot();
 
-			//3.14の超過分の初期化（回転）
-			CHossoLibrary::CalcRotation(m_vModelList[nCnt]->GetRot().x);
+				//3.14の超過分の初期化（回転）
+				CHossoLibrary::CalcRotation(m_vModelList[nCnt]->GetRot().x);
 
-			//3.14の超過分の初期化（回転）
-			CHossoLibrary::CalcRotation(diffArmRot.x);
+				//3.14の超過分の初期化（回転）
+				CHossoLibrary::CalcRotation(diffArmRot.x);
 
-			//求めた差分だけ追従する計算
-			m_vModelList[nCnt]->GetRot().x += diffArmRot.x * ADD_ROTATION_SPEED;
+				//求めた差分だけ追従する計算
+				m_vModelList[nCnt]->GetRot().x += diffArmRot.x * ADD_ROTATION_SPEED;
+			}
 		}
 
 		//描画処理
 		m_vModelList[nCnt]->Draw(m_mtxWorld);
 
-		if (nCnt == 2 || nCnt == 3 || nCnt == 4)
+		/*if (nCnt == 2 || nCnt == 3 || nCnt == 4)
 		{
 			m_vModelList[nCnt]->SetRot(m_vModelList[nCnt]->GetRot());
-		}
+		}*/
 	}
 }
 //====================================================================

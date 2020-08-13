@@ -98,6 +98,9 @@ public:
 		MODEL_GUN_TANKGUN,				// 戦車の銃
 		MODEL_GUN_PLANEGUN,				// 戦闘機の銃
 		MODEL_GUN_HELIGUN,				// ヘリの銃
+		MODEL_GUN_BALKAN,				// バルカン
+		MODEL_GUN_FLAMETHROWER,			// 火炎放射器
+		MODEL_GUN_INCENDIARY,			// 焼夷弾
 		MODEL_KNIFE,					// ナイフ
 		MODEL_GUN_MAX
 	}GUN_MODEL;
@@ -147,7 +150,7 @@ public:
 		MODEL_BOSS_MAX
 	}BOSS_PARTS_MODEL;
 
-	// 障害物の種類
+// 障害物の種類
 	typedef enum
 	{
 		OBSTACLE_TYPE_BOX = 0,								// ハコ
@@ -164,8 +167,25 @@ public:
 		MODEL_WEPON_SHIELD,			// 盾
 		MODEL_WEPON_MAX
 	}SPECIAL_WEPON_MODEL;
-
-	//全モデルの種類
+	// モデルの種類
+typedef enum
+	{
+		//===ボス ドラゴンノスケのモデル===
+		MODEL_BOSSONE_BODY,				// 体
+		MODEL_BOSSONE_HEAD,				// 頭
+		MODEL_BOSSONE_THIGH_L_FRONT,	// 左前大腿
+		MODEL_BOSSONE_THIGH_L_REAR,		// 左後大腿
+		MODEL_BOSSONE_THIGH_R_FRONT,	// 右前大腿
+		MODEL_BOSSONE_THIGH_R_REAR,		// 右後大腿
+		MODEL_BOSSONE_LEG_L_FRONT,		// 左前下腿
+		MODEL_BOSSONE_LEG_L_REAR,		// 左後下腿
+		MODEL_BOSSONE_LEG_R_FRONT,		// 右前下腿
+		MODEL_BOSSONE_LEG_R_REAR,		// 右後下腿
+		MODEL_BOSSONE_GUN_BALKAN,		// バルカン
+		MODEL_BOSSONE_GUN_FLAMETHROWER,	// 火炎放射器
+		MODEL_BOSSONE_GUN_INCENDIARY,	// 焼夷弾
+		MODEL_BOSSONE_MAX
+	}BOSSONE_PARTS_MODEL;	//全モデルの種類
 	typedef enum
 	{
 		PLAYER_MODEL,
@@ -179,6 +199,7 @@ public:
 		PLANE_MODEL,
 		HELI_MODEL,
 		BOSS_MODEL,
+		BOSS_ONE_MODEL,
 		WEPON_MODEL,
 		TYPE_MAX
 	}MODEL_TYPE;
@@ -259,6 +280,7 @@ private:
 	static char *m_HeliFileName[MODEL_HELI_MAX];
 	static char *m_BossFileName[MODEL_BOSS_MAX];
 	static char *m_WeponFileName[MODEL_WEPON_MAX];
+	static char *m_BossOneFileName[MODEL_BOSSONE_MAX];
 
 	D3DXVECTOR3		m_pos;					//位置
 	D3DXVECTOR3		m_size;					//サイズ

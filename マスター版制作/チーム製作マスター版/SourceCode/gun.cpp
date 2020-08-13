@@ -23,6 +23,9 @@
 #include "diffusiongun.h"
 #include "sound.h"
 #include "particle.h"
+#include "balkan.h"
+#include "incendiary.h"
+#include "flamethrower.h"
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
 // =====================================================================================================================================================================
@@ -316,6 +319,23 @@ void CGun::Shot()
 			// 拡散弾
 			CParticle::CreateFromText(m_ShotPos, m_ShotRot, CParticleParam::EFFECT_BOSSLAZER, GetTag(), CBullet::GetBulletParam((int)CGun::GUNTYPE_BOSSLASERGUN)->nPower, D3DXCOLOR(0.0f, 0.0f, 0.0f, -1.0f), GetShotPosPtr());
 			break;
+
+		case CGun::GUNTYPE_BALKAN:
+			//
+			pBullet = CBalkan::Create(m_ShotRot);
+			m_bMultiple = true;		// 複数発撃つフラグをオン
+			break;
+		case CGun::GUNTYPE_FLAMETHROWER:
+			//
+			pBullet = CFlamethrower::Create(m_ShotRot);
+			m_bMultiple = true;		// 複数発撃つフラグをオン
+			break;
+		case CGun::GUNTYPE_INCENDIARY:
+			//
+			pBullet = CIncendiary::Create(m_ShotRot);
+			m_bMultiple = true;		// 複数発撃つフラグをオン
+			break;
+
 		}
 		if (pBullet)
 		{

@@ -301,13 +301,27 @@
     <ClCompile Include="SourceCode\3Dmultinumber.cpp">
       <Filter>UI</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\shield.cpp">
+<ClCompile Include="SourceCode\shield.cpp">
+      <Filter>Model</Filter>
+    </ClCompile><ClCompile Include="SourceCode\Boss_One.cpp">
       <Filter>Model</Filter>
     </ClCompile>
+<<<<<<< .mine
     <ClCompile Include="SourceCode\EnemyShield.cpp">
       <Filter>Model</Filter>
+=======
+    <ClCompile Include="SourceCode\balkan.cpp">
+      <Filter>Wepon</Filter>
+>>>>>>> .theirs
     </ClCompile>
   </ItemGroup>
+    </ClCompile>
+    <ClCompile Include="SourceCode\flamethrower.cpp">
+      <Filter>Wepon</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\incendiary.cpp">
+      <Filter>Wepon</Filter>
+    </ClCompile>  </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SourceCode\mesh.h">
       <Filter>mesh</Filter>
@@ -618,13 +632,32 @@
     <ClInclude Include="SourceCode\3Dmultinumber.h">
       <Filter>UI</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\shield.h">
+<ClInclude Include="SourceCode\shield.h">
+      <Filter>Model</Filter>
+    </ClInclude><ClInclude Include="SourceCode\Boss_One.h">
       <Filter>Model</Filter>
     </ClInclude>
+<<<<<<< .mine
     <ClInclude Include="SourceCode\EnemyShield.h">
       <Filter>Model</Filter>
     </ClInclude>
   </ItemGroup>
+
+
+
+
+
+=======
+    <ClInclude Include="SourceCode\balkan.h">
+      <Filter>Wepon</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\flamethrower.h">
+      <Filter>Wepon</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\incendiary.h">
+      <Filter>Wepon</Filter>
+    </ClInclude>  </ItemGroup>
+>>>>>>> .theirs
   <ItemGroup>
     <Filter Include="mesh">
       <UniqueIdentifier>{93673758-e55d-42f7-84f1-0900ba051b62}</UniqueIdentifier>

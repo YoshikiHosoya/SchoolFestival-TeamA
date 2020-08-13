@@ -85,6 +85,9 @@ char *CModel::m_GunFileName[MODEL_GUN_MAX] =
 	{ "data/MODEL/Gun/TankGun.x" },					// 戦車の銃
 	{ "data/MODEL/Gun/PlaneGun.x" },				// 戦闘機の銃
 	{ "data/MODEL/Gun/HeliGun.x" },					// ヘリの銃
+	{ "data/MODEL/Gun/Balkan.x" },					// バルカン
+	{ "data/MODEL/Gun/Flamethrower.x" },			// 火炎放射器
+	{ "data/MODEL/Gun/Incendiary.x" },				// 焼夷弾
 	{ "data/MODEL/Gun/Knife.x" },					// ナイフ
 };
 char *CModel::m_BulletFileName[MODEL_BULLET_MAX] =
@@ -134,8 +137,23 @@ char *CModel::m_WeponFileName[MODEL_WEPON_MAX] =
 {
 	{ "data/MODEL/Wepon/Shield.x" },			// 盾
 };
-
-CModel::CModel(OBJ_TYPE type) : CScene(type)
+// ボス1ドラゴンノスケ
+char *CModel::m_BossOneFileName[MODEL_BOSSONE_MAX] =
+{
+	{ "data/MODEL/DragonNosuke/Body.x" },			// 体
+	{ "data/MODEL/DragonNosuke/Head.x" },			// 頭
+	{ "data/MODEL/DragonNosuke/Thigh_L_F.x" },		// 左前大腿
+	{ "data/MODEL/DragonNosuke/Thigh_L_R.x" },		// 左後大腿
+	{ "data/MODEL/DragonNosuke/Thigh_R_F.x" },		// 右前大腿
+	{ "data/MODEL/DragonNosuke/Thigh_R_R.x" },		// 右後大腿
+	{ "data/MODEL/DragonNosuke/Leg_L_F.x" },		// 左前下腿
+	{ "data/MODEL/DragonNosuke/Leg_L_R.x" },		// 左後下腿
+	{ "data/MODEL/DragonNosuke/Leg_R_F.x" },		// 右前下腿
+	{ "data/MODEL/DragonNosuke/Leg_R_R.x" },		// 右後下腿
+	{ "data/MODEL/DragonNosuke/Balkan.x" },			// 武器の場所に置く仮モデル
+	{ "data/MODEL/DragonNosuke/Flamethrower.x" },	// 武器の場所に置く仮モデル
+	{ "data/MODEL/DragonNosuke/Incendiary.x" },		// 武器の場所に置く仮モデル
+};CModel::CModel(OBJ_TYPE type) : CScene(type)
 {
 	m_pCollision = nullptr;							// 当たり判定のポインタ
 }
@@ -498,8 +516,7 @@ void CModel::LoadModel(void)
 			//テクスチャのメモリ確保
 			m_Model[WEPON_MODEL][nCnt].m_pTexture = new LPDIRECT3DTEXTURE9[(int)m_Model[WEPON_MODEL][nCnt].nNumMat];
 			pMat = (D3DXMATERIAL*)m_Model[WEPON_MODEL][nCnt].pBuffmat->GetBufferPointer();
-
-			for (int nCntmat = 0; nCntmat < (int)m_Model[WEPON_MODEL][nCnt].nNumMat; nCntmat++)
+for (int nCntmat = 0; nCntmat < (int)m_Model[WEPON_MODEL][nCnt].nNumMat; nCntmat++)
 			{
 				m_Model[WEPON_MODEL][nCnt].m_pTexture[nCntmat] = NULL;
 				D3DXCreateTextureFromFile(pDevice, pMat[nCntmat].pTextureFilename, &m_Model[WEPON_MODEL][nCnt].m_pTexture[nCntmat]);
@@ -507,7 +524,32 @@ void CModel::LoadModel(void)
 		}
 		std::cout << "WEPON_MODEL Load >>" << m_WeponFileName[nCnt] << NEWLINE;
 	}
-}
+// ボス1ドラゴンノスケのモデル読み込み
+	for (int nCnt = 0; nCnt < MODEL_BOSSONE_MAX; nCnt++)
+	{
+		// Xファイルの読み込み
+		D3DXLoadMeshFromX(
+			m_BossOneFileName[nCnt],
+			D3DXMESH_SYSTEMMEM,
+			pDevice,
+			NULL,
+			&m_Model[BOSS_ONE_MODEL][nCnt].pBuffmat,
+			NULL,
+			&m_Model[BOSS_ONE_MODEL][nCnt].nNumMat,
+			&m_Model[BOSS_ONE_MODEL][nCnt].pMesh
+		);
+		//テクスチャのメモリ確保
+		m_Model[BOSS_ONE_MODEL][nCnt].m_pTexture = new LPDIRECT3DTEXTURE9[(int)m_Model[BOSS_ONE_MODEL][nCnt].nNumMat];
+		pMat = (D3DXMATERIAL*)m_Model[BOSS_ONE_MODEL][nCnt].pBuffmat->GetBufferPointer();
+
+		for (int nCntmat = 0; nCntmat < (int)m_Model[BOSS_ONE_MODEL][nCnt].nNumMat; nCntmat++)
+		{
+			m_Model[BOSS_ONE_MODEL][nCnt].m_pTexture[nCntmat] = NULL;
+			D3DXCreateTextureFromFile(pDevice, pMat[nCntmat].pTextureFilename, &m_Model[BOSS_ONE_MODEL][nCnt].m_pTexture[nCntmat]);
+		}
+
+		std::cout << "BOSS_ONEMODEL Load >>" << m_BossOneFileName[nCnt] << NEWLINE;
+	}}
 //====================================================================
 //モデルの開放
 //====================================================================
@@ -1029,11 +1071,14 @@ char * CModel::GetModelFileName(int nType, int nModelCount)
 	case BOSS_MODEL:
 		return m_BossFileName[nModelCount];
 		break;
-		//特殊武器
+
+	case BOSS_ONE_MODEL:
+		return m_BossOneFileName[nModelCount];
+		break;
+//特殊武器
 	case WEPON_MODEL:
 		return m_WeponFileName[nModelCount];
-		break;
-	}
+		break;	}
 	return nullptr;
 }
 
