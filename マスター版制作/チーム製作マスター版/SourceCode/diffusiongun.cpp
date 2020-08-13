@@ -70,10 +70,8 @@ void CDiffusion::Update(void)
 	// 更新
 	CBullet::Update();
 
-	float fAngle = atan2f(GetMove().x, GetMove().y);
-
 	//パーティクル発生 軌跡みたいな
-	CParticle::CreateFromText(GetPosition(), D3DXVECTOR3(0.0f, 0.0f, -fAngle + 1.57f), CParticleParam::EFFECT_HEAVY_MACHINEGUN, CBullet::GetTag());
+	CParticle::CreateFromText(GetPosition(), GetRot(), CParticleParam::EFFECT_HEAVY_MACHINEGUN, CBullet::GetTag());
 
 }
 
@@ -136,7 +134,10 @@ CDiffusion * CDiffusion::Create(D3DXVECTOR3 rot)
 	pTracking->Init();
 
 	// 撃つ方向に合わせる
-	pTracking->GetMove() = rot * pBulletParam->fBulletSpeed;
+	pTracking->CalcBulletMove(rot, CGun::GUNTYPE_DIFFUSIONGUN);
+
+	//回転量設定
+	pTracking->SetRot(rot);
 
 	// モデルタイプの設定
 	pTracking->SetType(BULLET_MODEL);

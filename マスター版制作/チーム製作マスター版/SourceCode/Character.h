@@ -72,6 +72,7 @@ public:
 	}MOTION;
 	typedef enum
 	{
+		// プレイヤーのモーション
 		CHARACTER_MOTION_STATE_NONE = -1,	//何もしないモーションステート
 		PLAYER_MOTION_NORMAL = 0,			//ニュートラル
 		PLAYER_MOTION_WALK,					//歩き
@@ -84,13 +85,16 @@ public:
 		PLAYER_MOTION_SQUATSTOP,			//しゃがんでる状態
 		PLAYER_MOTION_DEAD,					//死んだ
 
+		// 敵のモーション
 		ENEMY_MOTION_NORMAL,				//ニュートラル
 		ENEMY_MOTION_WALK,					//歩き
 		ENEMY_MOTION_SQUAT,					//通常攻撃1
 		ENEMY_MOTION_DEAD_1,				//死んだ
 		ENEMY_MOTION_DEAD_2,				//死んだ2
+		ENEMY_MOTION_GRENADE,				//グレネード
 
-		BOSS_MOTION_NORMAL,				//ニュートラル
+		// ソル・デ・ロカのモーション
+		BOSS_MOTION_NORMAL,					//ニュートラル
 
 		// 捕虜のモーション
 		PRISONER_MOTION_STAY,				//ニュートラル

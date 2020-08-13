@@ -43,6 +43,8 @@ char *CBullet::m_BulletFileName[CGun::GUNTYPE_MAX] =
 	{ "data/Load/Gun/Balkan.txt" },					// ƒoƒ‹ƒJƒ“
 	{ "data/Load/Gun/Flamethrower.txt" },			// ‰Î‰Š•úËŠí
 	{ "data/Load/Gun/Incendiary.txt" },				// ÄˆÎ’e
+	{ "data/Load/Gun/BossLazerGun.txt" },				// ŠgUe
+
 };
 
 // =====================================================================================================================================================================

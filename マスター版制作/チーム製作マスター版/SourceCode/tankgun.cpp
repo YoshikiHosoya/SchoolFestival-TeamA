@@ -73,7 +73,7 @@ void CTankGun::Update(void)
 	CBullet::Update();
 
 	//パーティクル発生 軌跡みたいな
-	CParticle::CreateFromText(GetPosition(),D3DXVECTOR3(0.0f,0.0f,GetRot().x + D3DX_PI * 0.5f), CParticleParam::EFFECT_TANKGUN,CBullet::GetTag());
+	CParticle::CreateFromText(GetPosition(),GetRot(), CParticleParam::EFFECT_TANKGUN,CBullet::GetTag());
 
 }
 
@@ -129,15 +129,13 @@ CTankGun * CTankGun::Create(D3DXVECTOR3 rot)
 	// メモリの確保
 	pTankGun = new CTankGun(OBJTYPE_BULLET);
 
-	// 戦車の銃のパラメーター取得
-	BULLET_PARAM *pBulletParam = pTankGun->GetBulletParam(CGun::GUNTYPE_TANKGUN);
-
 	// 初期化
 	pTankGun->Init();
 
 	// 弾の移動量計算
 	pTankGun->CalcBulletMove(rot, CGun::GUNTYPE_TANKGUN);
 
+	//回転量保存
 	pTankGun->GetRot() = rot;
 
 	// モデルタイプの設定

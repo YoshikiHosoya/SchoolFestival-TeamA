@@ -69,7 +69,7 @@ HRESULT CBoss::Init(void)
 	GetCollision()->SetPosOld(&GetPositionOld());
 	GetCollision()->SetSize2D(BOSS_SIZE);
 	GetCollision()->SetMove(&GetMove());
-	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_CHARACTER);
+	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_NORMAL);
 	return S_OK;
 }
 //====================================================================
@@ -123,7 +123,7 @@ void CBoss::Draw(void)
 //====================================================================
 void CBoss::DebugInfo(void)
 {
-
+	m_pAI->DebugInfo();
 }
 //====================================================================
 //モデルのクリエイト

@@ -70,8 +70,6 @@ void CTracking::Update(void)
 	// 更新
 	CBullet::Update();
 
-	float fAngle = atan2f(GetMove().x, GetMove().y);
-
 	//パーティクル発生 軌跡みたいな
 	CParticle::CreateFromText(GetPosition(), D3DXVECTOR3(GetRot()), CParticleParam::EFFECT_TRACKINGGUN, CBullet::GetTag());
 
@@ -129,15 +127,13 @@ CTracking * CTracking::Create(D3DXVECTOR3 rot)
 	// メモリの確保
 	pTracking = new CTracking(OBJTYPE_BULLET);
 
-	// ハンドガンのパラメーター取得
-	BULLET_PARAM *pBulletParam = pTracking->GetBulletParam(CGun::GUNTYPE_TRACKINGGUN);
-
 	// 初期化
 	pTracking->Init();
 
-	// 撃つ方向に合わせる
-	pTracking->GetMove() = rot * pBulletParam->fBulletSpeed;
+	//移動方向計算
+	pTracking->CalcBulletMove(rot, CGun::GUNTYPE_TRACKINGGUN);
 
+	//回転量設定
 	pTracking->SetRot(rot);
 
 	// モデルタイプの設定

@@ -44,6 +44,7 @@ char *CCharacter::m_LoadMotionFileName[CHARACTER_MOTION_MAX] =
 	{ "data/Load/Enemy/Motion/EnemySquatStop.txt" },
 	{ "data/Load/Enemy/Motion/EnemyDead_1.txt" },
 	{ "data/Load/Enemy/Motion/EnemyDead_2.txt" },
+	{ "data/Load/Enemy/Motion/EnemyGrenade.txt" },
 	{ "data/Load/Boss/Motion/Neutral.txt" },
 	{ "data/Load/Prisoner/Motion/PrisonerStay.txt" },
 	{ "data/Load/Prisoner/Motion/PrisonerRelease.txt" },
@@ -1029,9 +1030,6 @@ void CCharacter::CalcShotDirection()
 		m_AddHeadRot.x = -0.5f;
 		m_AddArmRot.x = -0.3f* D3DX_PI;
 	}
-
-	//3.14‚Ì”ÍˆÍ“à‚É—}‚¦‚é
-	CHossoLibrary::CalcRotation(m_ShotRotDest.x);
 }
 //====================================================================
 //ˆÚ“®‚ÌŒvŽZ

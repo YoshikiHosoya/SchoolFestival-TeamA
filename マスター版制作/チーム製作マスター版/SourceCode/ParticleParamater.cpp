@@ -29,6 +29,7 @@ FILENAME_LIST CParticleParam::m_aFileNameList =
 	{ "data/Load/Effect/Paramater/TankGun.txt" },
 	{ "data/Load/Effect/Paramater/ShotGun.txt" },
 	{ "data/Load/Effect/Paramater/Lazer.txt" },
+	{ "data/Load/Effect/Paramater/BossLazer.txt" },
 	{ "data/Load/Effect/Paramater/Smoke.txt" },
 	{ "data/Load/Effect/Paramater/Fire.txt" },
 
@@ -383,7 +384,7 @@ HRESULT CParticleParam::SaveParticleDefaultParam(CParticleParam *pSaveParam)
 		fputs(cWriteText, pFile);
 		fputs(NEWLINE, pFile);
 
-		sprintf(cWriteText, "		%s %s %d							%s", "BILLBOARD", &EQUAL, pSaveParam->m_bZWrite, "//ビルボードするか");
+		sprintf(cWriteText, "		%s %s %d							%s", "BILLBOARD", &EQUAL, pSaveParam->m_bBillboard, "//ビルボードするか");
 		fputs(cWriteText, pFile);
 		fputs(NEWLINE, pFile);
 

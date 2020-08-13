@@ -164,15 +164,18 @@ void CBossAI::UpdateAttackAI(void)
 	D3DXVECTOR3 MoveVec = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
 	float fAngle = 0.0f;
-	if (pBossPass != nullptr || pPlayer != nullptr)
+	if (pBossPass != nullptr && pPlayer != nullptr)
 	{
 		if (AI_TRACKING == m_BossAItype)//ƒvƒŒƒCƒ„[’Ç]’e
 		{
+			//ƒKƒ“‚Ìƒ^ƒCƒv•ÏX
 			pBossPass->GetGun()->SetGunType(pBossPass->GetGun()->GUNTYPE_TRACKINGGUN);
+
 			m_ShotVec = pPlayer->GetPosition() - pBossPass->GetPosition();//ŽËŒ‚•ûŒü‚ÌŒvŽZ
 			D3DXVec3Normalize(&m_ShotVec, &m_ShotVec);//’l‚Ì³‹K‰»
+
 			//Œ‚‚ÂŒü‚«‚ÌÝ’è
-			pBossPass->GetGun()->SetShotVec(D3DXVECTOR3(m_ShotVec.x, m_ShotVec.y, m_ShotVec.z));
+			pBossPass->GetGun()->SetShotRot(D3DXVECTOR3(0.0f, 0.0f, atan2f(-m_ShotVec.x, m_ShotVec.y)));
 
 			m_AttackCastCnt++;
 			m_bShot = true;
@@ -201,17 +204,17 @@ void CBossAI::UpdateAttackAI(void)
 				}
 			}
 		}
-	
+
 		else if (AI_DIFFUSION == m_BossAItype)//ŠgŽUŽËŒ‚
 		{
+			//ƒKƒ“‚Ìƒ^ƒCƒv•ÏX
 			pBossPass->GetGun()->SetGunType(pBossPass->GetGun()->GUNTYPE_DIFFUSIONGUN);
-			m_ShotVec = pPlayer->GetPosition() - pBossPass->GetPosition();//ŽËŒ‚•ûŒü‚ÌŒvŽZ
-			D3DXVec3Normalize(&m_ShotVec, &m_ShotVec);//’l‚Ì³‹K‰»
-			fAngle = float(rand() % 157) / 100.0f - float(rand() % 157) / 100.0f;
+
+			//-1.57‚©‚ç1.57‚Ì”ÍˆÍ‚Åƒ‰ƒ“ƒ_ƒ€‚È’l‚ðÝ’è
+			fAngle = CHossoLibrary::Random(1.57f);
+
 			//Œ‚‚ÂŒü‚«‚ÌÝ’è
-			pBossPass->GetGun()->SetShotVec(D3DXVECTOR3 (-sinf(fAngle)*1,
-				-cosf(fAngle)*cosf(fAngle) *1,
-				0.0f));
+			pBossPass->GetGun()->SetShotRot(D3DXVECTOR3(0.0f, 0.0f, D3DX_PI + fAngle));
 
 			m_AttackCastCnt++;
 			m_bShot = true;
@@ -237,9 +240,12 @@ void CBossAI::UpdateAttackAI(void)
 		}
 		else if (AI_LASER == m_BossAItype)//ƒŒ[ƒU[
 		{
-			m_ShotVec = D3DXVECTOR3(0.0f,-1.0f,0.0f);//ŽËŒ‚•ûŒü‚ÌŒvŽZ
+			//ƒKƒ“‚Ìƒ^ƒCƒv•ÏX
+			pBossPass->GetGun()->SetGunType(pBossPass->GetGun()->GUNTYPE_BOSSLASERGUN);
+
 			//Œ‚‚ÂŒü‚«‚ÌÝ’è
-			pBossPass->GetGun()->SetShotVec(D3DXVECTOR3(m_ShotVec.x, m_ShotVec.y, m_ShotVec.z));
+			pBossPass->GetGun()->SetShotRot(D3DXVECTOR3(0.0f, 0.0f, D3DX_PI));
+
 			m_AttackCastCnt++;
 			m_bShot = true;
 			if (m_AttackCastCnt == 60)//UŒ‚‚É“ü‚é‚Ü‚Å‚ÌŽžŠÔ
@@ -298,6 +304,13 @@ void CBossAI::Draw(void)
 //=============================================================================
 void CBossAI::DebugInfo(void)
 {
+	CKeyboard *pkeyBoard = CManager::GetInputKeyboard();
+
+	if (pkeyBoard->GetKeyboardTrigger(DIK_9))
+	{
+		m_BossAItype = AI_LASER;
+	}
+
 }
 D3DXVECTOR3 CBossAI::GetTrackingShotRot(void)
 {
@@ -322,7 +335,7 @@ CBossAI::AI_BOSS_STATE CBossAI::GetBossAIType(void)
 	return m_BossAItype;
 }
 //=============================================================================
-// 
+//
 //=============================================================================
 bool CBossAI::GetShot(void)
 {

@@ -347,7 +347,7 @@ void CParticle::ResetVertexID()
 //------------------------------------------------------------------------------
 //テキスト情報を元にパーティクル作成
 //------------------------------------------------------------------------------
-void CParticle::CreateFromText(D3DXVECTOR3 pos, D3DXVECTOR3 rot, CParticleParam::PARTICLE_TEXT type,TAG tag, int nAttack, D3DXVECTOR3 *PosPtr)
+void CParticle::CreateFromText(D3DXVECTOR3 pos, D3DXVECTOR3 rot, CParticleParam::PARTICLE_TEXT type, TAG tag, int nAttack,D3DXCOLOR col, D3DXVECTOR3 *PosPtr)
 {
 	//メモリ確保
 	std::unique_ptr<CParticle> pParticle(new CParticle);
@@ -383,6 +383,13 @@ void CParticle::CreateFromText(D3DXVECTOR3 pos, D3DXVECTOR3 rot, CParticleParam:
 
 			//パーティクルの設定
 			pParticle->SetParticle(pos, rot, pParam);
+
+			//a値が初期値だったとき
+			if (col.a > 0)
+			{
+				//色設定
+				pParticle->m_pParticleParam->GetCol() = col;
+			}
 
 			//オブジェタイプ設定してSceneに所有権を渡す
 			CParticleManager::AddParticleList(std::move(pParticle));
@@ -673,6 +680,15 @@ void CParticle::Collision()
 			{
 				//当たり判定　敵、捕虜、オブジェクトに対して　貫通有
 				m_pCollision->ForPlayerBulletCollision(m_pParticleParam->GetCollisionAttackValue(), m_pParticleParam->GetCollisionAttackValue(), true);
+			}
+		}
+		//プレイヤーの攻撃だった場合
+		if (m_Tag == TAG_ENEMY)
+		{
+			if (CManager::GetMode() == CManager::MODE_GAME)
+			{
+				//当たり判定　敵、捕虜、オブジェクトに対して　貫通有
+				m_pCollision->ForEnemyCollision(m_pParticleParam->GetCollisionAttackValue(), m_pParticleParam->GetCollisionAttackValue(), true);
 			}
 		}
 	}

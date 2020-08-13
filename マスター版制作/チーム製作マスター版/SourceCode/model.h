@@ -6,7 +6,7 @@
 #include "renderer.h"
 #include "Scene.h"
 
-#define MAX_ALLMODEL (100)
+#define MAX_ALLMODEL (130)
 // =====================================================================================================================================================================
 // 前方宣言
 // =====================================================================================================================================================================
@@ -150,8 +150,25 @@ public:
 		MODEL_BOSS_MAX
 	}BOSS_PARTS_MODEL;
 
-	// モデルの種類
+// 障害物の種類
 	typedef enum
+	{
+		OBSTACLE_TYPE_BOX = 0,								// ハコ
+		OBSTACLE_TYPE_BARREL,								// 樽
+		OBSTACLE_TYPE_TREE,									// 木
+		OBSTACLE_TYPE_CHEST,								// 金庫
+		OBSTACLE_TYPE_SANDBAGS,								// 土嚢
+		OBSTACLE_TYPE_MAX,									// 障害物
+	}OBSTACLE_TYPE;
+
+	// 特殊武器の種類
+	typedef enum
+	{
+		MODEL_WEPON_SHIELD,			// 盾
+		MODEL_WEPON_MAX
+	}SPECIAL_WEPON_MODEL;
+	// モデルの種類
+typedef enum
 	{
 		//===ボス ドラゴンノスケのモデル===
 		MODEL_BOSSONE_BODY,				// 体
@@ -168,9 +185,7 @@ public:
 		MODEL_BOSSONE_GUN_FLAMETHROWER,	// 火炎放射器
 		MODEL_BOSSONE_GUN_INCENDIARY,	// 焼夷弾
 		MODEL_BOSSONE_MAX
-	}BOSSONE_PARTS_MODEL;
-
-	//全モデルの種類
+	}BOSSONE_PARTS_MODEL;	//全モデルの種類
 	typedef enum
 	{
 		PLAYER_MODEL,
@@ -185,19 +200,9 @@ public:
 		HELI_MODEL,
 		BOSS_MODEL,
 		BOSS_ONE_MODEL,
+		WEPON_MODEL,
 		TYPE_MAX
 	}MODEL_TYPE;
-
-	// 障害物の種類
-	typedef enum
-	{
-		OBSTACLE_TYPE_BOX = 0,								// ハコ
-		OBSTACLE_TYPE_BARREL,								// 樽
-		OBSTACLE_TYPE_TREE,									// 木
-		OBSTACLE_TYPE_CHEST,								// 金庫
-		OBSTACLE_TYPE_SANDBAGS,								// 土嚢
-		OBSTACLE_TYPE_MAX,									// 障害物
-	}OBSTACLE_TYPE;
 
 	typedef struct
 	{
@@ -274,6 +279,7 @@ private:
 	static char *m_PlaneFileName[MODEL_PLANE_MAX];
 	static char *m_HeliFileName[MODEL_HELI_MAX];
 	static char *m_BossFileName[MODEL_BOSS_MAX];
+	static char *m_WeponFileName[MODEL_WEPON_MAX];
 	static char *m_BossOneFileName[MODEL_BOSSONE_MAX];
 
 	D3DXVECTOR3		m_pos;					//位置
