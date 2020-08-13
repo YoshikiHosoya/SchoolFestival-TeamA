@@ -304,6 +304,9 @@
     <ClCompile Include="SourceCode\shield.cpp">
       <Filter>Model</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\EnemyShield.cpp">
+      <Filter>Model</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SourceCode\mesh.h">
@@ -616,6 +619,9 @@
       <Filter>UI</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\shield.h">
+      <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\EnemyShield.h">
       <Filter>Model</Filter>
     </ClInclude>
   </ItemGroup>

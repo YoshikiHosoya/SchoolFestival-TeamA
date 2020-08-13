@@ -197,10 +197,8 @@ bool CCollision::ForPlayerBulletCollision(int nEnemyDamage, int nObstacleDamage,
 					bHitFlag = false;
 				}
 			}
-
 		}
 	}
-
 	// “–‚½‚è”»’è ‘Šè‚ªáŠQ•¨‚¾‚Á‚½‚ç
 	// áŠQ•¨‚Ì‘”•ª
 	for (int nCntObst = 0; nCntObst < CManager::GetBaseMode()->GetMap()->GetMaxObstacle(); nCntObst++)
