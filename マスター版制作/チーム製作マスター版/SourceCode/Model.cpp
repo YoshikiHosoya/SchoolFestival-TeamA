@@ -146,6 +146,9 @@ char *CModel::m_BossOneFileName[MODEL_BOSSONE_MAX] =
 	{ "data/MODEL/DragonNosuke/Leg_L_R.x" },		// 左後下腿
 	{ "data/MODEL/DragonNosuke/Leg_R_F.x" },		// 右前下腿
 	{ "data/MODEL/DragonNosuke/Leg_R_R.x" },		// 右後下腿
+	{ "data/MODEL/DragonNosuke/Balkan.x" },			// 武器の場所に置く仮モデル
+	{ "data/MODEL/DragonNosuke/Flamethrower.x" },	// 武器の場所に置く仮モデル
+	{ "data/MODEL/DragonNosuke/Incendiary.x" },		// 武器の場所に置く仮モデル
 };
 
 
@@ -514,7 +517,7 @@ void CModel::LoadModel(void)
 			D3DXCreateTextureFromFile(pDevice, pMat[nCntmat].pTextureFilename, &m_Model[BOSS_ONE_MODEL][nCnt].m_pTexture[nCntmat]);
 		}
 
-		std::cout << "BOSSONEMODEL Load >>" << m_BossOneFileName[nCnt] << NEWLINE;
+		std::cout << "BOSS_ONEMODEL Load >>" << m_BossOneFileName[nCnt] << NEWLINE;
 	}
 }
 //====================================================================

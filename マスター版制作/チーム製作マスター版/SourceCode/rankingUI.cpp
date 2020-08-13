@@ -339,7 +339,7 @@ void CRankingUI::RankingSave()
 
 #ifdef _DEBUG
 		// 読み込み成功時の結果表示
-		MessageBox(NULL, "ランキング情報をセーブしました", "結果", MB_OK | MB_ICONINFORMATION);
+		//MessageBox(NULL, "ランキング情報をセーブしました", "結果", MB_OK | MB_ICONINFORMATION);
 #endif // DEBUG
 
 		// ファイルを閉じる
@@ -423,7 +423,7 @@ void CRankingUI::ScoreSave()
 
 #ifdef _DEBUG
 		// 読み込み成功時の結果表示
-		MessageBox(NULL, "スコア情報をセーブしました", "結果", MB_OK | MB_ICONINFORMATION);
+		//MessageBox(NULL, "スコア情報をセーブしました", "結果", MB_OK | MB_ICONINFORMATION);
 #endif // DEBUG
 
 		// ファイルを閉じる

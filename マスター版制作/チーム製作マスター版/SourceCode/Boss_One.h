@@ -19,9 +19,10 @@
 // =====================================================================================================================================================================
 typedef struct
 {
-	int					nLife;			// 体力
-	int					nCoolTime;		// クールタイム
+	int					nLife;				// 体力
+	int					nCoolTime;			// クールタイム
 	D3DXVECTOR3			CollisionSize[2];	// 当たり判定のサイズ
+	D3DXVECTOR3			GunShotOfsetPos[3];		// ガンのオフセット座標
 } BOSS_ONE_DATA;
 
 // =====================================================================================================================================================================
@@ -52,7 +53,6 @@ public:
 		ATTACKTYPE_BALKAN,											// バルカン砲
 		ATTACKTYPE_FLAMETHROWER,									// 火炎放射 立ち時のみ
 		ATTACKTYPE_INCENDIARY,										// 焼夷弾
-		ATTACKTYPE_SQUAT,											// しゃがみ
 		ATTACKTYPE_MAX												// 最大数
 	};
 
@@ -105,12 +105,14 @@ private:
 	// ステータス用 //
 	static int				m_nLife;							// 体力
 	static D3DXVECTOR3		m_CollisionSize[POSTURETYPE_MAX];	// 当たり判定の大きさ
+	static D3DXVECTOR3		m_GunShotOfsetPos[WEAPONTYPE_MAX];	// ガンのオフセット
 
 	/* メンバ関数 */
 	void					BossOneState();						// ボスの状態別処理
 	void					DamageReaction();
 	void					DeathReaction();
 	void					StateChangeReaction();
+	void					Behavior();							// 敵の行動
 
 	void					SetStateTime(int time)
 	{
