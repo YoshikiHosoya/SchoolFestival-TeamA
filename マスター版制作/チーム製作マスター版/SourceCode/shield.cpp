@@ -53,7 +53,6 @@ HRESULT CShield::Init()
 	// “–‚½‚è”»’è¶¬
 	GetCollision()->SetPos(&GetPosition());
 	GetCollision()->SetSize2D(SHIELD_SIZE);
-//	GetCollision()->SetMove(&GetMove());
 	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_NORMAL);
 
 	return S_OK;

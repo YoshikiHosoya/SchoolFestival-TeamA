@@ -65,7 +65,7 @@ HRESULT CGame::Init(void)
 	m_pMap->MapLoad(CMap::MAP_1_1);			// マップのロード
 
 	m_pPlayer	= CPlayer::Create();
-	CShield::Create(nullptr);
+	//m_pShield = CShield::Create(nullptr);
 
 	for (int nCnt = 0; nCnt < CMap::WAVE_MAX; nCnt++)
 	{
@@ -92,6 +92,12 @@ HRESULT CGame::Init(void)
 //==========================================================
 void CGame::Uninit(void)
 {
+	/*if (m_pShield)
+	{
+		m_pShield->Rerease();
+		m_pShield = nullptr;
+	}*/
+
 	// アイテムクラスの静的変数の初期化
 	CItem::InitVariable();
 	// スコアの計算

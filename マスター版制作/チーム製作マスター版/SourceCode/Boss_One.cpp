@@ -22,7 +22,7 @@
 BOSS_ONE_DATA		CBoss_One::m_BossOneData = {};									// データ
 int					CBoss_One::m_nLife = 0;											// 体力
 D3DXVECTOR3			CBoss_One::m_CollisionSize[POSTURETYPE_MAX] = {};				// 当たり判定の大きさ
-D3DXVECTOR3			CBoss_One::m_GunShotOfsetPos[WEAPONTYPE_MAX] = {};					// ガンのオフセット
+D3DXVECTOR3			CBoss_One::m_GunShotOfsetPos[WEAPONTYPE_MAX] = {};				// ガンのオフセット
 
 // =====================================================================================================================================================================
 // テキストファイル名
@@ -77,6 +77,7 @@ HRESULT CBoss_One::Init(void)
 	{
 		// 銃の生成
 		m_pGun[nCnt] = CGun::Create(GetCharacterModelPartsList(
+			//CModel::MODEL_BOSSONE_GUN_BALKAN)->GetMatrix());
 			static_cast<CModel::BOSSONE_PARTS_MODEL>(CModel::MODEL_BOSSONE_GUN_BALKAN + nCnt))->GetMatrix());
 		// 銃の弾の種類
 		m_pGun[nCnt]->GetTag() = TAG_ENEMY;
@@ -88,7 +89,7 @@ HRESULT CBoss_One::Init(void)
 	// 当たり判定設定
 	GetCollision()->SetPos(&GetPosition());
 	GetCollision()->SetSize2D(m_CollisionSize[0]);
-	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_CHARACTER);
+	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_NORMAL);
 
 	return S_OK;
 }
@@ -117,6 +118,7 @@ void CBoss_One::Update(void)
 	for (int nCnt = 0; nCnt < WEAPONTYPE_MAX; nCnt++)
 	{
 		m_pGun[nCnt]->Update();
+		m_pGun[nCnt]->Shot();
 	}
 
 	// 当たり判定
@@ -290,7 +292,7 @@ void CBoss_One::SetBoss_OneData()
 
 	for (int nCnt = 0; nCnt < WEAPONTYPE_MAX; nCnt++)
 	{
-		// ガンのオフセットの設定
+		// ガンの発射口オフセットの設定
 		m_GunShotOfsetPos[nCnt] = m_BossOneData.GunShotOfsetPos[nCnt];
 	}
 }
