@@ -359,7 +359,7 @@ void CVehicle::State()
 		// 破壊時のエフェクト
 
 		// 削除
-		Rerease();
+		this->SetDieFlag(true);
 		break;
 	}
 }

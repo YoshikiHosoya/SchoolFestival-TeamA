@@ -309,6 +309,8 @@ void CResultUI::ResultUICreate()
 		{
 			// シーン2Dの生成
 			m_apScene2D[nCnt] = CScene2D::Create(m_Pos[nCnt], m_Size[nCnt]);
+			// 一旦全て非表示にする
+			m_apScene2D[nCnt]->SetDisp(false);
 
 			if (nCnt == RESULT_UI_EVALUATION01P)
 			{
