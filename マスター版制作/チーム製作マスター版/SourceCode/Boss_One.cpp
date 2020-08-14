@@ -77,7 +77,6 @@ HRESULT CBoss_One::Init(void)
 	{
 		// e‚Ì¶¬
 		m_pGun[nCnt] = CGun::Create(GetCharacterModelPartsList(
-			//CModel::MODEL_BOSSONE_GUN_BALKAN)->GetMatrix());
 			static_cast<CModel::BOSSONE_PARTS_MODEL>(CModel::MODEL_BOSSONE_GUN_BALKAN + nCnt))->GetMatrix());
 		// e‚Ì’e‚ÌŽí—Þ
 		m_pGun[nCnt]->GetTag() = TAG_ENEMY;
@@ -118,7 +117,7 @@ void CBoss_One::Update(void)
 	for (int nCnt = 0; nCnt < WEAPONTYPE_MAX; nCnt++)
 	{
 		m_pGun[nCnt]->Update();
-		m_pGun[nCnt]->Shot();
+		//m_pGun[nCnt]->Shot();
 	}
 
 	// “–‚½‚è”»’è
