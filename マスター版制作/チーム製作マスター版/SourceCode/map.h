@@ -112,9 +112,9 @@ public:
 	int				GetMaxBattlePlane();											// 戦闘機の最大数取得
 	int				GetMaxHelicopter();												// ヘリの最大数取得
 
+	int				GetMaxShield();													// 盾の最大数取得
 	// 仮 今だけ
 	int				GetMaxBoss_One();												//
-
 	MAP				GetMapNum() { return m_MapNum; };								// マップ番号取得
 	LPD3DXMESH		GetMesh(int nCnt);												// メッシュの取得
 	CModel			*GetModel(int nCnt) { return m_pMapModel[nCnt]; };				// モデルの取得

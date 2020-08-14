@@ -306,8 +306,15 @@
     </ClCompile><ClCompile Include="SourceCode\Boss_One.cpp">
       <Filter>Model</Filter>
     </ClCompile>
+<<<<<<< .mine
+    <ClCompile Include="SourceCode\EnemyShield.cpp">
+      <Filter>Model</Filter>
+=======
     <ClCompile Include="SourceCode\balkan.cpp">
       <Filter>Wepon</Filter>
+>>>>>>> .theirs
+    </ClCompile>
+  </ItemGroup>
     </ClCompile>
     <ClCompile Include="SourceCode\flamethrower.cpp">
       <Filter>Wepon</Filter>
@@ -630,6 +637,17 @@
     </ClInclude><ClInclude Include="SourceCode\Boss_One.h">
       <Filter>Model</Filter>
     </ClInclude>
+<<<<<<< .mine
+    <ClInclude Include="SourceCode\EnemyShield.h">
+      <Filter>Model</Filter>
+    </ClInclude>
+  </ItemGroup>
+
+
+
+
+
+=======
     <ClInclude Include="SourceCode\balkan.h">
       <Filter>Wepon</Filter>
     </ClInclude>
@@ -639,6 +657,7 @@
     <ClInclude Include="SourceCode\incendiary.h">
       <Filter>Wepon</Filter>
     </ClInclude>  </ItemGroup>
+>>>>>>> .theirs
   <ItemGroup>
     <Filter Include="mesh">
       <UniqueIdentifier>{93673758-e55d-42f7-84f1-0900ba051b62}</UniqueIdentifier>
