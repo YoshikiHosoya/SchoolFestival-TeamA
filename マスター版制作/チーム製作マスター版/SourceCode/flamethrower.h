@@ -37,6 +37,5 @@ public:
 
 private:
 	/* Ã“Iƒƒ“ƒo•Ï” */
-
 };
 #endif

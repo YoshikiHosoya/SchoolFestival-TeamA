@@ -41,6 +41,7 @@ CBoss_One::CBoss_One(OBJ_TYPE type) :CCharacter(type)
 {
 	// ボスの初期状態
 	m_BossOneState = BOSS_ONE_STATE_NONE;
+	m_ShotCount = 0;
 }
 // =====================================================================================================================================================================
 //
@@ -84,11 +85,14 @@ HRESULT CBoss_One::Init(void)
 		m_pGun[nCnt]->SetGunType(static_cast<CGun::GUN_TYPE>(CGun::GUNTYPE_BALKAN + nCnt));
 		// 発射位置のオフセットの設定
 		m_pGun[nCnt]->SetShotOffsetPos(m_GunShotOfsetPos[nCnt]);
+		// 弾を撃つ方向を設定
+		m_pGun[nCnt]->SetShotRot(GetShotDirection());
+
 	}
 	// 当たり判定設定
 	GetCollision()->SetPos(&GetPosition());
 	GetCollision()->SetSize2D(m_CollisionSize[0]);
-	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_NORMAL);
+	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_CHARACTER);
 
 	return S_OK;
 }
@@ -118,6 +122,11 @@ void CBoss_One::Update(void)
 	{
 		m_pGun[nCnt]->Update();
 		//m_pGun[nCnt]->Shot();
+	}
+	m_ShotCount++;
+	if (m_ShotCount % 30 == 0)
+	{
+		m_pGun[WEAPONTYPE_FLAMETHROWER]->Shot();
 	}
 
 	// 当たり判定

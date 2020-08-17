@@ -122,6 +122,7 @@ private:
 	/* メンバ変数 */
 	BOSS_ONE_STATE			m_BossOneState;						// デバッグのステータス
 	BOSS_ONE_ATTACKTYPE		m_BossOneType;						// ボスの種類
+	int						m_ShotCount;						// 一発撃ってから次の弾を撃つまでの時間
 
 	int						m_StateTime;						// ステートが切り替わるまでの時間
 	CGun					*m_pGun[WEAPONTYPE_MAX];			// ガンクラスのポインタ
