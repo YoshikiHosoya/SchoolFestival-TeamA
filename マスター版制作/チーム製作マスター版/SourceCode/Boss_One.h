@@ -30,6 +30,7 @@ typedef struct
 // =====================================================================================================================================================================
 class CModel;
 class CGun;
+class CCollision;
 
 // =====================================================================================================================================================================
 // 捕虜クラス
@@ -97,6 +98,9 @@ public:
 	BOSS_ONE_ATTACKTYPE		GetPrisonerDropType()					{ return m_BossOneType; };				// ボスの種類
 	void					SetBossState(BOSS_ONE_STATE state)		{ m_BossOneState = state; };			// ボスの状態の設定
 	void					SetBossType(BOSS_ONE_ATTACKTYPE type)	{ m_BossOneType = type; };				// ボスの種類の設定
+
+	CCollision *GetCollision() { return m_pCollision; };			// 当たり判定のポインタ取得
+
 private:
 	/* 静的メンバ変数 */
 	static char				*m_BossOneFileName;					// ボスのファイル名
@@ -114,16 +118,20 @@ private:
 	void					StateChangeReaction();
 	void					Behavior();							// 敵の行動
 
-	void					SetStateTime(int time)
-	{
-		m_StateTime = time;
-	};															// ステートが切り替わるまでの時間の設定
+	void					SetStateTime(int time)	{m_StateTime = time;};						// ステートが切り替わるまでの時間の設定
+	void					SetGunOffsetPos(D3DXVECTOR3 pos);
+	void					SetGunPos();
+	void					MoveGun(D3DXVECTOR3 &PartsPos, D3DXVECTOR3 move);
 
 	/* メンバ変数 */
 	BOSS_ONE_STATE			m_BossOneState;						// デバッグのステータス
 	BOSS_ONE_ATTACKTYPE		m_BossOneType;						// ボスの種類
+	int						m_ShotCount;						// 一発撃ってから次の弾を撃つまでの時間
 
 	int						m_StateTime;						// ステートが切り替わるまでの時間
 	CGun					*m_pGun[WEAPONTYPE_MAX];			// ガンクラスのポインタ
+	CCollision				*m_pCollision;						//当たり判定のポインタ
+	D3DXVECTOR3				m_Gun_OffsetPos;
+	D3DXVECTOR3				m_Gun_Pos;
 };
 #endif

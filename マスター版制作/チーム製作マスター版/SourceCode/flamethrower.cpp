@@ -48,7 +48,6 @@ HRESULT CFlamethrower::Init()
 {
 	// 初期化
 	CBullet::Init();
-
 	return S_OK;
 }
 
@@ -72,6 +71,12 @@ void CFlamethrower::Update(void)
 {
 	// 更新
 	CBullet::Update();
+
+	if (CBullet::GetLife() % 3 == 0)
+	{
+		CParticle::CreateFromText(GetPosition() + CHossoLibrary::RandomVector3(10), ZeroVector3,
+			CParticleParam::EFFECT_FIRE, GetTag(), GetBulletParam(CGun::GUNTYPE_FLAMETHROWER)->nPower);
+	}
 }
 
 // =====================================================================================================================================================================
@@ -103,7 +108,7 @@ void CFlamethrower::DeleteBullet()
 // =====================================================================================================================================================================
 void CFlamethrower::BulletReaction(D3DXVECTOR3 rot)
 {
-	CParticle::CreateFromText(GetPosition(), rot, CParticleParam::EFFECT_SHOTGUN, GetTag(), GetBulletParam(CGun::GUNTYPE_SHOTGUN)->nPower);
+	CParticle::CreateFromText(GetPosition(), rot, CParticleParam::EFFECT_FIRE, GetTag(), GetBulletParam(CGun::GUNTYPE_FLAMETHROWER)->nPower);
 
 	//実弾の方は消去
 	CBullet::Rerease();
@@ -138,7 +143,7 @@ CFlamethrower * CFlamethrower::Create(D3DXVECTOR3 rot)
 	pBalkan->Init();
 
 	// 弾の移動量計算
-	pBalkan->CalcBulletMove(rot, CGun::GUNTYPE_SHOTGUN);
+	pBalkan->CalcBulletMove(rot, CGun::GUNTYPE_FLAMETHROWER);
 
 	// モデルタイプの設定
 	pBalkan->SetType(BULLET_MODEL);

@@ -41,6 +41,8 @@ CBoss_One::CBoss_One(OBJ_TYPE type) :CCharacter(type)
 {
 	// ボスの初期状態
 	m_BossOneState = BOSS_ONE_STATE_NONE;
+	m_ShotCount = 0;
+	m_pCollision = nullptr;
 }
 // =====================================================================================================================================================================
 //
@@ -72,6 +74,8 @@ HRESULT CBoss_One::Init(void)
 	CCharacter::SetLife(m_nLife);
 	// モーションさせない設定
 	SetMotion(CCharacter::CHARACTER_MOTION_STATE_NONE);
+	// 武器用の当たり判定の生成
+	m_pCollision = CCollision::Create();
 
 	for (int nCnt = 0; nCnt < WEAPONTYPE_MAX; nCnt++)
 	{
@@ -84,11 +88,23 @@ HRESULT CBoss_One::Init(void)
 		m_pGun[nCnt]->SetGunType(static_cast<CGun::GUN_TYPE>(CGun::GUNTYPE_BALKAN + nCnt));
 		// 発射位置のオフセットの設定
 		m_pGun[nCnt]->SetShotOffsetPos(m_GunShotOfsetPos[nCnt]);
+		// 弾を撃つ方向を設定
+		m_pGun[nCnt]->SetShotRot(GetShotDirection());
 	}
+
+	// ガンのオフセット座標の更新
+	SetGunOffsetPos(D3DXVECTOR3(GetCharacterModelPartsList((CModel::MODEL_BOSSONE_GUN_FLAMETHROWER))->GetPosition()));
+	// ガンの座標の更新
+	SetGunPos();
+
+	m_pCollision->SetPos(&m_Gun_Pos);
+	m_pCollision->SetSize2D(D3DXVECTOR3(100.0f, 100.0f, 0.0f));
+	m_pCollision->DeCollisionCreate(CCollision::COLLISIONTYPE_CHARACTER);
+
 	// 当たり判定設定
-	GetCollision()->SetPos(&GetPosition());
-	GetCollision()->SetSize2D(m_CollisionSize[0]);
-	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_NORMAL);
+	CCharacter::GetCollision()->SetPos(&GetPosition());
+	CCharacter::GetCollision()->SetSize2D(m_CollisionSize[0]);
+	CCharacter::GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_CHARACTER);
 
 	return S_OK;
 }
@@ -107,6 +123,13 @@ void CBoss_One::Uninit(void)
 		}
 	}
 
+	// 当たり判定の削除
+	if (m_pCollision != nullptr)
+	{
+		delete m_pCollision;
+		m_pCollision = nullptr;
+	}
+
 	CCharacter::Uninit();
 }
 // =====================================================================================================================================================================
@@ -114,17 +137,31 @@ void CBoss_One::Uninit(void)
 // =====================================================================================================================================================================
 void CBoss_One::Update(void)
 {
+	// ガンの更新
 	for (int nCnt = 0; nCnt < WEAPONTYPE_MAX; nCnt++)
 	{
 		m_pGun[nCnt]->Update();
-		//m_pGun[nCnt]->Shot();
+	}
+	// ガンのオフセット座標の更新
+	SetGunOffsetPos(D3DXVECTOR3(GetCharacterModelPartsList((CModel::MODEL_BOSSONE_GUN_FLAMETHROWER))->GetPosition()));
+	// ガンの移動
+	//MoveGun(GetCharacterModelPartsList((CModel::MODEL_BOSSONE_GUN_FLAMETHROWER))->GetPosition(), D3DXVECTOR3(0.0f, 1.0f, 0.0f));
+	// ガンの座標の更新
+	SetGunPos();
+	// ガンの当たり判定の座標の更新
+	m_pCollision->SetPos(&m_Gun_Pos);
+
+	m_ShotCount++;
+	if (m_ShotCount % 30 == 0)
+	{
+		m_pGun[WEAPONTYPE_FLAMETHROWER]->Shot();
 	}
 
 	// 当たり判定
-	if (GetCollision() != nullptr)
+	if (CCharacter::GetCollision() != nullptr)
 	{
 		// 座標の更新 pos
-		GetCollision()->SetPos(&GetPosition());
+		CCharacter::GetCollision()->SetPos(&GetPosition());
 	}
 
 	// キャラクターの更新
@@ -350,7 +387,6 @@ void CBoss_One::StateChangeReaction()
 		break;
 	case CHARACTER_STATE_DEATH:
 		SetStateCount(60);
-		SetMotion(CCharacter::ENEMY_MOTION_DEAD_1);
 		break;
 	}
 }
@@ -361,4 +397,33 @@ void CBoss_One::StateChangeReaction()
 void CBoss_One::Behavior()
 {
 
+}
+
+// =====================================================================================================================================================================
+// ガンのオフセット座標の更新
+// =====================================================================================================================================================================
+void CBoss_One::SetGunOffsetPos(D3DXVECTOR3 pos)
+{
+	m_Gun_OffsetPos = D3DXVECTOR3(
+		GetCharacterModelPartsList((CModel::MODEL_BOSSONE_GUN_FLAMETHROWER))->GetPosition().x,
+		GetCharacterModelPartsList((CModel::MODEL_BOSSONE_GUN_FLAMETHROWER))->GetPosition().y,
+		GetCharacterModelPartsList((CModel::MODEL_BOSSONE_GUN_FLAMETHROWER))->GetPosition().z);
+}
+
+// =====================================================================================================================================================================
+// ガンの座標の更新
+// =====================================================================================================================================================================
+void CBoss_One::SetGunPos()
+{
+	m_Gun_Pos = m_Gun_OffsetPos + GetPosition();
+}
+
+// =====================================================================================================================================================================
+// ガンの移動の更新
+// =====================================================================================================================================================================
+void CBoss_One::MoveGun(D3DXVECTOR3	&PartsPos , D3DXVECTOR3 move)
+{
+	PartsPos.x += move.x,
+	PartsPos.y += move.y,
+	PartsPos.z += move.z;
 }

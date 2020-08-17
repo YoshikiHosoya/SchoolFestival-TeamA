@@ -86,7 +86,7 @@ SET_START ---------[11]----------
 	MODEL_TYPE = 11
 	INDEX = 11
 	PARENT = 0
-	POS = 0.0 -32.0 0.0
+	POS = 0.0 -40.0 -7.6
 SET_END
 
 SET_START ---------[12]----------
