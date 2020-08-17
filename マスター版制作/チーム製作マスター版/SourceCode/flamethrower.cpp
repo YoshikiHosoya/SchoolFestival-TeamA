@@ -48,7 +48,6 @@ HRESULT CFlamethrower::Init()
 {
 	// ‰Šú‰»
 	CBullet::Init();
-
 	return S_OK;
 }
 

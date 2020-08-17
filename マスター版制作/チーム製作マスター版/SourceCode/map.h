@@ -124,7 +124,7 @@ public:
 	CPlayertank		*GetPlayertank(int nCnt) { return m_pPlayerTank[nCnt]; };		// 戦車の取得
 	CBattlePlane	*GetBattlePlane(int nCnt) { return m_pBattlePlane[nCnt]; };		// 戦闘機の取得
 	CHelicopter		*GetHelicopter(int nCnt) { return m_pHelicopter[nCnt]; };		// ヘリコプターの取得
-	CBoss_One		*GetBoss_One(int nCnt) { return m_pBoss_One[nCnt]; };			// ボス1の取得
+	CBoss_One		*GetBoss_One(int nCnt)	{ return m_pBoss_One[nCnt]; };					// ボス1の取得
 
 	WAVE_INFO		GetWaveInfo(int nWaveNum) { return m_aWaveInfo[nWaveNum]; };	// ウェーブ情報の取得
 	D3DXVECTOR3		GetTransitionPos() { return m_TransitionPos; };					// 遷移するための位置の取得
