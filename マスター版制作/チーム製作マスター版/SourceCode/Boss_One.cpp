@@ -359,7 +359,7 @@ void CBoss_One::StateChangeReaction()
 		break;
 	case CHARACTER_STATE_DEATH:
 		SetStateCount(60);
-		SetMotion(CCharacter::ENEMY_MOTION_DEAD_1);
+		//SetMotion(CCharacter::ENEMY_MOTION_DEAD_1);
 		break;
 	}
 }
