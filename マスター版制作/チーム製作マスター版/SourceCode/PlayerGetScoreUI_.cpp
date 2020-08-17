@@ -67,11 +67,11 @@ HRESULT CPlayerGSUI::Init(void)
 void CPlayerGSUI::Uninit(void)
 {
 	// ƒXƒRƒA‚Ì‰ð•ú
-	/*if (m_pGetScore)
+	if (m_pGetScore)
 	{
 		m_pGetScore->Rerease();
 		m_pGetScore = nullptr;
-	}*/
+	}
 }
 
 // =====================================================================================================================================================================

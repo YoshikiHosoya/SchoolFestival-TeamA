@@ -69,6 +69,8 @@ HRESULT CObstacle::Init()
 
 	// “–‚½‚è”»’è¶¬
 	GetCollision()->SetPos(&GetPosition());
+	GetCollision()->SetSize2D(GetSize());
+	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_NORMAL);
 
 	return S_OK;
 }

@@ -386,12 +386,6 @@ void CGun::MultipleShot()
 				// 弾の生成
 				pBullet = CHeavyMachinegun::Create(m_ShotRot);
 			}
-			// フレイムショットのとき
-			if (m_GunType == GUNTYPE_FLAMESHOT)
-			{
-				// 弾の生成
-				pBullet = CFlameshot::Create(m_ShotRot);
-			}
 			// 戦車の銃のとき
 			if (m_GunType == GUNTYPE_TANKGUN)
 			{
