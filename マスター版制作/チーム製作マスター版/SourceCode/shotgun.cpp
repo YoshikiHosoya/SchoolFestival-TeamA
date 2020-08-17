@@ -103,7 +103,6 @@ void CShotgun::DeleteBullet()
 // =====================================================================================================================================================================
 void CShotgun::BulletReaction(D3DXVECTOR3 rot)
 {
-	CParticle::CreateFromText(GetPosition(), rot, CParticleParam::EFFECT_SHOTGUN, GetTag(), GetBulletParam(CGun::GUNTYPE_SHOTGUN)->nPower);
 
 	//À’e‚Ì•û‚ÍÁ‹
 	CBullet::Rerease();

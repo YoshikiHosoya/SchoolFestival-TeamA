@@ -18,7 +18,6 @@
 #include "tankgun.h"
 #include "planegun.h"
 #include "Character.h"
-#include "TexAnimation3D.h"
 #include "TrackingGun.h"
 #include "diffusiongun.h"
 #include "sound.h"
@@ -276,12 +275,12 @@ void CGun::Shot()
 
 		case CGun::GUNTYPE_SHOTGUN:
 			// ショットガンの生成
-			pBullet = CShotgun::Create(m_ShotRot);
+			CParticle::CreateFromText(m_ShotPos, m_ShotRot, CParticleParam::EFFECT_SHOTGUN, GetTag(), CBullet::GetBulletParam(CGun::GUNTYPE_SHOTGUN)->nPower);
+
 			break;
 
 		case CGun::GUNTYPE_LASERGUN:
 			// レーザーガンの生成
-			//pBullet = CLasergun::Create(m_ShotRot);
 			CParticle::CreateFromText(m_ShotPos, m_ShotRot, CParticleParam::EFFECT_LAZER, GetTag(), CBullet::GetBulletParam((int)CGun::GUNTYPE_LASERGUN)->nPower, D3DXCOLOR(0.0f,0.0f,0.0f,-1.0f),GetShotPosPtr());
 			m_bMultiple = true;		// フラグをオン
 			break;
@@ -313,7 +312,7 @@ void CGun::Shot()
 			break;
 		case CGun::GUNTYPE_DIFFUSIONGUN:
 			// 拡散弾
-			pBullet = CTracking::Create(m_ShotRot);
+			pBullet = CDiffusion::Create(m_ShotRot);
 			break;
 		case CGun::GUNTYPE_BOSSLASERGUN:
 			// 拡散弾
@@ -351,9 +350,8 @@ void CGun::Shot()
 			// 弾発砲時のリアクション
 			pBullet->BulletReaction(m_ShotRot);
 
-			//ノズルフラッシュ
-			CTexAnimation3D::Create(m_ShotPos, D3DXVECTOR3(30.0f, 30.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),
-				CTexture::SEPARATE_TEX_EFFECT_SHOTFLASH, 1, CScene::OBJTYPE_EFFECT);
+			////ノズルフラッシュ
+			CParticle::CreateFromText(m_ShotPos, ZeroVector3, CParticleParam::EFFECT_SHOTFLASH);
 
 			//音再生
 			CManager::GetSound()->Play(CSound::LABEL_SE_SHOT);
@@ -423,9 +421,9 @@ void CGun::MultipleShot()
 				//音再生
 				CManager::GetSound()->Play(CSound::LABEL_SE_SHOT);
 
-				//ノズルフラッシュ
-				CTexAnimation3D::Create(m_ShotPos, D3DXVECTOR3(30.0f, 30.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),
-					CTexture::SEPARATE_TEX_EFFECT_SHOTFLASH, 1, CScene::OBJTYPE_EFFECT);
+				////ノズルフラッシュ
+				CParticle::CreateFromText(m_ShotPos, ZeroVector3, CParticleParam::EFFECT_SHOTFLASH);
+
 
 			}
 		}

@@ -10,6 +10,8 @@
 #include "BaseMode.h"
 #include "collision.h"
 #include "gun.h"
+#include "particle.h"
+
 #define CENTER_POS		(D3DXVECTOR3(0.0f,450.0f,0.0f))
 #define RIGHT_POS		(D3DXVECTOR3(300.0f,400.0f,0.0f))
 #define LEFT_POS		(D3DXVECTOR3(-300.0f,400.0f,0.0f))
@@ -177,6 +179,9 @@ void CBossAI::UpdateAttackAI(void)
 			//Œ‚‚ÂŒü‚«‚ÌÝ’è
 			pBossPass->GetGun()->SetShotRot(D3DXVECTOR3(0.0f, 0.0f, atan2f(-m_ShotVec.x, m_ShotVec.y)));
 
+			//Œõ‚é
+			CParticle::CreateFromText(pBossPass->GetPosition(), D3DXVECTOR3(0.0f, 0.0f, CHossoLibrary::Random_PI()), CParticleParam::EFFECT_FLASSHING, TAG::TAG_PLAYER, 0, RedColor);
+
 			m_AttackCastCnt++;
 			m_bShot = true;
 			if (m_AttackCastCnt == 60)//UŒ‚‚É“ü‚é‚Ü‚Å‚ÌŽžŠÔ
@@ -207,6 +212,9 @@ void CBossAI::UpdateAttackAI(void)
 
 		else if (AI_DIFFUSION == m_BossAItype)//ŠgŽUŽËŒ‚
 		{
+			//Œõ‚é
+			CParticle::CreateFromText(pBossPass->GetPosition(), D3DXVECTOR3(0.0f, 0.0f, CHossoLibrary::Random_PI()), CParticleParam::EFFECT_FLASSHING, TAG::TAG_PLAYER, 0, YellowColor);
+
 			//ƒKƒ“‚Ìƒ^ƒCƒv•ÏX
 			pBossPass->GetGun()->SetGunType(pBossPass->GetGun()->GUNTYPE_DIFFUSIONGUN);
 

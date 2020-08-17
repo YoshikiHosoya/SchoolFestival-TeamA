@@ -104,6 +104,7 @@ public:
 		SEPARATE_TEX_EFFECT_FIRE00,					//ファイア
 		SEPARATE_TEX_EFFECT_FIRE01,					//ファイア
 		SEPARATE_TEX_EFFECT_FIRE02,					//ファイア
+		SEPARATE_TEX_EFFECT_FLASH,					//フラッシュ
 
 		SEPARATE_TEX_NUM,							//ナンバー
 
