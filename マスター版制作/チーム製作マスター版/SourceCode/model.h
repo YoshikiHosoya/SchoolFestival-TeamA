@@ -247,6 +247,7 @@ typedef enum
 	void SetDieFlag(bool DieFlag)					{ m_bDieFlag = DieFlag; };							// 死亡フラグの設定
 	void SetColorChangeFlag(bool ColorChangeFlag)	{ m_bColorChangeFlag = ColorChangeFlag; };			// 色変更フラグの設定
 	void SetAddColor(D3DXCOLOR AddColor)			{ m_AddColor = AddColor; };							// 加算する色の設定
+	void SetDisp(bool bDisp)						{ m_bDisp = bDisp; };								// 画面に描画するかどうか
 	D3DXVECTOR3 &GetPosition(void)					{ return m_pos; };									// 位置の取得
 	D3DXVECTOR3 *GetPositionPtr()					{ return &m_pos; };									// 位置の取得　ポインタで
 	D3DXVECTOR3 &GetRot(void)						{ return m_rot; };									// 回転の取得
@@ -262,6 +263,7 @@ typedef enum
 	bool GetDieFlag()								{ return m_bDieFlag; };								// 死亡フラグの取得
 	bool GetColorChangeFlag()						{ return m_bColorChangeFlag; };						// 色変更フラグの取得
 	D3DXCOLOR	GetAddColor()						{ return m_AddColor; };								// 加算する色の取得
+	D3DXCOLOR	GetDisp()							{ return m_bDisp; };								// 描画するかどうか取得
 
 private:
 	/* メンバ関数 */
@@ -298,6 +300,7 @@ private:
 	int				m_nParentIdx;			//親番号
 	bool			m_bDieFlag;				// 死亡フラグ
 	bool			m_bColorChangeFlag;		// 色変更フラグ
+	bool			m_bDisp;				// 描画するかどうか
 	CCollision		*m_pCollision;			// 当たり判定情報
 };
 #endif

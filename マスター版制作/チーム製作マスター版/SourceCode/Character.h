@@ -235,6 +235,7 @@ private:
 	void CalcMove();												//移動の計算
 	void CalcRotation();											//回転の計算
 	void Motion(void);												//モーション処理
+	void SetAllModelDisp(bool bDisp);								//点滅の切り替え
 	virtual void Collision();										//当たり判定処理
 
 };
