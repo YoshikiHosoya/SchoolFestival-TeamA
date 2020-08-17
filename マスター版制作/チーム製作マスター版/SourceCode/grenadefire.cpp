@@ -11,7 +11,6 @@
 #include "debugproc.h"
 #include "texture.h"
 #include "Player.h"
-#include "TexAnimation3D_Collision.h"
 #include "bullet.h"
 #include "grenade.h"
 

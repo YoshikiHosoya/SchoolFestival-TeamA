@@ -14,7 +14,6 @@
 #include "map.h"
 #include "pause.h"
 #include "ParticleManager.h"
-#include "TexAnimation3D_Collision.h"
 #include "item.h"
 #include "UIManager.h"
 #include "Scene.h"

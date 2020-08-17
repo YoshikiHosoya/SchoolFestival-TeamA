@@ -17,7 +17,6 @@
 #include "Obstacle.h"
 #include "prisoner.h"
 #include "particle.h"
-#include "TexAnimation3D.h"
 // =====================================================================================================================================================================
 // ê√ìIÉÅÉìÉoïœêîÇÃèâä˙âª
 // =====================================================================================================================================================================
@@ -202,7 +201,7 @@ void CBullet::Draw(void)
 // =====================================================================================================================================================================
 void CBullet::DeleteBullet()
 {
-	CTexAnimation3D::Create(GetPosition(), D3DXVECTOR3(15.0f, 15.0f, 0.0f), ZeroVector3, CTexture::SEPARATE_TEX_EFFECT_HITEFFECT, 1, OBJTYPE_EFFECT);
+	CParticle::CreateFromText(GetPosition(), ZeroVector3, CParticleParam::EFFECT_DELETEBULLET);
 
 	// íeÇÃçÌèú
 	Rerease();
