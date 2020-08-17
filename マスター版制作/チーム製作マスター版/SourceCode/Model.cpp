@@ -891,6 +891,7 @@ HRESULT CModel::Init(void)
 	m_AddColor			= D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);	// 加算する色
 	m_bDieFlag			= false;								// 死亡フラグ
 	m_bColorChangeFlag	= false;									// 色変更フラグ
+	m_bDisp				= true;									// 描画する
 	m_type				= 0;									// 種類
 	int nNumVertices;
 	DWORD sizeFVF;
@@ -1100,6 +1101,12 @@ void CModel::NotDrawCalcMtxOnly(D3DXMATRIX * pParentMtx)
 //====================================================================
 void CModel::DrawMesh()
 {
+	//描画しない時はreturn
+	if (!m_bDisp)
+	{
+		return;
+	}
+
 	// デバイスの取得
 	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
 	D3DXMATERIAL *pMat;

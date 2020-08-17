@@ -273,16 +273,17 @@ void CCharacter::State()
 		if (m_nStateCnt <= 0)
 		{
 			SetState(CHARACTER_STATE_NORMAL);
+			SetAllModelDisp(true);
 		}
 
 		//点滅処理
 		else if (m_nStateCnt % 4 == 0 && m_nStateCnt % 8 != 0)
 		{
-			ChangeColor(true, D3DXCOLOR(0.0f, 0.0f, 0.0f, -1.0f));
+			SetAllModelDisp(false);
 		}
 		else if (m_nStateCnt % 8 == 0)
 		{
-			ChangeColor(true, D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f));
+			SetAllModelDisp(true);
 		}
 		break;
 	case CHARACTER_STATE_DAMAGE_RED:
@@ -831,6 +832,20 @@ void CCharacter::Motion(void)
 	{
 		m_Fram = 0;
 		m_CntKeySet = 0;
+	}
+}
+//====================================================================
+//全部のモデルのDisp情報設定
+//====================================================================
+void CCharacter::SetAllModelDisp(bool bDisp)
+{
+	//モデル数分
+	for (unsigned int nCnt = 0; nCnt < m_vModelList.size(); nCnt++)
+	{
+		if (m_vModelList[nCnt])
+		{
+			m_vModelList[nCnt]->SetDisp(bDisp);
+		}
 	}
 }
 //====================================================================
