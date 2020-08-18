@@ -1,0 +1,12 @@
+
+	[BGM]
+		[ステージ・BOSS] (いい感じのが見つからなかった)
+		・stage_00
+		・stage_01
+		・stage_02
+		・stage_03
+		
+		[ステージクリア]
+		・stage_clear
+		
+		[]
