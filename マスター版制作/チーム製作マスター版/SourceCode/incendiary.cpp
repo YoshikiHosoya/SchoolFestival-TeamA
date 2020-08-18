@@ -102,7 +102,7 @@ void CIncendiary::DeleteBullet()
 // =====================================================================================================================================================================
 void CIncendiary::BulletReaction(D3DXVECTOR3 rot)
 {
-	CParticle::CreateFromText(GetPosition(), rot, CParticleParam::EFFECT_SHOTGUN, GetTag(), GetBulletParam(CGun::GUNTYPE_SHOTGUN)->nPower);
+	CParticle::CreateFromText(GetPosition(), rot, CParticleParam::EFFECT_HEAVY_MACHINEGUN, GetTag(), GetBulletParam(CGun::GUNTYPE_INCENDIARY)->nPower);
 
 	//実弾の方は消去
 	CBullet::Rerease();
@@ -130,14 +130,14 @@ CIncendiary * CIncendiary::Create(D3DXVECTOR3 rot)
 	// メモリの確保
 	pBalkan = new CIncendiary(OBJTYPE_BULLET);
 
-	// ショットガンのパラメーター取得
-	BULLET_PARAM *pBulletParam = pBalkan->GetBulletParam(CGun::GUNTYPE_BALKAN);
+	// 焼夷弾のパラメーター取得
+	BULLET_PARAM *pBulletParam = pBalkan->GetBulletParam(CGun::GUNTYPE_INCENDIARY);
 
 	// 初期化
 	pBalkan->Init();
 
 	// 弾の移動量計算
-	pBalkan->CalcBulletMove(rot, CGun::GUNTYPE_SHOTGUN);
+	pBalkan->CalcBulletMove(rot, CGun::GUNTYPE_INCENDIARY);
 
 	// モデルタイプの設定
 	pBalkan->SetType(BULLET_MODEL);
