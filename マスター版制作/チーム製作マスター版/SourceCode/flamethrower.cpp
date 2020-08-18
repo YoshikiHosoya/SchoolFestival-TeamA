@@ -136,7 +136,7 @@ CFlamethrower * CFlamethrower::Create(D3DXVECTOR3 rot)
 	// メモリの確保
 	pBalkan = new CFlamethrower(OBJTYPE_BULLET);
 
-	// ショットガンのパラメーター取得
+	// 火炎放射器のパラメーター取得
 	BULLET_PARAM *pBulletParam = pBalkan->GetBulletParam(CGun::GUNTYPE_FLAMETHROWER);
 
 	// 初期化

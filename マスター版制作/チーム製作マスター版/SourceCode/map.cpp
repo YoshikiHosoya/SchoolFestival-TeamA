@@ -21,6 +21,7 @@
 #include "Boss.h"
 #include "scene2D.h"
 #include "Boss_One.h"
+#include "WeakEnemy.h"
 
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
@@ -343,7 +344,7 @@ void CMap::MapModelCreate(int ModelType, int nType, D3DXVECTOR3 pos,int nItemTyp
 	/* --- 敵 --- */
 	case CMap::ARRANGEMENT_MODEL_ENEMY:
 		// オブジェクトの生成
-		m_pEnemy.emplace_back(CEnemy::Create());
+		m_pEnemy.emplace_back(CWeakEnemy::Create());
 		// 位置の設定
 		m_pEnemy[m_pEnemy.size() - 1]->SetPosition(pos);
 		break;
@@ -1187,7 +1188,7 @@ void CMap::ModelCreat()
 	{
 	case CMap::ARRANGEMENT_MODEL_ENEMY:
 		// 敵
-		m_pEnemy.emplace_back(CEnemy::Create());
+		m_pEnemy.emplace_back(CWeakEnemy::Create());
 		break;
 
 	case CMap::ARRANGEMENT_MODEL_PRISONER:
@@ -1291,7 +1292,7 @@ void CMap::WaveCreate(int nModelType, int nType, int nItemType, D3DXVECTOR3 pos)
 	if (nModelType == ARRANGEMENT_MODEL_ENEMY)
 	{
 		// 敵
-		m_pEnemy.emplace_back(CEnemy::Create());
+		m_pEnemy.emplace_back(CWeakEnemy::Create());
 		m_pEnemy[m_pEnemy.size() - 1]->SetPosition(pos);
 	}
 	else if (nModelType == ARRANGEMENT_MODEL_PRISONER)
