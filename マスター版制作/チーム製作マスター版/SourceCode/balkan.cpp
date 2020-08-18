@@ -93,7 +93,6 @@ void CBalkan::Draw(void)
 void CBalkan::DeleteBullet()
 {
 	CBullet::DeleteBullet();
-
 }
 
 // =====================================================================================================================================================================
@@ -103,7 +102,7 @@ void CBalkan::DeleteBullet()
 // =====================================================================================================================================================================
 void CBalkan::BulletReaction(D3DXVECTOR3 rot)
 {
-	CParticle::CreateFromText(GetPosition(), rot, CParticleParam::EFFECT_SHOTGUN, GetTag(), GetBulletParam(CGun::GUNTYPE_SHOTGUN)->nPower);
+	CParticle::CreateFromText(GetPosition(), GetRot(), CParticleParam::EFFECT_HEAVY_MACHINEGUN, GetTag(), GetBulletParam(CGun::GUNTYPE_BALKAN)->nPower);
 
 	//実弾の方は消去
 	CBullet::Rerease();
@@ -120,7 +119,7 @@ void CBalkan::DebugInfo()
 
 // =====================================================================================================================================================================
 //
-// ショットガンの生成
+// バルカンの生成
 //
 // =====================================================================================================================================================================
 CBalkan * CBalkan::Create(D3DXVECTOR3 rot)
@@ -131,14 +130,17 @@ CBalkan * CBalkan::Create(D3DXVECTOR3 rot)
 	// メモリの確保
 	pBalkan = new CBalkan(OBJTYPE_BULLET);
 
-	// ショットガンのパラメーター取得
+	// バルカンのパラメーター取得
 	BULLET_PARAM *pBulletParam = pBalkan->GetBulletParam(CGun::GUNTYPE_BALKAN);
 
 	// 初期化
 	pBalkan->Init();
 
 	// 弾の移動量計算
-	pBalkan->CalcBulletMove(rot, CGun::GUNTYPE_SHOTGUN);
+	pBalkan->CalcBulletMove(rot, CGun::GUNTYPE_BALKAN);
+
+	// 回転量設定
+	pBalkan->GetRot() = rot;
 
 	// モデルタイプの設定
 	pBalkan->SetType(BULLET_MODEL);

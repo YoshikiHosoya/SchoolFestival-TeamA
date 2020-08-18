@@ -154,7 +154,9 @@ void CBoss_One::Update(void)
 	m_ShotCount++;
 	if (m_ShotCount % 30 == 0)
 	{
+		m_pGun[WEAPONTYPE_BALKAN]->Shot();
 		m_pGun[WEAPONTYPE_FLAMETHROWER]->Shot();
+		m_pGun[WEAPONTYPE_INCENDIARY]->Shot();
 	}
 
 	// “–‚½‚è”»’è

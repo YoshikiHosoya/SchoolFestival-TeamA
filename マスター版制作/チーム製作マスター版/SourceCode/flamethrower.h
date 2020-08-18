@@ -33,10 +33,10 @@ public:
 	void						Draw();								// 描画
 	void						DeleteBullet();						// 弾を消す処理
 	void						BulletReaction(D3DXVECTOR3 rot);	// 弾の反応
-	void						DebugInfo();						//デバッグ
+	void						DebugInfo();						// デバッグ
 
 	/* 静的メンバ関数 */
-	static	CFlamethrower		*Create(D3DXVECTOR3 rot);	// バルカンの生成
+	static	CFlamethrower		*Create(D3DXVECTOR3 rot);			// 火炎放射器の生成
 
 private:
 	/* 静的メンバ変数 */
