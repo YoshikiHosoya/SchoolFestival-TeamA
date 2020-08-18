@@ -9,14 +9,14 @@
 //=============================================================================
 #include "main.h"
 #include "scene.h"
-
+#include "BaseAI.h"
 class CBoss;
 class CGun;
 class CCollision;
 //=============================================================================
 // プロトタイプ宣言
 //=============================================================================
-class CBossAI
+class CBossAI :public CBaseAI
 {
 public:
 	typedef enum
@@ -50,8 +50,8 @@ public:
 	void SetBossAI(AI_BOSS_STATE attack);
 private:
 	CBoss	*pBossPass;					//敵の情報の格納用
-	AI_BOSS_STATE m_BossAItype;		//攻撃の種類
-	AI_BOSS_STATE m_BossAItypeOld;	//前の攻撃の格納
+	AI_BOSS_STATE m_BossAItype;			//攻撃の種類
+	AI_BOSS_STATE m_BossAItypeOld;		//前の攻撃の格納
 
 	int m_recast;						//現在行動から次回行動までの時間
 	int m_castcount;					//行動時間

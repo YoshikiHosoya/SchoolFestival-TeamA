@@ -9,14 +9,14 @@
 //=============================================================================
 #include "main.h"
 #include "scene.h"
-
+#include "BaseAI.h"
 class CEnemy;
 class CGun;
 class CCollision;
 //=============================================================================
 // プロトタイプ宣言
 //=============================================================================
-class CEnemyAI
+class CEnemyAI :public CBaseAI
 {
 public:
 	typedef enum

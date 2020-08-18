@@ -158,6 +158,7 @@
     <ClCompile Include="SourceCode\3Dmultinumber.cpp" />
     <ClCompile Include="SourceCode\3Dnumber.cpp" />
     <ClCompile Include="SourceCode\balkan.cpp" />
+    <ClCompile Include="SourceCode\BaseAI.cpp" />
     <ClCompile Include="SourceCode\BaseMode.cpp" />
     <ClCompile Include="SourceCode\BattlePlane.cpp" />
     <ClCompile Include="SourceCode\Boss.cpp" />
@@ -265,6 +266,7 @@
     <ClInclude Include="SourceCode\3Dmultinumber.h" />
     <ClInclude Include="SourceCode\3Dnumber.h" />
     <ClInclude Include="SourceCode\balkan.h" />
+    <ClInclude Include="SourceCode\BaseAI.h" />
     <ClInclude Include="SourceCode\BaseMode.h" />
     <ClInclude Include="SourceCode\BattlePlane.h" />
     <ClInclude Include="SourceCode\Boss.h" />
