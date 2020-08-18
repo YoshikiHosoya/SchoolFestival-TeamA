@@ -93,7 +93,6 @@ void CBalkan::Draw(void)
 void CBalkan::DeleteBullet()
 {
 	CBullet::DeleteBullet();
-
 }
 
 // =====================================================================================================================================================================
@@ -103,7 +102,7 @@ void CBalkan::DeleteBullet()
 // =====================================================================================================================================================================
 void CBalkan::BulletReaction(D3DXVECTOR3 rot)
 {
-	CParticle::CreateFromText(GetPosition(), rot, CParticleParam::EFFECT_SHOTGUN, GetTag(), GetBulletParam(CGun::GUNTYPE_SHOTGUN)->nPower);
+	CParticle::CreateFromText(GetPosition(), rot, CParticleParam::EFFECT_HEAVY_MACHINEGUN, GetTag(), GetBulletParam(CGun::GUNTYPE_HEAVYMACHINEGUN)->nPower);
 
 	//ŽÀ’e‚Ì•û‚ÍÁ‹Ž
 	CBullet::Rerease();
@@ -138,7 +137,7 @@ CBalkan * CBalkan::Create(D3DXVECTOR3 rot)
 	pBalkan->Init();
 
 	// ’e‚ÌˆÚ“®—ÊŒvŽZ
-	pBalkan->CalcBulletMove(rot, CGun::GUNTYPE_SHOTGUN);
+	pBalkan->CalcBulletMove(rot, CGun::GUNTYPE_HEAVYMACHINEGUN);
 
 	// ƒ‚ƒfƒ‹ƒ^ƒCƒv‚ÌÝ’è
 	pBalkan->SetType(BULLET_MODEL);
