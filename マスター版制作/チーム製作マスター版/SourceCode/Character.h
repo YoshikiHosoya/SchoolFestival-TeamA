@@ -180,16 +180,17 @@ public:
 	char* GetOffsetFileName(CHARACTER_TYPE type);
 	char* GetMotionFileName(CHARACTER_MOTION_STATE motionstate);
 
-	D3DXVECTOR3 *GetPositionPtr()					{ return &m_pos; };							//座標のポインタ取得
-	bool GetDieFlag()								{ return m_bDieFlag; };						// 死亡フラグの取得
 	void SetDieFlag(bool DieFlag)					{ m_bDieFlag = DieFlag; };					// 死亡フラグの設定
-	bool GetDraw()									{ return m_bDraw; };						// 描画するかどうか取得
-
-	bool GetFallFlag()								{ return m_bFall; };						// 落下フラグの取得
 	void SetFallFlag(bool bFall)					{ m_bFall = bFall; };						// 落下フラグの設定
 
+	D3DXVECTOR3 *GetPositionPtr()					{ return &m_pos; };							//座標のポインタ取得
+	bool GetDieFlag()								{ return m_bDieFlag; };						// 死亡フラグの取得
+	bool GetDraw()									{ return m_bDraw; };						// 描画するかどうか取得
+	bool GetFallFlag()								{ return m_bFall; };						// 落下フラグの取得
+	int GetCharacterStateCnt()						{ return m_nStateCnt; };					// キャラクターのステートのカウント
+
 	void ChangeColor(bool ColorChangeFlag, D3DXCOLOR AddColor);									// 色変更
-	void CheckDrawRange();
+	bool CheckDrawRange();
 
 	CCollision *GetCollision() { return m_pCollision; };			// 当たり判定のポインタ取得
 	virtual void		DebugInfo(void);						// デバッグ用関数

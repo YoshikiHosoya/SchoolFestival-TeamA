@@ -51,14 +51,6 @@ char *CBullet::m_BulletFileName[CGun::GUNTYPE_MAX] =
 // =====================================================================================================================================================================
 #define BULLET_LIFE				(100)			// 弾の体力
 
-// 弾のダメージ
-#define BULLET_DAMAGE_ENEMY		(10)			// エネミーへのダメージ
-#define BULLET_DAMAGE_OBSTACLE	(10)			// 障害物へのダメージ
-#define BULLET_DAMAGE_PLAYER	(1)				// プレイヤーへのダメージ
-
-// 貫通させるかのフラグ
-#define BULLET_PENETRATION		(false)			// 弾の判定が貫通するかどうか
-
 // =====================================================================================================================================================================
 //
 // コンストラクタ
@@ -143,7 +135,7 @@ void CBullet::Update(void)
 		if (m_Tag == TAG_PLAYER)
 		{
 			// プレイヤーの弾の判定
-			if (GetCollision()->ForPlayerBulletCollision(BULLET_DAMAGE_ENEMY, BULLET_DAMAGE_OBSTACLE, BULLET_PENETRATION))
+			if (GetCollision()->ForPlayerBulletCollision(m_BulletParam[m_GunType].nPower, m_BulletParam[m_GunType].nPower, false))
 			{
 				// 弾の削除
 				DeleteBullet();
@@ -154,7 +146,7 @@ void CBullet::Update(void)
 		else if (m_Tag == TAG_ENEMY)
 		{
 			// エネミーの弾の判定
-			if (GetCollision()->ForEnemyCollision(BULLET_DAMAGE_PLAYER, 10,BULLET_PENETRATION))
+			if (GetCollision()->ForEnemyCollision(m_BulletParam[m_GunType].nPower, m_BulletParam[m_GunType].nPower, false))
 			{
 				// 弾の削除
 				DeleteBullet();

@@ -257,6 +257,7 @@
     <ClCompile Include="SourceCode\UI.cpp" />
     <ClCompile Include="SourceCode\UIManager.cpp" />
     <ClCompile Include="SourceCode\vehicle.cpp" />
+    <ClCompile Include="SourceCode\WeakEnemy.cpp" />
     <ClCompile Include="SourceCode\XInputPad.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -366,6 +367,7 @@
     <ClInclude Include="SourceCode\UI.h" />
     <ClInclude Include="SourceCode\UIManager.h" />
     <ClInclude Include="SourceCode\vehicle.h" />
+    <ClInclude Include="SourceCode\WeakEnemy.h" />
     <ClInclude Include="SourceCode\XInputPad.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

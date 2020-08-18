@@ -1135,9 +1135,10 @@ void CCharacter::Collision()
 //====================================================================
 //•`‰æ‚Ì”ÍˆÍ“à‚©‚Ç‚¤‚©Šm”F
 //====================================================================
-void CCharacter::CheckDrawRange()
+bool CCharacter::CheckDrawRange()
 {
 	m_bDraw = CManager::GetRenderer()->CheckScreenRange(m_pos);
+	return m_bDraw;
 }
 
 
