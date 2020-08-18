@@ -18,7 +18,7 @@
 //マクロ定義
 //====================================================================
 #define BOSS_SIZE			(D3DXVECTOR3(50.0f,75.0f,0.0f)) //敵のサイズ
-#define BOSS_LIFE			(1000)
+#define BOSS_LIFE			(300)
 
 //====================================================================
 //コンストラクタ
@@ -42,7 +42,7 @@ CBoss::~CBoss()
 HRESULT CBoss::Init(void)
 {
 	//キャラの初期化
-	CCharacter::Init();
+	CEnemy::Init();
 	LoadOffset(CCharacter::CHARACTER_TYPE_BOSS);
 	SetPosition(D3DXVECTOR3(0.0f, 300.0f, 0.0f));
 	SetMotion(CCharacter::BOSS_MOTION_NORMAL);
@@ -65,10 +65,7 @@ HRESULT CBoss::Init(void)
 	m_pGun->GetTag() = TAG_ENEMY;
 
 	// 当たり判定生成
-	GetCollision()->SetPos(GetPositionPtr());
-	GetCollision()->SetPosOld(&GetPositionOld());
 	GetCollision()->SetSize2D(BOSS_SIZE);
-	GetCollision()->SetMove(&GetMove());
 	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_NORMAL);
 	return S_OK;
 }
@@ -90,7 +87,7 @@ void CBoss::Uninit(void)
 		m_pAI = nullptr;
 	}
 
-	CCharacter::Uninit();
+	CEnemy::Uninit();
 }
 //====================================================================
 //更新
@@ -102,7 +99,7 @@ void CBoss::Update(void)
 	{
 		m_pAI->Update();
 	}
-	CCharacter::Update();
+	CEnemy::Update();
 
 	m_pGun->Update();
 
@@ -112,7 +109,7 @@ void CBoss::Update(void)
 //====================================================================
 void CBoss::Draw(void)
 {
-	CCharacter::Draw();
+	CEnemy::Draw();
 
 	//ガンのマトリックスの計算だけ
 	m_pGun->NoDrawCalcMatrixOnly();
@@ -172,7 +169,10 @@ void CBoss::State()
 	{
 	case CHARACTER_STATE_DEATH:
 		//爆発
-		CParticle::CreateFromText(GetPosition() + CHossoLibrary::RandomVector3(150.0f), ZeroVector3, CParticleParam::EFFECT_NO_COLLISION_EXPLOSION);
+		if (GetCharacterStateCnt() % 3 == 0)
+		{
+			CParticle::CreateFromText(GetPosition() + CHossoLibrary::RandomVector3(250.0f), ZeroVector3, CParticleParam::EFFECT_NO_COLLISION_EXPLOSION);
+		}
 		break;
 	}
 }

@@ -67,6 +67,7 @@ private:
 	/* メンバ変数 */
 	D3DXVECTOR3					m_move;					// 移動値
 	TAG							m_Tag;					// タグ
+	CGun::GUN_TYPE				m_GunType;				// ガンのタイプ
 	int							m_nLife;				// 体力
 	/* 静的メンバ変数 */
 	static char					*m_BulletFileName[CGun::GUNTYPE_MAX];	// 弾のファイル名
