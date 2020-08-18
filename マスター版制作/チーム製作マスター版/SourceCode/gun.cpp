@@ -249,7 +249,9 @@ void CGun::Shot()
 	CBullet *pBullet = nullptr;
 
 	// ハンドガンと戦車の銃以外のとき
-	if (m_GunType != GUNTYPE_HANDGUN && m_GunType != GUNTYPE_TANKGUN)
+	if (m_GunType != GUNTYPE_HANDGUN && m_GunType != GUNTYPE_TANKGUN &&
+		m_GunType != GUNTYPE_BALKAN && m_GunType != GUNTYPE_FLAMETHROWER &&
+		m_GunType != GUNTYPE_INCENDIARY)
 	{
 		// 残弾数を減らす
 		m_nAmmo--;
@@ -327,12 +329,10 @@ void CGun::Shot()
 		case CGun::GUNTYPE_FLAMETHROWER:
 			//
 			pBullet = CFlamethrower::Create(m_ShotRot);
-			m_bMultiple = true;		// 複数発撃つフラグをオン
 			break;
 		case CGun::GUNTYPE_INCENDIARY:
 			//
 			pBullet = CIncendiary::Create(m_ShotRot);
-			m_bMultiple = true;		// 複数発撃つフラグをオン
 			break;
 
 		}
@@ -377,8 +377,11 @@ void CGun::MultipleShot()
 			// フレームカウント初期化
 			m_nCntFrame = 0;
 
-			// 残弾数を減らす
-			m_nAmmo--;
+			if (m_GunType != GUNTYPE_BALKAN)
+			{
+				// 残弾数を減らす
+				m_nAmmo--;
+			}
 
 			// ヘビーマシンガンのとき
 			if (m_GunType == GUNTYPE_HEAVYMACHINEGUN)
@@ -391,6 +394,12 @@ void CGun::MultipleShot()
 			{
 				// 弾の生成
 				pBullet = CTankGun::Create(m_ShotRot);
+			}
+			// バルカンのとき
+			if (m_GunType == GUNTYPE_BALKAN)
+			{
+				// 弾の生成
+				pBullet = CBalkan::Create(m_ShotRot);
 			}
 
 			// 弾のカウントアップ

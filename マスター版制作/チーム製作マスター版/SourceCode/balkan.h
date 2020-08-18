@@ -30,10 +30,10 @@ public:
 	void						Draw();								// 描画
 	void						DeleteBullet();						// 弾を消す処理
 	void						BulletReaction(D3DXVECTOR3 rot);	// 弾の反応
-	void						DebugInfo();						//デバッグ
+	void						DebugInfo();						// デバッグ
 
 	/* 静的メンバ関数 */
-	static	CBalkan			*Create(D3DXVECTOR3 rot);	// バルカンの生成
+	static	CBalkan				*Create(D3DXVECTOR3 rot);			// バルカンの生成
 
 private:
 	/* 静的メンバ変数 */
