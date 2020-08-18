@@ -58,7 +58,8 @@ HRESULT CBoss::Init(void)
 	SetGravity(false);
 
 	// e‚Ì¶¬
-	m_pGun = CGun::Create(GetCharacterModelPartsList(CModel::MODEL_BOSS_BODY)->GetMatrix());
+	m_pGun = CGun::Create();
+	m_pGun->SetHandMtx(GetCharacterModelPartsList(CModel::MODEL_BOSS_BODY)->GetMatrix());
 	m_pGun->SetGunType(CGun::GUNTYPE_TRACKINGGUN);
 
 	// e‚Ì’e‚Ìí—Ş
@@ -203,13 +204,4 @@ void CBoss::StateChangeReaction()
 CGun *CBoss::GetGun(void)
 {
 	return m_pGun;
-}
-//====================================================================
-//ˆÚ“®
-//====================================================================
-void CBoss::Move(float move, float fdest)
-{
-	GetMove().x += sinf(move * -D3DX_PI) * 1.0f;
-	GetMove().z += cosf(move * -D3DX_PI) * 1.0f;
-	//m_rotDest.y = fdest *  D3DX_PI;
 }

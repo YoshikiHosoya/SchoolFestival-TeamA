@@ -40,7 +40,11 @@ public:
 	virtual void DeathReaction();
 	virtual void StateChangeReaction();
 
-private:
-	void Move(float move, float fdest);
+	void SetGunPtr(CGun *pGun) { m_pGun = pGun; };
+	CGun *GetGunPtr() { return m_pGun; };
+
+ private:
+	CGun	*m_pGun;								// ガンクラスのポインタ
+
 };
 #endif

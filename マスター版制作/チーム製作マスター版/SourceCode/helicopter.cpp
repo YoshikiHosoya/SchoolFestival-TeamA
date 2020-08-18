@@ -60,7 +60,9 @@ HRESULT CHelicopter::Init(void)
 	// 乗り物のタイプの設定
 	SetVehicleType(CVehicle::VEHICLE_TYPE_HELICOPTER);
 	// 銃の生成
-	m_pGun = CGun::Create(GetVehicleModelPartsList(CModel::MODEL_HELIGUN)->GetMatrix());
+	m_pGun = CGun::Create();
+	// 銃のマトリックス設定
+	m_pGun->SetHandMtx(GetVehicleModelPartsList(CModel::MODEL_HELIGUN)->GetMatrix());
 	// グレネード放つ位置の生成
 	m_pGrenadeFire = CGrenadeFire::Create(GetVehicleModelPartsList(CModel::MODEL_HELIBODY)->GetMatrix());
 	// 銃の弾の種類

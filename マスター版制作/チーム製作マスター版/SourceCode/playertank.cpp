@@ -64,9 +64,11 @@ HRESULT CPlayertank::Init(void)
 	// 乗り物のタイプの設定
 	SetVehicleType(CVehicle::VEHICLE_TYPE_TANK);
 	// 銃の生成
-	m_pGun = CGun::Create(GetVehicleModelPartsList(CModel::MODEL_TANK_TANKGUN)->GetMatrix());
+	m_pGun = CGun::Create();
 	// グレネード放つ位置の生成
 	m_pGrenadeFire = CGrenadeFire::Create(GetVehicleModelPartsList(CModel::MODEL_TANK_TANKBODY)->GetMatrix());
+	// マトリックス設定
+	m_pGun->SetHandMtx(GetVehicleModelPartsList(CModel::MODEL_TANK_TANKGUN)->GetMatrix());
 	// 銃の弾の種類
 	m_pGun->GetTag() = TAG_PLAYER;
 	// 銃の弾の種類

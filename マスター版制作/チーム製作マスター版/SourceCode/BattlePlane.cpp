@@ -62,7 +62,9 @@ HRESULT CBattlePlane::Init(void)
 	// 乗り物のタイプの設定
 	SetVehicleType(CVehicle::VEHICLE_TYPE_PLANE);
 	// 銃の生成
-	m_pGun = CGun::Create(GetVehicleModelPartsList(CModel::MODEL_PLANE_GUN)->GetMatrix());
+	m_pGun = CGun::Create();
+	// マトリックス設定
+	m_pGun->SetHandMtx(GetVehicleModelPartsList(CModel::MODEL_PLANE_GUN)->GetMatrix());
 	// 銃の弾の種類
 	m_pGun->GetTag() = TAG_PLAYER;
 	// 銃の弾の種類

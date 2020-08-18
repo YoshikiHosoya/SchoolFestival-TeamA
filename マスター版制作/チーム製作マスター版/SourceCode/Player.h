@@ -94,7 +94,6 @@ private:
 	static void		SetPlayerData();				// 読み込んだデータの設定
 
 	/* メンバ関数 */
-	void Move(float move, float fdest);				//
 	void Ride();									//
 
 	/* 静的メンバ変数 */

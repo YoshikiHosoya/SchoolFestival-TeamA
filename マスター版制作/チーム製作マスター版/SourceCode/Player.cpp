@@ -94,7 +94,10 @@ HRESULT CPlayer::Init(void)
 	m_bKnifeAttack = false;
 
 	 // 銃の生成
-	m_pGun = CGun::Create(GetCharacterModelPartsList(CModel::MODEL_PLAYER_RHAND)->GetMatrix());
+	m_pGun = CGun::Create();
+	// 手のポインタ設定
+	m_pGun->SetHandMtx(GetCharacterModelPartsList(CModel::MODEL_PLAYER_RHAND)->GetMatrix());
+
 	// グレネード放つ位置の生成
 	m_pGrenadeFire = CGrenadeFire::Create(GetCharacterModelPartsList(CModel::MODEL_PLAYER_LHAND)->GetMatrix());
 	// 銃の弾の種類
@@ -668,15 +671,6 @@ void CPlayer::StateChangeReaction()
 CPlayer::DEBUG_STATE CPlayer::GetDebugState(void)
 {
 	return m_DebugState;
-}
-//====================================================================
-//移動
-//====================================================================
-void CPlayer::Move(float move, float fdest)
-{
-	GetMove().x += sinf(move * -D3DX_PI) * 3.0f;
-	GetMove().z += cosf(move * -D3DX_PI) * 3.0f;
-	GetRotDest().y = fdest *  D3DX_PI;
 }
 
 //====================================================================

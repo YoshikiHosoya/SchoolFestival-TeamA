@@ -20,7 +20,6 @@
 CWeakEnemy::CWeakEnemy(OBJ_TYPE type) :CEnemy(type)
 {
 	SetObjType(OBJTYPE_ENEMY);
-	m_pGun = nullptr;
 }
 
 CWeakEnemy::~CWeakEnemy()
@@ -41,9 +40,10 @@ HRESULT CWeakEnemy::Init(void)
 	m_Attack = false;
 
 	// e‚Ì¶¬
-	m_pGun = CGun::Create(GetCharacterModelPartsList(CModel::MODEL_ENEMY_RHAND)->GetMatrix());
+	GetGunPtr()->SetHandMtx(GetCharacterModelPartsList(CModel::MODEL_ENEMY_RHAND)->GetMatrix());
+
 	// e‚Ì’e‚ÌŽí—Þ
-	m_pGun->GetTag() = TAG_ENEMY;
+	GetGunPtr()->GetTag() = TAG_ENEMY;
 
 	// “–‚½‚è”»’è¶¬
 	GetCollision()->SetSize2D(ENEMY_SIZE);
@@ -58,13 +58,7 @@ HRESULT CWeakEnemy::Init(void)
 //====================================================================
 void CWeakEnemy::Uninit(void)
 {
-	// e‚Ì‰ð•ú
-	if (m_pGun != nullptr)
-	{
-		// e‚Ìíœ
-		delete m_pGun;
-		m_pGun = nullptr;
-	}
+
 	if (m_pAI != nullptr)
 	{
 		delete m_pAI;
@@ -92,20 +86,20 @@ void CWeakEnemy::Update(void)
 		{
 
 			// ’e‚ðŒ‚‚Â•ûŒü‚ðÝ’è
-			m_pGun->SetShotRot(GetShotDirection());
+			GetGunPtr()->SetShotRot(GetShotDirection());
 			//AIŠÖ˜Aˆ—
 			if (m_pAI)
 			{
 				if (m_pAI->GetAIType() == m_pAI->AI_SHOT && m_pAI->GetShot() == true)
 				{
-					m_pGun->Shot();
+					GetGunPtr()->Shot();
 				}
 
 				m_pAI->Update();
 			}
-			if (m_pGun)
+			if (GetGunPtr())
 			{
-				m_pGun->Update();
+				GetGunPtr()->Update();
 			}
 		}
 	}
@@ -117,9 +111,6 @@ void CWeakEnemy::Update(void)
 void CWeakEnemy::Draw(void)
 {
 	CEnemy::Draw();
-
-	m_pGun->Draw();
-
 }
 //====================================================================
 //ƒfƒoƒbƒO
@@ -196,13 +187,4 @@ void CWeakEnemy::StateChangeReaction()
 
 		break;
 	}
-}
-//====================================================================
-//ˆÚ“®
-//====================================================================
-void CWeakEnemy::Move(float move, float fdest)
-{
-	GetMove().x += sinf(move * -D3DX_PI) * 3.0f;
-	GetMove().z += cosf(move * -D3DX_PI) * 3.0f;
-	//m_rotDest.y = fdest *  D3DX_PI;
 }

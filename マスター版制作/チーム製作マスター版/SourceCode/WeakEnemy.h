@@ -25,6 +25,13 @@ public:
 	CWeakEnemy() {};
 	CWeakEnemy(OBJ_TYPE type);
 	~CWeakEnemy();
+
+	enum class WEAKENEMY_TYPE
+	{
+		ENEMY_NORMAL,
+		ENEMY_SHIELD
+	};
+
 	virtual HRESULT Init(void);
 	virtual void Uninit(void);
 	virtual void Update(void);
@@ -37,10 +44,8 @@ public:
 	virtual void StateChangeReaction();
 
 private:
-	void Move(float move, float fdest);
 	bool m_Attack;									//攻撃時
 	float m_Angle;
-	CGun	*m_pGun;								// ガンクラスのポインタ
 	CEnemyAI *m_pAI;
 };
 #endif

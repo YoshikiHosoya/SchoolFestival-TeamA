@@ -37,6 +37,9 @@ HRESULT CEnemy::Init(void)
 	//キャラの初期化
 	CCharacter::Init();
 
+	//ガンのポインタ生成
+	m_pGun = CGun::Create();
+
 	// 当たり判定生成
 	GetCollision()->SetPos(GetPositionPtr());
 	GetCollision()->SetPosOld(&GetPositionOld());
@@ -52,6 +55,14 @@ HRESULT CEnemy::Init(void)
 //====================================================================
 void CEnemy::Uninit(void)
 {
+	// 銃の解放
+	if (m_pGun != nullptr)
+	{
+		// 銃の削除
+		delete m_pGun;
+		m_pGun = nullptr;
+	}
+
 	CCharacter::Uninit();
 }
 //====================================================================
@@ -79,6 +90,8 @@ void CEnemy::Update(void)
 void CEnemy::Draw(void)
 {
 	CCharacter::Draw();
+
+	m_pGun->Draw();
 }
 //====================================================================
 //デバッグ
@@ -123,13 +136,4 @@ void CEnemy::DeathReaction()
 void CEnemy::StateChangeReaction()
 {
 
-}
-//====================================================================
-//移動
-//====================================================================
-void CEnemy::Move(float move, float fdest)
-{
-	GetMove().x += sinf(move * -D3DX_PI) * 3.0f;
-	GetMove().z += cosf(move * -D3DX_PI) * 3.0f;
-	//m_rotDest.y = fdest *  D3DX_PI;
 }
