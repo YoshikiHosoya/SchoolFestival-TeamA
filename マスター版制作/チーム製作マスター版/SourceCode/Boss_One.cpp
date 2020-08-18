@@ -74,6 +74,9 @@ HRESULT CBoss_One::Init(void)
 	CCharacter::SetLife(m_nLife);
 	// ƒ‚[ƒVƒ‡ƒ“‚³‚¹‚È‚¢İ’è
 	SetMotion(CCharacter::CHARACTER_MOTION_STATE_NONE);
+	// ‘å–C‚ğŒX‚¯‚é
+	GetCharacterModelPartsList((CModel::MODEL_BOSSONE_GUN_INCENDIARY))->GetRot().x += 0.6f;
+
 	// •Ší—p‚Ì“–‚½‚è”»’è‚Ì¶¬
 	m_pCollision = CCollision::Create();
 
