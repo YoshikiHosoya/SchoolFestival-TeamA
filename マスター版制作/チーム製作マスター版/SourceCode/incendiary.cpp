@@ -72,7 +72,15 @@ void CIncendiary::Uninit(void)
 void CIncendiary::Update(void)
 {
 	// èdóÕ
+	if (GetMove().x > 0)
+	{
+		GetMove().x -= INCENDIARY_GRAVITY;
+	}
+
+
+
 	GetMove().y -= INCENDIARY_GRAVITY;
+
 
 	// çXêV
 	CBullet::Update();
