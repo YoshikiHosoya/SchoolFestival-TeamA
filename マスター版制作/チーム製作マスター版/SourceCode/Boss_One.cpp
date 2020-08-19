@@ -74,6 +74,10 @@ HRESULT CBoss_One::Init(void)
 	CCharacter::SetLife(m_nLife);
 	// モーションさせない設定
 	SetMotion(CCharacter::CHARACTER_MOTION_STATE_NONE);
+	// 大砲を傾ける
+	GetCharacterModelPartsList((CModel::MODEL_BOSSONE_GUN_INCENDIARY))->GetRot().x += 0.6f;
+	//GetCharacterModelPartsList((CModel::MODEL_BOSSONE_GUN_BALKAN))->GetRot().x -= 1.57f;
+
 	// 武器用の当たり判定の生成
 	m_pCollision = CCollision::Create();
 
@@ -89,9 +93,9 @@ HRESULT CBoss_One::Init(void)
 		// 発射位置のオフセットの設定
 		m_pGun[nCnt]->SetShotOffsetPos(m_GunShotOfsetPos[nCnt]);
 		// 弾を撃つ方向を設定
-		m_pGun[nCnt]->SetShotRot(GetShotDirection());
+		m_pGun[nCnt]->SetShotRot(
+			D3DXVECTOR3(0.0f, 0.0f, (GetCharacterModelPartsList(static_cast<CModel::BOSSONE_PARTS_MODEL>(CModel::MODEL_BOSSONE_GUN_BALKAN + nCnt))->GetRot().x)));
 	}
-
 	// ガンのオフセット座標の更新
 	SetGunOffsetPos(D3DXVECTOR3(GetCharacterModelPartsList((CModel::MODEL_BOSSONE_GUN_FLAMETHROWER))->GetPosition()));
 	// ガンの座標の更新
@@ -154,8 +158,18 @@ void CBoss_One::Update(void)
 	m_ShotCount++;
 	if (m_ShotCount % 30 == 0)
 	{
-		m_pGun[WEAPONTYPE_BALKAN]->Shot();
 		m_pGun[WEAPONTYPE_FLAMETHROWER]->Shot();
+	}
+	if (m_ShotCount % 60 == 0)
+	{
+		// 弾を撃つ方向を設定
+		m_pGun[WEAPONTYPE_BALKAN]->SetShotRot(
+			D3DXVECTOR3(0.0f, 0.0f, (GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_BALKAN))->GetRot().x));
+
+		m_pGun[WEAPONTYPE_BALKAN]->Shot();
+	}
+	if (m_ShotCount % 120 == 0)
+	{
 		m_pGun[WEAPONTYPE_INCENDIARY]->Shot();
 	}
 

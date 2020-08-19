@@ -72,6 +72,9 @@ void CBalkan::Update(void)
 {
 	// 更新
 	CBullet::Update();
+
+	//パーティクル発生 軌跡みたいな
+	CParticle::CreateFromText(GetPosition(), GetRot(), CParticleParam::EFFECT_HEAVY_MACHINEGUN, CBullet::GetTag());
 }
 
 // =====================================================================================================================================================================
@@ -102,10 +105,6 @@ void CBalkan::DeleteBullet()
 // =====================================================================================================================================================================
 void CBalkan::BulletReaction(D3DXVECTOR3 rot)
 {
-	CParticle::CreateFromText(GetPosition(), GetRot(), CParticleParam::EFFECT_HEAVY_MACHINEGUN, GetTag(), GetBulletParam(CGun::GUNTYPE_BALKAN)->nPower);
-
-	//実弾の方は消去
-	CBullet::Rerease();
 }
 
 // =====================================================================================================================================================================
