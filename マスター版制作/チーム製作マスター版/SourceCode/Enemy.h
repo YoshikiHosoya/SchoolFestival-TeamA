@@ -11,8 +11,8 @@
 //インクルード
 //------------------------------------------------------------------------------
 #include "main.h"
-#include "Scene.h"
 #include "Character.h"
+#include "BaseAI.h"
 //------------------------------------------------------------------------------
 //マクロ
 //------------------------------------------------------------------------------
@@ -40,11 +40,16 @@ public:
 	virtual void DeathReaction();
 	virtual void StateChangeReaction();
 
+	void DeleteAI();
+
 	void SetGunPtr(CGun *pGun) { m_pGun = pGun; };
 	CGun *GetGunPtr() { return m_pGun; };
+	void SetAIPtr(CBaseAI *pAI) { m_pAI = pAI; };
+	CBaseAI *GetAIPtr() { return m_pAI; };
 
  private:
 	CGun	*m_pGun;								// ガンクラスのポインタ
+	CBaseAI *m_pAI;									// AIのポインタ
 
 };
 #endif

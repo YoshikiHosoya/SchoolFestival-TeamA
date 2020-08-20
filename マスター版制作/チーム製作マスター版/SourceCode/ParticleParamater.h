@@ -96,6 +96,7 @@ public:
 
 	D3DXVECTOR3 &GetCollisionSize()						{ return m_CollisionSize; };				//ランダム生成時の範囲
 	bool &GetCollision()								{ return m_bCollision; };					//当たり判定あるか
+	bool &GetPenetration()								{ return m_bPenetration; };					//貫通するかどうか
 	bool &GetCollisionSizeCalc()						{ return m_bCollisionSizeCalc; };			//当たり判定生成時にサイズを計算するかどうか　ShotGunとかに必要
 	int &GetCollisionAttackValue()						{ return m_nCollisionAttackValue; };		//攻撃力
 	int &GetCollisionCnt()								{ return m_nCollisionCnt; };				//判定をする時間
@@ -137,6 +138,7 @@ private:
 	D3DXVECTOR3 m_CollisionSize;					//当たり判定の大きさ
 	bool m_bCollision;								//当たり判定あるか
 	bool m_bCollisionSizeCalc;						//当たり判定生成時にサイズを計算するかどうか　ShotGunとかに必要
+	bool m_bPenetration;							//貫通するかどうか
 	int m_nCollisionAttackValue;					//攻撃力
 	int m_nCollisionCnt;							//判定をする時間
 

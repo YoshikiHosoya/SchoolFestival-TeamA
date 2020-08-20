@@ -1116,7 +1116,10 @@ void CCharacter::Collision()
 	// マップモデルが存在した時して当たり判定が存在する時
 	if (pMap && m_pCollision)
 	{
+		m_pCollision->SetPos(&m_pos);
+
 		m_pCollision->SetHeight(m_vModelList[0]->GetPosition().y);
+
 		// レイの判定
 		if (m_pCollision->RayBlockCollision(pMap, m_vModelList[0]->GetMatrix()))
 		{

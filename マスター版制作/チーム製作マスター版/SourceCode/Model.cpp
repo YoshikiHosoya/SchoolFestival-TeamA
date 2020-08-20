@@ -956,6 +956,12 @@ void CModel::Uninit(void)
 //====================================================================
 void CModel::Update(void)
 {
+	//nullcheck
+	if (m_pCollision)
+	{
+		//ç¿ïWê›íË
+		m_pCollision->SetPos(&m_pos);
+	}
 }
 //====================================================================
 //ï`âÊ
@@ -1095,6 +1101,18 @@ void CModel::NotDrawCalcMtxOnly(D3DXMATRIX * pParentMtx)
 	D3DXMatrixMultiply(&m_mtxWorld,
 		&m_mtxWorld,
 		pParentMtx);
+}
+//====================================================================
+//ÉRÉäÉWÉáÉìè¡ãé
+//====================================================================
+void CModel::DeleteCollision()
+{
+	// ìñÇΩÇËîªíËÇÃçÌèú
+	if (m_pCollision != nullptr)
+	{
+		delete m_pCollision;
+		m_pCollision = nullptr;
+	}
 }
 //====================================================================
 //ï`âÊ

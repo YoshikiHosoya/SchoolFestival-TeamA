@@ -81,6 +81,7 @@ CParticleParam::CParticleParam()
 
 	m_CollisionSize = m_Size;												//当たり判定の大きさ
 	m_bCollision = false;													//当たり判定あるか
+	m_bPenetration = true;
 	m_bCollisionSizeCalc = false;											//当たり判定生成時にサイズを計算するかどうか　ShotGunとかに必要
 	m_nCollisionAttackValue = 1;											//攻撃力
 	m_nCollisionCnt = 10;													//判定をする時間
@@ -214,6 +215,11 @@ HRESULT CParticleParam::LoadParticleDefaultParam()
 							if (strcmp(cHeadText, "COLLISION_ATTACK_VALUE") == 0)
 							{
 								sscanf(cReadText, "%s %s %d", &cDie, &cDie, &pParam->m_nCollisionAttackValue);
+							}
+							if (strcmp(cHeadText, "PENETRATION") == 0)
+							{
+								sscanf(cReadText, "%s %s %d", &cDie, &cDie, &n_BoolValue);
+								pParam->m_bPenetration = n_BoolValue ? true : false;
 							}
 							if (strcmp(cHeadText, "COLLISION_COUNT") == 0)
 							{
@@ -370,19 +376,19 @@ HRESULT CParticleParam::SaveParticleDefaultParam(CParticleParam *pSaveParam)
 		fputs(cWriteText, pFile);
 		fputs(NEWLINE, pFile);
 
-		sprintf(cWriteText, "		%s %s %d							%s", "ALPHABLEND_ADD", &EQUAL, pSaveParam->m_bAlphaBlend_Add, "//加算合成するか");
+		sprintf(cWriteText, "		%s %s %d						%s", "ALPHABLEND_ADD", &EQUAL, pSaveParam->m_bAlphaBlend_Add, "//加算合成するか");
 		fputs(cWriteText, pFile);
 		fputs(NEWLINE, pFile);
 
-		sprintf(cWriteText, "		%s %s %d							%s", "ALPHABLEND_SUB", &EQUAL, pSaveParam->m_bAlphaBlend_Sub, "//減算合成するか");
+		sprintf(cWriteText, "		%s %s %d						%s", "ALPHABLEND_SUB", &EQUAL, pSaveParam->m_bAlphaBlend_Sub, "//減算合成するか");
 		fputs(cWriteText, pFile);
 		fputs(NEWLINE, pFile);
 
-		sprintf(cWriteText, "		%s %s %d							%s", "ZTEST", &EQUAL, pSaveParam->m_bZtest, "//Zテストするか");
+		sprintf(cWriteText, "		%s %s %d								%s", "ZTEST", &EQUAL, pSaveParam->m_bZtest, "//Zテストするか");
 		fputs(cWriteText, pFile);
 		fputs(NEWLINE, pFile);
 
-		sprintf(cWriteText, "		%s %s %d							%s", "ZWRITE", &EQUAL, pSaveParam->m_bZWrite, "//Zライティングするか");
+		sprintf(cWriteText, "		%s %s %d								%s", "ZWRITE", &EQUAL, pSaveParam->m_bZWrite, "//Zライティングするか");
 		fputs(cWriteText, pFile);
 		fputs(NEWLINE, pFile);
 
@@ -402,7 +408,7 @@ HRESULT CParticleParam::SaveParticleDefaultParam(CParticleParam *pSaveParam)
 		//通常のテクスチャか分割テクスチャか
 		int TexID = pSaveParam->m_bAnimation ?
 			pSaveParam->m_SeparateTex : pSaveParam->m_Textype;
-		sprintf(cWriteText, "		%s %s %d								%s", "TEXTURE", &EQUAL, TexID, "//テクスチャ");
+		sprintf(cWriteText, "		%s %s %d							%s", "TEXTURE", &EQUAL, TexID, "//テクスチャ");
 		fputs(cWriteText, pFile);
 		fputs(NEWLINE, pFile);
 
@@ -430,6 +436,10 @@ HRESULT CParticleParam::SaveParticleDefaultParam(CParticleParam *pSaveParam)
 			fputs(NEWLINE, pFile);
 
 			sprintf(cWriteText, "		%s %s %d					%s", "COLLISION_COUNT", &EQUAL, pSaveParam->m_nCollisionCnt, "//判定のカウント");
+			fputs(cWriteText, pFile);
+			fputs(NEWLINE, pFile);
+
+			sprintf(cWriteText, "		%s %s %d					%s", "PENETRATION", &EQUAL, pSaveParam->m_bPenetration, "//貫通するかどうか");
 			fputs(cWriteText, pFile);
 			fputs(NEWLINE, pFile);
 
@@ -472,7 +482,7 @@ HRESULT CParticleParam::SaveParticleDefaultParam(CParticleParam *pSaveParam)
 		fputs(cWriteText, pFile);
 		fputs(NEWLINE, pFile);
 
-		sprintf(cWriteText, "		%s %s %.2f %.2f %.2f				%s", "LOCALPOS_RANGE", &EQUAL,
+		sprintf(cWriteText, "		%s %s %.2f %.2f %.2f			%s", "LOCALPOS_RANGE", &EQUAL,
 			pSaveParam->m_LocalPosRandomRange.x, pSaveParam->m_LocalPosRandomRange.y, pSaveParam->m_LocalPosRandomRange.z, "//ローカル座標がランダム時の値の範囲");
 		fputs(cWriteText, pFile);
 		fputs(NEWLINE, pFile);
@@ -621,6 +631,7 @@ void * CParticleParam::operator=(const CParticleParam * pParam)
 	m_SeparateTex				= pParam->m_SeparateTex;
 	m_CollisionSize				= pParam->m_CollisionSize;
 	m_bCollision				= pParam->m_bCollision;
+	m_bPenetration				= pParam->m_bPenetration;
 	m_bCollisionSizeCalc		= pParam->m_bCollisionSizeCalc;
 	m_nCollisionAttackValue		= pParam->m_nCollisionAttackValue;
 	m_nCollisionCnt				= pParam->m_nCollisionCnt;

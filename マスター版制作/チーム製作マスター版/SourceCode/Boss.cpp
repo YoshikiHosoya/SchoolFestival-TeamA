@@ -26,7 +26,6 @@
 CBoss::CBoss(OBJ_TYPE type) :CEnemy(type)
 {
 	SetObjType(OBJTYPE_BOSS);
-	m_pGun = nullptr;
 }
 //====================================================================
 //デストラクタ
@@ -58,12 +57,14 @@ HRESULT CBoss::Init(void)
 	SetGravity(false);
 
 	// 銃の生成
-	m_pGun = CGun::Create();
-	m_pGun->SetHandMtx(GetCharacterModelPartsList(CModel::MODEL_BOSS_BODY)->GetMatrix());
-	m_pGun->SetGunType(CGun::GUNTYPE_TRACKINGGUN);
+	GetGunPtr()->SetHandMtx(GetCharacterModelPartsList(CModel::MODEL_BOSS_BODY)->GetMatrix());
+	GetGunPtr()->SetGunType(CGun::GUNTYPE_TRACKINGGUN);
 
 	// 銃の弾の種類
-	m_pGun->GetTag() = TAG_ENEMY;
+	GetGunPtr()->GetTag() = TAG_ENEMY;
+
+	//銃を描画しない
+	GetGunPtr()->SetDisp(false);
 
 	// 当たり判定生成
 	GetCollision()->SetSize2D(BOSS_SIZE);
@@ -75,19 +76,6 @@ HRESULT CBoss::Init(void)
 //====================================================================
 void CBoss::Uninit(void)
 {
-	// 銃の解放
-	if (m_pGun != nullptr)
-	{
-		// 銃の削除
-		delete m_pGun;
-		m_pGun = nullptr;
-	}
-	if (m_pAI != nullptr)
-	{
-		delete m_pAI;
-		m_pAI = nullptr;
-	}
-
 	CEnemy::Uninit();
 }
 //====================================================================
@@ -95,15 +83,7 @@ void CBoss::Uninit(void)
 //====================================================================
 void CBoss::Update(void)
 {
-	//AI関連処理
-	if (m_pAI != nullptr)
-	{
-		m_pAI->Update();
-	}
 	CEnemy::Update();
-
-	m_pGun->Update();
-
 }
 //====================================================================
 //描画
@@ -113,7 +93,7 @@ void CBoss::Draw(void)
 	CEnemy::Draw();
 
 	//ガンのマトリックスの計算だけ
-	m_pGun->NoDrawCalcMatrixOnly();
+	GetGunPtr()->NoDrawCalcMatrixOnly();
 
 }
 //====================================================================
@@ -121,7 +101,7 @@ void CBoss::Draw(void)
 //====================================================================
 void CBoss::DebugInfo(void)
 {
-	m_pAI->DebugInfo();
+
 }
 //====================================================================
 //モデルのクリエイト
@@ -132,7 +112,7 @@ CBoss *CBoss::Create(void)
 	CBoss*pBoss;
 	pBoss = new CBoss(OBJTYPE_BOSS);
 	pBoss->Init();
-	pBoss->m_pAI = CBossAI::CreateAI(pBoss);
+	pBoss->SetAIPtr(CBossAI::CreateAI(pBoss));
 	return pBoss;
 }
 //====================================================================
@@ -189,19 +169,7 @@ void CBoss::StateChangeReaction()
 	{
 	case CHARACTER_STATE_DEATH:
  		SetStateCount(300);
-
-		if (m_pAI != nullptr)
-		{
-			delete m_pAI;
-			m_pAI = nullptr;
-		}
+		CEnemy::DeleteAI();
 		break;
 	}
-}
-//====================================================================
-//ボスの銃の取得
-//====================================================================
-CGun *CBoss::GetGun(void)
-{
-	return m_pGun;
 }

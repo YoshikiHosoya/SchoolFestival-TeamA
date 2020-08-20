@@ -43,8 +43,9 @@ public:
 		TYPE_MAX,									// 最大数
 	};
 
+	CObstacle() {};
 	CObstacle(OBJ_TYPE type);						// コンストラクタ
-	~CObstacle();									// デストラクタ
+	virtual ~CObstacle();									// デストラクタ
 
 	/* メンバ関数 */
 	virtual HRESULT			Init();					// 初期化

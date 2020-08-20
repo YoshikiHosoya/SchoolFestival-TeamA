@@ -19,6 +19,7 @@
 //------------------------------------------------------------------------------
 //ÉNÉâÉXíËã`
 //------------------------------------------------------------------------------
+class CShield;
 class CWeakEnemy :public CEnemy
 {
 public:
@@ -42,10 +43,11 @@ public:
 	virtual void DamageReaction();
 	virtual void DeathReaction();
 	virtual void StateChangeReaction();
+	void ShieldBreak();
 
 private:
 	bool m_Attack;									//çUåÇéû
 	float m_Angle;
-	CEnemyAI *m_pAI;
+	CShield *m_pShield;								//èÇ
 };
 #endif

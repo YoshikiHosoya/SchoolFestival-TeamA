@@ -10,6 +10,7 @@
 #include "BaseMode.h"
 #include "map.h"
 #include "collision.h"
+#include "gun.h"
 #define MAX_RECASTTIME (120)
 CEnemyAI::CEnemyAI()
 {
@@ -113,6 +114,10 @@ void CEnemyAI::Update(void)
 		if (m_castcount % 30 == 0)
 		{
 			m_bShot = true;
+			if (m_AItype == AI_STATE::AI_SHOT)
+			{
+				pEnemyPass->GetGunPtr()->Shot();
+			}
 		}
 		else
 		{

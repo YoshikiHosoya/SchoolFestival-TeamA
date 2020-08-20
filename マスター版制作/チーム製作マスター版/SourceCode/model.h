@@ -223,7 +223,7 @@ typedef enum
 
 	CModel() {};
 	CModel(OBJ_TYPE type);				// コンストラクタ
-	~CModel();							// デストラクタ
+	virtual~CModel();							// デストラクタ
 
 	/* メンバ関数 */
 	HRESULT Init(void);					// 初期化処理
@@ -270,6 +270,8 @@ typedef enum
 	bool GetColorChangeFlag()						{ return m_bColorChangeFlag; };						// 色変更フラグの取得
 	D3DXCOLOR	GetAddColor()						{ return m_AddColor; };								// 加算する色の取得
 	D3DXCOLOR	GetDisp()							{ return m_bDisp; };								// 描画するかどうか取得
+
+	void DeleteCollision();																				// 判定の消去
 
 private:
 	/* メンバ関数 */

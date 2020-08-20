@@ -55,6 +55,11 @@ HRESULT CEnemy::Init(void)
 //====================================================================
 void CEnemy::Uninit(void)
 {
+	if (m_pAI != nullptr)
+	{
+		delete m_pAI;
+		m_pAI = nullptr;
+	}
 	// èeÇÃâï˙
 	if (m_pGun != nullptr)
 	{
@@ -73,11 +78,17 @@ void CEnemy::Update(void)
 	//éÄñSÇµÇƒÇ¢Ç»Ç¢éû
 	if (CCharacter::GetCharacterState() != CCharacter::CHARACTER_STATE_DEATH)
 	{
-		//nullcheck
-		if (GetCollision() != nullptr)
+		// íeÇåÇÇ¬ï˚å¸Çê›íË
+		GetGunPtr()->SetShotRot(GetShotDirection());
+
+		//AIä÷òAèàóù
+		if (m_pAI)
 		{
-			//ç¿ïWÇÃçXêV
-			GetCollision()->SetPos(&GetPosition());
+			m_pAI->Update();
+		}
+		if (m_pGun)
+		{
+			m_pGun->Update();
 		}
 	}
 
@@ -98,8 +109,8 @@ void CEnemy::Draw(void)
 //====================================================================
 void CEnemy::DebugInfo(void)
 {
-	CKeyboard *key;
-	key = CManager::GetInputKeyboard();
+	m_pAI->DebugInfo();
+	m_pGun->DebugInfo();
 }
 
 //====================================================================
@@ -136,4 +147,15 @@ void CEnemy::DeathReaction()
 void CEnemy::StateChangeReaction()
 {
 
+}
+//====================================================================
+//AIè¡ãé
+//====================================================================
+void CEnemy::DeleteAI()
+{
+	if (m_pAI != nullptr)
+	{
+		delete m_pAI;
+		m_pAI = nullptr;
+	}
 }
