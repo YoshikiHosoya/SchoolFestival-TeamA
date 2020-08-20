@@ -99,6 +99,7 @@ public:
 		ENEMY_MOTION_DEAD_2,				//死んだ2
 		ENEMY_MOTION_GRENADE,				//グレネード
 		ENEMY_MOTION_JUMPATTACK,			//近接攻撃
+		ENEMY_MOTION_KNIFEATTACK,			//近接攻撃2
 
 		// ソル・デ・ロカのモーション
 		BOSS_MOTION_NORMAL,					//ニュートラル

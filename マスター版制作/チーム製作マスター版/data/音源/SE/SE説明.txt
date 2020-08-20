@@ -1,0 +1,37 @@
+	
+	[SE]
+		[エンジン音]
+		・engine
+		
+		[爆発]
+		・explosion_00
+		・explosion_01
+		・explosion_02
+		
+		[アイテム取得時]
+		・item
+		・item_gun
+		
+		[ナイフ・攻撃]
+		・knife
+		
+		[レーザーガン]
+		・laser
+		
+		[ロケットランチャー]
+		・launcher
+		
+		[リザルト画面のスコア表示]
+		・score_00
+		・score_01
+		・score_bonus
+		
+		[ハンドガン] (いい感じのが見つからなかった)
+		・shot
+		
+		[ショットガン]
+		・shotgun
+		
+		[戦車のキャタピラ音]
+		・tank_00
+		・tank_01

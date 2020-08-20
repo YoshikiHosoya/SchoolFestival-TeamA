@@ -19,6 +19,7 @@
 // =====================================================================================================================================================================
 // マクロ定義
 // =====================================================================================================================================================================
+#define INCENDIARY_GRAVITY				(0.1f)								// 焼夷弾の重力
 
 // =====================================================================================================================================================================
 //
@@ -70,8 +71,22 @@ void CIncendiary::Uninit(void)
 // =====================================================================================================================================================================
 void CIncendiary::Update(void)
 {
+	// 重力
+	if (GetMove().x > 0)
+	{
+		GetMove().x -= INCENDIARY_GRAVITY;
+	}
+
+
+
+	GetMove().y -= INCENDIARY_GRAVITY;
+
+
 	// 更新
 	CBullet::Update();
+
+	//パーティクル発生 軌跡みたいな
+	CParticle::CreateFromText(GetPosition(), D3DXVECTOR3(0.0f, 0.0f, CHossoLibrary::Random_PI()), CParticleParam::EFFECT_SMOKE, CBullet::GetTag());
 }
 
 // =====================================================================================================================================================================
@@ -102,10 +117,6 @@ void CIncendiary::DeleteBullet()
 // =====================================================================================================================================================================
 void CIncendiary::BulletReaction(D3DXVECTOR3 rot)
 {
-	CParticle::CreateFromText(GetPosition(), rot, CParticleParam::EFFECT_HEAVY_MACHINEGUN, GetTag(), GetBulletParam(CGun::GUNTYPE_INCENDIARY)->nPower);
-
-	//実弾の方は消去
-	CBullet::Rerease();
 }
 
 // =====================================================================================================================================================================
@@ -125,25 +136,25 @@ void CIncendiary::DebugInfo()
 CIncendiary * CIncendiary::Create(D3DXVECTOR3 rot)
 {
 	// 変数
-	CIncendiary *pBalkan;
+	CIncendiary *pIncendiary;
 
 	// メモリの確保
-	pBalkan = new CIncendiary(OBJTYPE_BULLET);
+	pIncendiary = new CIncendiary(OBJTYPE_BULLET);
 
 	// 焼夷弾のパラメーター取得
-	BULLET_PARAM *pBulletParam = pBalkan->GetBulletParam(CGun::GUNTYPE_INCENDIARY);
+	BULLET_PARAM *pBulletParam = pIncendiary->GetBulletParam(CGun::GUNTYPE_INCENDIARY);
 
 	// 初期化
-	pBalkan->Init();
+	pIncendiary->Init();
 
 	// 弾の移動量計算
-	pBalkan->CalcBulletMove(rot, CGun::GUNTYPE_INCENDIARY);
+	pIncendiary->CalcBulletMove(rot, CGun::GUNTYPE_INCENDIARY);
 
 	// モデルタイプの設定
-	pBalkan->SetType(BULLET_MODEL);
+	pIncendiary->SetType(BULLET_MODEL);
 
 	// モデルカウントの設定
-	pBalkan->SetModelConut(MODEL_BULLET_SPHERE);
+	pIncendiary->SetModelConut(MODEL_BULLET_SPHERE);
 
-	return pBalkan;
+	return pIncendiary;
 }
