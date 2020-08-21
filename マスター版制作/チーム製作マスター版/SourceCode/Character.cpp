@@ -326,6 +326,8 @@ void CCharacter::State()
 			//死亡時のリアクション処理
 			//派生クラスがオーバーライド
 			DeathReaction();
+
+			SetState(CHARACTER_STATE_NONE);
 		}
 
 		break;

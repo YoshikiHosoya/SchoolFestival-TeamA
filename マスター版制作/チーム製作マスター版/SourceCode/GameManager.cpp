@@ -106,8 +106,8 @@ void CGameManager::Draw()
 void CGameManager::ShowDebugInfo()
 {
 #ifdef _DEBUG
+	CDebugProc::Print("NowWaveNum >> %d\n", m_nNowWave);
 
-	ImGui::End();
 #endif
 }
 
@@ -166,6 +166,11 @@ void CGameManager::EndWave()
 //------------------------------------------------------------------------------
 void CGameManager::UpdateWave()
 {
+	if (m_nNowWave >= CMap::WAVE::WAVE_MAX)
+	{
+		return;
+	}
+
 	//ウェーブのポインタ
 	CMap::WAVE_INFO *pWaveInfo = CManager::GetGame()->GetMap()->GetWaveInfo(m_nNowWave);
 

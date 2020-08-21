@@ -213,6 +213,8 @@ void CGame::ShowDebugInfo(void)
 	//キーボード情報取得
 	CKeyboard *key = CManager::GetInputKeyboard();
 
+	m_pGameManager->ShowDebugInfo();
+
 	// デバッグ用当たり判定
 	DebugCollision(key);
 	// デバッグ用アイテム
