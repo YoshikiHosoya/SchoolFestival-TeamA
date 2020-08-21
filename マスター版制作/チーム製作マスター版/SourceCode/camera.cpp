@@ -127,6 +127,8 @@ void CCamera::DebugCommand()
 	CDebugProc::Print("m_posV %.1f %.1f %.1f \n", m_posV.x, m_posV.y, m_posV.z);
 	CDebugProc::Print("m_posR %.1f %.1f %.1f \n", m_posR.x, m_posR.y, m_posR.z);
 	CDebugProc::Print("m_rot  %.1f %.1f %.1f \n", m_rot.x, m_rot.y, m_rot.z);
+	CDebugProc::Print("bCameraStop >> %d",m_bStopMove);
+
 
 	if (key->GetKeyboardPress(DIK_LCONTROL) || key->GetKeyboardPress(DIK_RCONTROL))
 	{
@@ -134,7 +136,7 @@ void CCamera::DebugCommand()
 		{
 			//ƒJƒƒ‰Ø‚è‘Ö‚¦
 			m_CameraFollowingType += 1;
-			
+
 			if (m_CameraFollowingType >= CAMERA_FOLLOWING_TYPE_MAX)
 			{
 				m_CameraFollowingType = CAMERA_FOLLOWING_TYPE_PLAYER;

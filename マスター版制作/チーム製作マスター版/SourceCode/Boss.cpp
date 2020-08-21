@@ -3,6 +3,7 @@
 //====================================================================
 #include "Boss.h"
 #include "inputKeyboard.h"
+#include "GameManager.h"
 #include "model.h"
 #include "game.h"
 #include "fade.h"
@@ -133,7 +134,7 @@ void CBoss::DeathReaction()
 	//nullcheck
 	if(CManager::GetGame())
 	{
-		CManager::GetGame()->SetGameMode(CGame::GAME_MODE_RESULT);
+		CManager::GetGame()->GetGameManager()->SetGameState(CGameManager::GAMESTATE::RESULT);
 	}
 
 	SetDieFlag(true);

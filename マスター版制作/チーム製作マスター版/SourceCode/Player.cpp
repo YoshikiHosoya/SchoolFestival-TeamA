@@ -277,6 +277,7 @@ void CPlayer::DebugInfo(void)
 	CKeyboard *key;
 	key = CManager::GetInputKeyboard();
 
+	CDebugProc::Print("pos %f,%f,%f\n", GetPosition().x, GetPosition().y, GetPosition().z);
 	CDebugProc::Print("ShotRot >> %.2f %.2f %.2f\n", GetShotDirection().x, GetShotDirection().y, GetShotDirection().z);
 	CDebugProc::Print("PlayerState >> %d\n", GetCharacterState());
 	CDebugProc::Print("Direction >> %d\n", GetCharacterDirection());

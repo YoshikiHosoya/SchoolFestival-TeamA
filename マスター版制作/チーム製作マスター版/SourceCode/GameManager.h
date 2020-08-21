@@ -29,6 +29,7 @@ public:
 		NORMAL = 0,
 		WAVE,
 		BOSSBUTTLE,
+		RESULT,
 	};
 
 	void Update();
@@ -37,14 +38,28 @@ public:
 	CGameManager();
 	~CGameManager();
 	void ShowDebugInfo();						//デバッグ情報表記
-
 	static std::unique_ptr<CGameManager> Create();
+
+	GAMESTATE GetGameState() { return m_state; };
+	void SetGameState(GAMESTATE state) { m_state = state; };
+	void EventClear();
 
 private:
 	int			m_nCnt;					//カウント
+	int			m_nWaveCnt;				//カウント
+	int			m_nWaveEnemyNum;		//ウェーブの敵のナンバー
+	int			m_nWavePrisonerNum;		//ウェーブの捕虜のナンバー
+
+	int			m_nNowWave;				//ウェーブ
 	CScene2D	*m_pScene2D_GoSign;		//2Dポリゴン　Goサイン
 	GAMESTATE	m_state;				//ゲームの状態
 	int			m_nTimeCnt;				//時間のカウント
+
+	void StartWave();
+	void UpdateWave();
+	void EndWave();
+	void UpdateGoSign();
+	void UpdateTimer();
 };
 
 #endif

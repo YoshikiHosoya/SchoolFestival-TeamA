@@ -674,13 +674,17 @@ void CMap::WaveLoad(WAVE WaveNum)
 				}
 			}
 		}
+
+		//パラメータロード
+		std::cout << "Load WaveInfo - " << WaveNum << m_WaveFileName[WaveNum] << NEWLINE;
+
 		// ファイルを閉じる
 		fclose(pFile);
 	}
 	else
 	{
 		// 読み込み失敗時の警告表示
-		MessageBox(NULL, "読み込み失敗", m_WaveFileName[m_MapNum], MB_ICONWARNING);
+		MessageBox(NULL, "読み込み失敗", m_WaveFileName[WaveNum], MB_ICONWARNING);
 	}
 }
 
@@ -1282,26 +1286,28 @@ void CMap::AllDelete()
 	m_bMapExclusion = false;
 }
 
+
 // =====================================================================================================================================================================
 //
 // Waveの生成
 //
 // =====================================================================================================================================================================
-void CMap::WaveCreate(int nModelType, int nType, int nItemType, D3DXVECTOR3 pos)
+void CMap::WaveCreate(int nModelType, D3DXVECTOR3 eventpos, WAVE_PARAM * pWaveParam)
 {
 	if (nModelType == ARRANGEMENT_MODEL_ENEMY)
 	{
 		// 敵
 		m_pEnemy.emplace_back(CWeakEnemy::Create());
-		m_pEnemy[m_pEnemy.size() - 1]->SetPosition(pos);
+		m_pEnemy[m_pEnemy.size() - 1]->SetPosition(pWaveParam->pos + eventpos);
+		m_pEnemy[m_pEnemy.size() - 1]->SetEventFlag(pWaveParam->bEvent);
 	}
 	else if (nModelType == ARRANGEMENT_MODEL_PRISONER)
 	{
 		// 捕虜
 		m_pPrisoner.emplace_back(CPrisoner::Create());
-		m_pPrisoner[m_pEnemy.size() - 1]->SetPosition(pos);
-		m_pPrisoner[m_pEnemy.size() - 1]->SetPrisonerType((CPrisoner::PRISONER_ITEM_DROPTYPE)nType);
-		m_pPrisoner[m_pEnemy.size() - 1]->SetPrisonerItem((CItem::ITEMTYPE)nItemType);
+		m_pPrisoner[m_pEnemy.size() - 1]->SetPosition(pWaveParam->pos + eventpos);
+		m_pPrisoner[m_pEnemy.size() - 1]->SetPrisonerType((CPrisoner::PRISONER_ITEM_DROPTYPE)pWaveParam->nType);
+		m_pPrisoner[m_pEnemy.size() - 1]->SetPrisonerItem((CItem::ITEMTYPE)pWaveParam->nItemType);
 	}
 }
 

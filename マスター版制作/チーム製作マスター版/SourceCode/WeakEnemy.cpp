@@ -130,10 +130,7 @@ void CWeakEnemy::DamageReaction()
 //====================================================================
 void CWeakEnemy::DeathReaction()
 {
-	//Ž€–Sƒtƒ‰ƒO‚ð‚½‚Ä‚é
-	this->SetDieFlag(true);
-
-	CCharacter::DeathReaction();
+	CEnemy::DeathReaction();
 
 }
 //====================================================================

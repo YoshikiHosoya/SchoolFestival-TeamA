@@ -14,6 +14,7 @@
 #include "gun.h"
 #include "particle.h"
 #include "sound.h"
+#include "GameManager.h"
 //====================================================================
 //マクロ定義
 //====================================================================
@@ -39,6 +40,9 @@ HRESULT CEnemy::Init(void)
 
 	//ガンのポインタ生成
 	m_pGun = CGun::Create();
+
+	//イベントのフラグ
+	m_bEventFlag = false;
 
 	// 当たり判定生成
 	GetCollision()->SetPos(GetPositionPtr());
@@ -138,8 +142,15 @@ void CEnemy::DeathReaction()
 	//死亡フラグをたてる
 	this->SetDieFlag(true);
 
+	//死亡リアクション
 	CCharacter::DeathReaction();
 
+	//フラグが立っている時
+	if (m_bEventFlag)
+	{
+		//イベントクリア
+		CManager::GetGame()->GetGameManager()->EventClear();
+	}
 }
 //====================================================================
 //ステートが変更した瞬間の処理

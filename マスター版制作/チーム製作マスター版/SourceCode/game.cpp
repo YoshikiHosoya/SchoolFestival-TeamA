@@ -40,8 +40,7 @@ CMap		*CGame::m_pMap		= nullptr;
 //==========================================================
 CGame::CGame()
 {
-	// ゲームモードの初期状態
-	m_GameState = GAME_MODE_NORMAL;
+
 }
 //==========================================================
 // デストラクタ
@@ -72,11 +71,10 @@ HRESULT CGame::Init(void)
 	}
 
 	m_pPause->CreatePause();
-	// ゲームモードの初期設定
-	m_GameState = GAME_MODE_NORMAL;
 
 	//ゲームの進行管理クラス作成
 	m_pGameManager = CGameManager::Create();
+	m_pGameManager->SetGameState(CGameManager::GAMESTATE::NORMAL);
 
 	//パーティクル生成
 	CParticleManager::Create();
@@ -131,7 +129,7 @@ void CGame::Update(void)
 	m_pGameManager->Update();
 
 	// リザルトモードでまだリザルトマネージャーが生成されていなかった時
-	if (m_GameState == GAME_MODE_RESULT && m_pResultManager == nullptr)
+	if (m_pGameManager->GetGameState() == CGameManager::GAMESTATE::RESULT && m_pResultManager == nullptr)
 	{
 		// リザルト管理クラスの生成
 		m_pResultManager = CResultManager::Create();
@@ -151,35 +149,35 @@ void CGame::Update(void)
 		m_bEventFlag = !m_bEventFlag;
 	}
 
-	if (m_bEventFlag)
-	{
-		m_nFrame++;
+	//if (m_bEventFlag)
+	//{
+	//	m_nFrame++;
 
-		if(m_nCntNum < (int)m_pMap->GetWaveInfo(CMap::WAVE_1).EnemyWaveInfo.size())
-		{
-			if (m_nFrame == m_pMap->GetWaveInfo(CMap::WAVE_1).EnemyWaveInfo[m_nCntNum]->nFrame)
-			{
-				m_pMap->WaveCreate(CMap::ARRANGEMENT_MODEL_ENEMY, m_pMap->GetWaveInfo(CMap::WAVE_1).EnemyWaveInfo[m_nCntNum]->nType, 0,
-									m_pMap->GetWaveInfo(CMap::WAVE_1).EnemyWaveInfo[m_nCntNum]->pos + m_pMap->GetWaveInfo(CMap::WAVE_1).EventPos);
-				m_nCntNum++;
-				m_nFrame = 0;
-			}
-		}
-		if (m_nCntNum < (int)m_pMap->GetWaveInfo(CMap::WAVE_1).PrisonerWaveInfo.size())
-		{
-			if (m_nFrame == m_pMap->GetWaveInfo(CMap::WAVE_1).PrisonerWaveInfo[m_nCntNum]->nFrame)
-			{
-				m_pMap->WaveCreate(CMap::ARRANGEMENT_MODEL_PRISONER, m_pMap->GetWaveInfo(CMap::WAVE_1).PrisonerWaveInfo[m_nCntNum]->nType, 0,
-					m_pMap->GetWaveInfo(CMap::WAVE_1).PrisonerWaveInfo[m_nCntNum]->pos + m_pMap->GetWaveInfo(CMap::WAVE_1).EventPos);
-				m_nCntNum++;
-				m_nFrame = 0;
-			}
-		}
-	}
-	else
-	{
-		m_nCntNum = 0;
-	}
+	//	if(m_nCntNum < (int)m_pMap->GetWaveInfo(CMap::WAVE_1)->EnemyWaveInfo.size())
+	//	{
+	//		if (m_nFrame == m_pMap->GetWaveInfo(CMap::WAVE_1)->EnemyWaveInfo[m_nCntNum]->nFrame)
+	//		{
+	//			m_pMap->WaveCreate(CMap::ARRANGEMENT_MODEL_ENEMY, m_pMap->GetWaveInfo(CMap::WAVE_1)->EnemyWaveInfo[m_nCntNum]->nType, 0,
+	//								m_pMap->GetWaveInfo(CMap::WAVE_1)->EnemyWaveInfo[m_nCntNum]->pos + m_pMap->GetWaveInfo(CMap::WAVE_1)->EventPos);
+	//			m_nCntNum++;
+	//			m_nFrame = 0;
+	//		}
+	//	}
+	//	if (m_nCntNum < (int)m_pMap->GetWaveInfo(CMap::WAVE_1)->PrisonerWaveInfo.size())
+	//	{
+	//		if (m_nFrame == m_pMap->GetWaveInfo(CMap::WAVE_1)->PrisonerWaveInfo[m_nCntNum]->nFrame)
+	//		{
+	//			m_pMap->WaveCreate(CMap::ARRANGEMENT_MODEL_PRISONER, m_pMap->GetWaveInfo(CMap::WAVE_1)->PrisonerWaveInfo[m_nCntNum]->nType, 0,
+	//				m_pMap->GetWaveInfo(CMap::WAVE_1)->PrisonerWaveInfo[m_nCntNum]->pos + m_pMap->GetWaveInfo(CMap::WAVE_1)->EventPos);
+	//			m_nCntNum++;
+	//			m_nFrame = 0;
+	//		}
+	//	}
+	//}
+	//else
+	//{
+	//	m_nCntNum = 0;
+	//}
  }
 //==========================================================
 // プレイヤー取得

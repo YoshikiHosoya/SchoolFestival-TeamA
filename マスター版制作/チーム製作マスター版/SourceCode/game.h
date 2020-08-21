@@ -30,12 +30,6 @@ class CShield;
 class CGame :public CBaseMode
 {
 public:
-	// ゲームモード
-	enum GAME_STATE
-	{
-		GAME_MODE_NORMAL,		// 通常のゲームプレイ状態
-		GAME_MODE_RESULT,		// リザルト表示状態
-	};
 
 	/* メンバ関数 */
 	CGame();
@@ -46,9 +40,8 @@ public:
 	CPlayer		*GetPlayer(void);
 	CMap		*GetMap(void);
 
-	GAME_STATE	GetGameMode()					{ return m_GameState; };
-	void		SetGameMode(GAME_STATE mode)	{ m_GameState = mode; };
 	CResultManager *GetResultManager()			{ return m_pResultManager; };
+	CGameManager *GetGameManager()				{ return m_pGameManager.get(); };
 
 	void Draw(void);							//描画
 	void ShowDebugInfo(void);					//デバッグ情報表記
@@ -67,7 +60,6 @@ private:
 
 	/* メンバ変数 */
 	CPause								*m_pPause;
-	GAME_STATE							m_GameState;
 	CResultManager						*m_pResultManager;
 	std::unique_ptr<CGameManager>		m_pGameManager;			//ゲームの進行管理
 	int									m_nFrame;

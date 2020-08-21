@@ -42,10 +42,17 @@ public:
 
 	void DeleteAI();
 
-	void SetGunPtr(CGun *pGun) { m_pGun = pGun; };
-	CGun *GetGunPtr() { return m_pGun; };
-	void SetAIPtr(CBaseAI *pAI) { m_pAI = pAI; };
-	CBaseAI *GetAIPtr() { return m_pAI; };
+	//Set関数
+	void SetGunPtr(CGun *pGun)			{ m_pGun = pGun; };
+	void SetAIPtr(CBaseAI *pAI)			{ m_pAI = pAI; };
+	void SetEventFlag(bool bFlag)		{ m_bEventFlag = bFlag; };
+
+	//Get関数
+	CGun *GetGunPtr()					{ return m_pGun; };
+	CBaseAI *GetAIPtr()					{ return m_pAI; };
+	bool GetEventFlag()					{ return m_bEventFlag; };
+
+	bool m_bEventFlag;								// イベントフラグ
 
  private:
 	CGun	*m_pGun;								// ガンクラスのポインタ

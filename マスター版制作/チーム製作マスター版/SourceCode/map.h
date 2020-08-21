@@ -102,7 +102,7 @@ public:
 	void			WaveLoad(WAVE WaveNum);											// ウェーブのロード
 	void			UpdateDieFlag();												// 死亡フラグ確認関数
 	void			AllDelete();													// 配置しているモデルを全て破棄
-	void			WaveCreate(int nModelType, int nType, int nItemType, D3DXVECTOR3 pos);	// Waveの生成
+	void			WaveCreate(int nModelType, D3DXVECTOR3 eventpos, WAVE_PARAM *pWaveParam);				// Waveの生成
 
 	int				GetMaxModel();													// モデルの最大数取得
 	int				GetMaxEnemy();													// 敵の最大数取得
@@ -126,7 +126,7 @@ public:
 	CHelicopter		*GetHelicopter(int nCnt) { return m_pHelicopter[nCnt]; };		// ヘリコプターの取得
 	CBoss_One		*GetBoss_One(int nCnt)	{ return m_pBoss_One[nCnt]; };					// ボス1の取得
 
-	WAVE_INFO		GetWaveInfo(int nWaveNum) { return m_aWaveInfo[nWaveNum]; };	// ウェーブ情報の取得
+	WAVE_INFO		*GetWaveInfo(int nWaveNum) { return &m_aWaveInfo[nWaveNum]; };	// ウェーブ情報の取得
 	D3DXVECTOR3		GetTransitionPos() { return m_TransitionPos; };					// 遷移するための位置の取得
 	int				GetTransitionMapID() { return m_TransitionMapID; }				// 次に遷移するためのマップ番号の取得
 	CShield			*GetShield(int nCnt) { return m_pShield[nCnt]; };				// shieldの取得

@@ -7,9 +7,9 @@ EVENTPOS	= 3000
 
 ENEMYSET									# 0
 	TYPE			= 0
-	POS 			= 0 0 0
-	FRAME 			= 60
-	EVENT			= 0
+	POS 			= 0 300 0
+	FRAME 			= 200
+	EVENT			= 1
 END_ENEMYSET
 
 PRISONERSET									# 1

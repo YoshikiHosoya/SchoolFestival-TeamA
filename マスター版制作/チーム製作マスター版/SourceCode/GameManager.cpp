@@ -30,7 +30,12 @@
 //------------------------------------------------------------------------------
 CGameManager::CGameManager()
 {
+	m_nCnt = 0;
 	m_nTimeCnt = 0;
+	m_nNowWave = 0;
+	m_nWaveCnt = 0;
+	m_nWaveEnemyNum = 0;
+	m_nWavePrisonerNum = 0;
 }
 //------------------------------------------------------------------------------
 //デストラクタ
@@ -45,9 +50,13 @@ CGameManager::~CGameManager()
 //------------------------------------------------------------------------------
 void CGameManager::Update()
 {
-	m_nCnt++;
 
+	// それぞれのポインタ取得
 	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
+	CGame *pGame = (CGame*)CManager::GetBaseMode();
+	CMap::WAVE_INFO *pWaveInfo = pGame->GetMap()->GetWaveInfo(m_nNowWave);
+
+	m_nCnt = 0;
 
 	if (pPlayer)
 	{
@@ -55,49 +64,32 @@ void CGameManager::Update()
 		{
 			CManager::GetRenderer()->GetFade()->SetFade(CFADE::FADETYPE::FADETYPE_MAPMOVE, CManager::GetGame()->GetMap()->GetTransitionMapID());
 		}
-	}
 
-	if (m_pScene2D_GoSign)
-	{
-		if (CManager::GetGame()->GetMap()->GetMapNum() == CMap::MAP_1_1)
+		if (pPlayer->GetPosition().x >= pWaveInfo->EventPos.x)
 		{
-			if (m_nCnt % 40 == 0)
-			{
-				m_pScene2D_GoSign->SetDisp(m_pScene2D_GoSign->GetDisp() ^ 1);
-			}
+			//ウェーブ開始
+			StartWave();
 		}
 	}
 
-	// ゲームクラスのポインタ取得
-	CGame *pGame = (CGame*)CManager::GetBaseMode();
-
-	// ゲームモードでプレイ操作可能なタイミングの時
-	if (pGame->GetGameMode() == CGame::GAME_MODE_NORMAL)
+	//stateに応じた処理
+	switch (m_state)
 	{
-		// カウント加算
-		m_nTimeCnt++;
+	case CGameManager::GAMESTATE::NORMAL:
+		break;
+	case CGameManager::GAMESTATE::WAVE:
+		UpdateWave();
+		break;
+	case CGameManager::GAMESTATE::BOSSBUTTLE:
+		break;
+
 	}
 
-	// 5秒経過した時
-	if (m_nTimeCnt >= 300)
-	{
-		if (CManager::GetBaseMode()->GetPlayer()->GetPlayerUI())
-		{
-			// 体力が0より大きかった時
-			if (CManager::GetBaseMode()->GetPlayer()->GetPlayerUI()->GetTime() > 0)
-			{
-				// タイマーの値を減少する
-				CManager::GetBaseMode()->GetPlayer()->GetPlayerUI()->DecrementTime();
-			}
-			// タイマーが0以下になった時
-			else
-			{
-			}
-		}
+	//GoSign更新
+	UpdateGoSign();
 
-		// タイマーカウントをリセットする
-		m_nTimeCnt = 0;
-	}
+	//タイマー更新
+	UpdateTimer();
 }
 
 //------------------------------------------------------------------------------
@@ -138,4 +130,107 @@ std::unique_ptr<CGameManager> CGameManager::Create()
 		return pGameManager;
 	}
 	return nullptr;
+}
+//------------------------------------------------------------------------------
+//イベントクリア
+//------------------------------------------------------------------------------
+void CGameManager::EventClear()
+{
+	EndWave();
+}
+
+//------------------------------------------------------------------------------
+//ウェーブ開始
+//------------------------------------------------------------------------------
+void CGameManager::StartWave()
+{
+	m_state = CGameManager::GAMESTATE::WAVE;
+	CManager::GetRenderer()->GetCamera()->SetCameraStopMove(true);
+}
+
+//------------------------------------------------------------------------------
+//ウェーブの終了
+//------------------------------------------------------------------------------
+void CGameManager::EndWave()
+{
+	m_state = CGameManager::GAMESTATE::NORMAL;
+	CManager::GetRenderer()->GetCamera()->SetCameraStopMove(false);
+	m_nWaveCnt = 0;
+	m_nWaveEnemyNum = 0;
+	m_nWavePrisonerNum = 0;
+	m_nNowWave++;
+}
+
+//------------------------------------------------------------------------------
+//ウェーブの更新
+//------------------------------------------------------------------------------
+void CGameManager::UpdateWave()
+{
+	//ウェーブのポインタ
+	CMap::WAVE_INFO *pWaveInfo = CManager::GetGame()->GetMap()->GetWaveInfo(m_nNowWave);
+
+	m_nWaveCnt++;
+
+	//まだ出てないのがいるとき
+	if (m_nWaveEnemyNum < (int)pWaveInfo->EnemyWaveInfo.size())
+	{
+		//フレーム数が一緒になった時
+		if (pWaveInfo->EnemyWaveInfo[m_nWaveEnemyNum]->nFrame == m_nWaveCnt)
+		{
+			//敵生成
+			CManager::GetGame()->GetMap()->WaveCreate(CModel::ENEMY_MODEL, pWaveInfo->EventPos, pWaveInfo->EnemyWaveInfo[m_nWaveEnemyNum]);
+			m_nWaveEnemyNum++;
+			m_nWaveCnt = 0;
+		}
+	}
+}
+
+//------------------------------------------------------------------------------
+//GoSign
+//------------------------------------------------------------------------------
+void CGameManager::UpdateGoSign()
+{
+	if (m_pScene2D_GoSign)
+	{
+		if (CManager::GetGame()->GetMap()->GetMapNum() == CMap::MAP_1_1)
+		{
+			if (m_nCnt % 40 == 0)
+			{
+				m_pScene2D_GoSign->SetDisp(m_pScene2D_GoSign->GetDisp() ^ 1);
+			}
+		}
+	}
+}
+//------------------------------------------------------------------------------
+//タイマー更新
+//------------------------------------------------------------------------------
+void CGameManager::UpdateTimer()
+{
+	// ゲームモードでプレイ操作可能なタイミングの時
+	if (m_state != CGameManager::GAMESTATE::RESULT)
+	{
+		// カウント加算
+		m_nTimeCnt++;
+	}
+
+	// 5秒経過した時
+	if (m_nTimeCnt >= 300)
+	{
+		if (CManager::GetBaseMode()->GetPlayer()->GetPlayerUI())
+		{
+			// 体力が0より大きかった時
+			if (CManager::GetBaseMode()->GetPlayer()->GetPlayerUI()->GetTime() > 0)
+			{
+				// タイマーの値を減少する
+				CManager::GetBaseMode()->GetPlayer()->GetPlayerUI()->DecrementTime();
+			}
+			// タイマーが0以下になった時
+			else
+			{
+			}
+		}
+
+		// タイマーカウントをリセットする
+		m_nTimeCnt = 0;
+	}
 }
