@@ -75,7 +75,7 @@ void CFlamethrower::Update(void)
 	if (CBullet::GetLife() % 3 == 0)
 	{
 		CParticle::CreateFromText(GetPosition() + CHossoLibrary::RandomVector3(10), ZeroVector3,
-			CParticleParam::EFFECT_FIRE, GetTag(), GetBulletParam(CGun::GUNTYPE_FLAMETHROWER)->nPower);
+			CParticleParam::EFFECT_SMOKE, GetTag(), GetBulletParam(CGun::GUNTYPE_FLAMETHROWER)->nPower);
 	}
 }
 
@@ -107,10 +107,10 @@ void CFlamethrower::DeleteBullet()
 // =====================================================================================================================================================================
 void CFlamethrower::BulletReaction(D3DXVECTOR3 rot)
 {
-	CParticle::CreateFromText(GetPosition(), rot, CParticleParam::EFFECT_FIRE, GetTag(), GetBulletParam(CGun::GUNTYPE_FLAMETHROWER)->nPower);
+	//CParticle::CreateFromText(GetPosition(), rot, CParticleParam::EFFECT_FIRE, GetTag(), GetBulletParam(CGun::GUNTYPE_FLAMETHROWER)->nPower);
 
 	//À’e‚Ì•û‚ÍÁ‹
-	CBullet::Rerease();
+	//CBullet::Rerease();
 }
 
 // =====================================================================================================================================================================

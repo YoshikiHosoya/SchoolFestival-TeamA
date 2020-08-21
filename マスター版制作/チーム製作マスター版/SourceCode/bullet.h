@@ -52,6 +52,7 @@ public:
 	/* 静的メンバ関数 */
 	static	void				BulletLoad();											// 弾のロード
 	void						CalcBulletMove(D3DXVECTOR3 ShotRot,int Guntype);		// 弾の発射方向計算
+	void						CalcIncendiaryMove(D3DXVECTOR3 ShotRot, float move_x, float move_y);// 弾の発射方向計算
 
 	/* メンバ関数 */
 	D3DXVECTOR3					&GetMove()						{ return m_move; };					// 移動値の取得

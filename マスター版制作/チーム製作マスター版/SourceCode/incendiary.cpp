@@ -11,6 +11,10 @@
 #include "debugproc.h"
 #include "texture.h"
 #include "particle.h"
+#include "player.h"
+#include "boss_one.h"
+#include "BaseMode.h"
+#include "map.h"
 
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
@@ -20,6 +24,10 @@
 // マクロ定義
 // =====================================================================================================================================================================
 #define INCENDIARY_GRAVITY				(0.1f)								// 焼夷弾の重力
+#define MAX_FIRING_RANGE				(700.0f)							// ボスの最大射程
+#define MIN_FIRING_RANGE				(250.0f)							// ボスの最低射程
+#define ATTENUATION_RATE				(100.0f)							// 移動量の減衰割合
+#define MIN_SPEED						(-2.5f)								// 最も遅い移動速度
 
 // =====================================================================================================================================================================
 //
@@ -71,16 +79,8 @@ void CIncendiary::Uninit(void)
 // =====================================================================================================================================================================
 void CIncendiary::Update(void)
 {
-	// 重力
-	if (GetMove().x > 0)
-	{
-		GetMove().x -= INCENDIARY_GRAVITY;
-	}
-
-
-
-	GetMove().y -= INCENDIARY_GRAVITY;
-
+	// 移動量の減衰
+	VelocityAttenuation();
 
 	// 更新
 	CBullet::Update();
@@ -130,6 +130,36 @@ void CIncendiary::DebugInfo()
 
 // =====================================================================================================================================================================
 //
+// 移動量の減衰
+//
+// =====================================================================================================================================================================
+void CIncendiary::VelocityAttenuation()
+{
+	// 現在の弾の移動量を取得
+	float fMove_x = GetMove().x;
+
+	// 弾の移動量が0より小さい時(左向きに弾を撃つため - になっている)
+	if (GetMove().x < 0)
+	{
+		// 移動量が規定値を下回った時
+		if (GetMove().x >= MIN_SPEED)
+		{
+			// 速度減衰
+			GetMove().x -= fMove_x / (ATTENUATION_RATE - 50.0f);
+		}
+		else
+		{
+			// 速度減衰
+			GetMove().x -= fMove_x / ATTENUATION_RATE;
+		}
+	}
+
+	// 重力
+	GetMove().y -= INCENDIARY_GRAVITY;
+}
+
+// =====================================================================================================================================================================
+//
 // 焼夷弾の生成
 //
 // =====================================================================================================================================================================
@@ -147,8 +177,23 @@ CIncendiary * CIncendiary::Create(D3DXVECTOR3 rot)
 	// 初期化
 	pIncendiary->Init();
 
+	// 弾の基準となる速度を取得
+	pIncendiary->m_fSpeed = pIncendiary->GetBulletParam(CGun::GUNTYPE_INCENDIARY)->fBulletSpeed;
+
+	// プレイヤーのポインタ取得
+	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
+
+	// nullチェック
+	if (pPlayer != nullptr)
+	{
+		// 目的座標の取得
+		pIncendiary->m_TargetPos = pPlayer->GetPosition();
+		// 初速を求める
+		pIncendiary->CalcBulletSpeed(pIncendiary->m_TargetPos);
+	}
+
 	// 弾の移動量計算
-	pIncendiary->CalcBulletMove(rot, CGun::GUNTYPE_INCENDIARY);
+	pIncendiary->CalcIncendiaryMove(rot, pIncendiary->m_fSpeed *2.0f, pIncendiary->m_fSpeed);
 
 	// モデルタイプの設定
 	pIncendiary->SetType(BULLET_MODEL);
@@ -157,4 +202,47 @@ CIncendiary * CIncendiary::Create(D3DXVECTOR3 rot)
 	pIncendiary->SetModelConut(MODEL_BULLET_SPHERE);
 
 	return pIncendiary;
+}
+
+// =====================================================================================================================================================================
+//
+// 焼夷弾の初速を求める
+//
+// =====================================================================================================================================================================
+void CIncendiary::CalcBulletSpeed(D3DXVECTOR3 Target)
+{
+	// プレイヤーとボスの距離
+	float fDistance;
+	// エネミーのポインタ取得
+	CBoss_One *pBoss_One = CManager::GetBaseMode()->GetMap()->GetBoss_One(0);
+	if (pBoss_One != nullptr)
+	{
+		//死亡してない時
+		if (pBoss_One->GetCharacterState() != CCharacter::CHARACTER_STATE_DEATH)
+		{
+			// プレイヤーとボスの距離を求める
+			fDistance = pBoss_One->GetPosition().x - Target.x;
+		}
+	}
+
+	// 射程外なら基準の速度のまま
+	if (fDistance > MAX_FIRING_RANGE)
+	{
+		return;
+	}
+
+	// 射程の内側だったら自分の前に弾が落ちるようにする
+	else if (fDistance <= MIN_FIRING_RANGE)
+	{
+		m_fSpeed = 3.0f;
+	}
+
+	// 射程内なら距離から速度の割合を求める
+	else
+	{
+		// 距離の割合を求める
+		m_fRatio = MAX_FIRING_RANGE / fDistance;
+		// 速度の割合を求める
+		m_fSpeed = m_fSpeed / m_fRatio;
+	}
 }
