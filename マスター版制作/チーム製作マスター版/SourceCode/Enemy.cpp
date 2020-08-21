@@ -37,6 +37,9 @@ HRESULT CEnemy::Init(void)
 	//キャラの初期化
 	CCharacter::Init();
 
+	//ガンのポインタ生成
+	m_pGun = CGun::Create();
+
 	// 当たり判定生成
 	GetCollision()->SetPos(GetPositionPtr());
 	GetCollision()->SetPosOld(&GetPositionOld());
@@ -52,6 +55,19 @@ HRESULT CEnemy::Init(void)
 //====================================================================
 void CEnemy::Uninit(void)
 {
+	if (m_pAI != nullptr)
+	{
+		delete m_pAI;
+		m_pAI = nullptr;
+	}
+	// 銃の解放
+	if (m_pGun != nullptr)
+	{
+		// 銃の削除
+		delete m_pGun;
+		m_pGun = nullptr;
+	}
+
 	CCharacter::Uninit();
 }
 //====================================================================
@@ -62,11 +78,17 @@ void CEnemy::Update(void)
 	//死亡していない時
 	if (CCharacter::GetCharacterState() != CCharacter::CHARACTER_STATE_DEATH)
 	{
-		//nullcheck
-		if (GetCollision() != nullptr)
+		// 弾を撃つ方向を設定
+		GetGunPtr()->SetShotRot(GetShotDirection());
+
+		//AI関連処理
+		if (m_pAI)
 		{
-			//座標の更新
-			GetCollision()->SetPos(&GetPosition());
+			m_pAI->Update();
+		}
+		if (m_pGun)
+		{
+			m_pGun->Update();
 		}
 	}
 
@@ -79,14 +101,16 @@ void CEnemy::Update(void)
 void CEnemy::Draw(void)
 {
 	CCharacter::Draw();
+
+	m_pGun->Draw();
 }
 //====================================================================
 //デバッグ
 //====================================================================
 void CEnemy::DebugInfo(void)
 {
-	CKeyboard *key;
-	key = CManager::GetInputKeyboard();
+	m_pAI->DebugInfo();
+	m_pGun->DebugInfo();
 }
 
 //====================================================================
@@ -125,11 +149,13 @@ void CEnemy::StateChangeReaction()
 
 }
 //====================================================================
-//移動
+//AI消去
 //====================================================================
-void CEnemy::Move(float move, float fdest)
+void CEnemy::DeleteAI()
 {
-	GetMove().x += sinf(move * -D3DX_PI) * 3.0f;
-	GetMove().z += cosf(move * -D3DX_PI) * 3.0f;
-	//m_rotDest.y = fdest *  D3DX_PI;
+	if (m_pAI != nullptr)
+	{
+		delete m_pAI;
+		m_pAI = nullptr;
+	}
 }

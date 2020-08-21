@@ -157,7 +157,7 @@ void CGun::DebugInfo()
 // 銃の生成
 //
 // =====================================================================================================================================================================
-CGun * CGun::Create(D3DXMATRIX *mtx)
+CGun * CGun::Create()
 {
 	// 変数
 	CGun *pGun;
@@ -167,9 +167,6 @@ CGun * CGun::Create(D3DXMATRIX *mtx)
 
 	// 初期化
 	pGun->Init();
-
-	// マトリックス代入
-	pGun->m_HasHandMtx = mtx;
 
 	// モデルタイプの設定
 	pGun->SetType(GUN_MODEL);

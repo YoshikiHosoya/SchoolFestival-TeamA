@@ -43,7 +43,9 @@ HRESULT CEnemyShield::Init(void)
 	m_Attack = false;
 
 	// 銃の生成
-	m_pGun = CGun::Create(GetCharacterModelPartsList(CModel::MODEL_ENEMY_RHAND)->GetMatrix());
+	m_pGun = CGun::Create();
+	// マトリックス設定
+	m_pGun->SetHandMtx(GetCharacterModelPartsList(CModel::MODEL_ENEMY_RHAND)->GetMatrix());
 	// 銃の弾の種類
 	m_pGun->GetTag() = TAG_ENEMY;
 	// 当たり判定生成

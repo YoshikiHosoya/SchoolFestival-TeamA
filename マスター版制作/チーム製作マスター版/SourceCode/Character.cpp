@@ -370,10 +370,10 @@ void CCharacter::StateChangeReaction()
 //====================================================================
 //モデルのムーヴ
 //====================================================================
-void CCharacter::Move(float move, float fdest)
+void CCharacter::Move(float move, float fdest,float fSpeed)
 {
-	m_move.x += sinf(move * -D3DX_PI) * 1.0f;
-	m_move.z += cosf(move * -D3DX_PI) * 1.0f;
+	m_move.x += sinf(move * -D3DX_PI) * fSpeed;
+	m_move.z += cosf(move * -D3DX_PI) * fSpeed;
 	m_rotDest.y = fdest *  D3DX_PI;
 }
 //====================================================================
@@ -1117,7 +1117,10 @@ void CCharacter::Collision()
 	// マップモデルが存在した時して当たり判定が存在する時
 	if (pMap && m_pCollision)
 	{
+		m_pCollision->SetPos(&m_pos);
+
 		m_pCollision->SetHeight(m_vModelList[0]->GetPosition().y);
+
 		// レイの判定
 		if (m_pCollision->RayBlockCollision(pMap, m_vModelList[0]->GetMatrix()))
 		{

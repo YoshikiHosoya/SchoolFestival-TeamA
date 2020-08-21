@@ -12,6 +12,7 @@
 #include "gun.h"
 #include "particle.h"
 #include "sound.h"
+#include "shield.h"
 //====================================================================
 //ƒ}ƒNƒ’è‹`
 //====================================================================
@@ -20,7 +21,6 @@
 CWeakEnemy::CWeakEnemy(OBJ_TYPE type) :CEnemy(type)
 {
 	SetObjType(OBJTYPE_ENEMY);
-	m_pGun = nullptr;
 }
 
 CWeakEnemy::~CWeakEnemy()
@@ -41,9 +41,16 @@ HRESULT CWeakEnemy::Init(void)
 	m_Attack = false;
 
 	// e‚Ì¶¬
-	m_pGun = CGun::Create(GetCharacterModelPartsList(CModel::MODEL_ENEMY_RHAND)->GetMatrix());
+	GetGunPtr()->SetHandMtx(GetCharacterModelPartsList(CModel::MODEL_ENEMY_RHAND)->GetMatrix());
+
 	// e‚Ì’e‚ÌŽí—Þ
-	m_pGun->GetTag() = TAG_ENEMY;
+	GetGunPtr()->GetTag() = TAG_ENEMY;
+
+	//‚¶¬
+	m_pShield = nullptr;
+	m_pShield = CShield::Create();
+	m_pShield->SetHandMtx(GetCharacterModelPartsList(CModel::MODEL_ENEMY_RHAND)->GetMatrix());
+	m_pShield->SetHasEnemyPtr(this);
 
 	// “–‚½‚è”»’è¶¬
 	GetCollision()->SetSize2D(ENEMY_SIZE);
@@ -58,17 +65,10 @@ HRESULT CWeakEnemy::Init(void)
 //====================================================================
 void CWeakEnemy::Uninit(void)
 {
-	// e‚Ì‰ð•ú
-	if (m_pGun != nullptr)
+	if (m_pShield)
 	{
-		// e‚Ìíœ
-		delete m_pGun;
-		m_pGun = nullptr;
-	}
-	if (m_pAI != nullptr)
-	{
-		delete m_pAI;
-		m_pAI = nullptr;
+		m_pShield->Rerease();
+		m_pShield = nullptr;
 	}
 
 	CEnemy::Uninit();
@@ -78,37 +78,6 @@ void CWeakEnemy::Uninit(void)
 //====================================================================
 void CWeakEnemy::Update(void)
 {
-	//•`‰æ‚Ì”ÍˆÍ“à‚©ƒ`ƒFƒbƒN
-	if (!CheckDrawRange())
-	{
-		//•`‰æ”ÍˆÍŠO‚È‚ç•`‰æ‚µ‚È‚¢
-		return;
-	}
-
-	//Ž€–S‚µ‚Ä‚¢‚È‚¢Žž
-	if (CCharacter::GetCharacterState() != CCharacter::CHARACTER_STATE_DEATH)
-	{
-		if (GetCollision() != nullptr)
-		{
-
-			// ’e‚ðŒ‚‚Â•ûŒü‚ðÝ’è
-			m_pGun->SetShotRot(GetShotDirection());
-			//AIŠÖ˜Aˆ—
-			if (m_pAI)
-			{
-				if (m_pAI->GetAIType() == m_pAI->AI_SHOT && m_pAI->GetShot() == true)
-				{
-					m_pGun->Shot();
-				}
-
-				m_pAI->Update();
-			}
-			if (m_pGun)
-			{
-				m_pGun->Update();
-			}
-		}
-	}
 	CEnemy::Update();
 }
 //====================================================================
@@ -117,8 +86,6 @@ void CWeakEnemy::Update(void)
 void CWeakEnemy::Draw(void)
 {
 	CEnemy::Draw();
-
-	m_pGun->Draw();
 
 }
 //====================================================================
@@ -137,7 +104,8 @@ CWeakEnemy *CWeakEnemy::Create(void)
 	CWeakEnemy*pWeakEnemy;
 	pWeakEnemy = new CWeakEnemy(OBJTYPE_ENEMY);
 	pWeakEnemy->Init();
-	pWeakEnemy->m_pAI = CEnemyAI::CreateAI(pWeakEnemy);
+	pWeakEnemy->SetAIPtr(CEnemyAI::CreateAI(pWeakEnemy));
+
 	return pWeakEnemy;
 }
 //====================================================================
@@ -194,15 +162,28 @@ void CWeakEnemy::StateChangeReaction()
 		SetStateCount(60);
 		SetMotion(CCharacter::ENEMY_MOTION_DEAD_1);
 
+		if (m_pShield)
+		{
+			//‚”j‰ó
+			ShieldBreak();
+		}
+
 		break;
 	}
 }
 //====================================================================
-//ˆÚ“®
+//c”j‰ó
 //====================================================================
-void CWeakEnemy::Move(float move, float fdest)
+void CWeakEnemy::ShieldBreak()
 {
-	GetMove().x += sinf(move * -D3DX_PI) * 3.0f;
-	GetMove().z += cosf(move * -D3DX_PI) * 3.0f;
-	//m_rotDest.y = fdest *  D3DX_PI;
+	//nullcheck
+	if (m_pShield)
+	{
+		//ƒV[ƒ‹ƒh‚Á”ò‚Î‚·ˆ—
+		m_pShield->AwayShield();
+
+		//null
+		m_pShield = nullptr;
+
+	}
 }

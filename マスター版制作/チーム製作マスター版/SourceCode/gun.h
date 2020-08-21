@@ -53,7 +53,7 @@ public:
 	virtual void		DebugInfo();			//デバッグ
 
 	/* 静的メンバ関数 */
-	static	CGun		*Create(D3DXMATRIX *mtx);		// 銃の生成
+	static	CGun		*Create();		// 銃の生成
 	void				NoDrawCalcMatrixOnly();			// マトリックスの計算
 
 	/* メンバ関数 */
@@ -68,6 +68,7 @@ public:
 
 	void				SetGunType(GUN_TYPE type);															// 銃の種類の設定
 	void				GunAddAmmo(int nAmmo);																// 弾数の加算
+	void				SetHandMtx(D3DXMATRIX *pMtx)				{ m_HasHandMtx = pMtx; };				// 手のマトリックス設定
 	void				SetDrawFlag(bool bflag)						{ m_bDraw = bflag; };					// 描画フラグの設定
 	void				SetTag(TAG type)							{ m_Tag = type; };						// タグの設定
 	void				SetShotOffsetPos(D3DXVECTOR3 ShotOffsetPos)	{ m_ShotOffsetPos = ShotOffsetPos; };	// 発射位置のオフセットの設定

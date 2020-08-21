@@ -34,7 +34,7 @@
 #include "player.h"
 #include "playerui.h"
 #include "boss_one.h"
-
+#include "shield.h"
 //======================================================================================================================
 //
 // マクロ定義
@@ -160,6 +160,35 @@ bool CCollision::ForPlayerBulletCollision(int nEnemyDamage, int nObstacleDamage,
 {
 	// 弾を消すときに使うフラグ
 	bool bHitFlag = false;
+	std::vector<CScene*> pSceneList;
+
+	CScene::GetSceneList(CScene::OBJTYPE_SHIELD, pSceneList);
+
+	//当たり判定処理
+	//盾相手の場合
+	if (!pSceneList.empty())
+	{
+		for (size_t nCnt = 0; nCnt < pSceneList.size(); nCnt++)
+		{
+			CShield *pShield = (CShield*)pSceneList[nCnt];
+			if (pShield)
+			{
+				if (this->OtherCollision2D(pShield->GetCollision()))
+				{
+					pShield->AddDamage(nEnemyDamage);
+
+					// 当たり範囲フラグをtrueにする
+					bHitFlag = true;
+
+					if (!Penetration)
+					{
+						return bHitFlag;
+					}
+				}
+			}
+		}
+	}
+
 
 	// 当たり判定 相手がエネミーだったら
 	// 敵の総数分
@@ -301,10 +330,6 @@ bool CCollision::ForPlayerBulletCollision(int nEnemyDamage, int nObstacleDamage,
 		}
 	}
 
-
-
-
-
 	//仮
 	// 当たり判定 相手がボス1だったら
 	// 敵の総数分
@@ -346,10 +371,6 @@ bool CCollision::ForPlayerBulletCollision(int nEnemyDamage, int nObstacleDamage,
 
 		}
 	}
-
-
-
-
 	return bHitFlag;
 }
 

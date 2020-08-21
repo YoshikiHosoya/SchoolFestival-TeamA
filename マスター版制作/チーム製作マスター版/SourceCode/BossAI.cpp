@@ -171,13 +171,13 @@ void CBossAI::UpdateAttackAI(void)
 		if (AI_TRACKING == m_BossAItype)//プレイヤー追従弾
 		{
 			//ガンのタイプ変更
-			pBossPass->GetGun()->SetGunType(pBossPass->GetGun()->GUNTYPE_TRACKINGGUN);
+			pBossPass->GetGunPtr()->SetGunType(pBossPass->GetGunPtr()->GUNTYPE_TRACKINGGUN);
 
 			m_ShotVec = pPlayer->GetPosition() - pBossPass->GetPosition();//射撃方向の計算
 			D3DXVec3Normalize(&m_ShotVec, &m_ShotVec);//値の正規化
 
 			//撃つ向きの設定
-			pBossPass->GetGun()->SetShotRot(D3DXVECTOR3(0.0f, 0.0f, atan2f(-m_ShotVec.x, m_ShotVec.y)));
+			pBossPass->GetGunPtr()->SetShotRot(D3DXVECTOR3(0.0f, 0.0f, atan2f(-m_ShotVec.x, m_ShotVec.y)));
 
 			//光る
 			CParticle::CreateFromText(pBossPass->GetPosition(), D3DXVECTOR3(0.0f, 0.0f, CHossoLibrary::Random_PI()), CParticleParam::EFFECT_FLASSHING, TAG::TAG_PLAYER, 0, RedColor);
@@ -195,7 +195,7 @@ void CBossAI::UpdateAttackAI(void)
 				//120フレームより小さいとき射撃
 				if (m_AttackCnt < 60 && m_Attacks < 3 && m_AttackCnt % 10 == 0)
 				{
-					pBossPass->GetGun()->Shot();
+					pBossPass->GetGunPtr()->Shot();
 				}
 				else if (m_AttackCnt == 140)
 				{
@@ -216,13 +216,13 @@ void CBossAI::UpdateAttackAI(void)
 			CParticle::CreateFromText(pBossPass->GetPosition(), D3DXVECTOR3(0.0f, 0.0f, CHossoLibrary::Random_PI()), CParticleParam::EFFECT_FLASSHING, TAG::TAG_PLAYER, 0, YellowColor);
 
 			//ガンのタイプ変更
-			pBossPass->GetGun()->SetGunType(pBossPass->GetGun()->GUNTYPE_DIFFUSIONGUN);
+			pBossPass->GetGunPtr()->SetGunType(pBossPass->GetGunPtr()->GUNTYPE_DIFFUSIONGUN);
 
 			//-1.57から1.57の範囲でランダムな値を設定
 			fAngle = CHossoLibrary::Random(1.57f);
 
 			//撃つ向きの設定
-			pBossPass->GetGun()->SetShotRot(D3DXVECTOR3(0.0f, 0.0f, D3DX_PI + fAngle));
+			pBossPass->GetGunPtr()->SetShotRot(D3DXVECTOR3(0.0f, 0.0f, D3DX_PI + fAngle));
 
 			m_AttackCastCnt++;
 			m_bShot = true;
@@ -237,7 +237,7 @@ void CBossAI::UpdateAttackAI(void)
 				//120フレームより小さいとき射撃
 				if (m_AttackCnt < 180 && m_AttackCnt % 5 == 0)
 				{
-					pBossPass->GetGun()->Shot();
+					pBossPass->GetGunPtr()->Shot();
 				}
 				//120フレームになったら初期化
 				else if (m_AttackCnt > 230)
@@ -249,10 +249,10 @@ void CBossAI::UpdateAttackAI(void)
 		else if (AI_LASER == m_BossAItype)//レーザー
 		{
 			//ガンのタイプ変更
-			pBossPass->GetGun()->SetGunType(pBossPass->GetGun()->GUNTYPE_BOSSLASERGUN);
+			pBossPass->GetGunPtr()->SetGunType(pBossPass->GetGunPtr()->GUNTYPE_BOSSLASERGUN);
 
 			//撃つ向きの設定
-			pBossPass->GetGun()->SetShotRot(D3DXVECTOR3(0.0f, 0.0f, D3DX_PI));
+			pBossPass->GetGunPtr()->SetShotRot(D3DXVECTOR3(0.0f, 0.0f, D3DX_PI));
 
 			m_AttackCastCnt++;
 			m_bShot = true;
@@ -270,7 +270,7 @@ void CBossAI::UpdateAttackAI(void)
 					if (m_AttackCnt > 30)
 					{
 						pBossPass->GetPosition().x += 3;
-						pBossPass->GetGun()->Shot();
+						pBossPass->GetGunPtr()->Shot();
 					}
 					else
 					{
@@ -283,7 +283,7 @@ void CBossAI::UpdateAttackAI(void)
 					if (m_AttackCnt > 30)
 					{
 						pBossPass->GetPosition().x -= 3;
-						pBossPass->GetGun()->Shot();
+						pBossPass->GetGunPtr()->Shot();
 					}
 					else
 					{

@@ -127,7 +127,7 @@ public:
 	virtual void State();							//ステートに応じた処理
 	virtual void StateChangeReaction();				//ステート変更処理
 
-	void Move(float move, float fdest);
+	void Move(float move, float fdest, float fSpeed = 3.0f);
 	void AddDamage(int Damage);
 	static void LoadMotion(void);
 	void LoadOffset(CHARACTER_TYPE nType);
