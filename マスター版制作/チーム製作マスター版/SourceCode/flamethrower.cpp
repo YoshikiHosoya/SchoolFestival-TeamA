@@ -48,6 +48,9 @@ HRESULT CFlamethrower::Init()
 {
 	// 初期化
 	CBullet::Init();
+
+	//CParticle::CreateFromText(GetPosition(), ZeroVector3, CParticleParam::EFFECT_EXPLOSION);
+
 	return S_OK;
 }
 
@@ -69,14 +72,12 @@ void CFlamethrower::Uninit(void)
 // =====================================================================================================================================================================
 void CFlamethrower::Update(void)
 {
+	// エフェクトの生成
+	//パーティクル発生 軌跡みたいな
+	CParticle::CreateFromText(GetPosition(), D3DXVECTOR3(0.0f, 0.0f, CHossoLibrary::Random_PI()), CParticleParam::EFFECT_SMOKE, CBullet::GetTag());
+
 	// 更新
 	CBullet::Update();
-
-	if (CBullet::GetLife() % 3 == 0)
-	{
-		CParticle::CreateFromText(GetPosition() + CHossoLibrary::RandomVector3(10), ZeroVector3,
-			CParticleParam::EFFECT_SMOKE, GetTag(), GetBulletParam(CGun::GUNTYPE_FLAMETHROWER)->nPower);
-	}
 }
 
 // =====================================================================================================================================================================
@@ -107,10 +108,6 @@ void CFlamethrower::DeleteBullet()
 // =====================================================================================================================================================================
 void CFlamethrower::BulletReaction(D3DXVECTOR3 rot)
 {
-	//CParticle::CreateFromText(GetPosition(), rot, CParticleParam::EFFECT_FIRE, GetTag(), GetBulletParam(CGun::GUNTYPE_FLAMETHROWER)->nPower);
-
-	//実弾の方は消去
-	//CBullet::Rerease();
 }
 
 // =====================================================================================================================================================================
@@ -124,7 +121,7 @@ void CFlamethrower::DebugInfo()
 
 // =====================================================================================================================================================================
 //
-// ショットガンの生成
+// 火炎放射の生成
 //
 // =====================================================================================================================================================================
 CFlamethrower * CFlamethrower::Create(D3DXVECTOR3 rot)

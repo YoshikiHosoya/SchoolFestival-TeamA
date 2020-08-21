@@ -130,9 +130,14 @@ private:
 	void					SetGunPos();
 	void					MoveGun(D3DXVECTOR3 &PartsPos, D3DXVECTOR3 move);
 	void					Cooltime_Decrease();				// クールタイムの減少
+
+	// --- 攻撃管理関数 ---  //
 	void					ShotIncendiary();					// 焼夷弾
 	void					ShotBalkan();						// バルカン
+	void					ShotWarning();						// 焼夷弾の最初の爆発
 	void					ShotFlameRadiation();				// フレイム火炎放射器
+
+	void					ShotFlameManager();
 
 	void					RandomAttack();						// 攻撃方法をランダムに決める
 	uint64_t				get_rand_range(uint64_t min_val, uint64_t max_val);				// ランダム関数 範囲
@@ -149,6 +154,8 @@ private:
 	CCollision				*m_pCollision;						//当たり判定のポインタ
 	D3DXVECTOR3				m_Gun_OffsetPos;
 	D3DXVECTOR3				m_Gun_Pos;
-	int						m_nShotCount_Incendiary;
+	int						m_nShotCount;
+	int						m_nTrrigerCount;
+	bool					m_bFlame;
 };
 #endif

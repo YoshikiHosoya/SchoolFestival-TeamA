@@ -46,9 +46,10 @@ CBoss_One::CBoss_One(OBJ_TYPE type) :CCharacter(type)
 	m_AttckType = ATTACKTYPE_NONE;
 	m_ShotCount = 0;
 	m_pCollision = nullptr;
-	m_nCoolTime = 0;
+	m_nCoolTime = 120;
 	m_nShotIntervalTime = 0;
-	m_nShotCount_Incendiary = 0;
+	m_nTrrigerCount = 0;
+	m_bFlame = false;
 }
 // =====================================================================================================================================================================
 //
@@ -74,16 +75,16 @@ HRESULT CBoss_One::Init(void)
 	SetCharacterType(CCharacter::CHARACTER_TYPE_BOSS_ONE);
 	//重力無し
 	SetGravity(false);
-	// 角度の設定
+	// ボスの角度の設定
 	SetRotDest(D3DXVECTOR3(0.0f, 1.57f, 0.0f));
 	// 体力の初期値
 	CCharacter::SetLife(m_nLife);
 	// モーションさせない設定
 	SetMotion(CCharacter::CHARACTER_MOTION_STATE_NONE);
-	// 大砲を傾ける
+	// 銃を傾ける
 	GetCharacterModelPartsList((CModel::MODEL_BOSSONE_GUN_INCENDIARY))->GetRot().x += 0.6f;
-	//GetCharacterModelPartsList((CModel::MODEL_BOSSONE_GUN_BALKAN))->GetRot().x -= 1.57f;
-	GetCharacterModelPartsList((CModel::MODEL_BOSSONE_GUN_BALKAN))->GetRot().x -= 1.0f;
+	GetCharacterModelPartsList((CModel::MODEL_BOSSONE_GUN_BALKAN))->GetRot().x -= 1.57f;
+	GetCharacterModelPartsList((CModel::MODEL_BOSSONE_GUN_FLAMETHROWER))->GetRot().x -= 1.57f;
 
 	// 武器用の当たり判定の生成
 	m_pCollision = CCollision::Create();
@@ -109,6 +110,9 @@ HRESULT CBoss_One::Init(void)
 	SetGunOffsetPos(D3DXVECTOR3(GetCharacterModelPartsList((CModel::MODEL_BOSSONE_GUN_FLAMETHROWER))->GetPosition()));
 	// ガンの座標の更新
 	SetGunPos();
+
+	m_nShotCount = 0;
+
 
 	// ガンの当たり判定の設定
 	m_pCollision->SetPos(&m_Gun_Pos);
@@ -165,19 +169,8 @@ void CBoss_One::Update(void)
 	// ガンの当たり判定の座標の更新
 	m_pCollision->SetPos(&m_Gun_Pos);
 
-	//	//m_pGun[WEAPONTYPE_FLAMETHROWER]->Shot();
-	//	// 弾を撃つ方向を設定
-
-	// 攻撃状態だった時
-	if (m_BossOneState == BOSS_ONE_STATE_ATTACK)
-	{
-
-	}
-
 	// ボスの状態ごとの処理
 	BossOneStateManager();
-	// ボスの攻撃管理
-	BossOneAttackManager();
 
 	// 当たり判定
 	if (CCharacter::GetCollision() != nullptr)
@@ -186,6 +179,7 @@ void CBoss_One::Update(void)
 		CCharacter::GetCollision()->SetPos(&GetPosition());
 	}
 
+	// デバッグ用距離の計算
 	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
 	float fDist = this->GetPosition().x - pPlayer->GetPosition().x;
 
@@ -364,11 +358,7 @@ void CBoss_One::SetBoss_OneData()
 // =====================================================================================================================================================================
 // ボスのデフォルトモーション
 // =====================================================================================================================================================================
-bool CBoss_One::Motion(void)
-{
-	return false;
-}
-
+bool CBoss_One::Motion(void){return false;}
 bool CBoss_One::DefaultMotion(void){return false;}
 
 // =====================================================================================================================================================================
@@ -377,7 +367,6 @@ bool CBoss_One::DefaultMotion(void){return false;}
 void CBoss_One::DamageReaction()
 {
 	SetState(CCharacter::CHARACTER_STATE_DAMAGE_RED);
-
 	//CManager::GetSound()->Play(CSound::LABEL_SE_HIT);
 }
 // =====================================================================================================================================================================
@@ -387,7 +376,6 @@ void CBoss_One::DeathReaction()
 {
 	//死亡フラグをたてる
 	this->SetDieFlag(true);
-
 	CCharacter::DeathReaction();
 }
 
@@ -423,7 +411,14 @@ void CBoss_One::StateChangeReaction()
 //=====================================================================================================================================================================
 void CBoss_One::Behavior()
 {
-
+	// 弾を撃った回数をリセット
+	m_nShotCount = 0;
+	// インターバルの時間をリセット
+	SetShotIntervalTime(0);
+	// クールタイムの計算
+	Cooltime_Decrease();
+	// 攻撃方法をランダムに決める
+	RandomAttack();
 }
 
 // =====================================================================================================================================================================
@@ -450,9 +445,7 @@ void CBoss_One::SetGunPos()
 // =====================================================================================================================================================================
 void CBoss_One::MoveGun(D3DXVECTOR3	&PartsPos , D3DXVECTOR3 move)
 {
-	PartsPos.x += move.x,
-	PartsPos.y += move.y,
-	PartsPos.z += move.z;
+	PartsPos += move;
 }
 
 // =====================================================================================================================================================================
@@ -476,29 +469,29 @@ void CBoss_One::Cooltime_Decrease()
 // =====================================================================================================================================================================
 void CBoss_One::ShotIncendiary()
 {
-	// 50フレームごとに弾を撃つ
-	if (m_nShotIntervalTime <= 0)
-	{
-		// 焼夷弾を撃つ
-		m_pGun[WEAPONTYPE_INCENDIARY]->Shot();
-		// インターバルの時間を設定
-		SetShotIntervalTime(50);
-		// 弾を撃った回数を加算
-		m_nShotCount_Incendiary++;
-	}
-
-	// インターバルの時間を減少
-	m_nShotIntervalTime--;
-
 	// 弾を3回撃った時
-	if (m_nShotCount_Incendiary >= 3)
+	if (m_nShotCount >= 3)
 	{
 		// クールタイムの設定
 		SetCoolTime(120);
-		// 弾を撃った回数をリセット
-		m_nShotCount_Incendiary = 0;
 		// ボスの状態を変更
 		m_BossOneState = BOSS_ONE_STATE_STAY;
+	}
+	else
+	{
+		// 50フレームごとに弾を撃つ
+		if (m_nShotIntervalTime <= 0)
+		{
+			// 焼夷弾を撃つ
+			m_pGun[WEAPONTYPE_INCENDIARY]->Shot();
+			// インターバルの時間を設定
+			SetShotIntervalTime(50);
+			// 弾を撃った回数を加算
+			m_nShotCount++;
+		}
+
+		// インターバルの時間を減少
+		m_nShotIntervalTime--;
 	}
 }
 
@@ -507,62 +500,134 @@ void CBoss_One::ShotIncendiary()
 // =====================================================================================================================================================================
 void CBoss_One::ShotBalkan()
 {
-	// 60フレームごとに弾を撃つ
-	if (m_nShotIntervalTime <= 0)
-	{
-		// バルカンを撃つ
-		m_pGun[WEAPONTYPE_BALKAN]->Shot();
-		// インターバルの時間を設定
-		SetShotIntervalTime(60);
-	}
-
-	// インターバルの時間を減少
-	m_nShotIntervalTime--;
+	// 弾の向きの設定
+	m_pGun[WEAPONTYPE_BALKAN]->SetShotRot(
+		D3DXVECTOR3(0.0f, 0.0f, (GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_BALKAN))->GetRot().x * -1.0f));
 
 	// 弾を2回撃った時
-	if (m_nShotCount_Incendiary >= 2)
+	if (m_nTrrigerCount >= 2)
 	{
 		// クールタイムの設定
 		SetCoolTime(120);
-		// 弾を撃った回数をリセット
-		m_nShotCount_Incendiary = 0;
 		// ボスの状態を変更
 		m_BossOneState = BOSS_ONE_STATE_STAY;
+	}
+	else
+	{
+		// 30フレームごとに1トリガー撃つ
+		if (m_nShotIntervalTime <= 0)
+		{
+			// バルカンを撃つ
+			m_pGun[WEAPONTYPE_BALKAN]->Shot();
+			// 弾を撃った回数を加算
+			m_nShotCount++;
+
+			if (m_nShotCount >= 3)
+			{
+				// インターバルの時間を設定
+				SetShotIntervalTime(30);
+				m_nShotCount = 0;
+				m_nTrrigerCount++;
+			}
+			else if (m_nShotCount >= 0)
+			{
+				// インターバルの時間を設定
+				SetShotIntervalTime(10);
+			}
+		}
+
+		// インターバルの時間を減少
+		m_nShotIntervalTime--;
 	}
 }
 
 // =====================================================================================================================================================================
-// フレイム火炎放射器
+// 焼夷弾の最初の爆発
+// =====================================================================================================================================================================
+void CBoss_One::ShotWarning()
+{
+	m_pGun[WEAPONTYPE_FLAMETHROWER]->SetShotRot(
+			D3DXVECTOR3(0.0f, 0.0f, (GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_FLAMETHROWER))->GetRot().x * -1.0f));
+
+	// 弾を7回撃った時
+	if (m_nShotCount >= 7)
+	{
+		// クールタイムの設定
+		SetCoolTime(80);
+		// 弾を撃った回数をリセット
+		m_nShotCount = 0;
+		//
+		m_bFlame = true;
+	}
+	else
+	{
+		// 10フレームごとに弾を撃つ
+		if (m_nShotIntervalTime <= 0)
+		{
+			// を撃つ
+			m_pGun[WEAPONTYPE_FLAMETHROWER]->Shot();
+			// インターバルの時間を設定
+			SetShotIntervalTime(10);
+			// 弾を撃った回数を加算
+			m_nShotCount++;
+		}
+
+		// インターバルの時間を減少
+		m_nShotIntervalTime--;
+	}
+}
+
+// =====================================================================================================================================================================
+// フレイム火炎放射
 // =====================================================================================================================================================================
 void CBoss_One::ShotFlameRadiation()
 {
-	// 7回_数フレーム空けて動かない爆発を生成する
-	// 16初_弾を撃つ 数フレームごと 弾一発につきエフェクト一つ
+	m_pGun[WEAPONTYPE_FLAMETHROWER]->SetShotRot(
+		D3DXVECTOR3(0.0f, 0.0f, (GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_FLAMETHROWER))->GetRot().x * -1.0f));
 
-	//// 30フレームごとに弾を撃つ
-	//if (m_nShotIntervalTime <= 0)
-	//{
-	//	// 火炎放射を撃つ
-	//	m_pGun[WEAPONTYPE_FLAMETHROWER]->Shot();
-	//	// インターバルの時間を設定
-	//	SetShotIntervalTime(60);
-	//	// 弾を撃った回数を加算
-	//	m_nShotCount_Incendiary++;
-	//}
+	// 弾を7回撃った時
+	if (m_nShotCount >= (16 + 1))
+	{
+		// クールタイムの設定
+		SetCoolTime(120);
+		// 弾を撃った回数をリセット
+		m_nShotCount = 0;
+		//
+		m_bFlame = false;
+		// ボスの状態を変更
+		m_BossOneState = BOSS_ONE_STATE_STAY;
+	}
+	else
+	{
+		// 50フレームごとに弾を撃つ
+		if (m_nShotIntervalTime <= 0)
+		{
+			// 焼夷弾を撃つ
+			m_pGun[WEAPONTYPE_FLAMETHROWER]->Shot();
+			// インターバルの時間を設定
+			SetShotIntervalTime(30);
+			// 弾を撃った回数を加算
+			m_nShotCount++;
+		}
 
-	//// インターバルの時間を減少
-	//m_nShotIntervalTime--;
+		// インターバルの時間を減少
+		m_nShotIntervalTime--;
+	}
+}
 
-	//// 弾を2回撃った時
-	//if (m_nShotCount_Incendiary >= 2)
-	//{
-	//	// クールタイムの設定
-	//	SetCoolTime(120);
-	//	// 弾を撃った回数をリセット
-	//	m_nShotCount_Incendiary = 0;
-	//	// ボスの状態を変更
-	//	m_BossOneState = BOSS_ONE_STATE_STAY;
-	//}
+// =====================================================================================================================================================================
+// 火炎放射の攻撃管理
+// =====================================================================================================================================================================
+void CBoss_One::ShotFlameManager()
+{
+	if (!m_bFlame)
+	{
+		ShotWarning();
+	}
+	else
+	{
+		ShotFlameRadiation();
+	}
 }
 
 // =====================================================================================================================================================================
@@ -596,7 +661,6 @@ uint64_t CBoss_One::get_rand_range(uint64_t min_val, uint64_t max_val)
 	return get_rand_uni_int(mt64);
 }
 
-
 // =====================================================================================================================================================================
 // ボスのステートごとの処理
 // =====================================================================================================================================================================
@@ -607,17 +671,13 @@ void CBoss_One::BossOneStateManager()
 	case CBoss_One::BOSS_ONE_STATE_NONE:
 		break;
 	case CBoss_One::BOSS_ONE_STATE_STAY:
-		Cooltime_Decrease();
-		// 攻撃方法をランダムに決める
-		RandomAttack();
+		Behavior();
 		break;
 	case CBoss_One::BOSS_ONE_STATE_ATTACK:
 		// ボスの攻撃管理
 		BossOneAttackManager();
 		break;
 	case CBoss_One::BOSS_ONE_STATE_SHIFT_POSTURE:
-		break;
-	case CBoss_One::BOSS_ONE_STATE_MAX:
 		break;
 	default:
 		break;
@@ -633,14 +693,15 @@ void CBoss_One::BossOneAttackManager()
 	switch (m_AttckType)
 	{
 	case CBoss_One::ATTACKTYPE_BALKAN:
-		m_pGun[WEAPONTYPE_BALKAN]->SetShotRot(
-			D3DXVECTOR3(0.0f, 0.0f, (GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_BALKAN))->GetRot().x * -1.0f));
+		// バルカンを撃つ
 		ShotBalkan();
 		break;
 	case CBoss_One::ATTACKTYPE_FLAMERADIATION:
-		ShotFlameRadiation();
+		// 火炎放射を撃つ
+		ShotFlameManager();
 		break;
 	case CBoss_One::ATTACKTYPE_INCENDIARY:
+		// 焼夷弾を撃つ
 		ShotIncendiary();
 		break;
 	default:
