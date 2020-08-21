@@ -11,6 +11,8 @@
 #include "manager.h"
 #include "map.h"
 #include "gun.h"
+#include "player.h"
+#include <random>
 
 //====================================================================
 //マクロ定義
@@ -40,9 +42,13 @@ char *CBoss_One::m_BossOneFileName =
 CBoss_One::CBoss_One(OBJ_TYPE type) :CCharacter(type)
 {
 	// ボスの初期状態
-	m_BossOneState = BOSS_ONE_STATE_NONE;
+	m_BossOneState = BOSS_ONE_STATE_STAY;
+	m_AttckType = ATTACKTYPE_NONE;
 	m_ShotCount = 0;
 	m_pCollision = nullptr;
+	m_nCoolTime = 0;
+	m_nShotIntervalTime = 0;
+	m_nShotCount_Incendiary = 0;
 }
 // =====================================================================================================================================================================
 //
@@ -77,6 +83,7 @@ HRESULT CBoss_One::Init(void)
 	// 大砲を傾ける
 	GetCharacterModelPartsList((CModel::MODEL_BOSSONE_GUN_INCENDIARY))->GetRot().x += 0.6f;
 	//GetCharacterModelPartsList((CModel::MODEL_BOSSONE_GUN_BALKAN))->GetRot().x -= 1.57f;
+	GetCharacterModelPartsList((CModel::MODEL_BOSSONE_GUN_BALKAN))->GetRot().x -= 1.0f;
 
 	// 武器用の当たり判定の生成
 	m_pCollision = CCollision::Create();
@@ -101,6 +108,7 @@ HRESULT CBoss_One::Init(void)
 	// ガンの座標の更新
 	SetGunPos();
 
+	// ガンの当たり判定の設定
 	m_pCollision->SetPos(&m_Gun_Pos);
 	m_pCollision->SetSize2D(D3DXVECTOR3(100.0f, 100.0f, 0.0f));
 	m_pCollision->DeCollisionCreate(CCollision::COLLISIONTYPE_CHARACTER);
@@ -155,23 +163,19 @@ void CBoss_One::Update(void)
 	// ガンの当たり判定の座標の更新
 	m_pCollision->SetPos(&m_Gun_Pos);
 
-	m_ShotCount++;
-	if (m_ShotCount % 30 == 0)
-	{
-		m_pGun[WEAPONTYPE_FLAMETHROWER]->Shot();
-	}
-	if (m_ShotCount % 60 == 0)
-	{
-		// 弾を撃つ方向を設定
-		m_pGun[WEAPONTYPE_BALKAN]->SetShotRot(
-			D3DXVECTOR3(0.0f, 0.0f, (GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_BALKAN))->GetRot().x));
+	//	//m_pGun[WEAPONTYPE_FLAMETHROWER]->Shot();
+	//	// 弾を撃つ方向を設定
 
-		m_pGun[WEAPONTYPE_BALKAN]->Shot();
-	}
-	if (m_ShotCount % 120 == 0)
+	// 攻撃状態だった時
+	if (m_BossOneState == BOSS_ONE_STATE_ATTACK)
 	{
-		m_pGun[WEAPONTYPE_INCENDIARY]->Shot();
+
 	}
+
+	// ボスの状態ごとの処理
+	BossOneStateManager();
+	// ボスの攻撃管理
+	BossOneAttackManager();
 
 	// 当たり判定
 	if (CCharacter::GetCollision() != nullptr)
@@ -179,6 +183,12 @@ void CBoss_One::Update(void)
 		// 座標の更新 pos
 		CCharacter::GetCollision()->SetPos(&GetPosition());
 	}
+
+	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
+	float fDist = this->GetPosition().x - pPlayer->GetPosition().x;
+
+	CDebugProc::Print("ボスとプレイヤーの距離 --- x --- %f\n", fDist);
+	CDebugProc::Print("ボスのステート %d\n", m_BossOneState);
 
 	// キャラクターの更新
 	CCharacter::Update();
@@ -358,7 +368,6 @@ bool CBoss_One::Motion(void)
 }
 
 bool CBoss_One::DefaultMotion(void){return false;}
-void CBoss_One::BossOneState(){}
 
 // =====================================================================================================================================================================
 //ダメージを受けた時のリアクション
@@ -442,4 +451,197 @@ void CBoss_One::MoveGun(D3DXVECTOR3	&PartsPos , D3DXVECTOR3 move)
 	PartsPos.x += move.x,
 	PartsPos.y += move.y,
 	PartsPos.z += move.z;
+}
+
+// =====================================================================================================================================================================
+// クールタイムの減少
+// =====================================================================================================================================================================
+void CBoss_One::Cooltime_Decrease()
+{
+	// クールタイムの減少
+	m_nCoolTime--;
+
+	// クールタイムが0以下になった時
+	if (m_nCoolTime <= 0)
+	{
+		// 状態を攻撃に変える
+		SetBossState(BOSS_ONE_STATE_ATTACK);
+	}
+}
+
+// =====================================================================================================================================================================
+// 焼夷弾
+// =====================================================================================================================================================================
+void CBoss_One::ShotIncendiary()
+{
+	// 50フレームごとに弾を撃つ
+	if (m_nShotIntervalTime <= 0)
+	{
+		// 焼夷弾を撃つ
+		m_pGun[WEAPONTYPE_INCENDIARY]->Shot();
+		// インターバルの時間を設定
+		SetShotIntervalTime(50);
+		// 弾を撃った回数を加算
+		m_nShotCount_Incendiary++;
+	}
+
+	// インターバルの時間を減少
+	m_nShotIntervalTime--;
+
+	// 弾を3回撃った時
+	if (m_nShotCount_Incendiary >= 3)
+	{
+		// クールタイムの設定
+		SetCoolTime(120);
+		// 弾を撃った回数をリセット
+		m_nShotCount_Incendiary = 0;
+		// ボスの状態を変更
+		m_BossOneState = BOSS_ONE_STATE_STAY;
+	}
+}
+
+// =====================================================================================================================================================================
+// バルカン
+// =====================================================================================================================================================================
+void CBoss_One::ShotBalkan()
+{
+	// 60フレームごとに弾を撃つ
+	if (m_nShotIntervalTime <= 0)
+	{
+		// バルカンを撃つ
+		m_pGun[WEAPONTYPE_BALKAN]->Shot();
+		// インターバルの時間を設定
+		SetShotIntervalTime(60);
+	}
+
+	// インターバルの時間を減少
+	m_nShotIntervalTime--;
+
+	// 弾を2回撃った時
+	if (m_nShotCount_Incendiary >= 2)
+	{
+		// クールタイムの設定
+		SetCoolTime(120);
+		// 弾を撃った回数をリセット
+		m_nShotCount_Incendiary = 0;
+		// ボスの状態を変更
+		m_BossOneState = BOSS_ONE_STATE_STAY;
+	}
+}
+
+// =====================================================================================================================================================================
+// フレイム火炎放射器
+// =====================================================================================================================================================================
+void CBoss_One::ShotFlameRadiation()
+{
+	// 7回_数フレーム空けて動かない爆発を生成する
+	// 16初_弾を撃つ 数フレームごと 弾一発につきエフェクト一つ
+
+	//// 30フレームごとに弾を撃つ
+	//if (m_nShotIntervalTime <= 0)
+	//{
+	//	// 火炎放射を撃つ
+	//	m_pGun[WEAPONTYPE_FLAMETHROWER]->Shot();
+	//	// インターバルの時間を設定
+	//	SetShotIntervalTime(60);
+	//	// 弾を撃った回数を加算
+	//	m_nShotCount_Incendiary++;
+	//}
+
+	//// インターバルの時間を減少
+	//m_nShotIntervalTime--;
+
+	//// 弾を2回撃った時
+	//if (m_nShotCount_Incendiary >= 2)
+	//{
+	//	// クールタイムの設定
+	//	SetCoolTime(120);
+	//	// 弾を撃った回数をリセット
+	//	m_nShotCount_Incendiary = 0;
+	//	// ボスの状態を変更
+	//	m_BossOneState = BOSS_ONE_STATE_STAY;
+	//}
+}
+
+// =====================================================================================================================================================================
+// 攻撃方法をランダムに決める
+// =====================================================================================================================================================================
+void CBoss_One::RandomAttack()
+{
+	// 攻撃方法を決める
+	m_AttckType = (BOSS_ONE_ATTACKTYPE)get_rand_range(ATTACKTYPE_BALKAN, ATTACKTYPE_INCENDIARY);
+}
+
+// =====================================================================================================================================================================
+//
+// ランダム生成
+//
+// =====================================================================================================================================================================
+uint64_t CBoss_One::get_rand_range(uint64_t min_val, uint64_t max_val)
+{
+	// メルセンヌ・ツイスター法による擬似乱数生成器を、
+	// ハードウェア乱数をシードにして初期化
+	std::random_device seed_gen;
+	std::mt19937 engine(seed_gen());
+
+	// 乱数生成器
+	static std::mt19937_64 mt64(seed_gen());
+
+	// [min_val, max_val] の一様分布整数 (int) の分布生成器
+	std::uniform_int_distribution<uint64_t> get_rand_uni_int(min_val, max_val);
+
+	// 乱数を生成
+	return get_rand_uni_int(mt64);
+}
+
+
+// =====================================================================================================================================================================
+// ボスのステートごとの処理
+// =====================================================================================================================================================================
+void CBoss_One::BossOneStateManager()
+{
+	switch (m_BossOneState)
+	{
+	case CBoss_One::BOSS_ONE_STATE_NONE:
+		break;
+	case CBoss_One::BOSS_ONE_STATE_STAY:
+		Cooltime_Decrease();
+		// 攻撃方法をランダムに決める
+		RandomAttack();
+		break;
+	case CBoss_One::BOSS_ONE_STATE_ATTACK:
+		// ボスの攻撃管理
+		BossOneAttackManager();
+		break;
+	case CBoss_One::BOSS_ONE_STATE_SHIFT_POSTURE:
+		break;
+	case CBoss_One::BOSS_ONE_STATE_MAX:
+		break;
+	default:
+		break;
+	}
+}
+
+// =====================================================================================================================================================================
+// ボスの攻撃管理
+// =====================================================================================================================================================================
+void CBoss_One::BossOneAttackManager()
+{
+	// ステート別攻撃方法
+	switch (m_AttckType)
+	{
+	case CBoss_One::ATTACKTYPE_BALKAN:
+		m_pGun[WEAPONTYPE_BALKAN]->SetShotRot(
+			D3DXVECTOR3(0.0f, 0.0f, (GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_BALKAN))->GetRot().x * -1.0f));
+		ShotBalkan();
+		break;
+	case CBoss_One::ATTACKTYPE_FLAMERADIATION:
+		ShotFlameRadiation();
+		break;
+	case CBoss_One::ATTACKTYPE_INCENDIARY:
+		ShotIncendiary();
+		break;
+	default:
+		break;
+	}
 }

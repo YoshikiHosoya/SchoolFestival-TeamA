@@ -51,8 +51,9 @@ public:
 	// 攻撃の種類
 	enum BOSS_ONE_ATTACKTYPE
 	{
+		ATTACKTYPE_NONE = -1,
 		ATTACKTYPE_BALKAN,											// バルカン砲
-		ATTACKTYPE_FLAMETHROWER,									// 火炎放射 立ち時のみ
+		ATTACKTYPE_FLAMERADIATION,									// 火炎放射 立ち時のみ
 		ATTACKTYPE_INCENDIARY,										// 焼夷弾
 		ATTACKTYPE_MAX												// 最大数
 	};
@@ -95,43 +96,59 @@ public:
 
 	// ----- 状態の取得設定 ----- //
 	BOSS_ONE_STATE			GetBossOneState()						{ return m_BossOneState; };				// ボスの状態の取得
-	BOSS_ONE_ATTACKTYPE		GetPrisonerDropType()					{ return m_BossOneType; };				// ボスの種類
+	BOSS_ONE_ATTACKTYPE		GetBossOneType()						{ return m_AttckType; };				// ボスの種類
 	void					SetBossState(BOSS_ONE_STATE state)		{ m_BossOneState = state; };			// ボスの状態の設定
-	void					SetBossType(BOSS_ONE_ATTACKTYPE type)	{ m_BossOneType = type; };				// ボスの種類の設定
+	void					SetBossType(BOSS_ONE_ATTACKTYPE type)	{ m_AttckType = type; };				// ボスの種類の設定
 
-	CCollision *GetCollision() { return m_pCollision; };			// 当たり判定のポインタ取得
+	CCollision				*GetCollision()							{ return m_pCollision; };				// 当たり判定のポインタ取得
 
 private:
 	/* 静的メンバ変数 */
-	static char				*m_BossOneFileName;					// ボスのファイル名
-	static BOSS_ONE_DATA	m_BossOneData;						// ボスのデータ
+	static char				*m_BossOneFileName;							// ボスのファイル名
+	static BOSS_ONE_DATA	m_BossOneData;								// ボスのデータ
 
 	// ステータス用 //
-	static int				m_nLife;							// 体力
-	static D3DXVECTOR3		m_CollisionSize[POSTURETYPE_MAX];	// 当たり判定の大きさ
-	static D3DXVECTOR3		m_GunShotOfsetPos[WEAPONTYPE_MAX];	// ガンのオフセット
+	static int				m_nLife;									// 体力
+	static D3DXVECTOR3		m_CollisionSize[POSTURETYPE_MAX];			// 当たり判定の大きさ
+	static D3DXVECTOR3		m_GunShotOfsetPos[WEAPONTYPE_MAX];			// ガンのオフセット
 
 	/* メンバ関数 */
-	void					BossOneState();						// ボスの状態別処理
+
+	// --- 状態管理関数 ---  //
+	void					BossOneStateManager();						// ボスの状態別処理
+	void					BossOneAttackManager();						// ボスの攻撃管理処理
+
+	// --- 関数 ---  //
 	void					DamageReaction();
 	void					DeathReaction();
 	void					StateChangeReaction();
-	void					Behavior();							// 敵の行動
+	void					Behavior();									// 敵の行動
 
-	void					SetStateTime(int time)	{m_StateTime = time;};						// ステートが切り替わるまでの時間の設定
+	void					SetShotIntervalTime(int time) { m_nShotIntervalTime = time; };		//
+	void					SetCoolTime(int time)	{ m_nCoolTime = time;};						// ステートが切り替わるまでの時間の設定
 	void					SetGunOffsetPos(D3DXVECTOR3 pos);
 	void					SetGunPos();
 	void					MoveGun(D3DXVECTOR3 &PartsPos, D3DXVECTOR3 move);
+	void					Cooltime_Decrease();				// クールタイムの減少
+	void					ShotIncendiary();					// 焼夷弾
+	void					ShotBalkan();						// バルカン
+	void					ShotFlameRadiation();				// フレイム火炎放射器
+
+	void					RandomAttack();						// 攻撃方法をランダムに決める
+	uint64_t				get_rand_range(uint64_t min_val, uint64_t max_val);				// ランダム関数 範囲
+
 
 	/* メンバ変数 */
 	BOSS_ONE_STATE			m_BossOneState;						// デバッグのステータス
-	BOSS_ONE_ATTACKTYPE		m_BossOneType;						// ボスの種類
+	BOSS_ONE_ATTACKTYPE		m_AttckType;						// ボスの種類
 	int						m_ShotCount;						// 一発撃ってから次の弾を撃つまでの時間
 
-	int						m_StateTime;						// ステートが切り替わるまでの時間
+	int						m_nCoolTime;						// ステートが切り替わるまでの時間
+	int						m_nShotIntervalTime;				// 連続して撃つ弾の次の弾を撃つまでの時間
 	CGun					*m_pGun[WEAPONTYPE_MAX];			// ガンクラスのポインタ
 	CCollision				*m_pCollision;						//当たり判定のポインタ
 	D3DXVECTOR3				m_Gun_OffsetPos;
 	D3DXVECTOR3				m_Gun_Pos;
+	int						m_nShotCount_Incendiary;
 };
 #endif

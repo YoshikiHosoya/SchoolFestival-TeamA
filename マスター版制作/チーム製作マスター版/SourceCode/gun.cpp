@@ -370,9 +370,9 @@ void CGun::MultipleShot()
 
 	float randPos_y = (float)(rand() % 10 - 5);
 
-	if (m_nCntBullet < CBullet::GetBulletParam(m_GunType)->nTrigger)
+	if (m_nCntBullet < (CBullet::GetBulletParam(m_GunType)->nTrigger - 1))
 	{
-		if (m_nCntFrame >= HEAVYMACHINEGUN_SHOT_FRAME)
+		if (m_nCntFrame >= 10)
 		{
 			// フレームカウント初期化
 			m_nCntFrame = 0;
