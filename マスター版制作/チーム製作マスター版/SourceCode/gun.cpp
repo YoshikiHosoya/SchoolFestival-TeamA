@@ -321,7 +321,6 @@ void CGun::Shot()
 		case CGun::GUNTYPE_BALKAN:
 			//
 			pBullet = CBalkan::Create(m_ShotRot);
-			m_bMultiple = true;		// 複数発撃つフラグをオン
 			break;
 		case CGun::GUNTYPE_FLAMETHROWER:
 			//
@@ -374,12 +373,6 @@ void CGun::MultipleShot()
 			// フレームカウント初期化
 			m_nCntFrame = 0;
 
-			if (m_GunType != GUNTYPE_BALKAN)
-			{
-				// 残弾数を減らす
-				m_nAmmo--;
-			}
-
 			// ヘビーマシンガンのとき
 			if (m_GunType == GUNTYPE_HEAVYMACHINEGUN)
 			{
@@ -391,12 +384,6 @@ void CGun::MultipleShot()
 			{
 				// 弾の生成
 				pBullet = CTankGun::Create(m_ShotRot);
-			}
-			// バルカンのとき
-			if (m_GunType == GUNTYPE_BALKAN)
-			{
-				// 弾の生成
-				pBullet = CBalkan::Create(m_ShotRot);
 			}
 
 			// 弾のカウントアップ
