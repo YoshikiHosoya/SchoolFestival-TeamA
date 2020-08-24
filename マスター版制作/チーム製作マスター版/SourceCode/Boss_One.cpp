@@ -21,10 +21,10 @@
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
 // =====================================================================================================================================================================
-BOSS_ONE_DATA		CBoss_One::m_BossOneData = {};									// データ
-int					CBoss_One::m_nLife = 0;											// 体力
-D3DXVECTOR3			CBoss_One::m_CollisionSize[POSTURETYPE_MAX] = {};				// 当たり判定の大きさ
-D3DXVECTOR3			CBoss_One::m_GunShotOfsetPos[WEAPONTYPE_MAX] = {};				// ガンのオフセット
+BOSS_ONE_DATA		CBoss_One::m_BossOneData						 = {};			// データ
+int					CBoss_One::m_nLife								 = 0;			// 体力
+D3DXVECTOR3			CBoss_One::m_CollisionSize[POSTURETYPE_MAX]		 = {};			// 当たり判定の大きさ
+D3DXVECTOR3			CBoss_One::m_GunShotOfsetPos[WEAPONTYPE_MAX]	 = {};			// ガンのオフセット
 
 // =====================================================================================================================================================================
 // テキストファイル名
@@ -42,14 +42,14 @@ char *CBoss_One::m_BossOneFileName =
 CBoss_One::CBoss_One(OBJ_TYPE type) :CCharacter(type)
 {
 	// ボスの初期状態
-	m_BossOneState = BOSS_ONE_STATE_STAY;
-	m_AttckType = ATTACKTYPE_NONE;
-	m_ShotCount = 0;
-	m_pCollision = nullptr;
-	m_nCoolTime = 120;
-	m_nShotIntervalTime = 0;
-	m_nTrrigerCount = 0;
-	m_bFlame = false;
+	m_BossOneState			 = BOSS_ONE_STATE_STAY;
+	m_AttckType				 = ATTACKTYPE_NONE;
+	m_ShotCount				 = 0;
+	m_pCollision			 = nullptr;
+	m_nCoolTime				 = 120;
+	m_nShotIntervalTime		 = 0;
+	m_nTrrigerCount			 = 0;
+	m_bFlame				 = false;
 }
 // =====================================================================================================================================================================
 //
@@ -85,7 +85,6 @@ HRESULT CBoss_One::Init(void)
 	GetCharacterModelPartsList((CModel::MODEL_BOSSONE_GUN_INCENDIARY))->GetRot().x += 0.6f;
 	GetCharacterModelPartsList((CModel::MODEL_BOSSONE_GUN_BALKAN))->GetRot().x -= 1.57f;
 	GetCharacterModelPartsList((CModel::MODEL_BOSSONE_GUN_FLAMETHROWER))->GetRot().x -= 1.57f;
-
 	// 武器用の当たり判定の生成
 	m_pCollision = CCollision::Create();
 
@@ -110,10 +109,6 @@ HRESULT CBoss_One::Init(void)
 	SetGunOffsetPos(D3DXVECTOR3(GetCharacterModelPartsList((CModel::MODEL_BOSSONE_GUN_FLAMETHROWER))->GetPosition()));
 	// ガンの座標の更新
 	SetGunPos();
-
-	m_nShotCount = 0;
-
-
 	// ガンの当たり判定の設定
 	m_pCollision->SetPos(&m_Gun_Pos);
 	m_pCollision->SetSize2D(D3DXVECTOR3(100.0f, 100.0f, 0.0f));
@@ -426,10 +421,21 @@ void CBoss_One::Behavior()
 // =====================================================================================================================================================================
 void CBoss_One::SetGunOffsetPos(D3DXVECTOR3 pos)
 {
-	m_Gun_OffsetPos = D3DXVECTOR3(
-		GetCharacterModelPartsList((CModel::MODEL_BOSSONE_GUN_FLAMETHROWER))->GetPosition().x,
-		GetCharacterModelPartsList((CModel::MODEL_BOSSONE_GUN_FLAMETHROWER))->GetPosition().y,
-		GetCharacterModelPartsList((CModel::MODEL_BOSSONE_GUN_FLAMETHROWER))->GetPosition().z);
+	for (int nCnt = 0; nCnt < WEAPONTYPE_MAX; nCnt++)
+	{
+		m_Gun_OffsetPos[nCnt] = D3DXVECTOR3(
+			GetCharacterModelPartsList(static_cast<CModel::BOSSONE_PARTS_MODEL>(CModel::MODEL_BOSSONE_GUN_BALKAN + nCnt))->GetPosition().x,
+			GetCharacterModelPartsList(static_cast<CModel::BOSSONE_PARTS_MODEL>(CModel::MODEL_BOSSONE_GUN_BALKAN + nCnt))->GetPosition().y,
+			GetCharacterModelPartsList(static_cast<CModel::BOSSONE_PARTS_MODEL>(CModel::MODEL_BOSSONE_GUN_BALKAN + nCnt))->GetPosition().z);
+	}
+}
+
+// =====================================================================================================================================================================
+// ガンのオフセット座標の取得
+// =====================================================================================================================================================================
+D3DXVECTOR3 CBoss_One::GetGunOffsetPos(BOSS_ONE_WEAPONTYPE type)
+{
+	return m_Gun_OffsetPos[type];
 }
 
 // =====================================================================================================================================================================
@@ -437,7 +443,10 @@ void CBoss_One::SetGunOffsetPos(D3DXVECTOR3 pos)
 // =====================================================================================================================================================================
 void CBoss_One::SetGunPos()
 {
-	m_Gun_Pos = m_Gun_OffsetPos + GetPosition();
+	for (int nCnt = 0; nCnt < WEAPONTYPE_MAX; nCnt++)
+	{
+		m_Gun_Pos = m_Gun_OffsetPos[nCnt] + GetPosition();
+	}
 }
 
 // =====================================================================================================================================================================
@@ -500,6 +509,8 @@ void CBoss_One::ShotIncendiary()
 // =====================================================================================================================================================================
 void CBoss_One::ShotBalkan()
 {
+	// バルカンのモデルの回転
+	SetRotBalkan();
 	// 弾の向きの設定
 	m_pGun[WEAPONTYPE_BALKAN]->SetShotRot(
 		D3DXVECTOR3(0.0f, 0.0f, (GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_BALKAN))->GetRot().x * -1.0f));
@@ -526,7 +537,7 @@ void CBoss_One::ShotBalkan()
 			{
 				// インターバルの時間を設定
 				SetShotIntervalTime(30);
-				m_nShotCount = 0;
+				SetShotCount(0);
 				m_nTrrigerCount++;
 			}
 			else if (m_nShotCount >= 0)
@@ -564,7 +575,7 @@ void CBoss_One::ShotWarning()
 		// 10フレームごとに弾を撃つ
 		if (m_nShotIntervalTime <= 0)
 		{
-			// を撃つ
+			// 火炎放射を撃つ
 			m_pGun[WEAPONTYPE_FLAMETHROWER]->Shot();
 			// インターバルの時間を設定
 			SetShotIntervalTime(10);
@@ -640,6 +651,19 @@ void CBoss_One::RandomAttack()
 }
 
 // =====================================================================================================================================================================
+// バルカンの回転
+// =====================================================================================================================================================================
+void CBoss_One::SetRotBalkan()
+{
+	D3DXVECTOR3 rot;
+	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
+	rot = pPlayer->GetPosition() - GetGunOffsetPos(WEAPONTYPE_BALKAN);
+
+	// プレイヤーの方向にバルカンを回転
+	GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_BALKAN)->GetRot().x += rot.x;
+}
+
+// =====================================================================================================================================================================
 //
 // ランダム生成
 //
@@ -671,6 +695,7 @@ void CBoss_One::BossOneStateManager()
 	case CBoss_One::BOSS_ONE_STATE_NONE:
 		break;
 	case CBoss_One::BOSS_ONE_STATE_STAY:
+		// 次の行動を選択
 		Behavior();
 		break;
 	case CBoss_One::BOSS_ONE_STATE_ATTACK:
