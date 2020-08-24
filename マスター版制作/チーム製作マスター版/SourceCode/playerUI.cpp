@@ -20,33 +20,33 @@
 // =====================================================================================================================================================================
 // マクロ定義
 // =====================================================================================================================================================================
-#define PLAYER_MAX_LIFE						(5)														// 体力を表示する最大数
+#define PLAYER_MAX_LIFE						(5)															// 体力を表示する最大数
 
-#define PLAYER_UI_FRAME_POS					(D3DXVECTOR3(265.0f, 65.0f, 0.0f))						// 枠の位置
-#define PLAYER_UI_FRAME_SIZE				(D3DXVECTOR3(80.0f, 45.0f, 0.0f))						// 枠のサイズ
-#define PLAYER_UI_STOCK_LETTER_POS			(D3DXVECTOR3(90.0f, 90.0f, 0.0f))						// 残機( 文字 )の位置
-#define PLAYER_UI_STOCK_LETTER_SIZE			(D3DXVECTOR3(30.0f, 25.0f, 0.0f))						// 残機( 文字 )のサイズ
-#define PLAYER_UI_BULLET_AMMO_LETTER_POS	(D3DXVECTOR3(230.0f, 50.0f, 0.0f))						// 残弾数( 文字 )の位置
-#define PLAYER_UI_BULLET_AMMO_LETTER_SIZE	(D3DXVECTOR3(30.0f, 25.0f, 0.0f))						// 残弾数( 文字 )のサイズ
-#define PLAYER_UI_GRENADE_AMMO_LETTER_POS	(D3DXVECTOR3(300.0f, 50.0f, 0.0f))						// グレネードの残数( 文字 )の位置
-#define PLAYER_UI_GRENADE_AMMO_LETTER_SIZE	(D3DXVECTOR3(30.0f, 25.0f, 0.0f))						// グレネードの残数( 文字 )のサイズ
-#define PLAYER_UI_LIFE_ICON_POS				(D3DXVECTOR3(100.0f, 650.0f, 0.0f))						// 体力アイコンの位置
-#define PLAYER_UI_LIFE_ICON_SIZE			(D3DXVECTOR3(80.0f, 80.0f, 0.0f))						// 体力アイコンのサイズ
-#define PLAYER_UI_INFINITY_AMMO_POS			(D3DXVECTOR3(230.0f, 80.0f, 0.0f))						// 弾数無限の位置
-#define PLAYER_UI_INFINITY_AMMO_SIZE		(D3DXVECTOR3(40.0f, 40.0f, 0.0f))						// 弾数無限のサイズ
+#define PLAYER_UI_FRAME_POS					(D3DXVECTOR3((SCREEN_WIDTH * 0.5f) - 345.0f, 65.0f, 0.0f))	// 枠の位置
+#define PLAYER_UI_FRAME_SIZE				(D3DXVECTOR3(80.0f, 45.0f, 0.0f))							// 枠のサイズ
+#define PLAYER_UI_STOCK_LETTER_POS			(D3DXVECTOR3((SCREEN_WIDTH * 0.5f) - 510.0f, 90.0f, 0.0f))	// 残機( 文字 )の位置
+#define PLAYER_UI_STOCK_LETTER_SIZE			(D3DXVECTOR3(30.0f, 25.0f, 0.0f))							// 残機( 文字 )のサイズ
+#define PLAYER_UI_BULLET_AMMO_LETTER_POS	(D3DXVECTOR3((SCREEN_WIDTH * 0.5f) - 380.0f, 50.0f, 0.0f))	// 残弾数( 文字 )の位置
+#define PLAYER_UI_BULLET_AMMO_LETTER_SIZE	(D3DXVECTOR3(30.0f, 25.0f, 0.0f))							// 残弾数( 文字 )のサイズ
+#define PLAYER_UI_GRENADE_AMMO_LETTER_POS	(D3DXVECTOR3((SCREEN_WIDTH * 0.5f) - 310.0f, 50.0f, 0.0f))	// グレネードの残数( 文字 )の位置
+#define PLAYER_UI_GRENADE_AMMO_LETTER_SIZE	(D3DXVECTOR3(30.0f, 25.0f, 0.0f))							// グレネードの残数( 文字 )のサイズ
+#define PLAYER_UI_LIFE_ICON_POS				(D3DXVECTOR3((SCREEN_WIDTH * 0.5f) - 510.0f, 650.0f, 0.0f))	// 体力アイコンの位置
+#define PLAYER_UI_LIFE_ICON_SIZE			(D3DXVECTOR3(80.0f, 80.0f, 0.0f))							// 体力アイコンのサイズ
+#define PLAYER_UI_INFINITY_AMMO_POS			(D3DXVECTOR3((SCREEN_WIDTH * 0.5f) - 380.0f, 80.0f, 0.0f))	// 弾数無限の位置
+#define PLAYER_UI_INFINITY_AMMO_SIZE		(D3DXVECTOR3(40.0f, 40.0f, 0.0f))							// 弾数無限のサイズ
 
-#define PLAYER_UI_NUM_SCORE_POS				(D3DXVECTOR3(80.0f, 50.0f, 0.0f))						// スコアの位置
-#define PLAYER_UI_NUM_SCORE_SIZE			(D3DXVECTOR3(25.0f, 25.0f, 0.0f))						// スコアのサイズ
-#define PLAYER_UI_NUM_BULLET_AMMO_POS		(D3DXVECTOR3(230.0f, 80.0f, 0.0f))						// 残弾数の位置
-#define PLAYER_UI_NUM_BULLET_AMMO_SIZE		(D3DXVECTOR3(20.0f, 20.0f, 0.0f))						// 残弾数のサイズ
-#define PLAYER_UI_NUM_GRENADE_AMMO_POS		(D3DXVECTOR3(300.0f, 80.0f, 0.0f))						// グレネードの残数の位置
-#define PLAYER_UI_NUM_GRENADE_AMMO_SIZE		(D3DXVECTOR3(20.0f, 20.0f, 0.0f))						// グレネードの残数のサイズ
-#define PLAYER_UI_NUM_LIFE_POS				(D3DXVECTOR3(150.0f, 650.0f, 0.0f))						// 体力の位置
-#define PLAYER_UI_NUM_LIFE_SIZE				(D3DXVECTOR3(25.0f, 25.0f, 0.0f))						// 体力のサイズ
-#define PLAYER_UI_NUM_STOCK_POS				(D3DXVECTOR3(160.0f, 90.0f, 0.0f))						// 残機の位置
-#define PLAYER_UI_NUM_STOCK_SIZE			(D3DXVECTOR3(20.0f, 20.0f, 0.0f))						// 残機のサイズ
-#define PLAYER_UI_NUM_TIME_POS				(D3DXVECTOR3((SCREEN_WIDTH * 0.5f), 50.0f, 0.0f))		// 残り時間の位置
-#define PLAYER_UI_NUM_TIME_SIZE				(D3DXVECTOR3(50.0f, 50.0f, 0.0f))						// 残り時間のサイズ
+#define PLAYER_UI_NUM_SCORE_POS				(D3DXVECTOR3((SCREEN_WIDTH * 0.5f) - 530.0f, 50.0f, 0.0f))	// スコアの位置
+#define PLAYER_UI_NUM_SCORE_SIZE			(D3DXVECTOR3(25.0f, 25.0f, 0.0f))							// スコアのサイズ
+#define PLAYER_UI_NUM_BULLET_AMMO_POS		(D3DXVECTOR3((SCREEN_WIDTH * 0.5f) - 375.0f, 80.0f, 0.0f))	// 残弾数の位置
+#define PLAYER_UI_NUM_BULLET_AMMO_SIZE		(D3DXVECTOR3(20.0f, 20.0f, 0.0f))							// 残弾数のサイズ
+#define PLAYER_UI_NUM_GRENADE_AMMO_POS		(D3DXVECTOR3((SCREEN_WIDTH * 0.5f) - 310.0f, 80.0f, 0.0f))	// グレネードの残数の位置
+#define PLAYER_UI_NUM_GRENADE_AMMO_SIZE		(D3DXVECTOR3(20.0f, 20.0f, 0.0f))							// グレネードの残数のサイズ
+#define PLAYER_UI_NUM_LIFE_POS				(D3DXVECTOR3((SCREEN_WIDTH * 0.5f) - 460.0f, 650.0f, 0.0f))	// 体力の位置
+#define PLAYER_UI_NUM_LIFE_SIZE				(D3DXVECTOR3(25.0f, 25.0f, 0.0f))							// 体力のサイズ
+#define PLAYER_UI_NUM_STOCK_POS				(D3DXVECTOR3((SCREEN_WIDTH * 0.5f) - 450.0f, 90.0f, 0.0f))	// 残機の位置
+#define PLAYER_UI_NUM_STOCK_SIZE			(D3DXVECTOR3(20.0f, 20.0f, 0.0f))							// 残機のサイズ
+#define PLAYER_UI_NUM_TIME_POS				(D3DXVECTOR3((SCREEN_WIDTH * 0.5f), 50.0f, 0.0f))			// 残り時間の位置
+#define PLAYER_UI_NUM_TIME_SIZE				(D3DXVECTOR3(50.0f, 50.0f, 0.0f))							// 残り時間のサイズ
 
 // =====================================================================================================================================================================
 //
