@@ -77,7 +77,7 @@ CBullet::~CBullet()
 HRESULT CBullet::Init()
 {
 	// 変数初期化
-	m_move			= D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// 移動値
+	m_move			= ZeroVector3;		// 移動値
 	m_nLife			= 0;				// 体力
 
 	// 初期化
@@ -221,7 +221,7 @@ void CBullet::BulletLoad()
 	char cReadText[128];			// 文字として読み取る
 	char cHeadText[128];			// 比較用
 	char cDie[128];					// 不要な文字
-	D3DXVECTOR3 pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 位置
+	D3DXVECTOR3 pos = ZeroVector3;	// 位置
 
 	for (int nCnt = 0; nCnt < CGun::GUNTYPE_MAX; nCnt++)
 	{

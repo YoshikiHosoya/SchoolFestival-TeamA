@@ -20,7 +20,33 @@
 // =====================================================================================================================================================================
 // マクロ定義
 // =====================================================================================================================================================================
-#define PLAYER_MAX_LIFE		(5)
+#define PLAYER_MAX_LIFE						(5)														// 体力を表示する最大数
+
+#define PLAYER_UI_FRAME_POS					(D3DXVECTOR3(265.0f, 65.0f, 0.0f))						// 枠の位置
+#define PLAYER_UI_FRAME_SIZE				(D3DXVECTOR3(80.0f, 45.0f, 0.0f))						// 枠のサイズ
+#define PLAYER_UI_STOCK_LETTER_POS			(D3DXVECTOR3(90.0f, 90.0f, 0.0f))						// 残機( 文字 )の位置
+#define PLAYER_UI_STOCK_LETTER_SIZE			(D3DXVECTOR3(30.0f, 25.0f, 0.0f))						// 残機( 文字 )のサイズ
+#define PLAYER_UI_BULLET_AMMO_LETTER_POS	(D3DXVECTOR3(230.0f, 50.0f, 0.0f))						// 残弾数( 文字 )の位置
+#define PLAYER_UI_BULLET_AMMO_LETTER_SIZE	(D3DXVECTOR3(30.0f, 25.0f, 0.0f))						// 残弾数( 文字 )のサイズ
+#define PLAYER_UI_GRENADE_AMMO_LETTER_POS	(D3DXVECTOR3(300.0f, 50.0f, 0.0f))						// グレネードの残数( 文字 )の位置
+#define PLAYER_UI_GRENADE_AMMO_LETTER_SIZE	(D3DXVECTOR3(30.0f, 25.0f, 0.0f))						// グレネードの残数( 文字 )のサイズ
+#define PLAYER_UI_LIFE_ICON_POS				(D3DXVECTOR3(100.0f, 650.0f, 0.0f))						// 体力アイコンの位置
+#define PLAYER_UI_LIFE_ICON_SIZE			(D3DXVECTOR3(80.0f, 80.0f, 0.0f))						// 体力アイコンのサイズ
+#define PLAYER_UI_INFINITY_AMMO_POS			(D3DXVECTOR3(230.0f, 80.0f, 0.0f))						// 弾数無限の位置
+#define PLAYER_UI_INFINITY_AMMO_SIZE		(D3DXVECTOR3(40.0f, 40.0f, 0.0f))						// 弾数無限のサイズ
+
+#define PLAYER_UI_NUM_SCORE_POS				(D3DXVECTOR3(80.0f, 50.0f, 0.0f))						// スコアの位置
+#define PLAYER_UI_NUM_SCORE_SIZE			(D3DXVECTOR3(25.0f, 25.0f, 0.0f))						// スコアのサイズ
+#define PLAYER_UI_NUM_BULLET_AMMO_POS		(D3DXVECTOR3(230.0f, 80.0f, 0.0f))						// 残弾数の位置
+#define PLAYER_UI_NUM_BULLET_AMMO_SIZE		(D3DXVECTOR3(20.0f, 20.0f, 0.0f))						// 残弾数のサイズ
+#define PLAYER_UI_NUM_GRENADE_AMMO_POS		(D3DXVECTOR3(300.0f, 80.0f, 0.0f))						// グレネードの残数の位置
+#define PLAYER_UI_NUM_GRENADE_AMMO_SIZE		(D3DXVECTOR3(20.0f, 20.0f, 0.0f))						// グレネードの残数のサイズ
+#define PLAYER_UI_NUM_LIFE_POS				(D3DXVECTOR3(150.0f, 650.0f, 0.0f))						// 体力の位置
+#define PLAYER_UI_NUM_LIFE_SIZE				(D3DXVECTOR3(25.0f, 25.0f, 0.0f))						// 体力のサイズ
+#define PLAYER_UI_NUM_STOCK_POS				(D3DXVECTOR3(160.0f, 90.0f, 0.0f))						// 残機の位置
+#define PLAYER_UI_NUM_STOCK_SIZE			(D3DXVECTOR3(20.0f, 20.0f, 0.0f))						// 残機のサイズ
+#define PLAYER_UI_NUM_TIME_POS				(D3DXVECTOR3((SCREEN_WIDTH * 0.5f), 50.0f, 0.0f))		// 残り時間の位置
+#define PLAYER_UI_NUM_TIME_SIZE				(D3DXVECTOR3(50.0f, 50.0f, 0.0f))						// 残り時間のサイズ
 
 // =====================================================================================================================================================================
 //
@@ -201,7 +227,7 @@ void CPlayerUI::SetItemScore(int nScore)
 
 // =====================================================================================================================================================================
 //
-// 弾の残数の設定
+// 残弾数の設定
 //
 // =====================================================================================================================================================================
 void CPlayerUI::SetBulletAmmo(int nBulletAmmo, CGun::GUN_TYPE GunType)
@@ -211,17 +237,17 @@ void CPlayerUI::SetBulletAmmo(int nBulletAmmo, CGun::GUN_TYPE GunType)
 	{
 		// 弾数無限のUI非表示
 		m_apScene2D[INFINITY_AMMO]->SetDisp(false);
-		// 弾の残数の表示
+		// 残弾数の表示
 		m_pBulletAmmo->SetDisp(true);
-		// 弾の残数減算
+		// 残弾数減算
 		m_nBulletAmmo = nBulletAmmo;
-		// 弾の残数の設定
+		// 残弾数の設定
 		m_pBulletAmmo->SetMultiNumber(m_nBulletAmmo);
 	}
 	// ハンドガンと戦車の銃のとき
 	else
 	{
-		// 弾の残数の非表示
+		// 残弾数の非表示
 		m_pBulletAmmo->SetDisp(false);
 		// 弾数無限のUI表示
 		m_apScene2D[INFINITY_AMMO]->SetDisp(true);
@@ -338,23 +364,23 @@ void CPlayerUI::PlayerUICreate()
 				// 枠
 			case PLAYER_UI::FRAME:
 				// シーン2Dの生成
-				m_apScene2D[nCnt] = CScene2D::Create(D3DXVECTOR3(225.0f, 65.0f, 0.0f), D3DXVECTOR3(70.0f, 35.0f, 0.0f));
+				m_apScene2D[nCnt] = CScene2D::Create(PLAYER_UI_FRAME_POS, PLAYER_UI_FRAME_SIZE);
 				// テクスチャの割り当て
 				m_apScene2D[nCnt]->BindTexture(CTexture::GetTexture(CTexture::TEX_UI_FRAME));
 				break;
 
 				// 残機		( 文字 )
-			case PLAYER_UI::REMAIN_LETTER:
+			case PLAYER_UI::STOCK_LETTER:
 				// シーン2Dの生成
-				m_apScene2D[nCnt] = CScene2D::Create(D3DXVECTOR3(90.0f, 80.0f, 0.0f), D3DXVECTOR3(20.0f, 20.0f, 0.0f));
+				m_apScene2D[nCnt] = CScene2D::Create(PLAYER_UI_STOCK_LETTER_POS, PLAYER_UI_STOCK_LETTER_SIZE);
 				// テクスチャの割り当て
 				m_apScene2D[nCnt]->BindTexture(CTexture::GetTexture(CTexture::TEX_UI_REMAIN));
 				break;
 
-				// 弾の残数 ( 文字 )
+				// 残弾数 ( 文字 )
 			case PLAYER_UI::BULLET_AMMO_LETTER:
 				// シーン2Dの生成
-				m_apScene2D[nCnt] = CScene2D::Create(D3DXVECTOR3(200.0f, 50.0f, 0.0f), D3DXVECTOR3(20.0f, 20.0f, 0.0f));
+				m_apScene2D[nCnt] = CScene2D::Create(PLAYER_UI_BULLET_AMMO_LETTER_POS, PLAYER_UI_BULLET_AMMO_LETTER_SIZE);
 				// テクスチャの割り当て
 				m_apScene2D[nCnt]->BindTexture(CTexture::GetTexture(CTexture::TEX_UI_ARMS));
 				break;
@@ -362,7 +388,7 @@ void CPlayerUI::PlayerUICreate()
 				// グレネードの残数 ( 文字 )
 			case PLAYER_UI::GRENADE_AMMO_LETTER:
 				// シーン2Dの生成
-				m_apScene2D[nCnt] = CScene2D::Create(D3DXVECTOR3(250.0f, 50.0f, 0.0f), D3DXVECTOR3(20.0f, 20.0f, 0.0f));
+				m_apScene2D[nCnt] = CScene2D::Create(PLAYER_UI_GRENADE_AMMO_LETTER_POS, PLAYER_UI_GRENADE_AMMO_LETTER_SIZE);
 				// テクスチャの割り当て
 				m_apScene2D[nCnt]->BindTexture(CTexture::GetTexture(CTexture::TEX_UI_BOMB));
 				break;
@@ -370,18 +396,17 @@ void CPlayerUI::PlayerUICreate()
 				// 体力アイコン
 			case PLAYER_UI::LIFE_ICON:
 				// シーン2Dの生成
-				m_apScene2D[nCnt] = CScene2D::Create(D3DXVECTOR3(100.0f, 650.0f, 0.0f), D3DXVECTOR3(20.0f, 20.0f, 0.0f));
+				m_apScene2D[nCnt] = CScene2D::Create(PLAYER_UI_LIFE_ICON_POS, PLAYER_UI_LIFE_ICON_SIZE);
 				// テクスチャの割り当て
 				m_apScene2D[nCnt]->BindTexture(CTexture::GetSeparateTexture(CTexture::SEPARATE_TEX_UI_LIFE));
 				// アニメーションの設定
-				m_apScene2D[LIFE_ICON]->SetAnimation(CTexture::GetSparateTex_UVCnt(CTexture::SEPARATE_TEX_UI_LIFE), CTexture::GetSparateTex_UVSize(CTexture::SEPARATE_TEX_UI_LIFE));
-
+				m_apScene2D[nCnt]->SetAnimation(CTexture::GetSparateTex_UVCnt(CTexture::SEPARATE_TEX_UI_LIFE), CTexture::GetSparateTex_UVSize(CTexture::SEPARATE_TEX_UI_LIFE));
 				break;
 
 				// 弾数無限
 			case PLAYER_UI::INFINITY_AMMO:
 				// シーン2Dの生成
-				m_apScene2D[nCnt] = CScene2D::Create(D3DXVECTOR3(200.0f, 80.0f, 0.0f), D3DXVECTOR3(30.0f, 30.0f, 0.0f));
+				m_apScene2D[nCnt] = CScene2D::Create(PLAYER_UI_INFINITY_AMMO_POS, PLAYER_UI_INFINITY_AMMO_SIZE);
 				// テクスチャの割り当て
 				m_apScene2D[nCnt]->BindTexture(CTexture::GetTexture(CTexture::TEX_UI_INFINITY));
 				break;
@@ -390,15 +415,15 @@ void CPlayerUI::PlayerUICreate()
 	}
 
 	// スコアの生成
-	m_pScore = CMultiNumber::Create(D3DXVECTOR3(80.0f, 50.0f, 0.0f), D3DXVECTOR3(15.0f, 15.0f, 0.0f), m_nScore, 8, CScene::OBJTYPE_UI);
-	// 弾の残数の生成
-	m_pBulletAmmo = CMultiNumber::Create(D3DXVECTOR3(200.0f, 80.0f, 0.0f), D3DXVECTOR3(10.0f, 10.0f, 0.0f), m_nBulletAmmo, 3, CScene::OBJTYPE_UI);
+	m_pScore = CMultiNumber::Create(PLAYER_UI_NUM_SCORE_POS, PLAYER_UI_NUM_SCORE_SIZE, m_nScore, 8, CScene::OBJTYPE_UI);
+	// 残弾数の生成
+	m_pBulletAmmo = CMultiNumber::Create(PLAYER_UI_NUM_BULLET_AMMO_POS, PLAYER_UI_NUM_BULLET_AMMO_SIZE, m_nBulletAmmo, 3, CScene::OBJTYPE_UI);
 	// グレネードの残数の生成
-	m_pGrenadeAmmo = CMultiNumber::Create(D3DXVECTOR3(250.0f, 80.0f, 0.0f), D3DXVECTOR3(10.0f, 10.0f, 0.0f), m_nGrenadeAmmo, 2, CScene::OBJTYPE_UI);
+	m_pGrenadeAmmo = CMultiNumber::Create(PLAYER_UI_NUM_GRENADE_AMMO_POS, PLAYER_UI_NUM_GRENADE_AMMO_SIZE, m_nGrenadeAmmo, 2, CScene::OBJTYPE_UI);
 	// 体力の残数の生成
-	m_pLife = CMultiNumber::Create(D3DXVECTOR3(150.0f, 650.0f, 0.0f), D3DXVECTOR3(15.0f, 15.0f, 0.0f), m_nLife, 2, CScene::OBJTYPE_UI);
-	// 体力の残数の生成
-	m_pStock = CMultiNumber::Create(D3DXVECTOR3(130.0f, 80.0f, 0.0f), D3DXVECTOR3(10.0f, 10.0f, 0.0f), m_nStock, 2, CScene::OBJTYPE_UI);
+	m_pLife = CMultiNumber::Create(PLAYER_UI_NUM_LIFE_POS, PLAYER_UI_NUM_LIFE_SIZE, m_nLife, 2, CScene::OBJTYPE_UI);
+	// 残機の生成
+	m_pStock = CMultiNumber::Create(PLAYER_UI_NUM_STOCK_POS, PLAYER_UI_NUM_STOCK_SIZE, m_nStock, 2, CScene::OBJTYPE_UI);
 	// 残り時間の生成
-	m_pTime = CMultiNumber::Create(D3DXVECTOR3((SCREEN_WIDTH * 0.5f), 50.0f, 0.0f), D3DXVECTOR3(50.0f, 50.0f, 0.0f), m_nTime, 2, CScene::OBJTYPE_UI);
+	m_pTime = CMultiNumber::Create(PLAYER_UI_NUM_TIME_POS, PLAYER_UI_NUM_TIME_SIZE, m_nTime, 2, CScene::OBJTYPE_UI);
 }
