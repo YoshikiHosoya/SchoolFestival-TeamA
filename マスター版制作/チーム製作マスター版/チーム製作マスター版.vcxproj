@@ -174,7 +174,6 @@
     <ClCompile Include="SourceCode\diffusiongun.cpp" />
     <ClCompile Include="SourceCode\Enemy.cpp" />
     <ClCompile Include="SourceCode\EnemyAI.cpp" />
-    <ClCompile Include="SourceCode\EnemyShield.cpp" />
     <ClCompile Include="SourceCode\fade.cpp" />
     <ClCompile Include="SourceCode\flameshot.cpp" />
     <ClCompile Include="SourceCode\flamethrower.cpp" />
@@ -243,6 +242,7 @@
     <ClCompile Include="SourceCode\ScoreManager.cpp" />
     <ClCompile Include="SourceCode\selectcharacter.cpp" />
     <ClCompile Include="SourceCode\shield.cpp" />
+    <ClCompile Include="SourceCode\ShieldEnemyAI.cpp" />
     <ClCompile Include="SourceCode\shotgun.cpp" />
     <ClCompile Include="SourceCode\sound.cpp" />
     <ClCompile Include="SourceCode\tankgun.cpp" />
@@ -282,7 +282,6 @@
     <ClInclude Include="SourceCode\diffusiongun.h" />
     <ClInclude Include="SourceCode\Enemy.h" />
     <ClInclude Include="SourceCode\EnemyAI.h" />
-    <ClInclude Include="SourceCode\EnemyShield.h" />
     <ClInclude Include="SourceCode\fade.h" />
     <ClInclude Include="SourceCode\flameshot.h" />
     <ClInclude Include="SourceCode\flamethrower.h" />
@@ -354,6 +353,7 @@
     <ClInclude Include="SourceCode\ScoreManager.h" />
     <ClInclude Include="SourceCode\selectcharacter.h" />
     <ClInclude Include="SourceCode\shield.h" />
+    <ClInclude Include="SourceCode\ShieldEnemyAI.h" />
     <ClInclude Include="SourceCode\shotgun.h" />
     <ClInclude Include="SourceCode\sound.h" />
     <ClInclude Include="SourceCode\tankgun.h" />
