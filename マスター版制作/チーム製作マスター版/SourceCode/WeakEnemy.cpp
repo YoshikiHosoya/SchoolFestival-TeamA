@@ -8,7 +8,7 @@
 #include "collision.h"
 #include "debugproc.h"
 #include "item.h"
-#include "EnemyAI.h"
+#include "ShieldEnemyAI.h"
 #include "gun.h"
 #include "particle.h"
 #include "sound.h"
@@ -104,7 +104,7 @@ CWeakEnemy *CWeakEnemy::Create(void)
 	CWeakEnemy*pWeakEnemy;
 	pWeakEnemy = new CWeakEnemy(OBJTYPE_ENEMY);
 	pWeakEnemy->Init();
-	pWeakEnemy->SetAIPtr(CEnemyAI::CreateAI(pWeakEnemy));
+	pWeakEnemy->SetAIPtr(CShieldEnemyAI::CreateAI(pWeakEnemy));
 
 	return pWeakEnemy;
 }
