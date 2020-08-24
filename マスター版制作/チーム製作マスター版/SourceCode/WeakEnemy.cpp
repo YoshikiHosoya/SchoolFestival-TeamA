@@ -13,6 +13,7 @@
 #include "particle.h"
 #include "sound.h"
 #include "shield.h"
+#include "Knife.h"
 //====================================================================
 //マクロ定義
 //====================================================================
@@ -45,6 +46,8 @@ HRESULT CWeakEnemy::Init(void)
 
 	// 銃の弾の種類
 	GetGunPtr()->GetTag() = TAG_ENEMY;
+	// ナイフの生成
+	m_pKnife = CKnife::Create(GetCharacterModelPartsList(CModel::MODEL_ENEMY_LHAND)->GetMatrix());
 
 	//盾生成
 	m_pShield = nullptr;

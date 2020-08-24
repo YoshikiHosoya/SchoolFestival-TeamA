@@ -4,13 +4,14 @@
 #include "ShieldEnemyAI.h"
 #include "renderer.h"
 #include "inputKeyboard.h"
-#include "Enemy.h"
+#include "WeakEnemy.h"
 #include "Player.h"
 #include "manager.h"
 #include "BaseMode.h"
 #include "map.h"
 #include "collision.h"
 #include "gun.h"
+#include "Knife.h"
 #define MAX_RECASTTIME (120)
 #define MAX_DISTANCE (180)
 #define MAX_ATTACKDISTANCE (70)
@@ -30,6 +31,7 @@ HRESULT CShieldEnemyAI::Init(void)
 	m_recast = 60;
 	m_castcount = 0;
 	m_bAttack = false;
+	m_bKnifeAttack = false;
 	m_random = 0;
 	m_AItype = AI_NONE;
 	m_Distance = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
@@ -58,7 +60,6 @@ void CShieldEnemyAI::Update(void)
 
 	if (pEnemyPass != nullptr)
 	{
-		m_castcount++;
 		// マップモデルが存在した時
 		if (pMap != nullptr)
 		{
@@ -67,12 +68,14 @@ void CShieldEnemyAI::Update(void)
 			if (m_fDistance < MAX_ATTACKDISTANCE)
 			{
 				m_bAttack = true;
+				m_castcount++;
 			}
 			else
 			{
 				m_bAttack = false;
+				m_castcount = 0;
 			}					
-			if (m_bAttack == false)
+			if (m_bKnifeAttack == false)
 			{
 				//プレイヤーが左にいるとき
 				if (pEnemyPass->GetPosition().x > pPlayer->GetPosition().x)
@@ -152,6 +155,7 @@ void CShieldEnemyAI::Update(void)
 				pEnemyPass->GetRotDest().y = D3DX_PI * -0.5f;
 				pEnemyPass->SetCharacterDirection(DIRECTION::RIGHT);
 				pEnemyPass->SetMotion(CCharacter::ENEMY_MOTION_WALK);
+
 				break;
 			}
 		}
@@ -163,15 +167,22 @@ void CShieldEnemyAI::Update(void)
 //=============================================================================
 void CShieldEnemyAI::AttackUpdate(void)
 {
-	if (m_bAttack == true)
+	if (m_bAttack == true&& m_bKnifeAttack == false && m_castcount == 30)
 	{
+		m_bKnifeAttack = true;
+		 pEnemyPass->GetKnifePtr()->StartMeleeAttack();
+	}
+	if(m_bKnifeAttack == true)
+	{
+		m_recast++;
 		m_AItype = AI_ATTACK;
 	}
-	// 攻撃モーションから別のモーションになった時
-	if (pEnemyPass->GetMotionType() != CCharacter::ENEMY_MOTION_KNIFEATTACK)
+	if(m_recast == 180 && m_bKnifeAttack == true)
 	{
-		m_bAttack = false;
-		//m_pKnife->EndMeleeAttack();
+		m_bKnifeAttack = false;
+		m_AItype = AI_STOP;
+		m_recast = 0;
+		pEnemyPass->GetKnifePtr()->EndMeleeAttack();
 	}
 }
 //=============================================================================
@@ -189,7 +200,7 @@ void CShieldEnemyAI::DebugInfo(void)
 //=============================================================================
 // AIのクリエイト
 //=============================================================================
-CShieldEnemyAI * CShieldEnemyAI::CreateAI(CEnemy *pEnemy)
+CShieldEnemyAI * CShieldEnemyAI::CreateAI(CWeakEnemy *pEnemy)
 {
 	CShieldEnemyAI*pEnemyAI;
 	pEnemyAI = new CShieldEnemyAI();
