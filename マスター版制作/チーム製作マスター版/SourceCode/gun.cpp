@@ -66,10 +66,11 @@ HRESULT CGun::Init()
 	m_nCntBullet	= 0;											// 弾のカウント
 	m_nAmmo			= CBullet::GetBulletParam(m_GunType)->nAmmo;	// 残弾数
 	m_nInterval		= 0;											// 次に撃つためのインターバル
-	m_ShotPos		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);				// 発射位置
-	m_ShotOffsetPos	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);				// 発射位置のオフセット
-	m_ShotRot		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);				// 撃つときの回転の向き
+	m_ShotPos		= ZeroVector3;									// 発射位置
+	m_ShotOffsetPos	= ZeroVector3;									// 発射位置のオフセット
+	m_ShotRot		= ZeroVector3;									// 撃つときの回転の向き
 	m_bDraw			= false;										// 描画フラグ
+	m_bMoveZero		= false;										// 移動を無効にするフラグ
 
 	// 初期化
 	CModel::Init();
@@ -343,10 +344,16 @@ void CGun::Shot()
 			// 弾のパラメーターの設定
 			pBullet->SetBulletParam(m_GunType);
 
+			// 弾の移動量を0にする
+			if (m_bMoveZero)
+			{
+				pBullet->SetMove(ZeroVector3);
+			}
+
 			// 弾発砲時のリアクション
 			pBullet->BulletReaction(m_ShotRot);
 
-			////ノズルフラッシュ
+			//ノズルフラッシュ
 			CParticle::CreateFromText(m_ShotPos, ZeroVector3, CParticleParam::EFFECT_SHOTFLASH);
 
 			//音再生

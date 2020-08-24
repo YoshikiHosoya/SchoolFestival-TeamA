@@ -77,7 +77,7 @@ CBullet::~CBullet()
 HRESULT CBullet::Init()
 {
 	// •Ï”‰Šú‰»
-	m_move			= D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// ˆÚ“®’l
+	m_move			= ZeroVector3;		// ˆÚ“®’l
 	m_nLife			= 0;				// ‘Ì—Í
 
 	// ‰Šú‰»
