@@ -135,8 +135,8 @@ void CGrenadeFire::Fire(D3DXVECTOR3 rot)
 
 		if (pGrenade)
 		{
-			D3DXVECTOR3 pos = D3DXVECTOR3(0.0f, 0.0, 0.0f);
-			D3DXVec3TransformCoord(&pos, &D3DXVECTOR3(0.0f, 0.0f, 0.0f), m_mtx);
+			D3DXVECTOR3 pos = ZeroVector3;
+			D3DXVec3TransformCoord(&pos, &ZeroVector3, m_mtx);
 
 			// ˆÊ’u‚ÌÝ’è
 			pGrenade->SetPosition(pos);
