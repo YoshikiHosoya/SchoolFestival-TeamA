@@ -126,11 +126,18 @@ private:
 	void					SetShotIntervalTime(int time)	{ m_nShotIntervalTime = time; };		// インターバルの時間の設定
 	void					SetShotCount(int nCount)		{ m_nShotCount = nCount; };				// ショットカウントの時間の設定
 	void					SetCoolTime(int time)			{ m_nCoolTime = time;};					// ステートが切り替わるまでの時間の設定
+	void					SetTriggerCount(int nCount)		{ m_nTrrigerCount = nCount; };			// トリガーのカウントの設定
 	void					SetGunOffsetPos(D3DXVECTOR3 pos);										// ガンのオフセット座標の設定
 	D3DXVECTOR3				GetGunOffsetPos(BOSS_ONE_WEAPONTYPE type);								// ガンのオフセット座標の取得
 	void					SetGunPos();															// ガンの座標の設定
 	void					MoveGun(D3DXVECTOR3 &PartsPos, D3DXVECTOR3 move);						// ガンの移動
 	void					Cooltime_Decrease();													// クールタイムの減少
+	void					CalcRotationBalkan(const float fTarget, float fCurrent);				// 目標と現在
+
+
+	float					get_vector_length(D3DXVECTOR3 vectol);	// ベクトルの長さを計算する
+	float					dot_product(D3DXVECTOR3 vl, D3DXVECTOR3 vr); // ベクトル内積
+	float					AngleOf2Vector(D3DXVECTOR3 A, D3DXVECTOR3 B); // ２つのベクトルABのなす角度θを求める
 
 	// --- 攻撃管理関数 ---  //
 	void					ShotIncendiary();														// 焼夷弾
@@ -149,13 +156,15 @@ private:
 	CCollision				*m_pCollision;						// 当たり判定のポインタ
 	BOSS_ONE_STATE			m_BossOneState;						// ボスのステータス
 	BOSS_ONE_ATTACKTYPE		m_AttckType;						// ボスの攻撃の種類
+	BOSS_ONE_ATTACKTYPE		m_AttckTypeOld;						// 1つ前の攻撃パターン
 	int						m_ShotCount;						// 一発撃ってから次の弾を撃つまでの時間
 	int						m_nCoolTime;						// ステートが切り替わるまでの時間
 	int						m_nShotIntervalTime;				// 連続して撃つ弾の次の弾を撃つまでの時間
 	D3DXVECTOR3				m_Gun_OffsetPos[WEAPONTYPE_MAX];	// ガンのオフセット座標
-	D3DXVECTOR3				m_Gun_Pos;							// ガンの座標
+	D3DXVECTOR3				m_Gun_Pos[WEAPONTYPE_MAX];			// ガンの座標
 	int						m_nShotCount;						//
 	int						m_nTrrigerCount;					//
 	bool					m_bFlame;							//
+	bool					m_bBalkanRotFlag;
 };
 #endif
