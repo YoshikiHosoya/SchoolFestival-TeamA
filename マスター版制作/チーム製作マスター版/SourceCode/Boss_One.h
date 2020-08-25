@@ -127,6 +127,7 @@ private:
 	void					SetShotCount(int nCount)		{ m_nShotCount = nCount; };				// ショットカウントの時間の設定
 	void					SetCoolTime(int time)			{ m_nCoolTime = time;};					// ステートが切り替わるまでの時間の設定
 	void					SetTriggerCount(int nCount)		{ m_nTrrigerCount = nCount; };			// トリガーのカウントの設定
+	void					SetBalkanRot(float fRot)		{ m_fBalkanRot = fRot; };				// バルカンの回転量の設定
 	void					SetGunOffsetPos(D3DXVECTOR3 pos);										// ガンのオフセット座標の設定
 	D3DXVECTOR3				GetGunOffsetPos(BOSS_ONE_WEAPONTYPE type);								// ガンのオフセット座標の取得
 	void					SetGunPos();															// ガンの座標の設定
@@ -162,9 +163,10 @@ private:
 	int						m_nShotIntervalTime;				// 連続して撃つ弾の次の弾を撃つまでの時間
 	D3DXVECTOR3				m_Gun_OffsetPos[WEAPONTYPE_MAX];	// ガンのオフセット座標
 	D3DXVECTOR3				m_Gun_Pos[WEAPONTYPE_MAX];			// ガンの座標
-	int						m_nShotCount;						//
-	int						m_nTrrigerCount;					//
-	bool					m_bFlame;							//
-	bool					m_bBalkanRotFlag;
+	int						m_nShotCount;						// ショットした回数
+	int						m_nTrrigerCount;					// 何トリガー撃ったか
+	bool					m_bFlame;							// 
+	bool					m_bBalkanRotFlag;					// 回転許可フラグ
+	float					m_fBalkanRot;						// ガンの回転情報
 };
 #endif

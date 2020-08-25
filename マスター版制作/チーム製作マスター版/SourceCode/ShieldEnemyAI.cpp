@@ -74,7 +74,7 @@ void CShieldEnemyAI::Update(void)
 			{
 				m_bAttack = false;
 				m_castcount = 0;
-			}					
+			}
 			if (m_bKnifeAttack == false)
 			{
 				//ƒvƒŒƒCƒ„[‚ª¶‚É‚¢‚é‚Æ‚«

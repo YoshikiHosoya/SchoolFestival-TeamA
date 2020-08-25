@@ -51,6 +51,7 @@ CBoss_One::CBoss_One(OBJ_TYPE type) :CCharacter(type)
 	m_nTrrigerCount			 = 0;
 	m_bFlame				 = false;
 	m_bBalkanRotFlag		 = false;
+	m_fBalkanRot			 = 0.0f;
 }
 // =====================================================================================================================================================================
 //
@@ -411,6 +412,7 @@ void CBoss_One::Behavior()
 	// ƒKƒ“‚ÌŒX‚«‚ðŒ³‚É–ß‚·
 	//CalcRotationBalkan(-1.57f, GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_BALKAN)->GetRot().x);
 	GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_BALKAN)->GetRot().x = 0.0f;
+	m_fBalkanRot = GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_BALKAN)->GetRot().x;
 	// ’e‚ðŒ‚‚Á‚½‰ñ”‚ðƒŠƒZƒbƒg
 	SetShotCount(0);
 	// ƒCƒ“ƒ^[ƒoƒ‹‚ÌŽžŠÔ‚ðƒŠƒZƒbƒg
@@ -533,6 +535,18 @@ float CBoss_One::AngleOf2Vector(D3DXVECTOR3 A, D3DXVECTOR3 B)
 	//ƒ‰ƒWƒAƒ“‚Å‚È‚­0`180‚ÌŠp“x‚Å‚Ù‚µ‚¢ê‡‚ÍƒRƒƒ“ƒgŠO‚·
 	sita = sita * 180.0f / D3DX_PI;
 
+	// ¡‚Ì‰ñ“]—Ê‚Æ‹‚ß‚½‰ñ“]—Ê‚ª“¯‚¶‚È‚ç0.0f‚ð•Ô‚·
+	if (m_fBalkanRot == sita)
+	{
+		return 0.0f;
+	}
+	// ˆá‚¤‚È‚ç‹‚ß‚½Šp“x‚Æ¡‚Ì‰ñ“]—Ê‚ðŒvŽZ‚µ‰ñ“]—Ê‚ð‹‚ß‚é
+	else
+	{
+		return (sita - m_fBalkanRot);
+	}
+
+	// Šp“x‚ð•Ô‚·
 	return sita;
 }
 
@@ -598,6 +612,8 @@ void CBoss_One::ShotBalkan()
 
 			// ‰ñ“]‚ð”½‰f
 			GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_BALKAN)->GetRot().x += AngleOf2Vector(vectol, vec);
+			// ‰ñ“]—Ê‚ÌXV
+			SetBalkanRot(GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_BALKAN)->GetRot().x);
 
 			// ’e‚ÌŒü‚«‚ÌÝ’è
 			m_pGun[WEAPONTYPE_BALKAN]->SetShotRot(
