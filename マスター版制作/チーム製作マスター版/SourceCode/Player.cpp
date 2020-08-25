@@ -106,7 +106,7 @@ HRESULT CPlayer::Init(void)
 	m_pGun->SetShotOffsetPos(D3DXVECTOR3(0.0f, SHOT_BULLET_POS_Y, SHOT_BULLET_POS_Z));
 
 	// ナイフの生成
-	m_pKnife = CKnife::Create(GetCharacterModelPartsList(CModel::MODEL_PLAYER_LHAND)->GetMatrix());
+	m_pKnife = CKnife::Create(GetCharacterModelPartsList(CModel::MODEL_PLAYER_LHAND)->GetMatrix(), TAG::TAG_PLAYER);
 	// 乗り物に乗り込んでいるかどうかのフラグ
 	m_bRideVehicle = false;
 
@@ -216,9 +216,9 @@ void CPlayer::Update(void)
 	{
 		m_pGun->SetModelConut(m_pGun->GUNTYPE_HEAVYMACHINEGUN);
 	}
+
 	CCharacter::Update();
 
-	PadMoveUpdate();//パッドの更新
 	//スクリーンの範囲内から出ないように制限
 	CManager::GetRenderer()->ScreenLimitRange(GetPosition());
 }
@@ -436,11 +436,14 @@ void CPlayer::MoveUpdate(void)
 	}
 
 	//上も下も入力されていない時は正面を向く
-	if (!(key->GetKeyboardPress(DIK_S) || key->GetKeyboardPress(DIK_W)))
+	if (!(key->GetKeyboardPress(DIK_S) || key->GetKeyboardPress(DIK_W) || fabsf(Pad_Y) > 0.6f))
 	{
 		//正面を向く
 		ResetCharacterDirection();
 	}
+
+	PadMoveUpdate();//パッドの更新
+
 }
 //====================================================================
 //当たり判定関連

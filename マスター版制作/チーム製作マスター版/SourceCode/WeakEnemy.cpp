@@ -2,13 +2,14 @@
 // エネミー処理 [enemy.cpp]: NORI
 //====================================================================
 #include "weakenemy.h"
+#include "Enemy.h"
 #include "model.h"
 #include "game.h"
 #include "fade.h"
 #include "collision.h"
 #include "debugproc.h"
-#include "item.h"
 #include "ShieldEnemyAI.h"
+#include "EnemyAI.h"
 #include "gun.h"
 #include "particle.h"
 #include "sound.h"
@@ -34,7 +35,7 @@ CWeakEnemy::~CWeakEnemy()
 //====================================================================
 HRESULT CWeakEnemy::Init(void)
 {
-	//キャラの初期化
+	// キャラの初期化
 	CEnemy::Init();
 	LoadOffset(CCharacter::CHARACTER_TYPE_ENEMY);
 	SetCharacterType(CCharacter::CHARACTER_TYPE_ENEMY);
@@ -47,13 +48,31 @@ HRESULT CWeakEnemy::Init(void)
 	// 銃の弾の種類
 	GetGunPtr()->GetTag() = TAG_ENEMY;
 	// ナイフの生成
-	m_pKnife = CKnife::Create(GetCharacterModelPartsList(CModel::MODEL_ENEMY_LHAND)->GetMatrix());
 
-	//盾生成
-	m_pShield = nullptr;
-	m_pShield = CShield::Create();
-	m_pShield->SetHandMtx(GetCharacterModelPartsList(CModel::MODEL_ENEMY_RHAND)->GetMatrix());
-	m_pShield->SetHasEnemyPtr(this);
+	m_pKnife = CKnife::Create(GetCharacterModelPartsList(CModel::MODEL_ENEMY_LHAND)->GetMatrix(),TAG::TAG_ENEMY);
+	// 敵のタイプ設定
+	switch (m_type)
+	{
+	case CWeakEnemy::WEAKENEMY_TYPE::ENEMY_NORMAL:
+		SetAIPtr(CEnemyAI::CreateAI(this));
+		break;
+	case CWeakEnemy::WEAKENEMY_TYPE::ENEMY_SHIELD:
+		//AIの追加
+		SetAIPtr(CShieldEnemyAI::CreateAI(this));
+		//盾生成
+		m_pShield = nullptr;
+		m_pShield = CShield::Create();
+		m_pShield->SetHandMtx(GetCharacterModelPartsList(CModel::MODEL_ENEMY_RHAND)->GetMatrix());
+		m_pShield->SetHasEnemyPtr(this);
+		break;
+	default:
+		break;
+	}
+
+
+
+
+
 
 	// 当たり判定生成
 	GetCollision()->SetSize2D(ENEMY_SIZE);
@@ -72,6 +91,11 @@ void CWeakEnemy::Uninit(void)
 	{
 		m_pShield->Rerease();
 		m_pShield = nullptr;
+	}
+	if (m_pKnife)
+	{
+		m_pKnife->Rerease();
+		m_pKnife = nullptr;
 	}
 
 	CEnemy::Uninit();
@@ -101,13 +125,15 @@ void CWeakEnemy::DebugInfo(void)
 //====================================================================
 //モデルのクリエイト
 //====================================================================
-CWeakEnemy *CWeakEnemy::Create(void)
+
+CWeakEnemy *CWeakEnemy::Create(WEAKENEMY_TYPE type)
 {
 	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
 	CWeakEnemy*pWeakEnemy;
 	pWeakEnemy = new CWeakEnemy(OBJTYPE_ENEMY);
+	pWeakEnemy->m_type = type;
 	pWeakEnemy->Init();
-	pWeakEnemy->SetAIPtr(CShieldEnemyAI::CreateAI(pWeakEnemy));
+
 
 	return pWeakEnemy;
 }
@@ -160,6 +186,7 @@ void CWeakEnemy::StateChangeReaction()
 		break;
 	case CHARACTER_STATE_DEATH:
 		SetStateCount(60);
+		m_pKnife->EndMeleeAttack();
 		SetMotion(CCharacter::ENEMY_MOTION_DEAD_1);
 
 		if (m_pShield)

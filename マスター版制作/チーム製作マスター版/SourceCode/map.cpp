@@ -345,7 +345,7 @@ void CMap::MapModelCreate(int ModelType, int nType, D3DXVECTOR3 pos,int nItemTyp
 	/* --- 敵 --- */
 	case CMap::ARRANGEMENT_MODEL_ENEMY:
 		// オブジェクトの生成
-		m_pEnemy.emplace_back(CWeakEnemy::Create());
+		m_pEnemy.emplace_back(CWeakEnemy::Create(CWeakEnemy::WEAKENEMY_TYPE::ENEMY_NORMAL));
 		// 位置の設定
 		m_pEnemy[m_pEnemy.size() - 1]->SetPosition(pos);
 		break;
@@ -1193,7 +1193,7 @@ void CMap::ModelCreat()
 	{
 	case CMap::ARRANGEMENT_MODEL_ENEMY:
 		// 敵
-		m_pEnemy.emplace_back(CWeakEnemy::Create());
+		m_pEnemy.emplace_back(CWeakEnemy::Create(CWeakEnemy::WEAKENEMY_TYPE::ENEMY_NORMAL));
 		break;
 
 	case CMap::ARRANGEMENT_MODEL_PRISONER:
@@ -1298,7 +1298,7 @@ void CMap::WaveCreate(int nModelType, D3DXVECTOR3 eventpos, WAVE_PARAM * pWavePa
 	if (nModelType == ARRANGEMENT_MODEL_ENEMY)
 	{
 		// 敵
-		m_pEnemy.emplace_back(CWeakEnemy::Create());
+		m_pEnemy.emplace_back(CWeakEnemy::Create(CWeakEnemy::WEAKENEMY_TYPE::ENEMY_NORMAL));
 		m_pEnemy[m_pEnemy.size() - 1]->SetPosition(pWaveParam->pos + eventpos);
 		m_pEnemy[m_pEnemy.size() - 1]->SetEventFlag(pWaveParam->bEvent);
 	}
