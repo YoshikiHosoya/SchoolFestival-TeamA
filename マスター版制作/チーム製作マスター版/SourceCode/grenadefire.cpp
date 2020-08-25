@@ -30,6 +30,9 @@
 // =====================================================================================================================================================================
 CGrenadeFire::CGrenadeFire(OBJ_TYPE type) :CScene(type)
 {
+	m_nAmmo			= 0;				// 残弾数
+	m_nInterval		= 0;				// インターバル
+	m_type			= HAND_GRENADE;		// グレネードの種類
 }
 
 // =====================================================================================================================================================================
@@ -48,7 +51,16 @@ CGrenadeFire::~CGrenadeFire()
 // =====================================================================================================================================================================
 HRESULT CGrenadeFire::Init()
 {
-	m_nAmmo = CBullet::GetBulletParam(CGun::GUNTYPE_GRENADE)->nAmmo;	// 残弾数
+	// 残弾数
+	switch (m_type)
+	{
+	case CGrenadeFire::HAND_GRENADE:
+		m_nAmmo = CBullet::GetBulletParam(CGun::GUNTYPE_HANDGRENADE)->nAmmo;
+		break;
+	case CGrenadeFire::TANK_GRENADE:
+		m_nAmmo = CBullet::GetBulletParam(CGun::GUNTYPE_TANKGRENADE)->nAmmo;
+		break;
+	}
 
 	return S_OK;
 }
@@ -96,13 +108,15 @@ void CGrenadeFire::DebugInfo(void)
 // グレネード放つ位置の生成
 //
 // =====================================================================================================================================================================
-CGrenadeFire * CGrenadeFire::Create(D3DXMATRIX * mtx)
+CGrenadeFire * CGrenadeFire::Create(D3DXMATRIX * mtx, GRENADE_TYPE type)
 {
 	// 変数
 	CGrenadeFire *pGrenadeFire;
 
 	// メモリの確保
 	pGrenadeFire = new CGrenadeFire(OBJTYPE_MODEL);
+
+	pGrenadeFire->m_type = type;
 
 	// 初期化
 	pGrenadeFire->Init();
@@ -120,16 +134,28 @@ CGrenadeFire * CGrenadeFire::Create(D3DXMATRIX * mtx)
 // =====================================================================================================================================================================
 void CGrenadeFire::Fire(D3DXVECTOR3 rot)
 {
-	CGrenade *pGrenade = nullptr;
+	CGrenade				*pGrenade		= nullptr;
+	CBullet::BULLET_PARAM	*pBulletParam	= nullptr;
 
 	// グレネードの生成
-	pGrenade = CGrenade::Create(rot);
+	pGrenade = CGrenade::Create(rot, m_type);
+
+	// パラメーター取得
+	switch (m_type)
+	{
+	case CGrenadeFire::HAND_GRENADE:
+		pBulletParam = CBullet::GetBulletParam(CGun::GUNTYPE_HANDGRENADE);
+		break;
+	case CGrenadeFire::TANK_GRENADE:
+		pBulletParam = CBullet::GetBulletParam(CGun::GUNTYPE_TANKGRENADE);
+		break;
+	}
 
 	// 残弾数を減らす
 	m_nAmmo--;
 
 	// インターバルが経過したとき
-	if (m_nInterval >= CBullet::GetBulletParam(CGun::GUNTYPE_GRENADE)->nInterval)
+	if (m_nInterval >= pBulletParam->nInterval)
 	{
 		m_nInterval = 0;
 
@@ -145,7 +171,15 @@ void CGrenadeFire::Fire(D3DXVECTOR3 rot)
 			pGrenade->SetTag(m_Tag);
 
 			// 弾のパラメーターの設定
-			pGrenade->SetBulletParam(CGun::GUNTYPE_GRENADE);
+			switch (m_type)
+			{
+			case CGrenadeFire::HAND_GRENADE:
+				pGrenade->SetBulletParam(CGun::GUNTYPE_HANDGRENADE);
+				break;
+			case CGrenadeFire::TANK_GRENADE:
+				pGrenade->SetBulletParam(CGun::GUNTYPE_TANKGRENADE);
+				break;
+			}
 		}
 	}
 }
