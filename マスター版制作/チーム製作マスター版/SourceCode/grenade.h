@@ -25,7 +25,7 @@ public:
 	{
 		D3DXVECTOR3			Move;			// 移動量
 		float				fGravity;		// 重力
-		int					nRotDivision;	// 回転の分割数	( 縦 )
+		bool				bRot;			// 回転するかのフラグ
 	}GRENADE_PARAM;
 
 	CGrenade(OBJ_TYPE type);								// コンストラクタ

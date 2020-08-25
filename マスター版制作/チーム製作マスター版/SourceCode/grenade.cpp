@@ -92,7 +92,10 @@ void CGrenade::Update(void)
 	GetMove().y -= m_GrenadeParam[m_type].fGravity;
 
 	// 縦回転
-	m_rot.z += (D3DX_PI / m_GrenadeParam[m_type].nRotDivision);
+	if (m_GrenadeParam[m_type].bRot)
+	{
+		m_rot.z += (D3DX_PI / ROT_DIVISION_Z);
+	}
 
 	// 回転の設定
 	SetRot(m_rot);
@@ -172,10 +175,12 @@ void CGrenade::GrenadePramLoad()
 	// ファイルポイント
 	FILE *pFile;
 
-	char cReadText[128];			// 文字として読み取る
-	char cHeadText[128];			// 比較用
-	char cDie[128];					// 不要な文字
-	D3DXVECTOR3 pos = ZeroVector3;	// 位置
+	char cReadText[128];						// 文字として読み取る
+	char cHeadText[128];						// 比較用
+	char cDie[128];								// 不要な文字
+	D3DXVECTOR3		move		= ZeroVector3;	// 移動量
+	float			fGravity	= 0.0f;			// 重力
+	int				nRotFlag	= 0;			// 回転フラグ
 
 	for (int nCnt = 0; nCnt < CGrenadeFire::GRENADE_TYPE_MAX; nCnt++)
 	{
@@ -213,20 +218,23 @@ void CGrenade::GrenadePramLoad()
 							// MOVEが来たら
 							if (strcmp(cHeadText, "MOVE") == 0)
 							{
-								sscanf(cReadText, "%s %s %f %f %f", &cDie, &cDie, &m_GrenadeParam[nCnt].Move.x, &m_GrenadeParam[nCnt].Move.y, &m_GrenadeParam[nCnt].Move.z);
+								sscanf(cReadText, "%s %s %f %f %f", &cDie, &cDie, &move.x, &move.y, &move.z);
 							}
 							// GRAVITYが来たら
 							else if (strcmp(cHeadText, "GRAVITY") == 0)
 							{
-								sscanf(cReadText, "%s %s %f", &cDie, &cDie, &m_GrenadeParam[nCnt].fGravity);
+								sscanf(cReadText, "%s %s %f", &cDie, &cDie, &fGravity);
 							}
-							// ROT_DIVISIONが来たら
-							else if (strcmp(cHeadText, "ROT_DIVISION") == 0)
+							// ROT_FLAGが来たら
+							else if (strcmp(cHeadText, "ROT_FLAG") == 0)
 							{
-								sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_GrenadeParam[nCnt].nRotDivision);
+								sscanf(cReadText, "%s %s %d", &cDie, &cDie, &nRotFlag);
 							}
 							else if (strcmp(cHeadText, "END_GRENADESET") == 0)
 							{
+								m_GrenadeParam[nCnt].Move		= move;
+								m_GrenadeParam[nCnt].fGravity	= fGravity;
+								m_GrenadeParam[nCnt].bRot		= nRotFlag ? true : false;
 							}
 						}
 					}
