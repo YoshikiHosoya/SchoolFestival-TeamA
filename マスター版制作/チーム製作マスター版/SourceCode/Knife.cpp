@@ -110,21 +110,21 @@ void CKnife::Draw(void)
 // =====================================================================================================================================================================
 void CKnife::DebugInfo()
 {
-	char aDebugString[64];
+	//char aDebugString[64];
 
-	//軌跡が出てるかどうか
-	m_pOrbit ?
-		sprintf(aDebugString, "Orbit_ON\n") :	//true
-		sprintf(aDebugString, "Orbit_OFF\n");	//false
+	////軌跡が出てるかどうか
+	//m_pOrbit ?
+	//	sprintf(aDebugString, "Orbit_ON\n") :	//true
+	//	sprintf(aDebugString, "Orbit_OFF\n");	//false
 
-	//デバッグ表記
-	CDebugProc::Print("%s", aDebugString);
+	////デバッグ表記
+	//CDebugProc::Print("%s", aDebugString);
 }
 
 // =====================================================================================================================================================================
 // 生成
 // =====================================================================================================================================================================
-CKnife * CKnife::Create(D3DXMATRIX *mtx,TAG tag)
+CKnife * CKnife::Create(D3DXMATRIX * mtx, D3DXVECTOR3 knifesize, TAG tag)
 {
 	// 変数
 	CKnife *pKnife;
@@ -140,6 +140,9 @@ CKnife * CKnife::Create(D3DXMATRIX *mtx,TAG tag)
 
 	// タグの設定
 	pKnife->m_tag = tag;
+
+	// 判定の大きさ設定
+	pKnife->m_KnifeCollisionSize = knifesize;
 
 	//ワールド座標設定
 	pKnife->m_worldpos = D3DXVECTOR3(pKnife->m_HandMatrix->_41, pKnife->m_HandMatrix->_42, pKnife->m_HandMatrix->_43);
@@ -194,7 +197,7 @@ void CKnife::StartMeleeAttack()
 	{
 		// 判定の設定
 		m_pCollision->SetPos(&m_worldpos);
-		m_pCollision->SetSize(D3DXVECTOR3(80.0f, 60.0f, 0.0f));
+		m_pCollision->SetSize(m_KnifeCollisionSize);
 		m_pCollision->DeCollisionCreate(CCollision::COLLISIONTYPE_NORMAL);
 	}
 

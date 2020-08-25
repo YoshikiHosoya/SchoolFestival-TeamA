@@ -59,6 +59,7 @@ char *CPlayer::m_PlayerFileName =
 #define ATTACK_DAMAGE_ENEMY		(50)			// エネミーへのダメージ
 #define SHOT_BULLET_POS_Y		(-15.0f)		// 弾の発射位置Y
 #define SHOT_BULLET_POS_Z		(-5.0f)			// 弾の発射位置Z
+#define KNIFE_COLLISOIN_SIZE	(D3DXVECTOR3(80.0f,80.0f,0.0f))
 
 // =====================================================================================================================================================================
 //
@@ -106,7 +107,7 @@ HRESULT CPlayer::Init(void)
 	m_pGun->SetShotOffsetPos(D3DXVECTOR3(0.0f, SHOT_BULLET_POS_Y, SHOT_BULLET_POS_Z));
 
 	// ナイフの生成
-	m_pKnife = CKnife::Create(GetCharacterModelPartsList(CModel::MODEL_PLAYER_LHAND)->GetMatrix(), TAG::TAG_PLAYER);
+	m_pKnife = CKnife::Create(GetCharacterModelPartsList(CModel::MODEL_PLAYER_LHAND)->GetMatrix(), KNIFE_COLLISOIN_SIZE, TAG::TAG_PLAYER);
 	// 乗り物に乗り込んでいるかどうかのフラグ
 	m_bRideVehicle = false;
 

@@ -18,6 +18,7 @@
 //マクロ定義
 //====================================================================
 #define ENEMY_SIZE			(D3DXVECTOR3(50.0f,75.0f,0.0f)) //敵のサイズ
+#define KNIFE_COLLISOIN_SIZE	(D3DXVECTOR3(40.0f,60.0f,0.0f))
 
 CWeakEnemy::CWeakEnemy(OBJ_TYPE type) :CEnemy(type)
 {
@@ -47,7 +48,7 @@ HRESULT CWeakEnemy::Init(void)
 	// 銃の弾の種類
 	GetGunPtr()->GetTag() = TAG_ENEMY;
 	// ナイフの生成
-	m_pKnife = CKnife::Create(GetCharacterModelPartsList(CModel::MODEL_ENEMY_LHAND)->GetMatrix(),TAG::TAG_ENEMY);
+	m_pKnife = CKnife::Create(GetCharacterModelPartsList(CModel::MODEL_ENEMY_LHAND)->GetMatrix(), KNIFE_COLLISOIN_SIZE,TAG::TAG_ENEMY);
 
 	//盾生成
 	m_pShield = nullptr;

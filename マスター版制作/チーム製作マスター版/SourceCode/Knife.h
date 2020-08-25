@@ -33,7 +33,7 @@ public:
 	virtual void			DebugInfo();					//デバッグ
 
 	/* 静的メンバ関数 */
-	static	CKnife			*Create(D3DXMATRIX *mtx ,TAG tag);		//生成
+	static	CKnife			*Create(D3DXMATRIX *mtx , D3DXVECTOR3 knifesize,TAG tag);		//生成
 	void					StartMeleeAttack();				//近接攻撃開始
 	void					EndMeleeAttack();				//近接攻撃終了
 
@@ -47,6 +47,7 @@ private:
 	bool		m_bAttack;					//攻撃中かどうか
 
 	D3DXVECTOR3 m_worldpos;					//ワールド座標　当たり判定用
+	D3DXVECTOR3 m_KnifeCollisionSize;		//ナイフのコリジョンの大きさ
 	void		CollisionKnife();			//ナイフの当たり判定処理
 };
 #endif

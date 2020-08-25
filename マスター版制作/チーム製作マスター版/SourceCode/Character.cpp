@@ -139,11 +139,24 @@ void CCharacter::Uninit(void)
 void CCharacter::Update(void)
 {
 	//描画の範囲内かチェック
-	CheckDrawRange();
-
-	if (!m_bDraw)
+	if (!CheckDrawRange())
 	{
+		//nullcheck
+		if (m_pCollision)
+		{
+			//当たり判定不可
+			m_pCollision->SetCanCollision(false);
+		}
 		return;
+	}
+	else
+	{
+		//mullcheck
+		if (m_pCollision)
+		{
+			//当たり判定可能
+			m_pCollision->SetCanCollision(true);
+		}
 	}
 
 	//前Fの情報保存
@@ -320,12 +333,15 @@ void CCharacter::State()
 		break;
 
 	case CHARACTER_STATE_DEATH:
+		m_pCollision->SetCanCollision(false);
+
 		//カウントが0になった時
 		if (m_nStateCnt <= 0)
 		{
 			//死亡時のリアクション処理
 			//派生クラスがオーバーライド
 			DeathReaction();
+
 
 			SetState(CHARACTER_STATE_NONE);
 		}
