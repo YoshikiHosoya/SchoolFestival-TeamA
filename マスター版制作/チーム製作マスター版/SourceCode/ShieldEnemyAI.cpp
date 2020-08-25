@@ -63,70 +63,73 @@ void CShieldEnemyAI::Update(void)
 		// マップモデルが存在した時
 		if (pMap != nullptr)
 		{
-			m_Distance = pEnemyPass->GetPosition() - pPlayer->GetPosition();
-			m_fDistance = D3DXVec2Length(&D3DXVECTOR2(m_Distance.x, m_Distance.y));
-			if (m_fDistance < MAX_ATTACKDISTANCE)
+			if (pPlayer != nullptr)
 			{
-				m_bAttack = true;
-				m_castcount++;
-			}
-			else
-			{
-				m_bAttack = false;
-				m_castcount = 0;
-			}
-			if (m_bKnifeAttack == false)
-			{
-				//プレイヤーが左にいるとき
-				if (pEnemyPass->GetPosition().x > pPlayer->GetPosition().x)
+				m_Distance = pEnemyPass->GetPosition() - pPlayer->GetPosition();
+				m_fDistance = D3DXVec2Length(&D3DXVECTOR2(m_Distance.x, m_Distance.y));
+				if (m_fDistance < MAX_ATTACKDISTANCE)
 				{
-					pEnemyPass->GetRotDest().y = D3DX_PI * 0.5f;
-					pEnemyPass->SetCharacterDirection(DIRECTION::LEFT);
-					//Rayの判定があるとき
-					if (GetCollision()->RayFloorCollision(pMap, pEnemyPass->GetCharacterModelPartsList(0)->GetMatrix(),
-						D3DXVECTOR3(0.0f, -1.0f, 0.0f),
-						D3DXVECTOR3(pEnemyPass->GetPosition().x - 30, pEnemyPass->GetPosition().y, pEnemyPass->GetPosition().z)))
-					{
-						if (pEnemyPass->GetPosition().x - pPlayer->GetPosition().x > MAX_DISTANCE)
-						{
-							m_AItype = AI_WALK_LEFT;
-						}
-						else
-						{
-							m_AItype = AI_STOP;
-						}
-
-					}
-					//Rayの判定がないとき
-					else
-					{
-						m_AItype = AI_STOP;
-					}
+					m_bAttack = true;
+					m_castcount++;
 				}
-				//プレイヤーが右にいるとき
-				else if (pEnemyPass->GetPosition().x < pPlayer->GetPosition().x)
+				else
 				{
-					pEnemyPass->GetRotDest().y = D3DX_PI * -0.5f;
-					pEnemyPass->SetCharacterDirection(DIRECTION::RIGHT);
-					//Rayの判定があるとき
-					if (GetCollision()->RayFloorCollision(pMap, pEnemyPass->GetCharacterModelPartsList(0)->GetMatrix(),
-						D3DXVECTOR3(0.0f, -1.0f, 0.0f),
-						D3DXVECTOR3(pEnemyPass->GetPosition().x + 30, pEnemyPass->GetPosition().y, pEnemyPass->GetPosition().z)))
+					m_bAttack = false;
+					m_castcount = 0;
+				}
+				if (m_bKnifeAttack == false)
+				{
+					//プレイヤーが左にいるとき
+					if (pEnemyPass->GetPosition().x > pPlayer->GetPosition().x)
 					{
-						if (pEnemyPass->GetPosition().x - pPlayer->GetPosition().x < -MAX_DISTANCE)
+						pEnemyPass->GetRotDest().y = D3DX_PI * 0.5f;
+						pEnemyPass->SetCharacterDirection(DIRECTION::LEFT);
+						//Rayの判定があるとき
+						if (GetCollision()->RayFloorCollision(pMap, pEnemyPass->GetCharacterModelPartsList(0)->GetMatrix(),
+							D3DXVECTOR3(0.0f, -1.0f, 0.0f),
+							D3DXVECTOR3(pEnemyPass->GetPosition().x - 30, pEnemyPass->GetPosition().y, pEnemyPass->GetPosition().z)))
 						{
-							m_AItype = AI_WALK_RIGHT;
+							if (pEnemyPass->GetPosition().x - pPlayer->GetPosition().x > MAX_DISTANCE)
+							{
+								m_AItype = AI_WALK_LEFT;
+							}
+							else
+							{
+								m_AItype = AI_STOP;
+							}
+
 						}
+						//Rayの判定がないとき
 						else
 						{
 							m_AItype = AI_STOP;
 						}
-
 					}
-					//Rayの判定がないとき
-					else
+					//プレイヤーが右にいるとき
+					else if (pEnemyPass->GetPosition().x < pPlayer->GetPosition().x)
 					{
-						m_AItype = AI_STOP;
+						pEnemyPass->GetRotDest().y = D3DX_PI * -0.5f;
+						pEnemyPass->SetCharacterDirection(DIRECTION::RIGHT);
+						//Rayの判定があるとき
+						if (GetCollision()->RayFloorCollision(pMap, pEnemyPass->GetCharacterModelPartsList(0)->GetMatrix(),
+							D3DXVECTOR3(0.0f, -1.0f, 0.0f),
+							D3DXVECTOR3(pEnemyPass->GetPosition().x + 30, pEnemyPass->GetPosition().y, pEnemyPass->GetPosition().z)))
+						{
+							if (pEnemyPass->GetPosition().x - pPlayer->GetPosition().x < -MAX_DISTANCE)
+							{
+								m_AItype = AI_WALK_RIGHT;
+							}
+							else
+							{
+								m_AItype = AI_STOP;
+							}
+
+						}
+						//Rayの判定がないとき
+						else
+						{
+							m_AItype = AI_STOP;
+						}
 					}
 				}
 			}

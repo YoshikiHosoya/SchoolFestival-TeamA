@@ -43,6 +43,7 @@ char *CMap::m_MapModelFileName[MAP_MAX] =
 	{ "data/Load/Map/Map_1_2.txt" },
 	{ "data/Load/Map/Map_1_3.txt" },
 	{ "data/Load/Map/Map_1_BOSS.txt" },
+	{ "data/Load/Map/Map_2_BOSS.txt" },
 };
 
 /* ----- ウェーブ ----- */
@@ -345,7 +346,7 @@ void CMap::MapModelCreate(int ModelType, int nType, D3DXVECTOR3 pos,int nItemTyp
 	/* --- 敵 --- */
 	case CMap::ARRANGEMENT_MODEL_ENEMY:
 		// オブジェクトの生成
-		m_pEnemy.emplace_back(CWeakEnemy::Create(CWeakEnemy::WEAKENEMY_TYPE::ENEMY_NORMAL));
+		m_pEnemy.emplace_back(CWeakEnemy::Create((CWeakEnemy::WEAKENEMY_TYPE)nType));
 		// 位置の設定
 		m_pEnemy[m_pEnemy.size() - 1]->SetPosition(pos);
 		break;
@@ -962,7 +963,7 @@ void CMap::SaveModelContents(FILE *pFile, int ModelType, int nCnt, int nNum)
 		/* --- 敵 --- */
 	case CMap::ARRANGEMENT_MODEL_ENEMY:
 		fprintf(pFile, "ENEMYSET									# %d\n", nNum);
-		fprintf(pFile, "	TYPE		= %d\n", 0 /*m_pEnemy[nCnt]->GetType()*/);
+		fprintf(pFile, "	TYPE		= %d\n", m_pEnemy[nCnt]->GetEnemyType());
 		fprintf(pFile, "	POS			= %.0f %.0f %.0f\n", m_pEnemy[nCnt]->GetPosition().x, m_pEnemy[nCnt]->GetPosition().y, m_pEnemy[nCnt]->GetPosition().z);
 		fprintf(pFile, "END_ENEMYSET\n\n");
 		break;
@@ -1694,8 +1695,8 @@ void CMap::ComboBoxAll(int nNowSelect)
 	switch (m_ArrangmentModel)
 	{
 	case CMap::ARRANGEMENT_MODEL_ENEMY:
-		//// 敵の種類選択
-		//EnemyComboBox(nSelectType, nNowSelect);
+		// 敵の種類選択
+		EnemyTypeComboBox(nSelectType, nNowSelect);
 		break;
 
 	case CMap::ARRANGEMENT_MODEL_PRISONER:
