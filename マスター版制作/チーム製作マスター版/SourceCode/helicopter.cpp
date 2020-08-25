@@ -64,7 +64,7 @@ HRESULT CHelicopter::Init(void)
 	// 銃のマトリックス設定
 	m_pGun->SetHandMtx(GetVehicleModelPartsList(CModel::MODEL_HELIGUN)->GetMatrix());
 	// グレネード放つ位置の生成
-	m_pGrenadeFire = CGrenadeFire::Create(GetVehicleModelPartsList(CModel::MODEL_HELIBODY)->GetMatrix());
+	m_pGrenadeFire = CGrenadeFire::Create(GetVehicleModelPartsList(CModel::MODEL_HELIBODY)->GetMatrix(), CGrenadeFire::TANK_GRENADE);
 	// 銃の弾の種類
 	m_pGun->GetTag() = TAG_ENEMY;
 	// 銃の弾の種類

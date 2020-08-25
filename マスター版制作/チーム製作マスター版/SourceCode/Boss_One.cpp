@@ -409,7 +409,7 @@ void CBoss_One::StateChangeReaction()
 	case CHARACTER_STATE_NORMAL:
 		break;
 
-	case CHARACTER_STATE_DAMAGE:
+	case CHARACTER_STATE_DAMAGE_FLASHING:
 
 		break;
 	case CHARACTER_STATE_DAMAGE_RED:

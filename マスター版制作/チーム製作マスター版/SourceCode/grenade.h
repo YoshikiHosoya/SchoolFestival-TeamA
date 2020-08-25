@@ -12,6 +12,7 @@
 // =====================================================================================================================================================================
 #include "main.h"
 #include "bullet.h"
+#include "grenadefire.h"
 
 // =====================================================================================================================================================================
 // グレネードクラス
@@ -19,6 +20,13 @@
 class CGrenade : public CBullet
 {
 public:
+	// ----- グレネードのパラメーター -----
+	typedef struct
+	{
+		D3DXVECTOR3			Move;			// 移動量
+		float				fGravity;		// 重力
+		bool				bRot;			// 回転するかのフラグ
+	}GRENADE_PARAM;
 
 	CGrenade(OBJ_TYPE type);								// コンストラクタ
 	~CGrenade();											// デストラクタ
@@ -31,11 +39,17 @@ public:
 	void						DeleteBullet();				// 弾を消す処理
 
 	/* 静的メンバ関数 */
-	static	CGrenade			*Create(D3DXVECTOR3 rot);					// グレネードの生成
+	static	CGrenade			*Create(D3DXVECTOR3 rot, CGrenadeFire::GRENADE_TYPE type);		// グレネードの生成
+	static	void				GrenadePramLoad();												// グレネードのパラメーターのロード
 
 private:
 	/* メンバ変数 */
 	D3DXVECTOR3					m_move;						// 移動値
 	D3DXVECTOR3					m_rot;						// 回転
+	CGrenadeFire::GRENADE_TYPE	m_type;						// グレネードの種類
+	/* 静的メンバ変数 */
+	static char					*m_GrenadeFileName[CGrenadeFire::GRENADE_TYPE::GRENADE_TYPE_MAX];	// グレネードのファイル名
+	static	GRENADE_PARAM		m_GrenadeParam[CGrenadeFire::GRENADE_TYPE::GRENADE_TYPE_MAX];		// グレネードのパラメーター
+
 };
 #endif

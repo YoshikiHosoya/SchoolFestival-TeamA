@@ -13,10 +13,12 @@
 #include "particle.h"
 
 #define CENTER_POS		(D3DXVECTOR3(0.0f,450.0f,0.0f))
-#define RIGHT_POS		(D3DXVECTOR3(300.0f,400.0f,0.0f))
-#define LEFT_POS		(D3DXVECTOR3(-300.0f,400.0f,0.0f))
+#define RIGHT_POS		(D3DXVECTOR3(400.0f,400.0f,0.0f))
+#define LEFT_POS		(D3DXVECTOR3(-400.0f,400.0f,0.0f))
+#define BOSS_UNDER_POS	(D3DXVECTOR3(0.0f,180.0f,0.0f))
 #define MOVE_SPEED		(0.1f)
 #define MAX_RECASTTIME (60)
+#define LAZER_MOVE_SPEED (4.5f)
 CBossAI::CBossAI()
 {
 }
@@ -180,7 +182,7 @@ void CBossAI::UpdateAttackAI(void)
 			pBossPass->GetGunPtr()->SetShotRot(D3DXVECTOR3(0.0f, 0.0f, atan2f(-m_ShotVec.x, m_ShotVec.y)));
 
 			//Œõ‚é
-			CParticle::CreateFromText(pBossPass->GetPosition(), D3DXVECTOR3(0.0f, 0.0f, CHossoLibrary::Random_PI()), CParticleParam::EFFECT_FLASSHING, TAG::TAG_PLAYER, 0, RedColor);
+			CParticle::CreateFromText(pBossPass->GetPosition(), D3DXVECTOR3(0.0f, 0.0f, CHossoLibrary::Random_PI()), CParticleParam::EFFECT_FLASSHING, TAG::TAG_PLAYER, 0, D3DXCOLOR(0.7f,0.02f, 0.02f,1.0f));
 
 			m_AttackCastCnt++;
 			m_bShot = true;
@@ -213,7 +215,7 @@ void CBossAI::UpdateAttackAI(void)
 		else if (AI_DIFFUSION == m_BossAItype)//ŠgŽUŽËŒ‚
 		{
 			//Œõ‚é
-			CParticle::CreateFromText(pBossPass->GetPosition(), D3DXVECTOR3(0.0f, 0.0f, CHossoLibrary::Random_PI()), CParticleParam::EFFECT_FLASSHING, TAG::TAG_PLAYER, 0, YellowColor);
+			CParticle::CreateFromText(pBossPass->GetPosition(), D3DXVECTOR3(0.0f, 0.0f, CHossoLibrary::Random_PI()), CParticleParam::EFFECT_FLASSHING, TAG::TAG_PLAYER, 0, D3DXCOLOR(0.7f, 0.7f, 0.01f, 0.2f));
 
 			//ƒKƒ“‚Ìƒ^ƒCƒv•ÏX
 			pBossPass->GetGunPtr()->SetGunType(pBossPass->GetGunPtr()->GUNTYPE_DIFFUSIONGUN);
@@ -269,7 +271,7 @@ void CBossAI::UpdateAttackAI(void)
 				{
 					if (m_AttackCnt > 30)
 					{
-						pBossPass->GetPosition().x += 3;
+						pBossPass->GetPosition().x += LAZER_MOVE_SPEED;
 						pBossPass->GetGunPtr()->Shot();
 					}
 					else
@@ -282,7 +284,7 @@ void CBossAI::UpdateAttackAI(void)
 				{
 					if (m_AttackCnt > 30)
 					{
-						pBossPass->GetPosition().x -= 3;
+						pBossPass->GetPosition().x -= LAZER_MOVE_SPEED;
 						pBossPass->GetGunPtr()->Shot();
 					}
 					else
@@ -295,6 +297,14 @@ void CBossAI::UpdateAttackAI(void)
 				if (m_AttackCnt > 180)
 				{
 					SetRestartFlag(true);
+				}
+			}
+			else
+			{
+				if (m_AttackCastCnt % 5 == 0)
+				{
+					CParticle::CreateFromText(pBossPass->GetPosition() - BOSS_UNDER_POS, D3DXVECTOR3(0.0f, 0.0f, CHossoLibrary::Random_PI()), CParticleParam::EFFECT_CHARGE_PARTICLE);
+					CParticle::CreateFromText(pBossPass->GetPosition() - BOSS_UNDER_POS, D3DXVECTOR3(0.0f, 0.0f, CHossoLibrary::Random_PI()), CParticleParam::EFFECT_CHARGE_CIRCLE);
 				}
 			}
 		}

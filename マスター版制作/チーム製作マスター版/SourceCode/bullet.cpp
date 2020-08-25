@@ -17,10 +17,11 @@
 #include "Obstacle.h"
 #include "prisoner.h"
 #include "particle.h"
+
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
 // =====================================================================================================================================================================
-BULLET_PARAM	CBullet::m_BulletParam[CGun::GUNTYPE_MAX] = {};
+CBullet::BULLET_PARAM	CBullet::m_BulletParam[CGun::GUNTYPE_MAX] = {};
 
 // =====================================================================================================================================================================
 // テキストファイル名
@@ -39,11 +40,11 @@ char *CBullet::m_BulletFileName[CGun::GUNTYPE_MAX] =
 	{ "data/Load/Gun/Balkan.txt" },					// バルカン
 	{ "data/Load/Gun/Flamethrower.txt" },			// 火炎放射器
 	{ "data/Load/Gun/Incendiary.txt" },				// 焼夷弾
-	{ "data/Load/Gun/Grenade.txt" },				// グレネード
+	{ "data/Load/Gun/HandGrenade.txt" },			// 手投げグレネード
+	{ "data/Load/Gun/TankGrenade.txt" },			// 戦車のグレネード
 	{ "data/Load/Gun/TrackingGun.txt" },			// 追従銃
 	{ "data/Load/Gun/DiffusionGun.txt" },			// 拡散銃
 	{ "data/Load/Gun/BossLazerGun.txt" },			// 拡散銃
-
 };
 
 // =====================================================================================================================================================================

@@ -19,7 +19,7 @@
 #include "inputKeyboard.h"
 #include "sound.h"
 #include "scoremanager.h"
-
+#include "particle.h"
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
 // =====================================================================================================================================================================
@@ -248,6 +248,9 @@ void CItem::ItemType(ITEMTYPE type)
 	default:
 		break;
 	}
+
+	pPlayer->SetState(CCharacter::CHARACTER_STATE_ITEMGET_FLASH);
+	CParticle::CreateFromText(GetPosition(), ZeroVector3, CParticleParam::EFFECT_GETWEAPON);
 }
 // =====================================================================================================================================================================
 //
@@ -858,6 +861,7 @@ CItem::ITEMTYPE CItem::RandDropItem(ITEMDROP drop)
 {
 	// 値を返すための変数
 	ITEMTYPE type;
+
 	// 条件によってドロップさせるアイテムの種類に制限をかける
 	switch (drop)
 	{

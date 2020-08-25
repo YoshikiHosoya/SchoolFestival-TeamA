@@ -94,7 +94,7 @@ void CRocketlauncher::DeleteBullet()
 {
 	CBullet::DeleteBullet();
 
-	CParticle::CreateFromText(GetPosition(), ZeroVector3, CParticleParam::EFFECT_EXPLOSION, GetTag(), GetBulletParam(CGun::GUNTYPE_ROCKETLAUNCHER)->nPower);
+	CParticle::CreateFromText(GetPosition(), ZeroVector3, CParticleParam::EFFECT_EXPLOSION_ROCKETLANCHAR, GetTag(), GetBulletParam(CGun::GUNTYPE_ROCKETLAUNCHER)->nPower);
 
 }
 
@@ -134,6 +134,9 @@ CRocketlauncher * CRocketlauncher::Create(D3DXVECTOR3 rot)
 
 	// ‰Šú‰»
 	pRocketlauncher->Init();
+
+	//‰ñ“]—ÊÝ’è
+	pRocketlauncher->SetRot(rot);
 
 	// ’e‚ÌˆÚ“®—ÊŒvŽZ
 	pRocketlauncher->CalcBulletMove(rot, CGun::GUNTYPE_ROCKETLAUNCHER);

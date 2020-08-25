@@ -201,7 +201,6 @@
     <ClCompile Include="SourceCode\inputKeyboard.cpp" />
     <ClCompile Include="SourceCode\item.cpp" />
     <ClCompile Include="SourceCode\Knife.cpp" />
-    <ClCompile Include="SourceCode\lasergun.cpp" />
     <ClCompile Include="SourceCode\light.cpp" />
     <ClCompile Include="SourceCode\main.cpp" />
     <ClCompile Include="SourceCode\manager.cpp" />
@@ -243,7 +242,6 @@
     <ClCompile Include="SourceCode\selectcharacter.cpp" />
     <ClCompile Include="SourceCode\shield.cpp" />
     <ClCompile Include="SourceCode\ShieldEnemyAI.cpp" />
-    <ClCompile Include="SourceCode\shotgun.cpp" />
     <ClCompile Include="SourceCode\sound.cpp" />
     <ClCompile Include="SourceCode\tankgun.cpp" />
     <ClCompile Include="SourceCode\TexAnimation2D.cpp" />
@@ -312,7 +310,6 @@
     <ClInclude Include="SourceCode\inputKeyboard.h" />
     <ClInclude Include="SourceCode\item.h" />
     <ClInclude Include="SourceCode\Knife.h" />
-    <ClInclude Include="SourceCode\lasergun.h" />
     <ClInclude Include="SourceCode\light.h" />
     <ClInclude Include="SourceCode\main.h" />
     <ClInclude Include="SourceCode\manager.h" />
@@ -354,7 +351,6 @@
     <ClInclude Include="SourceCode\selectcharacter.h" />
     <ClInclude Include="SourceCode\shield.h" />
     <ClInclude Include="SourceCode\ShieldEnemyAI.h" />
-    <ClInclude Include="SourceCode\shotgun.h" />
     <ClInclude Include="SourceCode\sound.h" />
     <ClInclude Include="SourceCode\tankgun.h" />
     <ClInclude Include="SourceCode\TexAnimation2D.h" />

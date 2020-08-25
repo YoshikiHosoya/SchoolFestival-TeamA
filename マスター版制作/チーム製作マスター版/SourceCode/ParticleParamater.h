@@ -26,7 +26,9 @@ public:
 	enum PARTICLE_TEXT
 	{
 		EFFECT_DEFAULT = 0,
-		EFFECT_EXPLOSION,
+		EFFECT_EXPLOSION_ROCKETLANCHAR,
+		EFFECT_EXPLOSION_GRENADE,
+		EFFECT_EXPLOSION_SMOKE,
 		EFFECT_NO_COLLISION_EXPLOSION,
 		EFFECT_BLOOD,
 		EFFECT_FLASSHING,
@@ -34,13 +36,15 @@ public:
 		EFFECT_DELETEBULLET,
 		EFFECT_HANDGUN,
 		EFFECT_HEAVY_MACHINEGUN,
-		EFFECT_TRACKINGGUN,
-		EFFECT_TANKGUN,
 		EFFECT_SHOTGUN,
+		EFFECT_SHOTGUN_ADDEFFECT,
 		EFFECT_LAZER,
 		EFFECT_BOSSLAZER,
 		EFFECT_SMOKE,
 		EFFECT_FIRE,
+		EFFECT_GETWEAPON,
+		EFFECT_CHARGE_CIRCLE,
+		EFFECT_CHARGE_PARTICLE,
 
 		PARTICLE_MAX,
 	};
@@ -63,7 +67,7 @@ public:
 
 
 	static HRESULT LoadParticleDefaultParam();
-	static HRESULT SaveParticleDefaultParam(CParticleParam *pSaveParam);
+	static HRESULT SaveParticleDefaultParam(CParticleParam *pSaveParam,std::string aSaveFileName);
 
 	//Getä÷êî
 	static std::vector<std::string> &GetFileNameList() {	return m_aFileNameList;};

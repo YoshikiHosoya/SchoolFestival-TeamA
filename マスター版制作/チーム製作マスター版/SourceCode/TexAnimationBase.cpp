@@ -46,7 +46,7 @@ CTexAnimationBase::~CTexAnimationBase()
 //------------------------------------------------------------------------------
 bool CTexAnimationBase::UpdateAnimation()
 {
-	if (m_nLife-- <= 0)
+	if (m_nLife-- <= 0 || m_nCntSwitch == 0)
 	{
 		//I—¹ƒtƒ‰ƒOtrue
 		m_bEnd = true;

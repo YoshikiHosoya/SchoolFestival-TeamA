@@ -93,7 +93,7 @@ char *CModel::m_GunFileName[MODEL_GUN_MAX] =
 char *CModel::m_BulletFileName[MODEL_BULLET_MAX] =
 {
 	{ "data/MODEL/Bullet/Sphere.x" },				// 丸
-	{ "data/MODEL/Bullet/Rocketlauncher.x" },		// ロケットランチャー
+	{ "data/MODEL/Bullet/Tankmissile.x" },			// ロケットランチャー
 	{ "data/MODEL/Bullet/Grenade.x" },				// グレネード
 };
 
