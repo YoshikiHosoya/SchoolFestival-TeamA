@@ -27,7 +27,7 @@
 // 静的メンバ変数の初期化
 // =====================================================================================================================================================================
 CMap::MAP					CMap::m_MapNum				= MAP_TUTORIAL;				// マップ番号
-CMap::WAVE					CMap::m_WaveNum				= WAVE_1;					// ウェーブ番号
+CMap::WAVE					CMap::m_WaveNum				= WAVE_1_1_1;				// ウェーブ番号
 CMap::ARRANGEMENT_MODEL		CMap::m_ArrangmentModel		= ARRANGEMENT_MODEL_MAP;	// 配置するモデルの種類
 CMap::WAVE_INFO				CMap::m_aWaveInfo[WAVE_MAX] = {};						// ウェーブの情報
 
@@ -49,9 +49,9 @@ char *CMap::m_MapModelFileName[MAP_MAX] =
 /* ----- ウェーブ ----- */
 char *CMap::m_WaveFileName[WAVE_MAX] =
 {
-	{ "data/Load/Wave/Wave_01.txt" },
-	{ "data/Load/Wave/Wave_02.txt" },
-	{ "data/Load/Wave/Wave_03.txt" },
+	{ "data/Load/Wave/Wave_1_1_1.txt" },
+	{ "data/Load/Wave/Wave_1_1_2.txt" },
+	{ "data/Load/Wave/Wave_1_1_3.txt" },
 };
 
 // =====================================================================================================================================================================
@@ -1306,9 +1306,9 @@ void CMap::WaveCreate(int nModelType, D3DXVECTOR3 eventpos, WAVE_PARAM * pWavePa
 	{
 		// 捕虜
 		m_pPrisoner.emplace_back(CPrisoner::Create());
-		m_pPrisoner[m_pEnemy.size() - 1]->SetPosition(pWaveParam->pos + eventpos);
-		m_pPrisoner[m_pEnemy.size() - 1]->SetPrisonerType((CPrisoner::PRISONER_ITEM_DROPTYPE)pWaveParam->nType);
-		m_pPrisoner[m_pEnemy.size() - 1]->SetPrisonerItem((CItem::ITEMTYPE)pWaveParam->nItemType);
+		m_pPrisoner[m_pPrisoner.size() - 1]->SetPosition(pWaveParam->pos + eventpos);
+		m_pPrisoner[m_pPrisoner.size() - 1]->SetPrisonerType((CPrisoner::PRISONER_ITEM_DROPTYPE)pWaveParam->nType);
+		m_pPrisoner[m_pPrisoner.size() - 1]->SetPrisonerItem((CItem::ITEMTYPE)pWaveParam->nItemType);
 	}
 }
 

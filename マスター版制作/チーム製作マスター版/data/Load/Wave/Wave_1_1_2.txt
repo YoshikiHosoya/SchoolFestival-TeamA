@@ -3,7 +3,7 @@
 #------------------------------------------------------------------------------
 SCRIPT
 
-EVENTPOS	= 4000
+EVENTPOS	= 3000
 
 ENEMYSET									# 0
 	TYPE			= 0
@@ -15,7 +15,7 @@ END_ENEMYSET
 PRISONERSET									# 1
 	TYPE			= 0
 	ITEMTYPE		= -1
-	POS 			= 0 0 0
+	POS 			= 0 500 0
 	FRAME 			= 60
 END_PRISONERSET
 
