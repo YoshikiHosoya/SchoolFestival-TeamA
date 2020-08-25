@@ -77,7 +77,7 @@ CMap::CMap()
 	m_pBattlePlane.clear();											// 戦闘機
 	m_pHelicopter.clear();											// ヘリコプター
 	m_pVehicle.clear();												// (乗り物)
-	
+
 	// 今だけ 仮
 	m_pBoss_One.clear();
 
@@ -1251,6 +1251,7 @@ void CMap::AllDelete()
 		m_pEnemy[nCnt]->Rerease();
 		m_pEnemy[nCnt] = nullptr;
 	}
+
 	// 捕虜
 	for (size_t nCnt = 0; nCnt < m_pPrisoner.size(); nCnt++)
 	{
