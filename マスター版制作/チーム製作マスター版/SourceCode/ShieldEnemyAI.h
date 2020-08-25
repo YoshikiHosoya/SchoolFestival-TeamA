@@ -10,7 +10,7 @@
 #include "main.h"
 #include "scene.h"
 #include "BaseAI.h"
-class CEnemy;
+class CWeakEnemy;
 class CGun;
 class CCollision;
 //=============================================================================
@@ -38,13 +38,12 @@ public:
 	void AttackUpdate(void);
 	void Draw(void);
 	void DebugInfo(void);
-	static CShieldEnemyAI* CreateAI(CEnemy *pEnemy);
+	static CShieldEnemyAI* CreateAI(CWeakEnemy *pEnemy);
 	AI_STATE GetAIType(void);
-	bool GetShot(void);
 	CCollision *GetCollision() { return m_pCollision; };			// 当たり判定のポインタ取得
 
 private:
-	CEnemy *pEnemyPass;			//敵の情報の格納用
+	CWeakEnemy *pEnemyPass;			//敵の情報の格納用
 	CGun	*m_pGun;			//ガンクラスのポインタ
 	AI_STATE m_AItype;			//行動の種類
 	AI_STATE m_AItypeOld;		//前の行動の格納
@@ -53,6 +52,7 @@ private:
 	int m_recast;
 	int m_castcount;
 	bool m_bAttack;
+	bool m_bKnifeAttack;
 	bool m_bReStartFlag;
 	int m_random;
 	CCollision				*m_pCollision;							//当たり判定のポインタ
