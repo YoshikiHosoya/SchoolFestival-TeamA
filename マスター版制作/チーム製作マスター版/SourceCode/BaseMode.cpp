@@ -17,6 +17,7 @@
 #include "scoremanager.h"
 #include "player.h"
 #include "boss_one.h"
+#include "grenade.h"
 
 //==========================================================
 //デバッグコマンド
@@ -126,6 +127,8 @@ void CBaseMode::BaseLoad(HWND hWnd)
 	CCharacter::LoadMotion();
 	//弾のパラメーターロード
 	CBullet::BulletLoad();
+	//グレネードのパラメーターロード
+	CGrenade::GrenadePramLoad();
 	//障害物のパラメーターロード
 	CObstacle::ObstacleLoad();
 	//パーティクルのパラメータロード
