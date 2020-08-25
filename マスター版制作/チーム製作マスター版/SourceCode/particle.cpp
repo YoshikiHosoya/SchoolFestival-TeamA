@@ -739,16 +739,8 @@ void CParticle::SetSound()
 {
 	switch (m_pParticleParam->GetType())
 	{
-	case CParticleParam::PARTICLE_TEXT::EFFECT_EXPLOSION:
 	case CParticleParam::PARTICLE_TEXT::EFFECT_NO_COLLISION_EXPLOSION:
 		CManager::GetSound()->Play(CSound::LABEL_SE_EXPLOSION);
-		break;
-	case CParticleParam::PARTICLE_TEXT::EFFECT_BLOOD:
-		break;
-	case CParticleParam::PARTICLE_TEXT::EFFECT_LAZER:
-		break;
-	case CParticleParam::PARTICLE_TEXT::EFFECT_FIRE:
-
 		break;
 
 	}

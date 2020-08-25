@@ -134,16 +134,10 @@
     <ClCompile Include="SourceCode\helicoptergun.cpp">
       <Filter>Wepon\Gun</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\lasergun.cpp">
-      <Filter>Wepon\Gun</Filter>
-    </ClCompile>
     <ClCompile Include="SourceCode\planegun.cpp">
       <Filter>Wepon\Gun</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\rocketlauncher.cpp">
-      <Filter>Wepon\Gun</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\shotgun.cpp">
       <Filter>Wepon\Gun</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\tankgun.cpp">
@@ -306,16 +300,16 @@
       <Filter>Model\boss</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\hosso\HossoLibrary.cpp">
-      <Filter>projectBase</Filter>
+      <Filter>Scene2D.3D\projectBase</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\main.cpp">
-      <Filter>projectBase</Filter>
+      <Filter>Scene2D.3D\projectBase</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\renderer.cpp">
-      <Filter>projectBase</Filter>
+      <Filter>Scene2D.3D\projectBase</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\Scene.cpp">
-      <Filter>projectBase</Filter>
+      <Filter>Scene2D.3D\projectBase</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -461,9 +455,6 @@
     <ClInclude Include="SourceCode\helicoptergun.h">
       <Filter>Wepon\Gun</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\lasergun.h">
-      <Filter>Wepon\Gun</Filter>
-    </ClInclude>
     <ClInclude Include="SourceCode\rocketlauncher.h">
       <Filter>Wepon\Gun</Filter>
     </ClInclude>
@@ -471,9 +462,6 @@
       <Filter>Wepon\Gun</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\TrackingGun.h">
-      <Filter>Wepon\Gun</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\shotgun.h">
       <Filter>Wepon\Gun</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\planegun.h">
@@ -633,16 +621,16 @@
       <Filter>Model\boss</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\Scene.h">
-      <Filter>projectBase</Filter>
+      <Filter>Scene2D.3D\projectBase</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\hosso\HossoLibrary.h">
-      <Filter>projectBase</Filter>
+      <Filter>Scene2D.3D\projectBase</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\main.h">
-      <Filter>projectBase</Filter>
+      <Filter>Scene2D.3D\projectBase</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\renderer.h">
-      <Filter>projectBase</Filter>
+      <Filter>Scene2D.3D\projectBase</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -718,7 +706,7 @@
     <Filter Include="Model\boss">
       <UniqueIdentifier>{bd6e69f8-14b8-4fb1-884f-4e28de1e7b5e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="projectBase">
+    <Filter Include="Scene2D.3D\projectBase">
       <UniqueIdentifier>{9ec38c66-6a5c-4934-869e-bf20bc062660}</UniqueIdentifier>
     </Filter>
   </ItemGroup>

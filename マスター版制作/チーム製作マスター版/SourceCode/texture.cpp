@@ -75,18 +75,29 @@ FILENAME_LIST CTexture::m_aTexFileName =
 FILENAME_LIST CTexture::m_aSeparateTexFileNameList =
 {
 	{ "data/TEXTURE/TexNone.png"},								//白紙
+	{ "data/TEXTURE/Effect/Explosion00.png" },					//爆発
 	{ "data/TEXTURE/Effect/Explosion01.png" },					//爆発
-	{ "data/TEXTURE/Effect/ShotFlash.png" },					//発砲時の光
-	{ "data/TEXTURE/Effect/Spark.png" },						//電撃
-	{ "data/TEXTURE/Effect/HitEffect.png" },					//着弾エフェクト
-	{ "data/TEXTURE/Effect/Smoke.png" },						//煙
-	{ "data/TEXTURE/Effect/ShotGun.png" },						//ショットガン
+	{ "data/TEXTURE/Effect/Explosion02.png" },					//爆発
+	{ "data/TEXTURE/Effect/Explosion03.png" },					//爆発
 	{ "data/TEXTURE/Effect/Impact00.png" },						//インパクト
 	{ "data/TEXTURE/Effect/Impact01.png" },						//インパクト
+	{ "data/TEXTURE/Effect/Impact02.png" },						//インパクト
+	{ "data/TEXTURE/Effect/Impact03.png" },						//インパクト
+	{ "data/TEXTURE/Effect/Impact04.png" },						//インパクト
+	{ "data/TEXTURE/Effect/Impact05.png" },						//インパクト
 	{ "data/TEXTURE/Effect/Fire00.png" },						//ファイア
 	{ "data/TEXTURE/Effect/Fire01.png" },						//ファイア
 	{ "data/TEXTURE/Effect/Fire02.png" },						//ファイア
+	{ "data/TEXTURE/Effect/Fire03.png" },						//ファイア
+	{ "data/TEXTURE/Effect/Fire04.png" },						//ファイア
+	{ "data/TEXTURE/Effect/ShotFlash.png" },					//発砲時の光
+	{ "data/TEXTURE/Effect/HitEffect.png" },					//着弾エフェクト
+	{ "data/TEXTURE/Effect/Smoke.png" },						//煙
+	{ "data/TEXTURE/Effect/ShotGun.png" },						//ショットガン
 	{ "data/TEXTURE/Effect/Flashing.jpg" },						//フラッシュ
+	{ "data/TEXTURE/Effect/Charge00.png" },						//チャージ
+	{ "data/TEXTURE/Effect/Charge01.png" },						//チャージ
+
 	{ "data/TEXTURE/UI/num.png" },								//ナンバー
 	{ "data/TEXTURE/UI/Player_UI/life.png" },					//体力のUI
 };
@@ -98,18 +109,30 @@ std::vector<CTexture::SEPARATE_TEX_INFO> CTexture::m_apSeparateTexInfoList =
 	//テクスチャのポインタ、テクスチャのパス、テクスチャのタイプ、テクスチャの分割数、テクスチャのUVサイズ
 	//ポインタとUVサイズに関してはLoad関数で読み込み＆計算する
 	{ nullptr, CTexture::SEPARATE_TEX_NONE,					D3DXVECTOR2(1,1),	ZeroVector2 },		//白紙
+
+	{ nullptr, CTexture::SEPARATE_TEX_EFFECT_EXPLOSION00,	D3DXVECTOR2(4,2),	ZeroVector2 },		//爆発
 	{ nullptr, CTexture::SEPARATE_TEX_EFFECT_EXPLOSION01,	D3DXVECTOR2(5,3),	ZeroVector2 },		//爆発
-	{ nullptr, CTexture::SEPARATE_TEX_EFFECT_SHOTFLASH,		D3DXVECTOR2(5,2),	ZeroVector2 },		//発砲時の光
-	{ nullptr, CTexture::SEPARATE_TEX_EFFECT_SPARK,			D3DXVECTOR2(5,2),	ZeroVector2 },		//電撃
-	{ nullptr, CTexture::SEPARATE_TEX_EFFECT_HITEFFECT,		D3DXVECTOR2(14,1),	ZeroVector2 },		//着弾エフェクト
-	{ nullptr, CTexture::SEPARATE_TEX_EFFECT_SMOKE,			D3DXVECTOR2(10,1),	ZeroVector2 },		//煙
-	{ nullptr, CTexture::SEPARATE_TEX_EFFECT_SHOTGUN,		D3DXVECTOR2(5,3),	ZeroVector2 },		//ショットガン
+	{ nullptr, CTexture::SEPARATE_TEX_EFFECT_EXPLOSION02,	D3DXVECTOR2(5,6),	ZeroVector2 },		//爆発
+	{ nullptr, CTexture::SEPARATE_TEX_EFFECT_EXPLOSION03,	D3DXVECTOR2(7,1),	ZeroVector2 },		//爆発
 	{ nullptr, CTexture::SEPARATE_TEX_EFFECT_IMPACT00,		D3DXVECTOR2(2,5),	ZeroVector2 },		//インパクト
 	{ nullptr, CTexture::SEPARATE_TEX_EFFECT_IMPACT01,		D3DXVECTOR2(2,6),	ZeroVector2 },		//インパクト
+	{ nullptr, CTexture::SEPARATE_TEX_EFFECT_IMPACT02,		D3DXVECTOR2(2,5),	ZeroVector2 },		//インパクト
+	{ nullptr, CTexture::SEPARATE_TEX_EFFECT_IMPACT03,		D3DXVECTOR2(5,2),	ZeroVector2 },		//インパクト
+	{ nullptr, CTexture::SEPARATE_TEX_EFFECT_IMPACT04,		D3DXVECTOR2(5,3),	ZeroVector2 },		//インパクト
+	{ nullptr, CTexture::SEPARATE_TEX_EFFECT_IMPACT05,		D3DXVECTOR2(5,3),	ZeroVector2 },		//インパクト
 	{ nullptr, CTexture::SEPARATE_TEX_EFFECT_FIRE00,		D3DXVECTOR2(5,4),	ZeroVector2 },		//ファイア
 	{ nullptr, CTexture::SEPARATE_TEX_EFFECT_FIRE01,		D3DXVECTOR2(5,4),	ZeroVector2 },		//ファイア
 	{ nullptr, CTexture::SEPARATE_TEX_EFFECT_FIRE02,		D3DXVECTOR2(8,1),	ZeroVector2 },		//ファイア
+	{ nullptr, CTexture::SEPARATE_TEX_EFFECT_FIRE03,		D3DXVECTOR2(5,2),	ZeroVector2 },		//ファイア
+	{ nullptr, CTexture::SEPARATE_TEX_EFFECT_FIRE04,		D3DXVECTOR2(8,1),	ZeroVector2 },		//ファイア
+	{ nullptr, CTexture::SEPARATE_TEX_EFFECT_SHOTFLASH,		D3DXVECTOR2(5,2),	ZeroVector2 },		//発砲時の光
+	{ nullptr, CTexture::SEPARATE_TEX_EFFECT_HITEFFECT,		D3DXVECTOR2(14,1),	ZeroVector2 },		//着弾エフェクト
+	{ nullptr, CTexture::SEPARATE_TEX_EFFECT_SMOKE,			D3DXVECTOR2(10,1),	ZeroVector2 },		//煙
+	{ nullptr, CTexture::SEPARATE_TEX_EFFECT_SHOTGUN,		D3DXVECTOR2(5,3),	ZeroVector2 },		//ショットガン
 	{ nullptr, CTexture::SEPARATE_TEX_EFFECT_FLASH,			D3DXVECTOR2(5,1),	ZeroVector2 },		//フラッシュ
+	{ nullptr, CTexture::SEPARATE_TEX_EFFECT_CHARGE00,		D3DXVECTOR2(5,2),	ZeroVector2 },		//チャージ
+	{ nullptr, CTexture::SEPARATE_TEX_EFFECT_CHARGE01,		D3DXVECTOR2(5,2),	ZeroVector2 },		//チャージ
+
 	{ nullptr, CTexture::SEPARATE_TEX_NUM,					D3DXVECTOR2(10,1),	ZeroVector2 },		//ナンバー
 	{ nullptr, CTexture::SEPARATE_TEX_UI_LIFE,				D3DXVECTOR2(5,1),	ZeroVector2 },		//体力のUI
 

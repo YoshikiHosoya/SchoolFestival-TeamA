@@ -11,8 +11,6 @@
 #include "debugproc.h"
 #include "handgun.h"
 #include "heavymachinegun.h"
-#include "shotgun.h"
-#include "lasergun.h"
 #include "rocketlauncher.h"
 #include "flameshot.h"
 #include "tankgun.h"
@@ -32,7 +30,7 @@
 // =====================================================================================================================================================================
 // マクロ定義
 // =====================================================================================================================================================================
-#define HEAVYMACHINEGUN_SHOT_FRAME				(3)			// ヘビーマシンガンの弾の間隔
+#define HEAVYMACHINEGUN_SHOT_FRAME				(4)			// ヘビーマシンガンの弾の間隔
 #define MAX_AMMO								(999)		// 残弾数の最大値
 
 // =====================================================================================================================================================================
@@ -246,18 +244,18 @@ void CGun::Shot()
 
 	CBullet *pBullet = nullptr;
 
-	// ハンドガンと戦車の銃以外のとき
-	if (m_GunType != GUNTYPE_HANDGUN && m_GunType != GUNTYPE_TANKGUN &&
-		m_GunType != GUNTYPE_BALKAN && m_GunType != GUNTYPE_FLAMETHROWER &&
-		m_GunType != GUNTYPE_INCENDIARY)
-	{
-		// 残弾数を減らす
-		m_nAmmo--;
-	}
 
 	// インターバルが経過したとき
 	if (m_nInterval >= CBullet::GetBulletParam(m_GunType)->nInterval)
 	{
+		// ハンドガンと戦車の銃以外のとき
+		if (m_GunType != GUNTYPE_HANDGUN && m_GunType != GUNTYPE_TANKGUN &&
+			m_GunType != GUNTYPE_BALKAN && m_GunType != GUNTYPE_FLAMETHROWER &&
+			m_GunType != GUNTYPE_INCENDIARY)
+		{
+			// 残弾数を減らす
+			m_nAmmo--;
+		}
 		m_nInterval = 0;
 
 		switch (m_GunType)
@@ -276,12 +274,13 @@ void CGun::Shot()
 		case CGun::GUNTYPE_SHOTGUN:
 			// ショットガンの生成
 			CParticle::CreateFromText(m_ShotPos, m_ShotRot, CParticleParam::EFFECT_SHOTGUN, GetTag(), CBullet::GetBulletParam(CGun::GUNTYPE_SHOTGUN)->nPower);
+			CParticle::CreateFromText(m_ShotPos, m_ShotRot, CParticleParam::EFFECT_SHOTGUN_ADDEFFECT, GetTag(), CBullet::GetBulletParam(CGun::GUNTYPE_SHOTGUN)->nPower);
 
 			break;
 
 		case CGun::GUNTYPE_LASERGUN:
 			// レーザーガンの生成
-			CParticle::CreateFromText(m_ShotPos, m_ShotRot, CParticleParam::EFFECT_LAZER, GetTag(), CBullet::GetBulletParam((int)CGun::GUNTYPE_LASERGUN)->nPower, D3DXCOLOR(0.0f,0.0f,0.0f,-1.0f),GetShotPosPtr());
+			CParticle::CreateFromText(m_ShotPos, m_ShotRot, CParticleParam::EFFECT_LAZER, GetTag(), CBullet::GetBulletParam((int)CGun::GUNTYPE_LASERGUN)->nPower, D3DXCOLOR(0.0f, 0.0f, 0.0f, -1.0f), GetShotPosPtr());
 			m_bMultiple = true;		// フラグをオン
 			break;
 
@@ -373,9 +372,9 @@ void CGun::MultipleShot()
 
 	float randPos_y = (float)(rand() % 10 - 5);
 
-	if (m_nCntBullet < (CBullet::GetBulletParam(m_GunType)->nTrigger - 1))
+	if (m_nCntBullet < (CBullet::GetBulletParam(m_GunType)->nTrigger))
 	{
-		if (m_nCntFrame >= 10)
+		if (m_nCntFrame >= HEAVYMACHINEGUN_SHOT_FRAME)
 		{
 			// フレームカウント初期化
 			m_nCntFrame = 0;

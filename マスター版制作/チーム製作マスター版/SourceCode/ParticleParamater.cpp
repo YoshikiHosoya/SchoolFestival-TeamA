@@ -19,7 +19,9 @@ std::vector<std::unique_ptr<CParticleParam>> CParticleParam::m_pParticleDefaultP
 FILENAME_LIST CParticleParam::m_aFileNameList =
 {
 	{ "data/Load/Effect/Paramater/Default.txt" },
-	{ "data/Load/Effect/Paramater/Explosion.txt" },
+	{ "data/Load/Effect/Paramater/Explosion_RocketLanchar.txt" },
+	{ "data/Load/Effect/Paramater/Explosion_Grenade.txt" },
+	{ "data/Load/Effect/Paramater/ExplosionSmoke.txt" },
 	{ "data/Load/Effect/Paramater/NoCollisionExplosion.txt" },
 	{ "data/Load/Effect/Paramater/Blood.txt" },
 	{ "data/Load/Effect/Paramater/Flashing.txt" },
@@ -27,13 +29,15 @@ FILENAME_LIST CParticleParam::m_aFileNameList =
 	{ "data/Load/Effect/Paramater/DeleteBulletFlash.txt" },
 	{ "data/Load/Effect/Paramater/Handgun.txt" },
 	{ "data/Load/Effect/Paramater/HeavyMachinegun.txt" },
-	{ "data/Load/Effect/Paramater/TrackingGun.txt" },
-	{ "data/Load/Effect/Paramater/TankGun.txt" },
 	{ "data/Load/Effect/Paramater/ShotGun.txt" },
+	{ "data/Load/Effect/Paramater/ShotGunAddEffect.txt" },
 	{ "data/Load/Effect/Paramater/Lazer.txt" },
 	{ "data/Load/Effect/Paramater/BossLazer.txt" },
 	{ "data/Load/Effect/Paramater/Smoke.txt" },
 	{ "data/Load/Effect/Paramater/Fire.txt" },
+	{ "data/Load/Effect/Paramater/GetWeapon.txt" },
+	{ "data/Load/Effect/Paramater/ChargeCircle.txt" },
+	{ "data/Load/Effect/Paramater/ChargeParticleTex.txt" },
 
 };
 //
@@ -45,7 +49,6 @@ FILENAME_LIST CParticleParam::m_aFileNameList =
 //------------------------------------------------------------------------------
 //マクロ
 //------------------------------------------------------------------------------
-#define PARAMATER_SAVE_FILENAME ("data/Load/Effect/Paramater/SaveParamater.txt")
 
 //------------------------------------------------------------------------------
 //コンストラクタ
@@ -327,7 +330,7 @@ HRESULT CParticleParam::LoadParticleDefaultParam()
 //------------------------------------------------------------------------------
 //パーティクルのパラメータ保存
 //------------------------------------------------------------------------------
-HRESULT CParticleParam::SaveParticleDefaultParam(CParticleParam *pSaveParam)
+HRESULT CParticleParam::SaveParticleDefaultParam(CParticleParam *pSaveParam,std::string aSaveFileName)
 {
 	FILE *pFile;
 
@@ -335,7 +338,7 @@ HRESULT CParticleParam::SaveParticleDefaultParam(CParticleParam *pSaveParam)
 	char cWriteText[128];
 
 	//ファイル読み込み
-	pFile = fopen(PARAMATER_SAVE_FILENAME, "w");
+	pFile = fopen(aSaveFileName.data(), "w");
 
 	//nullcheck
 	if (pFile && pSaveParam)
@@ -520,7 +523,7 @@ HRESULT CParticleParam::SaveParticleDefaultParam(CParticleParam *pSaveParam)
 		fputs(NEWLINE, pFile);
 
 		//保存成功
-		std::cout << "ParticleParam Save Succsess!! >>" << PARAMATER_SAVE_FILENAME << NEWLINE;
+		std::cout << "ParticleParam Save Succsess!! >>" << aSaveFileName.data() << NEWLINE;
 
 		//ファイルを閉じる
 		fclose(pFile);
@@ -528,7 +531,7 @@ HRESULT CParticleParam::SaveParticleDefaultParam(CParticleParam *pSaveParam)
 	else
 	{
 		//ファイルが開けませんでした
-		std::cout << "ParticleParam Save FAILED!!  Can't Open File. SaveParticleDefaultParam()" << NEWLINE;
+		std::cout << "ParticleParam Save FAILED!!  Can't Open File. SaveParticleDefaultParam()" << aSaveFileName.data() << NEWLINE;
 		return E_FAIL;
 	}
 	return S_OK;

@@ -73,7 +73,7 @@ void CTankGun::Update(void)
 	CBullet::Update();
 
 	//パーティクル発生 軌跡みたいな
-	CParticle::CreateFromText(GetPosition(),GetRot(), CParticleParam::EFFECT_TANKGUN,CBullet::GetTag());
+	CParticle::CreateFromText(GetPosition(),GetRot(), CParticleParam::EFFECT_HEAVY_MACHINEGUN,CBullet::GetTag(),-1,D3DXCOLOR(0.3f,0.9f,0.7f,1.0f));
 
 }
 

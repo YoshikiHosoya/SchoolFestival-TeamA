@@ -71,7 +71,7 @@ void CTracking::Update(void)
 	CBullet::Update();
 
 	//パーティクル発生 軌跡みたいな
-	CParticle::CreateFromText(GetPosition(), D3DXVECTOR3(GetRot()), CParticleParam::EFFECT_TRACKINGGUN, CBullet::GetTag());
+	CParticle::CreateFromText(GetPosition(), GetRot(), CParticleParam::EFFECT_HEAVY_MACHINEGUN, CBullet::GetTag(), -1, D3DXCOLOR(1.0f, 0.2f, 0.2f, 1.0f));
 
 }
 

@@ -131,7 +131,14 @@ void CScene::RereaseAll(void)
 				{
 					//I—¹ˆ—
 					m_pSceneList[nCntObjtype][nCnt]->Uninit();
-
+				}
+			}
+			//Scene‚Ì”z—ñ‚Ì‘å‚«‚³•ª
+			for (size_t nCnt = 0; nCnt < m_pSceneList[nCntObjtype].size(); nCnt++)
+			{
+				//nullcheck
+				if (m_pSceneList[nCntObjtype][nCnt])
+				{
 					//ƒƒ‚ƒŠŠJ•ú
 					delete m_pSceneList[nCntObjtype][nCnt];
 					m_pSceneList[nCntObjtype][nCnt] = nullptr;

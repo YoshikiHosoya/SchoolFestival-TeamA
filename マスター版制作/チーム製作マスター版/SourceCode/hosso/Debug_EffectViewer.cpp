@@ -28,6 +28,7 @@
 //マクロ
 //------------------------------------------------------------------------------
 #define EFFECT_CREATE_POS (D3DXVECTOR3(0.0f, 50.0f, 100.0f))
+#define PARAMATER_SAVE_FILENAME ("data/Load/Effect/Paramater/SaveParamater.txt")
 #define LINE_LENGTH (500.0f)
 #define LINE_OFFSET (D3DXVECTOR3(0.0f,LINE_LENGTH,0.0f))
 
@@ -199,7 +200,7 @@ void CDebug_EffectViewer::ParticleParamaterViewer()
 			//ループするか
 			ImGui::Checkbox("bAnimationLoop", &m_pParticleParam->GetAnimationLoop());
 
-			//アニメーション切り替えの家運後
+			//アニメーション切り替えのカウント
 			ImGui::InputInt("AnimationCntSwitch", &m_pParticleParam->GetAnimationCntSwitch(), 1, 1, 20);
 
 			//ツリー終了
@@ -367,8 +368,22 @@ void CDebug_EffectViewer::ParticleParamaterViewer()
 	if (ImGui::Button("Save"))
 	{
 		//セーブ
-		CParticleParam::SaveParticleDefaultParam(m_pParticleParam.get());
+		CParticleParam::SaveParticleDefaultParam(m_pParticleParam.get(), PARAMATER_SAVE_FILENAME);
 	}
+
+	if (ImGui::TreeNode("OverRideSave"))
+	{
+
+		//パーティクル情報保存
+		if (ImGui::Button("OverRideSave"))
+		{
+			//セーブ
+			CParticleParam::SaveParticleDefaultParam(m_pParticleParam.get(), m_pParticleParam->GetFileNameList()[NowText]);
+		}
+
+		ImGui::TreePop();
+	}
+
 
 	//[Ctrl] + [Enter]
 	if ((pKeyboard->GetKeyboardPress(DIK_LCONTROL) && pKeyboard->GetKeyboardTrigger(DIK_RETURN)))
