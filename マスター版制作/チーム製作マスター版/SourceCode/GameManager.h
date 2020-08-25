@@ -45,10 +45,11 @@ public:
 	void EventClear();
 
 private:
-	int			m_nCnt;					//カウント
-	int			m_nWaveCnt;				//カウント
-	int			m_nWaveEnemyNum;		//ウェーブの敵のナンバー
-	int			m_nWavePrisonerNum;		//ウェーブの捕虜のナンバー
+	int			m_nCnt;							//カウント
+	int			m_nWaveEnemyCnt;				//敵のフレームカウント
+	int			m_nWavePrisonerCnt;				//捕虜のフレームカウント
+	int			m_nWaveEnemyNum;				//ウェーブの敵のナンバー
+	int			m_nWavePrisonerNum;				//ウェーブの捕虜のナンバー
 
 	int			m_nNowWave;				//ウェーブ
 	CScene2D	*m_pScene2D_GoSign;		//2Dポリゴン　Goサイン
