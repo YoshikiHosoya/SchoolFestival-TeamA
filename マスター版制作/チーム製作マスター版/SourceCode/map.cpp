@@ -77,7 +77,7 @@ CMap::CMap()
 	m_pBattlePlane.clear();											// 戦闘機
 	m_pHelicopter.clear();											// ヘリコプター
 	m_pVehicle.clear();												// (乗り物)
-
+	
 	// 今だけ 仮
 	m_pBoss_One.clear();
 
@@ -345,7 +345,7 @@ void CMap::MapModelCreate(int ModelType, int nType, D3DXVECTOR3 pos,int nItemTyp
 	/* --- 敵 --- */
 	case CMap::ARRANGEMENT_MODEL_ENEMY:
 		// オブジェクトの生成
-		m_pEnemy.emplace_back(CWeakEnemy::Create());
+		m_pEnemy.emplace_back(CWeakEnemy::Create(CWeakEnemy::WEAKENEMY_TYPE::ENEMY_NORMAL));
 		// 位置の設定
 		m_pEnemy[m_pEnemy.size() - 1]->SetPosition(pos);
 		break;
@@ -1193,7 +1193,7 @@ void CMap::ModelCreat()
 	{
 	case CMap::ARRANGEMENT_MODEL_ENEMY:
 		// 敵
-		m_pEnemy.emplace_back(CWeakEnemy::Create());
+		m_pEnemy.emplace_back(CWeakEnemy::Create(CWeakEnemy::WEAKENEMY_TYPE::ENEMY_NORMAL));
 		break;
 
 	case CMap::ARRANGEMENT_MODEL_PRISONER:
@@ -1298,7 +1298,7 @@ void CMap::WaveCreate(int nModelType, D3DXVECTOR3 eventpos, WAVE_PARAM * pWavePa
 	if (nModelType == ARRANGEMENT_MODEL_ENEMY)
 	{
 		// 敵
-		m_pEnemy.emplace_back(CWeakEnemy::Create());
+		m_pEnemy.emplace_back(CWeakEnemy::Create(CWeakEnemy::WEAKENEMY_TYPE::ENEMY_NORMAL));
 		m_pEnemy[m_pEnemy.size() - 1]->SetPosition(pWaveParam->pos + eventpos);
 		m_pEnemy[m_pEnemy.size() - 1]->SetEventFlag(pWaveParam->bEvent);
 	}
@@ -1675,8 +1675,8 @@ void CMap::MapModelSet()
 // =====================================================================================================================================================================
 void CMap::ComboBoxAll(int nNowSelect)
 {
-	static int nSelectType = 0;		// 選んでいる種類
-	static int nSelectType1 = 0;		// 選んでいる種類
+	static int nSelectType		= 0;	// 選んでいる種類
+	static int nSelectItemType	= 0;	// 選んでいるアイテムの種類
 
 	switch (m_ArrangmentModel)
 	{
@@ -1689,7 +1689,7 @@ void CMap::ComboBoxAll(int nNowSelect)
 		// 捕虜のドロップタイプ選択
 		PrisonerDropTypeComboBox(nSelectType, nNowSelect);
 		// 捕虜のアイテムタイプ選択
-		PrisonerItemTypeComboBox(nSelectType1, nNowSelect);
+		PrisonerItemTypeComboBox(nSelectItemType, nNowSelect);
 		break;
 
 	case CMap::ARRANGEMENT_MODEL_OBSTACLE:
@@ -1814,23 +1814,23 @@ void CMap::ObstacleTypeComboBox(int &nSelectType, int nNowSelect)
 void CMap::EnemyTypeComboBox(int &nSelectType, int nNowSelect)
 {
 #ifdef _DEBUG
-	//std::vector<std::string > aEnemyType = { "DESIGNATE_ONE", "DESIGNATE_RANGE", "ALL" };
+	//std::vector<std::string > aEnemyType = {"NORMAL", "SHIELD"};
 
 	//if (CHossoLibrary::ImGui_Combobox(aEnemyType, "Type", nSelectType))
 	//{
 	//	// NULLチェック
-	//	if (m_pPrisoner[nNowSelect])
+	//	if (m_pEnemy[nNowSelect])
 	//	{
 	//		// 敵の種類の取得
-	//		CPrisoner::PRISONER_ITEM_DROPTYPE PrisonerType = m_pPrisoner[nNowSelect]->GetPrisonerDropType();
+	//		CEnemy::TYPE EnemyType = m_pEnemy[nNowSelect]->GetType();
 
 	//		// 前回と違うとき
-	//		if (PrisonerType != nSelectType)
+	//		if (EnemyType != nSelectType)
 	//		{
 	//			// 種類代入
-	//			PrisonerType = (CPrisoner::PRISONER_ITEM_DROPTYPE)nSelectType;
+	//			EnemyType = (CEnemy::TYPE)nSelectType;
 	//			// 敵の種類の設定
-	//			m_pPrisoner[nNowSelect]->SetPrisonerType(PrisonerType);
+	//			m_pEnemy[nNowSelect]->SetType(EnemyType);
 	//		}
 	//	}
 	//}
