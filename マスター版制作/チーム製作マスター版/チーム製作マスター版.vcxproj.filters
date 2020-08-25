@@ -14,9 +14,6 @@
     <ClCompile Include="SourceCode\Enemy.cpp">
       <Filter>Model</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\EnemyShield.cpp">
-      <Filter>Model</Filter>
-    </ClCompile>
     <ClCompile Include="SourceCode\helicopter.cpp">
       <Filter>Model</Filter>
     </ClCompile>
@@ -311,6 +308,9 @@
     <ClCompile Include="SourceCode\BaseAI.cpp">
       <Filter>AI</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\ShieldEnemyAI.cpp">
+      <Filter>AI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SourceCode\hosso\HossoLibrary.h" />
@@ -324,9 +324,6 @@
       <Filter>Model</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\Enemy.h">
-      <Filter>Model</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\EnemyShield.h">
       <Filter>Model</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\helicopter.h">
@@ -630,6 +627,9 @@
       <Filter>Model</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\BaseAI.h">
+      <Filter>AI</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\ShieldEnemyAI.h">
       <Filter>AI</Filter>
     </ClInclude>
   </ItemGroup>

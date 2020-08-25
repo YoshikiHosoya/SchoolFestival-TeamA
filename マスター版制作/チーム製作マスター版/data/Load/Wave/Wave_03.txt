@@ -1,0 +1,22 @@
+#------------------------------------------------------------------------------
+# ウェーブの配置情報
+#------------------------------------------------------------------------------
+SCRIPT
+
+EVENTPOS	= 3000
+
+ENEMYSET									# 0
+	TYPE			= 0
+	POS 			= 0 300 0
+	FRAME 			= 200
+	EVENT			= 1
+END_ENEMYSET
+
+PRISONERSET									# 1
+	TYPE			= 0
+	ITEMTYPE		= -1
+	POS 			= 0 0 0
+	FRAME 			= 60
+END_PRISONERSET
+
+END_SCRIPT

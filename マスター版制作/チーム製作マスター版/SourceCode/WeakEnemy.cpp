@@ -8,11 +8,12 @@
 #include "collision.h"
 #include "debugproc.h"
 #include "item.h"
-#include "EnemyAI.h"
+#include "ShieldEnemyAI.h"
 #include "gun.h"
 #include "particle.h"
 #include "sound.h"
 #include "shield.h"
+#include "Knife.h"
 //====================================================================
 //マクロ定義
 //====================================================================
@@ -45,6 +46,8 @@ HRESULT CWeakEnemy::Init(void)
 
 	// 銃の弾の種類
 	GetGunPtr()->GetTag() = TAG_ENEMY;
+	// ナイフの生成
+	m_pKnife = CKnife::Create(GetCharacterModelPartsList(CModel::MODEL_ENEMY_LHAND)->GetMatrix());
 
 	//盾生成
 	m_pShield = nullptr;
@@ -104,7 +107,7 @@ CWeakEnemy *CWeakEnemy::Create(void)
 	CWeakEnemy*pWeakEnemy;
 	pWeakEnemy = new CWeakEnemy(OBJTYPE_ENEMY);
 	pWeakEnemy->Init();
-	pWeakEnemy->SetAIPtr(CEnemyAI::CreateAI(pWeakEnemy));
+	pWeakEnemy->SetAIPtr(CShieldEnemyAI::CreateAI(pWeakEnemy));
 
 	return pWeakEnemy;
 }

@@ -20,6 +20,7 @@
 //ƒNƒ‰ƒX’è‹`
 //------------------------------------------------------------------------------
 class CShield;
+class CKnife;
 class CWeakEnemy :public CEnemy
 {
 public:
@@ -44,10 +45,12 @@ public:
 	virtual void DeathReaction();
 	virtual void StateChangeReaction();
 	void ShieldBreak();
+	CKnife *GetKnifePtr() { return m_pKnife; };
 
 private:
 	bool m_Attack;									//UŒ‚
 	float m_Angle;
 	CShield *m_pShield;								//‚
+	CKnife  *m_pKnife;
 };
 #endif

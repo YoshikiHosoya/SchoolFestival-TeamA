@@ -221,7 +221,7 @@ void CBullet::BulletLoad()
 	char cReadText[128];			// 文字として読み取る
 	char cHeadText[128];			// 比較用
 	char cDie[128];					// 不要な文字
-	D3DXVECTOR3 pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 位置
+	D3DXVECTOR3 pos = ZeroVector3;	// 位置
 
 	for (int nCnt = 0; nCnt < CGun::GUNTYPE_MAX; nCnt++)
 	{
