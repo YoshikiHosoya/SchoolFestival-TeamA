@@ -52,14 +52,14 @@ char *CPlayer::m_PlayerFileName =
 //====================================================================
 //マクロ定義
 //====================================================================
-#define PLAYER_SIZE			(D3DXVECTOR3(50.0f,65.0f,0.0f)) //プレイヤーのサイズ
-#define PLAYER_SIZE_CRUCH	(D3DXVECTOR3(50.0f,30.0f,0.0f)) //しゃがんだ時のサイズ
+#define PLAYER_SIZE			(D3DXVECTOR3(40.0f,70.0f,0.0f)) //プレイヤーのサイズ
+#define PLAYER_SIZE_CRUCH	(D3DXVECTOR3(40.0f,30.0f,0.0f)) //しゃがんだ時のサイズ
 // 貫通させるかのフラグ
 #define ATTACK_PENETRATION		(true)			// プレイヤーの判定が貫通するかどうか
-#define ATTACK_DAMAGE_ENEMY		(50)			// エネミーへのダメージ
 #define SHOT_BULLET_POS_Y		(-15.0f)		// 弾の発射位置Y
 #define SHOT_BULLET_POS_Z		(-5.0f)			// 弾の発射位置Z
 #define KNIFE_COLLISOIN_SIZE	(D3DXVECTOR3(80.0f,80.0f,0.0f))
+#define RESPAWN_INTERVAL		(120)
 
 // =====================================================================================================================================================================
 //
@@ -196,18 +196,24 @@ void CPlayer::Update(void)
 	CKeyboard *key;
 	key = CManager::GetInputKeyboard();
 
+	CheckDrawRange();
+
 	m_pGun->Update();
 
-	// 乗り物に乗っていない時といない時の判定
-	Ride();
-
-	//当たり判定処理
-	CollisionUpdate();
-
+	//リスポーン状態かどうか
 	if (m_bRespawn == true)
 	{
+		//リスポーンの処理
 		ReSpawn();
 	}
+	//通常状態のとき
+	else
+	{
+		// 乗り物に乗っていない時といない時の判定
+		Ride();
+	}
+	//当たり判定処理
+	CollisionUpdate();
 	// 体力UIの設定
 	if (m_pPlayerUI)
 	{
@@ -284,10 +290,7 @@ void CPlayer::DebugInfo(void)
 	CDebugProc::Print("Direction >> %d\n", GetCharacterDirection());
 	CDebugProc::Print("DirectionOld >> %d\n", GetCharacterDirectionOld());
 
-
 	CDebugProc::Print("座標------------------------------------------%f,%f,%f\n", m_pos[0].x, m_pos[0].y, m_pos[0].z);
-
-
 
 	CDebugProc::Print("時機のライフ %d\n", GetLife());
 	if (m_bAttack == true)
@@ -344,100 +347,95 @@ void CPlayer::MoveUpdate(void)
 	pad->GetStickLeft(&Pad_X, &Pad_Y);//パッドの入力値を代入
 	Pad_X /= STICK_MAX_RANGE;//値の正規化
 	Pad_Y /= STICK_MAX_RANGE;//値の正規化
-
-	if (m_bRespawn == false)
-	{
 		// Aの処理
-		if (key->GetKeyboardPress(DIK_A))
-		{
-			CPlayer::Move(m_fRunSpeed, 0.5f);
-			SetCharacterDirection(DIRECTION::LEFT);
-
-		}
-
-		// Dの処理
-		else if (key->GetKeyboardPress(DIK_D))
-		{
-			CPlayer::Move(-m_fRunSpeed, -0.5f);
-
-			SetCharacterDirection(DIRECTION::RIGHT);
-		}
-
-		// W押してたら上むく
-		if (key->GetKeyboardPress(DIK_W))
-		{
-			SetCharacterDirection(DIRECTION::UP);
-		}
-
-		//ジャンプ
-		if ((key->GetKeyboardTrigger(DIK_SPACE) || pad->GetTrigger(pad->JOYPADKEY_A, 1)) && GetJump() == true && m_DebugState == DEBUG_NORMAL)
-		{
-			GetMove().y += m_fJump;
-			SetMotion(PLAYER_MOTION_JUMP);
-		}
-		//ジャンプ中はジャンプモーション
-		else if (GetJump() == false && GetMotionType() != PLAYER_MOTION_JUMPSTOP)
-		{
-			SetMotion(PLAYER_MOTION_JUMP);
-		}
-
-		//デバッグ用
-		else if (key->GetKeyboardPress(DIK_SPACE) && m_DebugState != DEBUG_NORMAL)
-		{
-			GetMove().y += 2;
-		}
-
-		//ジャンプしてない時
-		if (GetJump())
-		{
-			//攻撃してない時
-			if (GetMotionType() != PLAYER_MOTION_ATTACK01)
-			{
-				//移動したらウォークモーション
-				if (fabsf(GetMove().x) > 0.3f)
-				{
-					SetMotion(PLAYER_MOTION_WALK);
-					m_bCruch = false;
-				}
-				//Sを押したらしゃがみモーション
-				else if ((key->GetKeyboardPress(DIK_S) || Pad_Y < -0.6f) && GetJump() == true)
-				{
-					SetMotion(PLAYER_MOTION_SQUATSTOP);
-					GetCollision()->SetSize2D(PLAYER_SIZE_CRUCH);
-					m_bCruch = true;
-				}
-				//ジャンプ、しゃがみをしてなかったらニュートラル
-				else
-				{
-					SetMotion(PLAYER_MOTION_NORMAL);
-					GetCollision()->SetSize2D(PLAYER_SIZE);
-					m_bCruch = false;
-				}
-			}
-		}
-
-		//ジャンプしたとき
-		else if (GetMotionType() == PLAYER_MOTION_JUMP)
-		{
-			m_bCruch = false;
-
-			//キーセットが３になったらストップモーションへ
-			if (GetKeySet() == 3)
-			{
-				SetMotion(PLAYER_MOTION_JUMPSTOP);
-			}
-		}
-
-		//ジャンプしたときの下向発射
-		if (key->GetKeyboardPress(DIK_S) && GetJump() == false)
-		{
-			SetCharacterDirection(DIRECTION::DOWN);
-		}
+	if (key->GetKeyboardPress(DIK_A))
+	{
+		CPlayer::Move(m_fRunSpeed, 0.5f);
+		SetCharacterDirection(DIRECTION::LEFT);
 
 	}
 
+	// Dの処理
+	else if (key->GetKeyboardPress(DIK_D))
+	{
+		CPlayer::Move(-m_fRunSpeed, -0.5f);
+
+		SetCharacterDirection(DIRECTION::RIGHT);
+	}
+
+	// W押してたら上むく
+	if (key->GetKeyboardPress(DIK_W))
+	{
+		SetCharacterDirection(DIRECTION::UP);
+	}
+
+	//ジャンプ
+	if ((key->GetKeyboardTrigger(DIK_SPACE) || pad->GetTrigger(pad->JOYPADKEY_A, 1)) && GetJump() == true && m_DebugState == DEBUG_NORMAL)
+	{
+		GetMove().y += m_fJump;
+		SetMotion(PLAYER_MOTION_JUMP);
+	}
+	//ジャンプ中はジャンプモーション
+	else if (GetJump() == false && GetMotionType() != PLAYER_MOTION_JUMPSTOP)
+	{
+		SetMotion(PLAYER_MOTION_JUMP);
+	}
+
+	//デバッグ用
+	else if (key->GetKeyboardPress(DIK_SPACE) && m_DebugState != DEBUG_NORMAL)
+	{
+		GetMove().y += 2;
+	}
+
+	//ジャンプしてない時
+	if (GetJump())
+	{
+		//攻撃してない時
+		if (GetMotionType() != PLAYER_MOTION_ATTACK01)
+		{
+			//移動したらウォークモーション
+			if (fabsf(GetMove().x) > 0.3f)
+			{
+				SetMotion(PLAYER_MOTION_WALK);
+				m_bCruch = false;
+			}
+			//Sを押したらしゃがみモーション
+			else if ((key->GetKeyboardPress(DIK_S) || Pad_Y < -0.8f) && GetJump() == true)
+			{
+				SetMotion(PLAYER_MOTION_SQUATSTOP);
+				GetCollision()->SetSize2D(PLAYER_SIZE_CRUCH);
+				m_bCruch = true;
+			}
+			//ジャンプ、しゃがみをしてなかったらニュートラル
+			else
+			{
+				SetMotion(PLAYER_MOTION_NORMAL);
+				GetCollision()->SetSize2D(PLAYER_SIZE);
+				m_bCruch = false;
+			}
+		}
+	}
+
+	//ジャンプしたとき
+	else if (GetMotionType() == PLAYER_MOTION_JUMP)
+	{
+		m_bCruch = false;
+
+		//キーセットが３になったらストップモーションへ
+		if (GetKeySet() == 3)
+		{
+			SetMotion(PLAYER_MOTION_JUMPSTOP);
+		}
+	}
+
+	//ジャンプしたときの下向発射
+	if (key->GetKeyboardPress(DIK_S) && GetJump() == false)
+	{
+		SetCharacterDirection(DIRECTION::DOWN);
+	}
+
 	//上も下も入力されていない時は正面を向く
-	if (!(key->GetKeyboardPress(DIK_S) || key->GetKeyboardPress(DIK_W) || fabsf(Pad_Y) > 0.6f))
+	if (!(key->GetKeyboardPress(DIK_S) || key->GetKeyboardPress(DIK_W) || fabsf(Pad_Y) > 0.8f))
 	{
 		//正面を向く
 		ResetCharacterDirection();
@@ -517,46 +515,44 @@ void CPlayer::AttackUpdate(void)
 	key = CManager::GetInputKeyboard();
 	CXInputPad *pad;
 	pad = CManager::GetPad();
-	if (m_bRespawn == false)
+
+	// 銃を撃つ or 近接攻撃
+	if (key->GetKeyboardTrigger(DIK_P) || pad->GetTrigger(pad->JOYPADKEY_X, 1))
 	{
-		// 銃を撃つ or 近接攻撃
-		if (key->GetKeyboardTrigger(DIK_P)|| pad->GetTrigger(pad->JOYPADKEY_X,1))
+		// 銃を撃てる状態だった時
+		if (m_bAttack == false && m_bKnifeAttack == false)
 		{
-			// 銃を撃てる状態だった時
-			if (m_bAttack == false && m_bKnifeAttack == false)
-			{
-				// 銃発射処理
-				m_pGun->Shot();
-			}
-
-			// 近接攻撃をする状態だった時
-			if (m_bAttack == true && m_bKnifeAttack == false)
-			{
-				// 近接攻撃
-				m_bKnifeAttack = true;
-				m_pKnife->StartMeleeAttack();
-				SetMotion(CCharacter::PLAYER_MOTION_ATTACK01);
-			}
-		}
-		// グレネードを投げる
-		if (key->GetKeyboardTrigger(DIK_O)|| pad->GetTrigger(pad->JOYPADKEY_Y, 1))
-		{
-			// グレネードの弾数が残っているとき
-			if (m_pGrenadeFire->GetGrenadeAmmo() > 0)
-			{
-				// グレネード生成
-				m_pGrenadeFire->Fire(GetShotDirection());
-
-				SetMotion(CCharacter::PLAYER_MOTION_GRENADE);
-			}
+			// 銃発射処理
+			m_pGun->Shot();
 		}
 
-		// 攻撃モーションから別のモーションになった時
-		if (GetMotionType() != CCharacter::PLAYER_MOTION_ATTACK01)
+		// 近接攻撃をする状態だった時
+		if (m_bAttack == true && m_bKnifeAttack == false)
 		{
-			m_bKnifeAttack = false;
-			m_pKnife->EndMeleeAttack();
+			// 近接攻撃
+			m_bKnifeAttack = true;
+			m_pKnife->StartMeleeAttack();
+			SetMotion(CCharacter::PLAYER_MOTION_ATTACK01);
 		}
+	}
+	// グレネードを投げる
+	if (key->GetKeyboardTrigger(DIK_O) || pad->GetTrigger(pad->JOYPADKEY_Y, 1))
+	{
+		// グレネードの弾数が残っているとき
+		if (m_pGrenadeFire->GetGrenadeAmmo() > 0)
+		{
+			// グレネード生成
+			m_pGrenadeFire->Fire(GetShotDirection());
+
+			SetMotion(CCharacter::PLAYER_MOTION_GRENADE);
+		}
+	}
+
+	// 攻撃モーションから別のモーションになった時
+	if (GetMotionType() != CCharacter::PLAYER_MOTION_ATTACK01)
+	{
+		m_bKnifeAttack = false;
+		m_pKnife->EndMeleeAttack();
 	}
 }
 //====================================================================
@@ -567,38 +563,34 @@ void CPlayer::PadMoveUpdate(void)
 	//移動量
 	D3DXVECTOR3 MoveValue = ZeroVector3;
 
-	//リスポーンしていない時
-	if (m_bRespawn == false)
+	//パッドによる入力処理
+	if (CHossoLibrary::PadMoveInput(MoveValue, GetCharacterDirection(), GetJump()))
 	{
-		//パッドによる入力処理
-		if (CHossoLibrary::PadMoveInput(MoveValue, GetCharacterDirection(), GetJump()))
+		//移動量計算
+		Move(MoveValue.x, MoveValue.y);
+	}
+
+	CXInputPad *pad = CManager::GetPad();
+	D3DXVECTOR3 InputValue = ZeroVector3;
+	pad->GetStickLeft(&InputValue.x, &InputValue.y);//パッドの入力値を代入
+
+	InputValue.x /= STICK_MAX_RANGE;//値の正規化
+	InputValue.y /= STICK_MAX_RANGE;//値の正規化
+
+	//ジャンプモーションじゃない時かつジャンプストップモーションじゃない時
+
+	if (GetMotionType() != PLAYER_MOTION_JUMP && GetMotionType() != PLAYER_MOTION_JUMPSTOP && GetMotionType() != PLAYER_MOTION_ATTACK01)
+	{
+		//Sを押したらしゃがみモーション
+		if (InputValue.y < -0.8f && GetJump() == true)
 		{
-			//移動量計算
-			Move(MoveValue.x, MoveValue.y);
-		}
-
-		CXInputPad *pad = CManager::GetPad();
-		D3DXVECTOR3 InputValue = ZeroVector3;
-		pad->GetStickLeft(&InputValue.x, &InputValue.y);//パッドの入力値を代入
-
-		InputValue.x /= STICK_MAX_RANGE;//値の正規化
-		InputValue.y /= STICK_MAX_RANGE;//値の正規化
-
-		//ジャンプモーションじゃない時かつジャンプストップモーションじゃない時
-
-		if (GetMotionType() != PLAYER_MOTION_JUMP && GetMotionType() != PLAYER_MOTION_JUMPSTOP && GetMotionType() != PLAYER_MOTION_ATTACK01)
-		{
-			//Sを押したらしゃがみモーション
-			if (InputValue.y < -0.6f && GetJump() == true)
+			if (m_bCruch == false && GetMotionType() != PLAYER_MOTION_WALK)
 			{
-				if (m_bCruch == false && GetMotionType() != PLAYER_MOTION_WALK)
-				{
-					SetMotion(PLAYER_MOTION_SQUATSTOP);
-					m_bCruch = true;
-				}
+				SetMotion(PLAYER_MOTION_SQUATSTOP);
+				m_bCruch = true;
 			}
-
 		}
+
 	}
 }
 //====================================================================
@@ -637,6 +629,7 @@ void CPlayer::DamageReaction()
 void CPlayer::DeathReaction()
 {
 	CCharacter::DeathReaction();
+
 }
 //====================================================================
 //ステートが切り替わった時のリアクション
@@ -653,20 +646,20 @@ void CPlayer::StateChangeReaction()
 
 		break;
 
-	case CHARACTER_STATE_DAMAGE:
-
-
-		break;
-	case CHARACTER_STATE_DAMAGE_RED:
+	case CHARACTER_STATE_DAMAGE_FLASHING:
 
 
 		break;
 	case CHARACTER_STATE_INVINCIBLE:
 
 		break;
+	case CHARACTER_STATE_ITEMGET_FLASH:
+		ChangeColor(true, FlashColor);
+		SetStateCount(3);
+		break;
 	case CHARACTER_STATE_DEATH:
 		SetRespawnFlag(true);
-
+		SetMotion(CCharacter::PLAYER_MOTION_DEAD);
 		break;
 	}
 }
@@ -800,14 +793,14 @@ void CPlayer::Ride()
 void CPlayer::ReSpawn(void)
 {
 	m_nRespawnCnt++;
-	SetState(CHARACTER_STATE_INVINCIBLE);
 
-	if (m_nRespawnCnt == m_nRespawnCnt)
+	if (m_nRespawnCnt >= RESPAWN_INTERVAL)
 	{
 		m_nRespawnCnt = 0;
 		m_bRespawn = false;
 		m_pGun->SetGunType(CGun::GUNTYPE_HANDGUN);
-		SetState(CHARACTER_STATE_NORMAL);
+		SetMotion(CCharacter::PLAYER_MOTION_NORMAL);
+		SetState(CHARACTER_STATE_INVINCIBLE);
 		SetLife(m_nLife[0]);
 	}
 }
@@ -835,7 +828,7 @@ void CPlayer::PlayerLoad()
 	char cHeadText[128];			// 比較用
 	char cDie[128];					// 不要な文字
 
-									// ファイルを開く
+	// ファイルを開く
 	pFile = fopen(m_PlayerFileName, "r");
 
 	// 開いているとき

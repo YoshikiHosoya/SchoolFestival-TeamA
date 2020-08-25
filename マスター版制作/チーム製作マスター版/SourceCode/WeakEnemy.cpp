@@ -107,6 +107,11 @@ void CWeakEnemy::Uninit(void)
 //====================================================================
 void CWeakEnemy::Update(void)
 {
+	//描画の範囲内かチェック
+	if (!CheckDrawRange())
+	{
+		return;
+	}
 	CEnemy::Update();
 }
 //====================================================================
@@ -176,13 +181,7 @@ void CWeakEnemy::StateChangeReaction()
 	case CHARACTER_STATE_NORMAL:
 		break;
 
-	case CHARACTER_STATE_DAMAGE:
-
-		break;
 	case CHARACTER_STATE_DAMAGE_RED:
-
-		break;
-	case CHARACTER_STATE_INVINCIBLE:
 
 		break;
 	case CHARACTER_STATE_DEATH:

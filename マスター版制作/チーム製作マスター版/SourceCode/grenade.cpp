@@ -122,7 +122,7 @@ void CGrenade::Draw(void)
 // =====================================================================================================================================================================
 void CGrenade::DeleteBullet()
 {
-	CParticle::CreateFromText(GetPosition(), ZeroVector3, CParticleParam::EFFECT_EXPLOSION, GetTag(), GetBulletParam(CGun::GUNTYPE_ROCKETLAUNCHER)->nPower);
+	CParticle::CreateFromText(GetPosition(), ZeroVector3, CParticleParam::EFFECT_EXPLOSION_GRENADE, GetTag(), GetBulletParam(CGun::GUNTYPE_ROCKETLAUNCHER)->nPower);
 
 	CBullet::DeleteBullet();
 }

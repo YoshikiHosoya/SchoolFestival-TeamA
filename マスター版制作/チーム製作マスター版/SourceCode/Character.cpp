@@ -111,12 +111,12 @@ HRESULT CCharacter::Init(void)
 	m_Life				= 50;												// 体力
 	m_HeightBet			= 0.0f;												//
 	m_state				= CHARACTER_STATE_NORMAL;							// 状態
-	m_bCanJump				= false;											// ジャンプフラグ
+	m_bCanJump			= false;											// ジャンプフラグ
 	m_bGravity			= true;												//
 	m_bDieFlag			= false;											// 死亡フラグ
 	m_bMotion			= true;												// モーションするかどうか
 	m_bFall				= false;											//
-	m_bDraw				= false;											//描画するかどうか
+	m_bDraw				= true;												//描画するかどうか
 
 	// 当たり判定生成
 	m_pCollision = CCollision::Create();
@@ -131,34 +131,18 @@ HRESULT CCharacter::Init(void)
 //====================================================================
 void CCharacter::Uninit(void)
 {
-
+	// 当たり判定の削除
+	if (m_pCollision != nullptr)
+	{
+		delete m_pCollision;
+		m_pCollision = nullptr;
+	}
 }
 //====================================================================
 //更新
 //====================================================================
 void CCharacter::Update(void)
 {
-	//描画の範囲内かチェック
-	if (!CheckDrawRange())
-	{
-		//nullcheck
-		if (m_pCollision)
-		{
-			//当たり判定不可
-			m_pCollision->SetCanCollision(false);
-		}
-		return;
-	}
-	else
-	{
-		//mullcheck
-		if (m_pCollision)
-		{
-			//当たり判定可能
-			m_pCollision->SetCanCollision(true);
-		}
-	}
-
 	//前Fの情報保存
 	m_posold = m_pos;
 	m_MotionOld = m_MotionType;
@@ -255,19 +239,14 @@ void CCharacter::Draw(void)
 //====================================================================
 void CCharacter::DamageReaction()
 {
-	SetState(CHARACTER_STATE_DAMAGE);
+	SetState(CHARACTER_STATE_DAMAGE_FLASHING);
 }
 //====================================================================
 //死亡時のリアクション
 //====================================================================
 void CCharacter::DeathReaction()
 {
-	// 当たり判定の削除
-	if (m_pCollision != nullptr)
-	{
-		delete m_pCollision;
-		m_pCollision = nullptr;
-	}
+
 }
 //====================================================================
 //ステートに応じた処理
@@ -281,8 +260,9 @@ void CCharacter::State()
 	switch (m_state)
 	{
 	case CHARACTER_STATE_NORMAL:
+
 		break;
-	case CHARACTER_STATE_DAMAGE:
+	case CHARACTER_STATE_DAMAGE_FLASHING:
 		//カウントが0になったら通常に戻る
 		if (m_nStateCnt <= 0)
 		{
@@ -315,6 +295,8 @@ void CCharacter::State()
 		}
 		break;
 	case CHARACTER_STATE_INVINCIBLE:
+		GetCollision()->SetCanCollision(false);
+
 		//カウントが0になったら通常に戻す
 		if (m_nStateCnt <= 0)
 		{
@@ -324,11 +306,11 @@ void CCharacter::State()
 		//白く点滅
 		else if (m_nStateCnt % 4 == 0 && m_nStateCnt % 8 != 0)
 		{
-			ChangeColor(true, D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f));
+			ChangeColor(true, ZeroColor);
 		}
 		else if (m_nStateCnt % 8 == 0)
 		{
-			ChangeColor(true, D3DXCOLOR(0.6f, 0.6f, 0.6f, 0.0f));
+			ChangeColor(true, FlashColor);
 		}
 		break;
 
@@ -342,10 +324,17 @@ void CCharacter::State()
 			//派生クラスがオーバーライド
 			DeathReaction();
 
-
 			SetState(CHARACTER_STATE_NONE);
 		}
 
+		break;
+
+	default:
+		//カウントが0になった時
+		if (m_nStateCnt <= 0)
+		{
+			SetState(CHARACTER_STATE_NORMAL);
+		}
 		break;
 	}
 
@@ -362,9 +351,14 @@ void CCharacter::StateChangeReaction()
 	{
 	case CHARACTER_STATE_NORMAL:
 		m_nStateCnt = 0;
+		if (m_pCollision)
+		{
+			m_pCollision->SetCanCollision(true);
+		}
+		SetAllModelDisp(true);
 		break;
 
-	case CHARACTER_STATE_DAMAGE:
+	case CHARACTER_STATE_DAMAGE_FLASHING:
 		m_nStateCnt = 60;
 
 		break;
@@ -1159,7 +1153,31 @@ void CCharacter::Collision()
 //====================================================================
 bool CCharacter::CheckDrawRange()
 {
+	//描画するかどうか
 	m_bDraw = CManager::GetRenderer()->CheckScreenRange(m_pos);
+
+	//描画の範囲内の場合
+	if (m_bDraw)
+	{
+		//mullcheck
+		if (m_pCollision)
+		{
+			//当たり判定可能
+			m_pCollision->SetCanCollision(true);
+		}
+
+	}
+	else
+	{
+		//nullcheck
+		if (m_pCollision)
+		{
+			//当たり判定不可
+			m_pCollision->SetCanCollision(false);
+		}
+	}
+
+	//return
 	return m_bDraw;
 }
 

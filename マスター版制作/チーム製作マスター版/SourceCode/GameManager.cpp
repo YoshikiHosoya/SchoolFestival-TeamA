@@ -33,7 +33,8 @@ CGameManager::CGameManager()
 	m_nCnt = 0;
 	m_nTimeCnt = 0;
 	m_nNowWave = 0;
-	m_nWaveCnt = 0;
+	m_nWaveEnemyCnt = 0;
+	m_nWavePrisonerCnt = 0;
 	m_nWaveEnemyNum = 0;
 	m_nWavePrisonerNum = 0;
 }
@@ -175,8 +176,9 @@ void CGameManager::EndWave()
 {
 	m_state = CGameManager::GAMESTATE::NORMAL;
 	CManager::GetRenderer()->GetCamera()->SetCameraStopMove(false);
-	m_nWaveCnt = 0;
+	m_nWaveEnemyCnt = 0;
 	m_nWaveEnemyNum = 0;
+	m_nWavePrisonerCnt = 0;
 	m_nWavePrisonerNum = 0;
 	m_nNowWave++;
 }
@@ -195,18 +197,34 @@ void CGameManager::UpdateWave()
 	//ウェーブのポインタ
 	CMap::WAVE_INFO *pWaveInfo = CManager::GetGame()->GetMap()->GetWaveInfo(m_nNowWave);
 
-	m_nWaveCnt++;
+	m_nWaveEnemyCnt++;
+	m_nWavePrisonerCnt++;
 
 	//まだ出てないのがいるとき
+	//敵
 	if (m_nWaveEnemyNum < (int)pWaveInfo->EnemyWaveInfo.size())
 	{
 		//フレーム数が一緒になった時
-		if (pWaveInfo->EnemyWaveInfo[m_nWaveEnemyNum]->nFrame == m_nWaveCnt)
+		if (pWaveInfo->EnemyWaveInfo[m_nWaveEnemyNum]->nFrame == m_nWaveEnemyCnt)
 		{
 			//敵生成
-			CManager::GetGame()->GetMap()->WaveCreate(CModel::ENEMY_MODEL, pWaveInfo->EventPos, pWaveInfo->EnemyWaveInfo[m_nWaveEnemyNum]);
+			CManager::GetGame()->GetMap()->WaveCreate(CMap::ARRANGEMENT_MODEL_ENEMY, pWaveInfo->EventPos, pWaveInfo->EnemyWaveInfo[m_nWaveEnemyNum]);
 			m_nWaveEnemyNum++;
-			m_nWaveCnt = 0;
+			m_nWaveEnemyCnt = 0;
+		}
+	}
+
+	//まだ出てないのがいるとき
+	//捕虜
+	if (m_nWavePrisonerNum < (int)pWaveInfo->PrisonerWaveInfo.size())
+	{
+		//フレーム数が一緒になった時
+		if (pWaveInfo->PrisonerWaveInfo[m_nWavePrisonerNum]->nFrame == m_nWavePrisonerCnt)
+		{
+			//敵生成
+			CManager::GetGame()->GetMap()->WaveCreate(CMap::ARRANGEMENT_MODEL_PRISONER, pWaveInfo->EventPos, pWaveInfo->PrisonerWaveInfo[m_nWavePrisonerNum]);
+			m_nWavePrisonerNum++;
+			m_nWavePrisonerCnt = 0;
 		}
 	}
 }
