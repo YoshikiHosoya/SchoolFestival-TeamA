@@ -37,17 +37,10 @@ public:
 		LABEL_SE_WALK,								//歩く
 		LABEL_SE_JUMP,								//ジャンプ
 		LABEL_SE_LANDING,							//着地
-		LABEL_SE_APPEAR,							//出現
-
 
 		//エフェクト
 		LABEL_SE_EXPLOSION,							//爆発
 		LABEL_SE_SHOT,								//電撃
-
-		//タイトル用
-		LABEL_SE_TITLE_SPARKING,					//タイトル　ビリビリー
-		LABEL_SE_TITLE_EXPLOSION,					//タイトル　バーンって感じの
-		LABEL_SE_RANKING_THUNDER,					//ランキング　数字出てくるときの
 
 		//環境音とか
 		LABEL_SE_DECISION,							//決定
@@ -109,16 +102,10 @@ private:
 		{ "data/SE/CharacterAction/walking.wav", 0 },			//SE 歩く
 		{ "data/SE/CharacterAction/jump.wav", 0 },				//SE ジャンプ
 		{ "data/SE/CharacterAction/landing.wav", 0 },			//SE 着地
-		{ "data/SE/CharacterAction/appear.wav", 0 },			//SE 出現
 
 		//エフェクト
 		{ "data/SE/Effect/explosion.wav", 0 },					//SE 爆発
 		{ "data/SE/Effect/shot.wav", 0 },						//SE 電撃
-
-		//タイトル用
-		{ "data/SE/Title/Sparking.wav", 0 },					//SE ビリビリ
-		{ "data/SE/Title/Title_Explosion.wav", 0 },				//SE バーン
-		{ "data/SE/Ranking/Ranking_Thunder.wav", 0 },			//SE 数字出てくるときの雷
 
 		//環境音
 		{ "data/SE/System/decision.wav", 0 },					//SE 決定

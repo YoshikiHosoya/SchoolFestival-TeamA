@@ -47,7 +47,7 @@ HRESULT CWeakEnemy::Init(void)
 	// e‚Ì’e‚ÌŽí—Þ
 	GetGunPtr()->GetTag() = TAG_ENEMY;
 	// ƒiƒCƒt‚Ì¶¬
-	m_pKnife = CKnife::Create(GetCharacterModelPartsList(CModel::MODEL_ENEMY_LHAND)->GetMatrix());
+	m_pKnife = CKnife::Create(GetCharacterModelPartsList(CModel::MODEL_ENEMY_LHAND)->GetMatrix(),TAG::TAG_ENEMY);
 
 	//‚¶¬
 	m_pShield = nullptr;
@@ -72,6 +72,11 @@ void CWeakEnemy::Uninit(void)
 	{
 		m_pShield->Rerease();
 		m_pShield = nullptr;
+	}
+	if (m_pKnife)
+	{
+		m_pKnife->Rerease();
+		m_pKnife = nullptr;
 	}
 
 	CEnemy::Uninit();
@@ -160,6 +165,7 @@ void CWeakEnemy::StateChangeReaction()
 		break;
 	case CHARACTER_STATE_DEATH:
 		SetStateCount(60);
+		m_pKnife->EndMeleeAttack();
 		SetMotion(CCharacter::ENEMY_MOTION_DEAD_1);
 
 		if (m_pShield)
