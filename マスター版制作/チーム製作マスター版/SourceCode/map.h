@@ -64,6 +64,7 @@ public:
 		MAP_1_2,			// 1_2
 		MAP_1_3,			// 1_3
 		MAP_1_BOSS,			// 1_BOSS
+		MAP_2_BOSS,			// 2_BOSS
 		MAP_MAX
 	};
 

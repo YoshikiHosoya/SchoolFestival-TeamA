@@ -35,7 +35,8 @@ public:
 		GUNTYPE_BALKAN,								// バルカン
 		GUNTYPE_FLAMETHROWER,						// 火炎放射器
 		GUNTYPE_INCENDIARY,							// 焼夷弾
-		GUNTYPE_GRENADE,							// グレネード
+		GUNTYPE_HANDGRENADE,						// 手投げグレネード
+		GUNTYPE_TANKGRENADE,						// 戦車のグレネード
 		GUNTYPE_TRACKINGGUN,						// 追従銃
 		GUNTYPE_DIFFUSIONGUN,						// 拡散銃
 		GUNTYPE_BOSSLASERGUN,						// ボス用のレーザーガン

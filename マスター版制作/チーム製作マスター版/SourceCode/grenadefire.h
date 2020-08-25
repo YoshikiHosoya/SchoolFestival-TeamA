@@ -19,6 +19,13 @@
 class CGrenadeFire : public CScene
 {
 public:
+	// グレネードの種類
+	enum GRENADE_TYPE
+	{
+		HAND_GRENADE = 0,
+		TANK_GRENADE,
+		GRENADE_TYPE_MAX
+	};
 
 	CGrenadeFire(OBJ_TYPE type);							// コンストラクタ
 	~CGrenadeFire();										// デストラクタ
@@ -31,7 +38,7 @@ public:
 	void						DebugInfo(void);			// デバッグ
 
 	/* 静的メンバ関数 */
-	static	CGrenadeFire		*Create(D3DXMATRIX *mtx);	// グレネード放つ位置の生成
+	static	CGrenadeFire		*Create(D3DXMATRIX *mtx, GRENADE_TYPE type);	// グレネード放つ位置の生成
 
 	/* メンバ関数 */
 	void						Fire(D3DXVECTOR3 rot);					// グレネードを放つ
@@ -44,7 +51,7 @@ private:
 	int							m_nInterval;				// インターバル
 	D3DXMATRIX					*m_mtx;						// マトリックス
 	TAG							m_Tag;						// タグ
-
+	GRENADE_TYPE				m_type;						// グレネードの種類
 	/* 静的メンバ変数 */
 };
 #endif

@@ -193,7 +193,7 @@ void CGun::NoDrawCalcMatrixOnly()
 // =====================================================================================================================================================================
 void CGun::SetGunType(GUN_TYPE type)
 {
-	BULLET_PARAM *pBulletParam = CBullet::GetBulletParam(type);
+	CBullet::BULLET_PARAM *pBulletParam = CBullet::GetBulletParam(type);
 
 	// ÉÇÉfÉãÇÃç∑Çµë÷Ç¶
 	SetModelConut(type);
