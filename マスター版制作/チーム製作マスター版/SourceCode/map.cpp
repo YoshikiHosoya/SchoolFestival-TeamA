@@ -77,14 +77,14 @@ CMap::CMap()
 	m_pBattlePlane.clear();											// 戦闘機
 	m_pHelicopter.clear();											// ヘリコプター
 	m_pVehicle.clear();												// (乗り物)
-
+	
 	// 今だけ 仮
 	m_pBoss_One.clear();
 
 	m_nOldSelect			= 0;									// 前回選択していたもの
-	m_WavePos				= D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// ウェーブの位置
-	m_TransitionPos			= D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// 遷移する位置
-	m_CameraPos				= D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// カメラの位置
+	m_WavePos				= ZeroVector3;							// ウェーブの位置
+	m_TransitionPos			= ZeroVector3;							// 遷移する位置
+	m_CameraPos				= ZeroVector3;							// カメラの位置
 	m_TransitionMapID		= 0;									// 次に遷移するための番号
 	m_nBGTexID				= 0;									// 背景のテクスチャ番号
 	m_bCameraFollowing		= false;								// カメラを追従するフラグ
@@ -108,15 +108,15 @@ CMap::~CMap()
 void CMap::MapModelLoad()
 {
 	FILE			*pFile			= nullptr;							// ファイルのポインタ
-	char			cReadText[128];										// 文字として読み取る
-	char			cHeadText[128];										// 比較用
-	char			cDie[128];											// 不要な文字
-	D3DXVECTOR3		pos				= D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 位置
+	D3DXVECTOR3		pos				= ZeroVector3;						// 位置
 	int				nType			= 0;								// 種類
 	int				nItemType		= 0;								// アイテムの種類
 	char			*cFileName		= nullptr;							// ファイル名
 	int				nModelType		= -1;								// モデルの種類
 	int				nBGTexID		= 0;								// 背景のテクスチャ番号
+	char			cReadText[128];										// 文字として読み取る
+	char			cHeadText[128];										// 比較用
+	char			cDie[128];											// 不要な文字
 
 	// ファイルを開く
 	pFile = fopen(m_MapModelFileName[m_MapNum], "r");
@@ -195,7 +195,8 @@ void CMap::MapModelLoad()
 				{
 					sprintf(cEndSetText, "%s", "END_BGSET");
 					nModelType = BG_ID;
-				}else if (strcmp(cHeadText, "BOSSONESET") == 0)
+				}
+				else if (strcmp(cHeadText, "BOSSONESET") == 0)
 				{
 					sprintf(cEndSetText, "%s", "END_BOSSONESET");
 					nModelType = ARRANGEMENT_MODEL_BOSS_ONE;
@@ -564,15 +565,15 @@ void CMap::WaveLoad(WAVE WaveNum)
 	FILE		*pFile				= nullptr;							// ファイルポインタ
 	char		*cFileName			= nullptr;							// ファイル名
 	int			nFrame				= 0;								// フレーム
-	D3DXVECTOR3	pos					= D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 位置
-	char		cReadText[128];											// 文字として読み取る
-	char		cHeadText[128];											// 比較用
-	char		cDie[128];												// 不要な文字
+	D3DXVECTOR3	pos					= ZeroVector3;						// 位置
 	int			nModelType			= -1;								// モデルの種類
 	int			nType				= 0;								// 種類
 	int			nItemType			= 0;								// ドロップするアイテムの種類
 	int			nEvent				= 0;								// boolに変換するようの格納
 	WAVE_PARAM	*pParam				= nullptr;							// ウェーブのパラメータ保存用
+	char		cReadText[128];											// 文字として読み取る
+	char		cHeadText[128];											// 比較用
+	char		cDie[128];												// 不要な文字
 
 	// ファイルを開く
 	pFile = fopen(m_WaveFileName[WaveNum], "r");
@@ -1318,7 +1319,7 @@ void CMap::WaveCreate(int nModelType, D3DXVECTOR3 eventpos, WAVE_PARAM * pWavePa
 // =====================================================================================================================================================================
 D3DXVECTOR3 CMap::GetMapModelPos(int nNowSelect)
 {
-	D3DXVECTOR3 pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	D3DXVECTOR3 pos = ZeroVector3;
 
 	if (nNowSelect < 0)
 	{
@@ -1674,8 +1675,8 @@ void CMap::MapModelSet()
 // =====================================================================================================================================================================
 void CMap::ComboBoxAll(int nNowSelect)
 {
-	static int nSelectType = 0;		// 選んでいる種類
-	static int nSelectType1 = 0;		// 選んでいる種類
+	static int nSelectType		= 0;	// 選んでいる種類
+	static int nSelectItemType	= 0;	// 選んでいるアイテムの種類
 
 	switch (m_ArrangmentModel)
 	{
@@ -1688,7 +1689,7 @@ void CMap::ComboBoxAll(int nNowSelect)
 		// 捕虜のドロップタイプ選択
 		PrisonerDropTypeComboBox(nSelectType, nNowSelect);
 		// 捕虜のアイテムタイプ選択
-		PrisonerItemTypeComboBox(nSelectType1, nNowSelect);
+		PrisonerItemTypeComboBox(nSelectItemType, nNowSelect);
 		break;
 
 	case CMap::ARRANGEMENT_MODEL_OBSTACLE:
@@ -1813,23 +1814,23 @@ void CMap::ObstacleTypeComboBox(int &nSelectType, int nNowSelect)
 void CMap::EnemyTypeComboBox(int &nSelectType, int nNowSelect)
 {
 #ifdef _DEBUG
-	//std::vector<std::string > aEnemyType = { "DESIGNATE_ONE", "DESIGNATE_RANGE", "ALL" };
+	//std::vector<std::string > aEnemyType = {"NORMAL", "SHIELD"};
 
 	//if (CHossoLibrary::ImGui_Combobox(aEnemyType, "Type", nSelectType))
 	//{
 	//	// NULLチェック
-	//	if (m_pPrisoner[nNowSelect])
+	//	if (m_pEnemy[nNowSelect])
 	//	{
 	//		// 敵の種類の取得
-	//		CPrisoner::PRISONER_ITEM_DROPTYPE PrisonerType = m_pPrisoner[nNowSelect]->GetPrisonerDropType();
+	//		CEnemy::TYPE EnemyType = m_pEnemy[nNowSelect]->GetType();
 
 	//		// 前回と違うとき
-	//		if (PrisonerType != nSelectType)
+	//		if (EnemyType != nSelectType)
 	//		{
 	//			// 種類代入
-	//			PrisonerType = (CPrisoner::PRISONER_ITEM_DROPTYPE)nSelectType;
+	//			EnemyType = (CEnemy::TYPE)nSelectType;
 	//			// 敵の種類の設定
-	//			m_pPrisoner[nNowSelect]->SetPrisonerType(PrisonerType);
+	//			m_pEnemy[nNowSelect]->SetType(EnemyType);
 	//		}
 	//	}
 	//}
@@ -1907,7 +1908,8 @@ void CMap::PrisonerItemTypeComboBox(int & nSelectType, int nNowSelect)
 // =====================================================================================================================================================================
 void CMap::SetSelectMapModelPosRDest(D3DXVECTOR3 posR)
 {
-	D3DXVECTOR3 pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	D3DXVECTOR3 pos = ZeroVector3;
+
 	// カメラの取得
 	CCamera *pCamera = CManager::GetRenderer()->GetCamera();
 	// キーボードの取得

@@ -75,6 +75,7 @@ public:
 	void				SetShotRot(D3DXVECTOR3 ShotRot)				{ m_ShotRot = ShotRot; };				// 撃つときの回転の向きの設定
 	void				SetShotVec(D3DXVECTOR3 ShotVec)				{ m_Shotvector = ShotVec; };			// 撃つときの向きの設定
 	void				SetMtxWorld(D3DXMATRIX *mtx)				{ m_HasHandMtx = mtx; };				// マトリックスの設定
+	void				SetMoveZero(bool bMoveZero)					{ m_bMoveZero = bMoveZero; };			// 移動を無効にするかの設定
 	void				Shot();																				// 銃の発射
 
 private:
@@ -95,5 +96,6 @@ private:
 	int					m_nCntFrame;			// フレームカウント
 	int					m_nCntBullet;			// 弾のカウント
 	bool				m_bDraw;				// モデルの表示非表示
+	bool				m_bMoveZero;			// 移動を無効にするフラグ
 };
 #endif

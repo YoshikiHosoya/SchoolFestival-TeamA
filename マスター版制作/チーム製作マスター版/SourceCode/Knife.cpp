@@ -21,6 +21,7 @@
 // マクロ定義
 // =====================================================================================================================================================================
 #define KNIFE_ORBIT_OFFSET (D3DXVECTOR3(0.0,0.0,-30.0f))
+#define PLAYER_KNIFE_DAMAGE (20)
 
 // =====================================================================================================================================================================
 // コンストラクタ
@@ -123,7 +124,7 @@ void CKnife::DebugInfo()
 // =====================================================================================================================================================================
 // 生成
 // =====================================================================================================================================================================
-CKnife * CKnife::Create(D3DXMATRIX *mtx)
+CKnife * CKnife::Create(D3DXMATRIX *mtx,TAG tag)
 {
 	// 変数
 	CKnife *pKnife;
@@ -136,6 +137,9 @@ CKnife * CKnife::Create(D3DXMATRIX *mtx)
 
 	// マトリックス代入
 	pKnife->m_HandMatrix = mtx;
+
+	// タグの設定
+	pKnife->m_tag = tag;
 
 	//ワールド座標設定
 	pKnife->m_worldpos = D3DXVECTOR3(pKnife->m_HandMatrix->_41, pKnife->m_HandMatrix->_42, pKnife->m_HandMatrix->_43);
@@ -233,6 +237,14 @@ void CKnife::CollisionKnife()
 	{
 		if (m_pCollision)
 		{
-			m_pCollision->ForPlayerBulletCollision(50, 50, true);		}
+			if (m_tag == TAG::TAG_PLAYER)
+			{
+				m_pCollision->ForPlayerBulletCollision(PLAYER_KNIFE_DAMAGE, PLAYER_KNIFE_DAMAGE, true);
+			}
+			else if (m_tag == TAG::TAG_ENEMY)
+			{
+				m_pCollision->ForEnemyCollision(1, 1, true);
+			}
+		}
 	}
 }
