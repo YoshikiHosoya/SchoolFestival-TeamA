@@ -39,7 +39,7 @@ public:
 	virtual void Update(void);
 	virtual void Draw(void);
 	void DebugInfo(void);
-	static CWeakEnemy *Create(void);
+	static CWeakEnemy *Create(WEAKENEMY_TYPE type);
 	bool DefaultMotion(void);
 	virtual void DamageReaction();
 	virtual void DeathReaction();
@@ -52,5 +52,6 @@ private:
 	float m_Angle;
 	CShield *m_pShield;								//èÇ
 	CKnife  *m_pKnife;
+	WEAKENEMY_TYPE m_type;							//ìGÇÃÉ^ÉCÉv
 };
 #endif
