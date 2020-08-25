@@ -28,8 +28,11 @@ CWeakEnemy::CWeakEnemy(OBJ_TYPE type) :CEnemy(type)
 
 CWeakEnemy::~CWeakEnemy()
 {
-
-
+	if (m_pKnife)
+	{
+		m_pKnife->Rerease();
+		m_pKnife = nullptr;
+	}
 }
 //====================================================================
 //‰Šú‰»
@@ -94,11 +97,11 @@ void CWeakEnemy::Uninit(void)
 		m_pShield->Rerease();
 		m_pShield = nullptr;
 	}
-	if (m_pKnife)
+	/*if (m_pKnife)
 	{
 		m_pKnife->Rerease();
 		m_pKnife = nullptr;
-	}
+	}*/
 
 	CEnemy::Uninit();
 }
