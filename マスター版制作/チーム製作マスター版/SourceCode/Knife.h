@@ -33,7 +33,7 @@ public:
 	virtual void			DebugInfo();					//デバッグ
 
 	/* 静的メンバ関数 */
-	static	CKnife			*Create(D3DXMATRIX *mtx);		//生成
+	static	CKnife			*Create(D3DXMATRIX *mtx ,TAG tag);		//生成
 	void					StartMeleeAttack();				//近接攻撃開始
 	void					EndMeleeAttack();				//近接攻撃終了
 
@@ -43,6 +43,7 @@ private:
 	COrbit		*m_pOrbit;					//軌跡のポインタ
 	CCollision	*m_pCollision;				//当たり判定のポインタ
 	D3DXMATRIX	*m_HandMatrix;				//ナイフを持つ手のマトリックスのポインタ
+	TAG			m_tag;						//タグ
 	bool		m_bAttack;					//攻撃中かどうか
 
 	D3DXVECTOR3 m_worldpos;					//ワールド座標　当たり判定用

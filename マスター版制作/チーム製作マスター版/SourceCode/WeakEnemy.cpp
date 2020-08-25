@@ -48,7 +48,8 @@ HRESULT CWeakEnemy::Init(void)
 	// 銃の弾の種類
 	GetGunPtr()->GetTag() = TAG_ENEMY;
 	// ナイフの生成
-	m_pKnife = CKnife::Create(GetCharacterModelPartsList(CModel::MODEL_ENEMY_LHAND)->GetMatrix());
+
+	m_pKnife = CKnife::Create(GetCharacterModelPartsList(CModel::MODEL_ENEMY_LHAND)->GetMatrix(),TAG::TAG_ENEMY);
 	// 敵のタイプ設定
 	switch (m_type)
 	{
@@ -68,6 +69,11 @@ HRESULT CWeakEnemy::Init(void)
 		break;
 	}
 
+
+
+
+
+
 	// 当たり判定生成
 	GetCollision()->SetSize2D(ENEMY_SIZE);
 	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_CHARACTER);
@@ -85,6 +91,11 @@ void CWeakEnemy::Uninit(void)
 	{
 		m_pShield->Rerease();
 		m_pShield = nullptr;
+	}
+	if (m_pKnife)
+	{
+		m_pKnife->Rerease();
+		m_pKnife = nullptr;
 	}
 
 	CEnemy::Uninit();
@@ -114,6 +125,7 @@ void CWeakEnemy::DebugInfo(void)
 //====================================================================
 //モデルのクリエイト
 //====================================================================
+
 CWeakEnemy *CWeakEnemy::Create(WEAKENEMY_TYPE type)
 {
 	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
@@ -121,6 +133,7 @@ CWeakEnemy *CWeakEnemy::Create(WEAKENEMY_TYPE type)
 	pWeakEnemy = new CWeakEnemy(OBJTYPE_ENEMY);
 	pWeakEnemy->m_type = type;
 	pWeakEnemy->Init();
+
 
 	return pWeakEnemy;
 }
@@ -173,6 +186,7 @@ void CWeakEnemy::StateChangeReaction()
 		break;
 	case CHARACTER_STATE_DEATH:
 		SetStateCount(60);
+		m_pKnife->EndMeleeAttack();
 		SetMotion(CCharacter::ENEMY_MOTION_DEAD_1);
 
 		if (m_pShield)
