@@ -99,6 +99,15 @@ void CPrisoner::Uninit(void)
 //====================================================================
 void CPrisoner::Update(void)
 {
+	// キャラクターの更新
+	CCharacter::Update();
+
+	//画面の範囲外だった場合
+	if (!GetDraw())
+	{
+		return;
+	}
+
 	// 当たり判定
 	if (GetCollision() != nullptr)
 	{
@@ -109,8 +118,6 @@ void CPrisoner::Update(void)
 	// 捕虜の状態別処理
 	this->PrisonerState();
 
-	// キャラクターの更新
-	CCharacter::Update();
 }
 //====================================================================
 //描画
@@ -314,6 +321,12 @@ void CPrisoner::PrisonerState()
 
 		break;
 	}
+
+	//当たり判定可能かどうか設定
+	//縛られている状態以外は当たり判定がつかないようにする
+	m_PrisonerState == PRISONER_STATE_STAY ?
+		GetCollision()->SetCanCollision(true) :
+		GetCollision()->SetCanCollision(false);
 }
 
 //====================================================================

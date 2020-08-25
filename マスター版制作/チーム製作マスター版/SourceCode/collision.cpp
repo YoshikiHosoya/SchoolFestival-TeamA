@@ -62,6 +62,7 @@ CCollision::CCollision()
 	m_Debugcollision	= nullptr;							// デバッグ用当たり判定のポインタ
 	m_nCollisionTime	= 0;								// 当たり判定が持続する時間
 	m_fHeight			= 30;								// 腰の高さの初期化
+	m_bCanCollision		= true;
 }
 
 //======================================================================================================================
@@ -198,33 +199,36 @@ bool CCollision::ForPlayerBulletCollision(int nEnemyDamage, int nObstacleDamage,
 		CEnemy *pEnemy = CManager::GetBaseMode()->GetMap()->GetEnemy(nCnt);
 		if (pEnemy != nullptr)
 		{
-			//死亡してない時
-			if (pEnemy->GetCharacterState() != CCharacter::CHARACTER_STATE_DEATH)
+			if (pEnemy->GetCollision())
 			{
-				// 判定関数
-				if (this->OtherCollision2D(pEnemy->GetCollision()))
+				//判定が取れるとき
+				if (pEnemy->GetCollision()->GetCanCollison())
 				{
-					CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
-					if (pPlayer != nullptr && pPlayer->GetPlayerUI())
+					// 判定関数
+					if (this->OtherCollision2D(pEnemy->GetCollision()))
 					{
-						pPlayer->GetPlayerUI()->SetScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_DAMAGE_BULLET));
+						CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
+						if (pPlayer != nullptr && pPlayer->GetPlayerUI())
+						{
+							pPlayer->GetPlayerUI()->SetScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_DAMAGE_BULLET));
+						}
+
+						// 敵のライフ減衰
+						pEnemy->CCharacter::AddDamage(nEnemyDamage);
+
+						// 当たり範囲フラグをtrueにする
+						bHitFlag = true;
+
+						if (Penetration == false)
+						{
+							return bHitFlag;
+						}
 					}
-
-					// 敵のライフ減衰
-					pEnemy->CCharacter::AddDamage(nEnemyDamage);
-
-					// 当たり範囲フラグをtrueにする
-					bHitFlag = true;
-
-					if (Penetration == false)
+					else
 					{
-						return bHitFlag;
+						// 当たり範囲フラグをfalseにする
+						bHitFlag = false;
 					}
-				}
-				else
-				{
-					// 当たり範囲フラグをfalseにする
-					bHitFlag = false;
 				}
 			}
 		}
@@ -270,31 +274,35 @@ bool CCollision::ForPlayerBulletCollision(int nEnemyDamage, int nObstacleDamage,
 		CObstacle *pObstacle = CManager::GetBaseMode()->GetMap()->GetObstacle(nCntObst);
 		if (pObstacle != nullptr)
 		{
-			if (this->Collision2D(pObstacle->GetCollision()))
+			//判定が取れるとき
+			if (pObstacle->GetCollision()->GetCanCollison())
 			{
-				// 障害物のライフ減衰
-				pObstacle->Hit(CObstacle::TYPE_BOX, nObstacleDamage);
-
-				// 敵のライフが0以下になった時
-				if (pObstacle->GetLife() <= 0)
+				if (this->Collision2D(pObstacle->GetCollision()))
 				{
-					pObstacle->SetDieFlag(true);
-					// ポインタをnullにする
-					pObstacle = nullptr;
+					// 障害物のライフ減衰
+					pObstacle->Hit(CObstacle::TYPE_BOX, nObstacleDamage);
+
+					// 敵のライフが0以下になった時
+					if (pObstacle->GetLife() <= 0)
+					{
+						pObstacle->SetDieFlag(true);
+						// ポインタをnullにする
+						pObstacle = nullptr;
+					}
+
+					// 当たり範囲フラグをtrueにする
+					bHitFlag = true;
+
+					if (Penetration == false)
+					{
+						return bHitFlag;
+					}
 				}
-
-				// 当たり範囲フラグをtrueにする
-				bHitFlag = true;
-
-				if (Penetration == false)
+				else
 				{
-					return bHitFlag;
+					// 当たり範囲フラグをfalseにする
+					bHitFlag = false;
 				}
-			}
-			else
-			{
-				// 当たり範囲フラグをfalseにする
-				bHitFlag = false;
 			}
 		}
 	}
@@ -306,7 +314,8 @@ bool CCollision::ForPlayerBulletCollision(int nEnemyDamage, int nObstacleDamage,
 		CPrisoner *pPrisoner = CManager::GetBaseMode()->GetMap()->GetPrisoner(nCntPriso);
 		if (pPrisoner != nullptr)
 		{
-			if (pPrisoner->GetPrisonerState() == CPrisoner::PRISONER_STATE_STAY)
+			//判定が取れるとき
+			if (pPrisoner->GetCollision()->GetCanCollison())
 			{
 				if (this->OtherCollision2D(pPrisoner->GetCollision()))
 				{
@@ -466,9 +475,16 @@ bool CCollision::ForPlayer_EnemyCollision(bool Penetration)
 		CEnemy *pEnemy = CManager::GetBaseMode()->GetMap()->GetEnemy(nCnt);
 		if (pEnemy != nullptr)
 		{
-			if (this->CharCollision2D(pEnemy->GetCollision()))
+			if (pEnemy->GetCollision())
 			{
-				bHitFlag = true;
+				//判定が取れるとき
+				if (pEnemy->GetCollision()->GetCanCollison())
+				{
+					if (this->CharCollision2D(pEnemy->GetCollision()))
+					{
+						bHitFlag = true;
+					}
+				}
 			}
 		}
 	}
@@ -488,13 +504,19 @@ CEnemy * CCollision::ForPlayer_EnemyCollision()
 
 		if (pEnemy != nullptr)
 		{
-			if (this->CharCollision2D(pEnemy->GetCollision()))
+			if (pEnemy->GetCollision())
 			{
-				// 処理を行った捕虜のポインタを返す
-				return pEnemy;
+				//判定が取れるとき
+				if (pEnemy->GetCollision()->GetCanCollison())
+				{
+					if (this->CharCollision2D(pEnemy->GetCollision()))
+					{
+						// 処理を行った捕虜のポインタを返す
+						return pEnemy;
+					}
+				}
 			}
 		}
-
 		else if (pEnemy == nullptr)
 		{
 			return nullptr;
@@ -612,7 +634,8 @@ bool CCollision::ForPlayer_PrisonerCollision(bool Penetration)
 		CPrisoner *pPrisoner = CManager::GetBaseMode()->GetMap()->GetPrisoner(nCntPriso);
 		if (pPrisoner != nullptr)
 		{
-			if (pPrisoner->GetPrisonerState() == CPrisoner::PRISONER_STATE_STAY)
+			//判定が取れるとき
+			if (pPrisoner->GetCollision()->GetCanCollison())
 			{
 				if (this->CharCollision2D(pPrisoner->GetCollision()))
 				{

@@ -77,7 +77,7 @@ CMap::CMap()
 	m_pBattlePlane.clear();											// 戦闘機
 	m_pHelicopter.clear();											// ヘリコプター
 	m_pVehicle.clear();												// (乗り物)
-	
+
 	// 今だけ 仮
 	m_pBoss_One.clear();
 
@@ -1310,6 +1310,19 @@ void CMap::WaveCreate(int nModelType, D3DXVECTOR3 eventpos, WAVE_PARAM * pWavePa
 		m_pPrisoner[m_pEnemy.size() - 1]->SetPrisonerType((CPrisoner::PRISONER_ITEM_DROPTYPE)pWaveParam->nType);
 		m_pPrisoner[m_pEnemy.size() - 1]->SetPrisonerItem((CItem::ITEMTYPE)pWaveParam->nItemType);
 	}
+}
+
+// =====================================================================================================================================================================
+//
+// マップ情報表記
+//
+// =====================================================================================================================================================================
+void CMap::ShowDebugInfo()
+{
+	CDebugProc::Print("------ MapInfo ----------\n");
+
+	CDebugProc::Print("EnemyNum >> %d\n", m_pEnemy.size());
+	CDebugProc::Print("PrisonerNum >> %d\n", m_pPrisoner.size());
 }
 
 // =====================================================================================================================================================================

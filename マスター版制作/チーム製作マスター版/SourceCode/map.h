@@ -104,6 +104,7 @@ public:
 	void			UpdateDieFlag();												// 死亡フラグ確認関数
 	void			AllDelete();													// 配置しているモデルを全て破棄
 	void			WaveCreate(int nModelType, D3DXVECTOR3 eventpos, WAVE_PARAM *pWaveParam);				// Waveの生成
+	void			ShowDebugInfo();												// デバッグ情報表記
 
 	int				GetMaxModel();													// モデルの最大数取得
 	int				GetMaxEnemy();													// 敵の最大数取得

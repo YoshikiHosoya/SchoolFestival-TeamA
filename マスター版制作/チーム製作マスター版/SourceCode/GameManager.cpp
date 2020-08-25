@@ -54,21 +54,35 @@ void CGameManager::Update()
 	// それぞれのポインタ取得
 	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
 	CGame *pGame = (CGame*)CManager::GetBaseMode();
-	CMap::WAVE_INFO *pWaveInfo = pGame->GetMap()->GetWaveInfo(m_nNowWave);
 
 	m_nCnt = 0;
 
+	//nullcheck
 	if (pPlayer)
 	{
+		//特定の座標を超えた時
 		if(pPlayer->GetPosition().x >= CManager::GetGame()->GetMap()->GetTransitionPos().x)
 		{
+			//マップ遷移
 			CManager::GetRenderer()->GetFade()->SetFade(CFADE::FADETYPE::FADETYPE_MAPMOVE, CManager::GetGame()->GetMap()->GetTransitionMapID());
 		}
 
-		if (pPlayer->GetPosition().x >= pWaveInfo->EventPos.x)
+		//まだウェーブが残っている時
+		if (m_nNowWave <= CMap::WAVE::WAVE_MAX)
 		{
-			//ウェーブ開始
-			StartWave();
+			//今のウェーブの情報取得
+			CMap::WAVE_INFO *pWaveInfo = pGame->GetMap()->GetWaveInfo(m_nNowWave);
+
+			//nullcheck
+			if (pWaveInfo)
+			{
+				//特定の座標を超えた時
+				if (pPlayer->GetPosition().x >= pWaveInfo->EventPos.x)
+				{
+					//ウェーブ開始
+					StartWave();
+				}
+			}
 		}
 	}
 
@@ -106,7 +120,13 @@ void CGameManager::Draw()
 void CGameManager::ShowDebugInfo()
 {
 #ifdef _DEBUG
+	CDebugProc::Print("------ GameManager ----------\n");
+
 	CDebugProc::Print("NowWaveNum >> %d\n", m_nNowWave);
+	CDebugProc::Print("WaveState >> %d\n", m_state);
+	CDebugProc::Print("m_nWaveEnemyNum >> %d\n", m_nWaveEnemyNum);
+	CDebugProc::Print("m_nWavePrisonerNum >> %d\n", m_nWavePrisonerNum);
+
 
 #endif
 }
@@ -168,6 +188,7 @@ void CGameManager::UpdateWave()
 {
 	if (m_nNowWave >= CMap::WAVE::WAVE_MAX)
 	{
+		EndWave();
 		return;
 	}
 
