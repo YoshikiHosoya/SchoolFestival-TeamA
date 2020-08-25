@@ -38,7 +38,7 @@ END_MAPSET
 
 ENEMYSET									# 1
 	TYPE		= 0
-	POS			= 1073 191 0
+	POS			= 1073 190 0
 END_ENEMYSET
 
 ENEMYSET									# 2
@@ -349,6 +349,7 @@ END_ENEMYSET
 //	[ 0 ]	確定ドロップする捕虜
 //	[ 1 ]	範囲ドロップする捕虜
 //	[ 2 ]	ランダムドロップする捕虜
+//
 //------------------------------------------------------------
 // 捕虜の種類 ( ITEMTYPE )
 //
@@ -370,31 +371,31 @@ END_ENEMYSET
 PRISONERSET									# 62
 	TYPE		= 0
 	ITEMTYPE	= 0
-
+	POS			= 1234 58 12
 END_PRISONERSET
 
 PRISONERSET									# 63
 	TYPE		= 0
 	ITEMTYPE	= 0
-
+	POS			= 1234 58 12
 END_PRISONERSET
 
 PRISONERSET									# 64
 	TYPE		= 1
 	ITEMTYPE	= 0
-
+	POS			= 1234 58 12
 END_PRISONERSET
 
 PRISONERSET									# 65
 	TYPE		= 0
 	ITEMTYPE	= 0
-	POS			= 1159 191 12
+	POS			= 1159 191 27
 END_PRISONERSET
 
 PRISONERSET									# 66
 	TYPE		= 0
 	ITEMTYPE	= 0
-	POS			= 1770 184 12
+	POS			= 1770 184 27
 END_PRISONERSET
 
 PRISONERSET									# 67
@@ -484,7 +485,6 @@ END_PRISONERSET
 //------------------------------------------------------------
 // 障害物の配置情報
 //------------------------------------------------------------
-
 // 障害物の種類 ( TYPE )
 //
 //	[ 0 ]	箱
@@ -708,7 +708,7 @@ END_OBSTACLESET
 //------------------------------------------------------------
 
 //------------------------------------------------------------
-// 背景の情報
+// 背景のテクスチャ情報
 //------------------------------------------------------------
 //
 //	[ 49 ]	空の背景
