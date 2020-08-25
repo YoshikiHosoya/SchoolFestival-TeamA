@@ -51,7 +51,7 @@ HRESULT CWeakEnemy::Init(void)
 
 	m_pKnife = CKnife::Create(GetCharacterModelPartsList(CModel::MODEL_ENEMY_LHAND)->GetMatrix(),TAG::TAG_ENEMY);
 	// 敵のタイプ設定
-	switch (m_type)
+	switch (GetEnemyType())
 	{
 	case CWeakEnemy::WEAKENEMY_TYPE::ENEMY_NORMAL:
 		SetAIPtr(CEnemyAI::CreateAI(this));
@@ -125,13 +125,12 @@ void CWeakEnemy::DebugInfo(void)
 //====================================================================
 //モデルのクリエイト
 //====================================================================
-
 CWeakEnemy *CWeakEnemy::Create(WEAKENEMY_TYPE type)
 {
 	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
 	CWeakEnemy*pWeakEnemy;
 	pWeakEnemy = new CWeakEnemy(OBJTYPE_ENEMY);
-	pWeakEnemy->m_type = type;
+	pWeakEnemy->SetEnemyType(type);
 	pWeakEnemy->Init();
 
 

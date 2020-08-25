@@ -28,12 +28,6 @@ public:
 	CWeakEnemy(OBJ_TYPE type);
 	~CWeakEnemy();
 
-	enum class WEAKENEMY_TYPE
-	{
-		ENEMY_NORMAL,
-		ENEMY_SHIELD
-	};
-
 	virtual HRESULT Init(void);
 	virtual void Uninit(void);
 	virtual void Update(void);
@@ -52,6 +46,5 @@ private:
 	float m_Angle;
 	CShield *m_pShield;								//èÇ
 	CKnife  *m_pKnife;
-	WEAKENEMY_TYPE m_type;							//ìGÇÃÉ^ÉCÉv
 };
 #endif

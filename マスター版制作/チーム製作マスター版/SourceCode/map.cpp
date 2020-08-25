@@ -1814,26 +1814,26 @@ void CMap::ObstacleTypeComboBox(int &nSelectType, int nNowSelect)
 void CMap::EnemyTypeComboBox(int &nSelectType, int nNowSelect)
 {
 #ifdef _DEBUG
-	//std::vector<std::string > aEnemyType = {"NORMAL", "SHIELD"};
+	std::vector<std::string > aEnemyType = {"NORMAL", "SHIELD"};
 
-	//if (CHossoLibrary::ImGui_Combobox(aEnemyType, "Type", nSelectType))
-	//{
-	//	// NULLチェック
-	//	if (m_pEnemy[nNowSelect])
-	//	{
-	//		// 敵の種類の取得
-	//		CEnemy::TYPE EnemyType = m_pEnemy[nNowSelect]->GetType();
+	if (CHossoLibrary::ImGui_Combobox(aEnemyType, "Type", nSelectType))
+	{
+		// NULLチェック
+		if (m_pEnemy[nNowSelect])
+		{
+			// 敵の種類の取得
+			CWeakEnemy::WEAKENEMY_TYPE EnemyType = m_pEnemy[nNowSelect]->GetEnemyType();
 
-	//		// 前回と違うとき
-	//		if (EnemyType != nSelectType)
-	//		{
-	//			// 種類代入
-	//			EnemyType = (CEnemy::TYPE)nSelectType;
-	//			// 敵の種類の設定
-	//			m_pEnemy[nNowSelect]->SetType(EnemyType);
-	//		}
-	//	}
-	//}
+			// 前回と違うとき
+			if ((int)EnemyType != nSelectType)
+			{
+				// 種類代入
+				EnemyType = (CWeakEnemy::WEAKENEMY_TYPE)nSelectType;
+				// 敵の種類の設定
+				m_pEnemy[nNowSelect]->SetEnemyType(EnemyType);
+			}
+		}
+	}
 #endif
 }
 
