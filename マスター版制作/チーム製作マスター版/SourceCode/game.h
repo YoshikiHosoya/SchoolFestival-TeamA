@@ -64,7 +64,6 @@ private:
 	std::unique_ptr<CGameManager>		m_pGameManager;			//ƒQ[ƒ€‚ÌisŠÇ—
 	int									m_nFrame;
 	int									m_nCntNum;
-	bool								m_bEventFlag;
 	CShield								*m_pShield;
 };
 #endif
