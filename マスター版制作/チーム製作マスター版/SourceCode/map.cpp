@@ -1856,6 +1856,9 @@ void CMap::EnemyTypeComboBox(int &nSelectType, int nNowSelect)
 #ifdef _DEBUG
 	std::vector<std::string > aEnemyType = {"NORMAL", "SHIELD"};
 
+	// 現在のタイプを反映
+	nSelectType = (int)m_pEnemy[nNowSelect]->GetEnemyType();
+
 	if (CHossoLibrary::ImGui_Combobox(aEnemyType, "Type", nSelectType))
 	{
 		// NULLチェック
@@ -1887,13 +1890,10 @@ void CMap::PrisonerDropTypeComboBox(int &nSelectType, int nNowSelect)
 #ifdef _DEBUG
 	std::vector<std::string > aPrisonerType = { "DESIGNATE_ONE", "DESIGNATE_RANGE", "ALL" };
 
-	int nType = 0;
+	// 現在のタイプを反映
+	nSelectType = (int)m_pPrisoner[nNowSelect]->GetPrisonerDropType();
 
-	if (nSelectType > 3)
-	{
-		nType = 3;
-	}
-	if (CHossoLibrary::ImGui_Combobox(aPrisonerType, "DropType", nType))
+	if (CHossoLibrary::ImGui_Combobox(aPrisonerType, "DropType", nSelectType))
 	{
 		// NULLチェック
 		if (m_pPrisoner[nNowSelect])
@@ -1902,10 +1902,10 @@ void CMap::PrisonerDropTypeComboBox(int &nSelectType, int nNowSelect)
 			CPrisoner::PRISONER_ITEM_DROPTYPE PrisonerType = m_pPrisoner[nNowSelect]->GetPrisonerDropType();
 
 			// 前回と違うとき
-			if (PrisonerType != nType)
+			if (PrisonerType != nSelectType)
 			{
 				// 種類代入
-				PrisonerType = (CPrisoner::PRISONER_ITEM_DROPTYPE)nType;
+				PrisonerType = (CPrisoner::PRISONER_ITEM_DROPTYPE)nSelectType;
 				// 捕虜のドロップタイプの設定
 				m_pPrisoner[nNowSelect]->SetPrisonerType(PrisonerType);
 			}
