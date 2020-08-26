@@ -70,6 +70,7 @@ public:
 		MODEL_MAP_STAGE1_2,			//ステージ1-2
 		MODEL_MAP_STAGE1_3,			//ステージ1-3
 		MODEL_MAP_STAGE1_BOSS,		//ボスステージ1
+		MODEL_MAP_STAGE2_BOSS,		//ボスステージ2
 		MODEL_MAP_MAX
 	}MAP_MODEL;
 	/*--- 敵のパーツモデル ---*/
