@@ -1162,7 +1162,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "data\\materialtexture\\brick1_04z.jpg";
+    "data\\materialtexture\\brick1_04.jpg";
    }
   }
   Material {
