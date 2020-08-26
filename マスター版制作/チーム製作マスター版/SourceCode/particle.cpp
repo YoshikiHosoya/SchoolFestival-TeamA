@@ -740,7 +740,16 @@ void CParticle::SetSound()
 	switch (m_pParticleParam->GetType())
 	{
 	case CParticleParam::PARTICLE_TEXT::EFFECT_NO_COLLISION_EXPLOSION:
-		CManager::GetSound()->Play(CSound::LABEL_SE_EXPLOSION_03	);
+		CManager::GetSound()->Play(CSound::LABEL_SE_EXPLOSION_03);
+		break;
+
+	case CParticleParam::PARTICLE_TEXT::EFFECT_EXPLOSION_ROCKETLANCHAR:
+		CManager::GetSound()->Play(CSound::LABEL_SE_EXPLOSION_03);
+		break;
+
+	case CParticleParam::PARTICLE_TEXT::EFFECT_EXPLOSION_GRENADE:
+		CManager::GetSound()->Play(CSound::LABEL_SE_EXPLOSION_03);
+
 		break;
 
 	}

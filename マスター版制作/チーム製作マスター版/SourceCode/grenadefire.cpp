@@ -13,6 +13,7 @@
 #include "Player.h"
 #include "bullet.h"
 #include "grenade.h"
+#include "sound.h"
 
 // =====================================================================================================================================================================
 // Ã“Iƒƒ“ƒo•Ï”‚Ì‰Šú‰»
@@ -178,6 +179,7 @@ void CGrenadeFire::Fire(D3DXVECTOR3 rot)
 				break;
 			case CGrenadeFire::TANK_GRENADE:
 				pGrenade->SetBulletParam(CGun::GUNTYPE_TANKGRENADE);
+				CManager::GetSound()->Play(CSound::LABEL_SE_EXPLOSION_00);
 				break;
 			}
 		}

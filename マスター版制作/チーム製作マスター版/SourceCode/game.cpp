@@ -88,11 +88,6 @@ HRESULT CGame::Init(void)
 //==========================================================
 void CGame::Uninit(void)
 {
-	/*if (m_pShield)
-	{
-		m_pShield->Rerease();
-		m_pShield = nullptr;
-	}*/
 
 	// アイテムクラスの静的変数の初期化
 	CItem::InitVariable();

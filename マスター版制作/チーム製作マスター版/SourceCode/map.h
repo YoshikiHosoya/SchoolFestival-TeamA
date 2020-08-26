@@ -48,14 +48,6 @@ public:
 		bool		bEvent;			// イベントフラグ
 	} WAVE_PARAM;
 
-	// ウェーブの情報
-	typedef struct
-	{
-		std::vector<WAVE_PARAM*> EnemyWaveInfo;			// 敵のウェーブのパラメーター
-		std::vector<WAVE_PARAM*> PrisonerWaveInfo;		// 捕虜のウェーブパラメーター
-		D3DXVECTOR3 EventPos;							// イベントが起きる位置
-	} WAVE_INFO;
-
 	// マップの種類
 	enum MAP
 	{
@@ -64,6 +56,9 @@ public:
 		MAP_1_2,			// 1_2
 		MAP_1_3,			// 1_3
 		MAP_1_BOSS,			// 1_BOSS
+		MAP_2_1,			// 2_1
+		MAP_2_2,			// 2_2
+		MAP_2_3,			// 2_3
 		MAP_2_BOSS,			// 2_BOSS
 		MAP_MAX
 	};
@@ -89,8 +84,25 @@ public:
 		WAVE_1_1_1,									// ウェーブ1_1_1
 		WAVE_1_1_2,									// ウェーブ1_1_2
 		WAVE_1_1_3,									// ウェーブ1_1_3
+		WAVE_1_2_1,									// ウェーブ1_2_1
+		WAVE_1_3_1,									// ウェーブ1_3_1
+		WAVE_1_BOSS,								// ウェーブ1_BOSS
+		WAVE_2_1_1,									// ウェーブ2_1_1
+		WAVE_2_2_1,									// ウェーブ2_2_1
+		WAVE_2_3_1,									// ウェーブ2_3_1
+		WAVE_2_BOSS,								// ウェーブ2_BOSS
+
 		WAVE_MAX
 	};
+
+	// ウェーブの情報
+	typedef struct
+	{
+		std::vector<WAVE_PARAM*> EnemyWaveInfo;			// 敵のウェーブのパラメーター
+		std::vector<WAVE_PARAM*> PrisonerWaveInfo;		// 捕虜のウェーブパラメーター
+		D3DXVECTOR3 EventPos;							// イベントが起きる位置
+		MAP EventBeginMapNum;							// イベントが起きるマップ番号
+ 	} WAVE_INFO;
 
 	CMap();																			// コンストラクタ
 	~CMap();																		// デストラクタ

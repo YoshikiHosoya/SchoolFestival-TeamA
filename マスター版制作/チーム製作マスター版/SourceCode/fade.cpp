@@ -6,6 +6,7 @@
 #include "fade.h"
 #include "renderer.h"
 #include "game.h"
+#include "GameManager.h"
 #include "map.h"
 #include "Player.h"
 //=============================================================================
@@ -293,6 +294,7 @@ void CFADE::FadeOut()
 			//マップ更新
 			pMap->AllDelete();
 			pMap->MapLoad((CMap::MAP)m_NextID);
+			CManager::GetGame()->GetGameManager()->MapTransitionWaveSet((CMap::MAP)m_NextID);
 		}
 
 		//シーン管理にあるマップ変更時に必要ないものを消去

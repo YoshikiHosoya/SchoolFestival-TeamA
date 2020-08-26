@@ -40,9 +40,10 @@ public:
 	void ShowDebugInfo();						//デバッグ情報表記
 	static std::unique_ptr<CGameManager> Create();
 
-	GAMESTATE GetGameState() { return m_state; };
-	void SetGameState(GAMESTATE state) { m_state = state; };
-	void EventClear();
+	GAMESTATE GetGameState() { return m_state; };				//ステート取得
+	void SetGameState(GAMESTATE state) { m_state = state; };	//ステート設定
+	void EventClear();											//イベントクリア
+	void MapTransitionWaveSet(int nNextID);						//マップ遷移時にウェーブ設定
 
 private:
 	int			m_nCnt;							//カウント
