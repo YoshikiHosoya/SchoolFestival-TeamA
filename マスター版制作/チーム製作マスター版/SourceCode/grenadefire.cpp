@@ -151,12 +151,12 @@ void CGrenadeFire::Fire(D3DXVECTOR3 rot)
 		break;
 	}
 
-	// 残弾数を減らす
-	m_nAmmo--;
-
 	// インターバルが経過したとき
 	if (m_nInterval >= pBulletParam->nInterval)
 	{
+		// 残弾数を減らす
+		m_nAmmo--;
+
 		m_nInterval = 0;
 
 		if (pGrenade)

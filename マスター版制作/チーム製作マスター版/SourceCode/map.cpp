@@ -1656,12 +1656,6 @@ void CMap::MapModelSet()
 
 	ImGui::SameLine();
 
-	if (ImGui::Button("AllLoad"))
-	{
-		// 配置したモデルを全てロードする
-		MapModelLoad();
-	}
-
 	ImGui::SameLine(ButtonSpace);
 
 	if (ImGui::Button("Delete"))
