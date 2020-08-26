@@ -1,0 +1,50 @@
+#------------------------------------------------------------------------------
+# ウェーブの配置情報
+#------------------------------------------------------------------------------
+SCRIPT
+
+EVENTPOS	= 1000
+
+ENEMYSET									# 0
+	TYPE			= 0
+	POS 			= -600 80 0
+	FRAME 			= 60
+	EVENT			= 0
+END_ENEMYSET
+
+ENEMYSET									# 0
+	TYPE			= 0
+	POS 			= 600 80 0
+	FRAME 			= 1
+	EVENT			= 0
+END_ENEMYSET
+
+ENEMYSET									# 0
+	TYPE			= 0
+	POS 			= -600 80 0
+	FRAME 			= 60
+	EVENT			= 0
+END_ENEMYSET
+
+ENEMYSET									# 0
+	TYPE			= 0
+	POS 			= 600 80 0
+	FRAME 			= 1
+	EVENT			= 0
+END_ENEMYSET
+
+ENEMYSET									# 0
+	TYPE			= 0
+	POS 			= -600 80 0
+	FRAME 			= 60
+	EVENT			= 1
+END_ENEMYSET
+
+PRISONERSET									# 1
+	TYPE			= 0
+	ITEMTYPE		= -1
+	POS 			= 200 500 0
+	FRAME 			= 90
+END_PRISONERSET
+
+END_SCRIPT
