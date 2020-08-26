@@ -135,10 +135,9 @@ private:
 	void					Cooltime_Decrease();													// クールタイムの減少
 	void					CalcRotationBalkan(const float fTarget, float fCurrent);				// 目標と現在
 
-
-	float					get_vector_length(D3DXVECTOR3 vectol);	// ベクトルの長さを計算する
-	float					dot_product(D3DXVECTOR3 vl, D3DXVECTOR3 vr); // ベクトル内積
-	float					AngleOf2Vector(D3DXVECTOR3 A, D3DXVECTOR3 B); // ２つのベクトルABのなす角度θを求める
+	float					get_vector_length(D3DXVECTOR3 vectol);									// ベクトルの長さを計算する
+	float					dot_product(D3DXVECTOR3 vl, D3DXVECTOR3 vr);							// ベクトル内積
+	float					AngleOf2Vector(D3DXVECTOR3 A, D3DXVECTOR3 B);							// ２つのベクトルABのなす角度θを求める
 
 	// --- 攻撃管理関数 ---  //
 	void					ShotIncendiary();														// 焼夷弾
@@ -165,7 +164,7 @@ private:
 	D3DXVECTOR3				m_Gun_Pos[WEAPONTYPE_MAX];			// ガンの座標
 	int						m_nShotCount;						// ショットした回数
 	int						m_nTrrigerCount;					// 何トリガー撃ったか
-	bool					m_bFlame;							// 
+	bool					m_bFlame;							//
 	bool					m_bBalkanRotFlag;					// 回転許可フラグ
 	float					m_fBalkanRot;						// ガンの回転情報
 };

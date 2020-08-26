@@ -1274,6 +1274,7 @@ void CMap::AllDelete()
 		m_pEnemy[nCnt]->Rerease();
 		m_pEnemy[nCnt] = nullptr;
 	}
+
 	// •ß—¸
 	for (size_t nCnt = 0; nCnt < m_pPrisoner.size(); nCnt++)
 	{

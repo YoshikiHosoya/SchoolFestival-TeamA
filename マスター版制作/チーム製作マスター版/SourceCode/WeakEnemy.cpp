@@ -28,8 +28,6 @@ CWeakEnemy::CWeakEnemy(OBJ_TYPE type) :CEnemy(type)
 
 CWeakEnemy::~CWeakEnemy()
 {
-
-
 }
 //====================================================================
 //‰Šú‰»
