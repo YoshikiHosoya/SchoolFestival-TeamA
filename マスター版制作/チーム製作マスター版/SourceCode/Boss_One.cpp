@@ -48,10 +48,14 @@ CBoss_One::CBoss_One(OBJ_TYPE type) :CCharacter(type)
 	m_pCollision			 = nullptr;
 	m_nCoolTime				 = 120;
 	m_nShotIntervalTime		 = 0;
-	m_nTrrigerCount			 = 0;
+	m_nTriggerCount = 0;
 	m_bFlame				 = false;
 	m_bBalkanRotFlag		 = false;
 	m_fBalkanRot			 = 0.0f;
+	m_nBalkanAngle			 = 0;
+
+	m_nShot = 60;
+	m_RotTarget = 0.0f;
 }
 // =====================================================================================================================================================================
 //
@@ -174,6 +178,18 @@ void CBoss_One::Update(void)
 	// ボスの状態ごとの処理
 	BossOneStateManager();
 
+
+	//if (m_bBalkanGunRotFlag)
+	//{
+		// 回転の計算
+		CalcRotationBalkan(m_RotTarget, GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_BALKAN)->GetRot().x);
+		// 回転量の更新
+		SetBalkanRot(GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_BALKAN)->GetRot().x);
+		m_pGun[WEAPONTYPE_BALKAN]->SetShotRot(
+			D3DXVECTOR3(0.0f, 0.0f, (GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_BALKAN))->GetRot().x * -1.0f));
+	//}
+
+
 	// 当たり判定
 	if (CCharacter::GetCollision() != nullptr)
 	{
@@ -187,6 +203,11 @@ void CBoss_One::Update(void)
 
 	CDebugProc::Print("ボスとプレイヤーの距離 --- x --- %f\n", fDist);
 	CDebugProc::Print("ボスのステート %d\n", m_BossOneState);
+	CDebugProc::Print("\n");
+	CDebugProc::Print("\n");
+	CDebugProc::Print("\n");
+	CDebugProc::Print("ボスのガンの回転 %f\n", m_fBalkanRot);
+	CDebugProc::Print("ボスのガンの角度 %d\n", m_nBalkanAngle);
 
 	// キャラクターの更新
 	CCharacter::Update();
@@ -431,10 +452,13 @@ void CBoss_One::StateChangeReaction()
 //=====================================================================================================================================================================
 void CBoss_One::Behavior()
 {
+	m_RotTarget = 0;
+	m_nShot = 60;
 	// ガンの傾きを元に戻す
 	//CalcRotationBalkan(-1.57f, GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_BALKAN)->GetRot().x);
-	GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_BALKAN)->GetRot().x = 0.0f;
+	//m_RotTarget = 0.0f;
 	m_fBalkanRot = GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_BALKAN)->GetRot().x;
+	m_nBalkanAngle = 0;
 	// 弾を撃った回数をリセット
 	SetShotCount(0);
 	// インターバルの時間をリセット
@@ -521,16 +545,15 @@ void CBoss_One::Cooltime_Decrease()
 // =====================================================================================================================================================================
 void CBoss_One::CalcRotationBalkan(const float fTarget, float fCurrent)
 {
-	float fcurrent = fCurrent;
 	//目標点と現在の差分（回転）
-	float diffRot = fTarget - fcurrent;
+	float diffRot = fTarget - fCurrent;
 
 	//3.14の超過分の初期化（回転）
-	CHossoLibrary::CalcRotation(fcurrent);
+	CHossoLibrary::CalcRotation(fCurrent);
 	CHossoLibrary::CalcRotation(diffRot);
 
 	//求めた差分だけ追従する計算
-	GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_BALKAN)->GetRot().x += diffRot * 0.2f;
+	GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_BALKAN)->GetRot().x += diffRot * 0.1f;
 }
 
 // =====================================================================================================================================================================
@@ -573,16 +596,22 @@ float CBoss_One::AngleOf2Vector(D3DXVECTOR3 A, D3DXVECTOR3 B)
 	float sita = acos(cos_sita);
 
 	//ラジアンでなく0～180の角度でほしい場合はコメント外す
-	sita = sita * 180.0f / D3DX_PI;
+	//sita = sita * 180.0f / D3DX_PI;
+	int nAngle = (int)(sita * 180.0f / D3DX_PI);
 
 	// 今の回転量と求めた回転量が同じなら0.0fを返す
-	if (m_fBalkanRot == sita)
+	if (m_nBalkanAngle == nAngle)
 	{
 		return 0.0f;
 	}
 	// 違うなら求めた角度と今の回転量を計算し回転量を求める
 	else
 	{
+		m_nBalkanAngle = nAngle;
+
+		sita = D3DX_PI - sita;
+		sita *= -1.0f;
+
 		return (sita - m_fBalkanRot);
 	}
 
@@ -631,8 +660,9 @@ void CBoss_One::ShotIncendiary()
 void CBoss_One::ShotBalkan()
 {
 	// 弾を2回撃った時
-	if (m_nTrrigerCount >= 2)
+	if (m_nTriggerCount >= 2)
 	{
+
 		// クールタイムの設定
 		SetCoolTime(120);
 		// ガンの傾きを元に戻す
@@ -645,59 +675,50 @@ void CBoss_One::ShotBalkan()
 		if (!m_bBalkanRotFlag)
 		{
 			// ガンの向きをプレイヤーの方へ向ける
-			//SetRotBalkan();
-			// プレイヤーのポインタ取得
-			CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
-			// 座標が足元なので座標を上に上げる
-			D3DXVECTOR3 PlayerPos = D3DXVECTOR3(pPlayer->GetPosition().x, pPlayer->GetPosition().y + 40, pPlayer->GetPosition().z);
-			// プレイヤーの座標とバルカンの座標を結ぶベクトルを求める
-			D3DXVECTOR3 vectol = PlayerPos - m_Gun_Pos[WEAPONTYPE_BALKAN];
-			D3DXVECTOR3 vec = D3DXVECTOR3(vectol.x, m_Gun_Pos[WEAPONTYPE_BALKAN].y, 0.0f);
+			SetRotBalkan();
 
-			// 回転を反映
-			GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_BALKAN)->GetRot().x += AngleOf2Vector(vectol, vec);
-			// 回転量の更新
-			SetBalkanRot(GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_BALKAN)->GetRot().x);
-
-			// 弾の向きの設定
-			m_pGun[WEAPONTYPE_BALKAN]->SetShotRot(
-				D3DXVECTOR3(0.0f, 0.0f, (GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_BALKAN))->GetRot().x * -1.0f));
 
 			m_bBalkanRotFlag = true;
 		}
 
-		// 30フレームごとに1トリガー撃つ
-		if (m_nShotIntervalTime <= 0)
+		if (m_bBalkanRotFlag)
 		{
-			if (m_bBalkanRotFlag)
+			m_nShot--;
+			if (m_nShot <= 0)
 			{
-				// バルカンを撃つ
-				m_pGun[WEAPONTYPE_BALKAN]->Shot();
-				// 弾を撃った回数を加算
-				m_nShotCount++;
-				// 1トリガー撃った時
-				if (m_nShotCount >= 3)
+				// 30フレームごとに1トリガー撃つ
+				if (m_nShotIntervalTime <= 0)
 				{
-					// インターバルの時間を設定
-					SetShotIntervalTime(30);
-					// ショットカウントの初期化
-					SetShotCount(0);
-					// 何トリガー撃ったかのカウントを加算
-					m_nTrrigerCount++;
-
-					m_bBalkanRotFlag = false;
+					// バルカンを撃つ
+					m_pGun[WEAPONTYPE_BALKAN]->Shot();
+					// 弾を撃った回数を加算
+					m_nShotCount++;
+					// 1トリガー撃った時
+					if (m_nShotCount >= 3)
+					{
+						// インターバルの時間を設定
+						SetShotIntervalTime(30);
+						// ショットカウントの初期化
+						SetShotCount(0);
+						// 何トリガー撃ったかのカウントを加算
+						m_nTriggerCount++;
+						m_bBalkanRotFlag = false;
+					}
+					// インターバルの設定
+					else if (m_nShotCount >= 0)
+					{
+						// インターバルの時間を設定
+						SetShotIntervalTime(10);
+					}
 				}
-				// インターバルの設定
-				else if (m_nShotCount >= 0)
+
+				if (m_bBalkanRotFlag)
 				{
-					// インターバルの時間を設定
-					SetShotIntervalTime(10);
+					// インターバルの時間を減少
+					m_nShotIntervalTime--;
 				}
 			}
 		}
-
-		// インターバルの時間を減少
-		m_nShotIntervalTime--;
 	}
 }
 
@@ -830,13 +851,25 @@ void CBoss_One::SetRotBalkan()
 	// プレイヤーのポインタ取得
 	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
 	// 座標が足元なので座標を上に上げる
-	D3DXVECTOR3 PlayerPos = D3DXVECTOR3(pPlayer->GetPosition().x, pPlayer->GetPosition().y + 50, pPlayer->GetPosition().z);
+	D3DXVECTOR3 PlayerPos = D3DXVECTOR3(pPlayer->GetPosition().x, pPlayer->GetPosition().y + 0.0f, pPlayer->GetPosition().z);
+
 	// プレイヤーの座標とバルカンの座標を結ぶベクトルを求める
-	D3DXVECTOR3 vectol = PlayerPos - m_Gun_Pos[WEAPONTYPE_BALKAN];
-	// 正規化
-	D3DXVec3Normalize(&vectol, &vectol);
+	D3DXVECTOR3 vectol = m_Gun_Pos[WEAPONTYPE_BALKAN] - PlayerPos;
+	D3DXVECTOR3 vec = D3DXVECTOR3(m_Gun_Pos[WEAPONTYPE_BALKAN].x + 50, (m_Gun_Pos[WEAPONTYPE_BALKAN].y - vectol.x), 0.0f);
+
+	// 回転を反映
+	m_RotTarget += AngleOf2Vector(vec, vectol);
+
+	// 回転量の更新
+	//SetBalkanRot(GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_BALKAN)->GetRot().x);
+
+	// 弾の向きの設定
+	/*m_pGun[WEAPONTYPE_BALKAN]->SetShotRot(
+		D3DXVECTOR3(0.0f, 0.0f, (GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_BALKAN))->GetRot().x * -1.0f));*/
+
+	m_bBalkanGunRotFlag = true;
 	// 回転の計算
-	CalcRotationBalkan(vectol.x, GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_BALKAN)->GetRot().x);
+	//CalcRotationBalkan((float)m_nBalkanAngle, GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_BALKAN)->GetRot().x);
 }
 
 // =====================================================================================================================================================================

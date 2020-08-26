@@ -131,6 +131,9 @@ void CBoss::DeathReaction()
 {
 	CCharacter::DeathReaction();
 
+	//イベントクリア
+	CManager::GetGame()->GetGameManager()->EventClear();
+
 	//nullcheck
 	if(CManager::GetGame())
 	{
