@@ -215,6 +215,10 @@ void CGame::DebugCollision(CKeyboard *key)
 	{
 		CManager::GetRenderer()->GetFade()->SetFade(CFADE::FADETYPE::FADETYPE_MAPMOVE, CMap::MAP_1_BOSS);
 	}
+	if (key->GetKeyboardTrigger(DIK_F8))
+	{
+		CManager::GetRenderer()->GetFade()->SetFade(CFADE::FADETYPE::FADETYPE_MAPMOVE, CMap::MAP_2_BOSS);
+	}
 
 	// “–‚½‚è”»’èƒ‰ƒCƒ“‚Ì•\Ž¦”ñ•\Ž¦
 	if (key->GetKeyboardPress(DIK_LCONTROL))

@@ -873,6 +873,7 @@ void CMap::SaveModelHeader(FILE * pFile, int ModelType)
 		fprintf(pFile, "//	[ 2 ]	ステージ1_2\n");
 		fprintf(pFile, "//	[ 3 ]	ステージ1_3\n");
 		fprintf(pFile, "//	[ 4 ]	ステージ1_BOSS\n");
+		fprintf(pFile, "//	[ 5 ]	ステージ2_BOSS\n");
 		fprintf(pFile, COMMENT01);
 		fprintf(pFile, COMMENT02);
 		fprintf(pFile, NEWLINE);
@@ -885,7 +886,8 @@ void CMap::SaveModelHeader(FILE * pFile, int ModelType)
 		fprintf(pFile, COMMENT02);
 		fprintf(pFile, "// 敵の種類 ( TYPE )\n");
 		fprintf(pFile, COMMENT01);
-		fprintf(pFile, "//	[ 0 ]	兵士\n");
+		fprintf(pFile, "//	[ 0 ]	通常兵士\n");
+		fprintf(pFile, "//	[ 1 ]	盾持ち兵士\n");
 		fprintf(pFile, COMMENT01);
 		fprintf(pFile, COMMENT02);
 		fprintf(pFile, NEWLINE);
@@ -1681,12 +1683,6 @@ void CMap::MapModelSet()
 	}
 
 	ImGui::SameLine();
-
-	if (ImGui::Button("AllLoad"))
-	{
-		// 配置したモデルを全てロードする
-		MapModelLoad();
-	}
 
 	ImGui::SameLine(ButtonSpace);
 

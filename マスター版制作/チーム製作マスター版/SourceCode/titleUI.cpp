@@ -51,7 +51,6 @@ HRESULT CTitleUI::Init(void)
 {
 	for (int nCnt = 0; nCnt < TITLE_UI::TITLE_UI_MAX; nCnt++)
 	{
-
 		if (!m_apScene2D[nCnt])
 		{
 			switch (nCnt)
