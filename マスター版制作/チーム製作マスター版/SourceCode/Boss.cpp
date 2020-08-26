@@ -102,7 +102,7 @@ void CBoss::Draw(void)
 //====================================================================
 void CBoss::DebugInfo(void)
 {
-
+	CDebugProc::Print("BossLife >> %d\n", GetLife());
 }
 //====================================================================
 //モデルのクリエイト
@@ -130,6 +130,9 @@ bool CBoss::DefaultMotion(void)
 void CBoss::DeathReaction()
 {
 	CCharacter::DeathReaction();
+
+	//イベントクリア
+	CManager::GetGame()->GetGameManager()->EventClear();
 
 	//nullcheck
 	if(CManager::GetGame())

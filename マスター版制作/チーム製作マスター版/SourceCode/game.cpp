@@ -88,11 +88,6 @@ HRESULT CGame::Init(void)
 //==========================================================
 void CGame::Uninit(void)
 {
-	/*if (m_pShield)
-	{
-		m_pShield->Rerease();
-		m_pShield = nullptr;
-	}*/
 
 	// アイテムクラスの静的変数の初期化
 	CItem::InitVariable();
@@ -214,6 +209,10 @@ void CGame::DebugCollision(CKeyboard *key)
 	if (key->GetKeyboardTrigger(DIK_F7))
 	{
 		CManager::GetRenderer()->GetFade()->SetFade(CFADE::FADETYPE::FADETYPE_MAPMOVE, CMap::MAP_1_BOSS);
+	}
+	if (key->GetKeyboardTrigger(DIK_F8))
+	{
+		CManager::GetRenderer()->GetFade()->SetFade(CFADE::FADETYPE::FADETYPE_MAPMOVE, CMap::MAP_2_BOSS);
 	}
 
 	// 当たり判定ラインの表示非表示

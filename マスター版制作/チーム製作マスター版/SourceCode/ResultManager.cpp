@@ -14,7 +14,8 @@
 #include "fade.h"
 #include "player.h"
 #include "playerui.h"
-
+#include "sound.h"
+#include "map.h"
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
 // =====================================================================================================================================================================
@@ -111,6 +112,10 @@ CResultManager * CResultManager::Create()
 	// 初期化
 	pResultManager->Init();
 
+	//音を止める
+	CManager::GetSound()->Stop(CSound::LABEL_BGM_STAGE_01_BOSS);
+	CManager::GetSound()->Stop(CSound::LABEL_BGM_STAGE_02_BOSS);
+
 	return pResultManager;
 }
 
@@ -143,18 +148,24 @@ void CResultManager::NextMode()
 	// リザルトの状態が0だった時
 	if (m_ResultState == RESULT_STATE_0)
 	{
-		m_nNextCount = 180;
+		m_nNextCount = 240;
 		m_bNextFlag = false;
 		// 状態を1に移行する
 		m_ResultState = RESULT_STATE_1;
+
+		CManager::GetSound()->Play(CSound::LABEL_SE_GAMECLEAR);
 	}
 
 	// リザルトの状態が1だった時
 	else if (m_ResultState == RESULT_STATE_1)
 	{
 		// マップ2に移行
+		if (CManager::GetGame()->GetMap()->GetMapNum() == CMap::MAP_1_BOSS)
+		{
+			CManager::GetRenderer()->GetFade()->SetFade(CFADE::FADETYPE::FADETYPE_MAPMOVE, CMap::MAP_2_1);
+		}
 		// ランキングに遷移する
-		if (CManager::GetBaseMode() != nullptr)
+		else if (CManager::GetBaseMode() != nullptr)
 		{
 			CManager::GetRenderer()->GetFade()->SetFade(CFADE::FADETYPE::FADETYPE_MODE, CManager::MODE_RANKING);
 		}

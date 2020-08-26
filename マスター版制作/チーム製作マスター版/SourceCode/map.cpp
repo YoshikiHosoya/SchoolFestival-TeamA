@@ -22,6 +22,7 @@
 #include "scene2D.h"
 #include "Boss_One.h"
 #include "WeakEnemy.h"
+#include "sound.h"
 
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
@@ -43,6 +44,9 @@ char *CMap::m_MapModelFileName[MAP_MAX] =
 	{ "data/Load/Map/Map_1_2.txt" },
 	{ "data/Load/Map/Map_1_3.txt" },
 	{ "data/Load/Map/Map_1_BOSS.txt" },
+	{ "data/Load/Map/Map_2_1.txt" },
+	{ "data/Load/Map/Map_2_2.txt" },
+	{ "data/Load/Map/Map_2_3.txt" },
 	{ "data/Load/Map/Map_2_BOSS.txt" },
 };
 
@@ -52,6 +56,15 @@ char *CMap::m_WaveFileName[WAVE_MAX] =
 	{ "data/Load/Wave/Wave_1_1_1.txt" },
 	{ "data/Load/Wave/Wave_1_1_2.txt" },
 	{ "data/Load/Wave/Wave_1_1_3.txt" },
+	{ "data/Load/Wave/Wave_1_2_1.txt" },
+	{ "data/Load/Wave/Wave_1_3_1.txt" },
+	{ "data/Load/Wave/Wave_1_BOSS.txt" },
+
+	{ "data/Load/Wave/Wave_2_1_1.txt" },
+	{ "data/Load/Wave/Wave_2_2_1.txt" },
+	{ "data/Load/Wave/Wave_2_3_1.txt" },
+	{ "data/Load/Wave/Wave_2_BOSS.txt" },
+
 };
 
 // =====================================================================================================================================================================
@@ -118,6 +131,28 @@ void CMap::MapModelLoad()
 	char			cReadText[128];										// 文字として読み取る
 	char			cHeadText[128];										// 比較用
 	char			cDie[128];											// 不要な文字
+
+
+	switch (m_MapNum)
+	{
+	case CMap::MAP_1_1:
+		CManager::GetSound()->StopAll();
+		CManager::GetSound()->Play(CSound::LABEL_BGM_STAGE_01);
+		break;
+
+	case CMap::MAP_1_BOSS:
+		CManager::GetSound()->StopAll();
+		CManager::GetSound()->Play(CSound::LABEL_BGM_STAGE_01_BOSS);
+		break;
+
+	case CMap::MAP_2_BOSS:
+		CManager::GetSound()->StopAll();
+		CManager::GetSound()->Play(CSound::LABEL_BGM_STAGE_02_BOSS);
+		break;
+
+	default:
+		break;
+	}
 
 	// ファイルを開く
 	pFile = fopen(m_MapModelFileName[m_MapNum], "r");
@@ -577,7 +612,7 @@ void CMap::WaveLoad(WAVE WaveNum)
 	char		cDie[128];												// 不要な文字
 
 	// ファイルを開く
-	pFile = fopen(m_WaveFileName[WaveNum], "r");
+ 	pFile = fopen(m_WaveFileName[WaveNum], "r");
 
 	// 開いているとき
 	if (pFile != NULL)
@@ -597,6 +632,12 @@ void CMap::WaveLoad(WAVE WaveNum)
 			{
 				fgets(cReadText, sizeof(cReadText), pFile);
 				sscanf(cReadText, "%s", &cHeadText);
+
+				// イベントが起きるマップ番号
+				if (strcmp(cHeadText, "EVENT_BEGIN_MAP") == 0)
+				{
+					sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_aWaveInfo[WaveNum].EventBeginMapNum);
+				}
 
 				// イベントが起きる位置を保存
 				if (strcmp(cHeadText, "EVENTPOS") == 0)
@@ -850,6 +891,10 @@ void CMap::SaveModelHeader(FILE * pFile, int ModelType)
 		fprintf(pFile, "//	[ 2 ]	ステージ1_2\n");
 		fprintf(pFile, "//	[ 3 ]	ステージ1_3\n");
 		fprintf(pFile, "//	[ 4 ]	ステージ1_BOSS\n");
+		fprintf(pFile, "//	[ 5 ]	ステージ2_1\n");
+		fprintf(pFile, "//	[ 6 ]	ステージ2_2\n");
+		fprintf(pFile, "//	[ 7 ]	ステージ2_3\n");
+		fprintf(pFile, "//	[ 8 ]	ステージ2_BOSS\n");
 		fprintf(pFile, COMMENT01);
 		fprintf(pFile, COMMENT02);
 		fprintf(pFile, NEWLINE);
@@ -862,7 +907,8 @@ void CMap::SaveModelHeader(FILE * pFile, int ModelType)
 		fprintf(pFile, COMMENT02);
 		fprintf(pFile, "// 敵の種類 ( TYPE )\n");
 		fprintf(pFile, COMMENT01);
-		fprintf(pFile, "//	[ 0 ]	兵士\n");
+		fprintf(pFile, "//	[ 0 ]	通常兵士\n");
+		fprintf(pFile, "//	[ 1 ]	盾持ち兵士\n");
 		fprintf(pFile, COMMENT01);
 		fprintf(pFile, COMMENT02);
 		fprintf(pFile, NEWLINE);
@@ -1277,7 +1323,10 @@ void CMap::AllDelete()
 		m_pHelicopter[nCnt] = nullptr;
 	}
 	// 全ての要素の削除
-	m_pMapModel.clear();
+	if (!m_bMapExclusion)
+	{
+		m_pMapModel.clear();
+	}
 	m_pObstacle.clear();
 	m_pEnemy.clear();
 	m_pPrisoner.clear();
@@ -1656,12 +1705,6 @@ void CMap::MapModelSet()
 
 	ImGui::SameLine();
 
-	if (ImGui::Button("AllLoad"))
-	{
-		// 配置したモデルを全てロードする
-		MapModelLoad();
-	}
-
 	ImGui::SameLine(ButtonSpace);
 
 	if (ImGui::Button("Delete"))
@@ -1830,6 +1873,9 @@ void CMap::EnemyTypeComboBox(int &nSelectType, int nNowSelect)
 #ifdef _DEBUG
 	std::vector<std::string > aEnemyType = {"NORMAL", "SHIELD"};
 
+	// 現在のタイプを反映
+	nSelectType = (int)m_pEnemy[nNowSelect]->GetEnemyType();
+
 	if (CHossoLibrary::ImGui_Combobox(aEnemyType, "Type", nSelectType))
 	{
 		// NULLチェック
@@ -1860,6 +1906,9 @@ void CMap::PrisonerDropTypeComboBox(int &nSelectType, int nNowSelect)
 {
 #ifdef _DEBUG
 	std::vector<std::string > aPrisonerType = { "DESIGNATE_ONE", "DESIGNATE_RANGE", "ALL" };
+
+	// 現在のタイプを反映
+	nSelectType = (int)m_pPrisoner[nNowSelect]->GetPrisonerDropType();
 
 	if (CHossoLibrary::ImGui_Combobox(aPrisonerType, "DropType", nSelectType))
 	{

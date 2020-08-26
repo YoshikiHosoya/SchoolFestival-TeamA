@@ -49,11 +49,11 @@ char *CModel::m_PrisonerFileName[MODEL_PRISONER_MAX] =
 
 char *CModel::m_MapFileName[MODEL_MAP_MAX] =
 {
-
 	{ "data/MODEL/map/Map1_Boss stage.x" },
 	{ "data/MODEL/map/Stage1-1.x" },
 	{ "data/MODEL/map/Stage1-2.x" },
 	{ "data/MODEL/map/Stage1-3.x" },
+	{ "data/MODEL/map/Map1_Boss stage.x" },
 	{ "data/MODEL/map/Map1_Boss stage.x" },
 };
 char *CModel::m_EnemyFileName[MODEL_ENEMY_MAX] =
@@ -93,8 +93,9 @@ char *CModel::m_GunFileName[MODEL_GUN_MAX] =
 char *CModel::m_BulletFileName[MODEL_BULLET_MAX] =
 {
 	{ "data/MODEL/Bullet/Sphere.x" },				// 丸
-	{ "data/MODEL/Bullet/Tankmissile.x" },			// ロケットランチャー
+	{ "data/MODEL/Bullet/Rockets.x" },				// ロケットランチャー
 	{ "data/MODEL/Bullet/Grenade.x" },				// グレネード
+	{ "data/MODEL/Bullet/Tankmissile.x" },			// 戦車のグレネード
 };
 
 char *CModel::m_TankFileName[MODEL_TANK_MAX] =

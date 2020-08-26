@@ -155,8 +155,6 @@ bool CWeakEnemy::DefaultMotion(void)
 void CWeakEnemy::DamageReaction()
 {
 	SetState(CCharacter::CHARACTER_STATE_DAMAGE_RED);
-
-	CManager::GetSound()->Play(CSound::LABEL_SE_HIT);
 }
 //====================================================================
 //Ž€‚ñ‚¾Žž‚ÌƒŠƒAƒNƒVƒ‡ƒ“
@@ -186,6 +184,17 @@ void CWeakEnemy::StateChangeReaction()
 		SetStateCount(60);
 		m_pKnife->EndMeleeAttack();
 		SetMotion(CCharacter::ENEMY_MOTION_DEAD_1);
+
+		switch (GetEnemyType())
+		{
+		case CEnemy::WEAKENEMY_TYPE::ENEMY_NORMAL:
+		case CEnemy::WEAKENEMY_TYPE::ENEMY_SHIELD:
+
+			CManager::GetSound()->Play(CSound::LABEL_SE_VOICE_DEATH);
+
+		default:
+			break;
+		}
 
 		if (m_pShield)
 		{

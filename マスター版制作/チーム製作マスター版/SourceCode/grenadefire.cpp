@@ -13,6 +13,7 @@
 #include "Player.h"
 #include "bullet.h"
 #include "grenade.h"
+#include "sound.h"
 
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
@@ -151,12 +152,12 @@ void CGrenadeFire::Fire(D3DXVECTOR3 rot)
 		break;
 	}
 
-	// 残弾数を減らす
-	m_nAmmo--;
-
 	// インターバルが経過したとき
 	if (m_nInterval >= pBulletParam->nInterval)
 	{
+		// 残弾数を減らす
+		m_nAmmo--;
+
 		m_nInterval = 0;
 
 		if (pGrenade)
@@ -178,6 +179,7 @@ void CGrenadeFire::Fire(D3DXVECTOR3 rot)
 				break;
 			case CGrenadeFire::TANK_GRENADE:
 				pGrenade->SetBulletParam(CGun::GUNTYPE_TANKGRENADE);
+				CManager::GetSound()->Play(CSound::LABEL_SE_EXPLOSION_00);
 				break;
 			}
 		}
