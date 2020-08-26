@@ -73,6 +73,7 @@ public:
 
 		//武器系アイテム取得時のボイス
 		LABEL_SE_VOICE_HEAVYMACHINEGUN,				//ヘビーマシンガン
+		LABEL_SE_VOICE_DEATH,						//死亡時　ｳﾜｰ
 
 
 		LABEL_MAX,
@@ -160,6 +161,7 @@ private:
 
 		//武器系アイテム取得時
 		{ "data/SE/Voice/HeavyMachineGun.wav", 0 },				//SE HMG
+		{ "data/SE/Voice/Death.wav", 0 },						//SE 死亡ボイス
 
 	};
 

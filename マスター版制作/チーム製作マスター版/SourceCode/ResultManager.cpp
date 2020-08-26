@@ -113,7 +113,8 @@ CResultManager * CResultManager::Create()
 	pResultManager->Init();
 
 	//‰¹‚ğ~‚ß‚é
-	CManager::GetSound()->StopAll();
+	CManager::GetSound()->Stop(CSound::LABEL_BGM_STAGE_01_BOSS);
+	CManager::GetSound()->Stop(CSound::LABEL_BGM_STAGE_02_BOSS);
 
 	return pResultManager;
 }
@@ -147,7 +148,7 @@ void CResultManager::NextMode()
 	// ƒŠƒUƒ‹ƒg‚Ìó‘Ô‚ª0‚¾‚Á‚½
 	if (m_ResultState == RESULT_STATE_0)
 	{
-		m_nNextCount = 180;
+		m_nNextCount = 240;
 		m_bNextFlag = false;
 		// ó‘Ô‚ğ1‚ÉˆÚs‚·‚é
 		m_ResultState = RESULT_STATE_1;
