@@ -44,6 +44,9 @@ char *CMap::m_MapModelFileName[MAP_MAX] =
 	{ "data/Load/Map/Map_1_2.txt" },
 	{ "data/Load/Map/Map_1_3.txt" },
 	{ "data/Load/Map/Map_1_BOSS.txt" },
+	{ "data/Load/Map/Map_2_1.txt" },
+	{ "data/Load/Map/Map_2_2.txt" },
+	{ "data/Load/Map/Map_2_3.txt" },
 	{ "data/Load/Map/Map_2_BOSS.txt" },
 };
 
@@ -53,6 +56,15 @@ char *CMap::m_WaveFileName[WAVE_MAX] =
 	{ "data/Load/Wave/Wave_1_1_1.txt" },
 	{ "data/Load/Wave/Wave_1_1_2.txt" },
 	{ "data/Load/Wave/Wave_1_1_3.txt" },
+	{ "data/Load/Wave/Wave_1_2_1.txt" },
+	{ "data/Load/Wave/Wave_1_3_1.txt" },
+	{ "data/Load/Wave/Wave_1_BOSS.txt" },
+
+	{ "data/Load/Wave/Wave_2_1_1.txt" },
+	{ "data/Load/Wave/Wave_2_2_1.txt" },
+	{ "data/Load/Wave/Wave_2_3_1.txt" },
+	{ "data/Load/Wave/Wave_2_BOSS.txt" },
+
 };
 
 // =====================================================================================================================================================================
@@ -600,7 +612,7 @@ void CMap::WaveLoad(WAVE WaveNum)
 	char		cDie[128];												// 不要な文字
 
 	// ファイルを開く
-	pFile = fopen(m_WaveFileName[WaveNum], "r");
+ 	pFile = fopen(m_WaveFileName[WaveNum], "r");
 
 	// 開いているとき
 	if (pFile != NULL)
@@ -620,6 +632,12 @@ void CMap::WaveLoad(WAVE WaveNum)
 			{
 				fgets(cReadText, sizeof(cReadText), pFile);
 				sscanf(cReadText, "%s", &cHeadText);
+
+				// イベントが起きるマップ番号
+				if (strcmp(cHeadText, "EVENT_BEGIN_MAP") == 0)
+				{
+					sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_aWaveInfo[WaveNum].EventBeginMapNum);
+				}
 
 				// イベントが起きる位置を保存
 				if (strcmp(cHeadText, "EVENTPOS") == 0)
@@ -873,7 +891,10 @@ void CMap::SaveModelHeader(FILE * pFile, int ModelType)
 		fprintf(pFile, "//	[ 2 ]	ステージ1_2\n");
 		fprintf(pFile, "//	[ 3 ]	ステージ1_3\n");
 		fprintf(pFile, "//	[ 4 ]	ステージ1_BOSS\n");
-		fprintf(pFile, "//	[ 5 ]	ステージ2_BOSS\n");
+		fprintf(pFile, "//	[ 5 ]	ステージ2_1\n");
+		fprintf(pFile, "//	[ 6 ]	ステージ2_2\n");
+		fprintf(pFile, "//	[ 7 ]	ステージ2_3\n");
+		fprintf(pFile, "//	[ 8 ]	ステージ2_BOSS\n");
 		fprintf(pFile, COMMENT01);
 		fprintf(pFile, COMMENT02);
 		fprintf(pFile, NEWLINE);

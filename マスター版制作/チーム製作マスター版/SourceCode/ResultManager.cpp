@@ -15,7 +15,7 @@
 #include "player.h"
 #include "playerui.h"
 #include "sound.h"
-
+#include "map.h"
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
 // =====================================================================================================================================================================
@@ -160,8 +160,12 @@ void CResultManager::NextMode()
 	else if (m_ResultState == RESULT_STATE_1)
 	{
 		// マップ2に移行
+		if (CManager::GetGame()->GetMap()->GetMapNum() == CMap::MAP_1_BOSS)
+		{
+			CManager::GetRenderer()->GetFade()->SetFade(CFADE::FADETYPE::FADETYPE_MAPMOVE, CMap::MAP_2_1);
+		}
 		// ランキングに遷移する
-		if (CManager::GetBaseMode() != nullptr)
+		else if (CManager::GetBaseMode() != nullptr)
 		{
 			CManager::GetRenderer()->GetFade()->SetFade(CFADE::FADETYPE::FADETYPE_MODE, CManager::MODE_RANKING);
 		}

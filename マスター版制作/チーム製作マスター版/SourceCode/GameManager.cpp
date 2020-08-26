@@ -16,7 +16,7 @@
 #include "Playerui.h"
 #include "game.h"
 #include "camera.h"
-
+#include "map.h"
 //------------------------------------------------------------------------------
 //静的メンバ変数の初期化
 //------------------------------------------------------------------------------
@@ -51,7 +51,6 @@ CGameManager::~CGameManager()
 //------------------------------------------------------------------------------
 void CGameManager::Update()
 {
-
 	// それぞれのポインタ取得
 	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
 	CGame *pGame = (CGame*)CManager::GetBaseMode();
@@ -61,6 +60,7 @@ void CGameManager::Update()
 	//nullcheck
 	if (pPlayer)
 	{
+
 		//特定の座標を超えた時
 		if(pPlayer->GetPosition().x >= CManager::GetGame()->GetMap()->GetTransitionPos().x)
 		{
@@ -77,11 +77,15 @@ void CGameManager::Update()
 			//nullcheck
 			if (pWaveInfo)
 			{
-				//特定の座標を超えた時
-				if (pPlayer->GetPosition().x >= pWaveInfo->EventPos.x)
+				//現在のマップ番号とイベントが発生するマップ番号があっているかどうか
+				if (pWaveInfo->EventBeginMapNum == CManager::GetGame()->GetMap()->GetMapNum())
 				{
-					//ウェーブ開始
-					StartWave();
+					//特定の座標を超えた時
+					if (pPlayer->GetPosition().x >= pWaveInfo->EventPos.x)
+					{
+						//ウェーブ開始
+						StartWave();
+					}
 				}
 			}
 		}
@@ -158,6 +162,54 @@ std::unique_ptr<CGameManager> CGameManager::Create()
 void CGameManager::EventClear()
 {
 	EndWave();
+}
+
+//------------------------------------------------------------------------------
+//マップ遷移時にウェーブ再設定
+//------------------------------------------------------------------------------
+void CGameManager::MapTransitionWaveSet(int nNextID)
+{
+	EndWave();
+
+	//次のマップ番号に合わせて現在のウェーブ番号を合わせる
+	switch (nNextID)
+	{
+
+	case CMap::MAP_1_1:
+		m_nNowWave = CMap::WAVE::WAVE_1_1_1;
+
+			break;
+	case CMap::MAP_1_2:
+		m_nNowWave = CMap::WAVE::WAVE_1_2_1;
+
+		break;
+	case CMap::MAP_1_3:
+		m_nNowWave = CMap::WAVE::WAVE_1_3_1;
+
+		break;
+	case CMap::MAP_1_BOSS:
+		m_nNowWave = CMap::WAVE::WAVE_1_BOSS;
+
+		break;
+	case CMap::MAP_2_1:
+		m_nNowWave = CMap::WAVE::WAVE_2_1_1;
+
+		break;
+	case CMap::MAP_2_2:
+		m_nNowWave = CMap::WAVE::WAVE_2_2_1;
+
+		break;
+	case CMap::MAP_2_3:
+		m_nNowWave = CMap::WAVE::WAVE_2_3_1;
+
+		break;
+	case CMap::MAP_2_BOSS:
+		m_nNowWave = CMap::WAVE::WAVE_2_BOSS;
+
+
+	default:
+		break;
+	}
 }
 
 //------------------------------------------------------------------------------
