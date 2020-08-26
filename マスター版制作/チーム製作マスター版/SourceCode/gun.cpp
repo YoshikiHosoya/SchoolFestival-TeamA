@@ -30,7 +30,7 @@
 // =====================================================================================================================================================================
 // マクロ定義
 // =====================================================================================================================================================================
-#define HEAVYMACHINEGUN_SHOT_FRAME				(4)			// ヘビーマシンガンの弾の間隔
+#define HEAVYMACHINEGUN_SHOT_FRAME				(5)			// ヘビーマシンガンの弾の間隔
 #define MAX_AMMO								(999)		// 残弾数の最大値
 
 // =====================================================================================================================================================================
@@ -263,11 +263,25 @@ void CGun::Shot()
 		case CGun::GUNTYPE_HANDGUN:
 			// ハンドガンの生成
 			pBullet = CHandgun::Create(m_ShotRot);
+
+			//音再生
+			CManager::GetSound()->Play(CSound::LABEL_SE_SHOT_HANDGUN);
+
+			//ノズルフラッシュ
+			CParticle::CreateFromText(m_ShotPos, ZeroVector3, CParticleParam::EFFECT_SHOTFLASH);
+
 			break;
 
 		case CGun::GUNTYPE_HEAVYMACHINEGUN:
 			// ヘビーマシンガンの生成
 			pBullet = CHeavyMachinegun::Create(m_ShotRot);
+
+			//音再生
+			CManager::GetSound()->Play(CSound::LABEL_SE_SHOT_MACHINEGUN);
+
+			//ノズルフラッシュ
+			CParticle::CreateFromText(m_ShotPos, ZeroVector3, CParticleParam::EFFECT_SHOTFLASH);
+
 			m_bMultiple = true;		// フラグをオン
 			break;
 
@@ -276,33 +290,68 @@ void CGun::Shot()
 			CParticle::CreateFromText(m_ShotPos, m_ShotRot, CParticleParam::EFFECT_SHOTGUN, GetTag(), CBullet::GetBulletParam(CGun::GUNTYPE_SHOTGUN)->nPower);
 			CParticle::CreateFromText(m_ShotPos, m_ShotRot, CParticleParam::EFFECT_SHOTGUN_ADDEFFECT, GetTag(), CBullet::GetBulletParam(CGun::GUNTYPE_SHOTGUN)->nPower);
 
+
+			//音再生
+			CManager::GetSound()->Play(CSound::LABEL_SE_SHOT_SHOTGUN);
+
+			//ノズルフラッシュ
+			CParticle::CreateFromText(m_ShotPos, ZeroVector3, CParticleParam::EFFECT_SHOTFLASH);
+
 			break;
 
 		case CGun::GUNTYPE_LASERGUN:
 			// レーザーガンの生成
 			CParticle::CreateFromText(m_ShotPos, m_ShotRot, CParticleParam::EFFECT_LAZER, GetTag(), CBullet::GetBulletParam((int)CGun::GUNTYPE_LASERGUN)->nPower, D3DXCOLOR(0.0f, 0.0f, 0.0f, -1.0f), GetShotPosPtr());
-			m_bMultiple = true;		// フラグをオン
+
+			//音再生
+			CManager::GetSound()->Play(CSound::LABEL_SE_SHOT_LASER);
+
+			//ノズルフラッシュ
+			CParticle::CreateFromText(m_ShotPos, ZeroVector3, CParticleParam::EFFECT_SHOTFLASH);
+
 			break;
 
 		case CGun::GUNTYPE_ROCKETLAUNCHER:
 			// ロケットランチャーの生成
 			pBullet = CRocketlauncher::Create(m_ShotRot);
+
+			//音再生
+			CManager::GetSound()->Play(CSound::LABEL_SE_SHOT_LAUNCHER);
+
 			break;
 
 		case CGun::GUNTYPE_FLAMESHOT:
 			// フレイムショットの生成
 			pBullet = CFlameshot::Create(m_ShotRot);
+
+			//音再生
+			CManager::GetSound()->Play(CSound::LABEL_SE_SHOT_FIRE);
+
 			break;
 
 		case CGun::GUNTYPE_TANKGUN:
 			// 戦車の銃の生成
 			pBullet = CTankGun::Create(m_ShotRot);
+
+			//音再生
+			CManager::GetSound()->Play(CSound::LABEL_SE_SHOT_MACHINEGUN);
+
+			//ノズルフラッシュ
+			CParticle::CreateFromText(m_ShotPos, ZeroVector3, CParticleParam::EFFECT_SHOTFLASH,TAG_PLAYER,-1,BlueColor);
+
 			m_bMultiple = true;		// 複数発撃つフラグをオン
 			break;
 
 		case CGun::GUNTYPE_PLANEGUN:
 			// 戦車の銃の生成
 			pBullet = CPlaneGun::Create(m_ShotRot);
+
+			//音再生
+			CManager::GetSound()->Play(CSound::LABEL_SE_SHOT_MACHINEGUN);
+
+			//ノズルフラッシュ
+			CParticle::CreateFromText(m_ShotPos, ZeroVector3, CParticleParam::EFFECT_SHOTFLASH, TAG_PLAYER, -1, BlueColor);
+
 			m_bMultiple = true;		// 複数発撃つフラグをオン
 			break;
 		case CGun::GUNTYPE_TRACKINGGUN:
@@ -354,9 +403,6 @@ void CGun::Shot()
 
 			//ノズルフラッシュ
 			CParticle::CreateFromText(m_ShotPos, ZeroVector3, CParticleParam::EFFECT_SHOTFLASH);
-
-			//音再生
-			CManager::GetSound()->Play(CSound::LABEL_SE_SHOT);
 		}
 	}
 }
@@ -412,10 +458,7 @@ void CGun::MultipleShot()
 				pBullet->BulletReaction(m_ShotRot);
 
 				//音再生
-				CManager::GetSound()->Play(CSound::LABEL_SE_SHOT);
-
-				////ノズルフラッシュ
-				CParticle::CreateFromText(m_ShotPos, ZeroVector3, CParticleParam::EFFECT_SHOTFLASH);
+				CManager::GetSound()->Play(CSound::LABEL_SE_SHOT_MACHINEGUN);
 
 
 			}

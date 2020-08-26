@@ -70,6 +70,7 @@ public:
 		MODEL_MAP_STAGE1_2,			//ステージ1-2
 		MODEL_MAP_STAGE1_3,			//ステージ1-3
 		MODEL_MAP_STAGE1_BOSS,		//ボスステージ1
+		MODEL_MAP_STAGE2_BOSS,		//ボスステージ2
 		MODEL_MAP_MAX
 	}MAP_MODEL;
 	/*--- 敵のパーツモデル ---*/
@@ -116,6 +117,7 @@ public:
 		MODEL_BULLET_SPHERE,			// 丸
 		MODEL_BULLET_ROCKETLAUNCHER,	// ロケットランチャー
 		MODEL_BULLET_GRENADE,			// グレネード
+		MODEL_BULLET_TANKGRENADE,		// 戦車のグレネード
 		MODEL_BULLET_MAX
 	}BULLET_MODEL;
 

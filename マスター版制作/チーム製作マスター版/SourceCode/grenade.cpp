@@ -96,6 +96,10 @@ void CGrenade::Update(void)
 	{
 		m_rot.z += (D3DX_PI / ROT_DIVISION_Z);
 	}
+	else
+	{
+		m_rot.z = D3DX_PI / 2;
+	}
 
 	// 回転の設定
 	SetRot(m_rot);
@@ -151,14 +155,16 @@ CGrenade * CGrenade::Create(D3DXVECTOR3 rot, CGrenadeFire::GRENADE_TYPE type)
 	// モデルタイプの設定
 	pGrenade->SetType(BULLET_MODEL);
 
-	// モデルカウントの設定
 	switch (type)
 	{
 	case CGrenadeFire::HAND_GRENADE:
+		// モデルカウントの設定
 		pGrenade->SetModelConut(MODEL_BULLET_GRENADE);
 		break;
 	case CGrenadeFire::TANK_GRENADE:
-		pGrenade->SetModelConut(MODEL_BULLET_ROCKETLAUNCHER);
+		// 放つ方向に合わせる
+		pGrenade->GetMove() = D3DXVECTOR3(1.0f * pGrenade->m_move.x, pGrenade->m_move.y, 0.0f);
+		pGrenade->SetModelConut(MODEL_BULLET_TANKGRENADE);
 		break;
 	}
 
