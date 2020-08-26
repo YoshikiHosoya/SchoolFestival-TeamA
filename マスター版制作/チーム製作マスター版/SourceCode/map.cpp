@@ -1277,7 +1277,10 @@ void CMap::AllDelete()
 		m_pHelicopter[nCnt] = nullptr;
 	}
 	// 全ての要素の削除
-	m_pMapModel.clear();
+	if (!m_bMapExclusion)
+	{
+		m_pMapModel.clear();
+	}
 	m_pObstacle.clear();
 	m_pEnemy.clear();
 	m_pPrisoner.clear();
@@ -1861,7 +1864,13 @@ void CMap::PrisonerDropTypeComboBox(int &nSelectType, int nNowSelect)
 #ifdef _DEBUG
 	std::vector<std::string > aPrisonerType = { "DESIGNATE_ONE", "DESIGNATE_RANGE", "ALL" };
 
-	if (CHossoLibrary::ImGui_Combobox(aPrisonerType, "DropType", nSelectType))
+	int nType = 0;
+
+	if (nSelectType > 3)
+	{
+		nType = 3;
+	}
+	if (CHossoLibrary::ImGui_Combobox(aPrisonerType, "DropType", nType))
 	{
 		// NULLチェック
 		if (m_pPrisoner[nNowSelect])
@@ -1870,10 +1879,10 @@ void CMap::PrisonerDropTypeComboBox(int &nSelectType, int nNowSelect)
 			CPrisoner::PRISONER_ITEM_DROPTYPE PrisonerType = m_pPrisoner[nNowSelect]->GetPrisonerDropType();
 
 			// 前回と違うとき
-			if (PrisonerType != nSelectType)
+			if (PrisonerType != nType)
 			{
 				// 種類代入
-				PrisonerType = (CPrisoner::PRISONER_ITEM_DROPTYPE)nSelectType;
+				PrisonerType = (CPrisoner::PRISONER_ITEM_DROPTYPE)nType;
 				// 捕虜のドロップタイプの設定
 				m_pPrisoner[nNowSelect]->SetPrisonerType(PrisonerType);
 			}
