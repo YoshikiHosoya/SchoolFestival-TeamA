@@ -28,20 +28,7 @@ MAPSET										# 0
 	POS			= 0 0 0
 END_MAPSET
 
-MAPSET										# 1
-	TYPE		= 1
-	POS			= 0 0 0
-END_MAPSET
 
-MAPSET										# 2
-	TYPE		= 1
-	POS			= 0 0 0
-END_MAPSET
-
-MAPSET										# 3
-	TYPE		= 1
-	POS			= 0 0 0
-END_MAPSET
 
 //------------------------------------------------------------
 // ìGÇÃîzíuèÓïÒ

@@ -70,6 +70,9 @@ public:
 		MODEL_MAP_STAGE1_2,			//ステージ1-2
 		MODEL_MAP_STAGE1_3,			//ステージ1-3
 		MODEL_MAP_STAGE1_BOSS,		//ボスステージ1
+		MODEL_MAP_STAGE2_1,			//ステージ2-1
+		MODEL_MAP_STAGE2_2,			//ステージ2-2
+		MODEL_MAP_STAGE2_3,			//ステージ2-3
 		MODEL_MAP_STAGE2_BOSS,		//ボスステージ2
 		MODEL_MAP_MAX
 	}MAP_MODEL;
