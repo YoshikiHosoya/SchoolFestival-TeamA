@@ -157,8 +157,6 @@ bool CWeakEnemy::DefaultMotion(void)
 void CWeakEnemy::DamageReaction()
 {
 	SetState(CCharacter::CHARACTER_STATE_DAMAGE_RED);
-
-	CManager::GetSound()->Play(CSound::LABEL_SE_HIT);
 }
 //====================================================================
 //Ž€‚ñ‚¾Žž‚ÌƒŠƒAƒNƒVƒ‡ƒ“

@@ -14,6 +14,7 @@
 #include "fade.h"
 #include "player.h"
 #include "playerui.h"
+#include "sound.h"
 
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
@@ -111,6 +112,9 @@ CResultManager * CResultManager::Create()
 	// 初期化
 	pResultManager->Init();
 
+	//音を止める
+	CManager::GetSound()->StopAll();
+
 	return pResultManager;
 }
 
@@ -147,6 +151,8 @@ void CResultManager::NextMode()
 		m_bNextFlag = false;
 		// 状態を1に移行する
 		m_ResultState = RESULT_STATE_1;
+
+		CManager::GetSound()->Play(CSound::LABEL_SE_GAMECLEAR);
 	}
 
 	// リザルトの状態が1だった時

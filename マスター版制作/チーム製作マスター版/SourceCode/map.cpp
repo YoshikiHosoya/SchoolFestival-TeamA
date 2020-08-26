@@ -22,6 +22,7 @@
 #include "scene2D.h"
 #include "Boss_One.h"
 #include "WeakEnemy.h"
+#include "sound.h"
 
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
@@ -118,6 +119,28 @@ void CMap::MapModelLoad()
 	char			cReadText[128];										// 文字として読み取る
 	char			cHeadText[128];										// 比較用
 	char			cDie[128];											// 不要な文字
+
+
+	switch (m_MapNum)
+	{
+	case CMap::MAP_1_1:
+		CManager::GetSound()->StopAll();
+		CManager::GetSound()->Play(CSound::LABEL_BGM_STAGE_01);
+		break;
+
+	case CMap::MAP_1_BOSS:
+		CManager::GetSound()->StopAll();
+		CManager::GetSound()->Play(CSound::LABEL_BGM_STAGE_01_BOSS);
+		break;
+
+	case CMap::MAP_2_BOSS:
+		CManager::GetSound()->StopAll();
+		CManager::GetSound()->Play(CSound::LABEL_BGM_STAGE_02_BOSS);
+		break;
+
+	default:
+		break;
+	}
 
 	// ファイルを開く
 	pFile = fopen(m_MapModelFileName[m_MapNum], "r");

@@ -175,13 +175,12 @@ void CManager::SetMode(MODE mode)
 		//Game
 	case MODE_GAME:
 		m_pBaseMode = new CGame;
-		m_pSound->Play(CSound::LABEL_BGM_GAME);
 		break;
 
 		//Ranking
 	case MODE_RANKING:
 		m_pBaseMode = new CRanking;
-		m_pSound->Play(CSound::LABEL_BGM_RESULT);
+		m_pSound->Play(CSound::LABEL_BGM_RANKING);
 		break;
 
 		//MotionViewer

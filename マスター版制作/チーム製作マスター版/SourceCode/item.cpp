@@ -187,38 +187,58 @@ void CItem::ItemType(ITEMTYPE type)
 		// ヘビーマシンガン
 	case (ITEMTYPE_HEAVYMACHINEGUN): {
 		// SEを鳴らす
-		CManager::GetSound()->Play(CSound::LABEL_SE_ITEM_HMG);
+		CManager::GetSound()->Play(CSound::LABEL_SE_GET_WEAPON);
+		CManager::GetSound()->Play(CSound::LABEL_SE_VOICE_HEAVYMACHINEGUN);
+
 		pPlayer->GetGun()->SetGunType(CGun::GUNTYPE_HEAVYMACHINEGUN);
 	}break;
 
 		// ショットガン
 	case (ITEMTYPE_SHOTGUN): {
+		// SEを鳴らす
+		CManager::GetSound()->Play(CSound::LABEL_SE_GET_WEAPON);
+
 		pPlayer->GetGun()->SetGunType(CGun::GUNTYPE_SHOTGUN);
 	}break;
 
 		// レーザーガン
 	case (ITEMTYPE_LASERGUN): {
+		// SEを鳴らす
+		CManager::GetSound()->Play(CSound::LABEL_SE_GET_WEAPON);
+
 		pPlayer->GetGun()->SetGunType(CGun::GUNTYPE_LASERGUN);
 	}break;
 
 		// ロケットランチャー
 	case (ITEMTYPE_ROCKETLAUNCHER): {
+		// SEを鳴らす
+		CManager::GetSound()->Play(CSound::LABEL_SE_GET_WEAPON);
+
 		pPlayer->GetGun()->SetGunType(CGun::GUNTYPE_ROCKETLAUNCHER);
 	}break;
 
 		// フレイムショット
 	case (ITEMTYPE_FLAMESHOT): {
+		// SEを鳴らす
+		CManager::GetSound()->Play(CSound::LABEL_SE_GET_WEAPON);
+
 		pPlayer->GetGun()->SetGunType(CGun::GUNTYPE_FLAMESHOT);
 	}break;
 
 		// 熊
 	case (ITEMTYPE_BEAR): {
+		// SEを鳴らす
+		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
+
 		// スコアアップ
 		pPlayer->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_BEAR));
 	}break;
 
 		// コイン
 	case (ITEMTYPE_COIN): {
+		// SEを鳴らす
+		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
+
 		// コインを取るたびにコインのスコアアップ
 		pPlayer->GetPlayerUI()->SetItemScore(AddCoinScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_COIN)));
 	}break;
@@ -229,20 +249,32 @@ void CItem::ItemType(ITEMTYPE type)
 	}break;
 		// メダル
 	case (ITEMTYPE_MEDAL): {
+		// SEを鳴らす
+		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
+
 		// スコアアップ
 		pPlayer->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_MEDAL));
 	}break;
 
 		// 爆弾の数を増やす
 	case (ITEMTYPE_BOMBUP): {
+		// SEを鳴らす
+		CManager::GetSound()->Play(CSound::LABEL_SE_GET_WEAPON);
+
 	}break;
 
 		// 乗り物の耐久値を回復する
 	case (ITEMTYPE_ENERGYUP): {
+		// SEを鳴らす
+		CManager::GetSound()->Play(CSound::LABEL_SE_GET_WEAPON);
+
 	}break;
 
 		// ハンドガン以外の弾の残弾数を増やす
 	case (ITEMTYPE_BULLETUP): {
+		// SEを鳴らす
+		CManager::GetSound()->Play(CSound::LABEL_SE_GET_WEAPON);
+
 	}break;
 
 	default:
