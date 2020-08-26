@@ -146,14 +146,16 @@ char *CModel::m_BossOneFileName[MODEL_BOSSONE_MAX] =
 {
 	{ "data/MODEL/DragonNosuke/Body.x" },			// 体
 	{ "data/MODEL/DragonNosuke/Head.x" },			// 頭
-	{ "data/MODEL/DragonNosuke/Thigh_L_F.x" },		// 左前大腿
-	{ "data/MODEL/DragonNosuke/Thigh_L_R.x" },		// 左後大腿
-	{ "data/MODEL/DragonNosuke/Thigh_R_F.x" },		// 右前大腿
-	{ "data/MODEL/DragonNosuke/Thigh_R_R.x" },		// 右後大腿
+	{ "data/MODEL/DragonNosuke/Knee_L_F.x" },		// 左前大腿
+	{ "data/MODEL/DragonNosuke/Knee_L_R.x" },		// 左後大腿
+	{ "data/MODEL/DragonNosuke/Knee_R_F.x" },		// 右前大腿
+	{ "data/MODEL/DragonNosuke/Knee_R_R.x" },		// 右後大腿
 	{ "data/MODEL/DragonNosuke/Leg_L_F.x" },		// 左前下腿
 	{ "data/MODEL/DragonNosuke/Leg_L_R.x" },		// 左後下腿
 	{ "data/MODEL/DragonNosuke/Leg_R_F.x" },		// 右前下腿
 	{ "data/MODEL/DragonNosuke/Leg_R_R.x" },		// 右後下腿
+	{ "data/MODEL/DragonNosuke/R_Ventilation.x" },	// 右後下腿
+	{ "data/MODEL/DragonNosuke/L_Ventilation.x" },	// 右後下腿
 	{ "data/MODEL/DragonNosuke/Balkan.x" },			// 武器の場所に置く仮モデル
 	{ "data/MODEL/DragonNosuke/Flamethrower.x" },	// 武器の場所に置く仮モデル
 	{ "data/MODEL/DragonNosuke/Incendiary.x" },		// 武器の場所に置く仮モデル
