@@ -11,6 +11,7 @@
 #include "collision.h"
 #include "gun.h"
 #include "particle.h"
+#include "sound.h"
 
 #define CENTER_POS		(D3DXVECTOR3(0.0f,450.0f,0.0f))
 #define RIGHT_POS		(D3DXVECTOR3(400.0f,400.0f,0.0f))
@@ -184,6 +185,13 @@ void CBossAI::UpdateAttackAI(void)
 			//光る
 			CParticle::CreateFromText(pBossPass->GetPosition(), D3DXVECTOR3(0.0f, 0.0f, CHossoLibrary::Random_PI()), CParticleParam::EFFECT_FLASSHING, TAG::TAG_PLAYER, 0, D3DXCOLOR(0.7f,0.02f, 0.02f,1.0f));
 
+			//最初に音を再生
+			if (m_AttackCastCnt == 0)
+			{
+				CManager::GetSound()->Play(CSound::LABEL_SE_SHOT_FLASHING);
+			}
+
+
 			m_AttackCastCnt++;
 			m_bShot = true;
 			if (m_AttackCastCnt == 60)//攻撃に入るまでの時間
@@ -199,13 +207,13 @@ void CBossAI::UpdateAttackAI(void)
 				{
 					pBossPass->GetGunPtr()->Shot();
 				}
-				else if (m_AttackCnt == 140)
+				else if (m_AttackCnt == 120)
 				{
 					m_AttackCnt = 0;
 					m_Attacks++;
 				}
-				//120フレームかつ攻撃回数に達したら初期化
-				if (m_AttackCnt > 120 && m_Attacks >= 3)
+				//60フレームかつ攻撃回数に達したら初期化
+				if (m_AttackCnt > 60 && m_Attacks >= 3)
 				{
 					SetRestartFlag(true);
 				}
@@ -214,8 +222,6 @@ void CBossAI::UpdateAttackAI(void)
 
 		else if (AI_DIFFUSION == m_BossAItype)//拡散射撃
 		{
-			//光る
-			CParticle::CreateFromText(pBossPass->GetPosition(), D3DXVECTOR3(0.0f, 0.0f, CHossoLibrary::Random_PI()), CParticleParam::EFFECT_FLASSHING, TAG::TAG_PLAYER, 0, D3DXCOLOR(0.7f, 0.7f, 0.01f, 0.2f));
 
 			//ガンのタイプ変更
 			pBossPass->GetGunPtr()->SetGunType(pBossPass->GetGunPtr()->GUNTYPE_DIFFUSIONGUN);
@@ -225,6 +231,15 @@ void CBossAI::UpdateAttackAI(void)
 
 			//撃つ向きの設定
 			pBossPass->GetGunPtr()->SetShotRot(D3DXVECTOR3(0.0f, 0.0f, D3DX_PI + fAngle));
+
+			//光る
+			CParticle::CreateFromText(pBossPass->GetPosition(), D3DXVECTOR3(0.0f, 0.0f, CHossoLibrary::Random_PI()), CParticleParam::EFFECT_FLASSHING, TAG::TAG_PLAYER, 0, D3DXCOLOR(0.7f, 0.7f, 0.01f, 0.2f));
+
+			//最初に音を再生
+			if (m_AttackCastCnt == 0)
+			{
+				CManager::GetSound()->Play(CSound::LABEL_SE_SHOT_FLASHING);
+			}
 
 			m_AttackCastCnt++;
 			m_bShot = true;
@@ -236,13 +251,13 @@ void CBossAI::UpdateAttackAI(void)
 			if (m_Attack == true)
 			{
 				m_AttackCnt++;
-				//120フレームより小さいとき射撃
-				if (m_AttackCnt < 180 && m_AttackCnt % 5 == 0)
+				//200フレームより小さいとき射撃
+				if (m_AttackCnt < 200 && m_AttackCnt % 6 == 0)
 				{
 					pBossPass->GetGunPtr()->Shot();
 				}
-				//120フレームになったら初期化
-				else if (m_AttackCnt > 230)
+				//300フレームになったら初期化
+				else if (m_AttackCnt > 300)
 				{
 					SetRestartFlag(true);
 				}
@@ -262,11 +277,20 @@ void CBossAI::UpdateAttackAI(void)
 			{
 				m_Attack = true;//攻撃を可能にする
 				m_LaserRandom = (rand() % 2);
+
 			}
 			//攻撃が可能になったら
 			if (m_Attack == true)
 			{
 				m_AttackCnt++;
+
+				//レーザー発射の瞬間
+				if (m_AttackCnt == 30)
+				{
+					//音再生
+					CManager::GetSound()->Play(CSound::LABEL_SE_SHOT_BOSSLASER);
+				}
+
 				if (m_LaserRandom == 0)
 				{
 					if (m_AttackCnt > 30)
@@ -301,10 +325,20 @@ void CBossAI::UpdateAttackAI(void)
 			}
 			else
 			{
+
 				if (m_AttackCastCnt % 5 == 0)
 				{
+					//チャージエフェクト
 					CParticle::CreateFromText(pBossPass->GetPosition() - BOSS_UNDER_POS, D3DXVECTOR3(0.0f, 0.0f, CHossoLibrary::Random_PI()), CParticleParam::EFFECT_CHARGE_PARTICLE);
 					CParticle::CreateFromText(pBossPass->GetPosition() - BOSS_UNDER_POS, D3DXVECTOR3(0.0f, 0.0f, CHossoLibrary::Random_PI()), CParticleParam::EFFECT_CHARGE_CIRCLE);
+
+					//チャージ開始の瞬間
+					if (m_AttackCastCnt == 5)
+					{
+						//チャージ音再生
+						CManager::GetSound()->Play(CSound::LABEL_SE_SHOT_CHARGE);
+					}
+
 				}
 			}
 		}

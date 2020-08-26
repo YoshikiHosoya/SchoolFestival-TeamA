@@ -158,7 +158,7 @@ CGrenade * CGrenade::Create(D3DXVECTOR3 rot, CGrenadeFire::GRENADE_TYPE type)
 		pGrenade->SetModelConut(MODEL_BULLET_GRENADE);
 		break;
 	case CGrenadeFire::TANK_GRENADE:
-		pGrenade->SetModelConut(MODEL_BULLET_ROCKETLAUNCHER);
+		pGrenade->SetModelConut(MODEL_BULLET_TANKGRENADE);
 		break;
 	}
 

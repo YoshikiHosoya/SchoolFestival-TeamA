@@ -136,7 +136,7 @@ CRocketlauncher * CRocketlauncher::Create(D3DXVECTOR3 rot)
 	pRocketlauncher->Init();
 
 	//‰ñ“]—ÊÝ’è
-	pRocketlauncher->SetRot(rot);
+	pRocketlauncher->SetRot(D3DXVECTOR3(0.0f,0.0f, rot.z - D3DX_PI));
 
 	// ’e‚ÌˆÚ“®—ÊŒvŽZ
 	pRocketlauncher->CalcBulletMove(rot, CGun::GUNTYPE_ROCKETLAUNCHER);
