@@ -18,6 +18,7 @@
 #include "resultmanager.h"
 #include "rankingui.h"
 #include "scoremanager.h"
+#include "sound.h"
 #include <iostream>
 #include <mutex>
 #include <thread>
@@ -560,6 +561,9 @@ void CResultUI::TargetValue(const int &Target, int &Value, int Add , CMultiNumbe
 	{
 		// 値を加算
 		Value += Add;
+
+		//音の再生　ﾄｩﾙﾙﾙ
+		CManager::GetSound()->Play(CSound::LABEL_SE_ADD_SCORE00);
 
 		// 値が目標値を超えた時
 		if (Target < Value)

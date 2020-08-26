@@ -22,6 +22,7 @@
 #include "scene2D.h"
 #include "Boss_One.h"
 #include "WeakEnemy.h"
+#include "sound.h"
 
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
@@ -118,6 +119,28 @@ void CMap::MapModelLoad()
 	char			cReadText[128];										// 文字として読み取る
 	char			cHeadText[128];										// 比較用
 	char			cDie[128];											// 不要な文字
+
+
+	switch (m_MapNum)
+	{
+	case CMap::MAP_1_1:
+		CManager::GetSound()->StopAll();
+		CManager::GetSound()->Play(CSound::LABEL_BGM_STAGE_01);
+		break;
+
+	case CMap::MAP_1_BOSS:
+		CManager::GetSound()->StopAll();
+		CManager::GetSound()->Play(CSound::LABEL_BGM_STAGE_01_BOSS);
+		break;
+
+	case CMap::MAP_2_BOSS:
+		CManager::GetSound()->StopAll();
+		CManager::GetSound()->Play(CSound::LABEL_BGM_STAGE_02_BOSS);
+		break;
+
+	default:
+		break;
+	}
 
 	// ファイルを開く
 	pFile = fopen(m_MapModelFileName[m_MapNum], "r");
@@ -1277,7 +1300,10 @@ void CMap::AllDelete()
 		m_pHelicopter[nCnt] = nullptr;
 	}
 	// 全ての要素の削除
-	m_pMapModel.clear();
+	if (!m_bMapExclusion)
+	{
+		m_pMapModel.clear();
+	}
 	m_pObstacle.clear();
 	m_pEnemy.clear();
 	m_pPrisoner.clear();
@@ -1855,7 +1881,13 @@ void CMap::PrisonerDropTypeComboBox(int &nSelectType, int nNowSelect)
 #ifdef _DEBUG
 	std::vector<std::string > aPrisonerType = { "DESIGNATE_ONE", "DESIGNATE_RANGE", "ALL" };
 
-	if (CHossoLibrary::ImGui_Combobox(aPrisonerType, "DropType", nSelectType))
+	int nType = 0;
+
+	if (nSelectType > 3)
+	{
+		nType = 3;
+	}
+	if (CHossoLibrary::ImGui_Combobox(aPrisonerType, "DropType", nType))
 	{
 		// NULLチェック
 		if (m_pPrisoner[nNowSelect])
@@ -1864,10 +1896,10 @@ void CMap::PrisonerDropTypeComboBox(int &nSelectType, int nNowSelect)
 			CPrisoner::PRISONER_ITEM_DROPTYPE PrisonerType = m_pPrisoner[nNowSelect]->GetPrisonerDropType();
 
 			// 前回と違うとき
-			if (PrisonerType != nSelectType)
+			if (PrisonerType != nType)
 			{
 				// 種類代入
-				PrisonerType = (CPrisoner::PRISONER_ITEM_DROPTYPE)nSelectType;
+				PrisonerType = (CPrisoner::PRISONER_ITEM_DROPTYPE)nType;
 				// 捕虜のドロップタイプの設定
 				m_pPrisoner[nNowSelect]->SetPrisonerType(PrisonerType);
 			}
