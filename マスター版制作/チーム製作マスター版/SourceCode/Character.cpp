@@ -11,6 +11,7 @@
 #include "collision.h"
 #include "hosso\/Debug_ModelViewer.h"
 #include "particle.h"
+#include "sound.h"
 
 //=============================================================================
 // Ã“Iƒƒ“ƒo•Ï”‰Šú‰»
@@ -239,6 +240,7 @@ void CCharacter::Draw(void)
 //====================================================================
 void CCharacter::DamageReaction()
 {
+	CManager::GetSound()->Play(CSound::LABEL_SE_BULLET_HIT);
 	SetState(CHARACTER_STATE_DAMAGE_FLASHING);
 }
 //====================================================================
