@@ -20,6 +20,7 @@
 #include "Obstacle.h"
 #include "prisoner.h"
 #include "grenadefire.h"
+#include "sound.h"
 
 //====================================================================
 //マクロ定義
@@ -77,6 +78,8 @@ HRESULT CPlayertank::Init(void)
 	m_pGun->SetShotOffsetPos(D3DXVECTOR3(SHOT_BULLET_POS_X, SHOT_BULLET_POS_Y, SHOT_BULLET_POS_Z));
 	// 地面についているかのフラグ
 	m_bLand = true;
+	//初期化
+	m_nCntEngineSE = 0;
 	// 当たり判定生成
 	GetCollision()->SetPos(&GetPosition());
 	GetCollision()->SetPosOld(&GetPositionOld());
@@ -154,6 +157,9 @@ void CPlayertank::Update(void)
 			GetCollision()->ForTankCollision();
 		}
 	}
+
+	//乗り物のSE
+	TankSE();
 
 	// 判定をまとめて行う
 	Collision();
@@ -239,6 +245,40 @@ void CPlayertank::PadInput()
 		Move(MoveValue.x, -0.5f);
 	}
 
+}
+//====================================================================
+// 戦車の効果音
+//====================================================================
+void CPlayertank::TankSE()
+{
+	// プレイヤーのポインタを取得
+	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
+
+	//nullcheck
+	if (pPlayer)
+	{
+		if (pPlayer->GetRideFlag())
+		{
+			m_nCntEngineSE++;
+
+			//一定周期
+			if (m_nCntEngineSE % 120 == 1)
+			{
+				//エンジン音再生
+				CManager::GetSound()->Play(CSound::LABEL_SE_TANK_ENGINE);
+			}
+			//横移動しててジャンプしてない時
+			if (fabsf(GetMove().x) >= 1.0f && !GetJump() && m_nCntEngineSE % 10 == 0)
+			{
+				//音再生
+				CManager::GetSound()->Play(CSound::LABEL_SE_TANK_CATERPILLAR);
+			}
+		}
+		else
+		{
+			m_nCntEngineSE = 0;
+		}
+	}
 }
 
 //====================================================================
