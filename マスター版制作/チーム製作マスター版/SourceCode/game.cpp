@@ -253,6 +253,21 @@ void CGame::DebugCollision(CKeyboard *key)
 				C3DLine::SetDrawFlag(true);
 			}
 		}
+
+		if (key->GetKeyboardTrigger(DIK_8))
+		{
+			if (m_pMap->GetMapNum() - 1 > 0)
+			{
+				CManager::GetRenderer()->GetFade()->SetFade(CFADE::FADETYPE::FADETYPE_MAPMOVE, (CMap::MAP)(m_pMap->GetMapNum() - 1));
+			}
+		}
+		if (key->GetKeyboardTrigger(DIK_9))
+		{
+			if (m_pMap->GetMapNum() + 1 < CMap::MAP_MAX)
+			{
+				CManager::GetRenderer()->GetFade()->SetFade(CFADE::FADETYPE::FADETYPE_MAPMOVE, (CMap::MAP)(m_pMap->GetMapNum() + 1));
+			}
+		}
 	}
 }
 

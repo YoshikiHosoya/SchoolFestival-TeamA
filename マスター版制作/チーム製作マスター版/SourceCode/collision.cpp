@@ -33,7 +33,6 @@
 #include "scoremanager.h"
 #include "player.h"
 #include "playerui.h"
-#include "boss_one.h"
 #include "shield.h"
 //======================================================================================================================
 //
@@ -316,43 +315,6 @@ bool CCollision::ForPlayerBulletCollision(int nEnemyDamage, int nObstacleDamage,
 					}
 				}
 			}
-		}
-	}
-
-	//仮
-	// 当たり判定 相手がボス1だったら
-	// 敵の総数分
-	for (int nCnt = 0; nCnt < CManager::GetBaseMode()->GetMap()->GetMaxBoss_One(); nCnt++)
-	{
-		// エネミーのポインタ取得
-		CBoss_One *pBoss_One = CManager::GetBaseMode()->GetMap()->GetBoss_One(nCnt);
-		if (pBoss_One != nullptr)
-		{
-			//死亡してない時
-			if (pBoss_One->GetCharacterState() != CCharacter::CHARACTER_STATE_DEATH)
-			{
-				// 判定関数
-				if (this->OtherCollision2D(pBoss_One->GetCollision()))
-				{
-					CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
-					if (pPlayer != nullptr && pPlayer->GetPlayerUI())
-					{
-						pPlayer->GetPlayerUI()->SetScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_DAMAGE_BULLET));
-					}
-
-					// 敵のライフ減衰
-					pBoss_One->CCharacter::AddDamage(nEnemyDamage);
-
-					// 当たり範囲フラグをtrueにする
-					bHitFlag = true;
-
-					if (Penetration == false)
-					{
-						return bHitFlag;
-					}
-				}
-			}
-
 		}
 	}
 	return bHitFlag;

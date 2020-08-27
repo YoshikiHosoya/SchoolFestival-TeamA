@@ -22,7 +22,7 @@ MAPSET									# 0
 END_MAPSET
 
 BOSSONESET
-	POS		= 300 200 0
+	POS		= 400 250 0
 END_BOSSONESET
 
 //------------------------------------------------------------
@@ -47,42 +47,6 @@ END_BOSSONESET
 //	[ 2 ]	ランダムドロップする捕虜
 //
 //------------------------------------------------------------
-
-PRISONERSET									# 41
-	TYPE	= 0
-	POS		= 300 100 0
-	TYPE2	= 5
-END_PRISONERSET
-
-PRISONERSET									# 41
-	TYPE	= 0
-	POS		= 200 100 0
-	TYPE2	= 5
-END_PRISONERSET
-
-PRISONERSET									# 41
-	TYPE	= 2
-	POS		= 100 100 0
-END_PRISONERSET
-
-PRISONERSET									# 41
-	TYPE	= 2
-	POS		= 0 100 0
-END_PRISONERSET
-PRISONERSET									# 41
-	TYPE	= 2
-	POS		= -300 100 0
-END_PRISONERSET
-
-PRISONERSET									# 41
-	TYPE	= 2
-	POS		= -200 100 0
-END_PRISONERSET
-
-PRISONERSET									# 41
-	TYPE	= 2
-	POS		= -100 100 0
-END_PRISONERSET
 
 //------------------------------------------------------------
 // 障害物の配置情報
