@@ -63,11 +63,6 @@ HRESULT CGame::Init(void)
 
 	m_pPlayer	= CPlayer::Create();
 
-	for (int nCnt = 0; nCnt < CMap::WAVE_MAX; nCnt++)
-	{
-		m_pMap->WaveLoad((CMap::WAVE)nCnt);
-	}
-
 	m_pPause->CreatePause();
 
 	//ゲームの進行管理クラス作成

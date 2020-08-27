@@ -28,7 +28,6 @@
 // 静的メンバ変数の初期化
 // =====================================================================================================================================================================
 CMap::MAP					CMap::m_MapNum				= MAP_TUTORIAL;				// マップ番号
-CMap::WAVE					CMap::m_WaveNum				= WAVE_1_1_1;				// ウェーブ番号
 CMap::ARRANGEMENT_MODEL		CMap::m_ArrangmentModel		= ARRANGEMENT_MODEL_MAP;	// 配置するモデルの種類
 CMap::WAVE_INFO				CMap::m_aWaveInfo[WAVE_MAX] = {};						// ウェーブの情報
 
@@ -112,6 +111,7 @@ CMap::CMap()
 // =====================================================================================================================================================================
 CMap::~CMap()
 {
+
 }
 
 // =====================================================================================================================================================================
@@ -598,11 +598,8 @@ void CMap::MapLoad(MAP MapNum)
 // ウェーブのロード
 //
 // =====================================================================================================================================================================
-void CMap::WaveLoad(WAVE WaveNum)
+void CMap::WaveLoad()
 {
-	// 現在のウェーブ番号
-	m_WaveNum = WaveNum;
-
 	FILE		*pFile				= nullptr;							// ファイルポインタ
 	char		*cFileName			= nullptr;							// ファイル名
 	int			nFrame				= 0;								// フレーム
@@ -616,123 +613,158 @@ void CMap::WaveLoad(WAVE WaveNum)
 	char		cHeadText[128];											// 比較用
 	char		cDie[128];												// 不要な文字
 
-	// ファイルを開く
- 	pFile = fopen(m_WaveFileName[WaveNum], "r");
-
-	// 開いているとき
-	if (pFile != NULL)
+	for (int nCnt = 0; nCnt < CMap::WAVE::WAVE_MAX; nCnt++)
 	{
-		// SCRIPTが来るまでループ
-		while (strcmp(cHeadText, "SCRIPT") != 0)
-		{
-			fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
-			sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
-		}
+		// ファイルを開く
+		pFile = fopen(m_WaveFileName[nCnt], "r");
 
-		// SCRIPTが来たら
-		if (strcmp(cHeadText, "SCRIPT") == 0)
+		// 開いているとき
+		if (pFile != NULL)
 		{
-			// END_SCRIPTが来るまでループ
-			while (strcmp(cHeadText, "END_SCRIPT") != 0)
+			// SCRIPTが来るまでループ
+			while (strcmp(cHeadText, "SCRIPT") != 0)
 			{
-				fgets(cReadText, sizeof(cReadText), pFile);
-				sscanf(cReadText, "%s", &cHeadText);
+				fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
+				sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
+			}
 
-				// イベントが起きるマップ番号
-				if (strcmp(cHeadText, "EVENT_BEGIN_MAP") == 0)
+			// SCRIPTが来たら
+			if (strcmp(cHeadText, "SCRIPT") == 0)
+			{
+				// END_SCRIPTが来るまでループ
+				while (strcmp(cHeadText, "END_SCRIPT") != 0)
 				{
-					sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_aWaveInfo[WaveNum].EventBeginMapNum);
-				}
+					fgets(cReadText, sizeof(cReadText), pFile);
+					sscanf(cReadText, "%s", &cHeadText);
 
-				// イベントが起きる位置を保存
-				if (strcmp(cHeadText, "EVENTPOS") == 0)
-				{
-					sscanf(cReadText, "%s %s %f", &cDie, &cDie, &m_aWaveInfo[WaveNum].EventPos.x);
-				}
-
-				char cEndSetText[32];			// END_SET
-
-				// 読み込みモデル
-				if (strcmp(cHeadText, "ENEMYSET") == 0)
-				{
-					sprintf(cEndSetText, "%s", "END_ENEMYSET");
-					nModelType = ARRANGEMENT_MODEL_ENEMY;
-				}
-				else if (strcmp(cHeadText, "PRISONERSET") == 0)
-				{
-					sprintf(cEndSetText, "%s", "END_PRISONERSET");
-					nModelType = ARRANGEMENT_MODEL_PRISONER;
-				}
-
-				if (nModelType >= 0)
-				{
-					pParam = new WAVE_PARAM;
-
-					// END_〇〇SETが来るまでループ
-					while (strcmp(cHeadText, cEndSetText) != 0)
+					// イベントが起きるマップ番号
+					if (strcmp(cHeadText, "EVENT_BEGIN_MAP") == 0)
 					{
-						fgets(cReadText, sizeof(cReadText), pFile);
-						sscanf(cReadText, "%s", &cHeadText);
+						sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_aWaveInfo[nCnt].EventBeginMapNum);
+					}
 
-						// TYPEが来たら
-						if (strcmp(cHeadText, "TYPE") == 0)
-						{
-							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &nType);
-						}
-						// ITEMTYPEが来たら
-						else if (strcmp(cHeadText, "ITEMTYPE") == 0)
-						{
-							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &nItemType);
-						}
-						// POSが来たら
-						else if (strcmp(cHeadText, "POS") == 0)
-						{
-							sscanf(cReadText, "%s %s %f %f %f", &cDie, &cDie, &pos.x, &pos.y, &pos.z);
-						}
-						// FRAMEが来たら
-						else if (strcmp(cHeadText, "FRAME") == 0)
-						{
-							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &nFrame);
-						}
-						// EVENTが来たら
-						else if (strcmp(cHeadText, "EVENT") == 0)
-						{
-							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &nEvent);
-						}
-						else if (strcmp(cHeadText, cEndSetText) == 0)
-						{
-							pParam->pos			= pos;
-							pParam->nType		= nType;
-							pParam->nItemType	= nItemType;
-							pParam->nFrame		= nFrame;
-							pParam->bEvent		= nEvent ? true : false;
+					// イベントが起きる位置を保存
+					if (strcmp(cHeadText, "EVENTPOS") == 0)
+					{
+						sscanf(cReadText, "%s %s %f", &cDie, &cDie, &m_aWaveInfo[nCnt].EventPos.x);
+					}
 
-							// 情報保存
-							if (nModelType == ARRANGEMENT_MODEL_ENEMY)
+					char cEndSetText[32];			// END_SET
+
+					// 読み込みモデル
+					if (strcmp(cHeadText, "ENEMYSET") == 0)
+					{
+						sprintf(cEndSetText, "%s", "END_ENEMYSET");
+						nModelType = ARRANGEMENT_MODEL_ENEMY;
+					}
+					else if (strcmp(cHeadText, "PRISONERSET") == 0)
+					{
+						sprintf(cEndSetText, "%s", "END_PRISONERSET");
+						nModelType = ARRANGEMENT_MODEL_PRISONER;
+					}
+
+					if (nModelType >= 0)
+					{
+						pParam = new WAVE_PARAM;
+
+						// END_〇〇SETが来るまでループ
+						while (strcmp(cHeadText, cEndSetText) != 0)
+						{
+							fgets(cReadText, sizeof(cReadText), pFile);
+							sscanf(cReadText, "%s", &cHeadText);
+
+							// TYPEが来たら
+							if (strcmp(cHeadText, "TYPE") == 0)
 							{
-								m_aWaveInfo[WaveNum].EnemyWaveInfo.emplace_back(pParam);
+								sscanf(cReadText, "%s %s %d", &cDie, &cDie, &nType);
 							}
-							else if (nModelType == ARRANGEMENT_MODEL_PRISONER)
+							// ITEMTYPEが来たら
+							else if (strcmp(cHeadText, "ITEMTYPE") == 0)
 							{
-								m_aWaveInfo[WaveNum].PrisonerWaveInfo.emplace_back(pParam);
+								sscanf(cReadText, "%s %s %d", &cDie, &cDie, &nItemType);
 							}
-							nModelType = -1;
+							// POSが来たら
+							else if (strcmp(cHeadText, "POS") == 0)
+							{
+								sscanf(cReadText, "%s %s %f %f %f", &cDie, &cDie, &pos.x, &pos.y, &pos.z);
+							}
+							// FRAMEが来たら
+							else if (strcmp(cHeadText, "FRAME") == 0)
+							{
+								sscanf(cReadText, "%s %s %d", &cDie, &cDie, &nFrame);
+							}
+							// EVENTが来たら
+							else if (strcmp(cHeadText, "EVENT") == 0)
+							{
+								sscanf(cReadText, "%s %s %d", &cDie, &cDie, &nEvent);
+							}
+							else if (strcmp(cHeadText, cEndSetText) == 0)
+							{
+								pParam->pos = pos;
+								pParam->nType = nType;
+								pParam->nItemType = nItemType;
+								pParam->nFrame = nFrame;
+								pParam->bEvent = nEvent ? true : false;
+
+								// 情報保存
+								if (nModelType == ARRANGEMENT_MODEL_ENEMY)
+								{
+									m_aWaveInfo[nCnt].EnemyWaveInfo.emplace_back(pParam);
+								}
+								else if (nModelType == ARRANGEMENT_MODEL_PRISONER)
+								{
+									m_aWaveInfo[nCnt].PrisonerWaveInfo.emplace_back(pParam);
+								}
+								nModelType = -1;
+							}
 						}
 					}
 				}
 			}
+
+			//パラメータロード
+			std::cout << "Load WaveInfo - " << nCnt << m_WaveFileName[nCnt] << NEWLINE;
+
+			// ファイルを閉じる
+			fclose(pFile);
 		}
-
-		//パラメータロード
-		std::cout << "Load WaveInfo - " << WaveNum << m_WaveFileName[WaveNum] << NEWLINE;
-
-		// ファイルを閉じる
-		fclose(pFile);
+		else
+		{
+			// 読み込み失敗時の警告表示
+			MessageBox(NULL, "読み込み失敗", m_WaveFileName[nCnt], MB_ICONWARNING);
+		}
 	}
-	else
+}
+// =====================================================================================================================================================================
+//
+// ウェーブ情報開放
+//
+// =====================================================================================================================================================================
+void CMap::WaveUnLoad()
+{
+	if (m_aWaveInfo)
 	{
-		// 読み込み失敗時の警告表示
-		MessageBox(NULL, "読み込み失敗", m_WaveFileName[WaveNum], MB_ICONWARNING);
+		for (int nCntWave = 0; nCntWave < CMap::WAVE::WAVE_MAX; nCntWave++)
+		{
+			if (!m_aWaveInfo[nCntWave].EnemyWaveInfo.empty())
+			{
+				for (size_t nCnt = 0; nCnt < m_aWaveInfo[nCntWave].EnemyWaveInfo.size(); nCnt++)
+				{
+					delete m_aWaveInfo[nCntWave].EnemyWaveInfo[nCnt];
+					m_aWaveInfo[nCntWave].EnemyWaveInfo[nCnt] = nullptr;
+				}
+			}
+			if (!m_aWaveInfo[nCntWave].PrisonerWaveInfo.empty())
+			{
+				for (size_t nCnt = 0; nCnt < m_aWaveInfo[nCntWave].PrisonerWaveInfo.size(); nCnt++)
+				{
+					delete m_aWaveInfo[nCntWave].PrisonerWaveInfo[nCnt];
+					m_aWaveInfo[nCntWave].PrisonerWaveInfo[nCnt] = nullptr;
+				}
+			}
+			m_aWaveInfo[nCntWave].EnemyWaveInfo.clear();
+			m_aWaveInfo[nCntWave].PrisonerWaveInfo.clear();
+		}
 	}
 }
 

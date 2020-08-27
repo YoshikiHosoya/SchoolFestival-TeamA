@@ -61,13 +61,7 @@ HRESULT CTitle::Init(void)
 //==========================================================
 void CTitle::Uninit(void)
 {
-	// タイトルUIのポインタ
-	if (m_pTitleUI)
-	{
-		// 終了
-		m_pTitleUI->Uninit();
-		m_pTitleUI = nullptr;
-	}
+
 }
 
 //==========================================================
