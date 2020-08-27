@@ -20,6 +20,8 @@
 #include "sound.h"
 #include "scoremanager.h"
 #include "particle.h"
+#include "grenadefire.h"
+
 // =====================================================================================================================================================================
 // Ã“Iƒƒ“ƒo•Ï”‚Ì‰Šú‰»
 // =====================================================================================================================================================================
@@ -260,7 +262,7 @@ void CItem::ItemType(ITEMTYPE type)
 	case (ITEMTYPE_BOMBUP): {
 		// SE‚ğ–Â‚ç‚·
 		CManager::GetSound()->Play(CSound::LABEL_SE_GET_WEAPON);
-
+		pPlayer->GetGrenadeFire()->GrenadeAddAmmo();
 	}break;
 
 		// æ‚è•¨‚Ì‘Ï‹v’l‚ğ‰ñ•œ‚·‚é
@@ -274,7 +276,7 @@ void CItem::ItemType(ITEMTYPE type)
 	case (ITEMTYPE_BULLETUP): {
 		// SE‚ğ–Â‚ç‚·
 		CManager::GetSound()->Play(CSound::LABEL_SE_GET_WEAPON);
-
+		pPlayer->GetGun()->GunAddAmmo(pPlayer->GetGun()->GetGunType());
 	}break;
 
 	default:
