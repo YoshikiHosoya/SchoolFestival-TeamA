@@ -52,16 +52,7 @@ CGrenadeFire::~CGrenadeFire()
 // =====================================================================================================================================================================
 HRESULT CGrenadeFire::Init()
 {
-	// Žc’e”
-	switch (m_type)
-	{
-	case CGrenadeFire::HAND_GRENADE:
-		m_nAmmo = CBullet::GetBulletParam(CGun::GUNTYPE_HANDGRENADE)->nAmmo;
-		break;
-	case CGrenadeFire::TANK_GRENADE:
-		m_nAmmo = CBullet::GetBulletParam(CGun::GUNTYPE_TANKGRENADE)->nAmmo;
-		break;
-	}
+	SetGrenadeAmmoDefault();
 
 	return S_OK;
 }
@@ -183,6 +174,25 @@ void CGrenadeFire::Fire(D3DXVECTOR3 rot)
 				break;
 			}
 		}
+	}
+}
+
+// =====================================================================================================================================================================
+//
+// ƒOƒŒƒl[ƒh‚Ì’e”‰ŠúÝ’è
+//
+// =====================================================================================================================================================================
+void CGrenadeFire::SetGrenadeAmmoDefault()
+{
+	// Žc’e”
+	switch (m_type)
+	{
+	case CGrenadeFire::HAND_GRENADE:
+		m_nAmmo = CBullet::GetBulletParam(CGun::GUNTYPE_HANDGRENADE)->nAmmo;
+		break;
+	case CGrenadeFire::TANK_GRENADE:
+		m_nAmmo = CBullet::GetBulletParam(CGun::GUNTYPE_TANKGRENADE)->nAmmo;
+		break;
 	}
 }
 

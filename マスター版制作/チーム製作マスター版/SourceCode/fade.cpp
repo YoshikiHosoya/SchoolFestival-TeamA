@@ -323,7 +323,11 @@ void CFADE::FadeOut()
 
 		if (m_fadeType == CFADE::FADETYPE::FADETYPE_STAGE_CHANGE)
 		{
+			//ゲームの状態を通常に戻す
 			CManager::GetGame()->GetGameManager()->SetGameState(CGameManager::GAMESTATE::NORMAL);
+
+			//プレイヤーリセット
+			CManager::GetBaseMode()->GetPlayer()->ResetPlayer();
 
 		}
 		break;

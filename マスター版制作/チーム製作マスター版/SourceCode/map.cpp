@@ -140,6 +140,12 @@ void CMap::MapModelLoad()
 		CManager::GetSound()->Play(CSound::LABEL_BGM_STAGE_01);
 		break;
 
+	case CMap::MAP_2_1:
+		CManager::GetSound()->StopAll();
+		CManager::GetSound()->Play(CSound::LABEL_BGM_STAGE_02);
+		break;
+
+
 	case CMap::MAP_1_BOSS:
 		CManager::GetSound()->StopAll();
 		CManager::GetSound()->Play(CSound::LABEL_BGM_STAGE_01_BOSS);
