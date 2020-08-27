@@ -71,6 +71,8 @@ FILENAME_LIST CTexture::m_aTexFileName =
 	{ "data/TEXTURE/BG/sky.jpg" },							//空の背景
 
 	{ "data/TEXTURE/UI/Game_UI/go.png" },					//Goサイン
+	{ "data/TEXTURE/UI/Game_UI/Gameover.png" },				//ゲームオーバー
+
 };
 
 //テクスチャ名の設定
