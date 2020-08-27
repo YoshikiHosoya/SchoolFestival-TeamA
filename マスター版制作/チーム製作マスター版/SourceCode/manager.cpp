@@ -23,7 +23,7 @@ CKeyboard		*CManager::m_pInputKeyboard	= nullptr;
 CParticle		*CManager::m_Particle		= nullptr;
 CBaseMode		*CManager::m_pBaseMode		= nullptr;
 CMouse			*CManager::m_pMouse			= nullptr;
-CManager::MODE	CManager::m_mode = CManager::MODE_GAME;
+CManager::MODE	CManager::m_mode			= CManager::MODE_TITLE;
 CXInputPad		*CManager::m_pPad			= nullptr;
 CSound			*CManager::m_pSound = nullptr;
 

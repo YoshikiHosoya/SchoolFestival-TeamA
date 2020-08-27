@@ -108,11 +108,12 @@ public:
 
 	/* 静的メンバ関数 */
 	static	CMap	*MapCreate();													// マップの生成
+	static void		WaveLoad();														// ウェーブのロード
+	static void		WaveUnLoad();													// ウェーブのロード
 
 	/* メンバ関数 */
 	void			MapUpdate();													// マップの更新
 	void			MapLoad(MAP MapNum);											// マップのロード
-	void			WaveLoad(WAVE WaveNum);											// ウェーブのロード
 	void			UpdateDieFlag();												// 死亡フラグ確認関数
 	void			AllDelete();													// 配置しているモデルを全て破棄
 	void			WaveCreate(int nModelType, D3DXVECTOR3 eventpos, WAVE_PARAM *pWaveParam);				// Waveの生成
@@ -182,7 +183,6 @@ private:
 	static char					*m_WaveFileName[WAVE_MAX];					// ウェーブファイル名
 
 	static MAP					m_MapNum;									// マップ番号
-	static WAVE					m_WaveNum;									// ウェーブ番号
 	static ARRANGEMENT_MODEL	m_ArrangmentModel;							// 配置するモデルの種類
 	static WAVE_INFO			m_aWaveInfo[WAVE_MAX];						// ウェーブの情報
 
