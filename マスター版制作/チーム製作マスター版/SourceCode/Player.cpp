@@ -92,8 +92,6 @@ HRESULT CPlayer::Init(void)
 	CCharacter::Init();
 	LoadOffset(CCharacter::CHARACTER_TYPE_PLAYER);
 	SetCharacterType(CCharacter::CHARACTER_TYPE_PLAYER);
-	m_bAttack = false;
-	m_bKnifeAttack = false;
 
 	 // 銃の生成
 	m_pGun = CGun::Create();
@@ -137,8 +135,8 @@ HRESULT CPlayer::Init(void)
 	// ゲームモードだった時
 	else if(CManager::GetMode() == CManager::MODE_GAME)
 	{
-		SetPosition(m_pos[0]);
-		SetLife(m_nLife[0]);
+		//プレイヤー設定
+		ResetPlayer();
 	}
 
 	//初期の向き
@@ -489,13 +487,6 @@ void CPlayer::CollisionUpdate(void)
 				m_bAttack = false;
 			}
 
-			// 障害物との判定
-			//if (GetCollision()->ForPlayer_ObstacleCollision())
-			//{
-			//	// ジャンプフラグを可能にする
-			//	CCharacter::SetJump(true);
-			//}
-
 			// アイテムとの判定
 			if (GetCollision()->ForPlayer_ItemCollision())
 			{
@@ -615,7 +606,7 @@ bool CPlayer::DefaultMotion(void)
 {
 	if (GetJump() == true)
 	{
-SetMotion(CCharacter::PLAYER_MOTION_NORMAL);
+		SetMotion(CCharacter::PLAYER_MOTION_NORMAL);
 	}
 	return true;
 }
@@ -625,10 +616,29 @@ SetMotion(CCharacter::PLAYER_MOTION_NORMAL);
 void CPlayer::MapChangePlayerRespawn()
 {
 	SetState(CCharacter::CHARACTER_STATE_INVINCIBLE);
-	SetPosition(ZeroVector3);
-	SetPosition(ZeroVector3);
+	SetPosition(m_pos[0]);
 	m_bRideVehicle = false;
+	SetMotion(CCharacter::PLAYER_MOTION_NORMAL);
+}
+
+//====================================================================
+//プレイヤーリセット
+//====================================================================
+void CPlayer::ResetPlayer()
+{
+	SetPosition(m_pos[0]);
+	SetLife(m_nLife[0]);
+	SetState(CCharacter::CHARACTER_STATE_INVINCIBLE);
+	SetMotion(CCharacter::PLAYER_MOTION_NORMAL);
+	m_pGun->SetGunType(CGun::GUNTYPE_HANDGUN);
 	m_pKnife->EndMeleeAttack();
+	SetCharacterDirection(DIRECTION::RIGHT);
+	m_pGrenadeFire->SetGrenadeAmmoDefault();
+	m_bRideVehicle = false;
+	m_bAttack = false;
+	m_bCruch = false;
+	m_bKnifeAttack = false;
+	m_bRespawn = false;
 }
 
 //====================================================================

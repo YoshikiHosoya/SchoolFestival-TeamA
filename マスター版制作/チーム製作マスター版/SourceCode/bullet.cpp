@@ -17,6 +17,7 @@
 #include "Obstacle.h"
 #include "prisoner.h"
 #include "particle.h"
+#include "sound.h"
 
 // =====================================================================================================================================================================
 // Ã“Iƒƒ“ƒo•Ï”‚Ì‰Šú‰»
@@ -44,13 +45,13 @@ char *CBullet::m_BulletFileName[CGun::GUNTYPE_MAX] =
 	{ "data/Load/Gun/TankGrenade.txt" },			// íŽÔ‚ÌƒOƒŒƒl[ƒh
 	{ "data/Load/Gun/TrackingGun.txt" },			// ’Ç]e
 	{ "data/Load/Gun/DiffusionGun.txt" },			// ŠgŽUe
-	{ "data/Load/Gun/BossLazerGun.txt" },			// ŠgŽUe
+	{ "data/Load/Gun/BossLazerGun.txt" },			// ƒ{ƒX‚ÌƒŒ[ƒU[
+	{ "data/Load/Gun/HandGun_Enemy.txt" },			// “G‚Ìƒnƒ“ƒhƒKƒ“
 };
 
 // =====================================================================================================================================================================
 // ƒ}ƒNƒ’è‹`
 // =====================================================================================================================================================================
-#define BULLET_LIFE				(100)			// ’e‚Ì‘Ì—Í
 
 // =====================================================================================================================================================================
 //
@@ -138,6 +139,10 @@ void CBullet::Update(void)
 			// ƒvƒŒƒCƒ„[‚Ì’e‚Ì”»’è
 			if (GetCollision()->ForPlayerBulletCollision(m_BulletParam[m_GunType].nPower, m_BulletParam[m_GunType].nPower, false))
 			{
+				//‰¹Ä¶
+				//“G‚â•ß—¸‚É“–‚½‚Á‚½Žž‚É‰¹o‚µ‚½‚¢
+				BulletHitSound();
+
 				// ’e‚Ìíœ
 				DeleteBullet();
 			}
@@ -306,7 +311,8 @@ void CBullet::BulletLoad()
 		}
 		else
 		{
-			MessageBox(NULL, "’e‚Ìƒpƒ‰ƒ[ƒ^[“Ç‚Ýž‚ÝŽ¸”s", "Œx", MB_ICONWARNING);
+			// “Ç‚Ýž‚ÝŽ¸”sŽž‚ÌŒx•\Ž¦
+			MessageBox(NULL, "’e‚Ìƒpƒ‰ƒ[ƒ^[“Ç‚Ýž‚ÝŽ¸”s" ,m_BulletFileName[nCnt], MB_ICONWARNING);
 		}
 	}
 }
@@ -346,3 +352,32 @@ void CBullet::SetBulletParam(CGun::GUN_TYPE type)
 	GetCollision()->SetMove(&m_move);
 	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_NORMAL);
 }
+
+// =====================================================================================================================================================================
+//
+// ’e‚ª“–‚½‚Á‚½Žž‚É‰¹Ä¶
+//
+// =====================================================================================================================================================================
+void CBullet::BulletHitSound()
+{
+	//e‚ÌŽí—Þ‚É‚æ‚Á‚Ä‰¹Ä¶
+	switch (m_GunType)
+	{
+	case CGun::GUNTYPE_HANDGUN:
+	case CGun::GUNTYPE_HEAVYMACHINEGUN:
+	case CGun::GUNTYPE_TANKGUN:
+	case CGun::GUNTYPE_PLANEGUN:
+	case CGun::GUNTYPE_HELIGUN:
+	case CGun::GUNTYPE_BALKAN:
+	case CGun::GUNTYPE_TRACKINGGUN:
+	case CGun::GUNTYPE_DIFFUSIONGUN:
+		//’e‚ª“–‚½‚Á‚½SE
+		CManager::GetSound()->Play(CSound::LABEL_SE_BULLET_HIT);
+		break;
+
+	default:
+		break;
+	}
+}
+
+

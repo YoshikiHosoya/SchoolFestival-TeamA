@@ -1,17 +1,16 @@
 #------------------------------------------------------------------------------
-# プレイヤーの情報
+# 弾のパラメーター
 #------------------------------------------------------------------------------
-
 SCRIPT
 
-PLAYERSET
-	LIFE		= 3
-	RESPAEN		= 120
-	RUNSPEED	= 0.5
-	CROUCHSPEED	= 0.3
-	RIDEJUMP	= 20
-	JUMP		= 27
-	POS			= -300.0 100.0 0.0
-END_PLAYERSET
+BULLETSET									# 0
+	SPEED			= 8
+	LIFE			= 450
+	POWER			= 1
+	AMMO			= 999
+	TRIGGER			= 1
+	INTERVAL		= 60
+	COLLISIONSIZE	= 10 10 0
+END_BULLETSET
 
 END_SCRIPT

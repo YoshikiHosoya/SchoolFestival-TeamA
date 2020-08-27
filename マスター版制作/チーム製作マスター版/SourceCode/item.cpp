@@ -20,6 +20,8 @@
 #include "sound.h"
 #include "scoremanager.h"
 #include "particle.h"
+#include "grenadefire.h"
+
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
 // =====================================================================================================================================================================
@@ -244,6 +246,9 @@ void CItem::ItemType(ITEMTYPE type)
 	}break;
 		// 宝石
 	case (ITEMTYPE_JEWELRY): {
+		// SEを鳴らす
+		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
+
 		// スコアアップ
 		pPlayer->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_JEWELRY));
 	}break;
@@ -260,7 +265,7 @@ void CItem::ItemType(ITEMTYPE type)
 	case (ITEMTYPE_BOMBUP): {
 		// SEを鳴らす
 		CManager::GetSound()->Play(CSound::LABEL_SE_GET_WEAPON);
-
+		pPlayer->GetGrenadeFire()->GrenadeAddAmmo();
 	}break;
 
 		// 乗り物の耐久値を回復する
@@ -274,7 +279,7 @@ void CItem::ItemType(ITEMTYPE type)
 	case (ITEMTYPE_BULLETUP): {
 		// SEを鳴らす
 		CManager::GetSound()->Play(CSound::LABEL_SE_GET_WEAPON);
-
+		pPlayer->GetGun()->GunAddAmmo(pPlayer->GetGun()->GetGunType());
 	}break;
 
 	default:

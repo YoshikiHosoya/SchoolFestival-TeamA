@@ -21,20 +21,20 @@ SCRIPT
 		TEXTURE = 1							//テクスチャ
 		COLLISION_SIZE_CALC = 1					//コリジョンのサイズの計算
 		COLLISION_ATTACK_VALUE = 1				//攻撃力
-		COLLISION_COUNT = 5					//判定のカウント
+		COLLISION_COUNT = 1					//判定のカウント
 		PENETRATION = 1					//貫通するかどうか
 		COLLISION_SIZE = 5.00 500.00 0.00		//コリジョンのサイズ
 		SHAPE = 3								//パーティクルの出し方
 		LIFE = 50								//ライフ
 		NUMBER = 50								//個数
-		SPEED = 65.5								//速度
+		SPEED = 43.5								//速度
 		RANGE = 0.5								//範囲
-		ALPHADAMPING = 0.80						//アルファ値の減衰値
+		ALPHADAMPING = 0.86						//アルファ値の減衰値
 		GRAVITYPOWER = 0.80						//重力の強さ
 		LOCALPOS = 0.00 0.00 0.00				//ローカル座標
 		LOCALPOS_RANGE = 0.00 0.00 0.00			//ローカル座標がランダム時の値の範囲
-		SIZE = 5.00 150.00 0.00				//サイズ
-		SIZEDAMPING = 0.93 1.10 0.00			//サイズ減衰量
+		SIZE = 4.50 137.00 0.00				//サイズ
+		SIZEDAMPING = 0.97 1.10 0.00			//サイズ減衰量
 		COLOR = 0.7 1.0 0.8 1.0					//色
 		ROT = 0.00 0.00 0.00					//回転量
 

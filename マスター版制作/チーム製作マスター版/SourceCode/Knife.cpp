@@ -13,6 +13,7 @@
 #include "map.h"
 #include "basemode.h"
 #include "item.h"
+#include "sound.h"
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
 // =====================================================================================================================================================================
@@ -236,18 +237,41 @@ void CKnife::EndMeleeAttack()
 // =====================================================================================================================================================================
 void CKnife::CollisionKnife()
 {
+	bool bHit = false;
+	//ゲームの時のみ
+	//ビューワ上とかで判定おこさない
 	if (CManager::GetMode() == CManager::MODE_GAME)
 	{
+		//nullcheck
 		if (m_pCollision)
 		{
+			//持ち主がプレイヤーの場合
 			if (m_tag == TAG::TAG_PLAYER)
 			{
-				m_pCollision->ForPlayerBulletCollision(PLAYER_KNIFE_DAMAGE, PLAYER_KNIFE_DAMAGE, true);
+				//敵、捕虜、障害物と判定
+				if (m_pCollision->ForPlayerBulletCollision(PLAYER_KNIFE_DAMAGE, PLAYER_KNIFE_DAMAGE, true))
+				{
+					//true
+					bHit = true;
+				}
 			}
+			//持ち主が敵の場合
 			else if (m_tag == TAG::TAG_ENEMY)
 			{
-				m_pCollision->ForEnemyCollision(1, 1, true);
+				//プレイヤー側との判定
+				if (m_pCollision->ForEnemyCollision(1, 1, true))
+				{
+					//当たってた時
+					bHit = true;
+				}
 			}
 		}
+	}
+
+	//当たっていた場合
+	if (bHit)
+	{
+		//音再生
+		CManager::GetSound()->Play(CSound::LABEL_SE_KNIFE_HIT);
 	}
 }

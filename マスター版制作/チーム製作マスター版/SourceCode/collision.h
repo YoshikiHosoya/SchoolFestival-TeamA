@@ -77,6 +77,7 @@ public:
 	bool CharCollision2D(CCollision *pCollision);						// キャラクター用板型の当たり判定
 	bool OtherCollision2D(CCollision *pCollision);						// 板型の当たり判定
 	bool BlockCollision2D(CCollision *pCollision);						// 板型ブロックの当たり判定
+	bool BlockNotUpsideCollision2D(CCollision *pCollision);						// 板型ブロックの当たり判定
 	bool RayBlockCollision(CMap *pMap, D3DXMATRIX *pMat);				// Rayの判定 キャラクター
 	bool RayCollision(CMap *pMap);										// Rayの判定 弾など
 	bool RayFloorCollision(CMap *pMap, D3DXMATRIX *pMat,D3DXVECTOR3 pdirection,D3DXVECTOR3 ppos);// Rayの判定 前方の床

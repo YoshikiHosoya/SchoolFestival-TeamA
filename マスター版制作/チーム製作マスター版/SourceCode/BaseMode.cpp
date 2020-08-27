@@ -18,6 +18,7 @@
 #include "player.h"
 #include "boss_one.h"
 #include "grenade.h"
+#include "map.h"
 
 //==========================================================
 //デバッグコマンド
@@ -143,6 +144,8 @@ void CBaseMode::BaseLoad(HWND hWnd)
 	CPlayer::PlayerLoad();
 	// ボス1のデータの読み込み ドラゴンノスケ
 	CBoss_One::Boss_One_DataLoad();
+	// ウェーブ情報読み込み
+	CMap::WaveLoad();
 }
 //==========================================================
 //生成したものを全て破棄
@@ -152,4 +155,6 @@ void CBaseMode::BaseUnload(void)
 	CModel::UnLoad();
 	CTexture::TexUnload();
 	CCharacter::CharacterUnLoad();
+	CMap::WaveUnLoad();
+
 }
