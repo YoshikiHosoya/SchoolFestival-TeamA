@@ -583,7 +583,6 @@ void CMap::MapLoad(MAP MapNum)
 	{
 		CManager::GetRenderer()->GetCamera()->SetCameraStopMove(true);
 		CManager::GetRenderer()->GetCamera()->SetPosR(D3DXVECTOR3(0.0f, 200.0f, 0.0f));
-
 	}
 
 }
@@ -928,6 +927,7 @@ void CMap::SaveModelHeader(FILE * pFile, int ModelType)
 		fprintf(pFile, COMMENT02);
 		fprintf(pFile, "// 捕虜の種類 ( ITEMTYPE )\n");
 		fprintf(pFile, COMMENT01);
+		fprintf(pFile, "//	[ -1 ]	NONE\n");
 		fprintf(pFile, "//	[ 0 ]	ヘビーマシンガン\n");
 		fprintf(pFile, "//	[ 1 ]	ショットガン\n");
 		fprintf(pFile, "//	[ 2 ]	レーザーガン\n");
@@ -1907,7 +1907,7 @@ void CMap::PrisonerDropTypeComboBox(int &nSelectType, int nNowSelect)
 #ifdef _DEBUG
 	std::vector<std::string > aPrisonerType = { "DESIGNATE_ONE", "DESIGNATE_RANGE", "ALL" };
 
-	// 現在のタイプを反映
+	// 現在のドロップタイプを反映
 	nSelectType = (int)m_pPrisoner[nNowSelect]->GetPrisonerDropType();
 
 	if (CHossoLibrary::ImGui_Combobox(aPrisonerType, "DropType", nSelectType))
@@ -1937,10 +1937,13 @@ void CMap::PrisonerDropTypeComboBox(int &nSelectType, int nNowSelect)
 // 捕虜のアイテムタイプのコンボボックス
 //
 // =====================================================================================================================================================================
-void CMap::PrisonerItemTypeComboBox(int & nSelectType, int nNowSelect)
+void CMap::PrisonerItemTypeComboBox(int &nSelectType, int nNowSelect)
 {
 #ifdef _DEBUG
 	std::vector<std::string > aPrisonerItem = { "NONE","HMG","SG","LG","RL","FS","BEAR","COIN","JEWELRY","MEDAL","BOMBUP","ENERGYUP","BULLETUP" };
+
+	// 現在のアイテムタイプを反映	( NONEがあるため +1 )
+	nSelectType = (int)m_pPrisoner[nNowSelect]->GetPrisonerDropItem() + 1;
 
 	if (CHossoLibrary::ImGui_Combobox(aPrisonerItem, "ItemType", nSelectType))
 	{
@@ -1953,9 +1956,8 @@ void CMap::PrisonerItemTypeComboBox(int & nSelectType, int nNowSelect)
 			// 前回と違うとき
 			if (PrisonerItem != nSelectType)
 			{
-				CItem::ITEMTYPE Item = (CItem::ITEMTYPE)nSelectType;
-				// 種類代入
-				PrisonerItem = static_cast<CItem::ITEMTYPE>(Item - 1);
+				// 種類代入	( NONEがあるため -1 )
+				PrisonerItem = (CItem::ITEMTYPE)(nSelectType - 1);
 				// 捕虜が落とすアイテムの種類の設定
 				m_pPrisoner[nNowSelect]->SetPrisonerItem(PrisonerItem);
 			}
