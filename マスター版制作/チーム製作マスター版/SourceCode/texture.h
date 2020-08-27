@@ -84,6 +84,9 @@ public:
 
 		TEX_BG_SKY,								//空の背景
 
+		TEX_UI_GAME_GO,							//Goサイン
+		TEX_UI_GAME_GAMEOVER,					//ゲームオーバー
+
 		TEX_MAX									//MAX
 	};
 

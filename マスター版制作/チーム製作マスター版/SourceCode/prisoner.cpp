@@ -119,8 +119,6 @@ void CPrisoner::Update(void)
 		}
 	}
 
-	//当たり判定更新
-	Collision();
 	// 捕虜の状態別処理
 	this->PrisonerState();
 	// キャラクターの更新
@@ -268,13 +266,12 @@ void CPrisoner::Collision()
 	// マップモデルが存在した時して当たり判定が存在する時
 	if (pMap && GetCollision())
 	{
-
 		GetCollision()->SetPos(&GetPosition());
 
 		GetCollision()->SetHeight(CCharacter::GetCharacterModelPartsList(0)->GetPosition().y);
 
 		// レイの判定
-		if (GetCollision()->RayBlockCollision(CManager::GetGame()->GetMap(), CCharacter::GetCharacterModelPartsList(0)->GetMatrix()))
+		if (GetCollision()->RayBlockCollision(pMap, CCharacter::GetCharacterModelPartsList(0)->GetMatrix()))
 		{
 			// ジャンプすることを承認する
 			SetJump(true);
@@ -286,7 +283,12 @@ void CPrisoner::Collision()
 			SetJump(false);
 			SetFallFlag(true);
 		}
+		if (GetFallFlag() == true)
+		{
+		CDebugProc::Print("トルゥーやで\n");
+		}
 	}
+
 }
 
 //====================================================================

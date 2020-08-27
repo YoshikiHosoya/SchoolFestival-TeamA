@@ -39,8 +39,8 @@ FILENAME_LIST CTexture::m_aTexFileName =
 	{ "data/TEXTURE/UI/Player_UI/infinity.png" },			//弾数無限のUI
 	{ "data/TEXTURE/UI/Player_UI/frame.png" },				//枠のUI
 
-	{ "data/TEXTURE/UI/Title_UI/title.png" },						//タイトルロゴ
-	{ "data/TEXTURE/UI/Title_UI/start.png" },						//スタート
+	{ "data/TEXTURE/UI/Title_UI/title.png" },				//タイトルロゴ
+	{ "data/TEXTURE/UI/Title_UI/start.png" },				//スタート
 
 	{ "data/TEXTURE/UI/Tutorial_UI/Tutorial_Name.png" },	//チュートリアル名前ロゴ
 	{ "data/TEXTURE/UI/Tutorial_UI/Tutorial_1.png" },		//チュートリアル開始
@@ -69,6 +69,10 @@ FILENAME_LIST CTexture::m_aTexFileName =
 	{ "data/TEXTURE/UI/Ranking_UI/5th.png" },				//ランキング
 
 	{ "data/TEXTURE/BG/sky.jpg" },							//空の背景
+
+	{ "data/TEXTURE/UI/Game_UI/go.png" },					//Goサイン
+	{ "data/TEXTURE/UI/Game_UI/Gameover.png" },				//ゲームオーバー
+
 };
 
 //テクスチャ名の設定
