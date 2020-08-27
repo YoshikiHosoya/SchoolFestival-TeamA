@@ -103,26 +103,26 @@ void CPrisoner::Update(void)
 	//描画の範囲内かチェック
 	if (!CheckDrawRange())
 	{
-		//縛られてる状態以外のとき
-		if (m_PrisonerState != PRISONER_STATE_STAY)
+		// 当たり判定
+		if (GetCollision() != nullptr)
 		{
-			//消去
-			SetDieFlag(true);
+			// 座標の更新 pos
+			GetCollision()->SetPos(&GetPosition());
+			//縛られてる状態以外のとき
+			if (m_PrisonerState != PRISONER_STATE_STAY)
+			{
+				//消去
+				SetDieFlag(true);
+			}
+			//処理しない
+			return;
 		}
-		//処理しない
-		return;
 	}
 
-	// 当たり判定
-	if (GetCollision() != nullptr)
-	{
-		// 座標の更新 pos
-		GetCollision()->SetPos(&GetPosition());
-	}
-
+	//当たり判定更新
+	Collision();
 	// 捕虜の状態別処理
 	this->PrisonerState();
-
 	// キャラクターの更新
 	CCharacter::Update();
 }
@@ -256,6 +256,37 @@ bool CPrisoner::DefaultMotion(void)
 {
 	SetMotion(CCharacter::PRISONER_MOTION_STAY);
 	return false;
+}
+//====================================================================
+// 捕虜の当たり判定
+//====================================================================
+void CPrisoner::Collision()
+{
+	CMap *pMap;
+	pMap = CManager::GetBaseMode()->GetMap();
+
+	// マップモデルが存在した時して当たり判定が存在する時
+	if (pMap && GetCollision())
+	{
+
+		GetCollision()->SetPos(&GetPosition());
+
+		GetCollision()->SetHeight(CCharacter::GetCharacterModelPartsList(0)->GetPosition().y);
+
+		// レイの判定
+		if (GetCollision()->RayBlockCollision(CManager::GetGame()->GetMap(), CCharacter::GetCharacterModelPartsList(0)->GetMatrix()))
+		{
+			// ジャンプすることを承認する
+			SetJump(true);
+			SetFallFlag(false);
+		}
+		else
+		{
+			// ジャンプすることを承認しない
+			SetJump(false);
+			SetFallFlag(true);
+		}
+	}
 }
 
 //====================================================================

@@ -97,7 +97,6 @@ void CEnemy::Update(void)
 			m_pGun->Update();
 		}
 	}
-
 	//キャラクターの更新
 	CCharacter::Update();
 }

@@ -582,7 +582,7 @@ bool CCollision::ForPlayer_ObstacleCollision()
 		CObstacle *pObstacle = CManager::GetBaseMode()->GetMap()->GetObstacle(nCntObst);
 		if (pObstacle != nullptr)
 		{
-			if (this->BlockCollision2D(pObstacle->GetCollision()))
+			if (this->BlockNotUpsideCollision2D(pObstacle->GetCollision()))
 			{
 				bHitFlag = true;
 			}
@@ -1091,6 +1091,63 @@ bool CCollision::BlockCollision2D(CCollision * pCollision)
 	// 当たっているかいないかを返す
 	return bHitFlag;
 }
+//======================================================================================================================
+// 板型のブロックの当たり判定処理(上の判定なし)
+//======================================================================================================================
+bool CCollision::BlockNotUpsideCollision2D(CCollision * pCollision)
+{
+	// 弾を消すときに使うフラグ
+	bool bHitFlag = false;
+
+	// 素材のY範囲
+	if (this->m_ppos->y + this->m_size.y > pCollision->m_ppos->y - pCollision->m_size.y * 0.5f &&
+		this->m_ppos->y < pCollision->m_ppos->y + pCollision->m_size.y * 0.5f)
+	{
+		// 当たり判定(左)
+		if (this->m_ppos->x + this->m_size.x * 0.5f > pCollision->m_ppos->x - pCollision->m_size.x * 0.5f &&
+			this->m_posOld->x + this->m_size.x * 0.5f <= pCollision->m_ppos->x - pCollision->m_size.x * 0.5f)
+		{
+			// 素材状の左に
+			this->m_ppos->x = pCollision->m_ppos->x - pCollision->m_size.x * 0.5f - this->m_size.x * 0.5f;
+			// 移動量の初期化
+			this->m_pmove->x = 0.0f;
+			// オブジェクトに当たったフラグ
+			bHitFlag = true;
+		}
+
+		// 当たり判定(右)
+		else if (this->m_ppos->x - this->m_size.x * 0.5f < pCollision->m_ppos->x + pCollision->m_size.x * 0.5f &&
+			this->m_posOld->x - this->m_size.x * 0.5f >= pCollision->m_ppos->x + pCollision->m_size.x * 0.5f)
+		{
+			// 素材状の左に
+			this->m_ppos->x = pCollision->m_ppos->x + pCollision->m_size.x * 0.5f + this->m_size.x * 0.5f;
+			// 移動量の初期化
+			this->m_pmove->x = 0.0f;
+			// オブジェクトに当たったフラグ
+			bHitFlag = true;
+		}
+	}
+
+	// 素材のX範囲
+	if (this->m_ppos->x + this->m_size.x * 0.5f > pCollision->m_ppos->x - pCollision->m_size.x * 0.5f &&
+		this->m_ppos->x - this->m_size.x * 0.5f < pCollision->m_ppos->x + pCollision->m_size.x * 0.5f)
+	{
+		// 当たり判定(下)
+		if (this->m_ppos->y + this->m_size.y > pCollision->m_ppos->y - pCollision->m_size.y * 0.5f &&
+			this->m_posOld->y + this->m_size.y <= pCollision->m_ppos->y - pCollision->m_size.y * 0.5f)
+		{
+			// 素材状の下に
+			this->m_ppos->y = this->m_posOld->y;
+			// 移動量の初期化
+			this->m_pmove->y = 0.0f;
+			// オブジェクトに当たったフラグ
+			bHitFlag = true;
+		}
+	}
+
+	// 当たっているかいないかを返す
+	return bHitFlag;
+}
 
 //======================================================================================================================
 // レイの判定
@@ -1133,6 +1190,29 @@ bool CCollision::RayBlockCollision(CMap *pMap, D3DXMATRIX *pMat)
 		{
 		}
 	}
+	// オブジェクトの最大数分繰り返す
+	for (int nCnt = 0; nCnt < CManager::GetGame()->GetMap()->GetMaxObstacle(); nCnt++)
+	{
+		//	逆行列の取得
+		D3DXMatrixInverse(&invmat, NULL, CManager::GetGame()->GetMap()->GetObstacle(nCnt)->GetMatrix());
+		//	逆行列を使用し、レイ始点情報を変換　位置と向きで変換する関数が異なるので要注意
+		D3DXVec3TransformCoord(&m_posBefore, &D3DXVECTOR3(this->m_ppos->x, pMat->_42, this->m_ppos->z), &invmat);
+		//	レイ終点情報を変換
+		D3DXVec3TransformCoord(&m_posAfter, &D3DXVECTOR3(this->m_ppos->x, this->m_ppos->y - 1, this->m_ppos->z), &invmat);
+		//	レイ方向情報を変換
+		D3DXVec3Normalize(&direction, &(m_posAfter - m_posBefore));
+		//Rayを飛ばす
+		D3DXIntersect(CManager::GetGame()->GetMap()->GetObstacle(nCnt)->GetMesh(), &m_posBefore, &direction, &bHitFlag, &dwHitIndex, &fHitU, &fHitV, &fLandDistance, NULL, NULL);
+		if (bHitFlag == TRUE)
+		{
+			//長さの保存追加
+			vDistance.emplace_back(fLandDistance);
+		}
+		else
+		{
+		}
+	}
+
 	//Rayのヒットした物があったとき
 	if (!vDistance.empty())
 	{
