@@ -112,31 +112,26 @@ void CGame::Uninit(void)
 //==========================================================
 void CGame::Update(void)
 {
-	//キーボード情報取得
-	CKeyboard *key = CManager::GetInputKeyboard();
-
-	// 死亡判定が出ているかの確認
-	m_pMap->UpdateDieFlag();
-
-	//ゲームの進行管理の更新
-	m_pGameManager->Update();
-
-	// リザルトモードでまだリザルトマネージャーが生成されていなかった時
-	if (m_pGameManager->GetGameState() == CGameManager::GAMESTATE::RESULT && m_pResultManager == nullptr)
+	if (m_pMap)
 	{
-
-	}
-	else
-	{
-		// リザルトマネージャークラスが生成された時
-		if (m_pResultManager != nullptr)
-		{
-			// リザルトマネージャー更新
-			m_pResultManager->Update();
-		}
+		// 死亡判定が出ているかの確認
+		m_pMap->UpdateDieFlag();
 	}
 
- }
+	//nullcheck
+	if (m_pGameManager)
+	{
+		//ゲームの進行管理の更新
+		m_pGameManager->Update();
+	}
+
+	// リザルトマネージャークラスが生成された時
+	if (m_pResultManager != nullptr)
+	{
+		// リザルトマネージャー更新
+		m_pResultManager->Update();
+	}
+}
 //==========================================================
 // プレイヤー取得
 //==========================================================

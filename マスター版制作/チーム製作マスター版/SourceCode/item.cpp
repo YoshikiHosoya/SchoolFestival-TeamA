@@ -246,6 +246,9 @@ void CItem::ItemType(ITEMTYPE type)
 	}break;
 		// 宝石
 	case (ITEMTYPE_JEWELRY): {
+		// SEを鳴らす
+		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
+
 		// スコアアップ
 		pPlayer->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_JEWELRY));
 	}break;

@@ -6,7 +6,7 @@ SCRIPT
 //------------------------------------------------------------
 // 遷移するための情報
 //------------------------------------------------------------
-TRANSITION_POS_X		= 8100
+TRANSITION_POS_X		= 8000
 TRANSITION_MAP_ID		= 6
 
 //------------------------------------------------------------
@@ -19,13 +19,347 @@ TRANSITION_MAP_ID		= 6
 //	[ 2 ]	ステージ1_2
 //	[ 3 ]	ステージ1_3
 //	[ 4 ]	ステージ1_BOSS
-//	[ 5 ]	ステージ2_BOSS
+//	[ 5 ]	ステージ2_1
+//	[ 6 ]	ステージ2_2
+//	[ 7 ]	ステージ2_3
+//	[ 8 ]	ステージ2_BOSS
 //
 //------------------------------------------------------------
 
 MAPSET										# 0
-	TYPE		= 1
+	TYPE		= 6
 	POS			= 0 0 0
 END_MAPSET
+
+//------------------------------------------------------------
+// 敵の配置情報
+//------------------------------------------------------------
+// 敵の種類 ( TYPE )
+//
+//	[ 0 ]	通常兵士
+//	[ 1 ]	盾持ち兵士
+//
+//------------------------------------------------------------
+
+ENEMYSET									# 1
+	TYPE		= 1
+	POS			= 893 62 0
+END_ENEMYSET
+
+ENEMYSET									# 2
+	TYPE		= 0
+	POS			= 966 63 0
+END_ENEMYSET
+
+ENEMYSET									# 3
+	TYPE		= 1
+	POS			= 1051 63 0
+END_ENEMYSET
+
+ENEMYSET									# 4
+	TYPE		= 0
+	POS			= 1140 63 0
+END_ENEMYSET
+
+ENEMYSET									# 5
+	TYPE		= 0
+	POS			= 1227 63 0
+END_ENEMYSET
+
+ENEMYSET									# 6
+	TYPE		= 0
+	POS			= 1316 63 0
+END_ENEMYSET
+
+ENEMYSET									# 7
+	TYPE		= 1
+	POS			= 2121 56 0
+END_ENEMYSET
+
+ENEMYSET									# 8
+	TYPE		= 0
+	POS			= 2212 58 0
+END_ENEMYSET
+
+ENEMYSET									# 9
+	TYPE		= 0
+	POS			= 2305 56 0
+END_ENEMYSET
+
+ENEMYSET									# 10
+	TYPE		= 1
+	POS			= 2384 56 0
+END_ENEMYSET
+
+ENEMYSET									# 11
+	TYPE		= 0
+	POS			= 3805 60 0
+END_ENEMYSET
+
+ENEMYSET									# 12
+	TYPE		= 0
+	POS			= 3884 60 0
+END_ENEMYSET
+
+ENEMYSET									# 13
+	TYPE		= 0
+	POS			= 3947 60 0
+END_ENEMYSET
+
+ENEMYSET									# 14
+	TYPE		= 0
+	POS			= 4005 60 0
+END_ENEMYSET
+
+ENEMYSET									# 15
+	TYPE		= 0
+	POS			= 4761 60 0
+END_ENEMYSET
+
+ENEMYSET									# 16
+	TYPE		= 1
+	POS			= 5699 60 0
+END_ENEMYSET
+
+ENEMYSET									# 17
+	TYPE		= 0
+	POS			= 5792 60 0
+END_ENEMYSET
+
+ENEMYSET									# 18
+	TYPE		= 0
+	POS			= 5904 60 0
+END_ENEMYSET
+
+ENEMYSET									# 19
+	TYPE		= 0
+	POS			= 6015 60 0
+END_ENEMYSET
+
+ENEMYSET									# 20
+	TYPE		= 0
+	POS			= 5806 224 0
+END_ENEMYSET
+
+ENEMYSET									# 21
+	TYPE		= 0
+	POS			= 5911 224 0
+END_ENEMYSET
+
+ENEMYSET									# 22
+	TYPE		= 0
+	POS			= 6003 224 0
+END_ENEMYSET
+
+ENEMYSET									# 23
+	TYPE		= 0
+	POS			= 6273 55 0
+END_ENEMYSET
+
+ENEMYSET									# 24
+	TYPE		= 0
+	POS			= 6372 55 0
+END_ENEMYSET
+
+ENEMYSET									# 25
+	TYPE		= 0
+	POS			= 6470 55 0
+END_ENEMYSET
+
+ENEMYSET									# 26
+	TYPE		= 1
+	POS			= 6738 55 0
+END_ENEMYSET
+
+ENEMYSET									# 27
+	TYPE		= 1
+	POS			= 6862 55 0
+END_ENEMYSET
+
+ENEMYSET									# 28
+	TYPE		= 0
+	POS			= 7046 55 0
+END_ENEMYSET
+
+ENEMYSET									# 29
+	TYPE		= 0
+	POS			= 7149 55 0
+END_ENEMYSET
+
+ENEMYSET									# 30
+	TYPE		= 0
+	POS			= 6753 224 0
+END_ENEMYSET
+
+ENEMYSET									# 31
+	TYPE		= 0
+	POS			= 6873 224 0
+END_ENEMYSET
+
+ENEMYSET									# 32
+	TYPE		= 0
+	POS			= 7049 224 0
+END_ENEMYSET
+
+ENEMYSET									# 33
+	TYPE		= 0
+	POS			= 7157 224 0
+END_ENEMYSET
+
+//------------------------------------------------------------
+// 捕虜の配置情報
+//------------------------------------------------------------
+// 捕虜の種類 ( TYPE )
+//
+//	[ 0 ]	確定ドロップする捕虜
+//	[ 1 ]	範囲ドロップする捕虜
+//	[ 2 ]	ランダムドロップする捕虜
+//
+//------------------------------------------------------------
+// 捕虜の種類 ( ITEMTYPE )
+//
+//	[ 0 ]	ヘビーマシンガン
+//	[ 1 ]	ショットガン
+//	[ 2 ]	レーザーガン
+//	[ 3 ]	ロケットランチャー
+//	[ 4 ]	フレイムショット
+//	[ 5 ]	クマ
+//	[ 6 ]	コイン
+//	[ 7 ]	宝石
+//	[ 8 ]	メダル
+//	[ 9 ]	ボム増加
+//	[ 10 ]	エネルギー増加
+//	[ 11 ]	弾薬数増加
+//
+//------------------------------------------------------------
+
+PRISONERSET									# 34
+	TYPE		= 0
+	ITEMTYPE	= 0
+	POS			= 2985 95 0
+END_PRISONERSET
+
+PRISONERSET									# 35
+	TYPE		= 0
+	ITEMTYPE	= 0
+	POS			= 3913 61 0
+END_PRISONERSET
+
+PRISONERSET									# 36
+	TYPE		= 0
+	ITEMTYPE	= 0
+	POS			= 6953 229 0
+END_PRISONERSET
+
+//------------------------------------------------------------
+// 障害物の配置情報
+//------------------------------------------------------------
+// 障害物の種類 ( TYPE )
+//
+//	[ 0 ]	箱
+//	[ 1 ]	樽
+//	[ 2 ]	木
+//	[ 3 ]	金庫
+//	[ 4 ]	土嚢
+//
+//------------------------------------------------------------
+
+OBSTACLESET									# 37
+	TYPE		= 4
+	POS			= 838 88 0
+END_OBSTACLESET
+
+OBSTACLESET									# 38
+	TYPE		= 4
+	POS			= 1359 88 0
+END_OBSTACLESET
+
+OBSTACLESET									# 39
+	TYPE		= 4
+	POS			= 1975 91 0
+END_OBSTACLESET
+
+OBSTACLESET									# 40
+	TYPE		= 1
+	POS			= 2042 256 0
+END_OBSTACLESET
+
+OBSTACLESET									# 41
+	TYPE		= 1
+	POS			= 2082 256 0
+END_OBSTACLESET
+
+OBSTACLESET									# 42
+	TYPE		= 1
+	POS			= 2123 256 0
+END_OBSTACLESET
+
+OBSTACLESET									# 43
+	TYPE		= 1
+	POS			= 2163 257 0
+END_OBSTACLESET
+
+OBSTACLESET									# 44
+	TYPE		= 1
+	POS			= 2042 299 0
+END_OBSTACLESET
+
+OBSTACLESET									# 45
+	TYPE		= 1
+	POS			= 2082 299 0
+END_OBSTACLESET
+
+OBSTACLESET									# 46
+	TYPE		= 1
+	POS			= 2123 299 0
+END_OBSTACLESET
+
+OBSTACLESET									# 47
+	TYPE		= 1
+	POS			= 2163 299 0
+END_OBSTACLESET
+
+OBSTACLESET									# 48
+	TYPE		= 4
+	POS			= 5613 258 0
+END_OBSTACLESET
+
+OBSTACLESET									# 49
+	TYPE		= 4
+	POS			= 5687 258 0
+END_OBSTACLESET
+
+OBSTACLESET									# 50
+	TYPE		= 4
+	POS			= 6199 86 0
+END_OBSTACLESET
+
+OBSTACLESET									# 51
+	TYPE		= 4
+	POS			= 6543 86 0
+END_OBSTACLESET
+
+//------------------------------------------------------------
+// 戦車の配置情報
+//------------------------------------------------------------
+
+//------------------------------------------------------------
+// 戦闘機の配置情報
+//------------------------------------------------------------
+
+//------------------------------------------------------------
+// ヘリコプターの配置情報
+//------------------------------------------------------------
+
+//------------------------------------------------------------
+// 背景のテクスチャ情報
+//------------------------------------------------------------
+//
+//	[ 49 ]	空の背景
+//
+//------------------------------------------------------------
+BGSET
+	BG_TEX_ID			= 49
+END_BGSET
 
 END_SCRIPT

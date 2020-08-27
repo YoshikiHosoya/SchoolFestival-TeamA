@@ -59,23 +59,24 @@ public:
 	CPlayer(OBJ_TYPE type);
 	~CPlayer();
 
-	HRESULT Init(void);
-	void Uninit(void);
-	void Update(void);
-	void Draw(void);
-	void DrawWepon(void);
-	void DebugInfo(void);
-	void MoveUpdate(void);
-	void CollisionUpdate(void);
-	void AttackUpdate(void);
-	void PadMoveUpdate(void);
-	void ReSpawn(void);
-	void DamageReaction();
-	void DeathReaction();
-	void StateChangeReaction();
-	DEBUG_STATE GetDebugState(void);
-	bool DefaultMotion(void);
-	void MapChangePlayerRespawn();
+	HRESULT Init(void);						//初期化
+	void Uninit(void);						//終了
+	void Update(void);						//更新
+	void Draw(void);						//描画
+	void DrawWepon(void);					//武器の描画
+	void DebugInfo(void);					//デバッグ情報表記
+	void MoveUpdate(void);					//移動に関する更新
+	void CollisionUpdate(void);				//当たり判定に関する更新
+	void AttackUpdate(void);				//攻撃に関する更新
+	void PadMoveUpdate(void);				//パッドによる移動
+	void ReSpawn(void);						//リスポーン処理
+	void DamageReaction();					//ダメージ受けた時のリアクション
+	void DeathReaction();					//死亡時のリアクション
+	void StateChangeReaction();				//状態が変わった時のリアクション
+	DEBUG_STATE GetDebugState(void);		//STATE取得
+	bool DefaultMotion(void);				//デフォルトのモーションセット
+	void MapChangePlayerRespawn();			//マップ遷移時のプレイヤー設定
+	void ResetPlayer();						//プレイヤー初期状態にリセット
 
 	/* 設定 取得 関数 */
 	CGun			*GetGun()						{ return  m_pGun; };			// 銃のポインタ取得

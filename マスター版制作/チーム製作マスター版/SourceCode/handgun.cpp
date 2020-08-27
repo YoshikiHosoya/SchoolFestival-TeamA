@@ -71,7 +71,14 @@ void CHandgun::Update(void)
 	CBullet::Update();
 
 	//パーティクル発生 軌跡みたいな
-	CParticle::CreateFromText(GetPosition(), ZeroVector3, CParticleParam::EFFECT_HANDGUN, CBullet::GetTag());
+	if (GetTag() == TAG::TAG_PLAYER)
+	{
+		CParticle::CreateFromText(GetPosition(), ZeroVector3, CParticleParam::EFFECT_HANDGUN);
+	}
+	else if (GetTag() == TAG::TAG_ENEMY)
+	{
+		CParticle::CreateFromText(GetPosition(), ZeroVector3, CParticleParam::EFFECT_HANDGUN, GetTag(), -1, RedColor);
+	}
 
 }
 
@@ -114,12 +121,14 @@ void CHandgun::DebugInfo()
 {
 }
 
+
+
 // =====================================================================================================================================================================
 //
 // ハンドガンの生成
 //
 // =====================================================================================================================================================================
-CHandgun * CHandgun::Create(D3DXVECTOR3 rot)
+CHandgun * CHandgun::Create(D3DXVECTOR3 rot, TAG tag)
 {
 	// 変数
 	CHandgun *pHandgun;
@@ -127,15 +136,18 @@ CHandgun * CHandgun::Create(D3DXVECTOR3 rot)
 	// メモリの確保
 	pHandgun = new CHandgun(OBJTYPE_BULLET);
 
-	// ハンドガンのパラメーター取得
-	BULLET_PARAM *pBulletParam = pHandgun->GetBulletParam(CGun::GUNTYPE_HANDGUN);
-
 	// 初期化
 	pHandgun->Init();
 
 	// 弾の移動量計算
-	pHandgun->CalcBulletMove(rot, CGun::GUNTYPE_HANDGUN);
-
+	if (tag == TAG::TAG_PLAYER)
+	{
+		pHandgun->CalcBulletMove(rot, CGun::GUNTYPE_HANDGUN);
+	}
+	else if(tag == TAG::TAG_ENEMY)
+	{
+		pHandgun->CalcBulletMove(rot, CGun::GUNTYPE_HANDGUN_ENEMY);
+	}
 	// モデルタイプの設定
 	pHandgun->SetType(BULLET_MODEL);
 
