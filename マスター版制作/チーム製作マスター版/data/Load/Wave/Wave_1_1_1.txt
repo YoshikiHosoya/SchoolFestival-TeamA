@@ -83,42 +83,42 @@ END_ENEMYSET
 ENEMYSET									# 0
 	TYPE			= 0
 	POS 			= 200 200 0
-	FRAME 			= 50
+	FRAME 			= 60
 	EVENT			= 0
 END_ENEMYSET
 
 ENEMYSET									# 0
 	TYPE			= 0
 	POS 			= 200 200 0
-	FRAME 			= 50
+	FRAME 			= 60
 	EVENT			= 0
 END_ENEMYSET
 
 ENEMYSET									# 0
 	TYPE			= 0
 	POS 			= 200 200 0
-	FRAME 			= 50
+	FRAME 			= 60
 	EVENT			= 0
 END_ENEMYSET
 
 ENEMYSET									# 0
 	TYPE			= 0
 	POS 			= -200 200 0
-	FRAME 			= 50
+	FRAME 			= 1
 	EVENT			= 0
 END_ENEMYSET
 
 ENEMYSET									# 0
 	TYPE			= 0
 	POS 			= -200 200 0
-	FRAME 			= 50
+	FRAME 			= 1
 	EVENT			= 0
 END_ENEMYSET
 
 ENEMYSET									# 0
 	TYPE			= 0
 	POS 			= -200 200 0
-	FRAME 			= 50
+	FRAME 			= 1
 	EVENT			= 1
 END_ENEMYSET
 

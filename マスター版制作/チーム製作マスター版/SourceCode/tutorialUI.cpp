@@ -120,6 +120,8 @@ void CTutorialUI::Uninit(void)
 		{
 			// 終了
 			m_apScene2D[nCnt]->Uninit();
+			delete m_apScene2D[nCnt];
+			m_apScene2D[nCnt] = nullptr;
 
 			// デリートフラグを有効にする
 			SetDeleteFlag(true);

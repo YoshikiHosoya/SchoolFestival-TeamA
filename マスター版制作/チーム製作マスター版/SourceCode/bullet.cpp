@@ -311,7 +311,8 @@ void CBullet::BulletLoad()
 		}
 		else
 		{
-			MessageBox(NULL, "弾のパラメーター読み込み失敗", "警告", MB_ICONWARNING);
+			// 読み込み失敗時の警告表示
+			MessageBox(NULL, "弾のパラメーター読み込み失敗" ,m_BulletFileName[nCnt], MB_ICONWARNING);
 		}
 	}
 }

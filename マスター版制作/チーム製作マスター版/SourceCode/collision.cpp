@@ -1245,6 +1245,9 @@ bool CCollision::RayBlockCollision(CMap *pMap, D3DXMATRIX *pMat)
 		bLand = false;
 	}
 
+	//配列を空にしておく
+	vDistance.clear();
+
 	// 判定フラグを返す
 	return bLand;
 }
@@ -1320,6 +1323,9 @@ bool CCollision::RayCollision(CMap *pMap)
 		bJudg = false;
 	}
 
+	//配列を空にしておく
+	vDistance.clear();
+
 	// 判定フラグを返す
 	return bJudg;
 }
@@ -1390,6 +1396,9 @@ bool CCollision::RayFloorCollision(CMap * pMap, D3DXMATRIX * pMat, D3DXVECTOR3 p
 	{
 		bJudg = false;
 	}
+	//配列を空にしておく
+	vDistance.clear();
+
 	// 判定フラグを返す
 	return bJudg;
 }
