@@ -109,7 +109,7 @@ void CPlayertank::Uninit(void)
 	}
 
 	// プレイヤーのポインタを取得
-	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
+ 	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
 	if (pPlayer != nullptr)
 	{
 		pPlayer->SetRideFlag(false);

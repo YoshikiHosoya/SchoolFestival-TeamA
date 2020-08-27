@@ -71,6 +71,11 @@ void CTutorial::Uninit(void)
 		delete m_pTutorialManager;
 		m_pTutorialManager = nullptr;
 	}
+	if (m_pMap)
+	{
+		delete m_pMap;
+		m_pMap = nullptr;
+	}
 }
 
 //==========================================================

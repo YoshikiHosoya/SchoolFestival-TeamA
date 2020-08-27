@@ -236,9 +236,6 @@
     <ClCompile Include="SourceCode\GameManager.cpp">
       <Filter>Mode\manager</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\manager.cpp">
-      <Filter>Mode\manager</Filter>
-    </ClCompile>
     <ClCompile Include="SourceCode\RankingManager.cpp">
       <Filter>Mode\manager</Filter>
     </ClCompile>
@@ -300,16 +297,19 @@
       <Filter>Model\boss</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\hosso\HossoLibrary.cpp">
-      <Filter>Scene2D.3D\projectBase</Filter>
+      <Filter>projectBase</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\main.cpp">
-      <Filter>Scene2D.3D\projectBase</Filter>
+      <Filter>projectBase</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\renderer.cpp">
-      <Filter>Scene2D.3D\projectBase</Filter>
+      <Filter>projectBase</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\Scene.cpp">
-      <Filter>Scene2D.3D\projectBase</Filter>
+      <Filter>projectBase</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\manager.cpp">
+      <Filter>projectBase</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -557,9 +557,6 @@
     <ClInclude Include="SourceCode\GameManager.h">
       <Filter>Mode\manager</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\manager.h">
-      <Filter>Mode\manager</Filter>
-    </ClInclude>
     <ClInclude Include="SourceCode\RankingManager.h">
       <Filter>Mode\manager</Filter>
     </ClInclude>
@@ -621,16 +618,19 @@
       <Filter>Model\boss</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\Scene.h">
-      <Filter>Scene2D.3D\projectBase</Filter>
+      <Filter>projectBase</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\hosso\HossoLibrary.h">
-      <Filter>Scene2D.3D\projectBase</Filter>
+      <Filter>projectBase</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\main.h">
-      <Filter>Scene2D.3D\projectBase</Filter>
+      <Filter>projectBase</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\renderer.h">
-      <Filter>Scene2D.3D\projectBase</Filter>
+      <Filter>projectBase</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\manager.h">
+      <Filter>projectBase</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -706,7 +706,7 @@
     <Filter Include="Model\boss">
       <UniqueIdentifier>{bd6e69f8-14b8-4fb1-884f-4e28de1e7b5e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Scene2D.3D\projectBase">
+    <Filter Include="projectBase">
       <UniqueIdentifier>{9ec38c66-6a5c-4934-869e-bf20bc062660}</UniqueIdentifier>
     </Filter>
   </ItemGroup>

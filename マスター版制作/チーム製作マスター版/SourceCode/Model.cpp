@@ -884,6 +884,34 @@ void CModel::UnLoad(void)
 			m_Model[WEPON_MODEL][nCnt].m_pTexture = NULL;
 		}
 	}
+
+	// ÉhÉâÉSÉìÉmÉXÉP
+	for (int nCnt = 0; nCnt < MODEL_BOSSONE_MAX; nCnt++)
+	{
+		if (m_Model[BOSS_ONE_MODEL][nCnt].pBuffmat != NULL)
+		{
+			m_Model[BOSS_ONE_MODEL][nCnt].pBuffmat->Release();
+			m_Model[BOSS_ONE_MODEL][nCnt].pBuffmat = NULL;
+		}
+		if (m_Model[BOSS_ONE_MODEL][nCnt].pMesh != NULL)
+		{
+			m_Model[BOSS_ONE_MODEL][nCnt].pMesh->Release();
+			m_Model[BOSS_ONE_MODEL][nCnt].pMesh = NULL;
+		}
+		if (m_Model[BOSS_ONE_MODEL][nCnt].m_pTexture != NULL)
+		{
+			for (int nCntmat = 0; nCntmat < (int)m_Model[BOSS_ONE_MODEL][nCnt].nNumMat; nCntmat++)
+			{
+				if (m_Model[BOSS_ONE_MODEL][nCnt].m_pTexture[nCntmat] != NULL)
+				{
+					m_Model[BOSS_ONE_MODEL][nCnt].m_pTexture[nCntmat]->Release();
+					m_Model[BOSS_ONE_MODEL][nCnt].m_pTexture[nCntmat] = NULL;
+				}
+			}
+			delete[] m_Model[BOSS_ONE_MODEL][nCnt].m_pTexture;
+			m_Model[BOSS_ONE_MODEL][nCnt].m_pTexture = NULL;
+		}
+	}
 }
 //====================================================================
 //èâä˙âª
