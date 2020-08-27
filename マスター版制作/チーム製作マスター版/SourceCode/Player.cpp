@@ -29,6 +29,7 @@
 #include "playertank.h"
 #include "battleplane.h"
 #include "resultmanager.h"
+#include "GameManager.h"
 
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
@@ -206,12 +207,26 @@ void CPlayer::Update(void)
 		//リスポーンの処理
 		ReSpawn();
 	}
-	//通常状態のとき
+	//ゲーム中の時
+	else if (CManager::GetMode() == CManager::MODE_GAME)
+	{
+		//リザルト画面以外のとき
+		if (CManager::GetGame()->GetGameManager()->GetGameState() != CGameManager::GAMESTATE::RESULT)
+		{
+			// 乗り物に乗っていない時といない時の判定
+			Ride();
+		}
+		else
+		{
+			DefaultMotion();
+		}
+	}
 	else
 	{
 		// 乗り物に乗っていない時といない時の判定
 		Ride();
 	}
+
 	//当たり判定処理
 	CollisionUpdate();
 	// 体力UIの設定
@@ -610,6 +625,7 @@ SetMotion(CCharacter::PLAYER_MOTION_NORMAL);
 void CPlayer::MapChangePlayerRespawn()
 {
 	SetState(CCharacter::CHARACTER_STATE_INVINCIBLE);
+	SetPosition(ZeroVector3);
 	SetPosition(ZeroVector3);
 	m_bRideVehicle = false;
 	m_pKnife->EndMeleeAttack();

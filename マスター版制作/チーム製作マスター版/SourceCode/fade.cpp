@@ -7,14 +7,17 @@
 #include "renderer.h"
 #include "game.h"
 #include "GameManager.h"
+#include "ResultManager.h"
 #include "map.h"
 #include "Player.h"
 //=============================================================================
 // マクロ定義
 //=============================================================================
-#define	TEXTURE_FADE	"data/TEXTURE/fade000.jpg"	// 読み込むテクスチャファイル名
-#define FADE_COLOR	(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f))
-#define WAPE_SPEED	(50.0f)
+#define	TEXTURE_FADE					"data/TEXTURE/fade000.jpg"	// 読み込むテクスチャファイル名
+#define FADE_COLOR_WHITE				(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f))
+#define WAPE_SPEED						(50.0f)
+#define FADE_ALPHADAMPING_MODE			(0.05f)
+#define FADE_ALPHADAMPING_STAGE			(0.02f)
 
 //=============================================================================
 // プロトタイプ宣言
@@ -67,6 +70,7 @@ void CFADE::UpdateFade(void)
 		switch (m_fadeType)
 		{
 		case CFADE::FADETYPE::FADETYPE_MODE:
+		case CFADE::FADETYPE::FADETYPE_STAGE_CHANGE:
 			//ホワイトアウト
 			FadeWhiteOut();
 			break;
@@ -173,7 +177,7 @@ void CFADE::ResetFadeParam()
 	{
 		//モードのフェードの時
 	case CFADE::FADETYPE::FADETYPE_MODE:
-		m_colorFade = FADE_COLOR;
+		m_colorFade = FADE_COLOR_WHITE;
 		m_pos = SCREEN_CENTER_POS;
 
 		break;
@@ -181,6 +185,12 @@ void CFADE::ResetFadeParam()
 	case CFADE::FADETYPE::FADETYPE_MAPMOVE:
 		m_colorFade = BlackColor;
 		m_pos = D3DXVECTOR3(-SCREEN_WIDTH, SCREEN_HEIGHT * 0.5f, 0.0f);
+		break;
+
+		//マップのフェード時
+	case CFADE::FADETYPE::FADETYPE_STAGE_CHANGE:
+		m_colorFade = ZeroColor;
+		m_pos = SCREEN_CENTER_POS;
 
 		break;
 	}
@@ -196,8 +206,17 @@ void CFADE::FadeWhiteOut()
 	//フェードアウト時
 	if (m_fadeState == FADESTATE::FADESTATE_OUT)
 	{
-		//どんどん白く
-		m_colorFade.a += 0.05f;
+		if (m_fadeType == CFADE::FADETYPE::FADETYPE_MODE)
+		{
+			//どんどん白く
+			m_colorFade.a += FADE_ALPHADAMPING_MODE;
+		}
+		else
+		{
+			//どんどん白く
+			m_colorFade.a += FADE_ALPHADAMPING_STAGE;
+
+		}
 
 		//α値が1超えた時
 		if (m_colorFade.a >= 1.0f)
@@ -216,7 +235,7 @@ void CFADE::FadeWhiteOut()
 	else if (m_fadeState == FADESTATE::FADESTATE_IN)
 	{
 		//どんどん薄く
-		m_colorFade.a -= 0.05f;
+		m_colorFade.a -= FADE_ALPHADAMPING_MODE;
 
 		//α値が0になった時
 		if (m_colorFade.a <= 0.0f)
@@ -231,6 +250,7 @@ void CFADE::FadeWhiteOut()
 	}
 	UpdateVertex();
 }
+
 //=============================================================================
 // フェード　ワイプしていくタイプ
 //=============================================================================
@@ -278,6 +298,7 @@ void CFADE::FadeOut()
 		break;
 		//マップのフェード時
 	case CFADE::FADETYPE::FADETYPE_MAPMOVE:
+	case CFADE::FADETYPE::FADETYPE_STAGE_CHANGE:
 
 		//マップのポインタ取得
 		CMap *pMap = CManager::GetBaseMode()->GetMap();
@@ -300,7 +321,13 @@ void CFADE::FadeOut()
 		//シーン管理にあるマップ変更時に必要ないものを消去
 		CScene::MapChangeRelease();
 
+		if (m_fadeType == CFADE::FADETYPE::FADETYPE_STAGE_CHANGE)
+		{
+			CManager::GetGame()->GetGameManager()->SetGameState(CGameManager::GAMESTATE::NORMAL);
+
+		}
 		break;
+
 	}
 }
 //=============================================================================
