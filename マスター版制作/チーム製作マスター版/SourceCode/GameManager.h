@@ -28,7 +28,6 @@ public:
 	{
 		NORMAL = 0,
 		WAVE,
-		BOSSBUTTLE,
 		RESULT,
 	};
 
@@ -41,7 +40,7 @@ public:
 	static std::unique_ptr<CGameManager> Create();
 
 	GAMESTATE GetGameState() { return m_state; };				//ステート取得
-	void SetGameState(GAMESTATE state) { m_state = state; };	//ステート設定
+	void SetGameState(GAMESTATE state);	//ステート設定
 	void EventClear();											//イベントクリア
 	void MapTransitionWaveSet(int nNextID);						//マップ遷移時にウェーブ設定
 

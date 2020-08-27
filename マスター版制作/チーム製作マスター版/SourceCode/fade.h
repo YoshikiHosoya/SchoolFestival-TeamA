@@ -29,9 +29,10 @@ public:
 
 	enum class FADETYPE
 	{
-		FADETYPE_NONE = -1,
-		FADETYPE_MODE,
-		FADETYPE_MAPMOVE,
+		FADETYPE_NONE = -1,			//NONE
+		FADETYPE_MODE,				//モード遷移
+		FADETYPE_MAPMOVE,			//マップ遷移
+		FADETYPE_STAGE_CHANGE,		//ステージ遷移
 	};
 
 	void InitFade(void);

@@ -62,7 +62,6 @@ HRESULT CGame::Init(void)
 	m_pMap->MapLoad(CMap::MAP_1_1);			// マップのロード
 
 	m_pPlayer	= CPlayer::Create();
-	//m_pShield = CShield::Create(nullptr);
 
 	for (int nCnt = 0; nCnt < CMap::WAVE_MAX; nCnt++)
 	{
@@ -125,8 +124,7 @@ void CGame::Update(void)
 	// リザルトモードでまだリザルトマネージャーが生成されていなかった時
 	if (m_pGameManager->GetGameState() == CGameManager::GAMESTATE::RESULT && m_pResultManager == nullptr)
 	{
-		// リザルト管理クラスの生成
-		m_pResultManager = CResultManager::Create();
+
 	}
 	else
 	{
@@ -156,6 +154,42 @@ CMap * CGame::GetMap(void)
 		return m_pMap;
 	}
 	return nullptr;
+}
+
+//==========================================================
+// ステート変更時のリアクション
+//==========================================================
+void CGame::StateChangeReaction()
+{
+	//ステートによって処理が変わる
+	switch (m_pGameManager->GetGameState())
+	{
+	case CGameManager::GAMESTATE::NORMAL:
+		//nullcheck
+		if (m_pResultManager)
+		{
+			// リザルト管理クラスの破棄
+			delete m_pResultManager;
+			m_pResultManager = nullptr;
+		}
+		break;
+
+	case CGameManager::GAMESTATE::RESULT:
+		//nullcheck
+		if (m_pResultManager)
+		{
+			// リザルト管理クラス破棄
+			delete m_pResultManager;
+			m_pResultManager = nullptr;
+
+		}
+		// リザルト管理クラスの生成
+		m_pResultManager = CResultManager::Create();
+		break;
+	default:
+
+		break;
+	}
 }
 
 //==========================================================
