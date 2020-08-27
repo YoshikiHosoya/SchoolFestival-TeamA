@@ -2047,7 +2047,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "C:\\Users\\game317\\Desktop\\ドラゴン・ノスケ\\T\\4.png";
+    "data/materialtexture/Boss_One/Head.png";
    }
   }
   Material {
@@ -2056,7 +2056,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "C:\\Users\\game317\\Desktop\\ドラゴン・ノスケ\\T\\3.png";
+    "data/materialtexture/Boss_One/Other.png";
    }
   }
   Material {
@@ -2065,7 +2065,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "C:\\Users\\game317\\Desktop\\ドラゴン・ノスケ\\T\\3.png";
+    "data/materialtexture/Boss_One/Other.png";
    }
   }
   Material {
@@ -2074,7 +2074,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "C:\\Users\\game317\\Desktop\\ドラゴン・ノスケ\\T\\3.png";
+    "data/materialtexture/Boss_One/Other.png";
    }
   }
   Material {
@@ -2089,7 +2089,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "C:\\Users\\game317\\Desktop\\ドラゴン・ノスケ\\T\\3.png";
+    "data/materialtexture/Boss_One/Other.png";
    }
   }
   Material {
@@ -2098,7 +2098,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "C:\\Users\\game317\\Desktop\\ドラゴン・ノスケ\\T\\3.png";
+    "data/materialtexture/Boss_One/Other.png";
    }
   }
   Material {
@@ -2113,7 +2113,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "C:\\Users\\game317\\Desktop\\ドラゴン・ノスケ\\T\\2.png";
+    "data/materialtexture/Boss_One/Body.png";
    }
   }
   Material {

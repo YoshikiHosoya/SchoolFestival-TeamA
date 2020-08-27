@@ -71,6 +71,10 @@ public:
 		LABEL_SE_BULLET_HIT,						//ナイフダメージ
 		LABEL_SE_KNIFE_HIT,							//弾ダメージ
 
+		//乗り物系
+		LABEL_SE_TANK_ENGINE,						//エンジン音
+		LABEL_SE_TANK_CATERPILLAR,					//キャタピラ音
+
 		//武器系アイテム取得時のボイス
 		LABEL_SE_VOICE_HEAVYMACHINEGUN,				//ヘビーマシンガン
 		LABEL_SE_VOICE_DEATH,						//死亡時　ｳﾜｰ
@@ -83,6 +87,7 @@ public:
 	void Uninit(void);
 
 	HRESULT Play(LABEL label);
+
 	void Stop(LABEL label);
 	void StopAll(void);
 
@@ -159,9 +164,14 @@ private:
 		{ "data/SE/Game/hit_bullet.wav", 0 },						//SE 弾ダメージ
 		{ "data/SE/Game/hit_knife.wav", 0 },						//SE ナイフダメージ
 
+		//乗り物系の効果音
+		{ "data/SE/Rides/engine.wav", 0 },							//SE エンジン
+		{ "data/SE/Rides/caterpillar.wav", 0 },						//SE キャタピラ
+
+
 		//武器系アイテム取得時
-		{ "data/SE/Voice/HeavyMachineGun.wav", 0 },				//SE HMG
-		{ "data/SE/Voice/Death.wav", 0 },						//SE 死亡ボイス
+		{ "data/SE/Voice/HeavyMachineGun.wav", 0 },					//SE HMG
+		{ "data/SE/Voice/Death.wav", 0 },							//SE 死亡ボイス
 
 	};
 

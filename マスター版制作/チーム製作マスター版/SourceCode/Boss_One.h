@@ -12,7 +12,7 @@
 // =====================================================================================================================================================================
 #include "main.h"
 #include "Scene.h"
-#include "Character.h"
+#include "enemy.h"
 
 // =====================================================================================================================================================================
 // ボス1のデータ
@@ -35,7 +35,7 @@ class CCollision;
 // =====================================================================================================================================================================
 // 捕虜クラス
 // =====================================================================================================================================================================
-class CBoss_One :public CCharacter
+class CBoss_One :public CEnemy
 {
 public:
 	// ボス1の状態
@@ -91,7 +91,7 @@ public:
 
 	/* メンバ関数 */
 	void					DebugInfo(void);						// デバッグ
-	bool					Motion(void);							// ボスのパーツの動き
+	void					Motion(void);							// ボスのパーツの動き
 	bool					DefaultMotion(void);					// デフォルトモーション
 
 	// ----- 状態の取得設定 ----- //
@@ -139,6 +139,10 @@ private:
 	float					dot_product(D3DXVECTOR3 vl, D3DXVECTOR3 vr);							// ベクトル内積
 	float					AngleOf2Vector(D3DXVECTOR3 A, D3DXVECTOR3 B);							// ２つのベクトルABのなす角度θを求める
 
+	void					SetFlameThrower(bool bOpen);// 火炎放射器の移動
+	void					SetBalkan(bool bOpen);// バルカンの移動
+
+
 	// --- 攻撃管理関数 ---  //
 	void					ShotIncendiary();														// 焼夷弾
 	void					ShotBalkan();															// バルカン
@@ -172,6 +176,9 @@ private:
 	int						m_nShot;
 	bool					m_bBalkanGunRotFlag;					// 回転許可フラグ
 
-	float					m_RotTarget;
+	float					m_fRotTarget;
+	float					m_fPartsRotVentilation;
+	bool					m_bSetBossState;
+	bool					m_bOpenWeapon;//
 };
 #endif

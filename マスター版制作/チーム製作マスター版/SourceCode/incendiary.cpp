@@ -15,6 +15,7 @@
 #include "boss_one.h"
 #include "BaseMode.h"
 #include "map.h"
+#include "enemy.h"
 
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
@@ -24,7 +25,7 @@
 // マクロ定義
 // =====================================================================================================================================================================
 #define INCENDIARY_GRAVITY				(0.1f)								// 焼夷弾の重力
-#define MAX_FIRING_RANGE				(700.0f)							// ボスの最大射程
+#define MAX_FIRING_RANGE				(900.0f)							// ボスの最大射程
 #define MIN_FIRING_RANGE				(250.0f)							// ボスの最低射程
 #define ATTENUATION_RATE				(100.0f)							// 移動量の減衰割合
 #define MIN_SPEED						(-2.5f)								// 最も遅い移動速度
@@ -213,15 +214,22 @@ void CIncendiary::CalcBulletSpeed(D3DXVECTOR3 Target)
 {
 	// プレイヤーとボスの距離
 	float fDistance;
-	// エネミーのポインタ取得
-	CBoss_One *pBoss_One = CManager::GetBaseMode()->GetMap()->GetBoss_One(0);
-	if (pBoss_One != nullptr)
+
+	for (int nCnt = 0; nCnt < CManager::GetBaseMode()->GetMap()->GetMaxEnemy(); nCnt++)
 	{
-		//死亡してない時
-		if (pBoss_One->GetCharacterState() != CCharacter::CHARACTER_STATE_DEATH)
+		CEnemy *pEnemy = CManager::GetBaseMode()->GetMap()->GetEnemy(nCnt);
+
+		if (pEnemy->GetCharacterType() == CCharacter::CHARACTER_TYPE_BOSS_ONE)
 		{
-			// プレイヤーとボスの距離を求める
-			fDistance = pBoss_One->GetPosition().x - Target.x;
+			if (pEnemy != nullptr)
+			{
+				//死亡してない時
+				if (pEnemy->GetCharacterState() != CCharacter::CHARACTER_STATE_DEATH)
+				{
+					// プレイヤーとボスの距離を求める
+					fDistance = pEnemy->GetPosition().x - Target.x;
+				}
+			}
 		}
 	}
 
