@@ -57,6 +57,7 @@ char *CMap::m_WaveFileName[WAVE_MAX] =
 	{ "data/Load/Wave/Wave_1_2_1.txt" },
 	{ "data/Load/Wave/Wave_1_2_2.txt" },
 	{ "data/Load/Wave/Wave_1_3_1.txt" },
+	{ "data/Load/Wave/Wave_1_3_2.txt" },
 	{ "data/Load/Wave/Wave_1_BOSS.txt" },
 
 	{ "data/Load/Wave/Wave_2_1_1.txt" },

@@ -19,7 +19,10 @@ TRANSITION_MAP_ID		= 4
 //	[ 2 ]	ステージ1_2
 //	[ 3 ]	ステージ1_3
 //	[ 4 ]	ステージ1_BOSS
-//	[ 5 ]	ステージ2_BOSS
+//	[ 5 ]	ステージ2_1
+//	[ 6 ]	ステージ2_2
+//	[ 7 ]	ステージ2_3
+//	[ 8 ]	ステージ2_BOSS
 //
 //------------------------------------------------------------
 
@@ -40,167 +43,167 @@ END_MAPSET
 
 ENEMYSET									# 1
 	TYPE		= 1
-	POS			= 1502 55 0
+	POS			= 1502 53 0
 END_ENEMYSET
 
 ENEMYSET									# 2
 	TYPE		= 1
-	POS			= 1637 62 0
+	POS			= 1637 53 0
 END_ENEMYSET
 
 ENEMYSET									# 3
 	TYPE		= 1
-	POS			= 1784 64 0
+	POS			= 1784 53 0
 END_ENEMYSET
 
 ENEMYSET									# 4
 	TYPE		= 0
-	POS			= 1912 60 0
+	POS			= 1912 53 0
 END_ENEMYSET
 
 ENEMYSET									# 5
 	TYPE		= 0
-	POS			= 2031 63 0
+	POS			= 2031 53 0
 END_ENEMYSET
 
 ENEMYSET									# 6
 	TYPE		= 1
-	POS			= 2149 57 0
+	POS			= 2149 53 0
 END_ENEMYSET
 
 ENEMYSET									# 7
 	TYPE		= 1
-	POS			= 2263 58 0
+	POS			= 2263 53 0
 END_ENEMYSET
 
 ENEMYSET									# 8
 	TYPE		= 1
-	POS			= 2376 58 0
+	POS			= 2376 53 0
 END_ENEMYSET
 
 ENEMYSET									# 9
 	TYPE		= 0
-	POS			= 2425 59 0
+	POS			= 2425 53 0
 END_ENEMYSET
 
 ENEMYSET									# 10
 	TYPE		= 0
-	POS			= 2464 57 0
+	POS			= 2464 53 0
 END_ENEMYSET
 
 ENEMYSET									# 11
 	TYPE		= 0
-	POS			= 2505 57 0
+	POS			= 2505 53 0
 END_ENEMYSET
 
 ENEMYSET									# 12
 	TYPE		= 0
-	POS			= 2851 352 0
+	POS			= 2851 298 0
 END_ENEMYSET
 
 ENEMYSET									# 13
 	TYPE		= 0
-	POS			= 2916 352 0
+	POS			= 2916 298 0
 END_ENEMYSET
 
 ENEMYSET									# 14
 	TYPE		= 0
-	POS			= 3546 352 0
+	POS			= 3546 297 0
 END_ENEMYSET
 
 ENEMYSET									# 15
 	TYPE		= 0
-	POS			= 3618 352 0
+	POS			= 3618 297 0
 END_ENEMYSET
 
 ENEMYSET									# 16
 	TYPE		= 1
-	POS			= 5280 231 0
+	POS			= 5280 192 0
 END_ENEMYSET
 
 ENEMYSET									# 17
 	TYPE		= 0
-	POS			= 5476 231 0
+	POS			= 5476 192 0
 END_ENEMYSET
 
 ENEMYSET									# 18
 	TYPE		= 0
-	POS			= 5687 231 0
+	POS			= 5687 192 0
 END_ENEMYSET
 
 ENEMYSET									# 19
 	TYPE		= 0
-	POS			= 5903 231 0
+	POS			= 5903 192 0
 END_ENEMYSET
 
 ENEMYSET									# 20
 	TYPE		= 1
-	POS			= 6046 231 0
+	POS			= 6046 192 0
 END_ENEMYSET
 
 ENEMYSET									# 21
 	TYPE		= 1
-	POS			= 6244 360 0
+	POS			= 6244 304 0
 END_ENEMYSET
 
 ENEMYSET									# 22
 	TYPE		= 0
-	POS			= 6423 360 0
+	POS			= 6423 304 0
 END_ENEMYSET
 
 ENEMYSET									# 23
 	TYPE		= 0
-	POS			= 6645 360 0
+	POS			= 6645 304 0
 END_ENEMYSET
 
 ENEMYSET									# 24
 	TYPE		= 0
-	POS			= 6847 360 0
+	POS			= 6847 304 0
 END_ENEMYSET
 
 ENEMYSET									# 25
 	TYPE		= 1
-	POS			= 7005 360 0
+	POS			= 7005 304 0
 END_ENEMYSET
 
 ENEMYSET									# 26
 	TYPE		= 0
-	POS			= 7502 360 0
+	POS			= 7502 304 0
 END_ENEMYSET
 
 ENEMYSET									# 27
 	TYPE		= 0
-	POS			= 7373 360 0
+	POS			= 7373 304 0
 END_ENEMYSET
 
 ENEMYSET									# 28
 	TYPE		= 0
-	POS			= 6234 56 0
+	POS			= 6234 53 0
 END_ENEMYSET
 
 ENEMYSET									# 29
 	TYPE		= 0
-	POS			= 6650 56 0
+	POS			= 6650 53 0
 END_ENEMYSET
 
 ENEMYSET									# 30
 	TYPE		= 0
-	POS			= 7042 56 0
+	POS			= 7019 53 0
 END_ENEMYSET
 
 ENEMYSET									# 31
 	TYPE		= 0
-	POS			= 7391 56 0
+	POS			= 7391 53 0
 END_ENEMYSET
 
 ENEMYSET									# 32
 	TYPE		= 0
-	POS			= 8088 56 0
+	POS			= 8088 53 0
 END_ENEMYSET
 
 ENEMYSET									# 33
 	TYPE		= 0
-	POS			= 7743 56 0
+	POS			= 7743 53 0
 END_ENEMYSET
 
 //------------------------------------------------------------
@@ -215,6 +218,7 @@ END_ENEMYSET
 //------------------------------------------------------------
 // 捕虜の種類 ( ITEMTYPE )
 //
+//	[ -1 ]	NONE
 //	[ 0 ]	ヘビーマシンガン
 //	[ 1 ]	ショットガン
 //	[ 2 ]	レーザーガン
@@ -239,37 +243,31 @@ END_PRISONERSET
 PRISONERSET									# 35
 	TYPE		= 0
 	ITEMTYPE	= 0
-	POS			= 2775 362 2
+	POS			= 2775 298 6
 END_PRISONERSET
 
 PRISONERSET									# 36
 	TYPE		= 0
 	ITEMTYPE	= 0
-	POS			= 3238 192 4
+	POS			= 3238 164 8
 END_PRISONERSET
 
 PRISONERSET									# 37
 	TYPE		= 0
 	ITEMTYPE	= 0
-	POS			= 3687 349 2
+	POS			= 3687 297 6
 END_PRISONERSET
 
 PRISONERSET									# 38
 	TYPE		= 0
 	ITEMTYPE	= 0
-	POS			= 8000 364 0
+	POS			= 8107 304 4
 END_PRISONERSET
 
 PRISONERSET									# 39
 	TYPE		= 0
 	ITEMTYPE	= 0
-	POS			= 8089 364 0
-END_PRISONERSET
-
-PRISONERSET									# 40
-	TYPE		= 0
-	ITEMTYPE	= 0
-	POS			= 8176 364 0
+	POS			= 8176 304 4
 END_PRISONERSET
 
 //------------------------------------------------------------
@@ -289,7 +287,7 @@ END_PRISONERSET
 // 戦車の配置情報
 //------------------------------------------------------------
 
-TANKSET										# 41
+TANKSET										# 40
 	POS			= 838 241 0
 END_TANKSET
 
