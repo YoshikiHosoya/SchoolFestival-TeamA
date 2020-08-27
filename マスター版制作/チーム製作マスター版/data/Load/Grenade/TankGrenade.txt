@@ -4,7 +4,7 @@
 SCRIPT
 
 GRENADESET									# 0
-	MOVE			= 15.0 3.0 0.0
+	MOVE			= 18.0 3.0 0.0
 	GRAVITY			= 0.2
 	ROT_FLAG		= 0
 END_GRENADESET
