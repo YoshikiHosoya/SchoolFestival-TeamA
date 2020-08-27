@@ -21,34 +21,65 @@ SCRIPT
 
 EVENT_BEGIN_MAP = 1			//イベントが発生するマップ番号
 
-EVENTPOS	= 4000
+EVENTPOS	= 7300
+
 
 ENEMYSET									# 0
 	TYPE			= 0
-	POS 			= 0 300 0
-	FRAME 			= 200
+	POS 			= -500 400 0
+	FRAME 			= 20
+	EVENT			= 0
+END_ENEMYSET
+
+ENEMYSET									# 0
+	TYPE			= 0
+	POS 			= -400 400 0
+	FRAME 			= 1
+	EVENT			= 0
+END_ENEMYSET
+
+ENEMYSET									# 0
+	TYPE			= 0
+	POS 			= -300 400 0
+	FRAME 			= 1
+	EVENT			= 0
+END_ENEMYSET
+
+ENEMYSET									# 0
+	TYPE			= 0
+	POS 			= -200 400 0
+	FRAME 			= 1
+	EVENT			= 0
+END_ENEMYSET
+
+
+ENEMYSET									# 0
+	TYPE			= 0
+	POS 			= 500 400 0
+	FRAME 			= 1
+	EVENT			= 0
+END_ENEMYSET
+
+ENEMYSET									# 0
+	TYPE			= 0
+	POS 			= 400 400 0
+	FRAME 			= 1
+	EVENT			= 0
+END_ENEMYSET
+
+ENEMYSET									# 0
+	TYPE			= 0
+	POS 			= 300 400 0
+	FRAME 			= 1
+	EVENT			= 0
+END_ENEMYSET
+
+ENEMYSET									# 0
+	TYPE			= 0
+	POS 			= 200 400 0
+	FRAME 			= 1
 	EVENT			= 1
 END_ENEMYSET
 
-PRISONERSET									# 1
-	TYPE			= 0
-	ITEMTYPE		= -1
-	POS 			= -300 500 0
-	FRAME 			= 60
-END_PRISONERSET
-
-PRISONERSET									# 1
-	TYPE			= 0
-	ITEMTYPE		= -1
-	POS 			= 0 500 0
-	FRAME 			= 1
-END_PRISONERSET
-
-PRISONERSET									# 1
-	TYPE			= 0
-	ITEMTYPE		= -1
-	POS 			= 300 500 0
-	FRAME 			= 1
-END_PRISONERSET
 
 END_SCRIPT
