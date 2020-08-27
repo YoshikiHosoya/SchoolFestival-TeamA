@@ -1134,7 +1134,10 @@ void CCharacter::Collision()
 		m_pCollision->SetPos(&m_pos);
 
 		m_pCollision->SetHeight(m_vModelList[0]->GetPosition().y);
-
+		// áŠQ•¨‚Æ‚Ì”»’è
+		if (m_pCollision->ForPlayer_ObstacleCollision())
+		{
+		}
 		// ƒŒƒC‚Ì”»’è
 		if (m_pCollision->RayBlockCollision(pMap, m_vModelList[0]->GetMatrix()))
 		{
@@ -1149,6 +1152,8 @@ void CCharacter::Collision()
 			m_bFall = true;
 		}
 	}
+
+
 }
 //====================================================================
 //•`‰æ‚Ì”ÍˆÍ“à‚©‚Ç‚¤‚©Šm”F
