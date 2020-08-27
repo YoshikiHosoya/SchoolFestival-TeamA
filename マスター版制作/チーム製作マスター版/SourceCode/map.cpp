@@ -92,9 +92,6 @@ CMap::CMap()
 	m_pHelicopter.clear();											// ヘリコプター
 	m_pVehicle.clear();												// (乗り物)
 
-	// 今だけ 仮
-	m_pBoss_One.clear();
-
 	m_nOldSelect			= 0;									// 前回選択していたもの
 	m_WavePos				= ZeroVector3;							// ウェーブの位置
 	m_TransitionPos			= ZeroVector3;							// 遷移する位置
@@ -448,9 +445,9 @@ void CMap::MapModelCreate(int ModelType, int nType, D3DXVECTOR3 pos,int nItemTyp
 		/* --- ボス1 --- */
 	case CMap::ARRANGEMENT_MODEL_BOSS_ONE:
 		// オブジェクトの生成
-		m_pBoss_One.emplace_back(CBoss_One::Create());
+		m_pEnemy.emplace_back(CBoss_One::Create());
 		// 位置の設定
-		m_pBoss_One[m_pBoss_One.size() - 1]->SetPosition(pos);
+		m_pEnemy[m_pEnemy.size() - 1]->SetPosition(pos);
 		break;
 	}
 }
@@ -579,13 +576,17 @@ void CMap::MapLoad(MAP MapNum)
 		CManager::GetRenderer()->GetCamera()->SetPosR(D3DXVECTOR3(0.0f, 200.0f, 0.0f));
 
 	}
+	if (MapNum == CMap::MAP_2_BOSS)
+	{
+		CManager::GetRenderer()->GetCamera()->SetCameraStopMove(true);
+		CManager::GetRenderer()->GetCamera()->SetPosR(D3DXVECTOR3(0.0f, 250.0f, 0.0f));
+
+	}
 	if (MapNum == CMap::MAP_TUTORIAL)
 	{
 		CManager::GetRenderer()->GetCamera()->SetCameraStopMove(true);
 		CManager::GetRenderer()->GetCamera()->SetPosR(D3DXVECTOR3(0.0f, 200.0f, 0.0f));
-
 	}
-
 }
 
 // =====================================================================================================================================================================
@@ -838,20 +839,6 @@ int CMap::GetMaxShield()
 	if (!m_pShield.empty())
 	{
 		return m_pShield.size();
-	}
-	return 0;
-}
-
-// =====================================================================================================================================================================
-//
-// ボス1の最大数取得 仮
-//
-// =====================================================================================================================================================================
-int CMap::GetMaxBoss_One()
-{
-	if (!m_pBoss_One.empty())
-	{
-		return m_pBoss_One.size();
 	}
 	return 0;
 }
@@ -2027,15 +2014,20 @@ void CMap::UpdateDieFlag()
 	{
 		if (m_pEnemy[nCnt]->GetDieFlag())
 		{
-			// ランダムな確率でアイテムをドロップする
-			if (CItem::DropRate())
+			if (m_pEnemy[nCnt]->GetCharacterType() != CCharacter::CHARACTER_TYPE_BOSS_ONE &&
+				m_pEnemy[nCnt]->GetCharacterType() != CCharacter::CHARACTER_TYPE_BOSS)
 			{
-				//アイテムを生成
-				CItem::DropCreate(m_pEnemy[nCnt]->GetPosition(),
-					CItem::ITEMDROP_WEAPON,
-					CItem::ITEMDROP_PATTERN_RANDOM,
-					CItem::ITEMTYPE_HEAVYMACHINEGUN);
+				// ランダムな確率でアイテムをドロップする
+				if (CItem::DropRate())
+				{
+					//アイテムを生成
+					CItem::DropCreate(m_pEnemy[nCnt]->GetPosition(),
+						CItem::ITEMDROP_WEAPON,
+						CItem::ITEMDROP_PATTERN_RANDOM,
+						CItem::ITEMTYPE_NONE);
+				}
 			}
+
 			m_pEnemy[nCnt]->Rerease();
 			m_pEnemy[nCnt] = nullptr;
 			m_pEnemy.erase(m_pEnemy.begin() + nCnt);
