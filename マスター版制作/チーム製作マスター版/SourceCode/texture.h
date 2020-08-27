@@ -84,6 +84,8 @@ public:
 
 		TEX_BG_SKY,								//‹ó‚Ì”wŒi
 
+		TEX_UI_GAME_GO,							//GoƒTƒCƒ“
+
 		TEX_MAX									//MAX
 	};
 
