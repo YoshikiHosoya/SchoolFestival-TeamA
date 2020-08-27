@@ -202,6 +202,7 @@ public:
 
 	CCollision *GetCollision() { return m_pCollision; };			// 当たり判定のポインタ取得
 	virtual void		DebugInfo(void);						// デバッグ用関数
+	virtual void Collision();										//当たり判定処理
 
 private:
 	static char *m_LoadOffsetFileName[CHARACTER_TYPE_MAX];			//読み込むファイル名
@@ -245,7 +246,6 @@ private:
 	void CalcRotation();											//回転の計算
 	void Motion(void);												//モーション処理
 	void SetAllModelDisp(bool bDisp);								//点滅の切り替え
-	virtual void Collision();										//当たり判定処理
 
 };
 #endif

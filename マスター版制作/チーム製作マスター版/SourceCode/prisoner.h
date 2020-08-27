@@ -91,6 +91,7 @@ public:
 
 	void				SetPrisonerItem(CItem::ITEMTYPE type)
 	{m_DropItem = type;};										// ドロップするアイテムの設定
+	void Collision();											//　当たり判定
 private:
 	/* 静的メンバ変数 */
 	static char				*m_PrisonerFileName;				// 捕虜のファイル名

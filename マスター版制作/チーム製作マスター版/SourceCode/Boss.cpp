@@ -44,7 +44,6 @@ HRESULT CBoss::Init(void)
 	//ƒLƒƒƒ‰‚Ì‰Šú‰»
 	CEnemy::Init();
 	LoadOffset(CCharacter::CHARACTER_TYPE_BOSS);
-	SetPosition(D3DXVECTOR3(0.0f, 300.0f, 0.0f));
 	SetMotion(CCharacter::BOSS_MOTION_NORMAL);
 
 	CCharacter::SetLife(BOSS_LIFE);

@@ -80,36 +80,36 @@ void CEnemyAI::Update(void)
 		// マップモデルが存在した時
 		if (pMap != nullptr)
 		{
-			if (pEnemyPass->GetCharacterDirection() == DIRECTION::LEFT)
-			{
-				if (GetCollision()->RayFloorCollision(pMap, pEnemyPass->GetCharacterModelPartsList(0)->GetMatrix(),
-					D3DXVECTOR3(0.0f, -1.0f, 0.0f),
-					D3DXVECTOR3(pEnemyPass->GetPosition().x-30, pEnemyPass->GetPosition().y, pEnemyPass->GetPosition().z)))
-				{
-					m_bReStartFlag = false;
-				}
-				else
-				{
-					m_AItypeOld = m_AItype;						//前回の行動格納
-					m_bReStartFlag = true;
-					m_castcount = 0;
-				}
-			}
-			else if (pEnemyPass->GetCharacterDirection() == DIRECTION::RIGHT)
-			{
-				if (GetCollision()->RayFloorCollision(pMap, pEnemyPass->GetCharacterModelPartsList(0)->GetMatrix(),
-					D3DXVECTOR3(0.0f, -1.0f, 0.0f),
-					D3DXVECTOR3(pEnemyPass->GetPosition().x+30, pEnemyPass->GetPosition().y, pEnemyPass->GetPosition().z)))
-				{
-					m_bReStartFlag = false;
-				}
-				else
-				{
-					m_AItypeOld = m_AItype;						//前回の行動格納
-					m_bReStartFlag = true;
-					m_castcount = 0;
-				}
-			}
+			//if (pEnemyPass->GetCharacterDirection() == DIRECTION::LEFT)
+			//{
+			//	if (GetCollision()->RayFloorCollision(pMap, pEnemyPass->GetCharacterModelPartsList(0)->GetMatrix(),
+			//		D3DXVECTOR3(0.0f, -1.0f, 0.0f),
+			//		D3DXVECTOR3(pEnemyPass->GetPosition().x-30, pEnemyPass->GetPosition().y, pEnemyPass->GetPosition().z)))
+			//	{
+			//		m_bReStartFlag = false;
+			//	}
+			//	else
+			//	{
+			//		m_AItypeOld = m_AItype;						//前回の行動格納
+			//		m_bReStartFlag = true;
+			//		m_castcount = 0;
+			//	}
+			//}
+			//else if (pEnemyPass->GetCharacterDirection() == DIRECTION::RIGHT)
+			//{
+			//	if (GetCollision()->RayFloorCollision(pMap, pEnemyPass->GetCharacterModelPartsList(0)->GetMatrix(),
+			//		D3DXVECTOR3(0.0f, -1.0f, 0.0f),
+			//		D3DXVECTOR3(pEnemyPass->GetPosition().x+30, pEnemyPass->GetPosition().y, pEnemyPass->GetPosition().z)))
+			//	{
+			//		m_bReStartFlag = false;
+			//	}
+			//	else
+			//	{
+			//		m_AItypeOld = m_AItype;						//前回の行動格納
+			//		m_bReStartFlag = true;
+			//		m_castcount = 0;
+			//	}
+			//}
 		}
 		if (m_castcount % 30 == 0)
 		{

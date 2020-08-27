@@ -24,76 +24,76 @@ public:
 	/*--- プレイヤーのパーツモデル ---*/
 	typedef enum
 	{
-		MODEL_PLAYER_WAIST,			//プレイヤーの腰
-		MODEL_PLAYER_BODY,			//プレイヤーの体
-		MODEL_PLAYER_HEAD,			//プレイヤーの頭
-		MODEL_PLAYER_L_SHOLDER,		//プレイヤーの左肩
-		MODEL_PLAYER_R_SHOLDER,		//プレイヤーの右肩
-		MODEL_PLAYER_LARM,			//プレイヤーの左腕
-		MODEL_PLAYER_RARM,			//プレイヤーの右腕
-		MODEL_PLAYER_LHAND,			//プレイヤーの左手
-		MODEL_PLAYER_RHAND,			//プレイヤーの右手
-		MODEL_PLAYER_LKNEE,			//プレイヤーの左膝
-		MODEL_PLAYER_RKNEE,			//プレイヤーの右膝
-		MODEL_PLAYER_LLEG,			//プレイヤーの左脚
-		MODEL_PLAYER_RLEG,			//プレイヤーの右脚
-		MODEL_PLAYER_LFOOT,			//プレイヤーの左足
-		MODEL_PLAYER_RFOOT,			//プレイヤーの右足
+		MODEL_PLAYER_WAIST,			// プレイヤーの腰
+		MODEL_PLAYER_BODY,			// プレイヤーの体
+		MODEL_PLAYER_HEAD,			// プレイヤーの頭
+		MODEL_PLAYER_L_SHOLDER,		// プレイヤーの左肩
+		MODEL_PLAYER_R_SHOLDER,		// プレイヤーの右肩
+		MODEL_PLAYER_LARM,			// プレイヤーの左腕
+		MODEL_PLAYER_RARM,			// プレイヤーの右腕
+		MODEL_PLAYER_LHAND,			// プレイヤーの左手
+		MODEL_PLAYER_RHAND,			// プレイヤーの右手
+		MODEL_PLAYER_LKNEE,			// プレイヤーの左膝
+		MODEL_PLAYER_RKNEE,			// プレイヤーの右膝
+		MODEL_PLAYER_LLEG,			// プレイヤーの左脚
+		MODEL_PLAYER_RLEG,			// プレイヤーの右脚
+		MODEL_PLAYER_LFOOT,			// プレイヤーの左足
+		MODEL_PLAYER_RFOOT,			// プレイヤーの右足
 		MODEL_PLAYER_MAX
 	}CHARA_MODEL;
 
 	/*--- 捕虜のパーツモデル ---*/
 	typedef enum
 	{
-		MODEL_PRISONER_WAIST,			//捕虜の腰
-		MODEL_PRISONER_BODY,			//捕虜の体
-		MODEL_PRISONER_HEAD,			//捕虜の頭
-		MODEL_PRISONER_L_SHOLDER,		//捕虜の左肩
-		MODEL_PRISONER_R_SHOLDER,		//捕虜の右肩
-		MODEL_PRISONER_LARM,			//捕虜の左腕
-		MODEL_PRISONER_RARM,			//捕虜の右腕
-		MODEL_PRISONER_LHAND,			//捕虜の左手
-		MODEL_PRISONER_RHAND,			//捕虜の右手
-		MODEL_PRISONER_LKNEE,			//捕虜の左膝
-		MODEL_PRISONER_RKNEE,			//捕虜の右膝
-		MODEL_PRISONER_LLEG,			//捕虜の左脚
-		MODEL_PRISONER_RLEG,			//捕虜の右脚
-		MODEL_PRISONER_LFOOT,			//捕虜の左足
-		MODEL_PRISONER_RFOOT,			//捕虜の右足
+		MODEL_PRISONER_WAIST,			// 捕虜の腰
+		MODEL_PRISONER_BODY,			// 捕虜の体
+		MODEL_PRISONER_HEAD,			// 捕虜の頭
+		MODEL_PRISONER_L_SHOLDER,		// 捕虜の左肩
+		MODEL_PRISONER_R_SHOLDER,		// 捕虜の右肩
+		MODEL_PRISONER_LARM,			// 捕虜の左腕
+		MODEL_PRISONER_RARM,			// 捕虜の右腕
+		MODEL_PRISONER_LHAND,			// 捕虜の左手
+		MODEL_PRISONER_RHAND,			// 捕虜の右手
+		MODEL_PRISONER_LKNEE,			// 捕虜の左膝
+		MODEL_PRISONER_RKNEE,			// 捕虜の右膝
+		MODEL_PRISONER_LLEG,			// 捕虜の左脚
+		MODEL_PRISONER_RLEG,			// 捕虜の右脚
+		MODEL_PRISONER_LFOOT,			// 捕虜の左足
+		MODEL_PRISONER_RFOOT,			// 捕虜の右足
 		MODEL_PRISONER_MAX
 	}PRISONER_MODEL;
 
 	typedef enum
 	{
-		MODEL_MAP_TUTORIAL,			//チュートリアルマップ
-		MODEL_MAP_STAGE1_1,			//ステージ1-1
-		MODEL_MAP_STAGE1_2,			//ステージ1-2
-		MODEL_MAP_STAGE1_3,			//ステージ1-3
-		MODEL_MAP_STAGE1_BOSS,		//ボスステージ1
-		MODEL_MAP_STAGE2_1,			//ステージ2-1
-		MODEL_MAP_STAGE2_2,			//ステージ2-2
-		MODEL_MAP_STAGE2_3,			//ステージ2-3
-		MODEL_MAP_STAGE2_BOSS,		//ボスステージ2
+		MODEL_MAP_TUTORIAL,			// チュートリアルマップ
+		MODEL_MAP_STAGE1_1,			// ステージ1-1
+		MODEL_MAP_STAGE1_2,			// ステージ1-2
+		MODEL_MAP_STAGE1_3,			// ステージ1-3
+		MODEL_MAP_STAGE1_BOSS,		// ボスステージ1
+		MODEL_MAP_STAGE2_1,			// ステージ2-1
+		MODEL_MAP_STAGE2_2,			// ステージ2-2
+		MODEL_MAP_STAGE2_3,			// ステージ2-3
+		MODEL_MAP_STAGE2_BOSS,		// ボスステージ2
 		MODEL_MAP_MAX
 	}MAP_MODEL;
 	/*--- 敵のパーツモデル ---*/
 	typedef enum
 	{
-		MODEL_ENEMY_WAIST,		//腰
-		MODEL_ENEMY_HEAD,		//頭
-		MODEL_ENEMY_BODY,		//体
-		MODEL_ENEMY_L_SHOLDER,	//左肩
-		MODEL_ENEMY_R_SHOLDER,	//右肩
-		MODEL_ENEMY_LARM,		//左腕
-		MODEL_ENEMY_RARM,		//右腕
-		MODEL_ENEMY_LHAND,		//左手
-		MODEL_ENEMY_RHAND,		//右手
-		MODEL_ENEMY_LKNEE,		//左膝
-		MODEL_ENEMY_RKNEE,		//右膝
-		MODEL_ENEMY_LLEG,		//左脚
-		MODEL_ENEMY_RLEG,		//右脚
-		MODEL_ENEMY_LFOOT,		//左足
-		MODEL_ENEMY_RFOOT,		//右足
+		MODEL_ENEMY_WAIST,		// 腰
+		MODEL_ENEMY_HEAD,		// 頭
+		MODEL_ENEMY_BODY,		// 体
+		MODEL_ENEMY_L_SHOLDER,	// 左肩
+		MODEL_ENEMY_R_SHOLDER,	// 右肩
+		MODEL_ENEMY_LARM,		// 左腕
+		MODEL_ENEMY_RARM,		// 右腕
+		MODEL_ENEMY_LHAND,		// 左手
+		MODEL_ENEMY_RHAND,		// 右手
+		MODEL_ENEMY_LKNEE,		// 左膝
+		MODEL_ENEMY_RKNEE,		// 右膝
+		MODEL_ENEMY_LLEG,		// 左脚
+		MODEL_ENEMY_RLEG,		// 右脚
+		MODEL_ENEMY_LFOOT,		// 左足
+		MODEL_ENEMY_RFOOT,		// 右足
 		MODEL_ENEMY_MAX
 	}ENEMY_PARTS_MODEL;
 	/*--- 銃のモデル ---*/
