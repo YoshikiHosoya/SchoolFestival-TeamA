@@ -128,12 +128,12 @@ END_ENEMYSET
 
 ENEMYSET									# 18
 	TYPE		= 0
-	POS			= 5904 60 0
+	POS			= 5904 53 0
 END_ENEMYSET
 
 ENEMYSET									# 19
 	TYPE		= 0
-	POS			= 6015 60 0
+	POS			= 6015 52 0
 END_ENEMYSET
 
 ENEMYSET									# 20
@@ -143,67 +143,67 @@ END_ENEMYSET
 
 ENEMYSET									# 21
 	TYPE		= 0
-	POS			= 5911 224 0
+	POS			= 5911 176 0
 END_ENEMYSET
 
 ENEMYSET									# 22
 	TYPE		= 0
-	POS			= 6003 224 0
+	POS			= 6003 176 0
 END_ENEMYSET
 
 ENEMYSET									# 23
 	TYPE		= 0
-	POS			= 6273 55 0
+	POS			= 6273 52 0
 END_ENEMYSET
 
 ENEMYSET									# 24
 	TYPE		= 0
-	POS			= 6372 55 0
+	POS			= 6372 52 0
 END_ENEMYSET
 
 ENEMYSET									# 25
 	TYPE		= 0
-	POS			= 6470 55 0
+	POS			= 6470 52 0
 END_ENEMYSET
 
 ENEMYSET									# 26
 	TYPE		= 1
-	POS			= 6738 55 0
+	POS			= 6738 51 0
 END_ENEMYSET
 
 ENEMYSET									# 27
 	TYPE		= 1
-	POS			= 6862 55 0
+	POS			= 6862 51 0
 END_ENEMYSET
 
 ENEMYSET									# 28
 	TYPE		= 0
-	POS			= 7046 55 0
+	POS			= 7046 51 0
 END_ENEMYSET
 
 ENEMYSET									# 29
 	TYPE		= 0
-	POS			= 7149 55 0
+	POS			= 7149 51 0
 END_ENEMYSET
 
 ENEMYSET									# 30
 	TYPE		= 0
-	POS			= 6753 224 0
+	POS			= 6753 176 0
 END_ENEMYSET
 
 ENEMYSET									# 31
 	TYPE		= 0
-	POS			= 6873 224 0
+	POS			= 6873 176 0
 END_ENEMYSET
 
 ENEMYSET									# 32
 	TYPE		= 0
-	POS			= 7049 224 0
+	POS			= 7049 176 0
 END_ENEMYSET
 
 ENEMYSET									# 33
 	TYPE		= 0
-	POS			= 7157 224 0
+	POS			= 7157 176 0
 END_ENEMYSET
 
 //------------------------------------------------------------
@@ -218,6 +218,7 @@ END_ENEMYSET
 //------------------------------------------------------------
 // 捕虜の種類 ( ITEMTYPE )
 //
+//	[ -1 ]	NONE
 //	[ 0 ]	ヘビーマシンガン
 //	[ 1 ]	ショットガン
 //	[ 2 ]	レーザーガン
@@ -248,7 +249,7 @@ END_PRISONERSET
 PRISONERSET									# 36
 	TYPE		= 0
 	ITEMTYPE	= 0
-	POS			= 6953 229 0
+	POS			= 6953 181 4
 END_PRISONERSET
 
 //------------------------------------------------------------
@@ -281,57 +282,57 @@ END_OBSTACLESET
 
 OBSTACLESET									# 40
 	TYPE		= 1
-	POS			= 2042 256 0
+	POS			= 2093 192 0
 END_OBSTACLESET
 
 OBSTACLESET									# 41
 	TYPE		= 1
-	POS			= 2082 256 0
+	POS			= 2131 192 0
 END_OBSTACLESET
 
 OBSTACLESET									# 42
 	TYPE		= 1
-	POS			= 2123 256 0
+	POS			= 2169 192 0
 END_OBSTACLESET
 
 OBSTACLESET									# 43
 	TYPE		= 1
-	POS			= 2163 257 0
+	POS			= 2205 192 0
 END_OBSTACLESET
 
 OBSTACLESET									# 44
 	TYPE		= 1
-	POS			= 2042 299 0
+	POS			= 2091 236 0
 END_OBSTACLESET
 
 OBSTACLESET									# 45
 	TYPE		= 1
-	POS			= 2082 299 0
+	POS			= 2130 236 0
 END_OBSTACLESET
 
 OBSTACLESET									# 46
 	TYPE		= 1
-	POS			= 2123 299 0
+	POS			= 2168 236 0
 END_OBSTACLESET
 
 OBSTACLESET									# 47
 	TYPE		= 1
-	POS			= 2163 299 0
+	POS			= 2207 236 0
 END_OBSTACLESET
 
 OBSTACLESET									# 48
 	TYPE		= 4
-	POS			= 5613 258 0
+	POS			= 5508 205 0
 END_OBSTACLESET
 
 OBSTACLESET									# 49
 	TYPE		= 4
-	POS			= 5687 258 0
+	POS			= 5584 204 0
 END_OBSTACLESET
 
 OBSTACLESET									# 50
 	TYPE		= 4
-	POS			= 6199 86 0
+	POS			= 6099 86 0
 END_OBSTACLESET
 
 OBSTACLESET									# 51
