@@ -193,6 +193,7 @@ void CGun::NoDrawCalcMatrixOnly()
 // =====================================================================================================================================================================
 void CGun::SetGunType(GUN_TYPE type)
 {
+	// 弾のパラメーター取得
 	CBullet::BULLET_PARAM *pBulletParam = CBullet::GetBulletParam(type);
 
 	// モデルの差し替え
@@ -222,9 +223,12 @@ void CGun::SetGunType(GUN_TYPE type)
 // 弾数の加算
 //
 // =====================================================================================================================================================================
-void CGun::GunAddAmmo(int nAmmo)
+void CGun::GunAddAmmo(GUN_TYPE type)
 {
-	m_nAmmo += nAmmo;
+	// 弾のパラメーター取得
+	CBullet::BULLET_PARAM *pBulletParam = CBullet::GetBulletParam(type);
+
+	m_nAmmo += pBulletParam->nAmmo;
 }
 
 // =====================================================================================================================================================================
