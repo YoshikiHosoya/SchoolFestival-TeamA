@@ -99,7 +99,7 @@ void CGameManager::Update()
 	case CGameManager::GAMESTATE::WAVE:
 		UpdateWave();
 		break;
-	case CGameManager::GAMESTATE::BOSSBUTTLE:
+	default:
 		break;
 
 	}
@@ -128,7 +128,7 @@ void CGameManager::ShowDebugInfo()
 	CDebugProc::Print("------ GameManager ----------\n");
 
 	CDebugProc::Print("NowWaveNum >> %d\n", m_nNowWave);
-	CDebugProc::Print("WaveState >> %d\n", m_state);
+	CDebugProc::Print("GameState >> %d\n", m_state);
 	CDebugProc::Print("m_nWaveEnemyNum >> %d\n", m_nWaveEnemyNum);
 	CDebugProc::Print("m_nWavePrisonerNum >> %d\n", m_nWavePrisonerNum);
 
@@ -155,6 +155,16 @@ std::unique_ptr<CGameManager> CGameManager::Create()
 		return pGameManager;
 	}
 	return nullptr;
+}
+//------------------------------------------------------------------------------
+//ステート切り替え
+//------------------------------------------------------------------------------
+void CGameManager::SetGameState(GAMESTATE state)
+{
+	m_state = state;
+
+	//ゲームのステート切り替わった時の処理
+	CManager::GetGame()->StateChangeReaction();
 }
 //------------------------------------------------------------------------------
 //イベントクリア

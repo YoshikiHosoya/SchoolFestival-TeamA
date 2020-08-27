@@ -40,6 +40,8 @@ public:
 	CPlayer		*GetPlayer(void);
 	CMap		*GetMap(void);
 
+	void		StateChangeReaction();
+
 	CResultManager *GetResultManager()			{ return m_pResultManager; };
 	CGameManager *GetGameManager()				{ return m_pGameManager.get(); };
 

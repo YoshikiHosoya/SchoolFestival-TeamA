@@ -43,6 +43,7 @@ public:
 	/* メンバ関数 */
 	void						Fire(D3DXVECTOR3 rot);					// グレネードを放つ
 	int							GetGrenadeAmmo() { return m_nAmmo; };	// グレネードの残弾数取得
+	void						SetGrenadeAmmoDefault();				// グレネードの弾数初期化
 	void						GrenadeAddAmmo();						// グレネードの弾数追加
 
 private:

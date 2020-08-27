@@ -43,9 +43,10 @@ HRESULT CWeakEnemy::Init(void)
 
 	// èeÇÃê∂ê¨
 	GetGunPtr()->SetHandMtx(GetCharacterModelPartsList(CModel::MODEL_ENEMY_RHAND)->GetMatrix());
-
 	// èeÇÃíeÇÃéÌóﬁ
 	GetGunPtr()->GetTag() = TAG_ENEMY;
+
+	GetGunPtr()->SetGunTypeOnly(CGun::GUNTYPE_HANDGUN_ENEMY);
 	// ÉiÉCÉtÇÃê∂ê¨
 
 	m_pKnife = CKnife::Create(GetCharacterModelPartsList(CModel::MODEL_ENEMY_LHAND)->GetMatrix(), KNIFE_COLLISOIN_SIZE,TAG::TAG_ENEMY);
@@ -68,10 +69,6 @@ HRESULT CWeakEnemy::Init(void)
 	default:
 		break;
 	}
-
-
-
-
 
 
 	// ìñÇΩÇËîªíËê∂ê¨
