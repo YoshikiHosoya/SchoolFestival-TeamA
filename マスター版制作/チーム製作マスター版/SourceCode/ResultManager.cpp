@@ -72,6 +72,7 @@ HRESULT CResultManager::Init(void)
 // =====================================================================================================================================================================
 void CResultManager::Uninit(void)
 {
+
 }
 
 // =====================================================================================================================================================================
@@ -162,7 +163,7 @@ void CResultManager::NextMode()
 		// マップ2に移行
 		if (CManager::GetGame()->GetMap()->GetMapNum() == CMap::MAP_1_BOSS)
 		{
-			CManager::GetRenderer()->GetFade()->SetFade(CFADE::FADETYPE::FADETYPE_MAPMOVE, CMap::MAP_2_1);
+			CManager::GetRenderer()->GetFade()->SetFade(CFADE::FADETYPE::FADETYPE_STAGE_CHANGE, CMap::MAP_2_1);
 		}
 		// ランキングに遷移する
 		else if (CManager::GetBaseMode() != nullptr)

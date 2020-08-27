@@ -185,12 +185,14 @@ void CCamera::CharacterFollowingMoveCamera()
 				m_posRDest.x = pPlayer->GetPosition().x;
 				m_posRDest.y = CAMETA_POSR_OFFSET.y;
 
+				//カメラのエンドライン
 				if (m_posCameraEndLine.x > pPlayer->GetPosition().x)
 				{
 					m_posRDest.x = m_posCameraEndLine.x;
 				}
 				else
 				{
+					//カメラのエンドライン設定
 					m_posCameraEndLine.x = m_posRDest.x;
 					//m_posCameraEndLine.y = m_posRDest.y;
 
@@ -198,6 +200,9 @@ void CCamera::CharacterFollowingMoveCamera()
 			}
 		}
 	}
+
+	//カメラのxが0以下にならないようにする
+	CHossoLibrary::RangeLimit_Equal(m_posRDest.x, 0.0f, 99999.0f);
 
 	//視点の目的地の計算
 	m_posVDest.x = m_posRDest.x - sinf(m_rot.y) * cosf(m_rot.x) * m_fDistance;

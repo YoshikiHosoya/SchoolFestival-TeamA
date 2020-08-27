@@ -193,6 +193,7 @@ void CGun::NoDrawCalcMatrixOnly()
 // =====================================================================================================================================================================
 void CGun::SetGunType(GUN_TYPE type)
 {
+	// 弾のパラメーター取得
 	CBullet::BULLET_PARAM *pBulletParam = CBullet::GetBulletParam(type);
 
 	// モデルの差し替え
@@ -222,9 +223,12 @@ void CGun::SetGunType(GUN_TYPE type)
 // 弾数の加算
 //
 // =====================================================================================================================================================================
-void CGun::GunAddAmmo(int nAmmo)
+void CGun::GunAddAmmo(GUN_TYPE type)
 {
-	m_nAmmo += nAmmo;
+	// 弾のパラメーター取得
+	CBullet::BULLET_PARAM *pBulletParam = CBullet::GetBulletParam(type);
+
+	m_nAmmo += pBulletParam->nAmmo;
 }
 
 // =====================================================================================================================================================================
@@ -261,8 +265,10 @@ void CGun::Shot()
 		switch (m_GunType)
 		{
 		case CGun::GUNTYPE_HANDGUN:
+		case CGun::GUNTYPE_HANDGUN_ENEMY:
+
 			// ハンドガンの生成
-			pBullet = CHandgun::Create(m_ShotRot);
+			pBullet = CHandgun::Create(m_ShotRot,GetTag());
 
 			//音再生
 			CManager::GetSound()->Play(CSound::LABEL_SE_SHOT_HANDGUN);
@@ -400,9 +406,6 @@ void CGun::Shot()
 
 			// 弾発砲時のリアクション
 			pBullet->BulletReaction(m_ShotRot);
-
-			//ノズルフラッシュ
-			CParticle::CreateFromText(m_ShotPos, ZeroVector3, CParticleParam::EFFECT_SHOTFLASH);
 		}
 	}
 }
@@ -416,7 +419,7 @@ void CGun::MultipleShot()
 {
 	CBullet *pBullet = nullptr;
 
-	float randPos_y = (float)(rand() % 10 - 5);
+	float randPos_y = (float)(rand() % 10 - 3);
 
 	if (m_nCntBullet < (CBullet::GetBulletParam(m_GunType)->nTrigger))
 	{

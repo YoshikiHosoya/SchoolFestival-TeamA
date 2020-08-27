@@ -71,5 +71,8 @@ private:
 	/* 静的メンバ変数 */
 	static char					*m_BulletFileName[CGun::GUNTYPE_MAX];	// 弾のファイル名
 	static	BULLET_PARAM		m_BulletParam[CGun::GUNTYPE_MAX];		// 弾のパラメーター
+
+	void			BulletHitSound();		// 弾が当たった時のサウンド再生
+
 };
 #endif

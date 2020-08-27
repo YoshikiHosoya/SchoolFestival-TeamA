@@ -15,7 +15,7 @@
 // ===================================================================
 // É}ÉNÉçíËã`
 // ===================================================================
-#define SHIELD_LIFE				(5)			// shieldÇÃëÃóÕ
+#define SHIELD_LIFE				(12)			// shieldÇÃëÃóÕ
 #define SHIELD_SIZE				(D3DXVECTOR3(30.0f,100.0f,0.0f))
 #define SHIELD_OFFSET			(D3DXVECTOR3(0.0f,-30.0f,0.0f))
 #define SHIELD_DELETE_COUNT		(60)

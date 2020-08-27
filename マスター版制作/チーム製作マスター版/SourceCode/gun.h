@@ -40,6 +40,8 @@ public:
 		GUNTYPE_TRACKINGGUN,						// 追従銃
 		GUNTYPE_DIFFUSIONGUN,						// 拡散銃
 		GUNTYPE_BOSSLASERGUN,						// ボス用のレーザーガン
+		GUNTYPE_HANDGUN_ENEMY,						// ハンドガン
+
 		GUNTYPE_MAX									// 銃の種類の最大数
 	};
 
@@ -69,7 +71,9 @@ public:
 	D3DXVECTOR3			*GetShotPosPtr()			{ return &m_ShotPos; };				// 撃つときの座標のポインタ取得
 
 	void				SetGunType(GUN_TYPE type);															// 銃の種類の設定
-	void				GunAddAmmo(int nAmmo);																// 弾数の加算
+
+	void				GunAddAmmo(GUN_TYPE type);															// 弾数の加算
+	void				SetGunTypeOnly(GUN_TYPE type)				{ m_GunType = type; };					// 銃の種類だけ変更
 	void				SetHandMtx(D3DXMATRIX *pMtx)				{ m_HasHandMtx = pMtx; };				// 手のマトリックス設定
 	void				SetDrawFlag(bool bflag)						{ m_bDraw = bflag; };					// 描画フラグの設定
 	void				SetTag(TAG type)							{ m_Tag = type; };						// タグの設定

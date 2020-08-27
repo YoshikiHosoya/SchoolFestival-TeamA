@@ -23,6 +23,7 @@
 // マクロ定義
 // =====================================================================================================================================================================
 #define GRENADE_ADD_AMMO			(10)			// グレネードの増える弾数量
+#define MAX_GRENADE_AMMO			(99)			// グレネードの残数の最大値
 
 // =====================================================================================================================================================================
 //
@@ -52,16 +53,7 @@ CGrenadeFire::~CGrenadeFire()
 // =====================================================================================================================================================================
 HRESULT CGrenadeFire::Init()
 {
-	// 残弾数
-	switch (m_type)
-	{
-	case CGrenadeFire::HAND_GRENADE:
-		m_nAmmo = CBullet::GetBulletParam(CGun::GUNTYPE_HANDGRENADE)->nAmmo;
-		break;
-	case CGrenadeFire::TANK_GRENADE:
-		m_nAmmo = CBullet::GetBulletParam(CGun::GUNTYPE_TANKGRENADE)->nAmmo;
-		break;
-	}
+	SetGrenadeAmmoDefault();
 
 	return S_OK;
 }
@@ -84,6 +76,12 @@ void CGrenadeFire::Update(void)
 {
 	// インターバルカウントアップ
 	m_nInterval++;
+
+	// 残弾数の最大値
+	if (m_nAmmo >= MAX_GRENADE_AMMO)
+	{
+		m_nAmmo = MAX_GRENADE_AMMO;
+	}
 }
 
 // =====================================================================================================================================================================
@@ -183,6 +181,25 @@ void CGrenadeFire::Fire(D3DXVECTOR3 rot)
 				break;
 			}
 		}
+	}
+}
+
+// =====================================================================================================================================================================
+//
+// グレネードの弾数初期設定
+//
+// =====================================================================================================================================================================
+void CGrenadeFire::SetGrenadeAmmoDefault()
+{
+	// 残弾数
+	switch (m_type)
+	{
+	case CGrenadeFire::HAND_GRENADE:
+		m_nAmmo = CBullet::GetBulletParam(CGun::GUNTYPE_HANDGRENADE)->nAmmo;
+		break;
+	case CGrenadeFire::TANK_GRENADE:
+		m_nAmmo = CBullet::GetBulletParam(CGun::GUNTYPE_TANKGRENADE)->nAmmo;
+		break;
 	}
 }
 

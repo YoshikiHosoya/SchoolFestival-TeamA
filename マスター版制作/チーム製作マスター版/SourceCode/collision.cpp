@@ -224,11 +224,6 @@ bool CCollision::ForPlayerBulletCollision(int nEnemyDamage, int nObstacleDamage,
 							return bHitFlag;
 						}
 					}
-					else
-					{
-						// 当たり範囲フラグをfalseにする
-						bHitFlag = false;
-					}
 				}
 			}
 		}
@@ -260,11 +255,6 @@ bool CCollision::ForPlayerBulletCollision(int nEnemyDamage, int nObstacleDamage,
 				{
 					return bHitFlag;
 				}
-			}
-			else
-			{
-				// 当たり範囲フラグをfalseにする
-				bHitFlag = false;
 			}
 		}
 	}
@@ -298,11 +288,6 @@ bool CCollision::ForPlayerBulletCollision(int nEnemyDamage, int nObstacleDamage,
 						return bHitFlag;
 					}
 				}
-				else
-				{
-					// 当たり範囲フラグをfalseにする
-					bHitFlag = false;
-				}
 			}
 		}
 	}
@@ -329,11 +314,6 @@ bool CCollision::ForPlayerBulletCollision(int nEnemyDamage, int nObstacleDamage,
 					{
 						return bHitFlag;
 					}
-				}
-				else
-				{
-					// 当たり範囲フラグをfalseにする
-					bHitFlag = false;
 				}
 			}
 		}
@@ -370,11 +350,6 @@ bool CCollision::ForPlayerBulletCollision(int nEnemyDamage, int nObstacleDamage,
 					{
 						return bHitFlag;
 					}
-				}
-				else
-				{
-					// 当たり範囲フラグをfalseにする
-					bHitFlag = false;
 				}
 			}
 
