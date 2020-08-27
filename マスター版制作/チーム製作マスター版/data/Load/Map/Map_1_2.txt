@@ -19,6 +19,10 @@ TRANSITION_MAP_ID		= 3
 //	[ 2 ]	ステージ1_2
 //	[ 3 ]	ステージ1_3
 //	[ 4 ]	ステージ1_BOSS
+//	[ 5 ]	ステージ2_1
+//	[ 6 ]	ステージ2_2
+//	[ 7 ]	ステージ2_3
+//	[ 8 ]	ステージ2_BOSS
 //
 //------------------------------------------------------------
 
@@ -32,7 +36,8 @@ END_MAPSET
 //------------------------------------------------------------
 // 敵の種類 ( TYPE )
 //
-//	[ 0 ]	兵士
+//	[ 0 ]	通常兵士
+//	[ 1 ]	盾持ち兵士
 //
 //------------------------------------------------------------
 
@@ -88,7 +93,7 @@ END_ENEMYSET
 
 ENEMYSET									# 11
 	TYPE		= 0
-	POS			= 2058 148 0
+	POS			= 2045 148 0
 END_ENEMYSET
 
 ENEMYSET									# 12
@@ -288,6 +293,7 @@ END_ENEMYSET
 //------------------------------------------------------------
 // 捕虜の種類 ( ITEMTYPE )
 //
+//	[ -1 ]	NONE
 //	[ 0 ]	ヘビーマシンガン
 //	[ 1 ]	ショットガン
 //	[ 2 ]	レーザーガン
@@ -312,34 +318,22 @@ END_PRISONERSET
 PRISONERSET									# 50
 	TYPE		= 0
 	ITEMTYPE	= 0
-	POS			= 2250 197 0
+	POS			= 3432 197 0
 END_PRISONERSET
 
 PRISONERSET									# 51
 	TYPE		= 0
 	ITEMTYPE	= 0
-	POS			= 3432 197 0
+	POS			= 5310 193 4
 END_PRISONERSET
 
 PRISONERSET									# 52
 	TYPE		= 0
 	ITEMTYPE	= 0
-	POS			= 5294 193 4
-END_PRISONERSET
-
-PRISONERSET									# 53
-	TYPE		= 0
-	ITEMTYPE	= 0
-	POS			= 5349 193 4
-END_PRISONERSET
-
-PRISONERSET									# 54
-	TYPE		= 0
-	ITEMTYPE	= 0
 	POS			= 4656 278 4
 END_PRISONERSET
 
-PRISONERSET									# 55
+PRISONERSET									# 53
 	TYPE		= 0
 	ITEMTYPE	= 0
 	POS			= 6960 64 0
@@ -358,77 +352,77 @@ END_PRISONERSET
 //
 //------------------------------------------------------------
 
-OBSTACLESET									# 56
+OBSTACLESET									# 54
 	TYPE		= 4
 	POS			= 493 89 4
 END_OBSTACLESET
 
-OBSTACLESET									# 57
+OBSTACLESET									# 55
 	TYPE		= 4
 	POS			= 1043 237 0
 END_OBSTACLESET
 
-OBSTACLESET									# 58
+OBSTACLESET									# 56
 	TYPE		= 4
 	POS			= 1217 232 0
 END_OBSTACLESET
 
-OBSTACLESET									# 59
+OBSTACLESET									# 57
 	TYPE		= 4
 	POS			= 2171 229 0
 END_OBSTACLESET
 
-OBSTACLESET									# 60
+OBSTACLESET									# 58
 	TYPE		= 4
 	POS			= 2334 228 0
 END_OBSTACLESET
 
-OBSTACLESET									# 61
+OBSTACLESET									# 59
 	TYPE		= 4
 	POS			= 2636 89 0
 END_OBSTACLESET
 
-OBSTACLESET									# 62
+OBSTACLESET									# 60
 	TYPE		= 4
 	POS			= 3041 93 0
 END_OBSTACLESET
 
-OBSTACLESET									# 63
+OBSTACLESET									# 61
 	TYPE		= 4
 	POS			= 4181 90 0
 END_OBSTACLESET
 
-OBSTACLESET									# 64
+OBSTACLESET									# 62
 	TYPE		= 4
 	POS			= 4646 88 0
 END_OBSTACLESET
 
-OBSTACLESET									# 65
+OBSTACLESET									# 63
 	TYPE		= 4
 	POS			= 5060 85 0
 END_OBSTACLESET
 
-OBSTACLESET									# 66
+OBSTACLESET									# 64
 	TYPE		= 4
 	POS			= 5568 86 0
 END_OBSTACLESET
 
-OBSTACLESET									# 67
+OBSTACLESET									# 65
 	TYPE		= 4
 	POS			= 6033 85 0
 END_OBSTACLESET
 
-OBSTACLESET									# 68
+OBSTACLESET									# 66
 	TYPE		= 4
 	POS			= 6453 89 0
 END_OBSTACLESET
 
-OBSTACLESET									# 69
+OBSTACLESET									# 67
 	TYPE		= 4
 	POS			= 4646 145 0
 END_OBSTACLESET
 
-OBSTACLESET									# 70
+OBSTACLESET									# 68
 	TYPE		= 4
 	POS			= 6033 140 0
 END_OBSTACLESET
