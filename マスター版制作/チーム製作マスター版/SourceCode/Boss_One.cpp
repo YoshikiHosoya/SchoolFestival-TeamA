@@ -964,8 +964,8 @@ void CBoss_One::ShotFlameManager()
 void CBoss_One::RandomAttack()
 {
 	// 攻撃方法を決める
-	//m_AttckType = (BOSS_ONE_ATTACKTYPE)get_rand_range(ATTACKTYPE_BALKAN, ATTACKTYPE_INCENDIARY);
-	m_AttckType = ATTACKTYPE_BALKAN;
+	m_AttckType = (BOSS_ONE_ATTACKTYPE)get_rand_range(ATTACKTYPE_BALKAN, ATTACKTYPE_INCENDIARY);
+	//m_AttckType = ATTACKTYPE_BALKAN;
 
 	// 攻撃パターンの保存
 	m_AttckTypeOld = m_AttckType;
