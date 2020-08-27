@@ -70,10 +70,6 @@ HRESULT CWeakEnemy::Init(void)
 	}
 
 
-
-
-
-
 	// “–‚½‚è”»’è¶¬
 	GetCollision()->SetSize2D(ENEMY_SIZE);
 	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_CHARACTER);

@@ -37,15 +37,16 @@ public:
 	void					Uninit(void);	// 終了
 	void					Update(void);	// 更新
 
-	void					SetNextFlag(bool bNext) { m_bNextFlag = bNext; };
-	bool					GetNextFlag()			{ return m_bNextFlag; };
+	void					SetNextFlag(bool bNext)					{ m_bNextFlag = bNext; };
+	bool					GetNextFlag()							{ return m_bNextFlag; };
 
-	void					SetNextCount(int nNext) { m_nNextCount = nNext; };
-	int						GetNextCount()			{ return m_nNextCount; };
+	void					SetNextCount(int nNext)					{ m_nNextCount = nNext; };
+	int						GetNextCount()							{ return m_nNextCount; };
 
-	RESULT_STATE			GetResultState()		{ return m_ResultState; };
+	void					SetResultState(RESULT_STATE state)		{ m_ResultState = state; };
+	RESULT_STATE			GetResultState()						{ return m_ResultState; };
 
-	CResultUI				*GetResultUI()			{ return m_pResultUI; };
+	CResultUI				*GetResultUI()							{ return m_pResultUI; };
 
 	/* 静的メンバ関数 */
 	/* 静的メンバ関数 */

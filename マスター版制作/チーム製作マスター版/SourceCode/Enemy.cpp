@@ -52,6 +52,8 @@ HRESULT CEnemy::Init(void)
 
 	CCharacter::SetLife(1);
 
+	SetCharacterDirection(DIRECTION::LEFT);
+
 	return S_OK;
 }
 //====================================================================
