@@ -19,20 +19,114 @@ SCRIPT
 //
 //------------------------------------------------------------
 
-EVENT_BEGIN_MAP = 5			//イベントが発生するマップ番号
+EVENT_BEGIN_MAP = 3			//イベントが発生するマップ番号
 
-EVENTPOS	= 2100
+EVENTPOS	= 7200
 
 ENEMYSET									# 0
-	TYPE			= 0
-	POS 			= -600 300 0
-	FRAME 			= 60
+	TYPE			= 1
+	POS 			= -600 80 0
+	FRAME 			= 40
+	EVENT			= 0
+END_ENEMYSET
+
+ENEMYSET									# 0
+	TYPE			= 1
+	POS 			= -580 80 0
+	FRAME 			= 1
 	EVENT			= 0
 END_ENEMYSET
 
 ENEMYSET									# 0
 	TYPE			= 0
-	POS 			= -560 300 0
+	POS 			= -540 80 0
+	FRAME 			= 1
+	EVENT			= 0
+END_ENEMYSET
+
+ENEMYSET									# 0
+	TYPE			= 0
+	POS 			= -520 80 0
+	FRAME 			= 1
+	EVENT			= 0
+END_ENEMYSET
+
+ENEMYSET									# 0
+	TYPE			= 0
+	POS 			= -500 80 0
+	FRAME 			= 1
+	EVENT			= 0
+END_ENEMYSET
+
+ENEMYSET									# 0
+	TYPE			= 0
+	POS 			= -480 80 0
+	FRAME 			= 1
+	EVENT			= 0
+END_ENEMYSET
+
+
+ENEMYSET									# 0
+	TYPE			= 1
+	POS 			= 600 80 0
+	FRAME 			= 40
+	EVENT			= 0
+END_ENEMYSET
+
+ENEMYSET									# 0
+	TYPE			= 1
+	POS 			= 580 80 0
+	FRAME 			= 1
+	EVENT			= 0
+END_ENEMYSET
+
+ENEMYSET									# 0
+	TYPE			= 0
+	POS 			= 540 80 0
+	FRAME 			= 1
+	EVENT			= 0
+END_ENEMYSET
+
+ENEMYSET									# 0
+	TYPE			= 0
+	POS 			= 520 80 0
+	FRAME 			= 1
+	EVENT			= 0
+END_ENEMYSET
+
+ENEMYSET									# 0
+	TYPE			= 0
+	POS 			= 500 80 0
+	FRAME 			= 1
+	EVENT			= 0
+END_ENEMYSET
+
+ENEMYSET									# 0
+	TYPE			= 0
+	POS 			= 480 80 0
+	FRAME 			= 1
+	EVENT			= 0
+END_ENEMYSET
+
+
+
+ENEMYSET									# 0
+	TYPE			= 1
+	POS 			= -600 300 0
+	FRAME 			= 40
+	EVENT			= 0
+END_ENEMYSET
+
+ENEMYSET									# 0
+	TYPE			= 1
+	POS 			= -580 300 0
+	FRAME 			= 1
+	EVENT			= 0
+END_ENEMYSET
+
+ENEMYSET									# 0
+	TYPE			= 0
+	POS 			= -540 300 0
 	FRAME 			= 1
 	EVENT			= 0
 END_ENEMYSET
@@ -46,29 +140,36 @@ END_ENEMYSET
 
 ENEMYSET									# 0
 	TYPE			= 0
+	POS 			= -500 300 0
+	FRAME 			= 1
+	EVENT			= 0
+END_ENEMYSET
+
+ENEMYSET									# 0
+	TYPE			= 0
 	POS 			= -480 300 0
 	FRAME 			= 1
 	EVENT			= 0
 END_ENEMYSET
 
-ENEMYSET									# 0
-	TYPE			= 0
-	POS 			= -440 300 0
-	FRAME 			= 1
-	EVENT			= 0
-END_ENEMYSET
-
 
 ENEMYSET									# 0
-	TYPE			= 0
+	TYPE			= 1
 	POS 			= 600 300 0
+	FRAME 			= 40
+	EVENT			= 0
+END_ENEMYSET
+
+ENEMYSET									# 0
+	TYPE			= 1
+	POS 			= 580 300 0
 	FRAME 			= 1
 	EVENT			= 0
 END_ENEMYSET
 
 ENEMYSET									# 0
 	TYPE			= 0
-	POS 			= 560 300 0
+	POS 			= 540 300 0
 	FRAME 			= 1
 	EVENT			= 0
 END_ENEMYSET
@@ -82,73 +183,7 @@ END_ENEMYSET
 
 ENEMYSET									# 0
 	TYPE			= 0
-	POS 			= 480 300 0
-	FRAME 			= 1
-	EVENT			= 0
-END_ENEMYSET
-
-ENEMYSET									# 0
-	TYPE			= 0
-	POS 			= 440 300 0
-	FRAME 			= 1
-	EVENT			= 0
-END_ENEMYSET
-
-
-
-ENEMYSET									# 0
-	TYPE			= 0
-	POS 			= -600 300 0
-	FRAME 			= 60
-	EVENT			= 0
-END_ENEMYSET
-
-ENEMYSET									# 0
-	TYPE			= 0
-	POS 			= -560 300 0
-	FRAME 			= 1
-	EVENT			= 0
-END_ENEMYSET
-
-ENEMYSET									# 0
-	TYPE			= 0
-	POS 			= -520 300 0
-	FRAME 			= 1
-	EVENT			= 0
-END_ENEMYSET
-
-ENEMYSET									# 0
-	TYPE			= 0
-	POS 			= -480 300 0
-	FRAME 			= 1
-	EVENT			= 0
-END_ENEMYSET
-
-ENEMYSET									# 0
-	TYPE			= 0
-	POS 			= -440 300 0
-	FRAME 			= 1
-	EVENT			= 0
-END_ENEMYSET
-
-
-ENEMYSET									# 0
-	TYPE			= 0
-	POS 			= 600 300 0
-	FRAME 			= 30
-	EVENT			= 0
-END_ENEMYSET
-
-ENEMYSET									# 0
-	TYPE			= 0
-	POS 			= 560 300 0
-	FRAME 			= 1
-	EVENT			= 0
-END_ENEMYSET
-
-ENEMYSET									# 0
-	TYPE			= 0
-	POS 			= 520 300 0
+	POS 			= 500 300 0
 	FRAME 			= 1
 	EVENT			= 0
 END_ENEMYSET
@@ -157,14 +192,8 @@ ENEMYSET									# 0
 	TYPE			= 0
 	POS 			= 480 300 0
 	FRAME 			= 1
-	EVENT			= 0
+	EVENT			= 1
 END_ENEMYSET
 
-ENEMYSET									# 0
-	TYPE			= 0
-	POS 			= 440 300 0
-	FRAME 			= 1
-	EVENT			= 0
-END_ENEMYSET
 
 END_SCRIPT
