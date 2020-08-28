@@ -15,6 +15,7 @@
 #include "enemy.h"
 #include "character.h"
 #include <random>
+#include "gamemanager.h"
 
 // =====================================================================================================================================================================
 //マクロ定義
@@ -435,6 +436,15 @@ void CBoss_One::DeathReaction()
 	//死亡フラグをたてる
 	this->SetDieFlag(true);
 	CCharacter::DeathReaction();
+
+	//イベントクリア
+	CManager::GetGame()->GetGameManager()->EventClear();
+
+	//nullcheck
+	if (CManager::GetGame())
+	{
+		CManager::GetGame()->GetGameManager()->SetGameState(CGameManager::GAMESTATE::RESULT);
+	}
 }
 
 // =====================================================================================================================================================================
