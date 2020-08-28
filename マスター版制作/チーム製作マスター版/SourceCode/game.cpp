@@ -176,6 +176,11 @@ void CGame::StateChangeReaction()
 		// リザルト管理クラスの生成
 		m_pResultManager = CResultManager::Create();
 		break;
+
+	case CGameManager::GAMESTATE::GAMEOVER:
+
+
+		break;
 	default:
 
 		break;

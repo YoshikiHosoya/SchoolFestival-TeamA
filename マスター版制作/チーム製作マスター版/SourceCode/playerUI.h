@@ -62,10 +62,11 @@ public:
 	void				SetGrenadeAmmo(int nGrenadeAmmo);	// グレネードの残数の設定
 	void				SetLifeUI(int nLife);				// 体力UIの設定
 	void				SetStockUI(int nStock);				// 残機の数の設定
+	void				SetTimeUI(int nTime);				// 残り時間の設定
 
 	int					GetScore() { return m_nScore; };	// スコアの取得
-	void				SetTimeUI(int nTime);				// 残り時間の設定
 	int					GetTime() { return m_nTime; };		// 時間の取得
+	int					GetStock() { return m_nStock; };	// 残機の取得
 	void				DecrementTime();					// 時間の減少
 	void				ResetTime();						// 時間のリセット
 private:
