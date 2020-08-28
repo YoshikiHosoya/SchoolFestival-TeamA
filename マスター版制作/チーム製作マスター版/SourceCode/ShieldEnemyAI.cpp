@@ -189,9 +189,6 @@ void CShieldEnemyAI::AttackUpdate(void)
 		pEnemyPass->GetKnifePtr()->EndMeleeAttack();
 		m_castcount = 0;
 	}
-	if (pEnemyPass->GetMotionType() != CCharacter::ENEMY_MOTION_KNIFEATTACK)
-	{
-	}
 }
 //=============================================================================
 // •`‰æ
