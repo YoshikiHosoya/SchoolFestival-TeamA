@@ -17,6 +17,7 @@
 #include "game.h"
 #include "camera.h"
 #include "map.h"
+#include "sound.h"
 //------------------------------------------------------------------------------
 //Ã“Iƒƒ“ƒo•Ï”‚Ì‰Šú‰»
 //------------------------------------------------------------------------------
@@ -153,6 +154,10 @@ void CGameManager::ShowDebugInfo()
 
 	CDebugProc::Print("NowWaveNum >> %d\n", m_nNowWave);
 	CDebugProc::Print("GameState >> %d\n", m_state);
+	CDebugProc::Print("m_nCnt >> %d\n", m_nCnt);
+	CDebugProc::Print("m_nWavePrisonerCnt >> %d\n", m_nWavePrisonerCnt);
+	CDebugProc::Print("m_nWaveEnemyCnt >> %d\n", m_nWaveEnemyCnt);
+
 	CDebugProc::Print("m_nWaveEnemyNum >> %d\n", m_nWaveEnemyNum);
 	CDebugProc::Print("m_nWavePrisonerNum >> %d\n", m_nWavePrisonerNum);
 #endif
@@ -341,6 +346,10 @@ void CGameManager::UpdateGoSign()
 			{
 				//“_–Å
 				m_pScene2D_GoSign->SetDisp(m_pScene2D_GoSign->GetDisp() ^ 1);
+				if (m_pScene2D_GoSign->GetDisp())
+				{
+					CManager::GetSound()->Play(CSound::LABEL_SE_GO_SIGN);
+				}
 			}
 		}
 		else if (m_nCnt >= 600)
