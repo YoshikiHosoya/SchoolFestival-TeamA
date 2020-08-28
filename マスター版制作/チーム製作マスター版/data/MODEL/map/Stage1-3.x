@@ -2203,7 +2203,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "C:\\Users\\game305\\Desktop\\SchoolFestival-TeamA\\マスター版制作\\チーム製作マスター版\\data\\materialtexture\\brick1_04.jpg";
+    "data\\materialtexture\\brick1_04.jpg";
    }
   }
  }
