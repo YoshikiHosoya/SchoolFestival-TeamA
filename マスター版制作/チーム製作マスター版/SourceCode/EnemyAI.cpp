@@ -69,7 +69,7 @@ void CEnemyAI::Update(void)
 		{
 			m_random = (rand() % AI_MAX);				//行動のランダム
 			m_AItype = (AI_STATE)m_random;				//ランダムの形式をAI_STATEに変換
-			m_recast = (rand() % MAX_RECASTTIME) + 30;	//30フレーム分のリキャスト
+			m_recast = (rand() % MAX_RECASTTIME) + 50;	//50フレーム分のリキャスト
 
 			if (m_AItype != m_AItypeOld)
 			{
@@ -77,8 +77,8 @@ void CEnemyAI::Update(void)
 				m_castcount = 0;
 			}
 		}
-		// マップモデルが存在した時
-		if (pMap != nullptr)
+		//崖から落ちないようにする処理
+		if (pMap != nullptr)	// マップモデルが存在した時
 		{
 			//if (pEnemyPass->GetCharacterDirection() == DIRECTION::LEFT)
 			//{
@@ -111,17 +111,10 @@ void CEnemyAI::Update(void)
 			//	}
 			//}
 		}
-		if (m_castcount % 30 == 0)
+		//しゃがみ状態に設定（移動以外のAIになってもしゃがみを継続するため）
+		if (m_bCrouch == true)
 		{
-			m_bShot = true;
-			if (m_AItype == AI_STATE::AI_SHOT)
-			{
-				pEnemyPass->GetGunPtr()->Shot();
-			}
-		}
-		else
-		{
-			m_bShot = false;
+			pEnemyPass->SetMotion(CCharacter::ENEMY_MOTION_SQUAT);
 		}
 		if (pPlayer != nullptr)
 		{
@@ -134,18 +127,21 @@ void CEnemyAI::Update(void)
 				pEnemyPass->SetMotion(CCharacter::ENEMY_MOTION_NORMAL);
 				break;
 			case AI_STAND:
+				m_bCrouch = false;
 				pEnemyPass->SetMotion(CCharacter::ENEMY_MOTION_NORMAL);
 				break;
 			case AI_CROUCH:
-				pEnemyPass->SetMotion(CCharacter::ENEMY_MOTION_SQUAT);
+				m_bCrouch = true;
 				break;
 			case AI_WALK_LEFT:
+				m_bCrouch = false;
 				pEnemyPass->GetMove().x -= 0.5f;
 				pEnemyPass->GetRotDest().y = D3DX_PI * 0.5f;
 				pEnemyPass->SetCharacterDirection(DIRECTION::LEFT);
 				pEnemyPass->SetMotion(CCharacter::ENEMY_MOTION_WALK);
 				break;
 			case AI_WALK_RIGHT:
+				m_bCrouch = false;
 				pEnemyPass->GetMove().x += 0.5f;
 				pEnemyPass->GetRotDest().y = D3DX_PI * -0.5f;
 				pEnemyPass->SetCharacterDirection(DIRECTION::RIGHT);
@@ -164,6 +160,16 @@ void CEnemyAI::Update(void)
 					pEnemyPass->GetRotDest().y = D3DX_PI * -0.5f;
 					pEnemyPass->SetCharacterDirection(DIRECTION::RIGHT);
 				}
+				if (m_castcount % 30 == 0)
+				{
+					m_bShot = true;
+					pEnemyPass->GetGunPtr()->Shot();
+				}
+				else
+				{
+					m_bShot = false;
+				}
+
 				break;
 			case AI_GRENADE:
 				pEnemyPass->SetMotion(CCharacter::ENEMY_MOTION_NORMAL);

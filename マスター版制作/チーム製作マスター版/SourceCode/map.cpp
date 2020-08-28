@@ -1094,11 +1094,13 @@ void CMap::SaveBGContents(FILE * pFile)
 	fprintf(pFile, "// îwåiÇÃÉeÉNÉXÉ`ÉÉèÓïÒ\n");
 	fprintf(pFile, COMMENT02);
 	fprintf(pFile, COMMENT01);
-	fprintf(pFile, "//	[ %d ]	ãÛÇÃîwåi\n", CTexture::TEX_BG_SKY);
+	fprintf(pFile, "//	[ %d ]	ãÛÇÃîwåi ( ê∞ÇÍ )\n", CTexture::TEX_BG_SKY_SUNNY);
+	fprintf(pFile, "//	[ %d ]	ãÛÇÃîwåi ( ì‹ÇË )\n", CTexture::TEX_BG_SKY_CLOUDY);
+	fprintf(pFile, "//	[ %d ]	ãÛÇÃîwåi ( à√â_ )\n", CTexture::TEX_BG_SKY_DARKCLOUDS);
 	fprintf(pFile, COMMENT01);
 	fprintf(pFile, COMMENT02);
 	fprintf(pFile, "BGSET\n");
-	fprintf(pFile, "	BG_TEX_ID			= %d\n", CTexture::TEX_BG_SKY);
+	fprintf(pFile, "	BG_TEX_ID			= %d\n", CTexture::TEX_BG_SKY_SUNNY);
 	fprintf(pFile, "END_BGSET\n");
 	fprintf(pFile, NEWLINE);
 }

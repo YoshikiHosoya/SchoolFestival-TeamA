@@ -173,19 +173,21 @@ void CShieldEnemyAI::AttackUpdate(void)
 	if (m_bAttack == true&& m_bKnifeAttack == false && m_castcount == 30)
 	{
 		m_bKnifeAttack = true;
-		 pEnemyPass->GetKnifePtr()->StartMeleeAttack();
 	}
 	if(m_bKnifeAttack == true)
 	{
-		m_recast++;
 		m_AItype = AI_ATTACK;
+		if (pEnemyPass->GetMotionType() == CCharacter::ENEMY_MOTION_KNIFEATTACK &&pEnemyPass->GetKeySet() == 4 && pEnemyPass->GetFram() == 0)
+		{
+			pEnemyPass->GetKnifePtr()->StartMeleeAttack();
+		}
 	}
-	if(m_recast == 180 && m_bKnifeAttack == true)
+	if(pEnemyPass->GetMotionType() == CCharacter::ENEMY_MOTION_KNIFEATTACK &&pEnemyPass->GetKeySet() == 7 && m_bKnifeAttack == true&& pEnemyPass->GetFram() == 0)
 	{
 		m_bKnifeAttack = false;
 		m_AItype = AI_STOP;
-		m_recast = 0;
 		pEnemyPass->GetKnifePtr()->EndMeleeAttack();
+		m_castcount = 0;
 	}
 }
 //=============================================================================
