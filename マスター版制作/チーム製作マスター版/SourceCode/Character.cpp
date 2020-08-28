@@ -374,10 +374,6 @@ void CCharacter::StateChangeReaction()
 		break;
 	case CHARACTER_STATE_DEATH:
 		m_nStateCnt = 10;
-
-		//血のエフェクト
-		CParticle::CreateFromText(GetPosition(), GetShotDirection(), CParticleParam::EFFECT_BLOOD);
-
 		break;
 	}
 }

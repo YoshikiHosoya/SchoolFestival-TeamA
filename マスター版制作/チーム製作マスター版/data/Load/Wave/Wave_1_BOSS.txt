@@ -54,7 +54,7 @@ PRISONERSET									# 1
 	TYPE			= 0
 	ITEMTYPE		= 3
 	POS 			= 400 500 0
-	FRAME 			= 600
+	FRAME 			= 1200
 END_PRISONERSET
 
 PRISONERSET									# 1
@@ -68,7 +68,7 @@ PRISONERSET									# 1
 	TYPE			= 0
 	ITEMTYPE		= 1
 	POS 			= 300 500 0
-	FRAME 			= 1000
+	FRAME 			= 1500
 END_PRISONERSET
 
 

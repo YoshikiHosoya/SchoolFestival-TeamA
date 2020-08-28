@@ -75,7 +75,7 @@ SCRIPT
 	END_KEYSET
 
 	KEYSET		//---< KEY : 3 / 4 >---
-		FRAME = 120		//フレーム数
+		FRAME = 12000		//フレーム数
 		HEIGHT = 6.70		//原点の高さ
 
 		KEY [0] = 1.500 0.000 0.000

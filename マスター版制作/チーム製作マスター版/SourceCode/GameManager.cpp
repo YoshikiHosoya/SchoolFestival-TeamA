@@ -26,8 +26,8 @@
 //マクロ
 //------------------------------------------------------------------------------
 #define GO_SIGN_POS (D3DXVECTOR3(1180.0f,200.0f,0.0f))
-#define GO_SIGN_SIZE (D3DXVECTOR3(80.0f,50.0f,0.0f))
-#define GAMEOVER_SIZE (D3DXVECTOR3(800.0f, 300.0f, 0.0f))
+#define GO_SIGN_SIZE (D3DXVECTOR3(80.0f,40.0f,0.0f))
+#define GAMEOVER_SIZE (D3DXVECTOR3(450.0f, 150.0f, 0.0f))
 
 //------------------------------------------------------------------------------
 //コンストラクタ
@@ -184,6 +184,19 @@ std::unique_ptr<CGameManager> CGameManager::Create()
 void CGameManager::SetGameState(GAMESTATE state)
 {
 	m_state = state;
+
+	if (m_state == CGameManager::GAMESTATE::GAMEOVER)
+	{
+		//ゲームオーバー表示されていない時
+		if (!m_pScene2D_GameOver)
+		{
+			//ゲームオーバーUI生成
+			m_pScene2D_GameOver = CScene2D::CreateSceneManagement(SCREEN_CENTER_POS, GAMEOVER_SIZE, CScene::OBJTYPE_UI);
+			m_pScene2D_GameOver->BindTexture(CTexture::GetTexture(CTexture::TEX_UI_GAME_GAMEOVER));
+
+			m_nCnt = 0;
+		}
+	}
 
 	//ゲームのステート切り替わった時の処理
 	CManager::GetGame()->StateChangeReaction();
@@ -355,26 +368,14 @@ void CGameManager::UpdateTimer()
 	{
 		if (CManager::GetBaseMode()->GetPlayer()->GetPlayerUI())
 		{
-			// 体力が0より大きかった時
-			if (CManager::GetBaseMode()->GetPlayer()->GetPlayerUI()->GetTime() > 1)
+			// タイマーの値を減少する
+			CManager::GetBaseMode()->GetPlayer()->GetPlayerUI()->DecrementTime();
+
+			// タイムが0以下になった時
+			if (CManager::GetBaseMode()->GetPlayer()->GetPlayerUI()->GetTime() <= 0)
 			{
-				// タイマーの値を減少する
-				CManager::GetBaseMode()->GetPlayer()->GetPlayerUI()->DecrementTime();
-			}
-			// タイマーが0以下になった時
-			else
-			{
+				//ゲームオーバー
 				SetGameState(CGameManager::GAMESTATE::GAMEOVER);
-
-				//ゲームオーバー表示されていない時
-				if (!m_pScene2D_GameOver)
-				{
-					//ゲームオーバーUI生成
-					m_pScene2D_GameOver = CScene2D::CreateSceneManagement(SCREEN_CENTER_POS, GAMEOVER_SIZE, CScene::OBJTYPE_UI);
-					m_pScene2D_GameOver->BindTexture(CTexture::GetTexture(CTexture::TEX_UI_GAME_GAMEOVER));
-
-					m_nCnt = 0;
-				}
 			}
 		}
 
@@ -390,7 +391,7 @@ void CGameManager::UpdateGameover()
 	m_nCnt++;
 
 	//カウントがある程度になったら
-	if (m_nCnt >= 240)
+	if (m_nCnt >= 300)
 	{
 		//タイトルに遷移
 		CManager::GetRenderer()->GetFade()->SetFade(CFADE::FADETYPE::FADETYPE_MODE, CManager::MODE::MODE_TITLE);

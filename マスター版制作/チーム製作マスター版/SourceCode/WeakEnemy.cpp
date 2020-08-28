@@ -202,13 +202,16 @@ void CWeakEnemy::StateChangeReaction()
 		m_pKnife->EndMeleeAttack();
 		SetMotion(CCharacter::ENEMY_MOTION_DEAD_1);
 
+
 		switch (GetEnemyType())
 		{
 		case CEnemy::WEAKENEMY_TYPE::ENEMY_NORMAL:
 		case CEnemy::WEAKENEMY_TYPE::ENEMY_SHIELD:
-
+			//悲鳴
 			CManager::GetSound()->Play(CSound::LABEL_SE_VOICE_DEATH);
 
+			//血のエフェクト
+			CParticle::CreateFromText(GetPosition(), GetShotDirection(), CParticleParam::EFFECT_BLOOD);
 		default:
 			break;
 		}
