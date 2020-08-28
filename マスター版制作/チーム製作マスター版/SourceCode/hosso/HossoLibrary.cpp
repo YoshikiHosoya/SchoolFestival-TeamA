@@ -81,7 +81,10 @@ bool CHossoLibrary::PressAnyButton(void)
 	if (Keyboard->GetKeyboardTrigger(DIK_RETURN)||
 		Keyboard->GetKeyboardTrigger(DIK_SPACE)||
 		InpudPad->GetTrigger(CXInputPad::JOYPADKEY_START,1)||
-		InpudPad->GetTrigger(CXInputPad::JOYPADKEY_A, 1))
+		InpudPad->GetTrigger(CXInputPad::JOYPADKEY_A, 1) ||
+		InpudPad->GetTrigger(CXInputPad::JOYPADKEY_B, 1) ||
+		InpudPad->GetTrigger(CXInputPad::JOYPADKEY_X, 1) ||
+		InpudPad->GetTrigger(CXInputPad::JOYPADKEY_Y, 1))
 	{
 		//CManager::GetSound()->Play(CSound::LABEL_SE_DECISION);
 

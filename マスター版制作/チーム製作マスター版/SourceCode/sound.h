@@ -70,6 +70,7 @@ public:
 		LABEL_SE_ADD_SCORE_BONUS,					//リザルト時のスコア加算
 		LABEL_SE_BULLET_HIT,						//ナイフダメージ
 		LABEL_SE_KNIFE_HIT,							//弾ダメージ
+		LABEL_SE_GO_SIGN,							//Goサイン
 
 		//乗り物系
 		LABEL_SE_TANK_ENGINE,						//エンジン音
@@ -77,8 +78,9 @@ public:
 
 		//武器系アイテム取得時のボイス
 		LABEL_SE_VOICE_HEAVYMACHINEGUN,				//ヘビーマシンガン
-		LABEL_SE_VOICE_DEATH,						//死亡時　ｳﾜｰ
-
+		LABEL_SE_VOICE_ENEMY_DEATH,					//敵死亡時
+		LABEL_SE_VOICE_PLAYER_DAMAGE,				//プレイヤー被弾時
+		LABEL_SE_VOICE_PLAYER_DEATH,				//プレイヤー死亡
 
 		LABEL_MAX,
 	} LABEL;
@@ -163,6 +165,7 @@ private:
 		{ "data/SE/Game/score_bonus.wav", 0 },						//SE リザルト時のスコア加算
 		{ "data/SE/Game/hit_bullet.wav", 0 },						//SE 弾ダメージ
 		{ "data/SE/Game/hit_knife.wav", 0 },						//SE ナイフダメージ
+		{ "data/SE/Game/GoSign.wav", 0 },						//SE ナイフダメージ
 
 		//乗り物系の効果音
 		{ "data/SE/Rides/engine.wav", 0 },							//SE エンジン
@@ -170,8 +173,10 @@ private:
 
 
 		//武器系アイテム取得時
-		{ "data/SE/Voice/HeavyMachineGun.wav", 0 },					//SE HMG
-		{ "data/SE/Voice/Death.wav", 0 },							//SE 死亡ボイス
+		{ "data/SE/Voice/HeavyMachineGun.wav", 0 },					//ヘビーマシンガン
+		{ "data/SE/Voice/EnemyDeath.wav", 0 },						//敵死亡時
+		{ "data/SE/Voice/PlayerDamage.wav", 0 },					//プレイヤー被弾時
+		{ "data/SE/Voice/PlayerDeath.wav", 0 },						//プレイヤー死亡
 
 	};
 

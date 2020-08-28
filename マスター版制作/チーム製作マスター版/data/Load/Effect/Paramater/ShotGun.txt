@@ -22,7 +22,7 @@ SCRIPT
 		ANIMATION_LOOP = 0						//アニメーションループするか
 		ANIMATION_CNTSWITCH = 2					//切替のカウント
 		COLLISION_SIZE_CALC = 1					//コリジョンのサイズの計算
-		COLLISION_ATTACK_VALUE = 30				//攻撃力
+		COLLISION_ATTACK_VALUE = 10				//攻撃力
 		COLLISION_COUNT = 1					//判定のカウント
 		PENETRATION = 1					//貫通するかどうか
 		COLLISION_SIZE = 100.50 176.50 0.00		//コリジョンのサイズ

@@ -428,6 +428,9 @@ void CGun::MultipleShot()
 			// フレームカウント初期化
 			m_nCntFrame = 0;
 
+			// 残弾数を減らす
+			m_nAmmo--;
+
 			// ヘビーマシンガンのとき
 			if (m_GunType == GUNTYPE_HEAVYMACHINEGUN)
 			{

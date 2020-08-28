@@ -238,17 +238,37 @@ END_ENEMYSET
 
 ENEMYSET									# 40
 	TYPE		= 1
-	POS			= 6934 52 0
+	POS			= 6325 52 0
 END_ENEMYSET
 
 ENEMYSET									# 41
 	TYPE		= 1
-	POS			= 7000 52 0
+	POS			= 6392 52 0
 END_ENEMYSET
 
 ENEMYSET									# 42
-	TYPE		= 1
-	POS			= 7063 52 0
+	TYPE		= 0
+	POS			= 6612 52 0
+END_ENEMYSET
+
+ENEMYSET									# 43
+	TYPE		= 0
+	POS			= 6452 52 0
+END_ENEMYSET
+
+ENEMYSET									# 44
+	TYPE		= 0
+	POS			= 6686 52 0
+END_ENEMYSET
+
+ENEMYSET									# 45
+	TYPE		= 0
+	POS			= 6753 52 0
+END_ENEMYSET
+
+ENEMYSET									# 46
+	TYPE		= 0
+	POS			= 6825 52 0
 END_ENEMYSET
 
 //------------------------------------------------------------
@@ -263,6 +283,7 @@ END_ENEMYSET
 //------------------------------------------------------------
 // 捕虜の種類 ( ITEMTYPE )
 //
+//	[ -1 ]	NONE
 //	[ 0 ]	ヘビーマシンガン
 //	[ 1 ]	ショットガン
 //	[ 2 ]	レーザーガン
@@ -278,31 +299,31 @@ END_ENEMYSET
 //
 //------------------------------------------------------------
 
-PRISONERSET									# 43
+PRISONERSET									# 47
 	TYPE		= 0
 	ITEMTYPE	= 0
 	POS			= 988 220 0
 END_PRISONERSET
 
-PRISONERSET									# 44
+PRISONERSET									# 48
 	TYPE		= 0
 	ITEMTYPE	= 0
 	POS			= 1099 220 0
 END_PRISONERSET
 
-PRISONERSET									# 45
+PRISONERSET									# 49
 	TYPE		= 0
 	ITEMTYPE	= 0
 	POS			= 2100 60 0
 END_PRISONERSET
 
-PRISONERSET									# 46
+PRISONERSET									# 50
 	TYPE		= 0
 	ITEMTYPE	= 0
 	POS			= 4115 223 0
 END_PRISONERSET
 
-PRISONERSET									# 47
+PRISONERSET									# 51
 	TYPE		= 0
 	ITEMTYPE	= 0
 	POS			= 4115 96 0
@@ -321,27 +342,22 @@ END_PRISONERSET
 //
 //------------------------------------------------------------
 
-OBSTACLESET									# 48
+OBSTACLESET									# 52
 	TYPE		= 4
 	POS			= 1416 125 0
 END_OBSTACLESET
 
-OBSTACLESET									# 49
+OBSTACLESET									# 53
 	TYPE		= 4
 	POS			= 2626 125 0
 END_OBSTACLESET
 
-OBSTACLESET									# 50
-	TYPE		= 0
-	POS			= 2626 125 0
-END_OBSTACLESET
-
-OBSTACLESET									# 51
+OBSTACLESET									# 54
 	TYPE		= 4
 	POS			= 3209 123 0
 END_OBSTACLESET
 
-OBSTACLESET									# 52
+OBSTACLESET									# 55
 	TYPE		= 4
 	POS			= 5137 243 0
 END_OBSTACLESET

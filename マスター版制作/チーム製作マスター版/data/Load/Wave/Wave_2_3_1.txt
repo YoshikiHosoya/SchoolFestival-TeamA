@@ -21,7 +21,83 @@ SCRIPT
 
 EVENT_BEGIN_MAP = 7			//イベントが発生するマップ番号
 
-EVENTPOS	= 1000
+EVENTPOS	= 3950
+
+ENEMYSET									# 0
+	TYPE			= 0
+	POS 			= 0 200 0
+	FRAME 			= 60
+	EVENT			= 0
+END_ENEMYSET
+
+ENEMYSET									# 0
+	TYPE			= 0
+	POS 			= 50 200 0
+	FRAME 			= 1
+	EVENT			= 0
+END_ENEMYSET
+
+ENEMYSET									# 0
+	TYPE			= 0
+	POS 			= 100 200 0
+	FRAME 			= 1
+	EVENT			= 0
+END_ENEMYSET
+
+
+ENEMYSET									# 0
+	TYPE			= 0
+	POS 			= -50 200 0
+	FRAME 			= 1
+	EVENT			= 0
+END_ENEMYSET
+
+ENEMYSET									# 0
+	TYPE			= 0
+	POS 			= -100 200 0
+	FRAME 			= 1
+	EVENT			= 0
+END_ENEMYSET
+
+
+
+ENEMYSET									# 0
+	TYPE			= 0
+	POS 			= 0 80 0
+	FRAME 			= 200
+	EVENT			= 0
+END_ENEMYSET
+
+ENEMYSET									# 0
+	TYPE			= 0
+	POS 			= 50 80 0
+	FRAME 			= 1
+	EVENT			= 0
+END_ENEMYSET
+
+ENEMYSET									# 0
+	TYPE			= 0
+	POS 			= 100 80 0
+	FRAME 			= 1
+	EVENT			= 0
+END_ENEMYSET
+
+
+ENEMYSET									# 0
+	TYPE			= 0
+	POS 			= -50 80 0
+	FRAME 			= 1
+	EVENT			= 0
+END_ENEMYSET
+
+ENEMYSET									# 0
+	TYPE			= 0
+	POS 			= -100 80 0
+	FRAME 			= 1
+	EVENT			= 0
+END_ENEMYSET
+
+
 
 ENEMYSET									# 0
 	TYPE			= 0
@@ -29,6 +105,29 @@ ENEMYSET									# 0
 	FRAME 			= 60
 	EVENT			= 0
 END_ENEMYSET
+
+ENEMYSET									# 0
+	TYPE			= 0
+	POS 			= -500 80 0
+	FRAME 			= 1
+	EVENT			= 0
+END_ENEMYSET
+
+ENEMYSET									# 0
+	TYPE			= 0
+	POS 			= -400 80 0
+	FRAME 			= 1
+	EVENT			= 0
+END_ENEMYSET
+
+ENEMYSET									# 0
+	TYPE			= 1
+	POS 			= -300 80 0
+	FRAME 			= 1
+	EVENT			= 0
+END_ENEMYSET
+
+
 
 ENEMYSET									# 0
 	TYPE			= 0
@@ -39,30 +138,31 @@ END_ENEMYSET
 
 ENEMYSET									# 0
 	TYPE			= 0
-	POS 			= -600 80 0
-	FRAME 			= 60
-	EVENT			= 0
-END_ENEMYSET
-
-ENEMYSET									# 0
-	TYPE			= 0
-	POS 			= 600 80 0
+	POS 			= 500 80 0
 	FRAME 			= 1
 	EVENT			= 0
 END_ENEMYSET
 
 ENEMYSET									# 0
 	TYPE			= 0
-	POS 			= -600 80 0
-	FRAME 			= 60
+	POS 			= 400 80 0
+	FRAME 			= 1
+	EVENT			= 0
+END_ENEMYSET
+
+ENEMYSET									# 0
+	TYPE			= 1
+	POS 			= 300 80 0
+	FRAME 			= 1
 	EVENT			= 1
 END_ENEMYSET
 
 PRISONERSET									# 1
 	TYPE			= 0
 	ITEMTYPE		= -1
-	POS 			= 200 500 0
+	POS 			= 0 200 0
 	FRAME 			= 90
 END_PRISONERSET
+
 
 END_SCRIPT

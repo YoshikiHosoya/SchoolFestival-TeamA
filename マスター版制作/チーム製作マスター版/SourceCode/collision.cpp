@@ -409,17 +409,17 @@ bool CCollision::ForEnemyCollision(int nPlayerDamage, int nPlayerTankDamage, boo
 			CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
 			if (pPlayer != nullptr)
 			{
-				// 判定関数
-				if (this->OtherCollision2D(pPlayer->GetCollision()))
+				if (pPlayer->GetCollision()->GetCanCollison())
 				{
-					if (pPlayer->GetCharacterState() == CCharacter::CHARACTER_STATE_NORMAL)
+					// 判定関数
+					if (this->OtherCollision2D(pPlayer->GetCollision()))
 					{
-					// プレイヤーのライフ減衰
+						// プレイヤーのライフ減衰
 						pPlayer->CCharacter::AddDamage(nPlayerDamage);
-					}
 
-					// 当たり範囲フラグをtrueにする
-					bHitFlag = true;
+						// 当たり範囲フラグをtrueにする
+						bHitFlag = true;
+					}
 				}
 				else
 				{

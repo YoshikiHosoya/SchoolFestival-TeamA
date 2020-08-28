@@ -23,7 +23,7 @@ class CResultManager
 {
 public:
 	// リザルトの種類
-	enum RESULT_STATE
+	enum class RESULT_STATE
 	{
 		RESULT_STATE_0,						// 捕虜の数から追加スコアを計算するモード
 		RESULT_STATE_1,						// ミッションクリアを知らせるUIを出し次のモードに移行する

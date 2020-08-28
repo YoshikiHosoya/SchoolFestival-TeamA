@@ -173,6 +173,7 @@ END_ENEMYSET
 //------------------------------------------------------------
 // 捕虜の種類 ( ITEMTYPE )
 //
+//	[ -1 ]	NONE
 //	[ 0 ]	ヘビーマシンガン
 //	[ 1 ]	ショットガン
 //	[ 2 ]	レーザーガン
@@ -191,7 +192,7 @@ END_ENEMYSET
 PRISONERSET									# 25
 	TYPE		= 0
 	ITEMTYPE	= 0
-	POS			= 3850 60 0
+	POS			= 3950 60 0
 END_PRISONERSET
 
 PRISONERSET									# 26
@@ -245,12 +246,12 @@ END_OBSTACLESET
 
 OBSTACLESET									# 33
 	TYPE		= 4
-	POS			= 7865 85 0
+	POS			= 8001 85 0
 END_OBSTACLESET
 
 OBSTACLESET									# 34
 	TYPE		= 4
-	POS			= 7865 140 0
+	POS			= 8001 140 0
 END_OBSTACLESET
 
 //------------------------------------------------------------

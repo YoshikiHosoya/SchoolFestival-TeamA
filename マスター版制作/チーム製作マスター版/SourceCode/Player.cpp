@@ -30,6 +30,7 @@
 #include "battleplane.h"
 #include "resultmanager.h"
 #include "GameManager.h"
+#include "sound.h"
 
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
@@ -60,7 +61,8 @@ char *CPlayer::m_PlayerFileName =
 #define SHOT_BULLET_POS_Y		(-15.0f)		// 弾の発射位置Y
 #define SHOT_BULLET_POS_Z		(-5.0f)			// 弾の発射位置Z
 #define KNIFE_COLLISOIN_SIZE	(D3DXVECTOR3(80.0f,80.0f,0.0f))
-#define RESPAWN_INTERVAL		(120)
+#define RESPAWN_INTERVAL		(240)
+#define DEFAULT_STOCK			(3)				// 初期残機
 
 // =====================================================================================================================================================================
 //
@@ -123,6 +125,9 @@ HRESULT CPlayer::Init(void)
 			m_pPlayerUI->SetBulletAmmo(m_pGun->GetGunAmmo(), m_pGun->GetGunType());
 			// グレネードの残数表示
 			m_pPlayerUI->SetGrenadeAmmo(m_pGrenadeFire->GetGrenadeAmmo());
+			// 残機の設定
+			m_pPlayerUI->SetStockUI(DEFAULT_STOCK);
+
 		}
 	}
 
@@ -195,21 +200,27 @@ void CPlayer::Update(void)
 	CKeyboard *key;
 	key = CManager::GetInputKeyboard();
 
-	CheckDrawRange();
-
 	m_pGun->Update();
 
-	//リスポーン状態かどうか
-	if (m_bRespawn == true)
-	{
-		//リスポーンの処理
-		ReSpawn();
-	}
 	//ゲーム中の時
-	else if (CManager::GetMode() == CManager::MODE_GAME)
+	if (CManager::GetMode() == CManager::MODE_GAME)
 	{
+		if (m_bRespawn == true)
+		{
+			//リスポーンの処理
+			ReSpawn();
+		}
+		//ゲームオーバー中
+		else if (CManager::GetGame()->GetGameManager()->GetGameState() == CGameManager::GAMESTATE::GAMEOVER ||
+				CManager::GetGame()->GetGameManager()->GetGameState() == CGameManager::GAMESTATE::NONE)
+		{
+			//ずっと死亡
+			SetLife(0);
+			SetMotion(CCharacter::PLAYER_MOTION_DEAD);
+
+		}
 		//リザルト画面以外のとき
-		if (CManager::GetGame()->GetGameManager()->GetGameState() != CGameManager::GAMESTATE::RESULT)
+		else if (CManager::GetGame()->GetGameManager()->GetGameState() != CGameManager::GAMESTATE::RESULT)
 		{
 			// 乗り物に乗っていない時といない時の判定
 			Ride();
@@ -296,6 +307,11 @@ void CPlayer::DebugInfo(void)
 	static bool trigger2 = false;
 	CKeyboard *key;
 	key = CManager::GetInputKeyboard();
+
+	if (key->GetKeyboardTrigger(DIK_G))
+	{
+		AddDamage(1);
+	}
 
 	CDebugProc::Print("pos %f,%f,%f\n", GetPosition().x, GetPosition().y, GetPosition().z);
 	CDebugProc::Print("ShotRot >> %.2f %.2f %.2f\n", GetShotDirection().x, GetShotDirection().y, GetShotDirection().z);
@@ -642,10 +658,32 @@ void CPlayer::ResetPlayer()
 }
 
 //====================================================================
+//ステートに応じた処理
+//====================================================================
+void CPlayer::State()
+{
+	//ステート切り替えた時のリアクション
+	CCharacter::State();
+
+	//Player側でオーバーライド
+	switch (CCharacter::GetCharacterState())
+	{
+	case CHARACTER_STATE_DAMAGE_FLASHING:
+	case CHARACTER_STATE_INVINCIBLE:
+	case CHARACTER_STATE_DEATH:
+		GetCollision()->SetCanCollision(false);
+		break;
+	}
+}
+
+//====================================================================
 //ダメージ時のリアクション
 //====================================================================
 void CPlayer::DamageReaction()
 {
+	//悲鳴
+	CManager::GetSound()->Play(CSound::LABEL_SE_VOICE_PLAYER_DAMAGE);
+
 	CCharacter::DamageReaction();
 }
 
@@ -669,11 +707,9 @@ void CPlayer::StateChangeReaction()
 	switch (CCharacter::GetCharacterState())
 	{
 	case CHARACTER_STATE_NORMAL:
-
 		break;
 
 	case CHARACTER_STATE_DAMAGE_FLASHING:
-
 
 		break;
 	case CHARACTER_STATE_INVINCIBLE:
@@ -683,8 +719,14 @@ void CPlayer::StateChangeReaction()
 		ChangeColor(true, FlashColor);
 		SetStateCount(3);
 		break;
+
 	case CHARACTER_STATE_DEATH:
+		GetCollision()->SetCanCollision(false);
+		SetStateCount(240);
 		SetRespawnFlag(true);
+		//悲鳴
+		CManager::GetSound()->Play(CSound::LABEL_SE_VOICE_PLAYER_DEATH);
+
 		SetMotion(CCharacter::PLAYER_MOTION_DEAD);
 		break;
 	}
@@ -822,12 +864,26 @@ void CPlayer::ReSpawn(void)
 
 	if (m_nRespawnCnt >= RESPAWN_INTERVAL)
 	{
-		m_nRespawnCnt = 0;
-		m_bRespawn = false;
-		m_pGun->SetGunType(CGun::GUNTYPE_HANDGUN);
-		SetMotion(CCharacter::PLAYER_MOTION_NORMAL);
-		SetState(CHARACTER_STATE_INVINCIBLE);
-		SetLife(m_nLife[0]);
+		//残機が無い場合
+		if (m_pPlayerUI->GetStock() <= 0)
+		{
+			//ゲームオーバー
+			CManager::GetGame()->GetGameManager()->SetGameState(CGameManager::GAMESTATE::GAMEOVER);
+		}
+		else
+		{
+			//リセット
+			m_nRespawnCnt = 0;
+			m_bRespawn = false;
+			m_pGun->SetGunType(CGun::GUNTYPE_HANDGUN);
+			SetMotion(CCharacter::PLAYER_MOTION_NORMAL);
+			SetState(CHARACTER_STATE_INVINCIBLE);
+			SetLife(m_nLife[0]);
+			m_pPlayerUI->SetStockUI(m_pPlayerUI->GetStock() - 1);
+			m_pGrenadeFire->SetGrenadeAmmoDefault();
+			m_pPlayerUI->SetGrenadeAmmo(m_pGrenadeFire->GetGrenadeAmmo());
+
+		}
 	}
 }
 

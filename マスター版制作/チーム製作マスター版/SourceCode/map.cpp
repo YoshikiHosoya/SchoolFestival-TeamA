@@ -61,8 +61,11 @@ char *CMap::m_WaveFileName[WAVE_MAX] =
 	{ "data/Load/Wave/Wave_1_BOSS.txt" },
 
 	{ "data/Load/Wave/Wave_2_1_1.txt" },
+	{ "data/Load/Wave/Wave_2_1_2.txt" },
 	{ "data/Load/Wave/Wave_2_2_1.txt" },
+	{ "data/Load/Wave/Wave_2_2_2.txt" },
 	{ "data/Load/Wave/Wave_2_3_1.txt" },
+	{ "data/Load/Wave/Wave_2_3_2.txt" },
 	{ "data/Load/Wave/Wave_2_BOSS.txt" },
 
 };
@@ -1091,11 +1094,13 @@ void CMap::SaveBGContents(FILE * pFile)
 	fprintf(pFile, "// ”wŒi‚ÌƒeƒNƒXƒ`ƒƒî•ñ\n");
 	fprintf(pFile, COMMENT02);
 	fprintf(pFile, COMMENT01);
-	fprintf(pFile, "//	[ %d ]	‹ó‚Ì”wŒi\n", CTexture::TEX_BG_SKY);
+	fprintf(pFile, "//	[ %d ]	‹ó‚Ì”wŒi ( °‚ê )\n", CTexture::TEX_BG_SKY_SUNNY);
+	fprintf(pFile, "//	[ %d ]	‹ó‚Ì”wŒi ( “Ü‚è )\n", CTexture::TEX_BG_SKY_CLOUDY);
+	fprintf(pFile, "//	[ %d ]	‹ó‚Ì”wŒi ( ˆÃ‰_ )\n", CTexture::TEX_BG_SKY_DARKCLOUDS);
 	fprintf(pFile, COMMENT01);
 	fprintf(pFile, COMMENT02);
 	fprintf(pFile, "BGSET\n");
-	fprintf(pFile, "	BG_TEX_ID			= %d\n", CTexture::TEX_BG_SKY);
+	fprintf(pFile, "	BG_TEX_ID			= %d\n", CTexture::TEX_BG_SKY_SUNNY);
 	fprintf(pFile, "END_BGSET\n");
 	fprintf(pFile, NEWLINE);
 }
@@ -2056,20 +2061,6 @@ void CMap::UpdateDieFlag()
 	{
 		if (m_pEnemy[nCnt]->GetDieFlag())
 		{
-			if (m_pEnemy[nCnt]->GetCharacterType() != CCharacter::CHARACTER_TYPE_BOSS_ONE &&
-				m_pEnemy[nCnt]->GetCharacterType() != CCharacter::CHARACTER_TYPE_BOSS)
-			{
-				// ƒ‰ƒ“ƒ_ƒ€‚ÈŠm—¦‚ÅƒAƒCƒeƒ€‚ðƒhƒƒbƒv‚·‚é
-				if (CItem::DropRate())
-				{
-					//ƒAƒCƒeƒ€‚ð¶¬
-					CItem::DropCreate(m_pEnemy[nCnt]->GetPosition(),
-						CItem::ITEMDROP_WEAPON,
-						CItem::ITEMDROP_PATTERN_RANDOM,
-						CItem::ITEMTYPE_NONE);
-				}
-			}
-
 			m_pEnemy[nCnt]->Rerease();
 			m_pEnemy[nCnt] = nullptr;
 			m_pEnemy.erase(m_pEnemy.begin() + nCnt);

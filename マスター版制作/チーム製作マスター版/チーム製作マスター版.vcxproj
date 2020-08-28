@@ -179,7 +179,6 @@
     <ClCompile Include="SourceCode\flamethrower.cpp" />
     <ClCompile Include="SourceCode\game.cpp" />
     <ClCompile Include="SourceCode\GameManager.cpp" />
-    <ClCompile Include="SourceCode\gameover.cpp" />
     <ClCompile Include="SourceCode\grenade.cpp" />
     <ClCompile Include="SourceCode\grenadefire.cpp" />
     <ClCompile Include="SourceCode\gun.cpp" />
@@ -285,7 +284,6 @@
     <ClInclude Include="SourceCode\flamethrower.h" />
     <ClInclude Include="SourceCode\game.h" />
     <ClInclude Include="SourceCode\GameManager.h" />
-    <ClInclude Include="SourceCode\gameover.h" />
     <ClInclude Include="SourceCode\grenade.h" />
     <ClInclude Include="SourceCode\grenadefire.h" />
     <ClInclude Include="SourceCode\gun.h" />
@@ -339,6 +337,7 @@
     <ClInclude Include="SourceCode\RankingManager.h" />
     <ClInclude Include="SourceCode\rankingUI.h" />
     <ClInclude Include="SourceCode\renderer.h" />
+    <ClInclude Include="SourceCode\Resource\resource.h" />
     <ClInclude Include="SourceCode\ResultManager.h" />
     <ClInclude Include="SourceCode\resultUI.h" />
     <ClInclude Include="SourceCode\rocketlauncher.h" />
@@ -367,6 +366,9 @@
     <ClInclude Include="SourceCode\vehicle.h" />
     <ClInclude Include="SourceCode\WeakEnemy.h" />
     <ClInclude Include="SourceCode\XInputPad.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="SourceCode\Resource\icon.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

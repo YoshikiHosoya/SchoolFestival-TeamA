@@ -77,14 +77,15 @@ public:
 	bool DefaultMotion(void);				//デフォルトのモーションセット
 	void MapChangePlayerRespawn();			//マップ遷移時のプレイヤー設定
 	void ResetPlayer();						//プレイヤー初期状態にリセット
+	void State();							//ステートに応じた処理
 
 	/* 設定 取得 関数 */
+	void			SetRideFlag(bool bRide)			{ m_bRideVehicle = bRide; };	// ライドフラグの設定
+	void			SetRespawnFlag(bool bRespawn)	{ m_bRespawn = bRespawn; };		// リスポーンフラグ取得
 	CGun			*GetGun()						{ return  m_pGun; };			// 銃のポインタ取得
 	CGrenadeFire	*GetGrenadeFire()				{ return  m_pGrenadeFire; };	// グレネード発射位置のポインタ取得
 	CPlayerUI		*GetPlayerUI()					{ return  m_pPlayerUI; };		// プレイヤーUIのポインタ取得
-	void			SetRideFlag(bool bRide)			{ m_bRideVehicle = bRide; };	// ライドフラグの設定
 	bool			GetRideFlag()					{ return m_bRideVehicle; };		// ライドフラグの取得
-	void			SetRespawnFlag(bool bRespawn)	{ m_bRespawn = bRespawn; };		// リスポーンフラグ取得
 	bool			GetRespawnFlag()				{ return m_bRespawn; };			// リスポーンフラグの設定
 
 	/* 静的メンバ関数 */

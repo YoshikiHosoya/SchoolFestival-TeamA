@@ -1174,7 +1174,7 @@ void CModel::DrawMesh()
 	if (m_Model[m_type][m_modelCount].pBuffmat != NULL)
 	{
 		pMat = (D3DXMATERIAL*)m_Model[m_type][m_modelCount].pBuffmat->GetBufferPointer();
-
+		pDevice->SetRenderState(D3DRS_SPECULARENABLE, TRUE);						// すぺきゅらモード有効
 		for (int nCnt = 0; nCnt < (int)m_Model[m_type][m_modelCount].nNumMat; nCnt++)
 		{
 			// ローカルのマテリアル
@@ -1197,5 +1197,7 @@ void CModel::DrawMesh()
 			m_Model[m_type][m_modelCount].pMesh->DrawSubset(nCnt);
 		}
 	}
+	pDevice->SetRenderState(D3DRS_SPECULARENABLE, FALSE);						// すぺきゅらモード無効
+
 }
 

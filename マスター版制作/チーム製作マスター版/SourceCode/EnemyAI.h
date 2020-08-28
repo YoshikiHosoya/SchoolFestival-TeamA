@@ -54,6 +54,7 @@ private:
 	bool m_bShot;
 	bool m_bReStartFlag;
 	int m_random;
+	bool m_bCrouch;
 	CCollision				*m_pCollision;							//“–‚½‚è”»’è‚Ìƒ|ƒCƒ“ƒ^
 };
 

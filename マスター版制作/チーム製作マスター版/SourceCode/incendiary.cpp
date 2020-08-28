@@ -246,7 +246,7 @@ CIncendiary * CIncendiary::Create(D3DXVECTOR3 rot)
 void CIncendiary::CalcBulletSpeed(D3DXVECTOR3 Target)
 {
 	// プレイヤーとボスの距離
-	float fDistance;
+	float fDistance = 0.0f;
 
 	for (int nCnt = 0; nCnt < CManager::GetBaseMode()->GetMap()->GetMaxEnemy(); nCnt++)
 	{

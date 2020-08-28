@@ -17,6 +17,7 @@
 #include "game.h"
 #include "camera.h"
 #include "map.h"
+#include "sound.h"
 //------------------------------------------------------------------------------
 //静的メンバ変数の初期化
 //------------------------------------------------------------------------------
@@ -25,6 +26,10 @@
 //------------------------------------------------------------------------------
 //マクロ
 //------------------------------------------------------------------------------
+#define GO_SIGN_POS (D3DXVECTOR3(1180.0f,200.0f,0.0f))
+#define GO_SIGN_SIZE (D3DXVECTOR3(80.0f,60.0f,0.0f))
+#define GAMEOVER_SIZE (D3DXVECTOR3(450.0f, 150.0f, 0.0f))
+
 //------------------------------------------------------------------------------
 //コンストラクタ
 //------------------------------------------------------------------------------
@@ -55,7 +60,7 @@ void CGameManager::Update()
 	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
 	CGame *pGame = (CGame*)CManager::GetBaseMode();
 
-	m_nCnt = 0;
+	m_nCnt++;
 
 	//nullcheck
 	if (pPlayer)
@@ -94,21 +99,41 @@ void CGameManager::Update()
 	//stateに応じた処理
 	switch (m_state)
 	{
+		//通常かウェーブ状態のとき
 	case CGameManager::GAMESTATE::NORMAL:
-		break;
+		//GoSign更新
+		UpdateGoSign();
+
 	case CGameManager::GAMESTATE::WAVE:
-		UpdateWave();
+
+		//タイマー更新
+		UpdateTimer();
+
+		//ウェーブの時
+		if (m_state == CGameManager::GAMESTATE::WAVE)
+		{
+			//ウェーブの更新
+			UpdateWave();
+
+			//GoSign非表示
+			m_pScene2D_GoSign->SetDisp(false);
+			m_nCnt = 0;
+
+		}
+		break;
+
+	case CGameManager::GAMESTATE::RESULT:
+
+		break;
+
+	case CGameManager::GAMESTATE::GAMEOVER:
+		UpdateGameover();
+
 		break;
 	default:
 		break;
 
 	}
-
-	//GoSign更新
-	UpdateGoSign();
-
-	//タイマー更新
-	UpdateTimer();
 }
 
 //------------------------------------------------------------------------------
@@ -129,10 +154,12 @@ void CGameManager::ShowDebugInfo()
 
 	CDebugProc::Print("NowWaveNum >> %d\n", m_nNowWave);
 	CDebugProc::Print("GameState >> %d\n", m_state);
+	CDebugProc::Print("m_nCnt >> %d\n", m_nCnt);
+	CDebugProc::Print("m_nWavePrisonerCnt >> %d\n", m_nWavePrisonerCnt);
+	CDebugProc::Print("m_nWaveEnemyCnt >> %d\n", m_nWaveEnemyCnt);
+
 	CDebugProc::Print("m_nWaveEnemyNum >> %d\n", m_nWaveEnemyNum);
 	CDebugProc::Print("m_nWavePrisonerNum >> %d\n", m_nWavePrisonerNum);
-
-
 #endif
 }
 
@@ -147,10 +174,10 @@ std::unique_ptr<CGameManager> CGameManager::Create()
 	//nullcheck
 	if (pGameManager)
 	{
-		////Goサイン生成
-		//pGameManager->m_pScene2D_GoSign = CScene2D::CreateSceneManagement(D3DXVECTOR3(1000.0f, 300.0f, 0.0f), D3DXVECTOR3(200.0f, 120.0f,0.0f),CScene::OBJTYPE_UI);
-		//pGameManager->m_pScene2D_GoSign->BindTexture(CTexture::GetTexture(CTexture::TEX_ITEM_MEDAL));
-		//pGameManager->m_pScene2D_GoSign->SetColor(WhiteColor);
+		//Goサイン生成
+		pGameManager->m_pScene2D_GoSign = CScene2D::CreateSceneManagement(GO_SIGN_POS, GO_SIGN_SIZE,CScene::OBJTYPE_UI);
+		pGameManager->m_pScene2D_GoSign->BindTexture(CTexture::GetTexture(CTexture::TEX_UI_GAME_GO));
+		pGameManager->m_pScene2D_GoSign->SetColor(WhiteColor);
 
 		return pGameManager;
 	}
@@ -162,6 +189,19 @@ std::unique_ptr<CGameManager> CGameManager::Create()
 void CGameManager::SetGameState(GAMESTATE state)
 {
 	m_state = state;
+
+	if (m_state == CGameManager::GAMESTATE::GAMEOVER)
+	{
+		//ゲームオーバー表示されていない時
+		if (!m_pScene2D_GameOver)
+		{
+			//ゲームオーバーUI生成
+			m_pScene2D_GameOver = CScene2D::CreateSceneManagement(SCREEN_CENTER_POS, GAMEOVER_SIZE, CScene::OBJTYPE_UI);
+			m_pScene2D_GameOver->BindTexture(CTexture::GetTexture(CTexture::TEX_UI_GAME_GAMEOVER));
+
+			m_nCnt = 0;
+		}
+	}
 
 	//ゲームのステート切り替わった時の処理
 	CManager::GetGame()->StateChangeReaction();
@@ -237,6 +277,7 @@ void CGameManager::StartWave()
 void CGameManager::EndWave()
 {
 	m_state = CGameManager::GAMESTATE::NORMAL;
+	m_nCnt = 0;
 	CManager::GetRenderer()->GetCamera()->SetCameraStopMove(false);
 	m_nWaveEnemyCnt = 0;
 	m_nWaveEnemyNum = 0;
@@ -296,14 +337,30 @@ void CGameManager::UpdateWave()
 //------------------------------------------------------------------------------
 void CGameManager::UpdateGoSign()
 {
+	//nullcehck
 	if (m_pScene2D_GoSign)
 	{
-		if (CManager::GetGame()->GetMap()->GetMapNum() == CMap::MAP_1_1)
+		if (m_nCnt <= 300)
 		{
 			if (m_nCnt % 40 == 0)
 			{
+				//点滅
 				m_pScene2D_GoSign->SetDisp(m_pScene2D_GoSign->GetDisp() ^ 1);
+				if (m_pScene2D_GoSign->GetDisp())
+				{
+					CManager::GetSound()->Play(CSound::LABEL_SE_GO_SIGN);
+				}
 			}
+		}
+		else if (m_nCnt >= 600)
+		{
+			//カウント0にする
+			m_nCnt = 0;
+		}
+		else
+		{
+			//非表示
+			m_pScene2D_GoSign->SetDisp(false);
 		}
 	}
 }
@@ -312,31 +369,41 @@ void CGameManager::UpdateGoSign()
 //------------------------------------------------------------------------------
 void CGameManager::UpdateTimer()
 {
-	// ゲームモードでプレイ操作可能なタイミングの時
-	if (m_state != CGameManager::GAMESTATE::RESULT)
-	{
-		// カウント加算
-		m_nTimeCnt++;
-	}
+	// カウント加算
+	m_nTimeCnt++;
 
 	// 5秒経過した時
 	if (m_nTimeCnt >= 300)
 	{
 		if (CManager::GetBaseMode()->GetPlayer()->GetPlayerUI())
 		{
-			// 体力が0より大きかった時
-			if (CManager::GetBaseMode()->GetPlayer()->GetPlayerUI()->GetTime() > 0)
+			// タイマーの値を減少する
+			CManager::GetBaseMode()->GetPlayer()->GetPlayerUI()->DecrementTime();
+
+			// タイムが0以下になった時
+			if (CManager::GetBaseMode()->GetPlayer()->GetPlayerUI()->GetTime() <= 0)
 			{
-				// タイマーの値を減少する
-				CManager::GetBaseMode()->GetPlayer()->GetPlayerUI()->DecrementTime();
-			}
-			// タイマーが0以下になった時
-			else
-			{
+				//ゲームオーバー
+				SetGameState(CGameManager::GAMESTATE::GAMEOVER);
 			}
 		}
 
 		// タイマーカウントをリセットする
 		m_nTimeCnt = 0;
+	}
+}
+//------------------------------------------------------------------------------
+//ゲームオーバーの更新
+//------------------------------------------------------------------------------
+void CGameManager::UpdateGameover()
+{
+	m_nCnt++;
+
+	//カウントがある程度になったら
+	if (m_nCnt >= 300)
+	{
+		//タイトルに遷移
+		CManager::GetRenderer()->GetFade()->SetFade(CFADE::FADETYPE::FADETYPE_MODE, CManager::MODE::MODE_TITLE);
+		SetGameState(CGameManager::GAMESTATE::NONE);
 	}
 }

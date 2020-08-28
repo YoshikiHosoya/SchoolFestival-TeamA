@@ -252,7 +252,7 @@ void CBossAI::UpdateAttackAI(void)
 			{
 				m_AttackCnt++;
 				//200ƒtƒŒ[ƒ€‚æ‚è¬‚³‚¢‚Æ‚«ËŒ‚
-				if (m_AttackCnt < 200 && m_AttackCnt % 6 == 0)
+				if (m_AttackCnt < 200 && m_AttackCnt % 9 == 0)
 				{
 					pBossPass->GetGunPtr()->Shot();
 				}
