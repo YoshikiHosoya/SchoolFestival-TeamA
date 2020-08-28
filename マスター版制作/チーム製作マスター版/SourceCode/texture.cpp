@@ -70,6 +70,7 @@ FILENAME_LIST CTexture::m_aTexFileName =
 
 	{ "data/TEXTURE/BG/sky01.jpg" },						//‹ó‚Ì”wŒi	( °‚ê )
 	{ "data/TEXTURE/BG/sky02.jpg" },						//‹ó‚Ì”wŒi	( “Ü‚è )
+	{ "data/TEXTURE/BG/sky06.jpg" },						//‹ó‚Ì”wŒi	( ˆÃ‰_ )
 
 	{ "data/TEXTURE/UI/Game_UI/go.png" },					//GoƒTƒCƒ“
 	{ "data/TEXTURE/UI/Game_UI/Gameover.png" },				//ƒQ[ƒ€ƒI[ƒo[

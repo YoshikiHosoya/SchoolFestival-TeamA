@@ -84,6 +84,7 @@ public:
 
 		TEX_BG_SKY_SUNNY,						//空の背景	( 晴れ )
 		TEX_BG_SKY_CLOUDY,						//空の背景	( 曇り )
+		TEX_BG_SKY_DARKCLOUDS,					//空の背景	( 暗雲 )
 
 		TEX_UI_GAME_GO,							//Goサイン
 		TEX_UI_GAME_GAMEOVER,					//ゲームオーバー
