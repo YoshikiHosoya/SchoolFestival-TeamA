@@ -16,6 +16,7 @@
 #include "playerui.h"
 #include "sound.h"
 #include "map.h"
+#include "UI.h"
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
 // =====================================================================================================================================================================
@@ -33,7 +34,7 @@ CResultManager::CResultManager()
 {
 	m_bNextFlag = false;
 	m_nNextCount = 240;
-	m_ResultState = RESULT_STATE_0;
+	m_ResultState = RESULT_STATE::RESULT_STATE_0;
 	m_pResultUI = nullptr;
 }
 
@@ -44,11 +45,9 @@ CResultManager::CResultManager()
 // =====================================================================================================================================================================
 CResultManager::~CResultManager()
 {
-	// uiの解放
 	if (m_pResultUI)
 	{
-		m_pResultUI->Uninit();
-		m_pResultUI = nullptr;
+		m_pResultUI->SetDeleteFlag(true);
 	}
 }
 
@@ -93,7 +92,7 @@ void CResultManager::Update(void)
 		}
 	}
 
-	if (m_ResultState == RESULT_STATE_0)
+	if (m_ResultState == RESULT_STATE::RESULT_STATE_0)
 	{
 		// 順番通りに描画し処理していく
 		ResultUiOrder();
@@ -147,18 +146,18 @@ void CResultManager::DrawConditions(RESULT_STATE state)
 void CResultManager::NextMode()
 {
 	// リザルトの状態が0だった時
-	if (m_ResultState == RESULT_STATE_0)
+	if (m_ResultState == RESULT_STATE::RESULT_STATE_0)
 	{
 		m_nNextCount = 240;
 		m_bNextFlag = false;
 		// 状態を1に移行する
-		m_ResultState = RESULT_STATE_1;
+		m_ResultState = RESULT_STATE::RESULT_STATE_1;
 
 		CManager::GetSound()->Play(CSound::LABEL_SE_GAMECLEAR);
 	}
 
 	// リザルトの状態が1だった時
-	else if (m_ResultState == RESULT_STATE_1)
+	else if (m_ResultState == RESULT_STATE::RESULT_STATE_1)
 	{
 		// マップ2に移行
 		if (CManager::GetGame()->GetMap()->GetMapNum() == CMap::MAP_1_BOSS)

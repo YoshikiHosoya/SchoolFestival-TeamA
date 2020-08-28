@@ -105,6 +105,12 @@ void CWeakEnemy::Update(void)
 	//•`‰æ‚Ì”ÍˆÍ“à‚©ƒ`ƒFƒbƒN
 	if (!CheckDrawRange())
 	{
+		//‰æ–Ê‚Ì¶’[‚æ‚è¶‚És‚Á‚½ê‡‚ÍŽ€–Sˆµ‚¢
+		if (CManager::GetRenderer()->GetMinScreenPos().x > GetPosition().x)
+		{
+			//Ž€–S
+			DeathReaction();
+		}
 		return;
 	}
 	CEnemy::Update();

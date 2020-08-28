@@ -268,6 +268,11 @@ void CGame::DebugCollision(CKeyboard *key)
 				CManager::GetRenderer()->GetFade()->SetFade(CFADE::FADETYPE::FADETYPE_MAPMOVE, (CMap::MAP)(m_pMap->GetMapNum() + 1));
 			}
 		}
+		if (key->GetKeyboardTrigger(DIK_0))
+		{
+			//タイマー減少
+			m_pPlayer->GetPlayerUI()->DecrementTime();
+		}
 	}
 }
 
