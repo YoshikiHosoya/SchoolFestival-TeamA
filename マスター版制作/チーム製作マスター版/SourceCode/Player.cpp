@@ -30,6 +30,7 @@
 #include "battleplane.h"
 #include "resultmanager.h"
 #include "GameManager.h"
+#include "sound.h"
 
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
@@ -199,10 +200,7 @@ void CPlayer::Update(void)
 	CKeyboard *key;
 	key = CManager::GetInputKeyboard();
 
-	CheckDrawRange();
-
 	m_pGun->Update();
-
 
 	//ゲーム中の時
 	if (CManager::GetMode() == CManager::MODE_GAME)
@@ -683,6 +681,9 @@ void CPlayer::State()
 //====================================================================
 void CPlayer::DamageReaction()
 {
+	//悲鳴
+	CManager::GetSound()->Play(CSound::LABEL_SE_VOICE_PLAYER_DAMAGE);
+
 	CCharacter::DamageReaction();
 }
 
@@ -706,24 +707,25 @@ void CPlayer::StateChangeReaction()
 	switch (CCharacter::GetCharacterState())
 	{
 	case CHARACTER_STATE_NORMAL:
-		GetCollision()->SetCanCollision(true);
 		break;
 
 	case CHARACTER_STATE_DAMAGE_FLASHING:
-		GetCollision()->SetCanCollision(false);
 
 		break;
 	case CHARACTER_STATE_INVINCIBLE:
-		GetCollision()->SetCanCollision(false);
 
 		break;
 	case CHARACTER_STATE_ITEMGET_FLASH:
 		ChangeColor(true, FlashColor);
 		SetStateCount(3);
 		break;
+
 	case CHARACTER_STATE_DEATH:
 		GetCollision()->SetCanCollision(false);
+		SetStateCount(240);
 		SetRespawnFlag(true);
+		//悲鳴
+		CManager::GetSound()->Play(CSound::LABEL_SE_VOICE_PLAYER_DEATH);
 
 		SetMotion(CCharacter::PLAYER_MOTION_DEAD);
 		break;
@@ -862,7 +864,6 @@ void CPlayer::ReSpawn(void)
 
 	if (m_nRespawnCnt >= RESPAWN_INTERVAL)
 	{
-
 		//残機が無い場合
 		if (m_pPlayerUI->GetStock() <= 0)
 		{
@@ -879,6 +880,9 @@ void CPlayer::ReSpawn(void)
 			SetState(CHARACTER_STATE_INVINCIBLE);
 			SetLife(m_nLife[0]);
 			m_pPlayerUI->SetStockUI(m_pPlayerUI->GetStock() - 1);
+			m_pGrenadeFire->SetGrenadeAmmoDefault();
+			m_pPlayerUI->SetGrenadeAmmo(m_pGrenadeFire->GetGrenadeAmmo());
+
 		}
 	}
 }

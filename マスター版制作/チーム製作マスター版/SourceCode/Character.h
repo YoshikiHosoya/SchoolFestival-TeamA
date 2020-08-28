@@ -199,6 +199,7 @@ public:
 
 	void ChangeColor(bool ColorChangeFlag, D3DXCOLOR AddColor);									// 色変更
 	bool CheckDrawRange();
+	void SetAllModelDisp(bool bDisp);								//点滅の切り替え
 
 	CCollision *GetCollision() { return m_pCollision; };			// 当たり判定のポインタ取得
 	virtual void		DebugInfo(void);						// デバッグ用関数
@@ -245,7 +246,6 @@ private:
 	void CalcMove();												//移動の計算
 	void CalcRotation();											//回転の計算
 	void Motion(void);												//モーション処理
-	void SetAllModelDisp(bool bDisp);								//点滅の切り替え
 
 };
 #endif

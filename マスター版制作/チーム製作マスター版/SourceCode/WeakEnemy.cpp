@@ -165,7 +165,7 @@ void CWeakEnemy::DamageReaction()
 //====================================================================
 void CWeakEnemy::DeathReaction()
 {
-	if (CHossoLibrary::Random(5) <= 1)
+	if (CHossoLibrary::Random(10) <= 1)
 	{
 		// ランダムな確率でアイテムをドロップする
 		if (CItem::DropRate())
@@ -202,13 +202,12 @@ void CWeakEnemy::StateChangeReaction()
 		m_pKnife->EndMeleeAttack();
 		SetMotion(CCharacter::ENEMY_MOTION_DEAD_1);
 
-
 		switch (GetEnemyType())
 		{
 		case CEnemy::WEAKENEMY_TYPE::ENEMY_NORMAL:
 		case CEnemy::WEAKENEMY_TYPE::ENEMY_SHIELD:
 			//悲鳴
-			CManager::GetSound()->Play(CSound::LABEL_SE_VOICE_DEATH);
+			CManager::GetSound()->Play(CSound::LABEL_SE_VOICE_ENEMY_DEATH);
 
 			//血のエフェクト
 			CParticle::CreateFromText(GetPosition(), GetShotDirection(), CParticleParam::EFFECT_BLOOD);
