@@ -19,6 +19,7 @@
 #include "rankingui.h"
 #include "scoremanager.h"
 #include "sound.h"
+#include "ResultManager.h"
 #include <iostream>
 #include <mutex>
 #include <thread>
@@ -251,7 +252,7 @@ void CResultUI::Update(void)
 		if (pGame != nullptr && pGame->GetResultManager() != nullptr)
 		{
 			// 描画条件確認
-			DrawConditions(pGame->GetResultManager()->GetResultState());
+			DrawConditions();
 			// 待ち時間の設定
 			ResultUiOrder(m_bUseUIFlag[0], m_bUseUIFlag[1], m_bUseUIFlag[2]);
 			// 条件ごとの処理
@@ -458,7 +459,7 @@ void CResultUI::Result1Draw()
 			CGame *pGame = (CGame*)CManager::GetBaseMode();
 			if (pGame != nullptr && pGame->GetResultManager() != nullptr)
 			{
-				if (pGame->GetResultManager()->GetResultState() == CResultManager::RESULT_STATE_1)
+				if (pGame->GetResultManager()->GetResultState() == CResultManager::RESULT_STATE::RESULT_STATE_1)
 				{
 					// リザルトモードを次のモードに移行するためのフラグをtrueにする
 					pGame->GetResultManager()->SetNextFlag(true);
@@ -524,7 +525,7 @@ void CResultUI::Conditions()
 		CGame *pGame = (CGame*)CManager::GetBaseMode();
 		if (pGame != nullptr && pGame->GetResultManager() != nullptr)
 		{
-			if (pGame->GetResultManager()->GetResultState() == CResultManager::RESULT_STATE_0)
+			if (pGame->GetResultManager()->GetResultState() == CResultManager::RESULT_STATE::RESULT_STATE_0)
 			{
 				// マルチナンバーに値を代入
 				ScoreCal();
@@ -658,19 +659,22 @@ void CResultUI::ResultUiOrder(bool bUse0, bool bUse1, bool bUse2)
 // Uiの描画条件
 //
 // =====================================================================================================================================================================
-void CResultUI::DrawConditions(CResultManager::RESULT_STATE state)
+void CResultUI::DrawConditions()
 {
 	// 一度全てのリザルトUIを非表示にしてから次に表示するUIを決める
 	AllNotDraw();
 
+
+	CResultManager::RESULT_STATE state = CManager::GetGame()->GetResultManager()->GetResultState();
+
 	switch (state)
 	{
-	case CResultManager::RESULT_STATE_0:
+	case CResultManager::RESULT_STATE::RESULT_STATE_0:
 		// リザルト0用のUIを表示
 		Result0Draw();
 		break;
 
-	case CResultManager::RESULT_STATE_1:
+	case CResultManager::RESULT_STATE::RESULT_STATE_1:
 		// リザルト1用のUIを表示
 		Result1Draw();
 		break;

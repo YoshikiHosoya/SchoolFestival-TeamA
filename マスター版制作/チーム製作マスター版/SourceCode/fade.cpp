@@ -10,6 +10,7 @@
 #include "ResultManager.h"
 #include "map.h"
 #include "Player.h"
+#include "playerUI.h"
 //=============================================================================
 // マクロ定義
 //=============================================================================
@@ -308,6 +309,9 @@ void CFADE::FadeOut()
 
 		//レンダラー設定初期化
 		CManager::GetRenderer()->ResetRenderer();
+
+		//タイマーリセット
+		CManager::GetGame()->GetPlayer()->GetPlayerUI()->ResetTime();
 
 		//nullcheck
 		if (pMap)

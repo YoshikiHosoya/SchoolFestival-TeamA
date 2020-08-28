@@ -7,6 +7,7 @@
 #include "renderer.h"
 #include "scene.h"
 #include "manager.h"
+#include "Resource/resource.h"
 //マクロ定義
 #define CLASS_NAME		"WindowClass"		//ウィンドウクラスの名前
 #define WINDOW_NAME		"METAL PANZER"		//キャプション
@@ -30,6 +31,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hInstancePrev, LPSTR IpCmdLine
 	//メモリ番号でブレークポイント設定
 	//_CrtSetBreakAlloc(6748);
 
+
+	//変数宣言
+	CManager*pManager;
+	//メモリ確保
+	pManager = new CManager;
+
 	WNDCLASSEX wcex =
 	{
 		//WNDCLASSEXのメモリサイズ
@@ -43,7 +50,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hInstancePrev, LPSTR IpCmdLine
 		//Uindowsの引数のインスタンスハンドル指定
 		hInstance,
 		//タスクバーに使用するアイコンを指定
-		LoadIcon(NULL,IDI_APPLICATION),
+		LoadIcon(hInstance,MAKEINTRESOURCE(IDI_ICON)),
 		//使用するマウスカーソル
 		LoadCursor(NULL,IDC_ARROW),
 		//ウィンドウクライアント領域の色指定
@@ -51,14 +58,17 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hInstancePrev, LPSTR IpCmdLine
 		//ウィンドウクラスの名前
 		NULL,CLASS_NAME,
 		//小さいアイコンの指定
-		LoadIcon(NULL,IDI_APPLICATION)
+		LoadIcon(hInstance,MAKEINTRESOURCE(IDI_ICON))
 	};
-	// ウィンドウハンドル（識別子）
-	HWND hWnd;
-	//メッセージを格納する変数
-	MSG msg;
+
 	//ウィンドウのクラスの登録
 	RegisterClassEx(&wcex);
+
+	// ウィンドウハンドル（識別子）
+	HWND hWnd;
+
+	//メッセージを格納する変数
+	MSG msg;
 	RECT rect = { 0, 0,SCREEN_WIDTH,SCREEN_HEIGHT };
 	AdjustWindowRect(&rect, WS_OVERLAPPEDWINDOW, false);
 	//ウィンドウの生成
@@ -82,20 +92,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hInstancePrev, LPSTR IpCmdLine
 	DispConsol();
 #endif
 
-	//ウィンドウの表示
-	//指定されたウィンドウの表示設定
-	ShowWindow(hWnd, Cmdshow);
-
 	DWORD dwCurrentTime;			//現在時間
 	DWORD dwExeclastTime;			//最後に処理した時間
 	DWORD dwFrameCount;
 	DWORD dwFPSLastTime;
-	//変数宣言
-	CManager*pManager;
-	//メモリ確保
-	pManager = new CManager;
-	//マウスカーソルを消す
-	ShowCursor(TRUE);
+
 	//初期化処理
 	if (FAILED(pManager->Init(hInstance, hWnd, TRUE)))
 	{
@@ -103,9 +104,15 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hInstancePrev, LPSTR IpCmdLine
 	}
 
 	//ウィンドウの表示
+	//指定されたウィンドウの表示設定
 	ShowWindow(hWnd, Cmdshow);
+
 	//ウィンドウのクライアント領域更新
 	UpdateWindow(hWnd);
+
+	//マウスカーソルを消す
+	ShowCursor(TRUE);
+
 	//分解能を設定
 	timeBeginPeriod(1);
 
@@ -158,11 +165,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hInstancePrev, LPSTR IpCmdLine
 	//終了処理
 	pManager->Uninit();
 	delete pManager;
-	////for (int nCnt = 0; nCnt < MAX; nCnt++)
-	//{
-	//	CScene::RereaseAll();
-	//}
 	pManager = NULL;
+
 	//分解能を戻す
 	timeBeginPeriod(1);
 	//ウィンドウクラスの登録を解除:

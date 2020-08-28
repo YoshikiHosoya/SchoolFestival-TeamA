@@ -67,6 +67,7 @@ public:
 	void				SetTimeUI(int nTime);				// 残り時間の設定
 	int					GetTime() { return m_nTime; };		// 時間の取得
 	void				DecrementTime();					// 時間の減少
+	void				ResetTime();						// 時間のリセット
 private:
 	/* 静的メンバ関数 */
 

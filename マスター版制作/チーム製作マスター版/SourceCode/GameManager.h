@@ -26,9 +26,11 @@ public:
 
 	enum class GAMESTATE
 	{
-		NORMAL = 0,
+		NONE = 0,
+		NORMAL,
 		WAVE,
 		RESULT,
+		GAMEOVER,
 	};
 
 	void Update();
@@ -53,6 +55,8 @@ private:
 
 	int			m_nNowWave;				//ウェーブ
 	CScene2D	*m_pScene2D_GoSign;		//2Dポリゴン　Goサイン
+	CScene2D	*m_pScene2D_GameOver;	//2Dポリゴン　ゲームオーバー
+
 	GAMESTATE	m_state;				//ゲームの状態
 	int			m_nTimeCnt;				//時間のカウント
 
@@ -61,6 +65,7 @@ private:
 	void EndWave();
 	void UpdateGoSign();
 	void UpdateTimer();
+	void UpdateGameover();
 };
 
 #endif
