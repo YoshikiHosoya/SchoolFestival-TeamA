@@ -68,7 +68,8 @@ FILENAME_LIST CTexture::m_aTexFileName =
 	{ "data/TEXTURE/UI/Ranking_UI/4th.png" },				//ランキング
 	{ "data/TEXTURE/UI/Ranking_UI/5th.png" },				//ランキング
 
-	{ "data/TEXTURE/BG/sky.jpg" },							//空の背景
+	{ "data/TEXTURE/BG/sky01.jpg" },						//空の背景	( 晴れ )
+	{ "data/TEXTURE/BG/sky02.jpg" },						//空の背景	( 曇り )
 
 	{ "data/TEXTURE/UI/Game_UI/go.png" },					//Goサイン
 	{ "data/TEXTURE/UI/Game_UI/Gameover.png" },				//ゲームオーバー
