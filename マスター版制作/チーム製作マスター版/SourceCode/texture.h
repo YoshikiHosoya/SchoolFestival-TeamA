@@ -82,7 +82,8 @@ public:
 		TEX_UI_RANKING_4th,						//ランキング4位
 		TEX_UI_RANKING_5th,						//ランキング5位
 
-		TEX_BG_SKY,								//空の背景
+		TEX_BG_SKY_SUNNY,						//空の背景	( 晴れ )
+		TEX_BG_SKY_CLOUDY,						//空の背景	( 曇り )
 
 		TEX_UI_GAME_GO,							//Goサイン
 		TEX_UI_GAME_GAMEOVER,					//ゲームオーバー
