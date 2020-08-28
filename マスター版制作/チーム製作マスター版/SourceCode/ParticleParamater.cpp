@@ -22,6 +22,7 @@ FILENAME_LIST CParticleParam::m_aFileNameList =
 	{ "data/Load/Effect/Paramater/Explosion_RocketLanchar.txt" },
 	{ "data/Load/Effect/Paramater/Explosion_Grenade.txt" },
 	{ "data/Load/Effect/Paramater/ExplosionSmoke.txt" },
+	{ "data/Load/Effect/Paramater/Explosion_ObjectBreak.txt" },
 	{ "data/Load/Effect/Paramater/NoCollisionExplosion.txt" },
 	{ "data/Load/Effect/Paramater/Blood.txt" },
 	{ "data/Load/Effect/Paramater/Flashing.txt" },
