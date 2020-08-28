@@ -362,6 +362,7 @@ CDebugcollision * CDebugcollision::Create(
 void CDebugcollision::SetPos(D3DXVECTOR3 * pos)
 {
 	// 座標のポインタがnullptrじゃなかったら通す
+
 	if (pos != nullptr)
 	{
 		// 座標情報を代入

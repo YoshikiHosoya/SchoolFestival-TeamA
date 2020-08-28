@@ -34,6 +34,8 @@
 #include "player.h"
 #include "playerui.h"
 #include "shield.h"
+#include "boss_One.h"
+
 //======================================================================================================================
 //
 // マクロ定義
@@ -198,6 +200,41 @@ bool CCollision::ForPlayerBulletCollision(int nEnemyDamage, int nObstacleDamage,
 		CEnemy *pEnemy = CManager::GetBaseMode()->GetMap()->GetEnemy(nCnt);
 		if (pEnemy != nullptr)
 		{
+			if (pEnemy->GetCharacterType() == CCharacter::CHARACTER_TYPE_BOSS_ONE)
+			{
+				CBoss_One *pBoss_One = (CBoss_One*)pEnemy;
+
+				if (pBoss_One->GetCollision() &&
+					pBoss_One->GetPostureType() == CBoss_One::POSTURETYPE_STAND &&
+					pBoss_One->GetBossOneType() == CBoss_One::ATTACKTYPE_FLAMERADIATION)
+				{
+					//判定が取れるとき
+					//if (pBoss_One->GetCollision()->GetCanCollison())
+					//{
+						// 判定関数
+						if (this->OtherCollision2D(pBoss_One->GetCollision()))
+						{
+							CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
+							if (pPlayer != nullptr && pPlayer->GetPlayerUI())
+							{
+								pPlayer->GetPlayerUI()->SetScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_DAMAGE_BULLET));
+							}
+
+							// 敵のライフ減衰
+							pBoss_One->CCharacter::AddDamage(10);
+
+							// 当たり範囲フラグをtrueにする
+							bHitFlag = true;
+
+							if (Penetration == false)
+							{
+								return bHitFlag;
+							}
+						}
+					//}
+				}
+
+			}
 			if (pEnemy->GetCollision())
 			{
 				//判定が取れるとき
@@ -414,12 +451,28 @@ bool CCollision::ForPlayer_EnemyCollision(bool Penetration)
 		{
 			if (pEnemy->GetCollision())
 			{
-				//判定が取れるとき
-				if (pEnemy->GetCollision()->GetCanCollison())
+				if (pEnemy->GetCharacterType() == CCharacter::CHARACTER_TYPE_BOSS_ONE)
 				{
-					if (this->CharCollision2D(pEnemy->GetCollision()))
+					CBoss_One *pBoss_One = (CBoss_One*)pEnemy;
+
+					if (pBoss_One->GetCollision() &&
+						pBoss_One->GetPostureType() == CBoss_One::POSTURETYPE_SQUAT)
 					{
-						bHitFlag = true;
+						if (this->BoxCollision2D_Character(pBoss_One->GetCollision()))
+						{
+							bHitFlag = true;
+						}
+					}
+				}
+				else
+				{
+					//判定が取れるとき
+					if (pEnemy->GetCollision()->GetCanCollison())
+					{
+						if (this->CharCollision2D(pEnemy->GetCollision()))
+						{
+							bHitFlag = true;
+						}
 					}
 				}
 			}
@@ -446,6 +499,7 @@ CEnemy * CCollision::ForPlayer_EnemyCollision()
 				//判定が取れるとき
 				if (pEnemy->GetCollision()->GetCanCollison())
 				{
+
 					if (this->CharCollision2D(pEnemy->GetCollision()))
 					{
 						// 処理を行った捕虜のポインタを返す
@@ -746,6 +800,55 @@ bool CCollision::ForTankCollision()
 	return false;
 }
 
+
+//======================================================================================================================
+// ボスが行う判定
+//======================================================================================================================
+void CCollision::ForBossOne_PlayerCollision()
+{
+}
+
+//======================================================================================================================
+// ボスが行う判定
+//======================================================================================================================
+bool CCollision::BossOne_PlayerCollision()
+{
+	// 判定を確認するフラグ
+	bool bHitFlag = false;
+
+	//相手がエネミーだったら
+	// 敵の総数分
+	for (int nCnt = 0; nCnt < CManager::GetBaseMode()->GetMap()->GetMaxEnemy(); nCnt++)
+	{
+		CEnemy *pEnemy = CManager::GetBaseMode()->GetMap()->GetEnemy(nCnt);
+		if (pEnemy != nullptr)
+		{
+			if (pEnemy->GetCharacterType() == CCharacter::CHARACTER_TYPE_BOSS_ONE)
+			{
+				CBoss_One *pBoss_One = (CBoss_One*)pEnemy;
+
+				if (pBoss_One->GetCollision() &&
+					pBoss_One->GetIntermediateSquat())
+				{
+					CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
+					if (pPlayer != nullptr)
+					{
+						if (this->BlockCollision2D_Bottom(pPlayer->GetCollision()))
+						{
+							// 敵のライフ減衰
+							pPlayer->CCharacter::AddDamage(1);
+
+							bHitFlag = true;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	return bHitFlag;
+}
+
 //======================================================================================================================
 // ナイフとキャラクターの判定
 //======================================================================================================================
@@ -869,6 +972,13 @@ void CCollision::SetPosOld(D3DXVECTOR3 * posold)
 void CCollision::SetSize(D3DXVECTOR3 size)
 {
 	m_size = size;
+#ifdef _DEBUG
+	if (m_Debugcollision != nullptr)
+	{
+		m_Debugcollision->SetSize(&m_size);
+	}
+#endif // _DEBUG
+
 }
 
 //======================================================================================================================
@@ -877,6 +987,14 @@ void CCollision::SetSize(D3DXVECTOR3 size)
 void CCollision::SetSize2D(D3DXVECTOR3 size)
 {
 	m_size = size;
+
+#ifdef _DEBUG
+	if (m_Debugcollision != nullptr)
+	{
+		m_Debugcollision->SetSize(&m_size);
+	}
+#endif // _DEBUG
+
 }
 
 //======================================================================================================================
@@ -1102,6 +1220,118 @@ bool CCollision::BlockNotUpsideCollision2D(CCollision * pCollision)
 			this->m_ppos->y = this->m_posOld->y;
 			// 移動量の初期化
 			this->m_pmove->y = 0.0f;
+			// オブジェクトに当たったフラグ
+			bHitFlag = true;
+		}
+	}
+
+	// 当たっているかいないかを返す
+	return bHitFlag;
+}
+
+//======================================================================================================================
+// ブロックの下の判定を返す ボス用
+//======================================================================================================================
+bool CCollision::BlockCollision2D_Bottom(CCollision * pCollision)
+{
+	// 弾を消すときに使うフラグ
+	bool bHitFlag = false;
+
+	//// 素材のY範囲
+	//if (this->m_ppos->y + this->m_size.y * 0.5f > pCollision->m_ppos->y &&
+	//	this->m_ppos->y < pCollision->m_ppos->y + pCollision->m_size.y)
+	//{
+	//	// 当たり判定(左)
+	//	if (this->m_ppos->x + this->m_size.x * 0.5f > pCollision->m_ppos->x - pCollision->m_size.x * 0.5f &&
+	//		this->m_posOld->x + this->m_size.x * 0.5f <= pCollision->m_ppos->x - pCollision->m_size.x * 0.5f)
+	//	{
+	//		// 素材状の左に
+	//		//this->m_ppos->x = pCollision->m_ppos->x - pCollision->m_size.x * 0.5f - this->m_size.x * 0.5f;
+	//		// 移動量の初期化
+	//		//this->m_pmove->x = 0.0f;
+	//		// オブジェクトに当たったフラグ
+	//		//bHitFlag = true;
+	//	}
+
+	//	// 当たり判定(右)
+	//	else if (this->m_ppos->x - this->m_size.x * 0.5f < pCollision->m_ppos->x + pCollision->m_size.x * 0.5f &&
+	//		this->m_posOld->x - this->m_size.x * 0.5f >= pCollision->m_ppos->x + pCollision->m_size.x * 0.5f)
+	//	{
+	//		// 素材状の右に
+	//		//this->m_ppos->x = pCollision->m_ppos->x + pCollision->m_size.x * 0.5f + this->m_size.x * 0.5f;
+	//		// 移動量の初期化
+	//		//this->m_pmove->x = 0.0f;
+	//		// オブジェクトに当たったフラグ
+	//		//bHitFlag = true;
+	//	}
+	//}
+
+	// 素材のX範囲
+	if (this->m_ppos->x + this->m_size.x * 0.5f > pCollision->m_ppos->x - pCollision->m_size.x * 0.5f &&
+		this->m_ppos->x - this->m_size.x * 0.5f < pCollision->m_ppos->x + pCollision->m_size.x * 0.5f)
+	{
+		// 当たり判定(下)
+		if (this->m_posOld->y + 50.0f > pCollision->m_ppos->y + pCollision->m_size.y &&
+			this->m_ppos->y + 50.0f <= pCollision->m_ppos->y + pCollision->m_size.y)
+		{
+			// 素材状の下に
+			//this->m_ppos->y = this->m_posOld->y;
+			pCollision->m_ppos->x = pCollision->m_ppos->x - pCollision->m_size.x * 0.5f - this->m_size.x * 0.5f;
+			// 移動量の初期化
+			//this->m_pmove->y = 0.0f;
+			// オブジェクトに当たったフラグ
+			bHitFlag = true;
+		}
+
+		//// 当たり判定(上)
+		//else if (this->m_ppos->y < pCollision->m_ppos->y + pCollision->m_size.y * 0.5f &&
+		//	this->m_posOld->y >= pCollision->m_ppos->y + pCollision->m_size.y * 0.5f)
+		//{
+		//	// 素材状の上に
+		//	this->m_ppos->y = this->m_posOld->y;
+		//	// 移動量の初期化
+		//	this->m_pmove->y = 0.0f;
+		//	// オブジェクトに当たったフラグ
+		//	bHitFlag = true;
+		//}
+	}
+
+	// 当たっているかいないかを返す
+	return bHitFlag;
+}
+
+//======================================================================================================================
+// キャラクター同士のボックス判定 ボス用
+//======================================================================================================================
+bool CCollision::BoxCollision2D_Character(CCollision * pCollision)
+{
+	// 弾を消すときに使うフラグ
+	bool bHitFlag = false;
+
+	// 素材のY範囲
+	if (this->m_ppos->y + this->m_size.y > pCollision->m_ppos->y &&
+		this->m_ppos->y < pCollision->m_ppos->y + pCollision->m_size.y)
+	{
+		// 当たり判定(左)
+		if (this->m_ppos->x + this->m_size.x * 0.5f > pCollision->m_ppos->x - pCollision->m_size.x &&
+			this->m_posOld->x + this->m_size.x * 0.5f <= pCollision->m_ppos->x - pCollision->m_size.x)
+		{
+			// 素材状の左に
+			this->m_ppos->x = pCollision->m_ppos->x - pCollision->m_size.x - this->m_size.x * 0.5f;
+			// 移動量の初期化
+			this->m_pmove->x = 0.0f;
+			// オブジェクトに当たったフラグ
+			bHitFlag = true;
+		}
+
+		// 当たり判定(右)
+		else if (this->m_ppos->x - this->m_size.x * 0.5f < pCollision->m_ppos->x + pCollision->m_size.x &&
+			this->m_posOld->x - this->m_size.x * 0.5f >= pCollision->m_ppos->x + pCollision->m_size.x)
+		{
+			// 素材状の右に
+			this->m_ppos->x = pCollision->m_ppos->x + pCollision->m_size.x + this->m_size.x * 0.5f;
+			// 移動量の初期化
+			this->m_pmove->x = 0.0f;
 			// オブジェクトに当たったフラグ
 			bHitFlag = true;
 		}
