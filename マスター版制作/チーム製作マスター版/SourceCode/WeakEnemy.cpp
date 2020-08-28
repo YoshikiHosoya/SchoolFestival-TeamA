@@ -15,6 +15,7 @@
 #include "sound.h"
 #include "shield.h"
 #include "Knife.h"
+#include "item.h"
 //====================================================================
 //マクロ定義
 //====================================================================
@@ -105,6 +106,12 @@ void CWeakEnemy::Update(void)
 	//描画の範囲内かチェック
 	if (!CheckDrawRange())
 	{
+		//画面の左端より左に行った場合は死亡扱い
+		if (CManager::GetRenderer()->GetMinScreenPos().x > GetPosition().x)
+		{
+			//死亡
+			DeathReaction();
+		}
 		return;
 	}
 	CEnemy::Update();
@@ -158,6 +165,19 @@ void CWeakEnemy::DamageReaction()
 //====================================================================
 void CWeakEnemy::DeathReaction()
 {
+	if (CHossoLibrary::Random(5) <= 1)
+	{
+		// ランダムな確率でアイテムをドロップする
+		if (CItem::DropRate())
+		{
+			//アイテムを生成
+			CItem::DropCreate(GetPosition(),
+				CItem::ITEMDROP_CHARGE,
+				CItem::ITEMDROP_PATTERN_DESIGNATE,
+				CItem::ITEMTYPE_NONE);
+		}
+	}
+
 	CEnemy::DeathReaction();
 
 }

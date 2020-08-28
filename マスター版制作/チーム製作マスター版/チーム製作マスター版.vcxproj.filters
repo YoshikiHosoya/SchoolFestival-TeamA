@@ -275,9 +275,6 @@
     <ClCompile Include="SourceCode\game.cpp">
       <Filter>Mode\mode</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\gameover.cpp">
-      <Filter>Mode\mode</Filter>
-    </ClCompile>
     <ClCompile Include="SourceCode\pause.cpp">
       <Filter>Mode\mode</Filter>
     </ClCompile>
@@ -596,9 +593,6 @@
     <ClInclude Include="SourceCode\game.h">
       <Filter>Mode\mode</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\gameover.h">
-      <Filter>Mode\mode</Filter>
-    </ClInclude>
     <ClInclude Include="SourceCode\pause.h">
       <Filter>Mode\mode</Filter>
     </ClInclude>
@@ -631,6 +625,9 @@
     </ClInclude>
     <ClInclude Include="SourceCode\manager.h">
       <Filter>projectBase</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Resource\resource.h">
+      <Filter>Resource</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -709,5 +706,13 @@
     <Filter Include="projectBase">
       <UniqueIdentifier>{9ec38c66-6a5c-4934-869e-bf20bc062660}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource">
+      <UniqueIdentifier>{8e813104-f29a-494a-97d7-3f034869eb70}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="SourceCode\Resource\icon.rc">
+      <Filter>Resource</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

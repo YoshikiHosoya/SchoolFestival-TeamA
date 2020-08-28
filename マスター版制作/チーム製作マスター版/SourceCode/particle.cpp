@@ -751,6 +751,10 @@ void CParticle::SetSound()
 		CManager::GetSound()->Play(CSound::LABEL_SE_EXPLOSION_03);
 
 		break;
+	case CParticleParam::PARTICLE_TEXT::EFFECT_EXPLOSION_OBJECTBREAK:
+		CManager::GetSound()->Play(CSound::LABEL_SE_EXPLOSION_02);
+
+		break;
 
 	}
 }

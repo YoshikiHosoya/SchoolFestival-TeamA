@@ -2059,20 +2059,6 @@ void CMap::UpdateDieFlag()
 	{
 		if (m_pEnemy[nCnt]->GetDieFlag())
 		{
-			if (m_pEnemy[nCnt]->GetCharacterType() != CCharacter::CHARACTER_TYPE_BOSS_ONE &&
-				m_pEnemy[nCnt]->GetCharacterType() != CCharacter::CHARACTER_TYPE_BOSS)
-			{
-				// ランダムな確率でアイテムをドロップする
-				if (CItem::DropRate())
-				{
-					//アイテムを生成
-					CItem::DropCreate(m_pEnemy[nCnt]->GetPosition(),
-						CItem::ITEMDROP_WEAPON,
-						CItem::ITEMDROP_PATTERN_RANDOM,
-						CItem::ITEMTYPE_NONE);
-				}
-			}
-
 			m_pEnemy[nCnt]->Rerease();
 			m_pEnemy[nCnt] = nullptr;
 			m_pEnemy.erase(m_pEnemy.begin() + nCnt);
