@@ -25,6 +25,10 @@
 //------------------------------------------------------------------------------
 //マクロ
 //------------------------------------------------------------------------------
+#define GO_SIGN_POS (D3DXVECTOR3(1180.0f,200.0f,0.0f))
+#define GO_SIGN_SIZE (D3DXVECTOR3(80.0f,40.0f,0.0f))
+#define GAMEOVER_SIZE (D3DXVECTOR3(800.0f, 300.0f, 0.0f))
+
 //------------------------------------------------------------------------------
 //コンストラクタ
 //------------------------------------------------------------------------------
@@ -166,7 +170,7 @@ std::unique_ptr<CGameManager> CGameManager::Create()
 	if (pGameManager)
 	{
 		//Goサイン生成
-		pGameManager->m_pScene2D_GoSign = CScene2D::CreateSceneManagement(D3DXVECTOR3(1100.0f, 300.0f, 0.0f), D3DXVECTOR3(100.0f, 60.0f,0.0f),CScene::OBJTYPE_UI);
+		pGameManager->m_pScene2D_GoSign = CScene2D::CreateSceneManagement(GO_SIGN_POS, GO_SIGN_SIZE,CScene::OBJTYPE_UI);
 		pGameManager->m_pScene2D_GoSign->BindTexture(CTexture::GetTexture(CTexture::TEX_UI_GAME_GO));
 		pGameManager->m_pScene2D_GoSign->SetColor(WhiteColor);
 
@@ -255,6 +259,7 @@ void CGameManager::StartWave()
 void CGameManager::EndWave()
 {
 	m_state = CGameManager::GAMESTATE::NORMAL;
+	m_nCnt = 0;
 	CManager::GetRenderer()->GetCamera()->SetCameraStopMove(false);
 	m_nWaveEnemyCnt = 0;
 	m_nWaveEnemyNum = 0;
@@ -314,28 +319,26 @@ void CGameManager::UpdateWave()
 //------------------------------------------------------------------------------
 void CGameManager::UpdateGoSign()
 {
+	//nullcehck
 	if (m_pScene2D_GoSign)
 	{
-		if (CManager::GetGame()->GetMap()->GetMapNum() == CMap::MAP_1_1)
+		if (m_nCnt <= 300)
 		{
-			if (m_nCnt <= 300)
+			if (m_nCnt % 40 == 0)
 			{
-				if (m_nCnt % 40 == 0)
-				{
-					//点滅
-					m_pScene2D_GoSign->SetDisp(m_pScene2D_GoSign->GetDisp() ^ 1);
-				}
+				//点滅
+				m_pScene2D_GoSign->SetDisp(m_pScene2D_GoSign->GetDisp() ^ 1);
 			}
-			else if (m_nCnt >= 600)
-			{
-				//カウント0にする
-				m_nCnt = 0;
-			}
-			else
-			{
-				//非表示
-				m_pScene2D_GoSign->SetDisp(false);
-			}
+		}
+		else if (m_nCnt >= 600)
+		{
+			//カウント0にする
+			m_nCnt = 0;
+		}
+		else
+		{
+			//非表示
+			m_pScene2D_GoSign->SetDisp(false);
 		}
 	}
 }
@@ -367,7 +370,7 @@ void CGameManager::UpdateTimer()
 				if (!m_pScene2D_GameOver)
 				{
 					//ゲームオーバーUI生成
-					m_pScene2D_GameOver = CScene2D::CreateSceneManagement(SCREEN_CENTER_POS, D3DXVECTOR3(800.0f, 300.0f, 0.0f), CScene::OBJTYPE_UI);
+					m_pScene2D_GameOver = CScene2D::CreateSceneManagement(SCREEN_CENTER_POS, GAMEOVER_SIZE, CScene::OBJTYPE_UI);
 					m_pScene2D_GameOver->BindTexture(CTexture::GetTexture(CTexture::TEX_UI_GAME_GAMEOVER));
 
 					m_nCnt = 0;
