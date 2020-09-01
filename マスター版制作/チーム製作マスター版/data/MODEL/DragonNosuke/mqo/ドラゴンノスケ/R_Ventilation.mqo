@@ -2,14 +2,13 @@ Metasequoia Document
 Format Text Ver 1.0
 
 Scene {
-	pos -61.8105 103.8196 13.6424
+	pos 12.7695 31.8412 2399.9968
 	lookat 0.0000 0.0000 0.0000
 	head 0.0000
 	pich 0.0000
 	bank 0.0000
-	ortho 1
-	zoom2 0.8813
-	zoom_pers 549.7557
+	ortho 0
+	zoom2 3.1250
 	amb 0.250 0.250 0.250
 	dirlights 1 {
 		light {
@@ -18,16 +17,8 @@ Scene {
 		}
 	}
 }
-Material 9 {
-	"譚占ｳｪ0" col(0.537 0.537 0.537 1.000) dif(0.800) amb(0.600) emi(0.000) spc(0.000) power(5.00) tex("C:\Users\game317\Desktop\ドラゴン・ノスケ\T\4.png")
-	"譚占ｳｪ1" col(0.537 0.537 0.537 1.000) dif(0.800) amb(0.600) emi(0.000) spc(0.000) power(5.00) tex("C:\Users\game317\Desktop\ドラゴン・ノスケ\T\3.png")
-	"譚占ｳｪ13" col(0.482 0.482 0.482 1.000) dif(0.800) amb(0.600) emi(0.000) spc(0.000) power(5.00) tex("C:\Users\game317\Desktop\ドラゴン・ノスケ\T\3.png")
-	"譚占ｳｪ14" col(0.482 0.482 0.482 1.000) dif(0.800) amb(0.600) emi(0.000) spc(0.000) power(5.00) tex("C:\Users\game317\Desktop\ドラゴン・ノスケ\T\3.png")
-	"譚占ｳｪ19" col(0.000 0.000 0.000 1.000) dif(0.800) amb(0.600) emi(0.000) spc(0.000) power(5.00)
-	"譚占ｳｪ21" col(0.247 0.247 0.247 1.000) dif(0.800) amb(0.600) emi(0.000) spc(0.000) power(5.00) tex("C:\Users\game317\Desktop\ドラゴン・ノスケ\T\3.png")
-	"譚占ｳｪ22" col(0.482 0.482 0.482 1.000) dif(0.800) amb(0.600) emi(0.000) spc(0.000) power(5.00) tex("C:\Users\game317\Desktop\ドラゴン・ノスケ\T\3.png")
-	"譚占ｳｪ38" col(0.482 0.131 0.082 1.000) dif(0.800) amb(0.600) emi(0.000) spc(0.000) power(5.00)
-	"譚占ｳｪ6" col(0.482 0.482 0.482 1.000) dif(0.800) amb(0.600) emi(0.000) spc(0.000) power(5.00) tex("C:\Users\game317\Desktop\ドラゴン・ノスケ\T\2.png")
+Material 1 {
+	"mat1" col(0.741 0.741 0.741 1.000) dif(0.800) amb(0.600) emi(0.000) spc(0.000) power(5.00)
 }
 Object "obj7" {
 	visible 15
