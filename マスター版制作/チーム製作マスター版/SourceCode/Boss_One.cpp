@@ -219,7 +219,7 @@ void CBoss_One::Draw(void)
 void CBoss_One::DebugInfo(void)
 {
 	// デバッグ用距離の計算
-	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
+	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer(CONTROLLER::P1);
 	float fDist = this->GetPosition().x - pPlayer->GetPosition().x;
 
 	CDebugProc::Print("ボスとプレイヤーの距離 --- x --- %f\n", fDist);

@@ -77,26 +77,28 @@ bool CHossoLibrary::PressAnyButton(void)
 	CKeyboard *Keyboard;
 	Keyboard = CManager::GetInputKeyboard();
 	CXInputPad *InpudPad[(int)CONTROLLER::P_MAX] = {};
-	for (int nCnt = 0; nCnt < (int)CONTROLLER::P_MAX; nCnt++)
 
-	if (Keyboard->GetKeyboardTrigger(DIK_RETURN)||
-		Keyboard->GetKeyboardTrigger(DIK_SPACE)||
-		InpudPad->GetTrigger(CXInputPad::JOYPADKEY_START,1)||
-		InpudPad->GetTrigger(CXInputPad::JOYPADKEY_A, 1) ||
-		InpudPad->GetTrigger(CXInputPad::JOYPADKEY_B, 1) ||
-		InpudPad->GetTrigger(CXInputPad::JOYPADKEY_X, 1) ||
-		InpudPad->GetTrigger(CXInputPad::JOYPADKEY_Y, 1))
+	for (int nCnt = 0; nCnt < (int)CONTROLLER::P_MAX; nCnt++)
 	{
 		InpudPad[nCnt] = CManager::GetPad((CONTROLLER)nCnt);
 
 		if (Keyboard->GetKeyboardTrigger(DIK_RETURN) ||
 			Keyboard->GetKeyboardTrigger(DIK_SPACE) ||
 			InpudPad[nCnt]->GetTrigger(CXInputPad::JOYPADKEY_START, 1) ||
-			InpudPad[nCnt]->GetTrigger(CXInputPad::JOYPADKEY_A, 1))
+			InpudPad[nCnt]->GetTrigger(CXInputPad::JOYPADKEY_A, 1) ||
+			InpudPad[nCnt]->GetTrigger(CXInputPad::JOYPADKEY_B, 1) ||
+			InpudPad[nCnt]->GetTrigger(CXInputPad::JOYPADKEY_X, 1) ||
+			InpudPad[nCnt]->GetTrigger(CXInputPad::JOYPADKEY_Y, 1))
 		{
-			//CManager::GetSound()->Play(CSound::LABEL_SE_DECISION);
+			if (Keyboard->GetKeyboardTrigger(DIK_RETURN) ||
+				Keyboard->GetKeyboardTrigger(DIK_SPACE) ||
+				InpudPad[nCnt]->GetTrigger(CXInputPad::JOYPADKEY_START, 1) ||
+				InpudPad[nCnt]->GetTrigger(CXInputPad::JOYPADKEY_A, 1))
+			{
+				//CManager::GetSound()->Play(CSound::LABEL_SE_DECISION);
 
-			return true;
+				return true;
+			}
 		}
 	}
 	return false;

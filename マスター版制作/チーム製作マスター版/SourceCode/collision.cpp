@@ -222,7 +222,7 @@ bool CCollision::ForPlayerBulletCollision(int nEnemyDamage, int nObstacleDamage,
 						// ”»’èŠÖ”
 						if (this->OtherCollision2D(pBoss_One->GetCollision()))
 						{
-							CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
+							CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer(CONTROLLER::P1);
 							if (pPlayer != nullptr && pPlayer->GetPlayerUI())
 							{
 								pPlayer->GetPlayerUI()->SetScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_DAMAGE_BULLET));
@@ -835,7 +835,7 @@ bool CCollision::BossOne_PlayerCollision()
 				if (pBoss_One->GetCollision() &&
 					pBoss_One->GetIntermediateSquat())
 				{
-					CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
+					CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer(CONTROLLER::P1);
 					if (pPlayer != nullptr)
 					{
 						if (this->BlockCollision2D_Bottom(pPlayer->GetCollision()))
