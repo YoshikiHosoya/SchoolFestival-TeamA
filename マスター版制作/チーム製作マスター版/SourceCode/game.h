@@ -37,7 +37,7 @@ public:
 	HRESULT		Init(void);
 	void		Uninit(void);
 	void		Update(void);
-	CPlayer		*GetPlayer(void);
+	CPlayer		*GetPlayer(CONTROLLER Controller);
 	CMap		*GetMap(void);
 
 	void		StateChangeReaction();
@@ -56,7 +56,7 @@ private:
 
 	/* Ã“Iƒƒ“ƒo•Ï” */
 	static LPDIRECT3DTEXTURE9			m_pTexture;
-	static CPlayer						*m_pPlayer;
+	static CPlayer						*m_pPlayer[(int)CONTROLLER::P_MAX];
 	static CMap							*m_pMap;
 	static int							m_Counter;
 

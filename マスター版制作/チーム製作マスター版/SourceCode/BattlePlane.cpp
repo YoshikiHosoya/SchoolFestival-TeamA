@@ -78,6 +78,9 @@ HRESULT CBattlePlane::Init(void)
 	GetCollision()->SetMove(&GetMove());
 	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_CHARACTER);
 
+	// プレイヤーのポインタ
+	m_pPlayer = nullptr;
+
 	return S_OK;
 }
 
@@ -95,11 +98,9 @@ void CBattlePlane::Uninit(void)
 		m_pGun = nullptr;
 	}
 
-	// プレイヤーのポインタを取得
-	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
-	if (pPlayer != nullptr)
+	if (m_pPlayer != nullptr)
 	{
-		pPlayer->SetRideFlag(false);
+		m_pPlayer->SetRideFlag(false);
 	}
 
 	CVehicle::Uninit();
@@ -114,12 +115,10 @@ void CBattlePlane::Update(void)
 	// キー情報の取得
 	CKeyboard *key = CManager::GetInputKeyboard();
 
-	// プレイヤーのポインタを取得
-	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
-	if (pPlayer != nullptr)
+	if (m_pPlayer != nullptr)
 	{
 		// 乗り物に乗っている時
-		if (pPlayer->GetRideFlag())
+		if (m_pPlayer->GetRideFlag())
 		{
 			// 戦車が弾を撃つ処理
 			Shot(key);

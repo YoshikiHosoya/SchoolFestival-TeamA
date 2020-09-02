@@ -46,7 +46,7 @@ void CEnemyAI::Uninit(void)
 //=============================================================================
 void CEnemyAI::Update(void)
 {
-	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
+	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer(CONTROLLER::P1);
 	// マップのポインタ取得
 	CMap *pMap;
 	pMap = CManager::GetBaseMode()->GetMap();

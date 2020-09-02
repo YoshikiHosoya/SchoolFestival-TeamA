@@ -57,7 +57,7 @@ CGameManager::~CGameManager()
 void CGameManager::Update()
 {
 	// それぞれのポインタ取得
-	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
+	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer(CONTROLLER::P1);
 	CGame *pGame = (CGame*)CManager::GetBaseMode();
 
 	m_nCnt++;
@@ -380,13 +380,13 @@ void CGameManager::UpdateTimer()
 	// 5秒経過した時
 	if (m_nTimeCnt >= 300)
 	{
-		if (CManager::GetBaseMode()->GetPlayer()->GetPlayerUI())
+		if (CManager::GetBaseMode()->GetPlayer(CONTROLLER::P1)->GetPlayerUI())
 		{
 			// タイマーの値を減少する
-			CManager::GetBaseMode()->GetPlayer()->GetPlayerUI()->DecrementTime();
+			CManager::GetBaseMode()->GetPlayer(CONTROLLER::P1)->GetPlayerUI()->DecrementTime();
 
 			// タイムが0以下になった時
-			if (CManager::GetBaseMode()->GetPlayer()->GetPlayerUI()->GetTime() <= 0)
+			if (CManager::GetBaseMode()->GetPlayer(CONTROLLER::P1)->GetPlayerUI()->GetTime() <= 0)
 			{
 				//ゲームオーバー
 				SetGameState(CGameManager::GAMESTATE::GAMEOVER);
