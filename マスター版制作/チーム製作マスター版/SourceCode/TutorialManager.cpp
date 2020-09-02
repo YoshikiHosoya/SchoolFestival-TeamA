@@ -99,7 +99,7 @@ void CTutorialManager::Update(void)
 	//キーボード情報取得
 	CKeyboard *key = CManager::GetInputKeyboard();
 	// パッド取得
-	CXInputPad *pad = CManager::GetPad();
+	CXInputPad *pad = CManager::GetPad(CONTROLLER::P1);
 
 	// エンターを押したとき
 	if (CHossoLibrary::PressStartButton() || PAD_START)
@@ -286,7 +286,7 @@ void CTutorialManager::JudgPushButton()
 	// キーボード取得
 	CKeyboard *key = CManager::GetInputKeyboard();
 	// パッド取得
-	CXInputPad *pad = CManager::GetPad();
+	CXInputPad *pad = CManager::GetPad(CONTROLLER::P1);
 	// スティックの値を初期化
 	D3DXVECTOR3 InputValue = ZeroVector3;
 	// 値の正規化
@@ -295,7 +295,7 @@ void CTutorialManager::JudgPushButton()
 	// 左スティックの入力値を取得
 	pad->GetStickLeft(&InputValue.x, &InputValue.y);
 	// プレイヤーのポインタを取得
-	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
+	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer(CONTROLLER::P1);
 
 	// 各ステート時のボタンを押したかどうか
 	switch (m_TutorialState)

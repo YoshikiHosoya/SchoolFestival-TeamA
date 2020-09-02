@@ -78,6 +78,9 @@ HRESULT CHelicopter::Init(void)
 	GetCollision()->SetMove(&GetMove());
 	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_CHARACTER);
 
+	// プレイヤーのポインタ
+	m_pPlayer = nullptr;
+
 	return S_OK;
 }
 
@@ -101,7 +104,6 @@ void CHelicopter::Uninit(void)
 		m_pGrenadeFire->Rerease();
 		m_pGrenadeFire = nullptr;
 	}
-
 	CVehicle::Uninit();
 }
 //====================================================================

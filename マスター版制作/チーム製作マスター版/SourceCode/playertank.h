@@ -18,6 +18,8 @@
 // =====================================================================================================================================================================
 class CGun;
 class CGrenadeFire;
+class CPlayer;
+
 // =====================================================================================================================================================================
 // プレイヤーの戦車クラス
 // =====================================================================================================================================================================
@@ -37,6 +39,7 @@ public:
 	static CPlayertank	*Create();							// 生成
 
 	/* メンバ関数 */
+	void				SetPlayer(CPlayer *pPlayer) { m_pPlayer = pPlayer; };
 	void				DebugInfo(void);					// デバッグ
 	CGun				*GetGun() { return  m_pGun; };					// 銃のポインタ取得
 	CGrenadeFire		*GetGrenadeFire() { return  m_pGrenadeFire; };	// グレネード発射位置のポインタ取得
@@ -44,16 +47,17 @@ public:
 
 private:
 	/* メンバ関数 */
-	void				Shot(CKeyboard *key);				// 弾を撃つ処理
-	void				Operation(CKeyboard *key);			// 操作する処理
+	void				Shot(CKeyboard *key, CONTROLLER Controller);				// 弾を撃つ処理
+	void				Operation(CKeyboard *key, CONTROLLER Controller);			// 操作する処理
 	void				Jump();								// ジャンプ処理
 	void				Collision();						// 当たり判定をまとめてする処理
-	void				PadInput();							// ゲームパッドでの入力処理
+	void				PadInput(CONTROLLER Controller);	// ゲームパッドでの入力処理
 	void				TankSE();							// タンクから出る音設定
 
 	/* メンバ変数 */
 	CGun				*m_pGun;							// ガンクラスのポインタ
 	CGrenadeFire		*m_pGrenadeFire;					// グレネード発射クラスのポインタ
+	CPlayer				*m_pPlayer;							// プレイヤーのポインタ
 	bool				m_bLand;							// 地面についているかどうか
 	int					m_nCntEngineSE;						// カウント　SE用
 };

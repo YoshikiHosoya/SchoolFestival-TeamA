@@ -57,7 +57,7 @@ CGameManager::~CGameManager()
 void CGameManager::Update()
 {
 	// それぞれのポインタ取得
-	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
+	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer(CONTROLLER::P1);
 	CGame *pGame = (CGame*)CManager::GetBaseMode();
 
 	m_nCnt++;
@@ -86,7 +86,7 @@ void CGameManager::Update()
 				if (pWaveInfo->EventBeginMapNum == CManager::GetGame()->GetMap()->GetMapNum())
 				{
 					//特定の座標を超えた時
-					if (pPlayer->GetPosition().x >= pWaveInfo->EventPos.x)
+					if (pPlayer->GetPosition().x >= pWaveInfo->EventPos.x && pPlayer->GetCharacterState() != CCharacter::CHARACTER_STATE::CHARACTER_STATE_DEATH)
 					{
 						//ウェーブ開始
 						StartWave();
@@ -240,6 +240,9 @@ void CGameManager::MapTransitionWaveSet(int nNextID)
 	case CMap::MAP_1_BOSS:
 		m_nNowWave = CMap::WAVE::WAVE_1_BOSS;
 
+		//ボスマップに遷移したら無条件でウェーブ開始
+		StartWave();
+
 		break;
 	case CMap::MAP_2_1:
 		m_nNowWave = CMap::WAVE::WAVE_2_1_1;
@@ -256,6 +259,8 @@ void CGameManager::MapTransitionWaveSet(int nNextID)
 	case CMap::MAP_2_BOSS:
 		m_nNowWave = CMap::WAVE::WAVE_2_BOSS;
 
+		//ボスマップに遷移したら無条件でウェーブ開始
+		StartWave();
 
 	default:
 		break;
@@ -300,15 +305,14 @@ void CGameManager::UpdateWave()
 	//ウェーブのポインタ
 	CMap::WAVE_INFO *pWaveInfo = CManager::GetGame()->GetMap()->GetWaveInfo(m_nNowWave);
 
-	m_nWaveEnemyCnt++;
-	m_nWavePrisonerCnt++;
 
 	//まだ出てないのがいるとき
 	//敵
 	if (m_nWaveEnemyNum < (int)pWaveInfo->EnemyWaveInfo.size())
 	{
+		m_nWaveEnemyCnt++;
 		//フレーム数が一緒になった時
-		if (pWaveInfo->EnemyWaveInfo[m_nWaveEnemyNum]->nFrame == m_nWaveEnemyCnt)
+		if (pWaveInfo->EnemyWaveInfo[m_nWaveEnemyNum]->nFrame <= m_nWaveEnemyCnt)
 		{
 			//敵生成
 			CManager::GetGame()->GetMap()->WaveCreate(CMap::ARRANGEMENT_MODEL_ENEMY, pWaveInfo->EventPos, pWaveInfo->EnemyWaveInfo[m_nWaveEnemyNum]);
@@ -321,8 +325,9 @@ void CGameManager::UpdateWave()
 	//捕虜
 	if (m_nWavePrisonerNum < (int)pWaveInfo->PrisonerWaveInfo.size())
 	{
+		m_nWavePrisonerCnt++;
 		//フレーム数が一緒になった時
-		if (pWaveInfo->PrisonerWaveInfo[m_nWavePrisonerNum]->nFrame == m_nWavePrisonerCnt)
+		if (pWaveInfo->PrisonerWaveInfo[m_nWavePrisonerNum]->nFrame <= m_nWavePrisonerCnt)
 		{
 			//敵生成
 			CManager::GetGame()->GetMap()->WaveCreate(CMap::ARRANGEMENT_MODEL_PRISONER, pWaveInfo->EventPos, pWaveInfo->PrisonerWaveInfo[m_nWavePrisonerNum]);
@@ -375,13 +380,13 @@ void CGameManager::UpdateTimer()
 	// 5秒経過した時
 	if (m_nTimeCnt >= 300)
 	{
-		if (CManager::GetBaseMode()->GetPlayer()->GetPlayerUI())
+		if (CManager::GetBaseMode()->GetPlayer(CONTROLLER::P1)->GetPlayerUI())
 		{
 			// タイマーの値を減少する
-			CManager::GetBaseMode()->GetPlayer()->GetPlayerUI()->DecrementTime();
+			CManager::GetBaseMode()->GetPlayer(CONTROLLER::P1)->GetPlayerUI()->DecrementTime();
 
 			// タイムが0以下になった時
-			if (CManager::GetBaseMode()->GetPlayer()->GetPlayerUI()->GetTime() <= 0)
+			if (CManager::GetBaseMode()->GetPlayer(CONTROLLER::P1)->GetPlayerUI()->GetTime() <= 0)
 			{
 				//ゲームオーバー
 				SetGameState(CGameManager::GAMESTATE::GAMEOVER);

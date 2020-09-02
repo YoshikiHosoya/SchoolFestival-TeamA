@@ -37,6 +37,7 @@ public:
 	static CHelicopter	*Create();							// 生成
 
 	/* メンバ関数 */
+	void				SetPlayer(CPlayer *pPlayer) { m_pPlayer = pPlayer; };
 	void				DebugInfo(void);					// デバッグ
 	CGun				*GetGun() { return  m_pGun; };					// 銃のポインタ取得
 	CGrenadeFire		*GetGrenadeFire() { return  m_pGrenadeFire; };	// グレネード発射位置のポインタ取得
@@ -49,5 +50,6 @@ private:
 	/* メンバ変数 */
 	CGun				*m_pGun;							// ガンクラスのポインタ
 	CGrenadeFire		*m_pGrenadeFire;					// グレネード発射クラスのポインタ
+	CPlayer				*m_pPlayer;							// プレイヤーのポインタ
 };
 #endif

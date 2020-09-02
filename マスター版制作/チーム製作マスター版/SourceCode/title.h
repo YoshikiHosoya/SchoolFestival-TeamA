@@ -41,7 +41,7 @@ public:
 	void ShowDebugInfo(void);					// デバッグ情報表記
 
 	/* メンバ関数 */
-	CPlayer* GetPlayer() { return nullptr; };
+	CPlayer* GetPlayer(CONTROLLER Controller) { return nullptr; };
 	CMap* GetMap() { return nullptr; };
 private:
 	/* メンバ変数 */

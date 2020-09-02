@@ -61,7 +61,7 @@ void CBossAI::Uninit(void)
 //=============================================================================
 void CBossAI::Update(void)
 {
-	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
+	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer(CONTROLLER::P1);
 	D3DXVECTOR3 Distance;
 
 	if (pBossPass != nullptr || pPlayer != nullptr)
@@ -114,7 +114,7 @@ void CBossAI::Update(void)
 void CBossAI::UpdateMoveAI(void)
 {
 	D3DXVECTOR3 MoveVec = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
+	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer(CONTROLLER::P1);
 	if (pBossPass != nullptr || pPlayer != nullptr)
 	{
 		if (AI_CENTER == m_BossAItype) //’†‰›
@@ -167,7 +167,7 @@ void CBossAI::UpdateMoveAI(void)
 void CBossAI::UpdateAttackAI(void)
 {
 	D3DXVECTOR3 MoveVec = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
+	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer(CONTROLLER::P1);
 	float fAngle = 0.0f;
 	if (pBossPass != nullptr && pPlayer != nullptr)
 	{

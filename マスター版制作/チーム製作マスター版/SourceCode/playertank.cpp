@@ -78,6 +78,8 @@ HRESULT CPlayertank::Init(void)
 	m_pGun->SetShotOffsetPos(D3DXVECTOR3(SHOT_BULLET_POS_X, SHOT_BULLET_POS_Y, SHOT_BULLET_POS_Z));
 	// 地面についているかのフラグ
 	m_bLand = true;
+	// プレイヤーのポインタ
+	m_pPlayer = nullptr;
 	//初期化
 	m_nCntEngineSE = 0;
 	// 当たり判定生成
@@ -111,11 +113,9 @@ void CPlayertank::Uninit(void)
 		m_pGrenadeFire = nullptr;
 	}
 
-	// プレイヤーのポインタを取得
- 	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
-	if (pPlayer != nullptr)
+	if (m_pPlayer != nullptr)
 	{
-		pPlayer->SetRideFlag(false);
+		m_pPlayer->SetRideFlag(false);
 	}
 
 	CVehicle::Uninit();
@@ -130,21 +130,19 @@ void CPlayertank::Update(void)
 	// キー情報の取得
 	CKeyboard *key = CManager::GetInputKeyboard();
 
-	// プレイヤーのポインタを取得
-	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
-	if (pPlayer != nullptr)
+	if (m_pPlayer != nullptr)
 	{
 		// 乗り物に乗っている時
-		if (pPlayer->GetRideFlag())
+		if (m_pPlayer->GetRideFlag())
 		{
 			// 戦車が弾を撃つ処理
-			Shot(key);
+			Shot(key, m_pPlayer->GetControllerTag());
 
 			// 戦車を操作する処理
-			Operation(key);
+			Operation(key, m_pPlayer->GetControllerTag());
 
 			// 戦車の操作
-			PadInput();
+			PadInput(m_pPlayer->GetControllerTag());
 
 			// パーツの回転処理
 			VehiclePartsRotCondition(GetVehicleModelPartsList(CModel::MODEL_TANK_TANK_FRONTWHEEL), MODEL_ROT_TYPE_MOVING);
@@ -156,8 +154,11 @@ void CPlayertank::Update(void)
 			// 戦車の判定
 			GetCollision()->ForTankCollision();
 		}
+		else
+		{
+			m_pPlayer = nullptr;
+		}
 	}
-
 	//乗り物のSE
 	TankSE();
 
@@ -207,9 +208,9 @@ CPlayertank *CPlayertank::Create(void)
 //====================================================================
 // 弾を打つ処理
 //====================================================================
-void CPlayertank::Shot(CKeyboard *key)
+void CPlayertank::Shot(CKeyboard *key, CONTROLLER Controller)
 {
-	CXInputPad *pXInput = CManager::GetPad();
+	CXInputPad *pXInput = CManager::GetPad(Controller);
 
 	// 弾を撃つ方向を設定
 	// モデルの回転の向きと弾の発射方向の計算の回転を合わせる
@@ -236,11 +237,11 @@ void CPlayertank::Shot(CKeyboard *key)
 //====================================================================
 // パッドの入力
 //====================================================================
-void CPlayertank::PadInput()
+void CPlayertank::PadInput(CONTROLLER Controller)
 {
 	D3DXVECTOR3 MoveValue = ZeroVector3;
 
-	if (CHossoLibrary::PadMoveInput(MoveValue, GetVehicleDirection(), false))
+	if (CHossoLibrary::PadMoveInput(MoveValue, GetVehicleDirection(), false, Controller))
 	{
 		Move(MoveValue.x, -0.5f);
 	}
@@ -251,13 +252,10 @@ void CPlayertank::PadInput()
 //====================================================================
 void CPlayertank::TankSE()
 {
-	// プレイヤーのポインタを取得
-	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
-
 	//nullcheck
-	if (pPlayer)
+	if (m_pPlayer)
 	{
-		if (pPlayer->GetRideFlag())
+		if (m_pPlayer->GetRideFlag())
 		{
 			m_nCntEngineSE++;
 
@@ -284,9 +282,9 @@ void CPlayertank::TankSE()
 //====================================================================
 // 操作処理
 //====================================================================
-void CPlayertank::Operation(CKeyboard * key)
+void CPlayertank::Operation(CKeyboard * key, CONTROLLER Controller)
 {
-	CXInputPad *pXInput = CManager::GetPad();
+	CXInputPad *pXInput = CManager::GetPad(Controller);
 
 	// 上を向く
 	if (key->GetKeyboardPress(DIK_W))

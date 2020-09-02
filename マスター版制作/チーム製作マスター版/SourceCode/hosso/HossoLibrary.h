@@ -90,6 +90,14 @@ enum TAG
 	TAG_MAX,
 };
 
+// コントローラータグ
+enum class CONTROLLER
+{
+	P1 = 0,
+	P2,
+	P_MAX,
+};
+
 enum class DIRECTION
 {
 	LEFT,
@@ -127,7 +135,7 @@ public:
 	static bool PressStartButton(void);
 	static bool ImGui_Combobox(std::vector<std::string> aItemNameList, std::string aTitle, int &nValue);
 
-	static bool PadMoveInput(D3DXVECTOR3 & rMove, DIRECTION & direction,bool bJump);
+	static bool PadMoveInput(D3DXVECTOR3 & rMove, DIRECTION & direction, bool bJump, CONTROLLER Controller);
 
 	//------------------------------------------------------------------------------
 	//範囲内の値に修正する関数

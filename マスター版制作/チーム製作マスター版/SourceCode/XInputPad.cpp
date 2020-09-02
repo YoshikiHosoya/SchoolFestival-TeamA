@@ -16,6 +16,7 @@
 //==========================================================
 CXInputPad::CXInputPad()
 {
+	m_Controller = CONTROLLER::P1;
 	m_bVibration = false;
 	m_nCntVibration = 0;
 	Oldstate = 0;
@@ -30,8 +31,9 @@ CXInputPad::~CXInputPad()
 //==========================================================
 //èâä˙âª
 //==========================================================
-HRESULT CXInputPad::Init(HINSTANCE hInstance, HWND hWnd)
+HRESULT CXInputPad::Init(HINSTANCE hInstance, HWND hWnd, CONTROLLER Controller)
 {
+	m_Controller = Controller;
 	return TRUE;
 }
 //==========================================================
@@ -52,7 +54,7 @@ void CXInputPad::Update(void)
 	ZeroMemory(&m_pState, sizeof(XINPUT_STATE));
 
 	// XInputÇÃì¸óÕèÓïÒéÊìæ
-	DWORD dwResult = XInputGetState(0, &m_pState);
+	DWORD dwResult = XInputGetState((int)m_Controller, &m_pState);
 
 	//ê⁄ë±Ç≥ÇÍÇƒÇ¢ÇÈÇ©
 	if (dwResult == ERROR_SUCCESS)

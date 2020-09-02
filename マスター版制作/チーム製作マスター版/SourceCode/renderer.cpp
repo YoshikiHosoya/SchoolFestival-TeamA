@@ -59,7 +59,7 @@ HRESULT  CRenderer::Init(HWND hWnd, BOOL bWindow)
 	m_d3dpp.Windowed = bWindow = TRUE;							// ウィンドウモード
 	m_d3dpp.FullScreen_RefreshRateInHz = D3DPRESENT_RATE_DEFAULT;	// リフレッシュレート(現在の速度に合わせる)
 	m_d3dpp.PresentationInterval = D3DPRESENT_INTERVAL_DEFAULT;	// インターバル(VSyncを待って描画)
-	m_d3dpp.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE;	// クライアント領域を直ちに更新する
+	//m_d3dpp.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE;	// クライアント領域を直ちに更新する
 
 																// Direct3Dデバイスの生成
 																// [デバイス作成制御]<描画>と<頂点処理>をハードウェアで行なう
