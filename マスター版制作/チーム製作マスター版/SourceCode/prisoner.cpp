@@ -307,10 +307,10 @@ void CPrisoner::PrisonerState()
 		m_StateTime--;
 		if (m_StateTime <= 0)
 		{
-			CPlayer *pPlayer[(int)CONTROLLER::P_MAX] = {};
-			for (int nCntPlayer = 0; nCntPlayer < (int)CONTROLLER::P_MAX; nCntPlayer++)
+			CPlayer *pPlayer[MAX_TAG] = {};
+			for (int nCntPlayer = 0; nCntPlayer < MAX_TAG; nCntPlayer++)
 			{
-				pPlayer[nCntPlayer] = CManager::GetBaseMode()->GetPlayer((CONTROLLER)nCntPlayer);
+				pPlayer[nCntPlayer] = CManager::GetBaseMode()->GetPlayer((TAG)(nCntPlayer + 1));
 				if (pPlayer[nCntPlayer] && pPlayer[nCntPlayer]->GetPlayerUI())
 				{
 					pPlayer[nCntPlayer]->GetPlayerUI()->SetScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_RESCUE_PRISONER));

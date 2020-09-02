@@ -674,7 +674,7 @@ void CParticle::Collision()
 	if (m_pCollision)
 	{
 		//プレイヤーの攻撃だった場合
-		if (m_Tag == TAG_PLAYER)
+		if (m_Tag == TAG::PLAYER_1 || m_Tag == TAG::PLAYER_2)
 		{
 			if (CManager::GetMode() == CManager::MODE_GAME)
 			{
@@ -683,7 +683,7 @@ void CParticle::Collision()
 			}
 		}
 		//プレイヤーの攻撃だった場合
-		if (m_Tag == TAG_ENEMY)
+		if (m_Tag == TAG::ENEMY)
 		{
 			if (CManager::GetMode() == CManager::MODE_GAME)
 			{

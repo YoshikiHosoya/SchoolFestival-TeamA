@@ -32,6 +32,7 @@
 #define COMMENT01			("//\n")																//テキスト用　コメント　改行
 #define COMMENT02			("//------------------------------------------------------------\n")	//テキスト用　線
 #define EQUAL				("=")																	//テキスト用　イコール
+#define MAX_TAG		(2)																		//コントローラーの最大数
 
 //------------------------------------------------------------------------------
 //構造体定義
@@ -83,19 +84,13 @@ typedef struct INTEGER3
 }INTEGER3;
 
 // タグ
-enum TAG
+enum class TAG
 {
-	TAG_PLAYER = 0,
-	TAG_ENEMY,
-	TAG_MAX,
-};
-
-// コントローラータグ
-enum class CONTROLLER
-{
-	P1 = 0,
-	P2,
-	P_MAX,
+	NONE = 0,
+	PLAYER_1,			// プレイヤー1
+	PLAYER_2,			// プレイヤー2
+	ENEMY,				// 敵
+	PRISONER,			// 捕虜
 };
 
 enum class DIRECTION
@@ -135,7 +130,7 @@ public:
 	static bool PressStartButton(void);
 	static bool ImGui_Combobox(std::vector<std::string> aItemNameList, std::string aTitle, int &nValue);
 
-	static bool PadMoveInput(D3DXVECTOR3 & rMove, DIRECTION & direction, bool bJump, CONTROLLER Controller);
+	static bool PadMoveInput(D3DXVECTOR3 & rMove, DIRECTION & direction, bool bJump, TAG Tag);
 
 	//------------------------------------------------------------------------------
 	//範囲内の値に修正する関数

@@ -119,7 +119,7 @@ HRESULT CBoss_One::Init(void)
 		m_pGun[nCnt]->SetHandMtx(GetCharacterModelPartsList(
 			static_cast<CModel::BOSSONE_PARTS_MODEL>(CModel::MODEL_BOSSONE_GUN_BALKAN + nCnt))->GetMatrix());
 		// 銃の弾の種類
-		m_pGun[nCnt]->GetTag() = TAG_ENEMY;
+		m_pGun[nCnt]->GetTag() = TAG::ENEMY;
 		// 銃の弾の種類
 		m_pGun[nCnt]->SetGunType(static_cast<CGun::GUN_TYPE>(CGun::GUNTYPE_BALKAN + nCnt));
 		// 発射位置のオフセットの設定
@@ -219,7 +219,7 @@ void CBoss_One::Draw(void)
 void CBoss_One::DebugInfo(void)
 {
 	// デバッグ用距離の計算
-	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer(CONTROLLER::P1);
+	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer(TAG::PLAYER_1);
 	float fDist = this->GetPosition().x - pPlayer->GetPosition().x;
 
 	CDebugProc::Print("ボスとプレイヤーの距離 --- x --- %f\n", fDist);
@@ -1157,7 +1157,7 @@ void CBoss_One::RandomAttack()
 void CBoss_One::SetRotBalkan()
 {
 	// プレイヤーのポインタ取得
-	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer(CONTROLLER::P1);
+	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer(TAG::PLAYER_1);
 	D3DXVECTOR3 PlayerPos;
 
 	// プレイヤーがボスの射程外だった時

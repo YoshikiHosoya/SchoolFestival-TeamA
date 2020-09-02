@@ -51,7 +51,7 @@ void CShieldEnemyAI::Uninit(void)
 //=============================================================================
 void CShieldEnemyAI::Update(void)
 {
-	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer(CONTROLLER::P1);
+	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer(TAG::PLAYER_1);
 	// マップのポインタ取得
 	CMap *pMap;
 	pMap = CManager::GetBaseMode()->GetMap();

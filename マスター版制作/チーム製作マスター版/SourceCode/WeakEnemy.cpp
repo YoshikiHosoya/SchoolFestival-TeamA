@@ -45,12 +45,12 @@ HRESULT CWeakEnemy::Init(void)
 	// 銃の生成
 	GetGunPtr()->SetHandMtx(GetCharacterModelPartsList(CModel::MODEL_ENEMY_RHAND)->GetMatrix());
 	// 銃の弾の種類
-	GetGunPtr()->GetTag() = TAG_ENEMY;
+	GetGunPtr()->GetTag() = TAG::ENEMY;
 
 	GetGunPtr()->SetGunTypeOnly(CGun::GUNTYPE_HANDGUN_ENEMY);
 	// ナイフの生成
 
-	m_pKnife = CKnife::Create(GetCharacterModelPartsList(CModel::MODEL_ENEMY_LHAND)->GetMatrix(), KNIFE_COLLISOIN_SIZE,TAG::TAG_ENEMY);
+	m_pKnife = CKnife::Create(GetCharacterModelPartsList(CModel::MODEL_ENEMY_LHAND)->GetMatrix(), KNIFE_COLLISOIN_SIZE,TAG::ENEMY);
 
 	// 敵のタイプ設定
 	switch (GetEnemyType())

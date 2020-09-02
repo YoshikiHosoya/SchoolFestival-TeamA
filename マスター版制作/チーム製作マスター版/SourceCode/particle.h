@@ -72,7 +72,7 @@ public:
 	static void ResetVertexID();					//頂点IDリセット　画面が停止してもパーティクルの処理を行う為
 
 	static void CreateFromParam(D3DXVECTOR3 pos, D3DXVECTOR3 rot, CParticleParam *pInputParam);
-	static void CreateFromText(D3DXVECTOR3 pos, D3DXVECTOR3 rot, CParticleParam::PARTICLE_TEXT type, TAG tag = TAG_PLAYER, int nAttack = -1, D3DXCOLOR color = D3DXCOLOR(1.0f, 1.0f, 1.0f, -1.0f), D3DXVECTOR3 *PosPtr = nullptr);
+	static void CreateFromText(D3DXVECTOR3 pos, D3DXVECTOR3 rot, CParticleParam::PARTICLE_TEXT type, TAG tag = TAG::PLAYER_1, int nAttack = -1, D3DXCOLOR color = D3DXCOLOR(1.0f, 1.0f, 1.0f, -1.0f), D3DXVECTOR3 *PosPtr = nullptr);
 
 	bool GetDeleteFlag() { return m_bDeleteFlag; };
 

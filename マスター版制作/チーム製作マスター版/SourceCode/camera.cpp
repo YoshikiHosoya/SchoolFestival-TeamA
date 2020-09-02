@@ -175,7 +175,7 @@ void CCamera::CharacterFollowingMoveCamera()
 		if (pBaseMode)
 		{
 			//プレイヤーのポインタ取得
-			CPlayer *pPlayer = pBaseMode->GetPlayer(CONTROLLER::P1);
+			CPlayer *pPlayer = pBaseMode->GetPlayer(TAG::PLAYER_1);
 
 			//nullcheck
 			if (pPlayer)

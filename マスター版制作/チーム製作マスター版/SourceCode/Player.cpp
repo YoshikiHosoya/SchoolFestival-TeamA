@@ -73,6 +73,12 @@ char *CPlayer::m_PlayerFileName =
 CPlayer::CPlayer(OBJ_TYPE type) :CCharacter(type)
 {
 	SetObjType(OBJTYPE_PLAYER);
+	m_pGrenadeFire	= nullptr;
+	m_pGun			= nullptr;
+	m_pKnife		= nullptr;
+	m_pPlayerUI		= nullptr;
+	m_pVehicle		= nullptr;
+	m_pPad			= nullptr;
 }
 
 // =====================================================================================================================================================================
@@ -104,12 +110,12 @@ HRESULT CPlayer::Init(void)
 	// グレネード放つ位置の生成
 	m_pGrenadeFire = CGrenadeFire::Create(GetCharacterModelPartsList(CModel::MODEL_PLAYER_LHAND)->GetMatrix(), CGrenadeFire::HAND_GRENADE);
 	// 銃の弾の種類
-	m_pGun->GetTag() = TAG_PLAYER;
+	m_pGun->SetTag(GetTag());
 	// 発射位置のオフセットの設定
 	m_pGun->SetShotOffsetPos(D3DXVECTOR3(0.0f, SHOT_BULLET_POS_Y, SHOT_BULLET_POS_Z));
 
 	// ナイフの生成
-	m_pKnife = CKnife::Create(GetCharacterModelPartsList(CModel::MODEL_PLAYER_LHAND)->GetMatrix(), KNIFE_COLLISOIN_SIZE, TAG::TAG_PLAYER);
+	m_pKnife = CKnife::Create(GetCharacterModelPartsList(CModel::MODEL_PLAYER_LHAND)->GetMatrix(), KNIFE_COLLISOIN_SIZE, TAG::PLAYER_1);
 	// 乗り物に乗り込んでいるかどうかのフラグ
 	m_bRideVehicle = false;
 
@@ -121,7 +127,7 @@ HRESULT CPlayer::Init(void)
 		if (pGame != nullptr)
 		{
 			// プレイヤーUIの生成
-			m_pPlayerUI = CPlayerUI::Create(m_Controller);
+			m_pPlayerUI = CPlayerUI::Create(GetTag());
 			// 弾の残数表示
 			m_pPlayerUI->SetBulletAmmo(m_pGun->GetGunAmmo(), m_pGun->GetGunType());
 			// グレネードの残数表示
@@ -152,6 +158,9 @@ HRESULT CPlayer::Init(void)
 	GetCollision()->SetSize2D(PLAYER_SIZE);
 	GetCollision()->SetMove(&GetMove());
 	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_CHARACTER);
+
+	// 試験的パッドのポインタ取得
+	m_pPad = CManager::CManager::GetPad(GetTag());
 
 	return S_OK;
 }
@@ -371,12 +380,16 @@ void CPlayer::MoveUpdate(void)
 {
 	CKeyboard *key;
 	key = CManager::GetInputKeyboard();
-	CXInputPad *pad;
-	pad = CManager::GetPad(m_Controller);
 	float Pad_X, Pad_Y;
-	pad->GetStickLeft(&Pad_X, &Pad_Y);//パッドの入力値を代入
-	Pad_X /= STICK_MAX_RANGE;//値の正規化
-	Pad_Y /= STICK_MAX_RANGE;//値の正規化
+
+	if (m_pPad)
+	{
+		//パッドの入力値を代入
+		m_pPad->GetStickLeft(&Pad_X, &Pad_Y);
+
+		Pad_X /= STICK_MAX_RANGE;//値の正規化
+		Pad_Y /= STICK_MAX_RANGE;//値の正規化
+	}
 	// Aの処理
 	if (key->GetKeyboardPress(DIK_A))
 	{
@@ -400,7 +413,7 @@ void CPlayer::MoveUpdate(void)
 	}
 
 	//ジャンプ
-	if ((key->GetKeyboardTrigger(DIK_SPACE) || pad->GetTrigger(pad->JOYPADKEY_A, 1)) && GetJump() == true && m_DebugState == DEBUG_NORMAL)
+	if ((key->GetKeyboardTrigger(DIK_SPACE) || m_pPad->GetTrigger(m_pPad->JOYPADKEY_A, 1)) && GetJump() == true && m_DebugState == DEBUG_NORMAL)
 	{
 		GetMove().y += m_fJump;
 		SetMotion(PLAYER_MOTION_JUMP);
@@ -505,7 +518,7 @@ void CPlayer::CollisionUpdate(void)
 			}
 
 			// アイテムとの判定
-			if (GetCollision()->ForPlayer_ItemCollision(m_Controller))
+			if (GetCollision()->ForPlayer_ItemCollision(GetTag()))
 			{
 			}
 		}
@@ -540,41 +553,41 @@ void CPlayer::AttackUpdate(void)
 {
 	CKeyboard *key;
 	key = CManager::GetInputKeyboard();
-	CXInputPad *pad;
-	pad = CManager::GetPad(m_Controller);
 
-	// 銃を撃つ or 近接攻撃
-	if (key->GetKeyboardTrigger(DIK_P) || pad->GetTrigger(pad->JOYPADKEY_X, 1))
+	if (m_pPad || key)
 	{
-		// 銃を撃てる状態だった時
-		if (m_bAttack == false && m_bKnifeAttack == false)
+		// 銃を撃つ or 近接攻撃
+		if (key->GetKeyboardTrigger(DIK_P) || m_pPad->GetTrigger(m_pPad->JOYPADKEY_X, 1))
 		{
-			// 銃発射処理
-			m_pGun->Shot();
-		}
+			// 銃を撃てる状態だった時
+			if (m_bAttack == false && m_bKnifeAttack == false)
+			{
+				// 銃発射処理
+				m_pGun->Shot();
+			}
 
-		// 近接攻撃をする状態だった時
-		if (m_bAttack == true && m_bKnifeAttack == false)
+			// 近接攻撃をする状態だった時
+			if (m_bAttack == true && m_bKnifeAttack == false)
+			{
+				// 近接攻撃
+				m_bKnifeAttack = true;
+				m_pKnife->StartMeleeAttack();
+				SetMotion(CCharacter::PLAYER_MOTION_ATTACK01);
+			}
+		}
+		// グレネードを投げる
+		if (key->GetKeyboardTrigger(DIK_O) || m_pPad->GetTrigger(m_pPad->JOYPADKEY_Y, 1))
 		{
-			// 近接攻撃
-			m_bKnifeAttack = true;
-			m_pKnife->StartMeleeAttack();
-			SetMotion(CCharacter::PLAYER_MOTION_ATTACK01);
+			// グレネードの弾数が残っているとき
+			if (m_pGrenadeFire->GetGrenadeAmmo() > 0)
+			{
+				// グレネード生成
+				m_pGrenadeFire->Fire(GetShotDirection());
+
+				SetMotion(CCharacter::PLAYER_MOTION_GRENADE);
+			}
 		}
 	}
-	// グレネードを投げる
-	if (key->GetKeyboardTrigger(DIK_O) || pad->GetTrigger(pad->JOYPADKEY_Y, 1))
-	{
-		// グレネードの弾数が残っているとき
-		if (m_pGrenadeFire->GetGrenadeAmmo() > 0)
-		{
-			// グレネード生成
-			m_pGrenadeFire->Fire(GetShotDirection());
-
-			SetMotion(CCharacter::PLAYER_MOTION_GRENADE);
-		}
-	}
-
 	// 攻撃モーションから別のモーションになった時
 	if (GetMotionType() != CCharacter::PLAYER_MOTION_ATTACK01)
 	{
@@ -590,22 +603,24 @@ void CPlayer::PadMoveUpdate(void)
 	//移動量
 	D3DXVECTOR3 MoveValue = ZeroVector3;
 
+
 	//パッドによる入力処理
-	if (CHossoLibrary::PadMoveInput(MoveValue, GetCharacterDirection(), GetJump(), m_Controller))
+	if (CHossoLibrary::PadMoveInput(MoveValue, GetCharacterDirection(), GetJump(), GetTag()))
 	{
 		//移動量計算
 		Move(MoveValue.x, MoveValue.y);
 	}
 
-	CXInputPad *pad = CManager::GetPad(m_Controller);
 	D3DXVECTOR3 InputValue = ZeroVector3;
-	pad->GetStickLeft(&InputValue.x, &InputValue.y);//パッドの入力値を代入
 
-	InputValue.x /= STICK_MAX_RANGE;//値の正規化
-	InputValue.y /= STICK_MAX_RANGE;//値の正規化
+	if (m_pPad)
+	{
+		m_pPad->GetStickLeft(&InputValue.x, &InputValue.y);//パッドの入力値を代入
 
+		InputValue.x /= STICK_MAX_RANGE;//値の正規化
+		InputValue.y /= STICK_MAX_RANGE;//値の正規化
+	}
 	//ジャンプモーションじゃない時かつジャンプストップモーションじゃない時
-
 	if (GetMotionType() != PLAYER_MOTION_JUMP && GetMotionType() != PLAYER_MOTION_JUMPSTOP && GetMotionType() != PLAYER_MOTION_ATTACK01)
 	{
 		//Sを押したらしゃがみモーション
@@ -850,9 +865,8 @@ void CPlayer::Ride()
 
 		// 乗り物に乗っている時にジャンプして戦車から降りる
 		CKeyboard *key = CManager::GetInputKeyboard();
-		CXInputPad *pad = CManager::GetPad(m_Controller);
 		//プレイヤーが乗り物から降りるとき
-		if (key->GetKeyboardTrigger(DIK_SPACE)|| pad->GetTrigger(pad->JOYPADKEY_B,1) && GetJump() == false)
+		if (key->GetKeyboardTrigger(DIK_SPACE)|| m_pPad->GetTrigger(m_pPad->JOYPADKEY_B,1) && GetJump() == false)
 		{
 			m_bRideVehicle = false;
 			GetMove().y += m_fRideJump;
@@ -893,21 +907,13 @@ void CPlayer::ReSpawn(void)
 }
 
 //====================================================================
-//コントローラータグの取得
-//====================================================================
-CONTROLLER CPlayer::GetControllerTag()
-{
-	return m_Controller;
-}
-
-//====================================================================
 //モデルのクリエイト
 //====================================================================
-CPlayer *CPlayer::Create(CONTROLLER Controller)
+CPlayer *CPlayer::Create(TAG Tag)
 {
 	CPlayer*pPlayer;
 	pPlayer = new CPlayer(OBJTYPE_PLAYER);
-	pPlayer->m_Controller = Controller;
+	pPlayer->SetTag(Tag);
 	pPlayer->Init();
 	return pPlayer;
 }

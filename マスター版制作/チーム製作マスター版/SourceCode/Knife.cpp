@@ -246,7 +246,7 @@ void CKnife::CollisionKnife()
 		if (m_pCollision)
 		{
 			//持ち主がプレイヤーの場合
-			if (m_tag == TAG::TAG_PLAYER)
+			if (m_tag == TAG::PLAYER_1 || m_tag == TAG::PLAYER_2)
 			{
 				//敵、捕虜、障害物と判定
 				if (m_pCollision->ForPlayerBulletCollision(PLAYER_KNIFE_DAMAGE, PLAYER_KNIFE_DAMAGE, true))
@@ -256,7 +256,7 @@ void CKnife::CollisionKnife()
 				}
 			}
 			//持ち主が敵の場合
-			else if (m_tag == TAG::TAG_ENEMY)
+			else if (m_tag == TAG::ENEMY)
 			{
 				//プレイヤー側との判定
 				if (m_pCollision->ForEnemyCollision(1, 1, true))

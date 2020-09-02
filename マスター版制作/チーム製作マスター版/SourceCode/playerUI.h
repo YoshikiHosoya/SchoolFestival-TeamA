@@ -52,7 +52,7 @@ public:
 	void				Draw(void);				// 描画
 
 	/* 静的メンバ関数 */
-	static				CPlayerUI	*Create(CONTROLLER Controller);		// プレイヤーUIの生成
+	static				CPlayerUI	*Create(TAG Tag);		// プレイヤーUIの生成
 
 	/* メンバ関数 */
 	void				SetScore(int nScore);				// スコアの設定
@@ -73,7 +73,7 @@ private:
 	/* 静的メンバ関数 */
 
 	/* メンバ関数 */
-	void				PlayerUICreate(CONTROLLER Controller);	// プレイヤーUIの生成
+	void				PlayerUICreate(TAG Tag);	// プレイヤーUIの生成
 
 	/* 静的メンバ変数 */
 
@@ -93,8 +93,8 @@ private:
 	int							m_nStock;						// 残機の数
 	int							m_nTime;						// 残り時間
 
-	float						m_P2_UI_FramePos;				// プレイヤー2の枠の位置
-	float						m_P2_UI_ScorePos;				// プレイヤー2のスコアの位置
-	float						m_P2_UI_LifePos;				// プレイヤー2の体力の位置
+	float						m_PLAYER_2_UI_FramePos;				// プレイヤー2の枠の位置
+	float						m_PLAYER_2_UI_ScorePos;				// プレイヤー2のスコアの位置
+	float						m_PLAYER_2_UI_LifePos;				// プレイヤー2の体力の位置
 };
 #endif

@@ -274,7 +274,7 @@ void CGun::Shot()
 			CManager::GetSound()->Play(CSound::LABEL_SE_SHOT_HANDGUN);
 
 			//ノズルフラッシュ
-			CParticle::CreateFromText(m_ShotPos, ZeroVector3, CParticleParam::EFFECT_SHOTFLASH);
+			CParticle::CreateFromText(m_ShotPos, ZeroVector3, CParticleParam::EFFECT_SHOTFLASH, GetTag());
 
 			break;
 
@@ -286,7 +286,7 @@ void CGun::Shot()
 			CManager::GetSound()->Play(CSound::LABEL_SE_SHOT_MACHINEGUN);
 
 			//ノズルフラッシュ
-			CParticle::CreateFromText(m_ShotPos, ZeroVector3, CParticleParam::EFFECT_SHOTFLASH);
+			CParticle::CreateFromText(m_ShotPos, ZeroVector3, CParticleParam::EFFECT_SHOTFLASH, GetTag());
 
 			m_bMultiple = true;		// フラグをオン
 			break;
@@ -301,7 +301,7 @@ void CGun::Shot()
 			CManager::GetSound()->Play(CSound::LABEL_SE_SHOT_SHOTGUN);
 
 			//ノズルフラッシュ
-			CParticle::CreateFromText(m_ShotPos, ZeroVector3, CParticleParam::EFFECT_SHOTFLASH);
+			CParticle::CreateFromText(m_ShotPos, ZeroVector3, CParticleParam::EFFECT_SHOTFLASH, GetTag());
 
 			break;
 
@@ -313,7 +313,7 @@ void CGun::Shot()
 			CManager::GetSound()->Play(CSound::LABEL_SE_SHOT_LASER);
 
 			//ノズルフラッシュ
-			CParticle::CreateFromText(m_ShotPos, ZeroVector3, CParticleParam::EFFECT_SHOTFLASH);
+			CParticle::CreateFromText(m_ShotPos, ZeroVector3, CParticleParam::EFFECT_SHOTFLASH, GetTag());
 
 			break;
 
@@ -343,7 +343,7 @@ void CGun::Shot()
 			CManager::GetSound()->Play(CSound::LABEL_SE_SHOT_MACHINEGUN);
 
 			//ノズルフラッシュ
-			CParticle::CreateFromText(m_ShotPos, ZeroVector3, CParticleParam::EFFECT_SHOTFLASH,TAG_PLAYER,-1,BlueColor);
+			CParticle::CreateFromText(m_ShotPos, ZeroVector3, CParticleParam::EFFECT_SHOTFLASH, GetTag(),-1,BlueColor);		// 仮止め)プレイヤータグを変えれるようにする
 
 			m_bMultiple = true;		// 複数発撃つフラグをオン
 			break;
@@ -356,7 +356,7 @@ void CGun::Shot()
 			CManager::GetSound()->Play(CSound::LABEL_SE_SHOT_MACHINEGUN);
 
 			//ノズルフラッシュ
-			CParticle::CreateFromText(m_ShotPos, ZeroVector3, CParticleParam::EFFECT_SHOTFLASH, TAG_PLAYER, -1, BlueColor);
+			CParticle::CreateFromText(m_ShotPos, ZeroVector3, CParticleParam::EFFECT_SHOTFLASH, GetTag(), -1, BlueColor);	// 仮止め)プレイヤータグを変えれるようにする
 
 			m_bMultiple = true;		// 複数発撃つフラグをオン
 			break;

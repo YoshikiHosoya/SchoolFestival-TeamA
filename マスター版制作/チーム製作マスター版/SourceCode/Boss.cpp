@@ -61,7 +61,7 @@ HRESULT CBoss::Init(void)
 	GetGunPtr()->SetGunType(CGun::GUNTYPE_TRACKINGGUN);
 
 	// e‚Ì’e‚ÌŽí—Þ
-	GetGunPtr()->GetTag() = TAG_ENEMY;
+	GetGunPtr()->GetTag() = TAG::ENEMY;
 
 	//e‚ð•`‰æ‚µ‚È‚¢
 	GetGunPtr()->SetDisp(false);

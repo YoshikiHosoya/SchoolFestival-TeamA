@@ -71,11 +71,11 @@ void CHandgun::Update(void)
 	CBullet::Update();
 
 	//ƒp[ƒeƒBƒNƒ‹”­¶ ‹OÕ‚Ý‚½‚¢‚È
-	if (GetTag() == TAG::TAG_PLAYER)
+	if (GetTag() == TAG::PLAYER_1 || GetTag() == TAG::PLAYER_2)
 	{
 		CParticle::CreateFromText(GetPosition(), ZeroVector3, CParticleParam::EFFECT_HANDGUN);
 	}
-	else if (GetTag() == TAG::TAG_ENEMY)
+	else if (GetTag() == TAG::ENEMY)
 	{
 		CParticle::CreateFromText(GetPosition(), ZeroVector3, CParticleParam::EFFECT_HANDGUN, GetTag(), -1, RedColor);
 	}
@@ -140,11 +140,11 @@ CHandgun * CHandgun::Create(D3DXVECTOR3 rot, TAG tag)
 	pHandgun->Init();
 
 	// ’e‚ÌˆÚ“®—ÊŒvŽZ
-	if (tag == TAG::TAG_PLAYER)
+	if (tag == TAG::PLAYER_1 || tag == TAG::PLAYER_2)
 	{
 		pHandgun->CalcBulletMove(rot, CGun::GUNTYPE_HANDGUN);
 	}
-	else if(tag == TAG::TAG_ENEMY)
+	else if(tag == TAG::ENEMY)
 	{
 		pHandgun->CalcBulletMove(rot, CGun::GUNTYPE_HANDGUN_ENEMY);
 	}

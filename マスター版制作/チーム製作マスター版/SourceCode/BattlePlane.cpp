@@ -66,7 +66,7 @@ HRESULT CBattlePlane::Init(void)
 	// マトリックス設定
 	m_pGun->SetHandMtx(GetVehicleModelPartsList(CModel::MODEL_PLANE_GUN)->GetMatrix());
 	// 銃の弾の種類
-	m_pGun->GetTag() = TAG_PLAYER;
+	m_pGun->GetTag() = TAG::PLAYER_1;		// 仮止め)プレイヤータグを変数に(多分ポインタ)
 	// 銃の弾の種類
 	m_pGun->SetGunType(CGun::GUNTYPE_PLANEGUN);
 	// 発射位置のオフセットの設定

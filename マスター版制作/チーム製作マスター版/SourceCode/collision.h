@@ -103,7 +103,7 @@ public:
 
 	bool ForPlayer_PrisonerCollision(bool Penetration);					// プレイヤーと捕虜が行う判定 ダメージ量 貫通するかどうか
 
-	bool ForPlayer_ItemCollision(CONTROLLER Controller);				// プレイヤーと捕虜が行う判定 ダメージ量 貫通するかどうか
+	bool ForPlayer_ItemCollision(TAG Tag);				// プレイヤーと捕虜が行う判定 ダメージ量 貫通するかどうか
 
 	CPrisoner		*ForPlayer_PrisonerCollision();						// プレイヤーと捕虜の接触判定 捕虜の状態変更
 	CEnemy			*ForPlayer_EnemyCollision();						// プレイヤーとエネミーの接触判定
@@ -136,7 +136,7 @@ private:
 	bool				m_bCanCollision;				// 判定をとるかどうか
 	int					m_nCollisionTime;				// 当たり判定が持続する時間
 	float				m_fHeight;	
-	CPlayer				*m_pPlayer[(int)CONTROLLER::P_MAX];	// プレイヤーのポインタ
+	CPlayer				*m_pPlayer[MAX_TAG];	// プレイヤーのポインタ
 };
 
 #endif

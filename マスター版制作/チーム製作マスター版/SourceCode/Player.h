@@ -88,10 +88,9 @@ public:
 	CPlayerUI		*GetPlayerUI()					{ return  m_pPlayerUI; };		// プレイヤーUIのポインタ取得
 	bool			GetRideFlag()					{ return m_bRideVehicle; };		// ライドフラグの取得
 	bool			GetRespawnFlag()				{ return m_bRespawn; };			// リスポーンフラグの設定
-	CONTROLLER		GetControllerTag();												// コントローラータグの取得
 
 	/* 静的メンバ関数 */
-	static CPlayer *Create(CONTROLLER Controller);	// 生成
+	static CPlayer *Create(TAG Tag);	// 生成
 	static	void	PlayerLoad();					// プレイヤーのロード
 private:
 	/* 静的メンバ関数 */
@@ -127,7 +126,7 @@ private:
 	CPlayerUI		*m_pPlayerUI;						// プレイヤーUIのポインタ
 	CKnife			*m_pKnife;							// ナイフのポインタ
 	bool			m_bRideVehicle;						// 乗り物に乗り込んでいるかどうかのフラグ
-	CONTROLLER		m_Controller;						// コントローラータグ
 	CVehicle		*m_pVehicle;						// 乗り物クラスのポインタ
+	CXInputPad		*m_pPad;							// パッドのポインタ
 };
 #endif

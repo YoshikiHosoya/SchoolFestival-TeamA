@@ -22,7 +22,7 @@
 // 静的メンバ変数の初期化
 // =====================================================================================================================================================================
 CMap		*CTutorial::m_pMap = nullptr;
-CPlayer		*CTutorial::m_pPlayer[(int)CONTROLLER::P_MAX] = {};
+CPlayer		*CTutorial::m_pPlayer[MAX_TAG] = {};
 
 //==========================================================
 // コンストラクタ
@@ -47,11 +47,11 @@ HRESULT CTutorial::Init(void)
 	m_pMap = CMap::MapCreate();				// マップの生成
 	m_pMap->MapLoad(CMap::MAP_TUTORIAL);			// マップのロード
 
-	m_pPlayer[(int)CONTROLLER::P1] = CPlayer::Create(CONTROLLER::P1);
+	m_pPlayer[(int)TAG::PLAYER_1 - 1] = CPlayer::Create(TAG::PLAYER_1);
 	// 試験的プレイヤー2の配置
-	m_pPlayer[(int)CONTROLLER::P2] = CPlayer::Create(CONTROLLER::P2);
-	m_pPlayer[(int)CONTROLLER::P2]->SetPosition(m_pPlayer[(int)CONTROLLER::P2]->GetPosition() + D3DXVECTOR3(100.0f, 0.0f, 0.0f));
-	m_pPlayer[(int)CONTROLLER::P2]->ChangeColor(true, D3DXCOLOR(0.5f, -0.5f, 1.0f, 0.0f));
+	m_pPlayer[(int)TAG::PLAYER_2 - 1] = CPlayer::Create(TAG::PLAYER_2);
+	m_pPlayer[(int)TAG::PLAYER_2 - 1]->SetPosition(m_pPlayer[(int)TAG::PLAYER_2 - 1]->GetPosition() + D3DXVECTOR3(100.0f, 0.0f, 0.0f));
+	m_pPlayer[(int)TAG::PLAYER_2 - 1]->ChangeColor(true, D3DXCOLOR(0.5f, -0.5f, 1.0f, 0.0f));
 
 	// UI生成
 	CUIManager::Create();

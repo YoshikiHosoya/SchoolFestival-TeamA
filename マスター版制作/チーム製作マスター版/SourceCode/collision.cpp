@@ -64,7 +64,7 @@ CCollision::CCollision()
 	m_nCollisionTime	= 0;								// 当たり判定が持続する時間
 	m_fHeight			= 30;								// 腰の高さの初期化
 	m_bCanCollision		= true;
-	for (int nCntPlayer = 0; nCntPlayer < (int)CONTROLLER::P_MAX; nCntPlayer++)
+	for (int nCntPlayer = 0; nCntPlayer < MAX_TAG; nCntPlayer++)
 	{
 		m_pPlayer[nCntPlayer] = nullptr;					// プレイヤーのポインタ
 	}
@@ -94,9 +94,9 @@ CCollision::~CCollision()
 //======================================================================================================================
 void CCollision::Init(void)
 {
-	for (int nCntPlayer = 0; nCntPlayer < (int)CONTROLLER::P_MAX; nCntPlayer++)
+	for (int nCntPlayer = 0; nCntPlayer < MAX_TAG; nCntPlayer++)
 	{
-		m_pPlayer[nCntPlayer] = CManager::GetBaseMode()->GetPlayer((CONTROLLER)nCntPlayer);
+		m_pPlayer[nCntPlayer] = CManager::GetBaseMode()->GetPlayer((TAG)(nCntPlayer + 1));
 	}
 }
 
@@ -222,7 +222,7 @@ bool CCollision::ForPlayerBulletCollision(int nEnemyDamage, int nObstacleDamage,
 						// 判定関数
 						if (this->OtherCollision2D(pBoss_One->GetCollision()))
 						{
-							CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer(CONTROLLER::P1);
+							CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer(TAG::PLAYER_1);
 							if (pPlayer != nullptr && pPlayer->GetPlayerUI())
 							{
 								pPlayer->GetPlayerUI()->SetScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_DAMAGE_BULLET));
@@ -251,7 +251,7 @@ bool CCollision::ForPlayerBulletCollision(int nEnemyDamage, int nObstacleDamage,
 					// 判定関数
 					if (this->OtherCollision2D(pEnemy->GetCollision()))
 					{
-						for (int nCntPlayer = 0; nCntPlayer < (int)CONTROLLER::P_MAX; nCntPlayer++)
+						for (int nCntPlayer = 0; nCntPlayer < MAX_TAG; nCntPlayer++)
 						{
 							if (m_pPlayer[nCntPlayer] != nullptr && m_pPlayer[nCntPlayer]->GetPlayerUI())
 							{
@@ -374,7 +374,7 @@ bool CCollision::ForEnemyCollision(int nPlayerDamage, int nPlayerTankDamage, boo
 	// 判定を確認するフラグ
 	bool bHitFlag = false;
 
-	for (int nCntPlayer = 0; nCntPlayer < (int)CONTROLLER::P_MAX; nCntPlayer++)
+	for (int nCntPlayer = 0; nCntPlayer < MAX_TAG; nCntPlayer++)
 	{
 		if (m_pPlayer[nCntPlayer] != nullptr)
 		{
@@ -769,7 +769,7 @@ bool CCollision::ForVehicleCollision()
 				{
 					bHitFlag = true;
 					// アイテムごとの処理を通す
-					pItem->HitItem(pItem->GetItemType(), CONTROLLER::P1);
+					pItem->HitItem(pItem->GetItemType(), TAG::PLAYER_1);
 					pItem = nullptr;
 				}
 			}
@@ -835,7 +835,7 @@ bool CCollision::BossOne_PlayerCollision()
 				if (pBoss_One->GetCollision() &&
 					pBoss_One->GetIntermediateSquat())
 				{
-					CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer(CONTROLLER::P1);
+					CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer(TAG::PLAYER_1);
 					if (pPlayer != nullptr)
 					{
 						if (this->BlockCollision2D_Bottom(pPlayer->GetCollision()))
@@ -917,7 +917,7 @@ bool CCollision::VehicleCollision(CCollision * pCollision)
 //======================================================================================================================
 // プレイヤーとアイテムで行う判定 プレイヤーの接触判定
 //======================================================================================================================
-bool CCollision::ForPlayer_ItemCollision(CONTROLLER Controller)
+bool CCollision::ForPlayer_ItemCollision(TAG Tag)
 {
 	// 判定を確認するフラグ
 	bool bHitFlag = false;
@@ -939,7 +939,7 @@ bool CCollision::ForPlayer_ItemCollision(CONTROLLER Controller)
 			{
 				bHitFlag = true;
 				// アイテムごとの処理を通す
-				pItem->HitItem(pItem->GetItemType(), Controller);
+				pItem->HitItem(pItem->GetItemType(), Tag);
 				pItem = nullptr;
 			}
 		}

@@ -61,7 +61,7 @@ void CBossAI::Uninit(void)
 //=============================================================================
 void CBossAI::Update(void)
 {
-	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer(CONTROLLER::P1);
+	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer(TAG::PLAYER_1);
 	D3DXVECTOR3 Distance;
 
 	if (pBossPass != nullptr || pPlayer != nullptr)
@@ -114,7 +114,7 @@ void CBossAI::Update(void)
 void CBossAI::UpdateMoveAI(void)
 {
 	D3DXVECTOR3 MoveVec = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer(CONTROLLER::P1);
+	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer(TAG::PLAYER_1);
 	if (pBossPass != nullptr || pPlayer != nullptr)
 	{
 		if (AI_CENTER == m_BossAItype) //íÜâõ
@@ -167,7 +167,7 @@ void CBossAI::UpdateMoveAI(void)
 void CBossAI::UpdateAttackAI(void)
 {
 	D3DXVECTOR3 MoveVec = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer(CONTROLLER::P1);
+	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer(TAG::PLAYER_1);
 	float fAngle = 0.0f;
 	if (pBossPass != nullptr && pPlayer != nullptr)
 	{
@@ -183,7 +183,7 @@ void CBossAI::UpdateAttackAI(void)
 			pBossPass->GetGunPtr()->SetShotRot(D3DXVECTOR3(0.0f, 0.0f, atan2f(-m_ShotVec.x, m_ShotVec.y)));
 
 			//åıÇÈ
-			CParticle::CreateFromText(pBossPass->GetPosition(), D3DXVECTOR3(0.0f, 0.0f, CHossoLibrary::Random_PI()), CParticleParam::EFFECT_FLASSHING, TAG::TAG_PLAYER, 0, D3DXCOLOR(0.7f,0.02f, 0.02f,1.0f));
+			CParticle::CreateFromText(pBossPass->GetPosition(), D3DXVECTOR3(0.0f, 0.0f, CHossoLibrary::Random_PI()), CParticleParam::EFFECT_FLASSHING, TAG::PLAYER_1, 0, D3DXCOLOR(0.7f,0.02f, 0.02f,1.0f));
 
 			//ç≈èâÇ…âπÇçƒê∂
 			if (m_AttackCastCnt == 0)
@@ -233,7 +233,7 @@ void CBossAI::UpdateAttackAI(void)
 			pBossPass->GetGunPtr()->SetShotRot(D3DXVECTOR3(0.0f, 0.0f, D3DX_PI + fAngle));
 
 			//åıÇÈ
-			CParticle::CreateFromText(pBossPass->GetPosition(), D3DXVECTOR3(0.0f, 0.0f, CHossoLibrary::Random_PI()), CParticleParam::EFFECT_FLASSHING, TAG::TAG_PLAYER, 0, D3DXCOLOR(0.7f, 0.7f, 0.01f, 0.2f));
+			CParticle::CreateFromText(pBossPass->GetPosition(), D3DXVECTOR3(0.0f, 0.0f, CHossoLibrary::Random_PI()), CParticleParam::EFFECT_FLASSHING, TAG::PLAYER_1, 0, D3DXCOLOR(0.7f, 0.7f, 0.01f, 0.2f));
 
 			//ç≈èâÇ…âπÇçƒê∂
 			if (m_AttackCastCnt == 0)
