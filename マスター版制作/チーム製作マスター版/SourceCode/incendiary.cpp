@@ -182,7 +182,7 @@ CIncendiary * CIncendiary::Create(D3DXVECTOR3 rot)
 	pIncendiary->m_fSpeed = pIncendiary->GetBulletParam(CGun::GUNTYPE_INCENDIARY)->fBulletSpeed;
 
 	// プレイヤーのポインタ取得
-	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
+	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer(CONTROLLER::P1);
 
 	// nullチェック
 	if (pPlayer != nullptr)

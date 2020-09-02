@@ -18,14 +18,14 @@
 #include "XInputPad.h"
 #include "sound.h"
 //他のとこでも使えるようにするメンバ
-CRenderer		*CManager::m_pRenderer		= nullptr;
-CKeyboard		*CManager::m_pInputKeyboard	= nullptr;
-CParticle		*CManager::m_Particle		= nullptr;
-CBaseMode		*CManager::m_pBaseMode		= nullptr;
-CMouse			*CManager::m_pMouse			= nullptr;
-CManager::MODE	CManager::m_mode			= CManager::MODE_TITLE;
-CXInputPad		*CManager::m_pPad			= nullptr;
-CSound			*CManager::m_pSound = nullptr;
+CRenderer		*CManager::m_pRenderer						= nullptr;
+CKeyboard		*CManager::m_pInputKeyboard					= nullptr;
+CParticle		*CManager::m_Particle						= nullptr;
+CBaseMode		*CManager::m_pBaseMode						= nullptr;
+CMouse			*CManager::m_pMouse							= nullptr;
+CManager::MODE	CManager::m_mode							= CManager::MODE_TITLE;
+CXInputPad		*CManager::m_pPad[(int)CONTROLLER::P_MAX]	= {};
+CSound			*CManager::m_pSound							= nullptr;
 
 
 CManager::CManager()
@@ -44,8 +44,11 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	m_pRenderer = new CRenderer;
 	m_pInputKeyboard = new CKeyboard;
 	m_pMouse = new CMouse;
-	m_pPad = new CXInputPad;
 	m_pSound = new CSound;
+	for (int nCnt = 0; nCnt < (int)CONTROLLER::P_MAX; nCnt++)
+	{
+		m_pPad[nCnt] = new CXInputPad;
+	}
 
 	//初期化処理
 	if (FAILED(m_pRenderer->Init(hWnd, TRUE)))
@@ -54,7 +57,10 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	}
 	m_pInputKeyboard->InitInput(hInstance, hWnd);
 	m_pMouse->Init(hInstance, hWnd);
-	m_pPad->Init(hInstance, hWnd);
+	for (int nCnt = 0; nCnt < (int)CONTROLLER::P_MAX; nCnt++)
+	{
+		m_pPad[nCnt]->Init(hInstance, hWnd, (CONTROLLER)nCnt);
+	}
 
 	m_pSound->Init(hWnd);
 	CBaseMode::BaseLoad(hWnd);
@@ -81,11 +87,14 @@ void CManager::Uninit(void)
 		delete m_pMouse;
 		m_pMouse = nullptr;
 	}
-	if (m_pPad)
+	for (int nCnt = 0; nCnt < (int)CONTROLLER::P_MAX; nCnt++)
 	{
-		m_pPad->Uninit();
-		delete m_pPad;
-		m_pPad = nullptr;
+		if (m_pPad[nCnt])
+		{
+			m_pPad[nCnt]->Uninit();
+			delete m_pPad[nCnt];
+			m_pPad[nCnt] = nullptr;
+		}
 	}
 	if (m_pInputKeyboard)
 	{
@@ -116,7 +125,10 @@ void CManager::Update(void)
 	m_pInputKeyboard->UpdateInput();
 	m_pRenderer->Update();
 	m_pMouse->Update();
-	m_pPad->Update();
+	for (int nCnt = 0; nCnt < (int)CONTROLLER::P_MAX; nCnt++)
+	{
+		m_pPad[nCnt]->Update();
+	}
 	if (m_pBaseMode)
 	{	//モード
 		m_pBaseMode->Update();
@@ -253,11 +265,11 @@ CMouse * CManager::GetMouse()
 //===========================================
 //パッドの情報取得
 //===========================================
-CXInputPad * CManager::GetPad(void)
+CXInputPad * CManager::GetPad(CONTROLLER Controller)
 {
-	if (m_pPad)
+	if (m_pPad[(int)Controller])
 	{
-		return m_pPad;
+		return m_pPad[(int)Controller];
 	}
 	return nullptr;
 }

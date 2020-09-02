@@ -35,7 +35,7 @@ public:
 	HRESULT Init(void);										// 初期化処理
 	void Uninit(void);										// 終了処理
 	void Update(void);										// 更新処理
-	CPlayer * GetPlayer(void);								// プレイヤーの取得
+	CPlayer * GetPlayer(CONTROLLER Controller);								// プレイヤーの取得
 	CMap *GetMap(void);										// マップの取得
 
 	void Draw(void);							//描画

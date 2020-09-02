@@ -45,7 +45,7 @@ public:
 	static CKeyboard *GetInputKeyboard(void);
 	static CBaseMode *GetBaseMode(void);
 	static CMouse *GetMouse();
-	static CXInputPad *GetPad(void);
+	static CXInputPad *GetPad(CONTROLLER Controller);
 	static CGame *GetGame();
 	static CSound *GetSound();
 
@@ -57,7 +57,7 @@ private:
 	static CRenderer *m_pRenderer;
 	static CParticle *m_Particle;
 	static CBaseMode *m_pBaseMode;
-	static CXInputPad *m_pPad;
+	static CXInputPad *m_pPad[(int)CONTROLLER::P_MAX];
 	static CSound *m_pSound;
 };
 #endif

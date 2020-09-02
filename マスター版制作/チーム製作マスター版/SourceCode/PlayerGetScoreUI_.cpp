@@ -195,7 +195,7 @@ void CPlayerGSUI::ScoreDataInitialize()
 // =====================================================================================================================================================================
 void CPlayerGSUI::GetScoreUICreate()
 {
-	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
+	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer(CONTROLLER::P1);
 	if (pPlayer)
 	{
 		// ê∂ê¨

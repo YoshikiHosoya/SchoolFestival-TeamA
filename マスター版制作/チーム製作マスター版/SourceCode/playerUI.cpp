@@ -22,33 +22,37 @@
 // =====================================================================================================================================================================
 #define PLAYER_MAX_LIFE						(5)															// 体力を表示する最大数
 
-#define PLAYER_UI_FRAME_POS					(D3DXVECTOR3((SCREEN_WIDTH * 0.5f) - 345.0f, 65.0f, 0.0f))	// 枠の位置
-#define PLAYER_UI_FRAME_SIZE				(D3DXVECTOR3(80.0f, 45.0f, 0.0f))							// 枠のサイズ
-#define PLAYER_UI_STOCK_LETTER_POS			(D3DXVECTOR3((SCREEN_WIDTH * 0.5f) - 510.0f, 90.0f, 0.0f))	// 残機( 文字 )の位置
-#define PLAYER_UI_STOCK_LETTER_SIZE			(D3DXVECTOR3(30.0f, 25.0f, 0.0f))							// 残機( 文字 )のサイズ
-#define PLAYER_UI_BULLET_AMMO_LETTER_POS	(D3DXVECTOR3((SCREEN_WIDTH * 0.5f) - 380.0f, 50.0f, 0.0f))	// 残弾数( 文字 )の位置
-#define PLAYER_UI_BULLET_AMMO_LETTER_SIZE	(D3DXVECTOR3(30.0f, 25.0f, 0.0f))							// 残弾数( 文字 )のサイズ
-#define PLAYER_UI_GRENADE_AMMO_LETTER_POS	(D3DXVECTOR3((SCREEN_WIDTH * 0.5f) - 310.0f, 50.0f, 0.0f))	// グレネードの残数( 文字 )の位置
-#define PLAYER_UI_GRENADE_AMMO_LETTER_SIZE	(D3DXVECTOR3(30.0f, 25.0f, 0.0f))							// グレネードの残数( 文字 )のサイズ
-#define PLAYER_UI_LIFE_ICON_POS				(D3DXVECTOR3((SCREEN_WIDTH * 0.5f) - 510.0f, 650.0f, 0.0f))	// 体力アイコンの位置
-#define PLAYER_UI_LIFE_ICON_SIZE			(D3DXVECTOR3(80.0f, 80.0f, 0.0f))							// 体力アイコンのサイズ
-#define PLAYER_UI_INFINITY_AMMO_POS			(D3DXVECTOR3((SCREEN_WIDTH * 0.5f) - 380.0f, 80.0f, 0.0f))	// 弾数無限の位置
-#define PLAYER_UI_INFINITY_AMMO_SIZE		(D3DXVECTOR3(40.0f, 40.0f, 0.0f))							// 弾数無限のサイズ
+#define PLAYER_UI_FRAME_POS					(D3DXVECTOR3(305.0f + m_P2_UI_FramePos, 65.0f, 0.0f))	// 枠の位置
+#define PLAYER_UI_FRAME_SIZE				(D3DXVECTOR3(80.0f, 45.0f, 0.0f))						// 枠のサイズ
+#define PLAYER_UI_STOCK_LETTER_POS			(D3DXVECTOR3(140.0f + m_P2_UI_ScorePos, 90.0f, 0.0f))	// 残機( 文字 )の位置
+#define PLAYER_UI_STOCK_LETTER_SIZE			(D3DXVECTOR3(30.0f, 25.0f, 0.0f))						// 残機( 文字 )のサイズ
+#define PLAYER_UI_BULLET_AMMO_LETTER_POS	(D3DXVECTOR3(270.0f + m_P2_UI_FramePos, 50.0f, 0.0f))	// 残弾数( 文字 )の位置
+#define PLAYER_UI_BULLET_AMMO_LETTER_SIZE	(D3DXVECTOR3(30.0f, 25.0f, 0.0f))						// 残弾数( 文字 )のサイズ
+#define PLAYER_UI_GRENADE_AMMO_LETTER_POS	(D3DXVECTOR3(340.0f + m_P2_UI_FramePos, 50.0f, 0.0f))	// グレネードの残数( 文字 )の位置
+#define PLAYER_UI_GRENADE_AMMO_LETTER_SIZE	(D3DXVECTOR3(30.0f, 25.0f, 0.0f))						// グレネードの残数( 文字 )のサイズ
+#define PLAYER_UI_LIFE_ICON_POS				(D3DXVECTOR3(130.0f + m_P2_UI_LifePos, 650.0f, 0.0f))	// 体力アイコンの位置
+#define PLAYER_UI_LIFE_ICON_SIZE			(D3DXVECTOR3(80.0f, 80.0f, 0.0f))						// 体力アイコンのサイズ
+#define PLAYER_UI_INFINITY_AMMO_POS			(D3DXVECTOR3(270.0f + m_P2_UI_FramePos, 80.0f, 0.0f))	// 弾数無限の位置
+#define PLAYER_UI_INFINITY_AMMO_SIZE		(D3DXVECTOR3(40.0f, 40.0f, 0.0f))						// 弾数無限のサイズ
 
-#define PLAYER_UI_NUM_SCORE_POS				(D3DXVECTOR3((SCREEN_WIDTH * 0.5f) - 530.0f, 50.0f, 0.0f))	// スコアの位置
-#define PLAYER_UI_NUM_SCORE_SIZE			(D3DXVECTOR3(25.0f, 25.0f, 0.0f))							// スコアのサイズ
-#define PLAYER_UI_NUM_BULLET_AMMO_POS		(D3DXVECTOR3((SCREEN_WIDTH * 0.5f) - 375.0f, 80.0f, 0.0f))	// 残弾数の位置
-#define PLAYER_UI_NUM_BULLET_AMMO_SIZE		(D3DXVECTOR3(20.0f, 20.0f, 0.0f))							// 残弾数のサイズ
-#define PLAYER_UI_NUM_GRENADE_AMMO_POS		(D3DXVECTOR3((SCREEN_WIDTH * 0.5f) - 310.0f, 80.0f, 0.0f))	// グレネードの残数の位置
-#define PLAYER_UI_NUM_GRENADE_AMMO_SIZE		(D3DXVECTOR3(20.0f, 20.0f, 0.0f))							// グレネードの残数のサイズ
-#define PLAYER_UI_NUM_LIFE_POS				(D3DXVECTOR3((SCREEN_WIDTH * 0.5f) - 460.0f, 650.0f, 0.0f))	// 体力の位置
-#define PLAYER_UI_NUM_LIFE_SIZE				(D3DXVECTOR3(25.0f, 25.0f, 0.0f))							// 体力のサイズ
-#define PLAYER_UI_NUM_STOCK_POS				(D3DXVECTOR3((SCREEN_WIDTH * 0.5f) - 450.0f, 90.0f, 0.0f))	// 残機の位置
-#define PLAYER_UI_NUM_STOCK_SIZE			(D3DXVECTOR3(20.0f, 20.0f, 0.0f))							// 残機のサイズ
-#define PLAYER_UI_NUM_TIME_POS				(D3DXVECTOR3((SCREEN_WIDTH * 0.5f), 50.0f, 0.0f))			// 残り時間の位置
-#define PLAYER_UI_NUM_TIME_SIZE				(D3DXVECTOR3(50.0f, 50.0f, 0.0f))							// 残り時間のサイズ
+#define PLAYER_UI_NUM_SCORE_POS				(D3DXVECTOR3(120.0f + m_P2_UI_ScorePos, 50.0f, 0.0f))	// スコアの位置
+#define PLAYER_UI_NUM_SCORE_SIZE			(D3DXVECTOR3(25.0f, 25.0f, 0.0f))						// スコアのサイズ
+#define PLAYER_UI_NUM_BULLET_AMMO_POS		(D3DXVECTOR3(275.0f + m_P2_UI_FramePos, 80.0f, 0.0f))	// 残弾数の位置
+#define PLAYER_UI_NUM_BULLET_AMMO_SIZE		(D3DXVECTOR3(20.0f, 20.0f, 0.0f))						// 残弾数のサイズ
+#define PLAYER_UI_NUM_GRENADE_AMMO_POS		(D3DXVECTOR3(340.0f + m_P2_UI_FramePos, 80.0f, 0.0f))	// グレネードの残数の位置
+#define PLAYER_UI_NUM_GRENADE_AMMO_SIZE		(D3DXVECTOR3(20.0f, 20.0f, 0.0f))						// グレネードの残数のサイズ
+#define PLAYER_UI_NUM_LIFE_POS				(D3DXVECTOR3(180.0f + m_P2_UI_LifePos, 650.0f, 0.0f))	// 体力の位置
+#define PLAYER_UI_NUM_LIFE_SIZE				(D3DXVECTOR3(25.0f, 25.0f, 0.0f))						// 体力のサイズ
+#define PLAYER_UI_NUM_STOCK_POS				(D3DXVECTOR3(200.0f + m_P2_UI_ScorePos, 90.0f, 0.0f))	// 残機の位置
+#define PLAYER_UI_NUM_STOCK_SIZE			(D3DXVECTOR3(20.0f, 20.0f, 0.0f))						// 残機のサイズ
+#define PLAYER_UI_NUM_TIME_POS				(D3DXVECTOR3((SCREEN_WIDTH * 0.5f), 50.0f, 0.0f))		// 残り時間の位置
+#define PLAYER_UI_NUM_TIME_SIZE				(D3DXVECTOR3(50.0f, 50.0f, 0.0f))						// 残り時間のサイズ
 
-#define DEFAULT_TIME						(60)														// デフォルトのタイマー
+#define PLAYER_2_UI_FRAME_POS				(650.0f)						// プレイヤー2の枠の位置 ( プレイヤ1の位置に加算 )
+#define PLAYER_2_UI_SCORE_POS				(1020.0f)						// プレイヤー2のスコアの位置 ( 〃 )
+#define PLAYER_2_UI_LIFE_POS				(950.0f)						// プレイヤー2の体力の位置 ( 〃 )
+
+#define DEFAULT_TIME						(60)								// デフォルトのタイマー
 // =====================================================================================================================================================================
 //
 // コンストラクタ
@@ -63,6 +67,17 @@ CPlayerUI::CPlayerUI()
 	}
 
 	m_pPGSUI = nullptr;
+
+	// 変数初期化
+	m_nScore = 0;							// スコア
+	m_nBulletAmmo = 0;						// 弾の残弾数
+	m_nGrenadeAmmo = 0;						// グレネードの残弾数
+	m_nLife = 0;							// 体力
+	m_nStock = 0;							// 残機の数
+	m_nTime = DEFAULT_TIME;					// 残り時間
+	m_P2_UI_FramePos = 0;					// プレイヤー2の枠の位置
+	m_P2_UI_ScorePos = 0;					// プレイヤー2のスコアの位置
+	m_P2_UI_LifePos = 0;					// プレイヤー2の体力の位置
 }
 
 // =====================================================================================================================================================================
@@ -81,17 +96,6 @@ CPlayerUI::~CPlayerUI()
 // =====================================================================================================================================================================
 HRESULT CPlayerUI::Init(void)
 {
-	// 変数初期化
-	m_nScore		= 0;							// スコア
-	m_nBulletAmmo	= 0;							// 弾の残弾数
-	m_nGrenadeAmmo	= 0;							// グレネードの残弾数
-	m_nLife			= 0;							// 体力
-	m_nStock		= 0;							// 残機の数
-	m_nTime			= DEFAULT_TIME;					// 残り時間
-
-	// プレイヤーUIの生成
-	PlayerUICreate();
-
 	return S_OK;
 }
 
@@ -181,13 +185,16 @@ void CPlayerUI::Draw(void)
 // プレイヤーUIの生成
 //
 // =====================================================================================================================================================================
-CPlayerUI * CPlayerUI::Create()
+CPlayerUI * CPlayerUI::Create(CONTROLLER Controller)
 {
 	//メモリの確保
 	CPlayerUI *pPlayerUI = new CPlayerUI();
 
 	// 初期化
 	pPlayerUI->Init();
+
+	// プレイヤーUIの生成
+	pPlayerUI->PlayerUICreate(Controller);
 
 	//オブジェタイプ設定してSceneに所有権を渡す
 	CUIManager::AddUIList(std::move(pPlayerUI));
@@ -389,8 +396,16 @@ void CPlayerUI::ResetTime()
 // プレイヤーUIの生成
 //
 // =====================================================================================================================================================================
-void CPlayerUI::PlayerUICreate()
+void CPlayerUI::PlayerUICreate(CONTROLLER Controller)
 {
+	// プレイヤー2のUIの位置
+	if (Controller == CONTROLLER::P2)
+	{
+		m_P2_UI_FramePos	= PLAYER_2_UI_FRAME_POS;
+		m_P2_UI_ScorePos	= PLAYER_2_UI_SCORE_POS;
+		m_P2_UI_LifePos		= PLAYER_2_UI_LIFE_POS;
+	}
+
 	for (int nCnt = 0; nCnt < PLAYER_UI::PLAYER_UI_MAX; nCnt++)
 	{
 		if (!m_apScene2D[nCnt])
@@ -461,5 +476,8 @@ void CPlayerUI::PlayerUICreate()
 	// 残機の生成
 	m_pStock = CMultiNumber::Create(PLAYER_UI_NUM_STOCK_POS, PLAYER_UI_NUM_STOCK_SIZE, m_nStock, 2, CScene::OBJTYPE_UI);
 	// 残り時間の生成
-	m_pTime = CMultiNumber::Create(PLAYER_UI_NUM_TIME_POS, PLAYER_UI_NUM_TIME_SIZE, m_nTime, 2, CScene::OBJTYPE_UI);
+	if (Controller == CONTROLLER::P1)
+	{
+		m_pTime = CMultiNumber::Create(PLAYER_UI_NUM_TIME_POS, PLAYER_UI_NUM_TIME_SIZE, m_nTime, 2, CScene::OBJTYPE_UI);
+	}
 }

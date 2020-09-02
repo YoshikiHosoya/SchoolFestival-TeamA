@@ -205,7 +205,7 @@ void CBoss_One::Update(void)
 	}
 
 	// デバッグ用距離の計算
-	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
+	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer(CONTROLLER::P1);
 	float fDist = this->GetPosition().x - pPlayer->GetPosition().x;
 
 	CDebugProc::Print("ボスとプレイヤーの距離 --- x --- %f\n", fDist);
@@ -979,7 +979,7 @@ void CBoss_One::RandomAttack()
 void CBoss_One::SetRotBalkan()
 {
 	// プレイヤーのポインタ取得
-	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
+	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer(CONTROLLER::P1);
 	D3DXVECTOR3 PlayerPos;
 
 	// プレイヤーがボスの射程外だった時

@@ -176,10 +176,10 @@ HRESULT CResultUI::Init(void)
 {
 	// ゲームクラスのポインタ取得
 	CGame *pGame = (CGame*)CManager::GetBaseMode();
-	if (pGame->GetPlayer()->GetPlayerUI() != nullptr)
+	if (pGame->GetPlayer(CONTROLLER::P1)->GetPlayerUI() != nullptr)
 	{
 		// スコアの取得
-		m_PlayerScore = pGame->GetPlayer()->GetPlayerUI()->GetScore();
+		m_PlayerScore = pGame->GetPlayer(CONTROLLER::P1)->GetPlayerUI()->GetScore();
 	}
 
 	// UIをまとめて生成する
@@ -477,7 +477,7 @@ void CResultUI::Result1Draw()
 void CResultUI::ScoreCal()
 {
 	// プレイヤーのポインタを取得
-	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
+	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer(CONTROLLER::P1);
 
 	if (pPlayer != nullptr)
 	{

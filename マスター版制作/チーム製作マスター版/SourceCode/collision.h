@@ -31,6 +31,7 @@ class CPrisoner;
 class CEnemy;
 class CPlayertank;
 class CBattlePlane;
+class CPlayer;
 
 //=============================================================================
 //
@@ -97,7 +98,7 @@ public:
 
 	bool ForPlayer_PrisonerCollision(bool Penetration);					// プレイヤーと捕虜が行う判定 ダメージ量 貫通するかどうか
 
-	bool ForPlayer_ItemCollision();										// プレイヤーと捕虜が行う判定 ダメージ量 貫通するかどうか
+	bool ForPlayer_ItemCollision(CONTROLLER Controller);				// プレイヤーと捕虜が行う判定 ダメージ量 貫通するかどうか
 
 	CPrisoner		*ForPlayer_PrisonerCollision();						// プレイヤーと捕虜の接触判定 捕虜の状態変更
 	CEnemy			*ForPlayer_EnemyCollision();						// プレイヤーとエネミーの接触判定
@@ -105,7 +106,7 @@ public:
 	CBattlePlane	*ForPlayer_PlaneCollision();						// プレイヤーと戦闘機の接触判定
 
 	bool ForPlayer_VehicleCollision(CCollision * pCollision);	// プレイヤーと乗り物が行う判定
-	bool ForPlayer_VehicleCollision();							// プレイヤーと乗り物が行う判定
+	void *ForPlayer_VehicleCollision();							// プレイヤーと乗り物が行う判定
 	bool ForVehicleCollision();									// 乗り物が行う判定
 	bool ForTankCollision();									// 戦車が行う判定
 
@@ -127,6 +128,7 @@ private:
 	bool				m_bCanCollision;				// 判定をとるかどうか
 	int					m_nCollisionTime;				// 当たり判定が持続する時間
 	float				m_fHeight;	
+	CPlayer				*m_pPlayer[(int)CONTROLLER::P_MAX];	// プレイヤーのポインタ
 };
 
 #endif

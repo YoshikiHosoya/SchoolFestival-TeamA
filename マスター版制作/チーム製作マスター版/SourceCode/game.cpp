@@ -32,7 +32,7 @@
 // 静的メンバ変数の初期化
 // =====================================================================================================================================================================
 int			CGame::m_Counter	= 0;
-CPlayer		*CGame::m_pPlayer	= nullptr;
+CPlayer		*CGame::m_pPlayer[(int)CONTROLLER::P_MAX] = {};
 CMap		*CGame::m_pMap		= nullptr;
 
 //==========================================================
@@ -61,7 +61,11 @@ HRESULT CGame::Init(void)
 	m_pMap		= CMap::MapCreate();		// マップの生成
 	m_pMap->MapLoad(CMap::MAP_1_1);			// マップのロード
 
-	m_pPlayer	= CPlayer::Create();
+	m_pPlayer[(int)CONTROLLER::P1] = CPlayer::Create(CONTROLLER::P1);
+	// 試験的プレイヤー2の配置
+	m_pPlayer[(int)CONTROLLER::P2] = CPlayer::Create(CONTROLLER::P2);
+	m_pPlayer[(int)CONTROLLER::P2]->SetPosition(m_pPlayer[(int)CONTROLLER::P2]->GetPosition() + D3DXVECTOR3(-50.0f, 0.0f, 0.0f));
+	//m_pPlayer[(int)CONTROLLER::P2]->ChangeColor(true, D3DXCOLOR(0.5f, -0.5f, 1.0f, 0.0f));
 
 	m_pPause->CreatePause();
 
@@ -130,9 +134,9 @@ void CGame::Update(void)
 //==========================================================
 // プレイヤー取得
 //==========================================================
-CPlayer * CGame::GetPlayer(void)
+CPlayer * CGame::GetPlayer(CONTROLLER Controller)
 {
-	return m_pPlayer;
+	return m_pPlayer[(int)Controller];
 }
 //==========================================================
 // マップ取得
@@ -276,7 +280,7 @@ void CGame::DebugCollision(CKeyboard *key)
 		if (key->GetKeyboardTrigger(DIK_0))
 		{
 			//タイマー減少
-			m_pPlayer->GetPlayerUI()->DecrementTime();
+			m_pPlayer[(int)CONTROLLER::P1]->GetPlayerUI()->DecrementTime();
 		}
 	}
 }

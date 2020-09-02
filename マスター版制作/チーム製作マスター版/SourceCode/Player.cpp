@@ -43,6 +43,7 @@ float			CPlayer::m_fCrouchSpeed	 = 0.0f;
 float			CPlayer::m_fJump		 = 0.0f;
 float			CPlayer::m_fRideJump	 = 0.0f;
 D3DXVECTOR3		CPlayer::m_pos[2] = {};
+
 // =====================================================================================================================================================================
 // テキストファイル名
 // =====================================================================================================================================================================
@@ -120,7 +121,7 @@ HRESULT CPlayer::Init(void)
 		if (pGame != nullptr)
 		{
 			// プレイヤーUIの生成
-			m_pPlayerUI = CPlayerUI::Create();
+			m_pPlayerUI = CPlayerUI::Create(m_Controller);
 			// 弾の残数表示
 			m_pPlayerUI->SetBulletAmmo(m_pGun->GetGunAmmo(), m_pGun->GetGunType());
 			// グレネードの残数表示
@@ -371,12 +372,12 @@ void CPlayer::MoveUpdate(void)
 	CKeyboard *key;
 	key = CManager::GetInputKeyboard();
 	CXInputPad *pad;
-	pad = CManager::GetPad();
+	pad = CManager::GetPad(m_Controller);
 	float Pad_X, Pad_Y;
 	pad->GetStickLeft(&Pad_X, &Pad_Y);//パッドの入力値を代入
 	Pad_X /= STICK_MAX_RANGE;//値の正規化
 	Pad_Y /= STICK_MAX_RANGE;//値の正規化
-		// Aの処理
+	// Aの処理
 	if (key->GetKeyboardPress(DIK_A))
 	{
 		CPlayer::Move(m_fRunSpeed, 0.5f);
@@ -504,23 +505,27 @@ void CPlayer::CollisionUpdate(void)
 			}
 
 			// アイテムとの判定
-			if (GetCollision()->ForPlayer_ItemCollision())
+			if (GetCollision()->ForPlayer_ItemCollision(m_Controller))
 			{
 			}
 		}
 
 		if (m_bRideVehicle == false)
 		{
+			m_pVehicle = (CVehicle*)GetCollision()->ForPlayer_VehicleCollision();
+
 			// 乗り物との判定
-			if (GetCollision()->ForPlayer_VehicleCollision())
+			if (m_pVehicle)
 			{
 				// 乗り込んだ時
 				m_bRideVehicle = true;
+				m_pVehicle->SetPlayer(this);
 			}
 			else
 			{
 				// 乗っていないとき
 				m_bRideVehicle = false;
+
 			}
 		}
 	}
@@ -536,7 +541,7 @@ void CPlayer::AttackUpdate(void)
 	CKeyboard *key;
 	key = CManager::GetInputKeyboard();
 	CXInputPad *pad;
-	pad = CManager::GetPad();
+	pad = CManager::GetPad(m_Controller);
 
 	// 銃を撃つ or 近接攻撃
 	if (key->GetKeyboardTrigger(DIK_P) || pad->GetTrigger(pad->JOYPADKEY_X, 1))
@@ -586,13 +591,13 @@ void CPlayer::PadMoveUpdate(void)
 	D3DXVECTOR3 MoveValue = ZeroVector3;
 
 	//パッドによる入力処理
-	if (CHossoLibrary::PadMoveInput(MoveValue, GetCharacterDirection(), GetJump()))
+	if (CHossoLibrary::PadMoveInput(MoveValue, GetCharacterDirection(), GetJump(), m_Controller))
 	{
 		//移動量計算
 		Move(MoveValue.x, MoveValue.y);
 	}
 
-	CXInputPad *pad = CManager::GetPad();
+	CXInputPad *pad = CManager::GetPad(m_Controller);
 	D3DXVECTOR3 InputValue = ZeroVector3;
 	pad->GetStickLeft(&InputValue.x, &InputValue.y);//パッドの入力値を代入
 
@@ -845,7 +850,7 @@ void CPlayer::Ride()
 
 		// 乗り物に乗っている時にジャンプして戦車から降りる
 		CKeyboard *key = CManager::GetInputKeyboard();
-		CXInputPad *pad = CManager::GetPad();
+		CXInputPad *pad = CManager::GetPad(m_Controller);
 		//プレイヤーが乗り物から降りるとき
 		if (key->GetKeyboardTrigger(DIK_SPACE)|| pad->GetTrigger(pad->JOYPADKEY_B,1) && GetJump() == false)
 		{
@@ -888,12 +893,21 @@ void CPlayer::ReSpawn(void)
 }
 
 //====================================================================
+//コントローラータグの取得
+//====================================================================
+CONTROLLER CPlayer::GetControllerTag()
+{
+	return m_Controller;
+}
+
+//====================================================================
 //モデルのクリエイト
 //====================================================================
-CPlayer *CPlayer::Create(void)
+CPlayer *CPlayer::Create(CONTROLLER Controller)
 {
 	CPlayer*pPlayer;
 	pPlayer = new CPlayer(OBJTYPE_PLAYER);
+	pPlayer->m_Controller = Controller;
 	pPlayer->Init();
 	return pPlayer;
 }
