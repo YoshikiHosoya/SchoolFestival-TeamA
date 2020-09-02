@@ -28,7 +28,7 @@
 #define MAX_FIRING_RANGE				(900.0f)							// ボスの最大射程
 #define MIN_FIRING_RANGE				(250.0f)							// ボスの最低射程
 #define ATTENUATION_RATE				(100.0f)							// 移動量の減衰割合
-#define MIN_SPEED						(-2.5f)								// 最も遅い移動速度
+#define MIN_SPEED						(-1.0f)								// 最も遅い移動速度の基準
 
 // =====================================================================================================================================================================
 //
@@ -136,22 +136,55 @@ void CIncendiary::DebugInfo()
 // =====================================================================================================================================================================
 void CIncendiary::VelocityAttenuation()
 {
+	CBoss_One *pBoss_One = nullptr;
+
+	for (int nCnt = 0; nCnt < CManager::GetBaseMode()->GetMap()->GetMaxEnemy(); nCnt++)
+	{
+		// エネミーのポインタ取得
+		CEnemy *pEnemy = CManager::GetBaseMode()->GetMap()->GetEnemy(nCnt);
+		if (pEnemy != nullptr)
+		{
+			if (pEnemy->GetCharacterType() == CCharacter::CHARACTER_TYPE_BOSS_ONE)
+			{
+				pBoss_One = (CBoss_One*)pEnemy;
+			}
+		}
+	}
+
+
 	// 現在の弾の移動量を取得
 	float fMove_x = GetMove().x;
 
 	// 弾の移動量が0より小さい時(左向きに弾を撃つため - になっている)
 	if (GetMove().x < 0)
 	{
-		// 移動量が規定値を下回った時
-		if (GetMove().x >= MIN_SPEED)
+		if (pBoss_One->GetPostureType() == CBoss_One::POSTURETYPE_STAND)
 		{
-			// 速度減衰
-			GetMove().x -= fMove_x / (ATTENUATION_RATE - 50.0f);
+			// 移動量が規定値を下回った時
+			if (GetMove().x >= MIN_SPEED)
+			{
+				// 速度減衰
+				GetMove().x -= fMove_x / (ATTENUATION_RATE -80.0f);
+			}
+			else
+			{
+				// 速度減衰
+				GetMove().x -= fMove_x / ATTENUATION_RATE;
+			}
 		}
 		else
 		{
-			// 速度減衰
-			GetMove().x -= fMove_x / ATTENUATION_RATE;
+			// 移動量が規定値を下回った時
+			if (GetMove().x >= (MIN_SPEED))
+			{
+				// 速度減衰
+				GetMove().x -= fMove_x / (ATTENUATION_RATE -50.0f);
+			}
+			else
+			{
+				// 速度減衰
+				GetMove().x -= fMove_x / ATTENUATION_RATE;
+			}
 		}
 	}
 
@@ -194,7 +227,7 @@ CIncendiary * CIncendiary::Create(D3DXVECTOR3 rot)
 	}
 
 	// 弾の移動量計算
-	pIncendiary->CalcIncendiaryMove(rot, pIncendiary->m_fSpeed *2.0f, pIncendiary->m_fSpeed);
+	pIncendiary->CalcIncendiaryMove(rot, pIncendiary->m_fSpeed *2.2f, pIncendiary->m_fSpeed);
 
 	// モデルタイプの設定
 	pIncendiary->SetType(BULLET_MODEL);

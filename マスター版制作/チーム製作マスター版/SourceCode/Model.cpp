@@ -150,6 +150,10 @@ char *CModel::m_BossOneFileName[MODEL_BOSSONE_MAX] =
 	{ "data/MODEL/DragonNosuke/Knee_L_R.x" },		// 左後大腿
 	{ "data/MODEL/DragonNosuke/Knee_R_F.x" },		// 右前大腿
 	{ "data/MODEL/DragonNosuke/Knee_R_R.x" },		// 右後大腿
+	{ "data/MODEL/DragonNosuke/Knee2_L_F.x" },		// 左前大腿2
+	{ "data/MODEL/DragonNosuke/Knee2_L_R.x" },		// 左後大腿2
+	{ "data/MODEL/DragonNosuke/Knee2_R_F.x" },		// 右前大腿2
+	{ "data/MODEL/DragonNosuke/Knee2_R_R.x" },		// 右後大腿2
 	{ "data/MODEL/DragonNosuke/Leg_L_F.x" },		// 左前下腿
 	{ "data/MODEL/DragonNosuke/Leg_L_R.x" },		// 左後下腿
 	{ "data/MODEL/DragonNosuke/Leg_R_F.x" },		// 右前下腿

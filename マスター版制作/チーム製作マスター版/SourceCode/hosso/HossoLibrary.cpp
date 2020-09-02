@@ -78,6 +78,14 @@ bool CHossoLibrary::PressAnyButton(void)
 	Keyboard = CManager::GetInputKeyboard();
 	CXInputPad *InpudPad[(int)CONTROLLER::P_MAX] = {};
 	for (int nCnt = 0; nCnt < (int)CONTROLLER::P_MAX; nCnt++)
+
+	if (Keyboard->GetKeyboardTrigger(DIK_RETURN)||
+		Keyboard->GetKeyboardTrigger(DIK_SPACE)||
+		InpudPad->GetTrigger(CXInputPad::JOYPADKEY_START,1)||
+		InpudPad->GetTrigger(CXInputPad::JOYPADKEY_A, 1) ||
+		InpudPad->GetTrigger(CXInputPad::JOYPADKEY_B, 1) ||
+		InpudPad->GetTrigger(CXInputPad::JOYPADKEY_X, 1) ||
+		InpudPad->GetTrigger(CXInputPad::JOYPADKEY_Y, 1))
 	{
 		InpudPad[nCnt] = CManager::GetPad((CONTROLLER)nCnt);
 

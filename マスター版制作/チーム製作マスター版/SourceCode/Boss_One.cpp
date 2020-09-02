@@ -15,6 +15,7 @@
 #include "enemy.h"
 #include "character.h"
 #include <random>
+#include "gamemanager.h"
 
 // =====================================================================================================================================================================
 //マクロ定義
@@ -43,25 +44,39 @@ char *CBoss_One::m_BossOneFileName =
 // =====================================================================================================================================================================
 CBoss_One::CBoss_One(OBJ_TYPE type) :CEnemy(type)
 {
+	for (int nCnt = 0; nCnt < WEAPONTYPE_MAX; nCnt++)
+	{
+		m_pGun[nCnt]			 = nullptr;
+		m_Gun_OffsetPos[nCnt]	 = ZeroVector3;
+		m_Gun_Pos[nCnt]			 = ZeroVector3;
+	}
+
 	// ボスの初期状態
 	m_BossOneState			 = BOSS_ONE_STATE_STAY;
 	m_AttckType				 = ATTACKTYPE_NONE;
-	m_ShotCount				 = 0;
+	m_AttckTypeOld			 = ATTACKTYPE_NONE;
+	m_PostureType			 = POSTURETYPE_STAND;
 	m_pCollision			 = nullptr;
+	m_ShotCount				 = 0;
 	m_nCoolTime				 = 120;
 	m_nShotIntervalTime		 = 0;
-	m_nTriggerCount = 0;
+	m_nTriggerCount			 = 0;
+	m_nBalkanAngle			 = 0;
+	m_nShot					 = 60;
+	m_nShotCount			 = 0;
+	m_fBalkanRot			 = 0.0f;
+	m_fRotTarget			 = -1.57f;
+	m_fPartsRotVentilation	 = 0.0f;
+	m_AddMove				 = 0.0f;
 	m_bFlame				 = false;
 	m_bBalkanRotFlag		 = false;
-	m_fBalkanRot			 = 0.0f;
-	m_nBalkanAngle			 = 0;
-
-	m_nShot = 60;
-	m_fRotTarget = -1.57f;
-	m_fPartsRotVentilation = 0.0f;
-	m_bSetBossState = false;
-	m_bOpenWeapon = false;
+	m_bSetBossState			 = false;
+	m_bOpenWeapon			 = false;
+	m_bShiftPosture			 = false;
+	m_bIntermediateSquat	 = false;
+	m_bBalkanGunRotFlag		 = false;
 }
+
 // =====================================================================================================================================================================
 //
 // デストラクタ
@@ -93,11 +108,8 @@ HRESULT CBoss_One::Init(void)
 	// モーションさせない設定
 	SetMotion(CCharacter::CHARACTER_MOTION_STATE_NONE);
 	// 銃の傾き
-	GetCharacterModelPartsList((CModel::MODEL_BOSSONE_GUN_INCENDIARY))->GetRot().x += 0.6f;
-	GetCharacterModelPartsList((CModel::MODEL_BOSSONE_GUN_BALKAN))->GetRot().x = 0.0f;
+	GetCharacterModelPartsList((CModel::MODEL_BOSSONE_GUN_INCENDIARY))->GetRot().x -= 0.8f;
 	GetCharacterModelPartsList((CModel::MODEL_BOSSONE_GUN_FLAMETHROWER))->GetRot().x -= 1.57f;
-	// 武器用の当たり判定の生成
-	m_pCollision = CCollision::Create();
 
 	for (int nCnt = 0; nCnt < WEAPONTYPE_MAX; nCnt++)
 	{
@@ -120,15 +132,9 @@ HRESULT CBoss_One::Init(void)
 	SetGunOffsetPos(D3DXVECTOR3(GetCharacterModelPartsList((CModel::MODEL_BOSSONE_GUN_FLAMETHROWER))->GetPosition()));
 	// ガンの座標の更新
 	SetGunPos();
-	// ガンの当たり判定の設定
-	m_pCollision->SetPos(&m_Gun_Pos[WEAPONTYPE_FLAMETHROWER]);
-	m_pCollision->SetSize2D(D3DXVECTOR3(100.0f, 100.0f, 0.0f));
-	m_pCollision->DeCollisionCreate(CCollision::COLLISIONTYPE_NORMAL);
 
-	// 当たり判定設定
-	CCharacter::GetCollision()->SetPos(&GetPosition());
-	CCharacter::GetCollision()->SetSize2D(m_CollisionSize[0]);
-	CCharacter::GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_NORMAL);
+	// 当たり判定の設定
+	SetCollision();
 
 	return S_OK;
 }
@@ -172,50 +178,21 @@ void CBoss_One::Update(void)
 	}
 	// ガンのオフセット座標の更新
 	SetGunOffsetPos(D3DXVECTOR3(GetCharacterModelPartsList((CModel::MODEL_BOSSONE_GUN_FLAMETHROWER))->GetPosition()));
-	// ガンの移動
-	//MoveGun(GetCharacterModelPartsList((CModel::MODEL_BOSSONE_GUN_FLAMETHROWER))->GetPosition(), D3DXVECTOR3(0.0f, 1.0f, 0.0f));
 	// ガンの座標の更新
 	SetGunPos();
-	// ガンの当たり判定の座標の更新
-	m_pCollision->SetPos(&m_Gun_Pos[WEAPONTYPE_FLAMETHROWER]);
-
 	// ボスの状態ごとの処理
 	BossOneStateManager();
-
-	//if (m_bBalkanGunRotFlag)
-	//{
-		// 回転の計算
-		CalcRotationBalkan(m_fRotTarget, GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_BALKAN)->GetRot().x);
-		// 回転量の更新
-		SetBalkanRot(GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_BALKAN)->GetRot().x);
-		m_pGun[WEAPONTYPE_BALKAN]->SetShotRot(
-			D3DXVECTOR3(0.0f, 0.0f, (GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_BALKAN))->GetRot().x * -1.0f));
-	//}
-
+	// 回転の計算
+	CalcRotationBalkan(m_fRotTarget, GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_BALKAN)->GetRot().x);
+	// 回転量の更新
+	SetBalkanRot(GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_BALKAN)->GetRot().x);
+	// 弾が向かう角度
+	m_pGun[WEAPONTYPE_BALKAN]->SetShotRot(
+		D3DXVECTOR3(0.0f, 0.0f, (GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_BALKAN))->GetRot().x * -1.0f));
 	// ボスのモーション
 	Motion();
-	// 火炎放射器の移動
-	//SetFlameThrower();
-
-	// 当たり判定
-	if (CCharacter::GetCollision() != nullptr)
-	{
-		// 座標の更新 pos
-		CCharacter::GetCollision()->SetPos(&GetPosition());
-	}
-
-	// デバッグ用距離の計算
-	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer(CONTROLLER::P1);
-	float fDist = this->GetPosition().x - pPlayer->GetPosition().x;
-
-	CDebugProc::Print("ボスとプレイヤーの距離 --- x --- %f\n", fDist);
-	CDebugProc::Print("ボスのステート %d\n", m_BossOneState);
-	CDebugProc::Print("ボスの攻撃ステート %d\n", m_AttckType);
-	CDebugProc::Print("\n");
-	CDebugProc::Print("\n");
-	CDebugProc::Print("\n");
-	CDebugProc::Print("ボスのガンの回転 %f\n", m_fBalkanRot);
-	CDebugProc::Print("ボスのガンの角度 %d\n", m_nBalkanAngle);
+	// 当たり判定の更新
+	UpdateCollision();
 
 	// キャラクターの更新
 	CCharacter::Update();
@@ -241,6 +218,23 @@ void CBoss_One::Draw(void)
 // =====================================================================================================================================================================
 void CBoss_One::DebugInfo(void)
 {
+	// デバッグ用距離の計算
+	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
+	float fDist = this->GetPosition().x - pPlayer->GetPosition().x;
+
+	CDebugProc::Print("ボスとプレイヤーの距離 --- x --- %f\n", fDist);
+	CDebugProc::Print("ボスのステート %d\n", m_BossOneState);
+	CDebugProc::Print("\n");
+	CDebugProc::Print("\n");
+	CDebugProc::Print("\n");
+	CDebugProc::Print("\n");
+	CDebugProc::Print("ボスの攻撃ステート %d\n", m_AttckType);
+	CDebugProc::Print("ボスの姿勢 %d\n", m_PostureType);
+	CDebugProc::Print("ボスのガンの回転 %f\n", m_fBalkanRot);
+	CDebugProc::Print("ボスのガンの角度 %d\n", m_nBalkanAngle);
+	CDebugProc::Print("ボスのボディーの座標 %f\n", GetCharacterModelPartsList(CModel::MODEL_BOSSONE_BODY)->GetPosition().y);
+	CDebugProc::Print("ボスの体力 %d\n", GetLife());
+
 	//CDebugProc::Print("");
 	CCharacter::DebugInfo();
 }
@@ -420,9 +414,6 @@ void CBoss_One::Motion(void)
 	// パーツを回転させる
 	GetCharacterModelPartsList(CModel::MODEL_BOSSONE_L_VENTILATION)->GetRot().x += m_fPartsRotVentilation;
 	GetCharacterModelPartsList(CModel::MODEL_BOSSONE_R_VENTILATION)->GetRot().x += m_fPartsRotVentilation;
-
-
-
 }
 
 // =====================================================================================================================================================================
@@ -445,6 +436,15 @@ void CBoss_One::DeathReaction()
 	//死亡フラグをたてる
 	this->SetDieFlag(true);
 	CCharacter::DeathReaction();
+
+	//イベントクリア
+	CManager::GetGame()->GetGameManager()->EventClear();
+
+	//nullcheck
+	if (CManager::GetGame())
+	{
+		CManager::GetGame()->GetGameManager()->SetGameState(CGameManager::GAMESTATE::RESULT);
+	}
 }
 
 // =====================================================================================================================================================================
@@ -483,12 +483,11 @@ void CBoss_One::StateChangeReaction()
 //=====================================================================================================================================================================
 void CBoss_One::Behavior()
 {
+	// --- 変数の初期化 ---  //
 	m_AttckType = ATTACKTYPE_NONE;
+	m_bShiftPosture = false;
 	m_fRotTarget = -1.57f;
 	m_nShot = 60;
-	// ガンの傾きを元に戻す
-	//CalcRotationBalkan(-1.57f, GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_BALKAN)->GetRot().x);
-	//m_RotTarget = 0.0f;
 	m_fBalkanRot = GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_BALKAN)->GetRot().x;
 	m_nBalkanAngle = 0;
 	// 弾を撃った回数をリセット
@@ -507,8 +506,6 @@ void CBoss_One::Behavior()
 		SetFlameThrower(false);
 	}
 
-	// 攻撃方法をランダムに決める
-	RandomAttack();
 	// クールタイムの計算
 	Cooltime_Decrease();
 }
@@ -549,6 +546,10 @@ void CBoss_One::SetGunPos()
 	for (int nCnt = 0; nCnt < WEAPONTYPE_MAX; nCnt++)
 	{
 		m_Gun_Pos[nCnt] = m_Gun_OffsetPos[nCnt] + GetPosition();
+		if (nCnt == WEAPONTYPE_FLAMETHROWER)
+		{
+			m_Gun_Pos[nCnt].y -= 50.0f;
+		}
 	}
 }
 
@@ -575,12 +576,10 @@ void CBoss_One::Cooltime_Decrease()
 	// クールタイムが0以下になった時
 	if (m_nCoolTime <= 0)
 	{
-		//if (m_bSetBossState)
-		//{
-			//m_bSetBossState = false;
-			// 状態を攻撃に変える
-			SetBossState(BOSS_ONE_STATE_ATTACK);
-		//}
+		// 攻撃方法をランダムに決める
+		RandomAttack();
+		// 状態を攻撃に変える
+		SetBossState(BOSS_ONE_STATE_ATTACK);
 	}
 }
 
@@ -686,6 +685,8 @@ void CBoss_One::ShotIncendiary()
 		// 50フレームごとに弾を撃つ
 		if (m_nShotIntervalTime <= 0)
 		{
+			m_pGun[WEAPONTYPE_INCENDIARY]->SetShotRot(
+				D3DXVECTOR3(0.0f, 0.0f, (GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_INCENDIARY))->GetRot().x * -1.0f));
 			// 焼夷弾を撃つ
 			m_pGun[WEAPONTYPE_INCENDIARY]->Shot();
 			// インターバルの時間を設定
@@ -709,7 +710,7 @@ void CBoss_One::ShotBalkan()
 	if (m_bOpenWeapon)
 	{
 		// 弾を2回撃った時
-		if (m_nTriggerCount >= 3)
+		if (m_nTriggerCount >= 5)
 		{
 			// クールタイムの設定
 			SetCoolTime(120);
@@ -778,40 +779,36 @@ void CBoss_One::ShotWarning()
 	m_pGun[WEAPONTYPE_FLAMETHROWER]->SetShotRot(
 			D3DXVECTOR3(0.0f, 0.0f, (GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_FLAMETHROWER))->GetRot().x * -1.0f));
 
-	//m_nShot--;
-	//if (m_nShot <= 0)
-	//{
-		// 弾を7回撃った時
-		if (m_nShotCount >= 7)
+	// 弾を7回撃った時
+	if (m_nShotCount >= 7)
+	{
+		// 撃ち終わったら弾を動かせるようにする
+		m_pGun[WEAPONTYPE_FLAMETHROWER]->SetMoveZero(false);
+		// クールタイムの設定
+		SetCoolTime(30);
+		// 弾を撃った回数をリセット
+		m_nShotCount = 0;
+		// 火炎放射を撃つ
+		m_bFlame = true;
+	}
+	else
+	{
+		// 10フレームごとに弾を撃つ
+		if (m_nShotIntervalTime <= 0)
 		{
-			// 撃ち終わったら弾を動かせるようにする
-			m_pGun[WEAPONTYPE_FLAMETHROWER]->SetMoveZero(false);
-			// クールタイムの設定
-			SetCoolTime(30);
-			// 弾を撃った回数をリセット
-			m_nShotCount = 0;
+			// 弾の動きを止める
+			m_pGun[WEAPONTYPE_FLAMETHROWER]->SetMoveZero(true);
 			// 火炎放射を撃つ
-			m_bFlame = true;
+			m_pGun[WEAPONTYPE_FLAMETHROWER]->Shot();
+			// インターバルの時間を設定
+			SetShotIntervalTime(10);
+			// 弾を撃った回数を加算
+			m_nShotCount++;
 		}
-		else
-		{
-			// 10フレームごとに弾を撃つ
-			if (m_nShotIntervalTime <= 0)
-			{
-				// 弾の動きを止める
-				m_pGun[WEAPONTYPE_FLAMETHROWER]->SetMoveZero(true);
-				// 火炎放射を撃つ
-				m_pGun[WEAPONTYPE_FLAMETHROWER]->Shot();
-				// インターバルの時間を設定
-				SetShotIntervalTime(10);
-				// 弾を撃った回数を加算
-				m_nShotCount++;
-			}
 
-			// インターバルの時間を減少
-			m_nShotIntervalTime--;
-		}
-//	}
+		// インターバルの時間を減少
+		m_nShotIntervalTime--;
+	}
 }
 
 // =====================================================================================================================================================================
@@ -844,7 +841,7 @@ void CBoss_One::ShotFlameRadiation()
 		// 50フレームごとに弾を撃つ
 		if (m_nShotIntervalTime <= 0)
 		{
-			// 焼夷弾を撃つ
+			// 火炎放射を撃つ
 			m_pGun[WEAPONTYPE_FLAMETHROWER]->Shot();
 			// インターバルの時間を設定
 			SetShotIntervalTime(10);
@@ -859,6 +856,181 @@ void CBoss_One::ShotFlameRadiation()
 
 // =====================================================================================================================================================================
 //
+// 姿勢変更
+//
+// =====================================================================================================================================================================
+void CBoss_One::ShiftPosture()
+{
+	if (!m_bShiftPosture)
+	{
+		m_AddMove += 0.1f;
+	}
+
+	if (m_PostureType == POSTURETYPE_STAND)
+	{
+
+		// 膝上
+		if (GetCharacterModelPartsList(CModel::MODEL_BOSSONE_KNEE_R_FRONT)->GetRot().z >= -1.25f &&
+			GetCharacterModelPartsList(CModel::MODEL_BOSSONE_KNEE_R_REAR)->GetRot().z >= -1.25f)
+		{
+			GetCharacterModelPartsList(CModel::MODEL_BOSSONE_KNEE_R_FRONT)->GetRot().z -= m_AddMove;
+			GetCharacterModelPartsList(CModel::MODEL_BOSSONE_KNEE_R_REAR)->GetRot().z -= m_AddMove;
+
+			if (GetCharacterModelPartsList(CModel::MODEL_BOSSONE_KNEE_R_FRONT)->GetRot().z <= -1.25f &&
+				GetCharacterModelPartsList(CModel::MODEL_BOSSONE_KNEE_R_REAR)->GetRot().z <= -1.25f)
+			{
+				GetCharacterModelPartsList(CModel::MODEL_BOSSONE_KNEE_R_FRONT)->GetRot().z = -1.25f;
+				GetCharacterModelPartsList(CModel::MODEL_BOSSONE_KNEE_R_REAR)->GetRot().z = -1.25f;
+			}
+		}
+
+		if (GetCharacterModelPartsList(CModel::MODEL_BOSSONE_KNEE_L_FRONT)->GetRot().z <= 1.25f &&
+			GetCharacterModelPartsList(CModel::MODEL_BOSSONE_KNEE_L_REAR)->GetRot().z <= 1.25f)
+		{
+			GetCharacterModelPartsList(CModel::MODEL_BOSSONE_KNEE_L_FRONT)->GetRot().z += m_AddMove;
+			GetCharacterModelPartsList(CModel::MODEL_BOSSONE_KNEE_L_REAR)->GetRot().z += m_AddMove;
+
+			if (GetCharacterModelPartsList(CModel::MODEL_BOSSONE_KNEE_L_FRONT)->GetRot().z >= 1.25f &&
+				GetCharacterModelPartsList(CModel::MODEL_BOSSONE_KNEE_L_REAR)->GetRot().z >= 1.25f)
+			{
+				GetCharacterModelPartsList(CModel::MODEL_BOSSONE_KNEE_L_FRONT)->GetRot().z = 1.25f;
+				GetCharacterModelPartsList(CModel::MODEL_BOSSONE_KNEE_L_REAR)->GetRot().z = 1.25f;
+			}
+		}
+
+
+		// 膝下
+		if (GetCharacterModelPartsList(CModel::MODEL_BOSSONE_KNEE2_R_FRONT)->GetRot().z >= -0.9f &&
+			GetCharacterModelPartsList(CModel::MODEL_BOSSONE_KNEE2_R_REAR)->GetRot().z >= -0.9f)
+		{
+			GetCharacterModelPartsList(CModel::MODEL_BOSSONE_KNEE2_R_FRONT)->GetRot().z -= m_AddMove;
+			GetCharacterModelPartsList(CModel::MODEL_BOSSONE_KNEE2_R_REAR)->GetRot().z -= m_AddMove;
+
+			if (GetCharacterModelPartsList(CModel::MODEL_BOSSONE_KNEE2_R_FRONT)->GetRot().z <= -0.9f &&
+				GetCharacterModelPartsList(CModel::MODEL_BOSSONE_KNEE2_R_REAR)->GetRot().z <= -0.9f)
+			{
+				GetCharacterModelPartsList(CModel::MODEL_BOSSONE_KNEE2_R_FRONT)->GetRot().z = -0.9f;
+				GetCharacterModelPartsList(CModel::MODEL_BOSSONE_KNEE2_R_REAR)->GetRot().z = -0.9f;
+			}
+		}
+
+		if (GetCharacterModelPartsList(CModel::MODEL_BOSSONE_KNEE2_L_FRONT)->GetRot().z <= 0.9f &&
+			GetCharacterModelPartsList(CModel::MODEL_BOSSONE_KNEE2_L_REAR)->GetRot().z <= 0.9f)
+		{
+			GetCharacterModelPartsList(CModel::MODEL_BOSSONE_KNEE2_L_FRONT)->GetRot().z += m_AddMove;
+			GetCharacterModelPartsList(CModel::MODEL_BOSSONE_KNEE2_L_REAR)->GetRot().z += m_AddMove;
+
+			if (GetCharacterModelPartsList(CModel::MODEL_BOSSONE_KNEE2_L_FRONT)->GetRot().z >= 0.9f &&
+				GetCharacterModelPartsList(CModel::MODEL_BOSSONE_KNEE2_L_REAR)->GetRot().z >= 0.9f)
+			{
+				GetCharacterModelPartsList(CModel::MODEL_BOSSONE_KNEE2_L_FRONT)->GetRot().z = 0.9f;
+				GetCharacterModelPartsList(CModel::MODEL_BOSSONE_KNEE2_L_REAR)->GetRot().z = 0.9f;
+			}
+		}
+
+		m_bIntermediateSquat = true;
+		// ボディーの高さ
+		if (GetPosition().y >= 50.0f)
+		{
+			GetPosition().y -= m_AddMove * 2;
+
+			if (GetPosition().y <= 50.0f)
+			{
+				GetPosition().y = 50.0f;
+				// クールタイムの設定
+				SetCoolTime(120);
+				//
+				m_bShiftPosture = true;
+				m_bIntermediateSquat = false;
+				m_PostureType = POSTURETYPE_SQUAT;
+				m_AddMove = 0.0f;
+				// ボスの状態を変更
+				m_BossOneState = BOSS_ONE_STATE_STAY;
+			}
+		}
+	}
+	else
+	{
+		if (GetCharacterModelPartsList(CModel::MODEL_BOSSONE_KNEE_L_FRONT)->GetRot().z >= 0.0f &&
+			GetCharacterModelPartsList(CModel::MODEL_BOSSONE_KNEE_L_REAR)->GetRot().z >= 0.0f)
+		{
+			GetCharacterModelPartsList(CModel::MODEL_BOSSONE_KNEE_L_FRONT)->GetRot().z -= m_AddMove;
+			GetCharacterModelPartsList(CModel::MODEL_BOSSONE_KNEE_L_REAR)->GetRot().z -= m_AddMove;
+
+			if (GetCharacterModelPartsList(CModel::MODEL_BOSSONE_KNEE_L_FRONT)->GetRot().z <= 0.0f &&
+				GetCharacterModelPartsList(CModel::MODEL_BOSSONE_KNEE_L_REAR)->GetRot().z <= 0.0f)
+			{
+				GetCharacterModelPartsList(CModel::MODEL_BOSSONE_KNEE_L_FRONT)->GetRot().z = 0.0f;
+				GetCharacterModelPartsList(CModel::MODEL_BOSSONE_KNEE_L_REAR)->GetRot().z = 0.0f;
+			}
+		}
+
+		if (GetCharacterModelPartsList(CModel::MODEL_BOSSONE_KNEE_R_FRONT)->GetRot().z <= 0.0f &&
+			GetCharacterModelPartsList(CModel::MODEL_BOSSONE_KNEE_R_REAR)->GetRot().z <= 0.0f)
+		{
+			GetCharacterModelPartsList(CModel::MODEL_BOSSONE_KNEE_R_FRONT)->GetRot().z += m_AddMove;
+			GetCharacterModelPartsList(CModel::MODEL_BOSSONE_KNEE_R_REAR)->GetRot().z += m_AddMove;
+
+			if (GetCharacterModelPartsList(CModel::MODEL_BOSSONE_KNEE_R_FRONT)->GetRot().z >= 0.0f &&
+				GetCharacterModelPartsList(CModel::MODEL_BOSSONE_KNEE_R_REAR)->GetRot().z >= 0.0f)
+			{
+				GetCharacterModelPartsList(CModel::MODEL_BOSSONE_KNEE_R_FRONT)->GetRot().z = 0.0f;
+				GetCharacterModelPartsList(CModel::MODEL_BOSSONE_KNEE_R_REAR)->GetRot().z = 0.0f;
+			}
+		}
+
+
+		if (GetCharacterModelPartsList(CModel::MODEL_BOSSONE_KNEE2_L_REAR)->GetRot().z >= 0.0f &&
+			GetCharacterModelPartsList(CModel::MODEL_BOSSONE_KNEE2_L_REAR)->GetRot().z >= 0.0f)
+		{
+			GetCharacterModelPartsList(CModel::MODEL_BOSSONE_KNEE2_L_FRONT)->GetRot().z -= m_AddMove;
+			GetCharacterModelPartsList(CModel::MODEL_BOSSONE_KNEE2_L_REAR)->GetRot().z -= m_AddMove;
+
+			if (GetCharacterModelPartsList(CModel::MODEL_BOSSONE_KNEE2_L_FRONT)->GetRot().z <= 0.0f &&
+				GetCharacterModelPartsList(CModel::MODEL_BOSSONE_KNEE2_L_REAR)->GetRot().z <= 0.0f)
+			{
+				GetCharacterModelPartsList(CModel::MODEL_BOSSONE_KNEE2_L_FRONT)->GetRot().z = 0.0f;
+				GetCharacterModelPartsList(CModel::MODEL_BOSSONE_KNEE2_L_REAR)->GetRot().z = 0.0f;
+			}
+		}
+
+		if (GetCharacterModelPartsList(CModel::MODEL_BOSSONE_KNEE2_R_FRONT)->GetRot().z <= 0.0f &&
+			GetCharacterModelPartsList(CModel::MODEL_BOSSONE_KNEE2_R_REAR)->GetRot().z <= 0.0f)
+		{
+			GetCharacterModelPartsList(CModel::MODEL_BOSSONE_KNEE2_R_FRONT)->GetRot().z += m_AddMove;
+			GetCharacterModelPartsList(CModel::MODEL_BOSSONE_KNEE2_R_REAR)->GetRot().z += m_AddMove;
+
+			if (GetCharacterModelPartsList(CModel::MODEL_BOSSONE_KNEE2_R_FRONT)->GetRot().z >= 0.0f &&
+				GetCharacterModelPartsList(CModel::MODEL_BOSSONE_KNEE2_R_REAR)->GetRot().z >= 0.0f)
+			{
+				GetCharacterModelPartsList(CModel::MODEL_BOSSONE_KNEE2_R_FRONT)->GetRot().z = 0.0f;
+				GetCharacterModelPartsList(CModel::MODEL_BOSSONE_KNEE2_R_REAR)->GetRot().z = 0.0f;
+			}
+		}
+
+		if (GetPosition().y <= 170.0f)
+		{
+			m_AddMove += 0.1f;
+			GetPosition().y += m_AddMove * 2;
+
+			if (GetPosition().y >= 170.0)
+			{
+				GetPosition().y = 170.0f;
+				// クールタイムの設定
+				SetCoolTime(120);
+				//
+				m_bShiftPosture = true;
+				m_PostureType = POSTURETYPE_STAND;
+				m_AddMove = 0.0f;
+				// ボスの状態を変更
+				m_BossOneState = BOSS_ONE_STATE_STAY;
+			}
+		}
+	}
+}
+
+// =====================================================================================================================================================================
+//
 // 火炎放射器の移動
 //
 // =====================================================================================================================================================================
@@ -866,13 +1038,13 @@ void CBoss_One::SetFlameThrower(bool bOpen)
 {
 	if (bOpen)
 	{
-		if ((GetPosition().y + GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_FLAMETHROWER)->GetPosition().y) >= -110.0)
+		if ((GetPosition().y + GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_FLAMETHROWER)->GetPosition().y) >= -30.0)
 		{
 			GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_FLAMETHROWER)->GetPosition().y -= 2.0f;
 
-			if (GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_FLAMETHROWER)->GetPosition().y <= -110.0)
+			if (GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_FLAMETHROWER)->GetPosition().y <= -30.0)
 			{
-				GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_FLAMETHROWER)->GetPosition().y = -110.0f;
+				GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_FLAMETHROWER)->GetPosition().y = -30.0f;
 				m_bOpenWeapon = true;
 			}
 		}
@@ -880,13 +1052,13 @@ void CBoss_One::SetFlameThrower(bool bOpen)
 
 	else if (!bOpen)
 	{
-		if ((GetPosition().y + GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_FLAMETHROWER)->GetPosition().y) >= -15.0f)
+		if ((GetPosition().y + GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_FLAMETHROWER)->GetPosition().y) >= 65.0f)
 		{
 			GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_FLAMETHROWER)->GetPosition().y += 2.0f;
 
-			if (GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_FLAMETHROWER)->GetPosition().y >= -15.0f)
+			if (GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_FLAMETHROWER)->GetPosition().y >= 65.0f)
 			{
-				GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_FLAMETHROWER)->GetPosition().y = -15.0f;
+				GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_FLAMETHROWER)->GetPosition().y = 65.0f;
 				m_bOpenWeapon = false;
 			}
 		}
@@ -903,13 +1075,13 @@ void CBoss_One::SetBalkan(bool bOpen)
 {
 	if (bOpen)
 	{
-		if ((GetPosition().z - GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_BALKAN)->GetPosition().z) >= -60.0f)
+		if ((GetPosition().z - GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_BALKAN)->GetPosition().z) >= -50.0f)
 		{
-			GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_BALKAN)->GetPosition().z -= 2.0f;
+			GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_BALKAN)->GetPosition().z -= 3.0f;
 
-			if (GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_BALKAN)->GetPosition().z <= -60.0f)
+			if (GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_BALKAN)->GetPosition().z <= -50.0f)
 			{
-				GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_BALKAN)->GetPosition().z = -60.0f;
+				GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_BALKAN)->GetPosition().z = -50.0f;
 				m_bOpenWeapon = true;
 			}
 		}
@@ -917,13 +1089,13 @@ void CBoss_One::SetBalkan(bool bOpen)
 
 	else if (!bOpen)
 	{
-		if ((GetPosition().z - GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_BALKAN)->GetPosition().z) <= 60.0f)
+		if ((GetPosition().z - GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_BALKAN)->GetPosition().z) <= 50.0f)
 		{
-			GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_BALKAN)->GetPosition().z += 2.0f;
+			GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_BALKAN)->GetPosition().z += 3.0f;
 
-			if (GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_BALKAN)->GetPosition().z >= 60.0f)
+			if (GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_BALKAN)->GetPosition().z >= 50.0f)
 			{
-				GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_BALKAN)->GetPosition().z = 60.0f;
+				GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_BALKAN)->GetPosition().z = 50.0f;
 				m_bOpenWeapon = false;
 			}
 		}
@@ -964,8 +1136,14 @@ void CBoss_One::ShotFlameManager()
 void CBoss_One::RandomAttack()
 {
 	// 攻撃方法を決める
-	m_AttckType = (BOSS_ONE_ATTACKTYPE)get_rand_range(ATTACKTYPE_BALKAN, ATTACKTYPE_INCENDIARY);
-	//m_AttckType = ATTACKTYPE_BALKAN;
+	m_AttckType = (BOSS_ONE_ATTACKTYPE)get_rand_range(ATTACKTYPE_BALKAN, ATTACKTYPE_SHIFTPOSTURE);
+
+	// しゃがみ状態で攻撃が火炎放射になった場合はやり直し
+	do
+	{
+		m_AttckType = (BOSS_ONE_ATTACKTYPE)get_rand_range(ATTACKTYPE_BALKAN, ATTACKTYPE_SHIFTPOSTURE);
+	} while (m_PostureType == POSTURETYPE_SQUAT && m_AttckType == ATTACKTYPE_FLAMERADIATION ||
+			 m_AttckTypeOld == ATTACKTYPE_SHIFTPOSTURE && m_AttckTypeOld == m_AttckType);
 
 	// 攻撃パターンの保存
 	m_AttckTypeOld = m_AttckType;
@@ -996,21 +1174,42 @@ void CBoss_One::SetRotBalkan()
 
 	// プレイヤーの座標とバルカンの座標を結ぶベクトルを求める
 	D3DXVECTOR3 vectol = m_Gun_Pos[WEAPONTYPE_BALKAN] - PlayerPos;
-	D3DXVECTOR3 vec = D3DXVECTOR3(m_Gun_Pos[WEAPONTYPE_BALKAN].x - 70.0f, (m_Gun_Pos[WEAPONTYPE_BALKAN].y - vectol.x), 0.0f);
+	D3DXVECTOR3 vec = ZeroVector3;
+	if (m_PostureType == POSTURETYPE_STAND)
+	{
+		vec = D3DXVECTOR3(m_Gun_Pos[WEAPONTYPE_BALKAN].x - 60.0f, (m_Gun_Pos[WEAPONTYPE_BALKAN].y - vectol.x), 0.0f);
+	}
+	else
+	{
+		vec = D3DXVECTOR3(m_Gun_Pos[WEAPONTYPE_BALKAN].x - 60.0f, ((m_Gun_Pos[WEAPONTYPE_BALKAN].y - 500.0f) - vectol.x), 0.0f);
+	}
 
 	// 回転を反映
 	m_fRotTarget += AngleOf2Vector(vec, vectol);
-
-	// 回転量の更新
-	//SetBalkanRot(GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_BALKAN)->GetRot().x);
-
-	// 弾の向きの設定
-	/*m_pGun[WEAPONTYPE_BALKAN]->SetShotRot(
-		D3DXVECTOR3(0.0f, 0.0f, (GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_BALKAN))->GetRot().x * -1.0f));*/
-
+	//
 	m_bBalkanGunRotFlag = true;
-	// 回転の計算
-	//CalcRotationBalkan((float)m_nBalkanAngle, GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_BALKAN)->GetRot().x);
+}
+
+
+// =====================================================================================================================================================================
+//
+// 当たり判定の設定
+//
+// =====================================================================================================================================================================
+void CBoss_One::SetCollision()
+{
+	// ガンの当たり判定の設定
+	// 武器用の当たり判定の生成
+	m_pCollision = CCollision::Create();
+	m_pCollision->SetPos(&m_Gun_Pos[WEAPONTYPE_FLAMETHROWER]);
+	m_pCollision->SetSize2D(D3DXVECTOR3(100.0f, 100.0f, 0.0f));
+	m_pCollision->DeCollisionCreate(CCollision::COLLISIONTYPE_NORMAL);
+
+	// 当たり判定設定
+	CCharacter::GetCollision()->SetPos(&GetPosition());
+	CCharacter::GetCollision()->SetPosOld(&GetPositionOld());
+	CCharacter::GetCollision()->SetSize2D(m_CollisionSize[1]);
+	CCharacter::GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_CHARACTER);
 }
 
 // =====================================================================================================================================================================
@@ -1033,6 +1232,22 @@ uint64_t CBoss_One::get_rand_range(uint64_t min_val, uint64_t max_val)
 
 	// 乱数を生成
 	return get_rand_uni_int(mt64);
+}
+
+// =====================================================================================================================================================================
+//
+// 当たり判定の更新
+//
+// =====================================================================================================================================================================
+void CBoss_One::UpdateCollision()
+{
+	if (CCharacter::GetCollision() != nullptr)
+	{
+		// ガンの当たり判定の座標の更新
+		m_pCollision->SetPos(&m_Gun_Pos[WEAPONTYPE_FLAMETHROWER]);
+		CCharacter::GetCollision()->BossOne_PlayerCollision();
+		CCharacter::GetCollision()->SetPos(&GetPosition());
+	}
 }
 
 // =====================================================================================================================================================================
@@ -1085,6 +1300,10 @@ void CBoss_One::BossOneAttackManager()
 	case CBoss_One::ATTACKTYPE_INCENDIARY:
 		// 焼夷弾を撃つ
 		ShotIncendiary();
+		break;
+	case CBoss_One::ATTACKTYPE_SHIFTPOSTURE:
+		// 姿勢変更
+		ShiftPosture();
 		break;
 	default:
 		break;

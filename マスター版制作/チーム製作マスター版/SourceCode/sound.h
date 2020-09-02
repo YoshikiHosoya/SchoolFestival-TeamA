@@ -165,7 +165,7 @@ private:
 		{ "data/SE/Game/score_bonus.wav", 0 },						//SE リザルト時のスコア加算
 		{ "data/SE/Game/hit_bullet.wav", 0 },						//SE 弾ダメージ
 		{ "data/SE/Game/hit_knife.wav", 0 },						//SE ナイフダメージ
-		{ "data/SE/Game/hit_knife.wav", 0 },						//SE ナイフダメージ
+		{ "data/SE/Game/GoSign.wav", 0 },						//SE ナイフダメージ
 
 		//乗り物系の効果音
 		{ "data/SE/Rides/engine.wav", 0 },							//SE エンジン

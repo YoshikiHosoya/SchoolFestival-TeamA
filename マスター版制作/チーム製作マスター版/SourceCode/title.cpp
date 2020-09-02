@@ -14,6 +14,7 @@
 #include "Xinput.h"
 #include "XInputPad.h"
 #include "UI.h"
+#include "sound.h"
 
 // =====================================================================================================================================================================
 // マクロ定義
@@ -72,20 +73,14 @@ void CTitle::Update(void)
 	// パッド取得
 	CXInputPad *pad[(int)CONTROLLER::P_MAX] = {};
 
-	for (int nCnt = 0; nCnt < (int)CONTROLLER::P_MAX; nCnt++)
+	// エンターを押したとき
+	if (CHossoLibrary::PressAnyButton() && CManager::GetRenderer()->GetFade()->GetFadeState() == CFADE::FADESTATE::FADESTATE_NONE)
 	{
-		pad[nCnt] = CManager::GetPad((CONTROLLER)nCnt);
+		// ゲームモードへ状態遷移7
+		CManager::GetRenderer()->GetFade()->SetFade(CFADE::FADETYPE::FADETYPE_MODE, CManager::MODE_TUTORIAL);
 
-		// エンターを押したとき
-		if (CHossoLibrary::PressAnyButton() ||
-			PAD_X ||
-			PAD_Y ||
-			PAD_A ||
-			PAD_B)
-		{
-			// ゲームモードへ状態遷移
-			CManager::GetRenderer()->GetFade()->SetFade(CFADE::FADETYPE::FADETYPE_MODE, CManager::MODE_TUTORIAL);
-		}
+		//決定音
+		CManager::GetSound()->Play(CSound::LABEL_SE_DECISION);
 	}
 }
 

@@ -55,6 +55,7 @@ public:
 		ATTACKTYPE_BALKAN,											// バルカン砲
 		ATTACKTYPE_FLAMERADIATION,									// 火炎放射 立ち時のみ
 		ATTACKTYPE_INCENDIARY,										// 焼夷弾
+		ATTACKTYPE_SHIFTPOSTURE,									// 姿勢変更
 		ATTACKTYPE_MAX												// 最大数
 	};
 
@@ -97,10 +98,13 @@ public:
 	// ----- 状態の取得設定 ----- //
 	BOSS_ONE_STATE			GetBossOneState()						{ return m_BossOneState; };				// ボスの状態の取得
 	BOSS_ONE_ATTACKTYPE		GetBossOneType()						{ return m_AttckType; };				// ボスの攻撃の種類
+	CCollision				*GetCollision()							{ return m_pCollision; };				// 当たり判定のポインタ取得
+	BOSS_ONE_POSTURETYPE	GetPostureType()						{ return m_PostureType; };				// ボスの姿勢情報の取得
+	bool					GetIntermediateSquat()					{ return m_bIntermediateSquat; };		// しゃがみ途中ならtrueを返す
+
+	// ----- 状態の設定 ----- //
 	void					SetBossState(BOSS_ONE_STATE state)		{ m_BossOneState = state; };			// ボスの状態の設定
 	void					SetBossType(BOSS_ONE_ATTACKTYPE type)	{ m_AttckType = type; };				// ボスの攻撃の種類の設定
-	CCollision				*GetCollision()							{ return m_pCollision; };				// 当たり判定のポインタ取得
-
 private:
 	/* 静的メンバ変数 */
 	static char				*m_BossOneFileName;							// ボスのファイル名
@@ -123,37 +127,42 @@ private:
 	void					StateChangeReaction();						// 状態を変える
 	void					Behavior();									// 敵の行動
 
+	// --- 設定関数 ---  //
 	void					SetShotIntervalTime(int time)	{ m_nShotIntervalTime = time; };		// インターバルの時間の設定
 	void					SetShotCount(int nCount)		{ m_nShotCount = nCount; };				// ショットカウントの時間の設定
 	void					SetCoolTime(int time)			{ m_nCoolTime = time;};					// ステートが切り替わるまでの時間の設定
 	void					SetTriggerCount(int nCount)		{ m_nTriggerCount = nCount; };			// トリガーのカウントの設定
 	void					SetBalkanRot(float fRot)		{ m_fBalkanRot = fRot; };				// バルカンの回転量の設定
 	void					SetGunOffsetPos(D3DXVECTOR3 pos);										// ガンのオフセット座標の設定
-	D3DXVECTOR3				GetGunOffsetPos(BOSS_ONE_WEAPONTYPE type);								// ガンのオフセット座標の取得
 	void					SetGunPos();															// ガンの座標の設定
-	void					MoveGun(D3DXVECTOR3 &PartsPos, D3DXVECTOR3 move);						// ガンの移動
-	void					Cooltime_Decrease();													// クールタイムの減少
-	void					CalcRotationBalkan(const float fTarget, float fCurrent);				// 目標と現在
+	void					SetFlameThrower(bool bOpen);											// 火炎放射器の移動
+	void					SetBalkan(bool bOpen);													// バルカンの移動
+	void					SetRotBalkan();															// バルカンの回転
+	void					SetCollision();															// 当たり判定の設定
 
+	// --- 取得関数 ---  //
+	D3DXVECTOR3				GetGunOffsetPos(BOSS_ONE_WEAPONTYPE type);								// ガンのオフセット座標の取得
+
+	// --- ガンの座標の設定 ---  //
+	void					MoveGun(D3DXVECTOR3 &PartsPos, D3DXVECTOR3 move);						// ガンの移動
+	void					CalcRotationBalkan(const float fTarget, float fCurrent);				// 目標と現在
 	float					get_vector_length(D3DXVECTOR3 vectol);									// ベクトルの長さを計算する
 	float					dot_product(D3DXVECTOR3 vl, D3DXVECTOR3 vr);							// ベクトル内積
 	float					AngleOf2Vector(D3DXVECTOR3 A, D3DXVECTOR3 B);							// ２つのベクトルABのなす角度θを求める
 
-	void					SetFlameThrower(bool bOpen);// 火炎放射器の移動
-	void					SetBalkan(bool bOpen);// バルカンの移動
-
+	// --- その他 ---  //
+	void					Cooltime_Decrease();													// クールタイムの減少
+	uint64_t				get_rand_range(uint64_t min_val, uint64_t max_val);						// ランダム関数 範囲
+	void					UpdateCollision();														// 当たり判定の更新
 
 	// --- 攻撃管理関数 ---  //
 	void					ShotIncendiary();														// 焼夷弾
 	void					ShotBalkan();															// バルカン
 	void					ShotWarning();															// 焼夷弾の最初の爆発
 	void					ShotFlameRadiation();													// フレイム火炎放射器
-
+	void					ShiftPosture();															// 姿勢変更
 	void					ShotFlameManager();														// 火炎放射の管理
-
 	void					RandomAttack();															// 攻撃方法をランダムに決める
-	void					SetRotBalkan();															// バルカンの回転
-	uint64_t				get_rand_range(uint64_t min_val, uint64_t max_val);						// ランダム関数 範囲
 
 	/* メンバ変数 */
 	CGun					*m_pGun[WEAPONTYPE_MAX];			// ガンクラスのポインタ
@@ -161,24 +170,29 @@ private:
 	BOSS_ONE_STATE			m_BossOneState;						// ボスのステータス
 	BOSS_ONE_ATTACKTYPE		m_AttckType;						// ボスの攻撃の種類
 	BOSS_ONE_ATTACKTYPE		m_AttckTypeOld;						// 1つ前の攻撃パターン
+	BOSS_ONE_POSTURETYPE	m_PostureType;						// 姿勢
+
+	D3DXVECTOR3				m_Gun_OffsetPos[WEAPONTYPE_MAX];	// ガンのオフセット座標
+	D3DXVECTOR3				m_Gun_Pos[WEAPONTYPE_MAX];			// ガンの座標
+
 	int						m_ShotCount;						// 一発撃ってから次の弾を撃つまでの時間
 	int						m_nCoolTime;						// ステートが切り替わるまでの時間
 	int						m_nShotIntervalTime;				// 連続して撃つ弾の次の弾を撃つまでの時間
-	D3DXVECTOR3				m_Gun_OffsetPos[WEAPONTYPE_MAX];	// ガンのオフセット座標
-	D3DXVECTOR3				m_Gun_Pos[WEAPONTYPE_MAX];			// ガンの座標
 	int						m_nShotCount;						// ショットした回数
 	int						m_nTriggerCount;					// 何トリガー撃ったか
+	int						m_nBalkanAngle;						// 比較用ガンの回転情報
+	int						m_nShot;
+	float					m_fRotTarget;						// 回転目標
+	float					m_fBalkanRot;						// ガンの回転情報
+	float					m_fPartsRotVentilation;				//
+	float					m_AddMove;//
+
+	bool					m_bSetBossState;//
+	bool					m_bOpenWeapon;//
+	bool					m_bShiftPosture;//
+	bool					m_bBalkanGunRotFlag;				// 回転許可フラグ
+	bool					m_bIntermediateSquat;
 	bool					m_bFlame;							//
 	bool					m_bBalkanRotFlag;					// 回転許可フラグ
-	float					m_fBalkanRot;						// ガンの回転情報
-	int						m_nBalkanAngle;						// 比較用ガンの回転情報
-
-	int						m_nShot;
-	bool					m_bBalkanGunRotFlag;					// 回転許可フラグ
-
-	float					m_fRotTarget;
-	float					m_fPartsRotVentilation;
-	bool					m_bSetBossState;
-	bool					m_bOpenWeapon;//
 };
 #endif

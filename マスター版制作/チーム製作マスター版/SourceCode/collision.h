@@ -78,7 +78,12 @@ public:
 	bool CharCollision2D(CCollision *pCollision);						// キャラクター用板型の当たり判定
 	bool OtherCollision2D(CCollision *pCollision);						// 板型の当たり判定
 	bool BlockCollision2D(CCollision *pCollision);						// 板型ブロックの当たり判定
-	bool BlockNotUpsideCollision2D(CCollision *pCollision);						// 板型ブロックの当たり判定
+	bool BlockNotUpsideCollision2D(CCollision *pCollision);				// 板型ブロックの当たり判定
+
+	// 代用
+	bool BlockCollision2D_Bottom(CCollision *pCollision);
+	bool BoxCollision2D_Character(CCollision *pCollision);// キャラクター同士
+
 	bool RayBlockCollision(CMap *pMap, D3DXMATRIX *pMat);				// Rayの判定 キャラクター
 	bool RayCollision(CMap *pMap);										// Rayの判定 弾など
 	bool RayFloorCollision(CMap *pMap, D3DXMATRIX *pMat,D3DXVECTOR3 pdirection,D3DXVECTOR3 ppos);// Rayの判定 前方の床
@@ -109,6 +114,9 @@ public:
 	void *ForPlayer_VehicleCollision();							// プレイヤーと乗り物が行う判定
 	bool ForVehicleCollision();									// 乗り物が行う判定
 	bool ForTankCollision();									// 戦車が行う判定
+
+	void ForBossOne_PlayerCollision();
+	bool BossOne_PlayerCollision();								// ボスが行う判定
 
 	bool KnifeCollision(D3DXVECTOR3 Knifepos,
 		CCollision *pCollision);						// ナイフとキャラクターの判定

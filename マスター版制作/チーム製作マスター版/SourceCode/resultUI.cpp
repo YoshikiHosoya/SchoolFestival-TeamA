@@ -20,9 +20,7 @@
 #include "scoremanager.h"
 #include "sound.h"
 #include "ResultManager.h"
-#include <iostream>
-#include <mutex>
-#include <thread>
+#include "map.h"
 // =====================================================================================================================================================================
 // マクロ定義
 // =====================================================================================================================================================================
@@ -429,7 +427,8 @@ void CResultUI::Result0Draw()
 void CResultUI::Result1Draw()
 {
 	// 描画する列挙型を指定
-	if (m_apScene2D[RESULT_UI_MISSIONCOMP1] != nullptr)
+	if (m_apScene2D[RESULT_UI_MISSIONCOMP1] != nullptr &&
+		m_apScene2D[RESULT_UI_MISSIONCOMP2] != nullptr)
 	{
 		//AllNotDraw();
 		for (int nCnt = 0; nCnt < RESULT_UI_MAX; nCnt++)
@@ -446,11 +445,16 @@ void CResultUI::Result1Draw()
 			m_pBonusScore->SetDisp(false);
 		}
 
-
-		m_apScene2D[RESULT_UI_MISSIONCOMP1]->SetDisp(true);
-
-		Flashing(m_apScene2D[RESULT_UI_MISSIONCOMP1]);
-
+		if (CManager::GetGame()->GetMap()->GetMapNum() == CMap::MAP_1_BOSS)
+		{
+			m_apScene2D[RESULT_UI_MISSIONCOMP1]->SetDisp(true);
+			Flashing(m_apScene2D[RESULT_UI_MISSIONCOMP1]);
+		}
+		else if (CManager::GetGame()->GetMap()->GetMapNum() == CMap::MAP_2_BOSS)
+		{
+			m_apScene2D[RESULT_UI_MISSIONCOMP2]->SetDisp(true);
+			Flashing(m_apScene2D[RESULT_UI_MISSIONCOMP2]);
+		}
 
 		// ゲームモードだった時
 		if (CManager::GetMode() == CManager::MODE_GAME)
