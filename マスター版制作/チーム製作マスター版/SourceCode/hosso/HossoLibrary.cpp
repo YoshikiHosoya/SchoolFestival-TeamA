@@ -90,15 +90,9 @@ bool CHossoLibrary::PressAnyButton(void)
 			InpudPad[nCnt]->GetTrigger(CXInputPad::JOYPADKEY_X, 1) ||
 			InpudPad[nCnt]->GetTrigger(CXInputPad::JOYPADKEY_Y, 1))
 		{
-			if (Keyboard->GetKeyboardTrigger(DIK_RETURN) ||
-				Keyboard->GetKeyboardTrigger(DIK_SPACE) ||
-				InpudPad[nCnt]->GetTrigger(CXInputPad::JOYPADKEY_START, 1) ||
-				InpudPad[nCnt]->GetTrigger(CXInputPad::JOYPADKEY_A, 1))
-			{
-				//CManager::GetSound()->Play(CSound::LABEL_SE_DECISION);
+			//CManager::GetSound()->Play(CSound::LABEL_SE_DECISION);
 
-				return true;
-			}
+			return true;
 		}
 	}
 	return false;

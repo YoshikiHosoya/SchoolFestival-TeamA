@@ -65,7 +65,7 @@ HRESULT CGame::Init(void)
 	// 試験的プレイヤー2の配置
 	m_pPlayer[(int)CONTROLLER::P2] = CPlayer::Create(CONTROLLER::P2);
 	m_pPlayer[(int)CONTROLLER::P2]->SetPosition(m_pPlayer[(int)CONTROLLER::P2]->GetPosition() + D3DXVECTOR3(-50.0f, 0.0f, 0.0f));
-	//m_pPlayer[(int)CONTROLLER::P2]->ChangeColor(true, D3DXCOLOR(0.5f, -0.5f, 1.0f, 0.0f));
+	m_pPlayer[(int)CONTROLLER::P2]->ChangeColor(true, D3DXCOLOR(0.5f, -0.5f, 1.0f, 0.0f));
 
 	m_pPause->CreatePause();
 
