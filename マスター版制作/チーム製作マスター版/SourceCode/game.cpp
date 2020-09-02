@@ -95,6 +95,13 @@ void CGame::Uninit(void)
 		m_pResultManager = nullptr;
 	}
 
+	if (m_pGameManager)
+	{
+		// ゲームマネージャーのメモリ開放
+		m_pGameManager.reset();
+		m_pGameManager = nullptr;
+	}
+
 	if (m_pMap)
 	{
 		// マップの破棄
@@ -232,7 +239,6 @@ void CGame::DebugCollision(CKeyboard *key)
 	{
 		CDebugProc::Print("デバッグ用当たり判定ラインを描画していません\n");
 	}
-
 
 	//ボスマップ
 	if (key->GetKeyboardTrigger(DIK_F7))
