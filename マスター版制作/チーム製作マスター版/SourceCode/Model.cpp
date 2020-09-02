@@ -160,6 +160,10 @@ char *CModel::m_BossOneFileName[MODEL_BOSSONE_MAX] =
 	{ "data/MODEL/DragonNosuke/Leg_R_R.x" },		// 右後下腿
 	{ "data/MODEL/DragonNosuke/R_Ventilation.x" },	// 鉄板
 	{ "data/MODEL/DragonNosuke/L_Ventilation.x" },	// 鉄板
+	{ "data/MODEL/DragonNosuke/Light_L_F.x" },		// 青電気
+	{ "data/MODEL/DragonNosuke/Light_L_R.x" },		// 青電気
+	{ "data/MODEL/DragonNosuke/Light_R_F.x" },		// 青電気
+	{ "data/MODEL/DragonNosuke/Light_R_R.x" },		// 青電気
 	{ "data/MODEL/DragonNosuke/Balkan.x" },			// 武器の場所に置く仮モデル
 	{ "data/MODEL/DragonNosuke/Flamethrower.x" },	// 武器の場所に置く仮モデル
 	{ "data/MODEL/DragonNosuke/Incendiary.x" },		// 武器の場所に置く仮モデル
