@@ -123,10 +123,11 @@ HRESULT CBoss_One::Init(void)
 	SetRotDest(D3DXVECTOR3(0.0f, 1.57f, 0.0f));
 	// モーションさせない設定
 	SetMotion(CCharacter::CHARACTER_MOTION_STATE_NONE);
-// ボスの情報の設定
+	// ボスの情報の設定
 	SetBossInfo();
 	// ガンの生成と設定
-	CreateGun();	// 当たり判定の設定
+	CreateGun();
+	// 当たり判定の設定
 	SetCollision();
 	// 回転の差分
 	m_fBalkanRotDifferencial -= D3DX_PI / 120.0f;
@@ -1199,62 +1200,66 @@ void CBoss_One::RandomAttack()
 void CBoss_One::SetRotBalkan(BOSS_ONE_STATE state)
 {
 	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer(TAG::PLAYER_1);
+	if(pPlayer)
 	{
-	case CBoss_One::STATE_NORMAL:
-		if (m_fRotTarget >= -D3DX_PI / 4)
+		switch (m_BossState)
 		{
-			m_fRotTarget = -D3DX_PI / 4;
-			m_fBalkanRotDifferencial *= -1.0f;
-		}
-		else if (m_fRotTarget <= -2.355f)
-		{
+		case CBoss_One::STATE_NORMAL:
+			if (m_fRotTarget >= -D3DX_PI / 4)
+			{
+				m_fRotTarget = -D3DX_PI / 4;
+				m_fBalkanRotDifferencial *= -1.0f;
+			}
+			else if (m_fRotTarget <= -2.355f)
+			{
+				// 回転を反映
+				m_fRotTarget = -2.355f;
+				m_fBalkanRotDifferencial *= -1.0f;
+			}
+
+			m_fRotTarget -= m_fBalkanRotDifferencial;
+
+			break;
+		case CBoss_One::STATE_RUNAWAY:
+
+			// プレイヤーのポインタ取得
+			CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer(TAG::PLAYER_1);
+			D3DXVECTOR3 PlayerPos;
+
+			// プレイヤーがボスの射程外だった時
+			if (pPlayer->GetPosition().x >= 150.0f)
+			{
+				// プレイヤーの座標をボスの目の前にいることにする
+				PlayerPos = D3DXVECTOR3(150.0f, pPlayer->GetPosition().y, pPlayer->GetPosition().z);
+			}
+			else
+			{
+				// プレイヤーの座標
+				PlayerPos = pPlayer->GetPosition();
+			}
+
+			// プレイヤーの座標とバルカンの座標を結ぶベクトルを求める
+			D3DXVECTOR3 HorizontalAxis = m_Gun_Pos[WEAPONTYPE_BALKAN] - PlayerPos;
+			D3DXVECTOR3 VerticalAxis = ZeroVector3;
+
+			// 通常時
+			if (m_PostureType == POSTURETYPE_STAND)
+			{
+				VerticalAxis = D3DXVECTOR3(
+					m_Gun_Pos[WEAPONTYPE_BALKAN].x - BALKAN_LENGTH, (m_Gun_Pos[WEAPONTYPE_BALKAN].y - HorizontalAxis.x - BALKAN_LENGTH - PLAYER_HEADLINE), 0.0f);
+			}
+			// しゃがみ時
+			else
+			{
+				VerticalAxis = D3DXVECTOR3(
+					m_Gun_Pos[WEAPONTYPE_BALKAN].x - BALKAN_LENGTH - DIFFERENCE_POSTURE, (m_Gun_Pos[WEAPONTYPE_BALKAN].y - HorizontalAxis.x - BALKAN_LENGTH * 2 - PLAYER_HEADLINE * 2 - DIFFERENCE_POSTURE * 2), 0.0f);
+			}
+
 			// 回転を反映
-			m_fRotTarget = -2.355f;
-			m_fBalkanRotDifferencial *= -1.0f;
+			m_fRotTarget += AngleOf2Vector(VerticalAxis, HorizontalAxis);
+
+			break;
 		}
-
-		m_fRotTarget -= m_fBalkanRotDifferencial;
-
-		break;
-	case CBoss_One::STATE_RUNAWAY:
-
-		// プレイヤーのポインタ取得
-		CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
-		D3DXVECTOR3 PlayerPos;
-
-		// プレイヤーがボスの射程外だった時
-		if (pPlayer->GetPosition().x >= 150.0f)
-		{
-			// プレイヤーの座標をボスの目の前にいることにする
-			PlayerPos = D3DXVECTOR3(150.0f, pPlayer->GetPosition().y, pPlayer->GetPosition().z);
-		}
-		else
-		{
-			// プレイヤーの座標
-			PlayerPos = pPlayer->GetPosition();
-		}
-
-		// プレイヤーの座標とバルカンの座標を結ぶベクトルを求める
-		D3DXVECTOR3 HorizontalAxis = m_Gun_Pos[WEAPONTYPE_BALKAN] - PlayerPos;
-		D3DXVECTOR3 VerticalAxis = ZeroVector3;
-
-		// 通常時
-		if (m_PostureType == POSTURETYPE_STAND)
-		{
-			VerticalAxis = D3DXVECTOR3(
-				m_Gun_Pos[WEAPONTYPE_BALKAN].x - BALKAN_LENGTH, (m_Gun_Pos[WEAPONTYPE_BALKAN].y - HorizontalAxis.x - BALKAN_LENGTH - PLAYER_HEADLINE), 0.0f);
-		}
-		// しゃがみ時
-		else
-		{
-			VerticalAxis = D3DXVECTOR3(
-				m_Gun_Pos[WEAPONTYPE_BALKAN].x - BALKAN_LENGTH - DIFFERENCE_POSTURE, (m_Gun_Pos[WEAPONTYPE_BALKAN].y - HorizontalAxis.x - BALKAN_LENGTH * 2 - PLAYER_HEADLINE * 2 - DIFFERENCE_POSTURE * 2), 0.0f);
-		}
-
-		// 回転を反映
-		m_fRotTarget += AngleOf2Vector(VerticalAxis, HorizontalAxis);
-
-		break;
 	}
 
 	//
@@ -1543,7 +1548,7 @@ void CBoss_One::Attack_AI()
 // =====================================================================================================================================================================
 void CBoss_One::Attack_Priority()
 {
-	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
+	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer(TAG::PLAYER_1);
 
 	if (pPlayer)
 	{
@@ -1705,7 +1710,7 @@ void CBoss_One::CreateGun()
 		m_pGun[nCnt]->SetHandMtx(GetCharacterModelPartsList(
 			static_cast<CModel::BOSSONE_PARTS_MODEL>(CModel::MODEL_BOSSONE_GUN_BALKAN + nCnt))->GetMatrix());
 		// 銃の弾の種類
-		m_pGun[nCnt]->GetTag() = TAG_ENEMY;
+		m_pGun[nCnt]->SetTag(GetTag());
 		// 銃の弾の種類
 		m_pGun[nCnt]->SetGunType(static_cast<CGun::GUN_TYPE>(CGun::GUNTYPE_BALKAN + nCnt));
 		// 発射位置のオフセットの設定

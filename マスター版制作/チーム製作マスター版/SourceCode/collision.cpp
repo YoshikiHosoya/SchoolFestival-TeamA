@@ -232,26 +232,28 @@ bool CCollision::ForPlayerBulletCollision(int nEnemyDamage, int nObstacleDamage,
 					if (pBoss_One->GetCollision()->GetCanCollison())
 					{
 						// 判定関数
-					if (this->OtherCollision2D(pBoss_One->GetCollision()))
-					{
-						// プレイヤーのポインタ取得
-						pPlayer = CManager::GetBaseMode()->GetPlayer(m_pGameObject->GetTag());
-
-						if (pPlayer != nullptr && pPlayer->GetPlayerUI())
+						if (this->OtherCollision2D(pBoss_One->GetCollision()))
 						{
-							pPlayer->GetPlayerUI()->SetScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_DAMAGE_BULLET));
-						}
+							// プレイヤーのポインタ取得
+							pPlayer = CManager::GetBaseMode()->GetPlayer(m_pGameObject->GetTag());
+
+							if (pPlayer != nullptr && pPlayer->GetPlayerUI())
+							{
+								pPlayer->GetPlayerUI()->SetScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_DAMAGE_BULLET));
+							}
 
 							// 敵のライフ減衰
 							pBoss_One->CCharacter::AddDamage(nEnemyDamage);
 
-						// 当たり範囲フラグをtrueにする
-						bHitFlag = true;
+							// 当たり範囲フラグをtrueにする
+							bHitFlag = true;
 
-						if (Penetration == false)
-						{
-							return bHitFlag;
+							if (Penetration == false)
+							{
+								return bHitFlag;
+							}
 						}
+					}
 				}
 
 			}
