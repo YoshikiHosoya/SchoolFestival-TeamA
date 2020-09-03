@@ -42,7 +42,7 @@ public:
 		JOYPADKEY_Y		 = XINPUT_GAMEPAD_Y,				//Y
 	};
 
-	HRESULT Init(HINSTANCE hInstance, HWND hWnd, CONTROLLER Controller);	//初期化
+	HRESULT Init(HINSTANCE hInstance, HWND hWnd, TAG Tag);	//初期化
 	void Uninit(void);								//終了
 	void Update(void);								//更新
 
@@ -62,7 +62,7 @@ private:
 	bool m_bVibration;								//バイブレーションしてるかどうか
 	bool m_bConnect;								//コントローラーが接続されているかどうか
 	int m_nCntVibration;							//バイブレーション用のカウント
-	CONTROLLER	m_Controller;						//コントローラータグ
+	TAG	m_Tag;						//コントローラータグ
 };
 
 #endif

@@ -85,6 +85,7 @@ HRESULT CPrisoner::Init(void)
 	GetCollision()->SetSize2D(PRISONER_COLLISION_SIZE);
 	GetCollision()->SetMove(&GetMove());
 	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_CHARACTER);
+	GetCollision()->SetGameObject(this);
 
 	return S_OK;
 }
@@ -307,16 +308,13 @@ void CPrisoner::PrisonerState()
 		m_StateTime--;
 		if (m_StateTime <= 0)
 		{
-			CPlayer *pPlayer[(int)CONTROLLER::P_MAX] = {};
-			for (int nCntPlayer = 0; nCntPlayer < (int)CONTROLLER::P_MAX; nCntPlayer++)
+			CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer(((CPlayer*)this)->GetTag());
+
+			if (pPlayer && pPlayer->GetPlayerUI())
 			{
-				pPlayer[nCntPlayer] = CManager::GetBaseMode()->GetPlayer((CONTROLLER)nCntPlayer);
-				if (pPlayer[nCntPlayer] && pPlayer[nCntPlayer]->GetPlayerUI())
-				{
-					pPlayer[nCntPlayer]->GetPlayerUI()->SetScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_RESCUE_PRISONER));
-					// ‘Ì—Í‚Ì‰ÁZ
-					pPlayer[nCntPlayer]->SetLife(pPlayer[nCntPlayer]->GetLife() + 1);
-				}
+				pPlayer->GetPlayerUI()->SetScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_RESCUE_PRISONER));
+				// ‘Ì—Í‚Ì‰ÁZ
+				pPlayer->SetLife(pPlayer->GetLife() + 1);
 			}
 			SetStateTime(40);
 			// •ß—¸‚Ìó‘Ô‚Ì•ÏX

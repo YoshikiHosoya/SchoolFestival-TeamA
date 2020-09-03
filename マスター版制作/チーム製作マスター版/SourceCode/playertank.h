@@ -47,11 +47,11 @@ public:
 
 private:
 	/* メンバ関数 */
-	void				Shot(CKeyboard *key, CONTROLLER Controller);				// 弾を撃つ処理
-	void				Operation(CKeyboard *key, CONTROLLER Controller);			// 操作する処理
+	void				Shot(CKeyboard *key, TAG Tag);				// 弾を撃つ処理
+	void				Operation(CKeyboard *key, TAG Tag);			// 操作する処理
 	void				Jump();								// ジャンプ処理
 	void				Collision();						// 当たり判定をまとめてする処理
-	void				PadInput(CONTROLLER Controller);	// ゲームパッドでの入力処理
+	void				PadInput(TAG Tag);	// ゲームパッドでの入力処理
 	void				TankSE();							// タンクから出る音設定
 
 	/* メンバ変数 */

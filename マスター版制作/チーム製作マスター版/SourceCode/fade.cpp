@@ -305,15 +305,15 @@ void CFADE::FadeOut()
 		CMap *pMap = CManager::GetBaseMode()->GetMap();
 
 		//プレイヤーのマップ遷移時の処理
-		for (int nCntPlayer = 0; nCntPlayer < (int)CONTROLLER::P_MAX; nCntPlayer++)
+		for (int nCntPlayer = 0; nCntPlayer < MAX_CONTROLLER; nCntPlayer++)
 		{
-			CManager::GetBaseMode()->GetPlayer((CONTROLLER)nCntPlayer)->MapChangePlayerRespawn();
+			CManager::GetBaseMode()->GetPlayer((TAG)(nCntPlayer))->MapChangePlayerRespawn();
 		}
 		//レンダラー設定初期化
 		CManager::GetRenderer()->ResetRenderer();
 
 		//タイマーリセット
-		CManager::GetGame()->GetPlayer(CONTROLLER::P1)->GetPlayerUI()->ResetTime();
+		CManager::GetGame()->GetPlayer(TAG::PLAYER_1)->GetPlayerUI()->ResetTime();
 
 		//nullcheck
 		if (pMap)
@@ -333,9 +333,9 @@ void CFADE::FadeOut()
 			CManager::GetGame()->GetGameManager()->SetGameState(CGameManager::GAMESTATE::NORMAL);
 
 			//プレイヤーリセット
-			for (int nCntPlayer = 0; nCntPlayer < (int)CONTROLLER::P_MAX; nCntPlayer++)
+			for (int nCntPlayer = 0; nCntPlayer < MAX_CONTROLLER; nCntPlayer++)
 			{
-				CManager::GetBaseMode()->GetPlayer((CONTROLLER)nCntPlayer)->ResetPlayer();
+				CManager::GetBaseMode()->GetPlayer((TAG)(nCntPlayer))->ResetPlayer();
 			}
 		}
 		break;

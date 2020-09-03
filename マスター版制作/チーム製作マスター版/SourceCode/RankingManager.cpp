@@ -73,15 +73,15 @@ void CRankingManager::Uninit(void)
 // =====================================================================================================================================================================
 void CRankingManager::Update(void)
 {
-	CXInputPad *pad[(int)CONTROLLER::P_MAX] = {};
+	CXInputPad *pad[MAX_CONTROLLER] = {};
 
 	//キーボード情報取得
 	CKeyboard *key = CManager::GetInputKeyboard();
 
-	for (int nCnt = 0; nCnt < (int)CONTROLLER::P_MAX; nCnt++)
+	for (int nCnt = 0; nCnt < MAX_CONTROLLER; nCnt++)
 	{
 		// パッド取得
-		pad[nCnt] = CManager::GetPad((CONTROLLER)nCnt);
+		pad[nCnt] = CManager::GetPad((TAG)nCnt);
 		// エンターを押したとき
 
 		if (key->GetKeyboardTrigger(DIK_RETURN) ||

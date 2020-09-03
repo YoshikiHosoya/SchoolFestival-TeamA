@@ -35,8 +35,8 @@
 #define RESULT_UI_EVALUATION0_POS_2P (D3DXVECTOR3(SCREEN_WIDTH * 0.75f,650.0f,0.0f))
 #define RESULT_UI_EVALUATION1_POS_2P (D3DXVECTOR3(SCREEN_WIDTH * 0.75f,650.0f,0.0f))
 #define RESULT_UI_EVALUATION2_POS_2P (D3DXVECTOR3(SCREEN_WIDTH * 0.75f,650.0f,0.0f))
-#define RESULT_UI_MISSIONCOMP1_POS (SCREEN_CENTER_POS)
-#define RESULT_UI_MISSIONCOMP2_POS (SCREEN_CENTER_POS)
+#define RESULT_UI_MISSIONCOMPLAYER_1_POS (SCREEN_CENTER_POS)
+#define RESULT_UI_MISSIONCOMPLAYER_2_POS (SCREEN_CENTER_POS)
 
 #define RESULT_UI_PRISONERNUM_POS_1P (D3DXVECTOR3(SCREEN_WIDTH * 0.25f,350.0f,0.0f))
 #define RESULT_UI_PRISONERNUM_POS_2P (D3DXVECTOR3(SCREEN_WIDTH * 0.75f,350.0f,0.0f))
@@ -54,8 +54,8 @@
 #define RESULT_UI_EVALUATION0_SIZE_2P (D3DXVECTOR3(300.0f,40.0f,0.0f))
 #define RESULT_UI_EVALUATION1_SIZE_2P (D3DXVECTOR3(300.0f,40.0f,0.0f))
 #define RESULT_UI_EVALUATION2_SIZE_2P (D3DXVECTOR3(300.0f,40.0f,0.0f))
-#define RESULT_UI_MISSIONCOMP1_SIZE (D3DXVECTOR3(500.0f,200.0f,0.0f))
-#define RESULT_UI_MISSIONCOMP2_SIZE (D3DXVECTOR3(500.0f,200.0f,0.0f))
+#define RESULT_UI_MISSIONCOMPLAYER_1_SIZE (D3DXVECTOR3(500.0f,200.0f,0.0f))
+#define RESULT_UI_MISSIONCOMPLAYER_2_SIZE (D3DXVECTOR3(500.0f,200.0f,0.0f))
 
 #define RESULT_UI_PRISONERNUM_SIZE_1P (D3DXVECTOR3(70.0f,70.0f,0.0f))
 #define RESULT_UI_PRISONERNUM_SIZE_2P (D3DXVECTOR3(70.0f,70.0f,0.0f))
@@ -100,8 +100,8 @@ D3DXVECTOR3				CResultUI::m_Pos[RESULT_UI_MAX] = {
 	RESULT_UI_EVALUATION0_POS_2P,
 	RESULT_UI_EVALUATION1_POS_2P,
 	RESULT_UI_EVALUATION2_POS_2P,
-	RESULT_UI_MISSIONCOMP1_POS,
-	RESULT_UI_MISSIONCOMP2_POS,
+	RESULT_UI_MISSIONCOMPLAYER_1_POS,
+	RESULT_UI_MISSIONCOMPLAYER_2_POS,
 };
 
 D3DXVECTOR3				CResultUI::m_Size[RESULT_UI_MAX] = {
@@ -115,8 +115,8 @@ D3DXVECTOR3				CResultUI::m_Size[RESULT_UI_MAX] = {
 	RESULT_UI_EVALUATION0_SIZE_2P,
 	RESULT_UI_EVALUATION1_SIZE_2P,
 	RESULT_UI_EVALUATION2_SIZE_2P,
-	RESULT_UI_MISSIONCOMP1_SIZE,
-	RESULT_UI_MISSIONCOMP2_SIZE,
+	RESULT_UI_MISSIONCOMPLAYER_1_SIZE,
+	RESULT_UI_MISSIONCOMPLAYER_2_SIZE,
 };
 
 int				CResultUI::m_nTotalScore = 0;
@@ -174,10 +174,10 @@ HRESULT CResultUI::Init(void)
 {
 	// ゲームクラスのポインタ取得
 	CGame *pGame = (CGame*)CManager::GetBaseMode();
-	if (pGame->GetPlayer(CONTROLLER::P1)->GetPlayerUI() != nullptr)
+	if (pGame->GetPlayer(TAG::PLAYER_1)->GetPlayerUI() != nullptr)
 	{
 		// スコアの取得
-		m_PlayerScore = pGame->GetPlayer(CONTROLLER::P1)->GetPlayerUI()->GetScore();
+		m_PlayerScore = pGame->GetPlayer(TAG::PLAYER_1)->GetPlayerUI()->GetScore();
 	}
 
 	// UIをまとめて生成する
@@ -328,7 +328,7 @@ void CResultUI::ResultUICreate()
 				m_apScene2D[nCnt]->BindTexture(CTexture::GetTexture((CTexture::TEX_TYPE)(nCnt + CTexture::TEX_UI_RESULT_NOPRISONER)));
 			}
 
-			else if (nCnt >= RESULT_UI_MISSIONCOMP1)
+			else if (nCnt >= RESULT_UI_MISSIONCOMPLAYER_1)
 			{
 				// テクスチャの割り当て
 				m_apScene2D[nCnt]->BindTexture(CTexture::GetTexture((CTexture::TEX_TYPE)(CTexture::TEX_UI_RESULT_MISSION1COMPLETE)));
@@ -427,8 +427,8 @@ void CResultUI::Result0Draw()
 void CResultUI::Result1Draw()
 {
 	// 描画する列挙型を指定
-	if (m_apScene2D[RESULT_UI_MISSIONCOMP1] != nullptr &&
-		m_apScene2D[RESULT_UI_MISSIONCOMP2] != nullptr)
+	if (m_apScene2D[RESULT_UI_MISSIONCOMPLAYER_1] != nullptr &&
+		m_apScene2D[RESULT_UI_MISSIONCOMPLAYER_2] != nullptr)
 	{
 		//AllNotDraw();
 		for (int nCnt = 0; nCnt < RESULT_UI_MAX; nCnt++)
@@ -447,13 +447,13 @@ void CResultUI::Result1Draw()
 
 		if (CManager::GetGame()->GetMap()->GetMapNum() == CMap::MAP_1_BOSS)
 		{
-			m_apScene2D[RESULT_UI_MISSIONCOMP1]->SetDisp(true);
-			Flashing(m_apScene2D[RESULT_UI_MISSIONCOMP1]);
+			m_apScene2D[RESULT_UI_MISSIONCOMPLAYER_1]->SetDisp(true);
+			Flashing(m_apScene2D[RESULT_UI_MISSIONCOMPLAYER_1]);
 		}
 		else if (CManager::GetGame()->GetMap()->GetMapNum() == CMap::MAP_2_BOSS)
 		{
-			m_apScene2D[RESULT_UI_MISSIONCOMP2]->SetDisp(true);
-			Flashing(m_apScene2D[RESULT_UI_MISSIONCOMP2]);
+			m_apScene2D[RESULT_UI_MISSIONCOMPLAYER_2]->SetDisp(true);
+			Flashing(m_apScene2D[RESULT_UI_MISSIONCOMPLAYER_2]);
 		}
 
 		// ゲームモードだった時
@@ -481,7 +481,7 @@ void CResultUI::Result1Draw()
 void CResultUI::ScoreCal()
 {
 	// プレイヤーのポインタを取得
-	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer(CONTROLLER::P1);
+	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer(TAG::PLAYER_1);
 
 	if (pPlayer != nullptr)
 	{

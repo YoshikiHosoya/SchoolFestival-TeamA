@@ -71,7 +71,7 @@ HRESULT CPlayertank::Init(void)
 	// ƒ}ƒgƒŠƒbƒNƒXÝ’è
 	m_pGun->SetHandMtx(GetVehicleModelPartsList(CModel::MODEL_TANK_TANKGUN)->GetMatrix());
 	// e‚Ì’e‚ÌŽí—Þ
-	m_pGun->GetTag() = TAG_PLAYER;
+	m_pGun->SetTag(TAG::PLAYER_1);		// ‰¼Ž~‚ß)ƒvƒŒƒCƒ„[1A2‚Ç‚¿‚ç‚©“ü‚ê‚é •Ï”?
 	// e‚Ì’e‚ÌŽí—Þ
 	m_pGun->SetGunType(CGun::GUNTYPE_TANKGUN);
 	// ”­ŽËˆÊ’u‚ÌƒIƒtƒZƒbƒg‚ÌÝ’è
@@ -136,13 +136,13 @@ void CPlayertank::Update(void)
 		if (m_pPlayer->GetRideFlag())
 		{
 			// íŽÔ‚ª’e‚ðŒ‚‚Âˆ—
-			Shot(key, m_pPlayer->GetControllerTag());
+			Shot(key, m_pPlayer->GetTag());
 
 			// íŽÔ‚ð‘€ì‚·‚éˆ—
-			Operation(key, m_pPlayer->GetControllerTag());
+			Operation(key, m_pPlayer->GetTag());
 
 			// íŽÔ‚Ì‘€ì
-			PadInput(m_pPlayer->GetControllerTag());
+			PadInput(m_pPlayer->GetTag());
 
 			// ƒp[ƒc‚Ì‰ñ“]ˆ—
 			VehiclePartsRotCondition(GetVehicleModelPartsList(CModel::MODEL_TANK_TANK_FRONTWHEEL), MODEL_ROT_TYPE_MOVING);
@@ -208,9 +208,9 @@ CPlayertank *CPlayertank::Create(void)
 //====================================================================
 // ’e‚ð‘Å‚Âˆ—
 //====================================================================
-void CPlayertank::Shot(CKeyboard *key, CONTROLLER Controller)
+void CPlayertank::Shot(CKeyboard *key, TAG Tag)
 {
-	CXInputPad *pXInput = CManager::GetPad(Controller);
+	CXInputPad *pXInput = CManager::GetPad(Tag);
 
 	// ’e‚ðŒ‚‚Â•ûŒü‚ðÝ’è
 	// ƒ‚ƒfƒ‹‚Ì‰ñ“]‚ÌŒü‚«‚Æ’e‚Ì”­ŽË•ûŒü‚ÌŒvŽZ‚Ì‰ñ“]‚ð‡‚í‚¹‚é
@@ -237,11 +237,11 @@ void CPlayertank::Shot(CKeyboard *key, CONTROLLER Controller)
 //====================================================================
 // ƒpƒbƒh‚Ì“ü—Í
 //====================================================================
-void CPlayertank::PadInput(CONTROLLER Controller)
+void CPlayertank::PadInput(TAG Tag)
 {
 	D3DXVECTOR3 MoveValue = ZeroVector3;
 
-	if (CHossoLibrary::PadMoveInput(MoveValue, GetVehicleDirection(), false, Controller))
+	if (CHossoLibrary::PadMoveInput(MoveValue, GetVehicleDirection(), false, Tag))
 	{
 		Move(MoveValue.x, -0.5f);
 	}
@@ -282,9 +282,9 @@ void CPlayertank::TankSE()
 //====================================================================
 // ‘€ìˆ—
 //====================================================================
-void CPlayertank::Operation(CKeyboard * key, CONTROLLER Controller)
+void CPlayertank::Operation(CKeyboard * key, TAG Tag)
 {
-	CXInputPad *pXInput = CManager::GetPad(Controller);
+	CXInputPad *pXInput = CManager::GetPad(Tag);
 
 	// ã‚ðŒü‚­
 	if (key->GetKeyboardPress(DIK_W))

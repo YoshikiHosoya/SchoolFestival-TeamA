@@ -61,7 +61,7 @@ HRESULT CBoss::Init(void)
 	GetGunPtr()->SetGunType(CGun::GUNTYPE_TRACKINGGUN);
 
 	// e‚Ì’e‚ÌŽí—Þ
-	GetGunPtr()->GetTag() = TAG_ENEMY;
+	GetGunPtr()->SetTag(TAG::ENEMY);
 
 	//e‚ð•`‰æ‚µ‚È‚¢
 	GetGunPtr()->SetDisp(false);
@@ -111,6 +111,8 @@ CBoss *CBoss::Create(void)
 	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
 	CBoss*pBoss;
 	pBoss = new CBoss(OBJTYPE_BOSS);
+	// ƒ^ƒO‚ÌÝ’è
+	pBoss->SetTag(TAG::ENEMY);
 	pBoss->Init();
 	pBoss->SetAIPtr(CBossAI::CreateAI(pBoss));
 	return pBoss;

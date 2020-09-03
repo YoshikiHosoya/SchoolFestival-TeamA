@@ -21,7 +21,7 @@
 // =====================================================================================================================================================================
 // バレットクラス
 // =====================================================================================================================================================================
-class CBullet : public CModel
+class CBullet : public CModel, public CGameObject
 {
 public:
 	// ----- 弾のパラメーター -----
@@ -55,8 +55,6 @@ public:
 	/* メンバ関数 */
 	D3DXVECTOR3					&GetMove()						{ return m_move; };					// 移動値の取得
 	void						SetMove(D3DXVECTOR3 move)		{ m_move = move; };					// 移動値の設定
-	TAG							&GetTag()						{ return m_Tag; };					// タグの取得
-	void						SetTag(TAG type)				{ m_Tag = type; };					// タグの設定
 	static	BULLET_PARAM		*GetBulletParam(int nCnt)		{ return &m_BulletParam[nCnt]; };	// 弾のパラメーターの構造体の取得
 	void						SetBulletParam(CGun::GUN_TYPE type);								// 弾のパラメーター設定
 
@@ -65,7 +63,6 @@ public:
 private:
 	/* メンバ変数 */
 	D3DXVECTOR3					m_move;					// 移動値
-	TAG							m_Tag;					// タグ
 	CGun::GUN_TYPE				m_GunType;				// ガンのタイプ
 	int							m_nLife;				// 体力
 	/* 静的メンバ変数 */

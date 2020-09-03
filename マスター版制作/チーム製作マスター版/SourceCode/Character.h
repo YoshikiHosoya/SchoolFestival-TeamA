@@ -247,6 +247,5 @@ private:
 	void CalcMove();												//移動の計算
 	void CalcRotation();											//回転の計算
 	void Motion(void);												//モーション処理
-
 };
 #endif

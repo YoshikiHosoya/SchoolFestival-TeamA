@@ -167,7 +167,7 @@ void CGrenadeFire::Fire(D3DXVECTOR3 rot)
 			pGrenade->SetPosition(pos);
 
 			// タグの設定
-			pGrenade->SetTag(m_Tag);
+			pGrenade->SetTag(GetTag());
 
 			// 弾のパラメーターの設定
 			switch (m_type)

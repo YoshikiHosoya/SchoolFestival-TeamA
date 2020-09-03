@@ -95,7 +95,7 @@ void CDebugMapEditor::Update(void)
 // ÉvÉåÉCÉÑÅ[ÇÃéÊìæ
 //
 // =====================================================================================================================================================================
-CPlayer * CDebugMapEditor::GetPlayer(CONTROLLER Controller)
+CPlayer * CDebugMapEditor::GetPlayer(TAG Tag)
 {
 	return nullptr;
 }

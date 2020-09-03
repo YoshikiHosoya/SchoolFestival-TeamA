@@ -43,12 +43,12 @@ public:
 	void ShowDebugInfo(void);					// デバッグ情報表記
 
 	/* メンバ関数 */
-	CPlayer* GetPlayer(CONTROLLER Controller) { return m_pPlayer[(int)Controller]; };
+	CPlayer* GetPlayer(TAG Tag) { return m_pPlayer[(int)Tag]; };
 	CMap* GetMap() { return m_pMap; };
 private:
 	/* 静的メンバ変数 */
 	static CMap					*m_pMap;
-	static CPlayer				*m_pPlayer[(int)CONTROLLER::P_MAX];
+	static CPlayer				*m_pPlayer[MAX_CONTROLLER];
 
 	/* メンバ変数 */
 	CTutorialManager	*m_pTutorialManager;

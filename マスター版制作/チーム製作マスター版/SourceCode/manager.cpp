@@ -24,7 +24,7 @@ CParticle		*CManager::m_Particle						= nullptr;
 CBaseMode		*CManager::m_pBaseMode						= nullptr;
 CMouse			*CManager::m_pMouse							= nullptr;
 CManager::MODE	CManager::m_mode							= CManager::MODE_TITLE;
-CXInputPad		*CManager::m_pPad[(int)CONTROLLER::P_MAX]	= {};
+CXInputPad		*CManager::m_pPad[MAX_CONTROLLER]	= {};
 CSound			*CManager::m_pSound							= nullptr;
 
 
@@ -45,7 +45,7 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	m_pInputKeyboard = new CKeyboard;
 	m_pMouse = new CMouse;
 	m_pSound = new CSound;
-	for (int nCnt = 0; nCnt < (int)CONTROLLER::P_MAX; nCnt++)
+	for (int nCnt = 0; nCnt < MAX_CONTROLLER; nCnt++)
 	{
 		m_pPad[nCnt] = new CXInputPad;
 	}
@@ -57,9 +57,9 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	}
 	m_pInputKeyboard->InitInput(hInstance, hWnd);
 	m_pMouse->Init(hInstance, hWnd);
-	for (int nCnt = 0; nCnt < (int)CONTROLLER::P_MAX; nCnt++)
+	for (int nCnt = 0; nCnt < MAX_CONTROLLER; nCnt++)
 	{
-		m_pPad[nCnt]->Init(hInstance, hWnd, (CONTROLLER)nCnt);
+		m_pPad[nCnt]->Init(hInstance, hWnd, (TAG)nCnt);
 	}
 
 	m_pSound->Init(hWnd);
@@ -87,7 +87,7 @@ void CManager::Uninit(void)
 		delete m_pMouse;
 		m_pMouse = nullptr;
 	}
-	for (int nCnt = 0; nCnt < (int)CONTROLLER::P_MAX; nCnt++)
+	for (int nCnt = 0; nCnt < MAX_CONTROLLER; nCnt++)
 	{
 		if (m_pPad[nCnt])
 		{
@@ -125,7 +125,7 @@ void CManager::Update(void)
 	m_pInputKeyboard->UpdateInput();
 	m_pRenderer->Update();
 	m_pMouse->Update();
-	for (int nCnt = 0; nCnt < (int)CONTROLLER::P_MAX; nCnt++)
+	for (int nCnt = 0; nCnt < MAX_CONTROLLER; nCnt++)
 	{
 		m_pPad[nCnt]->Update();
 	}
@@ -265,11 +265,11 @@ CMouse * CManager::GetMouse()
 //===========================================
 //ÉpÉbÉhÇÃèÓïÒéÊìæ
 //===========================================
-CXInputPad * CManager::GetPad(CONTROLLER Controller)
+CXInputPad * CManager::GetPad(TAG Tag)
 {
-	if (m_pPad[(int)Controller])
+	if (m_pPad[(int)Tag])
 	{
-		return m_pPad[(int)Controller];
+		return m_pPad[(int)Tag];
 	}
 	return nullptr;
 }

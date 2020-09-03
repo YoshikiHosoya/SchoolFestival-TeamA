@@ -76,11 +76,11 @@ bool CHossoLibrary::PressAnyButton(void)
 {
 	CKeyboard *Keyboard;
 	Keyboard = CManager::GetInputKeyboard();
-	CXInputPad *InpudPad[(int)CONTROLLER::P_MAX] = {};
+	CXInputPad *InpudPad[MAX_CONTROLLER] = {};
 
-	for (int nCnt = 0; nCnt < (int)CONTROLLER::P_MAX; nCnt++)
+	for (int nCnt = 0; nCnt < MAX_CONTROLLER; nCnt++)
 	{
-		InpudPad[nCnt] = CManager::GetPad((CONTROLLER)nCnt);
+		InpudPad[nCnt] = CManager::GetPad((TAG)nCnt);
 
 		if (Keyboard->GetKeyboardTrigger(DIK_RETURN) ||
 			Keyboard->GetKeyboardTrigger(DIK_SPACE) ||
@@ -104,10 +104,10 @@ bool CHossoLibrary::PressStartButton(void)
 {
 	CKeyboard *Keyboard;
 	Keyboard = CManager::GetInputKeyboard();
-	CXInputPad *InpudPad[(int)CONTROLLER::P_MAX] = {};
-	for (int nCnt = 0; nCnt < (int)CONTROLLER::P_MAX; nCnt++)
+	CXInputPad *InpudPad[MAX_CONTROLLER] = {};
+	for (int nCnt = 0; nCnt < MAX_CONTROLLER; nCnt++)
 	{
-		InpudPad[nCnt] = CManager::GetPad((CONTROLLER)nCnt);
+		InpudPad[nCnt] = CManager::GetPad((TAG)nCnt);
 
 		if (Keyboard->GetKeyboardTrigger(DIK_RETURN) || InpudPad[nCnt]->GetTrigger(CXInputPad::JOYPADKEY_START, 1))
 		{
@@ -154,13 +154,13 @@ bool CHossoLibrary::ImGui_Combobox(std::vector<std::string> aItemNameList, std::
 //------------------------------------------------------------------------------
 //パッドの入力処理
 //------------------------------------------------------------------------------
-bool CHossoLibrary::PadMoveInput(D3DXVECTOR3 & rMove, DIRECTION & direction, bool bJump, CONTROLLER Controller)
+bool CHossoLibrary::PadMoveInput(D3DXVECTOR3 & rMove, DIRECTION & direction, bool bJump, TAG Tag)
 {
 	bool bInput = false;
 
 	CXInputPad *pad;
 
-	pad = CManager::GetPad(Controller);
+	pad = CManager::GetPad(Tag);
 	D3DXVECTOR3 InputValue = ZeroVector3;
 	pad->GetStickLeft(&InputValue.x, &InputValue.y);//パッドの入力値を代入
 	InputValue.x /= STICK_MAX_RANGE;//値の正規化
