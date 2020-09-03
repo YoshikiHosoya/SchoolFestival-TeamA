@@ -127,25 +127,25 @@ void CFlamethrower::DebugInfo()
 CFlamethrower * CFlamethrower::Create(D3DXVECTOR3 rot)
 {
 	// 変数
-	CFlamethrower *pBalkan;
+	CFlamethrower *pFlamethrower;
 
 	// メモリの確保
-	pBalkan = new CFlamethrower(OBJTYPE_BULLET);
+	pFlamethrower = new CFlamethrower(OBJTYPE_BULLET);
 
 	// 火炎放射器のパラメーター取得
-	BULLET_PARAM *pBulletParam = pBalkan->GetBulletParam(CGun::GUNTYPE_FLAMETHROWER);
+	BULLET_PARAM *pBulletParam = pFlamethrower->GetBulletParam(CGun::GUNTYPE_FLAMETHROWER);
 
 	// 初期化
-	pBalkan->Init();
+	pFlamethrower->Init();
 
 	// 弾の移動量計算
-	pBalkan->CalcBulletMove(rot, CGun::GUNTYPE_FLAMETHROWER);
+	pFlamethrower->CalcBulletMove(rot, CGun::GUNTYPE_FLAMETHROWER);
 
 	// モデルタイプの設定
-	pBalkan->SetType(BULLET_MODEL);
+	pFlamethrower->SetType(BULLET_MODEL);
 
 	// モデルカウントの設定
-	pBalkan->SetModelConut(MODEL_BULLET_SPHERE);
+	pFlamethrower->SetModelConut(MODEL_BULLET_SPHERE);
 
-	return pBalkan;
+	return pFlamethrower;
 }

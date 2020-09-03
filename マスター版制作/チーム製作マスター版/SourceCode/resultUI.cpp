@@ -510,7 +510,7 @@ void CResultUI::ScoreCal()
 				m_pBonusScore->SetDisp(true);
 			}
 			// 目標の値になるまで値を計算
-			TargetValue(nReferenceValue_BonusScore, m_nBonusScore, 100, m_pBonusScore);
+			TargetValue(nReferenceValue_BonusScore, m_nBonusScore, 1000, m_pBonusScore);
 		}
 	}
 }

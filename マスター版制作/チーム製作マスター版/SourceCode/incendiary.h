@@ -49,6 +49,8 @@ private:
 	float						m_fGravityRate;						// 
 	float						m_fRatio;							// Š„‡
 	float						m_fMoveAttenuationRate;				// ˆÚ“®—Êx‚ÌŒ¸Š‚ÌŠ„‡
+	float						m_fVelocityBase;					// ‘¬“xŠ„‡
+	float						m_fMoveResistance;					// ˆÚ“®—Ê‚Ì’ïR—Í
 
 };
 #endif

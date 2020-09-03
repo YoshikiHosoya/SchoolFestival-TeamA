@@ -5,29 +5,37 @@
 //
 // =====================================================================================================================================================================
 #include "Boss_One.h"
-#include "model.h"
-#include "collision.h"
-#include "game.h"
 #include "manager.h"
-#include "map.h"
-#include "gun.h"
+#include "basemode.h"
+#include "gamemanager.h"
+#include "game.h"
+#include "model.h"
+#include "character.h"
 #include "player.h"
 #include "enemy.h"
-#include "character.h"
+#include "map.h"
+#include "gun.h"
+#include "collision.h"
 #include <random>
-#include "gamemanager.h"
+#include <iostream>
+#include <algorithm>
 
 // =====================================================================================================================================================================
 //マクロ定義
 // =====================================================================================================================================================================
+#define DIFFERENCE_POSTURE	 (POSTURE_HEIGHT_STAND - POSTURE_HEIGHT_SQUAT)	// 姿勢の座標の差分の距離
+#define POSTURE_HEIGHT_STAND (150.0f)										// 通常状態の座標の高さ
+#define POSTURE_HEIGHT_SQUAT (50.0f)										// しゃがみ状態の座標の高さ
+#define BALKAN_LENGTH		 (50.0f)										// バルカンの横の長さ
+#define PLAYER_HEADLINE		 (60.0f)										// プレイヤーのヘッドラインの高さ
+#define RUNAWAY_BOSSLIFE	 (250)											// 暴走状態になる体力のライン
+#define COOLTIME_BASE		 (120)											// クールタイムの基準
+#define ATTACK_PRIORITY		 (2)											// 攻撃の優先度を保存しておく総数
 
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
 // =====================================================================================================================================================================
-BOSS_ONE_DATA		CBoss_One::m_BossOneData						 = {};			// データ
-int					CBoss_One::m_nLife								 = 0;			// 体力
-D3DXVECTOR3			CBoss_One::m_CollisionSize[POSTURETYPE_MAX]		 = {};			// 当たり判定の大きさ
-D3DXVECTOR3			CBoss_One::m_GunShotOfsetPos[WEAPONTYPE_MAX]	 = {};			// ガンのオフセット
+BOSS_ONE_DATABASE	CBoss_One::m_BossOneData						 = {};			// データ
 
 // =====================================================================================================================================================================
 // テキストファイル名
@@ -44,6 +52,7 @@ char *CBoss_One::m_BossOneFileName =
 // =====================================================================================================================================================================
 CBoss_One::CBoss_One(OBJ_TYPE type) :CEnemy(type)
 {
+	// 使用するガンの初期化
 	for (int nCnt = 0; nCnt < WEAPONTYPE_MAX; nCnt++)
 	{
 		m_pGun[nCnt]			 = nullptr;
@@ -51,30 +60,39 @@ CBoss_One::CBoss_One(OBJ_TYPE type) :CEnemy(type)
 		m_Gun_Pos[nCnt]			 = ZeroVector3;
 	}
 
-	// ボスの初期状態
-	m_BossOneState			 = BOSS_ONE_STATE_STAY;
-	m_AttckType				 = ATTACKTYPE_NONE;
-	m_AttckTypeOld			 = ATTACKTYPE_NONE;
-	m_PostureType			 = POSTURETYPE_STAND;
-	m_pCollision			 = nullptr;
-	m_ShotCount				 = 0;
-	m_nCoolTime				 = 120;
-	m_nShotIntervalTime		 = 0;
-	m_nTriggerCount			 = 0;
-	m_nBalkanAngle			 = 0;
-	m_nShot					 = 60;
-	m_nShotCount			 = 0;
-	m_fBalkanRot			 = 0.0f;
-	m_fRotTarget			 = -1.57f;
-	m_fPartsRotVentilation	 = 0.0f;
-	m_AddMove				 = 0.0f;
-	m_bFlame				 = false;
-	m_bBalkanRotFlag		 = false;
-	m_bSetBossState			 = false;
-	m_bOpenWeapon			 = false;
-	m_bShiftPosture			 = false;
-	m_bIntermediateSquat	 = false;
-	m_bBalkanGunRotFlag		 = false;
+	// 配列の初期化
+	m_AIPriorityData.nPriorityData.clear();
+
+	for (int nCnt = 0; nCnt < ATTACKTYPE_MAX; nCnt++)
+	{
+		m_AIPriorityData.AttackType[nCnt] = 0;
+	}
+
+	// 変数の初期化
+	m_BossState							 = STATE_NORMAL;
+	m_BossOneActionPattern				 = ACTION_PATTERN_STAY;
+	m_AttckType							 = ATTACKTYPE_NONE;
+	m_AttckTypeOld[SAVE_ATTACKOLD_NUM]	 = {};
+	m_PostureType						 = POSTURETYPE_STAND;
+	m_AttackAIState						 = AI_STATE_GET_INFORMATION;
+	m_pCollision						 = nullptr;
+	m_ShotCount							 = 0;
+	m_nCoolTime							 = COOLTIME_BASE;
+	m_nShotIntervalTime					 = 0;
+	m_nTriggerCount						 = 0;
+	m_nBalkanAngle						 = 0;
+	m_nFirstShotCount					 = 60;
+	m_nShotCount						 = 0;
+	m_fBalkanRot						 = 0.0f;
+	m_fRotTarget						 = -1.57f;
+	m_fPartsRotVentilation				 = 0.0f;
+	m_AddMove							 = 0.0f;
+	m_bFlame							 = false;
+	m_bBalkanRotFlag					 = false;
+	m_bOpenWeapon						 = false;
+	m_bShiftPosture						 = false;
+	m_bBalkanGunRotFlag					 = false;
+	m_bIntermediateSquat				 = false;
 }
 
 // =====================================================================================================================================================================
@@ -101,40 +119,18 @@ HRESULT CBoss_One::Init(void)
 	SetCharacterType(CCharacter::CHARACTER_TYPE_BOSS_ONE);
 	//重力無し
 	SetGravity(false);
-	// ボスの角度の設定
+	// ボスの角度の設定_左向き
 	SetRotDest(D3DXVECTOR3(0.0f, 1.57f, 0.0f));
-	// 体力の初期値
-	CCharacter::SetLife(m_nLife);
 	// モーションさせない設定
 	SetMotion(CCharacter::CHARACTER_MOTION_STATE_NONE);
-	// 銃の傾き
-	GetCharacterModelPartsList((CModel::MODEL_BOSSONE_GUN_INCENDIARY))->GetRot().x -= 0.8f;
-	GetCharacterModelPartsList((CModel::MODEL_BOSSONE_GUN_FLAMETHROWER))->GetRot().x -= 1.57f;
-
-	for (int nCnt = 0; nCnt < WEAPONTYPE_MAX; nCnt++)
-	{
-		// 銃の生成
-		m_pGun[nCnt] = CGun::Create();
-		//マトリックス設定
-		m_pGun[nCnt]->SetHandMtx(GetCharacterModelPartsList(
-			static_cast<CModel::BOSSONE_PARTS_MODEL>(CModel::MODEL_BOSSONE_GUN_BALKAN + nCnt))->GetMatrix());
-		// 銃の弾の種類
-		m_pGun[nCnt]->GetTag() = TAG_ENEMY;
-		// 銃の弾の種類
-		m_pGun[nCnt]->SetGunType(static_cast<CGun::GUN_TYPE>(CGun::GUNTYPE_BALKAN + nCnt));
-		// 発射位置のオフセットの設定
-		m_pGun[nCnt]->SetShotOffsetPos(m_GunShotOfsetPos[nCnt]);
-		// 弾を撃つ方向を設定
-		m_pGun[nCnt]->SetShotRot(
-			D3DXVECTOR3(0.0f, 0.0f, (GetCharacterModelPartsList(static_cast<CModel::BOSSONE_PARTS_MODEL>(CModel::MODEL_BOSSONE_GUN_BALKAN + nCnt))->GetRot().x)));
-	}
-	// ガンのオフセット座標の更新
-	SetGunOffsetPos(D3DXVECTOR3(GetCharacterModelPartsList((CModel::MODEL_BOSSONE_GUN_FLAMETHROWER))->GetPosition()));
-	// ガンの座標の更新
-	SetGunPos();
-
+	// ボスの情報の設定
+	SetBossInfo();
+	// ガンの生成と設定
+	CreateGun();
 	// 当たり判定の設定
 	SetCollision();
+	// 回転の差分
+	m_fBalkanRotDifferencial -= D3DX_PI / 120.0f;
 
 	return S_OK;
 }
@@ -180,8 +176,8 @@ void CBoss_One::Update(void)
 	SetGunOffsetPos(D3DXVECTOR3(GetCharacterModelPartsList((CModel::MODEL_BOSSONE_GUN_FLAMETHROWER))->GetPosition()));
 	// ガンの座標の更新
 	SetGunPos();
-	// ボスの状態ごとの処理
-	BossOneStateManager();
+	// ボスの行動管理
+	Behavior();
 	// 回転の計算
 	CalcRotationBalkan(m_fRotTarget, GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_BALKAN)->GetRot().x);
 	// 回転量の更新
@@ -223,17 +219,16 @@ void CBoss_One::DebugInfo(void)
 	float fDist = this->GetPosition().x - pPlayer->GetPosition().x;
 
 	CDebugProc::Print("ボスとプレイヤーの距離 --- x --- %f\n", fDist);
-	CDebugProc::Print("ボスのステート %d\n", m_BossOneState);
-	CDebugProc::Print("\n");
-	CDebugProc::Print("\n");
-	CDebugProc::Print("\n");
-	CDebugProc::Print("\n");
+	CDebugProc::Print("ボスのステート %d\n", m_BossOneActionPattern);
 	CDebugProc::Print("ボスの攻撃ステート %d\n", m_AttckType);
 	CDebugProc::Print("ボスの姿勢 %d\n", m_PostureType);
 	CDebugProc::Print("ボスのガンの回転 %f\n", m_fBalkanRot);
 	CDebugProc::Print("ボスのガンの角度 %d\n", m_nBalkanAngle);
 	CDebugProc::Print("ボスのボディーの座標 %f\n", GetCharacterModelPartsList(CModel::MODEL_BOSSONE_BODY)->GetPosition().y);
 	CDebugProc::Print("ボスの体力 %d\n", GetLife());
+
+	CDebugProc::Print("ボスの体力----------------------------------------------------- %d\n", m_BossOneData.nLife);
+
 
 	//CDebugProc::Print("");
 	CCharacter::DebugInfo();
@@ -361,31 +356,6 @@ void CBoss_One::Boss_One_DataLoad()
 	{
 		MessageBox(NULL, "ボス1のデータ読み込み失敗", "警告", MB_ICONWARNING);
 	}
-
-	// 読み込んだ情報の代入
-	SetBoss_OneData();
-}
-
-// =====================================================================================================================================================================
-//
-// ボスの読み込んだ情報の設定
-//
-// =====================================================================================================================================================================
-void CBoss_One::SetBoss_OneData()
-{
-	// 体力の設定
-	m_nLife = m_BossOneData.nLife;
-	// 当たり判定の設定
-	for (int nCnt = 0; nCnt < POSTURETYPE_MAX; nCnt++)
-	{
-		m_CollisionSize[nCnt] = m_BossOneData.CollisionSize[nCnt];
-	}
-
-	for (int nCnt = 0; nCnt < WEAPONTYPE_MAX; nCnt++)
-	{
-		// ガンの発射口オフセットの設定
-		m_GunShotOfsetPos[nCnt] = m_BossOneData.GunShotOfsetPos[nCnt];
-	}
 }
 
 // =====================================================================================================================================================================
@@ -476,20 +446,20 @@ void CBoss_One::StateChangeReaction()
 	}
 }
 
-//=====================================================================================================================================================================
+// =====================================================================================================================================================================
 //
-// 敵の行動
+// 待機時の行動
 //
-//=====================================================================================================================================================================
-void CBoss_One::Behavior()
+// =====================================================================================================================================================================
+void CBoss_One::StayAction()
 {
 	// --- 変数の初期化 ---  //
-	m_AttckType = ATTACKTYPE_NONE;
-	m_bShiftPosture = false;
-	m_fRotTarget = -1.57f;
-	m_nShot = 60;
-	m_fBalkanRot = GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_BALKAN)->GetRot().x;
-	m_nBalkanAngle = 0;
+	m_AttckType			 = ATTACKTYPE_NONE;
+	m_bShiftPosture		 = false;
+	m_fRotTarget		 = -1.57f;
+	m_nFirstShotCount	 = 60;
+	m_fBalkanRot		 = GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_BALKAN)->GetRot().x;
+	m_nBalkanAngle		 = 0;
 	// 弾を撃った回数をリセット
 	SetShotCount(0);
 	// インターバルの時間をリセット
@@ -497,17 +467,52 @@ void CBoss_One::Behavior()
 	// トリガーのカウントのリセット
 	SetTriggerCount(0);
 
-	if (m_AttckTypeOld == ATTACKTYPE_BALKAN)
+	if (m_AttckTypeOld[0] == ATTACKTYPE_BALKAN)
 	{
-		SetBalkan(false);
+		SetBalkan(false, m_BossState);
 	}
-	else if (m_AttckTypeOld == ATTACKTYPE_FLAMERADIATION)
+	else if (m_AttckTypeOld[0] == ATTACKTYPE_FLAMERADIATION)
 	{
 		SetFlameThrower(false);
 	}
 
+	for (int nCnt = 0; nCnt < ATTACKTYPE_MAX; nCnt++)
+	{
+		m_AIPriorityData.AttackType[nCnt] = PRIORITY_POINT_NONE;
+	}
+
+	//
+	m_AttackAIState = AI_STATE_GET_INFORMATION;
+	// 配列の初期化
+	m_AIPriorityData.nPriorityData.clear();
+
 	// クールタイムの計算
 	Cooltime_Decrease();
+}
+
+// =====================================================================================================================================================================
+//
+// クールタイムの設定
+//
+// =====================================================================================================================================================================
+void CBoss_One::SetCoolTime(int time)
+{
+	if (time == NULL)
+	{
+		switch (m_BossState)
+		{
+		case CBoss_One::STATE_NORMAL:
+			m_nCoolTime = COOLTIME_BASE;
+			break;
+		case CBoss_One::STATE_RUNAWAY:
+			m_nCoolTime = COOLTIME_BASE;
+			break;
+		}
+	}
+	else
+	{
+		m_nCoolTime = time;
+	}
 }
 
 // =====================================================================================================================================================================
@@ -576,10 +581,8 @@ void CBoss_One::Cooltime_Decrease()
 	// クールタイムが0以下になった時
 	if (m_nCoolTime <= 0)
 	{
-		// 攻撃方法をランダムに決める
-		RandomAttack();
 		// 状態を攻撃に変える
-		SetBossState(BOSS_ONE_STATE_ATTACK);
+		SetBossAction(ACTION_PATTERN_AI_ATTACK);
 	}
 }
 
@@ -675,10 +678,9 @@ void CBoss_One::ShotIncendiary()
 	if (m_nShotCount >= 3)
 	{
 		// クールタイムの設定
-		SetCoolTime(120);
-		//m_bSetBossState = true;
+		SetCoolTime(NULL);
 		// ボスの状態を変更
-		m_BossOneState = BOSS_ONE_STATE_STAY;
+		SetBossAction(ACTION_PATTERN_STAY);
 	}
 	else
 	{
@@ -709,61 +711,108 @@ void CBoss_One::ShotBalkan()
 {
 	if (m_bOpenWeapon)
 	{
-		// 弾を2回撃った時
+		// 5トリガー撃った時_暴走状態用
 		if (m_nTriggerCount >= 5)
 		{
 			// クールタイムの設定
-			SetCoolTime(120);
-			//m_bSetBossState = true;
+			SetCoolTime(NULL);
 			// ボスの状態を変更
-			m_BossOneState = BOSS_ONE_STATE_STAY;
+			SetBossAction(ACTION_PATTERN_STAY);
 		}
 		else
 		{
-			if (!m_bBalkanRotFlag)
+			switch (m_BossState)
 			{
-				// ガンの向きをプレイヤーの方へ向ける
-				SetRotBalkan();
-				m_bBalkanRotFlag = true;
-			}
+			case CBoss_One::STATE_NORMAL:
 
-			if (m_bBalkanRotFlag)
-			{
-				m_nShot--;
-				if (m_nShot <= 0)
+				// ガンの向きを往復させ回転させる
+				SetRotBalkan(m_BossState);
+				// 初弾を撃つまでの時間
+				m_nFirstShotCount--;
+				if (m_nFirstShotCount <= 0)
 				{
-					// 30フレームごとに1トリガー撃つ
 					if (m_nShotIntervalTime <= 0)
 					{
 						// バルカンを撃つ
 						m_pGun[WEAPONTYPE_BALKAN]->Shot();
 						// 弾を撃った回数を加算
 						m_nShotCount++;
-						// 1トリガー撃った時
-						if (m_nShotCount >= 3)
+						// インターバルの時間を設定
+						SetShotIntervalTime(10);
+						// 10発撃った時
+						if (m_nShotCount >= 15)
 						{
-							// インターバルの時間を設定
-							SetShotIntervalTime(30);
 							// ショットカウントの初期化
 							SetShotCount(0);
-							// 何トリガー撃ったかのカウントを加算
-							m_nTriggerCount++;
-							m_bBalkanRotFlag = false;
-						}
-						// インターバルの設定
-						else if (m_nShotCount >= 0)
-						{
-							// インターバルの時間を設定
-							SetShotIntervalTime(10);
+							// クールタイムの設定
+							SetCoolTime(NULL);
+							// ボスの状態を変更
+							SetBossAction(ACTION_PATTERN_STAY);
 						}
 					}
-
-					if (m_bBalkanRotFlag)
+					// インターバルの設定
+					else if (m_nShotIntervalTime >= 0)
 					{
 						// インターバルの時間を減少
 						m_nShotIntervalTime--;
 					}
 				}
+				else
+				{
+					m_fRotTarget = -D3DX_PI / 4;
+				}
+
+				break;
+
+			case CBoss_One::STATE_RUNAWAY:
+				if (!m_bBalkanRotFlag)
+				{
+					// ガンの向きをプレイヤーの方へ向ける
+					SetRotBalkan(m_BossState);
+					//
+					m_bBalkanRotFlag = true;
+				}
+
+
+				if (m_bBalkanRotFlag)
+				{
+					m_nFirstShotCount--;
+					if (m_nFirstShotCount <= 0)
+					{
+						// 30フレームごとに1トリガー撃つ
+						if (m_nShotIntervalTime <= 0)
+						{
+							// バルカンを撃つ
+							m_pGun[WEAPONTYPE_BALKAN]->Shot();
+							// 弾を撃った回数を加算
+							m_nShotCount++;
+							// 1トリガー撃った時
+							if (m_nShotCount >= 3)
+							{
+								// インターバルの時間を設定
+								SetShotIntervalTime(30);
+								// ショットカウントの初期化
+								SetShotCount(0);
+								// 何トリガー撃ったかのカウントを加算
+								m_nTriggerCount++;
+								m_bBalkanRotFlag = false;
+							}
+							// インターバルの設定
+							else if (m_nShotCount >= 0)
+							{
+								// インターバルの時間を設定
+								SetShotIntervalTime(10);
+							}
+						}
+
+						if (m_bBalkanRotFlag)
+						{
+							// インターバルの時間を減少
+							m_nShotIntervalTime--;
+						}
+					}
+				}
+				break;
 			}
 		}
 	}
@@ -771,7 +820,7 @@ void CBoss_One::ShotBalkan()
 
 // =====================================================================================================================================================================
 //
-// 焼夷弾の最初の爆発
+// 火炎放射の最初の爆発
 //
 // =====================================================================================================================================================================
 void CBoss_One::ShotWarning()
@@ -813,7 +862,7 @@ void CBoss_One::ShotWarning()
 
 // =====================================================================================================================================================================
 //
-// フレイム火炎放射
+// 火炎放射
 //
 // =====================================================================================================================================================================
 void CBoss_One::ShotFlameRadiation()
@@ -825,14 +874,14 @@ void CBoss_One::ShotFlameRadiation()
 	if (m_nShotCount >= (16 + 1))
 	{
 		// クールタイムの設定
-		SetCoolTime(120);
+		SetCoolTime(NULL);
 		// 弾を撃った回数をリセット
 		m_nShotCount = 0;
 		//
 		m_bFlame = false;
 
 		// ボスの状態を変更
-		m_BossOneState = BOSS_ONE_STATE_STAY;
+		SetBossAction(ACTION_PATTERN_STAY);
 
 		m_AttckType = ATTACKTYPE_NONE;
 	}
@@ -930,22 +979,22 @@ void CBoss_One::ShiftPosture()
 
 		m_bIntermediateSquat = true;
 		// ボディーの高さ
-		if (GetPosition().y >= 50.0f)
+		if (GetPosition().y >= POSTURE_HEIGHT_SQUAT)
 		{
 			GetPosition().y -= m_AddMove * 2;
 
-			if (GetPosition().y <= 50.0f)
+			if (GetPosition().y <= POSTURE_HEIGHT_SQUAT)
 			{
-				GetPosition().y = 50.0f;
+				GetPosition().y = POSTURE_HEIGHT_SQUAT;
 				// クールタイムの設定
-				SetCoolTime(120);
+				SetCoolTime(NULL);
 				//
 				m_bShiftPosture = true;
 				m_bIntermediateSquat = false;
 				m_PostureType = POSTURETYPE_SQUAT;
 				m_AddMove = 0.0f;
 				// ボスの状態を変更
-				m_BossOneState = BOSS_ONE_STATE_STAY;
+				SetBossAction(ACTION_PATTERN_STAY);
 			}
 		}
 	}
@@ -1008,22 +1057,22 @@ void CBoss_One::ShiftPosture()
 			}
 		}
 
-		if (GetPosition().y <= 170.0f)
+		if (GetPosition().y <= POSTURE_HEIGHT_STAND)
 		{
 			m_AddMove += 0.1f;
 			GetPosition().y += m_AddMove * 2;
 
-			if (GetPosition().y >= 170.0)
+			if (GetPosition().y >= POSTURE_HEIGHT_STAND)
 			{
-				GetPosition().y = 170.0f;
+				GetPosition().y = POSTURE_HEIGHT_STAND;
 				// クールタイムの設定
-				SetCoolTime(120);
+				SetCoolTime(NULL);
 				//
 				m_bShiftPosture = true;
 				m_PostureType = POSTURETYPE_STAND;
 				m_AddMove = 0.0f;
 				// ボスの状態を変更
-				m_BossOneState = BOSS_ONE_STATE_STAY;
+				SetBossAction(ACTION_PATTERN_STAY);
 			}
 		}
 	}
@@ -1071,17 +1120,21 @@ void CBoss_One::SetFlameThrower(bool bOpen)
 // バルカンの移動
 //
 // =====================================================================================================================================================================
-void CBoss_One::SetBalkan(bool bOpen)
+void CBoss_One::SetBalkan(bool bOpen, BOSS_ONE_STATE state)
 {
 	if (bOpen)
 	{
-		if ((GetPosition().z - GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_BALKAN)->GetPosition().z) >= -50.0f)
+		if (state == STATE_NORMAL)
 		{
-			GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_BALKAN)->GetPosition().z -= 3.0f;
+			//m_fRotTarget = -D3DX_PI / 4;
+		}
+		if ((GetPosition().z - GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_BALKAN)->GetPosition().z) >= -BALKAN_LENGTH)
+		{
+			GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_BALKAN)->GetPosition().z -= 4.0f;
 
-			if (GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_BALKAN)->GetPosition().z <= -50.0f)
+			if (GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_BALKAN)->GetPosition().z <= -BALKAN_LENGTH)
 			{
-				GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_BALKAN)->GetPosition().z = -50.0f;
+				GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_BALKAN)->GetPosition().z = -BALKAN_LENGTH;
 				m_bOpenWeapon = true;
 			}
 		}
@@ -1089,13 +1142,14 @@ void CBoss_One::SetBalkan(bool bOpen)
 
 	else if (!bOpen)
 	{
-		if ((GetPosition().z - GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_BALKAN)->GetPosition().z) <= 50.0f)
+		m_fRotTarget = -1.57f;
+		if ((GetPosition().z - GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_BALKAN)->GetPosition().z) <= BALKAN_LENGTH)
 		{
-			GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_BALKAN)->GetPosition().z += 3.0f;
+			GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_BALKAN)->GetPosition().z += 4.0f;
 
-			if (GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_BALKAN)->GetPosition().z >= 50.0f)
+			if (GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_BALKAN)->GetPosition().z >= BALKAN_LENGTH)
 			{
-				GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_BALKAN)->GetPosition().z = 50.0f;
+				GetCharacterModelPartsList(CModel::MODEL_BOSSONE_GUN_BALKAN)->GetPosition().z = BALKAN_LENGTH;
 				m_bOpenWeapon = false;
 			}
 		}
@@ -1135,18 +1189,17 @@ void CBoss_One::ShotFlameManager()
 // =====================================================================================================================================================================
 void CBoss_One::RandomAttack()
 {
-	// 攻撃方法を決める
-	m_AttckType = (BOSS_ONE_ATTACKTYPE)get_rand_range(ATTACKTYPE_BALKAN, ATTACKTYPE_SHIFTPOSTURE);
+	// 攻撃方法を決める デバッグ用
+	//m_AttckType = (BOSS_ONE_ATTACKTYPE)get_rand_range(ATTACKTYPE_BALKAN, ATTACKTYPE_SHIFTPOSTURE);
 
 	// しゃがみ状態で攻撃が火炎放射になった場合はやり直し
 	do
 	{
-		m_AttckType = (BOSS_ONE_ATTACKTYPE)get_rand_range(ATTACKTYPE_BALKAN, ATTACKTYPE_SHIFTPOSTURE);
-	} while (m_PostureType == POSTURETYPE_SQUAT && m_AttckType == ATTACKTYPE_FLAMERADIATION ||
-			 m_AttckTypeOld == ATTACKTYPE_SHIFTPOSTURE && m_AttckTypeOld == m_AttckType);
+		// 攻撃方法の設定
+		SetAttackType((BOSS_ONE_ATTACKTYPE)get_rand_range(ATTACKTYPE_BALKAN, ATTACKTYPE_SHIFTPOSTURE));
 
-	// 攻撃パターンの保存
-	m_AttckTypeOld = m_AttckType;
+	} while (m_PostureType == POSTURETYPE_SQUAT && m_AttckType == ATTACKTYPE_FLAMERADIATION ||
+			 m_AttckTypeOld[0] == ATTACKTYPE_SHIFTPOSTURE && m_AttckType == ATTACKTYPE_SHIFTPOSTURE);
 }
 
 // =====================================================================================================================================================================
@@ -1154,38 +1207,67 @@ void CBoss_One::RandomAttack()
 // バルカンの回転
 //
 // =====================================================================================================================================================================
-void CBoss_One::SetRotBalkan()
+void CBoss_One::SetRotBalkan(BOSS_ONE_STATE state)
 {
-	// プレイヤーのポインタ取得
-	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
-	D3DXVECTOR3 PlayerPos;
+	switch (state)
+	{
+	case CBoss_One::STATE_NORMAL:
+		if (m_fRotTarget >= -D3DX_PI / 4)
+		{
+			m_fRotTarget = -D3DX_PI / 4;
+			m_fBalkanRotDifferencial *= -1.0f;
+		}
+		else if (m_fRotTarget <= -2.355f)
+		{
+			// 回転を反映
+			m_fRotTarget = -2.355f;
+			m_fBalkanRotDifferencial *= -1.0f;
+		}
 
-	// プレイヤーがボスの射程外だった時
-	if (pPlayer->GetPosition().x >= 150.0f)
-	{
-		// プレイヤーの座標をボスの目の前にいることにする
-		PlayerPos = D3DXVECTOR3(150.0f, pPlayer->GetPosition().y, pPlayer->GetPosition().z);
-	}
-	else
-	{
-		// プレイヤーの座標
-		PlayerPos = pPlayer->GetPosition();
+		m_fRotTarget -= m_fBalkanRotDifferencial;
+
+		break;
+	case CBoss_One::STATE_RUNAWAY:
+
+		// プレイヤーのポインタ取得
+		CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
+		D3DXVECTOR3 PlayerPos;
+
+		// プレイヤーがボスの射程外だった時
+		if (pPlayer->GetPosition().x >= 150.0f)
+		{
+			// プレイヤーの座標をボスの目の前にいることにする
+			PlayerPos = D3DXVECTOR3(150.0f, pPlayer->GetPosition().y, pPlayer->GetPosition().z);
+		}
+		else
+		{
+			// プレイヤーの座標
+			PlayerPos = pPlayer->GetPosition();
+		}
+
+		// プレイヤーの座標とバルカンの座標を結ぶベクトルを求める
+		D3DXVECTOR3 HorizontalAxis = m_Gun_Pos[WEAPONTYPE_BALKAN] - PlayerPos;
+		D3DXVECTOR3 VerticalAxis = ZeroVector3;
+
+		// 通常時
+		if (m_PostureType == POSTURETYPE_STAND)
+		{
+			VerticalAxis = D3DXVECTOR3(
+				m_Gun_Pos[WEAPONTYPE_BALKAN].x - BALKAN_LENGTH, (m_Gun_Pos[WEAPONTYPE_BALKAN].y - HorizontalAxis.x - BALKAN_LENGTH - PLAYER_HEADLINE), 0.0f);
+		}
+		// しゃがみ時
+		else
+		{
+			VerticalAxis = D3DXVECTOR3(
+				m_Gun_Pos[WEAPONTYPE_BALKAN].x - BALKAN_LENGTH - DIFFERENCE_POSTURE, (m_Gun_Pos[WEAPONTYPE_BALKAN].y - HorizontalAxis.x - BALKAN_LENGTH * 2 - PLAYER_HEADLINE * 2 - DIFFERENCE_POSTURE * 2), 0.0f);
+		}
+
+		// 回転を反映
+		m_fRotTarget += AngleOf2Vector(VerticalAxis, HorizontalAxis);
+
+		break;
 	}
 
-	// プレイヤーの座標とバルカンの座標を結ぶベクトルを求める
-	D3DXVECTOR3 vectol = m_Gun_Pos[WEAPONTYPE_BALKAN] - PlayerPos;
-	D3DXVECTOR3 vec = ZeroVector3;
-	if (m_PostureType == POSTURETYPE_STAND)
-	{
-		vec = D3DXVECTOR3(m_Gun_Pos[WEAPONTYPE_BALKAN].x - 60.0f, (m_Gun_Pos[WEAPONTYPE_BALKAN].y - vectol.x), 0.0f);
-	}
-	else
-	{
-		vec = D3DXVECTOR3(m_Gun_Pos[WEAPONTYPE_BALKAN].x - 60.0f, ((m_Gun_Pos[WEAPONTYPE_BALKAN].y - 500.0f) - vectol.x), 0.0f);
-	}
-
-	// 回転を反映
-	m_fRotTarget += AngleOf2Vector(vec, vectol);
 	//
 	m_bBalkanGunRotFlag = true;
 }
@@ -1208,8 +1290,22 @@ void CBoss_One::SetCollision()
 	// 当たり判定設定
 	CCharacter::GetCollision()->SetPos(&GetPosition());
 	CCharacter::GetCollision()->SetPosOld(&GetPositionOld());
-	CCharacter::GetCollision()->SetSize2D(m_CollisionSize[1]);
+	CCharacter::GetCollision()->SetSize2D(m_BossOneData.CollisionSize[1]);
 	CCharacter::GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_CHARACTER);
+}
+
+// =====================================================================================================================================================================
+//
+// 決定した攻撃方法を設定する
+//
+// =====================================================================================================================================================================
+void CBoss_One::SetAttackType(BOSS_ONE_ATTACKTYPE type)
+{
+	m_AttckType = type;
+
+	// Oldの0番目を1番目に代入
+	m_AttckTypeOld[ATTACK_PRIORITY - 1] = m_AttckTypeOld[ATTACK_PRIORITY - ATTACK_PRIORITY];
+	m_AttckTypeOld[ATTACK_PRIORITY - ATTACK_PRIORITY] = m_AttckType;
 }
 
 // =====================================================================================================================================================================
@@ -1252,24 +1348,51 @@ void CBoss_One::UpdateCollision()
 
 // =====================================================================================================================================================================
 //
-// ボスのステートごとの処理
+// ボスのステート管理
 //
 // =====================================================================================================================================================================
 void CBoss_One::BossOneStateManager()
 {
-	switch (m_BossOneState)
+	switch (m_BossState)
 	{
-	case CBoss_One::BOSS_ONE_STATE_NONE:
+	case CBoss_One::STATE_NORMAL:
+		if (this->GetLife() <= RUNAWAY_BOSSLIFE)
+		{
+			m_BossState = STATE_RUNAWAY;
+		}
 		break;
-	case CBoss_One::BOSS_ONE_STATE_STAY:
+	case CBoss_One::STATE_RUNAWAY:
+
+		break;
+	}
+}
+
+// =====================================================================================================================================================================
+//
+// ボスの行動管理
+//
+// =====================================================================================================================================================================
+void CBoss_One::Behavior()
+{
+	switch (m_BossOneActionPattern)
+	{
+	case CBoss_One::ACTION_PATTERN_NONE:
+		break;
+	case CBoss_One::ACTION_PATTERN_STAY:
 		// 次の行動を選択
-		Behavior();
+		StayAction();
 		break;
-	case CBoss_One::BOSS_ONE_STATE_ATTACK:
+
+	case CBoss_One::ACTION_PATTERN_AI_ATTACK:
+		// 次の攻撃方法を選択
+		Attack_AI();
+		break;
+
+	case CBoss_One::ACTION_PATTERN_ATTACK:
 		// ボスの攻撃管理
 		BossOneAttackManager();
 		break;
-	case CBoss_One::BOSS_ONE_STATE_SHIFT_POSTURE:
+	case CBoss_One::ACTION_PATTERN_SHIFT_POSTURE:
 		break;
 	default:
 		break;
@@ -1287,7 +1410,7 @@ void CBoss_One::BossOneAttackManager()
 	switch (m_AttckType)
 	{
 	case CBoss_One::ATTACKTYPE_BALKAN:
-		SetBalkan(true);
+		SetBalkan(true, m_BossState);
 		// バルカンを撃つ
 		ShotBalkan();
 		break;
@@ -1308,4 +1431,302 @@ void CBoss_One::BossOneAttackManager()
 	default:
 		break;
 	}
+}
+
+// =====================================================================================================================================================================
+//
+// ボスの攻撃管理AI
+//
+// =====================================================================================================================================================================
+void CBoss_One::Attack_AI()
+{
+	switch (m_AttackAIState)
+	{
+		// 必要な情報の取得
+	case CBoss_One::AI_STATE_GET_INFORMATION:
+
+		// 攻撃の優先度を計算
+		Attack_Priority();
+
+		// それぞれの行動の優先度のアドレスを取得
+		for (int nCnt = 0; nCnt < ATTACKTYPE_MAX; nCnt++)
+		{
+			// 末尾に攻撃優先度の値を追加
+			m_AIPriorityData.nPriorityData.emplace_back(&m_AIPriorityData.AttackType[nCnt]);
+		}
+
+		m_AttackAIState = AI_STATE_AI;
+		break;
+
+		// 情報を元に攻撃を選択する
+	case CBoss_One::AI_STATE_AI:
+
+		// 優先度が高い順に入れ替え
+		BubbleSort(m_AIPriorityData.nPriorityData);
+
+		// 先頭のアドレスを取得する
+		int *nFront = m_AIPriorityData.nPriorityData[0];
+		// 先頭の次のアドレスを取得する
+		int *nSecond = (m_AIPriorityData.nPriorityData[1]);
+
+		// 攻撃の優先度を先頭から二番目まで保存
+		BOSS_ONE_ATTACKTYPE Attack_Priority[ATTACK_PRIORITY];
+
+		for (int nCnt = 0, nCntPrio = 0; nCnt < ATTACKTYPE_MAX, nCntPrio < ATTACK_PRIORITY; nCnt++)
+		{
+			// 優先度が一番高かった攻撃方法を求める
+			if (nFront == &m_AIPriorityData.AttackType[nCnt])
+			{
+				Attack_Priority[nCntPrio] = (BOSS_ONE_ATTACKTYPE)nCnt;
+			}
+			// 優先度が二番目に高かった攻撃方法を求める
+			else if (nSecond == &m_AIPriorityData.AttackType[nCnt])
+			{
+				Attack_Priority[nCntPrio] = (BOSS_ONE_ATTACKTYPE)nCnt;
+			}
+			// どちらかに当てはまっていたらカウントを加算する
+			if (nFront == &m_AIPriorityData.AttackType[nCnt] || nSecond == &m_AIPriorityData.AttackType[nCnt])
+			{
+				nCntPrio++;
+			}
+		}
+
+		// 優先度が高い行動の優先度を比べ同じならランダムに決定する
+		if (*nFront == *nSecond)
+		{
+			uint64_t nRandomAttack = get_rand_range(0, 1);
+			if (nRandomAttack == 0)
+			{
+				// 一つ前の攻撃方法と今回の最優先攻撃方法が同じじゃなかった時
+				if (m_AttckTypeOld[ATTACK_PRIORITY - ATTACK_PRIORITY] != Attack_Priority[ATTACK_PRIORITY - ATTACK_PRIORITY])
+				{
+					// 攻撃方法の設定
+					SetAttackType(Attack_Priority[ATTACK_PRIORITY - ATTACK_PRIORITY]);
+				}
+				else
+				{
+					// 攻撃方法の設定
+					SetAttackType(Attack_Priority[ATTACK_PRIORITY - 1]);
+				}
+			}
+			else
+			{
+				// 一つ前の攻撃方法と今回の最優先攻撃方法が同じじゃなかった時
+				if (m_AttckTypeOld[ATTACK_PRIORITY - ATTACK_PRIORITY] != Attack_Priority[ATTACK_PRIORITY - 1])
+				{
+					// 攻撃方法の設定
+					SetAttackType(Attack_Priority[ATTACK_PRIORITY - 1]);
+				}
+				else
+				{
+					// 攻撃方法の設定
+					SetAttackType(Attack_Priority[ATTACK_PRIORITY - ATTACK_PRIORITY]);
+				}
+			}
+		}
+		// 同じじゃない時
+		else
+		{
+			// 一つ前の攻撃方法と今回の最優先攻撃方法が同じじゃなかった時
+			if (m_AttckTypeOld[ATTACK_PRIORITY - ATTACK_PRIORITY] != Attack_Priority[ATTACK_PRIORITY - ATTACK_PRIORITY])
+			{
+				// 攻撃方法の設定
+				SetAttackType(Attack_Priority[ATTACK_PRIORITY - ATTACK_PRIORITY]);
+			}
+			else
+			{
+				// 攻撃方法の設定
+				SetAttackType(Attack_Priority[ATTACK_PRIORITY - 1]);
+			}
+		}
+
+		// 状態を攻撃に変える
+		SetBossAction(ACTION_PATTERN_ATTACK);
+
+		break;
+	}
+}
+
+// =====================================================================================================================================================================
+//
+// 攻撃の優先度を計算
+//
+// =====================================================================================================================================================================
+void CBoss_One::Attack_Priority()
+{
+	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
+
+	if (pPlayer)
+	{
+		// プレイヤーとボスの距離を求める
+		const unsigned int nDistance = (unsigned int)this->GetPosition().x - (unsigned int)pPlayer->GetPosition().x;
+
+		// ----- 優先度の設定 ----- //
+
+		// ----- 射程外 ----- //
+		if (nDistance <= MIN_PLAYER_DISTANCE)
+		{// 最短射程範囲より内側にいる時
+			m_AIPriorityData.AttackType[ATTACKTYPE_BALKAN]			+= PRIORITY_POINT_ONE;
+			m_AIPriorityData.AttackType[ATTACKTYPE_FLAMERADIATION]	+= PRIORITY_POINT_TWO;
+			m_AIPriorityData.AttackType[ATTACKTYPE_INCENDIARY]		+= PRIORITY_POINT_ONE;
+			m_AIPriorityData.AttackType[ATTACKTYPE_SHIFTPOSTURE]	+= PRIORITY_POINT_THREE;
+		}
+
+		if (nDistance >= MAX_PLAYER_DISTANCE)
+		{// 最長射程範囲より外側にいる時
+			m_AIPriorityData.AttackType[ATTACKTYPE_BALKAN]			+= PRIORITY_POINT_TWO;
+			m_AIPriorityData.AttackType[ATTACKTYPE_FLAMERADIATION]	+= PRIORITY_POINT_ONE;
+			m_AIPriorityData.AttackType[ATTACKTYPE_INCENDIARY]		+= PRIORITY_POINT_TWO;
+			m_AIPriorityData.AttackType[ATTACKTYPE_SHIFTPOSTURE]	+= PRIORITY_POINT_NONE;
+		}
+
+		// ----- 射程内 ----- //
+		if (nDistance >= MIN_PLAYER_DISTANCE && nDistance <= MAX_PLAYER_DISTANCE)
+		{// 射程範囲内の時
+			m_AIPriorityData.AttackType[ATTACKTYPE_BALKAN]			+= PRIORITY_POINT_ONE;
+			m_AIPriorityData.AttackType[ATTACKTYPE_FLAMERADIATION]	+= PRIORITY_POINT_ONE;
+			m_AIPriorityData.AttackType[ATTACKTYPE_INCENDIARY]		+= PRIORITY_POINT_ONE;
+			m_AIPriorityData.AttackType[ATTACKTYPE_SHIFTPOSTURE]	+= PRIORITY_POINT_ONE;
+		}
+
+		if (nDistance <= MAX_PLAYER_DISTANCE && nDistance >= RANGE_CENTER)
+		{// 最長射程範囲より内側にいて範囲の中心より外側にいる時
+			m_AIPriorityData.AttackType[ATTACKTYPE_BALKAN]			+= PRIORITY_POINT_TWO;
+			m_AIPriorityData.AttackType[ATTACKTYPE_FLAMERADIATION]	+= PRIORITY_POINT_ONE;
+			m_AIPriorityData.AttackType[ATTACKTYPE_INCENDIARY]		+= PRIORITY_POINT_ONE;
+			m_AIPriorityData.AttackType[ATTACKTYPE_SHIFTPOSTURE]	+= PRIORITY_POINT_ONE;
+		}
+		if (nDistance >= MIN_PLAYER_DISTANCE && nDistance <= RANGE_CENTER)
+		{// 最短射程範囲より外側にいて範囲の中心より内側にいる時
+			m_AIPriorityData.AttackType[ATTACKTYPE_BALKAN]			+= PRIORITY_POINT_ONE;
+			m_AIPriorityData.AttackType[ATTACKTYPE_FLAMERADIATION]	+= PRIORITY_POINT_TWO;
+			m_AIPriorityData.AttackType[ATTACKTYPE_INCENDIARY]		+= PRIORITY_POINT_ONE;
+			m_AIPriorityData.AttackType[ATTACKTYPE_SHIFTPOSTURE]	+= PRIORITY_POINT_ONE;
+		}
+		if (nDistance >= RANGE_CENTER - CENTER_RANGE && nDistance <= RANGE_CENTER + CENTER_RANGE)
+		{// 範囲の中心から内と外側に100加えた範囲の内側だった時
+			m_AIPriorityData.AttackType[ATTACKTYPE_BALKAN]			+= PRIORITY_POINT_ONE;
+			m_AIPriorityData.AttackType[ATTACKTYPE_FLAMERADIATION]	+= PRIORITY_POINT_ONE;
+			m_AIPriorityData.AttackType[ATTACKTYPE_INCENDIARY]		+= PRIORITY_POINT_TWO;
+			m_AIPriorityData.AttackType[ATTACKTYPE_SHIFTPOSTURE]	+= PRIORITY_POINT_ONE;
+		}
+	}
+
+	// 例外に該当していた場合は強制的に次の行動を制限する
+	Attack_Exception();
+}
+
+// =====================================================================================================================================================================
+//
+// 優先度の数値を初期化
+//
+// =====================================================================================================================================================================
+void CBoss_One::Attack_InitializeDataAll()
+{
+	m_AIPriorityData.AttackType[ATTACKTYPE_BALKAN]			 = PRIORITY_POINT_NONE;
+	m_AIPriorityData.AttackType[ATTACKTYPE_FLAMERADIATION]	 = PRIORITY_POINT_NONE;
+	m_AIPriorityData.AttackType[ATTACKTYPE_INCENDIARY]		 = PRIORITY_POINT_NONE;
+	m_AIPriorityData.AttackType[ATTACKTYPE_SHIFTPOSTURE]	 = PRIORITY_POINT_NONE;
+}
+
+// =====================================================================================================================================================================
+//
+// 指定した優先度の数値を初期化
+//
+// =====================================================================================================================================================================
+void CBoss_One::Attack_InitializeData(BOSS_ONE_ATTACKTYPE type)
+{
+	m_AIPriorityData.AttackType[type] = PRIORITY_POINT_NONE;
+}
+
+// =====================================================================================================================================================================
+//
+// 優先度を決めるにあたっての例外
+//
+// =====================================================================================================================================================================
+void CBoss_One::Attack_Exception()
+{
+	// 二回連続で姿勢変更をしない
+	if (m_AttckTypeOld[ATTACK_PRIORITY - ATTACK_PRIORITY] == ATTACKTYPE_SHIFTPOSTURE)
+	{
+		Attack_InitializeData(ATTACKTYPE_SHIFTPOSTURE);
+	}
+
+	// しゃがんでから二回目の行動で強制的に姿勢を変更させる
+	if (m_AttckTypeOld[ATTACK_PRIORITY - 1] == ATTACKTYPE_SHIFTPOSTURE)
+	{
+		// 次の行動が決まっている場合優先度の数値を初期化する
+		Attack_InitializeDataAll();
+		//
+		m_AIPriorityData.AttackType[ATTACKTYPE_SHIFTPOSTURE] = PRIORITY_POINT_MAX;
+	}
+
+	// しゃがんでいる時に火炎放射を撃たせない
+	if (m_PostureType == POSTURETYPE_SQUAT)
+	{
+		Attack_InitializeData(ATTACKTYPE_FLAMERADIATION);
+	}
+}
+
+// =====================================================================================================================================================================
+//
+// バブルソート 大きい順
+//
+// =====================================================================================================================================================================
+void CBoss_One::BubbleSort(std::vector<int*> &data)
+{
+	for (int nCnt = 0; nCnt < (int)data.size() - 1; nCnt++)
+	{
+		for (int num = (int)data.size() - 1; num > nCnt; num--)
+		{
+			if (*data[num - 1] < *data[num])
+			{  // 大きさが逆転している箇所があったら swap
+				std::swap(data[num - 1], data[num]);
+			}
+		}
+	}
+}
+
+// =====================================================================================================================================================================
+//
+// ボスのステータスの設定
+//
+// =====================================================================================================================================================================
+void CBoss_One::SetBossInfo()
+{
+	// 体力の初期値
+	CCharacter::SetLife(m_BossOneData.nLife);
+	// 銃の傾き
+	GetCharacterModelPartsList((CModel::MODEL_BOSSONE_GUN_INCENDIARY))->GetRot().x -= 1.0f;
+	GetCharacterModelPartsList((CModel::MODEL_BOSSONE_GUN_FLAMETHROWER))->GetRot().x -= 1.57f;
+}
+
+// =====================================================================================================================================================================
+//
+// ガンの生成と設定
+//
+// =====================================================================================================================================================================
+void CBoss_One::CreateGun()
+{
+	for (int nCnt = 0; nCnt < WEAPONTYPE_MAX; nCnt++)
+	{
+		// 銃の生成
+		m_pGun[nCnt] = CGun::Create();
+		//マトリックス設定
+		m_pGun[nCnt]->SetHandMtx(GetCharacterModelPartsList(
+			static_cast<CModel::BOSSONE_PARTS_MODEL>(CModel::MODEL_BOSSONE_GUN_BALKAN + nCnt))->GetMatrix());
+		// 銃の弾の種類
+		m_pGun[nCnt]->GetTag() = TAG_ENEMY;
+		// 銃の弾の種類
+		m_pGun[nCnt]->SetGunType(static_cast<CGun::GUN_TYPE>(CGun::GUNTYPE_BALKAN + nCnt));
+		// 発射位置のオフセットの設定
+		m_pGun[nCnt]->SetShotOffsetPos(m_BossOneData.GunShotOfsetPos[nCnt]);
+		// 弾を撃つ方向を設定
+		m_pGun[nCnt]->SetShotRot(
+			D3DXVECTOR3(0.0f, 0.0f, (GetCharacterModelPartsList(static_cast<CModel::BOSSONE_PARTS_MODEL>(CModel::MODEL_BOSSONE_GUN_BALKAN + nCnt))->GetRot().x)));
+	}
+	// ガンのオフセット座標の更新
+	SetGunOffsetPos(D3DXVECTOR3(GetCharacterModelPartsList((CModel::MODEL_BOSSONE_GUN_FLAMETHROWER))->GetPosition()));
+	// ガンの座標の更新
+	SetGunPos();
 }

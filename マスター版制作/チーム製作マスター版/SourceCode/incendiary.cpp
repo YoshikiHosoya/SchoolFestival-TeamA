@@ -24,11 +24,14 @@
 // =====================================================================================================================================================================
 // マクロ定義
 // =====================================================================================================================================================================
-#define INCENDIARY_GRAVITY				(0.1f)								// 焼夷弾の重力
-#define MAX_FIRING_RANGE				(900.0f)							// ボスの最大射程
-#define MIN_FIRING_RANGE				(250.0f)							// ボスの最低射程
+#define INCENDIARY_GRAVITY				(0.15f)								// 焼夷弾の重力
+#define INCENDIARY_GRAVITY_BASE			(1.0f)								// 焼夷弾の重力
+#define MAX_FIRING_RANGE				(800.0f)							// ボスの最大射程
+#define MIN_FIRING_RANGE				(300.0f)							// ボスの最低射程
 #define ATTENUATION_RATE				(100.0f)							// 移動量の減衰割合
-#define MIN_SPEED						(-1.0f)								// 最も遅い移動速度の基準
+#define MIN_SPEED						(-3.5f)								// 最も遅い移動速度の基準
+#define MAX_SPEED_BASE					(10.0f)								// 射程外(奥)の際の速さの基準値
+#define MIN_SPEED_BASE					(4.0f)								// 射程外(前)の際の速さの基準値
 
 // =====================================================================================================================================================================
 //
@@ -38,6 +41,14 @@
 CIncendiary::CIncendiary(OBJ_TYPE type) :CBullet(type)
 {
 	SetObjType(OBJTYPE_BULLET);
+
+	m_TargetPos				= ZeroVector3;
+	m_fSpeed				= 0.0f;
+	m_fGravityRate			= 0.0f;
+	m_fRatio				= 0.0f;
+	m_fMoveAttenuationRate	= 0.0f;
+	m_fVelocityBase			= 0.0f;
+	m_fMoveResistance = 0.0f;
 }
 
 // =====================================================================================================================================================================
@@ -151,45 +162,84 @@ void CIncendiary::VelocityAttenuation()
 		}
 	}
 
-
-	// 現在の弾の移動量を取得
-	float fMove_x = GetMove().x;
-
-	// 弾の移動量が0より小さい時(左向きに弾を撃つため - になっている)
-	if (GetMove().x < 0)
+	if (pBoss_One)
 	{
-		if (pBoss_One->GetPostureType() == CBoss_One::POSTURETYPE_STAND)
+		// 現在の弾の移動量を取得
+		float fMove_x = m_fVelocityBase;
+
+		// 弾の移動量が0より小さい時(左向きに弾を撃つため - になっている)
+		if (GetMove().x <= 0)
 		{
-			// 移動量が規定値を下回った時
-			if (GetMove().x >= MIN_SPEED)
+			if (pBoss_One->GetPostureType() == CBoss_One::POSTURETYPE_STAND)
 			{
-				// 速度減衰
-				GetMove().x -= fMove_x / (ATTENUATION_RATE -80.0f);
+				// 移動量が基準値より大きい時
+				if (GetMove().x <= MIN_SPEED)
+				{
+					// 速度減衰
+					m_fMoveResistance = fMove_x / (180.0f * m_fRatio);
+				}
+				//移動量が基準値を下回った時
+				else if (GetMove().x >= MIN_SPEED)
+				{
+					// 速度減衰
+					m_fMoveResistance = fMove_x / 75.0f;
+				}
 			}
 			else
 			{
-				// 速度減衰
-				GetMove().x -= fMove_x / ATTENUATION_RATE;
+				// 移動量が規定値を下回った時
+				if (GetMove().y >= -6.0f)
+				{
+					// 速度減衰
+					m_fMoveResistance = fMove_x / (270.0f * m_fRatio);
+				}
+				//移動量が基準値を下回った時
+				else if (GetMove().y <= -6.0)
+				{
+					// 速度減衰
+					m_fMoveResistance = fMove_x / 45.0f;
+				}
 			}
-		}
-		else
-		{
-			// 移動量が規定値を下回った時
-			if (GetMove().x >= (MIN_SPEED))
-			{
-				// 速度減衰
-				GetMove().x -= fMove_x / (ATTENUATION_RATE -50.0f);
-			}
-			else
-			{
-				// 速度減衰
-				GetMove().x -= fMove_x / ATTENUATION_RATE;
-			}
+
+			// 重力
+			m_fGravityRate = (m_fRatio / (INCENDIARY_GRAVITY_BASE));
 		}
 	}
 
-	// 重力
-	GetMove().y -= INCENDIARY_GRAVITY;
+	// 射程範囲より前側にいた際の重力
+	if (m_fSpeed <= MIN_SPEED_BASE)
+	{
+		// 移動量が最低値を下回ったら常に最低値にする
+		if (GetMove().x >= -1.0f)
+		{
+			m_fMoveResistance = 0.00f;
+			GetMove().x = -1.0f;
+		}
+		// 通常時
+		else
+		{
+			GetMove().x -= m_fMoveResistance / (0.5f * m_fRatio);
+		}
+		// 重力
+		GetMove().y -= 0.15f;
+	}
+	// 通常時
+	else
+	{
+		// 移動量が最低値を下回ったら常に最低値にする
+		if (GetMove().x >= -2.0f)
+		{
+			m_fMoveResistance = 0.00f;
+			GetMove().x = -2.0f;
+		}
+		// 通常時
+		else
+		{
+			GetMove().x -= m_fMoveResistance;
+		}
+		// 重力
+		GetMove().y -= INCENDIARY_GRAVITY * (m_fGravityRate * 0.7f);
+	}
 }
 
 // =====================================================================================================================================================================
@@ -227,7 +277,10 @@ CIncendiary * CIncendiary::Create(D3DXVECTOR3 rot)
 	}
 
 	// 弾の移動量計算
-	pIncendiary->CalcIncendiaryMove(rot, pIncendiary->m_fSpeed *2.2f, pIncendiary->m_fSpeed);
+	pIncendiary->CalcIncendiaryMove(rot, pIncendiary->m_fSpeed, pIncendiary->m_fSpeed);
+
+	//基準となる弾の速さを設定する
+	pIncendiary->m_fVelocityBase = pIncendiary->GetMove().x;
 
 	// モデルタイプの設定
 	pIncendiary->SetType(BULLET_MODEL);
@@ -266,16 +319,20 @@ void CIncendiary::CalcBulletSpeed(D3DXVECTOR3 Target)
 		}
 	}
 
-	// 射程外なら基準の速度のまま
+	// 射程外(奥)なら基準の速度のまま
 	if (fDistance > MAX_FIRING_RANGE)
 	{
-		return;
+		// 距離の割合を求める
+		m_fRatio = MAX_FIRING_RANGE / MAX_FIRING_RANGE;
+		m_fSpeed = MAX_SPEED_BASE;
 	}
 
-	// 射程の内側だったら自分の前に弾が落ちるようにする
+	// 射程外(前)だったら自分の前に弾が落ちるようにする
 	else if (fDistance <= MIN_FIRING_RANGE)
 	{
-		m_fSpeed = 3.0f;
+		// 距離の割合を求める
+		m_fRatio = MAX_FIRING_RANGE / MIN_FIRING_RANGE;
+		m_fSpeed = MIN_SPEED_BASE;
 	}
 
 	// 射程内なら距離から速度の割合を求める

@@ -209,8 +209,8 @@ bool CCollision::ForPlayerBulletCollision(int nEnemyDamage, int nObstacleDamage,
 					pBoss_One->GetBossOneType() == CBoss_One::ATTACKTYPE_FLAMERADIATION)
 				{
 					//判定が取れるとき
-					//if (pBoss_One->GetCollision()->GetCanCollison())
-					//{
+					if (pBoss_One->GetCollision()->GetCanCollison())
+					{
 						// 判定関数
 						if (this->OtherCollision2D(pBoss_One->GetCollision()))
 						{
@@ -221,7 +221,7 @@ bool CCollision::ForPlayerBulletCollision(int nEnemyDamage, int nObstacleDamage,
 							}
 
 							// 敵のライフ減衰
-							pBoss_One->CCharacter::AddDamage(10);
+							pBoss_One->CCharacter::AddDamage(nEnemyDamage);
 
 							// 当たり範囲フラグをtrueにする
 							bHitFlag = true;
@@ -231,7 +231,7 @@ bool CCollision::ForPlayerBulletCollision(int nEnemyDamage, int nObstacleDamage,
 								return bHitFlag;
 							}
 						}
-					//}
+					}
 				}
 
 			}
@@ -1309,29 +1309,25 @@ bool CCollision::BoxCollision2D_Character(CCollision * pCollision)
 	bool bHitFlag = false;
 
 	// 素材のY範囲
-	if (this->m_ppos->y + this->m_size.y > pCollision->m_ppos->y &&
-		this->m_ppos->y < pCollision->m_ppos->y + pCollision->m_size.y)
+	if (this->m_ppos->y + this->m_size.y > pCollision->m_ppos->y - pCollision->m_size.y * 2.0f &&
+		this->m_ppos->y < pCollision->m_ppos->y + pCollision->m_size.y * 2.0f)
 	{
 		// 当たり判定(左)
-		if (this->m_ppos->x + this->m_size.x * 0.5f > pCollision->m_ppos->x - pCollision->m_size.x &&
-			this->m_posOld->x + this->m_size.x * 0.5f <= pCollision->m_ppos->x - pCollision->m_size.x)
+		if (this->m_ppos->x + this->m_size.x > pCollision->m_ppos->x - pCollision->m_size.x &&
+			this->m_posOld->x + this->m_size.x  <= pCollision->m_ppos->x - pCollision->m_size.x)
 		{
 			// 素材状の左に
-			this->m_ppos->x = pCollision->m_ppos->x - pCollision->m_size.x - this->m_size.x * 0.5f;
-			// 移動量の初期化
-			this->m_pmove->x = 0.0f;
+			this->m_ppos->x = pCollision->m_ppos->x - pCollision->m_size.x - this->m_size.x;
 			// オブジェクトに当たったフラグ
 			bHitFlag = true;
 		}
 
 		// 当たり判定(右)
-		else if (this->m_ppos->x - this->m_size.x * 0.5f < pCollision->m_ppos->x + pCollision->m_size.x &&
-			this->m_posOld->x - this->m_size.x * 0.5f >= pCollision->m_ppos->x + pCollision->m_size.x)
+		else if (this->m_ppos->x - this->m_size.x < pCollision->m_ppos->x + pCollision->m_size.x &&
+			this->m_posOld->x - this->m_size.x >= pCollision->m_ppos->x + pCollision->m_size.x)
 		{
 			// 素材状の右に
-			this->m_ppos->x = pCollision->m_ppos->x + pCollision->m_size.x + this->m_size.x * 0.5f;
-			// 移動量の初期化
-			this->m_pmove->x = 0.0f;
+			this->m_ppos->x = pCollision->m_ppos->x + pCollision->m_size.x + this->m_size.x;
 			// オブジェクトに当たったフラグ
 			bHitFlag = true;
 		}
