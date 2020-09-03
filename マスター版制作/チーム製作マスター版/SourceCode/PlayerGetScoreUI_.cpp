@@ -103,7 +103,7 @@ void CPlayerGSUI::Update(void)
 		}
 	}
 
-	CDebugProc::Print("uiポインタ------------------------------------------------ %d\n", m_nTime);
+	CDebugProc::Print_Left("uiポインタ------------------------------------------------ %d\n", m_nTime);
 }
 
 // =====================================================================================================================================================================
@@ -195,7 +195,7 @@ void CPlayerGSUI::ScoreDataInitialize()
 // =====================================================================================================================================================================
 void CPlayerGSUI::GetScoreUICreate()
 {
-	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
+	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer(TAG::PLAYER_1);
 	if (pPlayer)
 	{
 		// 生成

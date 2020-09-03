@@ -71,6 +71,7 @@ HRESULT CObstacle::Init()
 	GetCollision()->SetPos(&GetPosition());
 	GetCollision()->SetSize2D(GetSize());
 	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_NORMAL);
+	GetCollision()->SetGameObject(this);
 
 	return S_OK;
 }

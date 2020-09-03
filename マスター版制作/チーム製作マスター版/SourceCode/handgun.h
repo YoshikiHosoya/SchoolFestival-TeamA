@@ -33,7 +33,7 @@ public:
 	void						DebugInfo();						//デバッグ
 
 	/* 静的メンバ関数 */
-	static	CHandgun			*Create(D3DXVECTOR3 rot,TAG tag = TAG::TAG_PLAYER);	// ハンドガンの生成
+	static	CHandgun			*Create(D3DXVECTOR3 rot,TAG tag = TAG::PLAYER_1);	// ハンドガンの生成
 
 private:
 	/* 静的メンバ変数 */

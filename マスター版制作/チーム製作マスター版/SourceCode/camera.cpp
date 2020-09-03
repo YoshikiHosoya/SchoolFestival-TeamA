@@ -120,14 +120,14 @@ void CCamera::DebugCommand()
 	CKeyboard *key = CManager::GetInputKeyboard();
 
 	//使い方説明
-	CDebugProc::Print("---------Camera Debug Command----------\n");
-	CDebugProc::Print("[Ctrl] + [1] : カメラ切替 : CameraMode >> [%d]\n", m_CameraFollowingType);
-	CDebugProc::Print("[Ctrl] + [↑] or [Ctrl] + [↓] : カメラ距離調整 : Distance>>[%f]\n", m_fDistance);
+	CDebugProc::Print_Right("---------Camera Debug Command----------\n");
+	CDebugProc::Print_Right("[Ctrl] + [1] : カメラ切替 : CameraMode >> [%d]\n", m_CameraFollowingType);
+	CDebugProc::Print_Right("[Ctrl] + [↑] or [Ctrl] + [↓] : カメラ距離調整 : Distance>>[%f]\n", m_fDistance);
 
-	CDebugProc::Print("m_posV %.1f %.1f %.1f \n", m_posV.x, m_posV.y, m_posV.z);
-	CDebugProc::Print("m_posR %.1f %.1f %.1f \n", m_posR.x, m_posR.y, m_posR.z);
-	CDebugProc::Print("m_rot  %.1f %.1f %.1f \n", m_rot.x, m_rot.y, m_rot.z);
-	CDebugProc::Print("bCameraStop >> %d",m_bStopMove);
+	CDebugProc::Print_Right("m_posV %.1f %.1f %.1f \n", m_posV.x, m_posV.y, m_posV.z);
+	CDebugProc::Print_Right("m_posR %.1f %.1f %.1f \n", m_posR.x, m_posR.y, m_posR.z);
+	CDebugProc::Print_Right("m_rot  %.1f %.1f %.1f \n", m_rot.x, m_rot.y, m_rot.z);
+	CDebugProc::Print_Right("bCameraStop >> %d\n",m_bStopMove);
 
 
 	if (key->GetKeyboardPress(DIK_LCONTROL) || key->GetKeyboardPress(DIK_RCONTROL))
@@ -175,7 +175,7 @@ void CCamera::CharacterFollowingMoveCamera()
 		if (pBaseMode)
 		{
 			//プレイヤーのポインタ取得
-			CPlayer *pPlayer = pBaseMode->GetPlayer();
+			CPlayer *pPlayer = pBaseMode->GetPlayer(TAG::PLAYER_1);
 
 			//nullcheck
 			if (pPlayer)

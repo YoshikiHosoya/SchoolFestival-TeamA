@@ -103,7 +103,7 @@ void CFlameshot::Update(void)
 	// çXêV
 	CBullet::Update();
 
-	CDebugProc::Print("\n\n BulletMove (%f, %f, %f)\n\n", GetMove().x, GetMove().y, GetMove().z);
+	CDebugProc::Print_Left("\n\n BulletMove (%f, %f, %f)\n\n", GetMove().x, GetMove().y, GetMove().z);
 
 	if (CBullet::GetLife() % 3 == 0)
 	{

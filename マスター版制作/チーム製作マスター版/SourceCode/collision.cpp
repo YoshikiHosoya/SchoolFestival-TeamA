@@ -64,6 +64,7 @@ CCollision::CCollision()
 	m_nCollisionTime	= 0;								// 当たり判定が持続する時間
 	m_fHeight			= 30;								// 腰の高さの初期化
 	m_bCanCollision		= true;
+	m_pGameObject		= nullptr;							// ゲームオブジェクト( タグ )のポインタ
 }
 
 //======================================================================================================================
@@ -110,6 +111,22 @@ void CCollision::Update(void)
 		m_Debugcollision->SetPos(m_ppos);
 	}
 #endif // _DEBUG
+}
+
+//======================================================================================================================
+// デバッグ情報表記
+//======================================================================================================================
+void CCollision::ShowDebugInfo()
+{
+	if(ImGui::TreeNode("CollisionInfo"))
+	{
+		ImGui::Text("Pos >> %.2f %.2f %.2f", m_ppos->x, m_ppos->y, m_ppos->z);
+		ImGui::Text("Size >> %.2f %.2f %.2f", m_size.x, m_size.y, m_size.z);
+		ImGui::Text("CanCollision >> %d", m_bCanCollision);
+
+		ImGui::TreePop();
+	}
+
 }
 
 //======================================================================================================================
@@ -163,6 +180,8 @@ bool CCollision::ForPlayerBulletCollision(int nEnemyDamage, int nObstacleDamage,
 	// 弾を消すときに使うフラグ
 	bool bHitFlag = false;
 	std::vector<CScene*> pSceneList;
+	// プレイヤーのポインタ
+	CPlayer *pPlayer = nullptr;
 
 	CScene::GetSceneList(CScene::OBJTYPE_SHIELD, pSceneList);
 
@@ -198,6 +217,7 @@ bool CCollision::ForPlayerBulletCollision(int nEnemyDamage, int nObstacleDamage,
 	{
 		// エネミーのポインタ取得
 		CEnemy *pEnemy = CManager::GetBaseMode()->GetMap()->GetEnemy(nCnt);
+
 		if (pEnemy != nullptr)
 		{
 			if (pEnemy->GetCharacterType() == CCharacter::CHARACTER_TYPE_BOSS_ONE)
@@ -212,26 +232,26 @@ bool CCollision::ForPlayerBulletCollision(int nEnemyDamage, int nObstacleDamage,
 					if (pBoss_One->GetCollision()->GetCanCollison())
 					{
 						// 判定関数
-						if (this->OtherCollision2D(pBoss_One->GetCollision()))
+					if (this->OtherCollision2D(pBoss_One->GetCollision()))
+					{
+						// プレイヤーのポインタ取得
+						pPlayer = CManager::GetBaseMode()->GetPlayer(m_pGameObject->GetTag());
+
+						if (pPlayer != nullptr && pPlayer->GetPlayerUI())
 						{
-							CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
-							if (pPlayer != nullptr && pPlayer->GetPlayerUI())
-							{
-								pPlayer->GetPlayerUI()->SetScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_DAMAGE_BULLET));
-							}
+							pPlayer->GetPlayerUI()->SetScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_DAMAGE_BULLET));
+						}
 
 							// 敵のライフ減衰
 							pBoss_One->CCharacter::AddDamage(nEnemyDamage);
 
-							// 当たり範囲フラグをtrueにする
-							bHitFlag = true;
+						// 当たり範囲フラグをtrueにする
+						bHitFlag = true;
 
-							if (Penetration == false)
-							{
-								return bHitFlag;
-							}
+						if (Penetration == false)
+						{
+							return bHitFlag;
 						}
-					}
 				}
 
 			}
@@ -243,10 +263,15 @@ bool CCollision::ForPlayerBulletCollision(int nEnemyDamage, int nObstacleDamage,
 					// 判定関数
 					if (this->OtherCollision2D(pEnemy->GetCollision()))
 					{
-						CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
-						if (pPlayer != nullptr && pPlayer->GetPlayerUI())
+						// プレイヤーのポインタ取得
+						pPlayer = CManager::GetBaseMode()->GetPlayer(m_pGameObject->GetTag());
+
+						if (pPlayer != nullptr)
 						{
-							pPlayer->GetPlayerUI()->SetScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_DAMAGE_BULLET));
+							if (pPlayer->GetPlayerUI())
+							{
+								pPlayer->GetPlayerUI()->SetScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_DAMAGE_BULLET));
+							}
 						}
 
 						// 敵のライフ減衰
@@ -364,35 +389,64 @@ bool CCollision::ForEnemyCollision(int nPlayerDamage, int nPlayerTankDamage, boo
 {
 	// 判定を確認するフラグ
 	bool bHitFlag = false;
+	// プレイヤーのポインタ
+	CPlayer *pPlayer[MAX_CONTROLLER] = {};
 
-	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
-	if (pPlayer != nullptr)
+	for (int nCntPlayer = 0; nCntPlayer < MAX_CONTROLLER; nCntPlayer++)
 	{
-		if (pPlayer->GetRideFlag())
+		pPlayer[nCntPlayer] = CManager::GetBaseMode()->GetPlayer((TAG)nCntPlayer);
+
+		if (pPlayer[nCntPlayer] != nullptr)
 		{
-			// 当たり判定 相手がプレイヤー用戦車だったら
-			// プレイヤーのポインタ取得
-			for (int nCntTank = 0; nCntTank < CManager::GetBaseMode()->GetMap()->GetMaxPlayerTank(); nCntTank++)
+			if (pPlayer[nCntPlayer]->GetRideFlag())
 			{
-				CPlayertank *pPlayertank = CManager::GetBaseMode()->GetMap()->GetPlayertank(nCntTank);
-				if (pPlayertank != nullptr)
+				// 当たり判定 相手がプレイヤー用戦車だったら
+				for (int nCntTank = 0; nCntTank < CManager::GetBaseMode()->GetMap()->GetMaxPlayerTank(); nCntTank++)
 				{
-					// 判定関数
-					if (this->OtherCollision2D(pPlayertank->GetCollision()))
+					CPlayertank *pPlayertank = CManager::GetBaseMode()->GetMap()->GetPlayertank(nCntTank);
+					if (pPlayertank != nullptr)
 					{
-						// プレイヤーのライフ減衰
-						pPlayertank->CVehicle::AddDamage(nPlayerTankDamage);
-
-						// プレイヤーのライフが0以下になった時
-						if (pPlayertank->CVehicle::GetLife() <= 0)
+						// 判定関数
+						if (this->OtherCollision2D(pPlayertank->GetCollision()))
 						{
-							pPlayertank->SetDieFlag(true);
-							// ポインタをnullにする
-							pPlayertank = nullptr;
-						}
+							// プレイヤーのライフ減衰
+							pPlayertank->CVehicle::AddDamage(nPlayerTankDamage);
 
-						// 当たり範囲フラグをtrueにする
-						bHitFlag = true;
+							// プレイヤーのライフが0以下になった時
+							if (pPlayertank->CVehicle::GetLife() <= 0)
+							{
+								pPlayertank->SetDieFlag(true);
+								// ポインタをnullにする
+								pPlayertank = nullptr;
+							}
+
+							// 当たり範囲フラグをtrueにする
+							bHitFlag = true;
+						}
+						else
+						{
+							// 当たり範囲フラグをfalseにする
+							bHitFlag = false;
+						}
+					}
+				}
+			}
+			else
+			{
+				// 当たり判定 相手がプレイヤーだったら
+				if (pPlayer[nCntPlayer] != nullptr)
+				{
+					if (pPlayer[nCntPlayer]->GetCollision()->GetCanCollison())
+					{
+						// 判定関数
+						if (this->OtherCollision2D(pPlayer[nCntPlayer]->GetCollision()))
+						{
+							// プレイヤーのライフ減衰
+							pPlayer[nCntPlayer]->CCharacter::AddDamage(nPlayerDamage);
+
+							// 当たり範囲フラグをtrueにする
+							bHitFlag = true;
+						}
 					}
 					else
 					{
@@ -402,35 +456,7 @@ bool CCollision::ForEnemyCollision(int nPlayerDamage, int nPlayerTankDamage, boo
 				}
 			}
 		}
-		else
-		{
-			// 当たり判定 相手がプレイヤーだったら
-			// プレイヤーのポインタ取得
-			CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
-			if (pPlayer != nullptr)
-			{
-				if (pPlayer->GetCollision()->GetCanCollison())
-				{
-					// 判定関数
-					if (this->OtherCollision2D(pPlayer->GetCollision()))
-					{
-						// プレイヤーのライフ減衰
-						pPlayer->CCharacter::AddDamage(nPlayerDamage);
-
-						// 当たり範囲フラグをtrueにする
-						bHitFlag = true;
-					}
-				}
-				else
-				{
-					// 当たり範囲フラグをfalseにする
-					bHitFlag = false;
-				}
-			}
-		}
-
 	}
-
 	return bHitFlag;
 }
 
@@ -692,11 +718,8 @@ bool CCollision::ForPlayer_VehicleCollision(CCollision * pCollision)
 //======================================================================================================================
 // プレイヤーが乗り物に乗る時の判定
 //======================================================================================================================
-bool CCollision::ForPlayer_VehicleCollision()
+void *CCollision::ForPlayer_VehicleCollision()
 {
-	// 判定を確認するフラグ
-	bool bHitFlag = false;
-
 	CPlayertank *pPlayertank = nullptr;
 
 	// 戦車の総数分
@@ -709,7 +732,7 @@ bool CCollision::ForPlayer_VehicleCollision()
 		{
 			if (this->VehicleCollision(pPlayertank->GetCollision()))
 			{
-				bHitFlag = true;
+				return pPlayertank;
 			}
 		}
 	}
@@ -726,12 +749,12 @@ bool CCollision::ForPlayer_VehicleCollision()
 		{
 			if (this->VehicleCollision(pBattlePlane->GetCollision()))
 			{
-				bHitFlag = true;
+				return pBattlePlane;
 			}
 		}
 	}
 
-	return bHitFlag;
+	return nullptr;
 }
 
 //======================================================================================================================
@@ -764,7 +787,7 @@ bool CCollision::ForVehicleCollision()
 				{
 					bHitFlag = true;
 					// アイテムごとの処理を通す
-					pItem->HitItem(pItem->GetItemType());
+					pItem->HitItem(pItem->GetItemType(), TAG::PLAYER_1);
 					pItem = nullptr;
 				}
 			}
@@ -815,6 +838,8 @@ bool CCollision::BossOne_PlayerCollision()
 {
 	// 判定を確認するフラグ
 	bool bHitFlag = false;
+	// プレイヤーのポインタ
+	CPlayer *pPlayer[MAX_CONTROLLER] = {};
 
 	//相手がエネミーだったら
 	// 敵の総数分
@@ -830,15 +855,20 @@ bool CCollision::BossOne_PlayerCollision()
 				if (pBoss_One->GetCollision() &&
 					pBoss_One->GetIntermediateSquat())
 				{
-					CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
-					if (pPlayer != nullptr)
+					for (int nCntPlayer = 0; nCntPlayer < MAX_CONTROLLER; nCntPlayer++)
 					{
-						if (this->BlockCollision2D_Bottom(pPlayer->GetCollision()))
-						{
-							// 敵のライフ減衰
-							pPlayer->CCharacter::AddDamage(1);
+						// プレイヤーのポインタ取得
+						pPlayer[nCntPlayer] = CManager::GetBaseMode()->GetPlayer((TAG)nCntPlayer);
 
-							bHitFlag = true;
+						if (pPlayer[nCntPlayer] != nullptr)
+						{
+							if (this->BlockCollision2D_Bottom(pPlayer[nCntPlayer]->GetCollision()))
+							{
+								// 敵のライフ減衰
+								pPlayer[nCntPlayer]->CCharacter::AddDamage(1);
+
+								bHitFlag = true;
+							}
 						}
 					}
 				}
@@ -912,11 +942,10 @@ bool CCollision::VehicleCollision(CCollision * pCollision)
 //======================================================================================================================
 // プレイヤーとアイテムで行う判定 プレイヤーの接触判定
 //======================================================================================================================
-bool CCollision::ForPlayer_ItemCollision()
+bool CCollision::ForPlayer_ItemCollision(TAG Tag)
 {
 	// 判定を確認するフラグ
 	bool bHitFlag = false;
-
 
 	//相手がアイテムだったら
 	// ベクター型の変数
@@ -935,7 +964,7 @@ bool CCollision::ForPlayer_ItemCollision()
 			{
 				bHitFlag = true;
 				// アイテムごとの処理を通す
-				pItem->HitItem(pItem->GetItemType());
+				pItem->HitItem(pItem->GetItemType(), Tag);
 				pItem = nullptr;
 			}
 		}

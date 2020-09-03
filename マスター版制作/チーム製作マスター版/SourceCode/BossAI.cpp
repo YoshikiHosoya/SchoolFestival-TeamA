@@ -61,7 +61,7 @@ void CBossAI::Uninit(void)
 //=============================================================================
 void CBossAI::Update(void)
 {
-	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
+	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer(TAG::PLAYER_1);
 	D3DXVECTOR3 Distance;
 
 	if (pBossPass != nullptr || pPlayer != nullptr)
@@ -101,9 +101,9 @@ void CBossAI::Update(void)
 			}
 		}
 	}
-	CDebugProc::Print("ボスのステート：%d\n", m_BossAItype);
-	CDebugProc::Print("ボスのキャストタイム：%d\n", m_castcount);
-	CDebugProc::Print("ボスのリキャストタイム：%d\n", m_recast);
+	CDebugProc::Print_Left("ボスのステート：%d\n", m_BossAItype);
+	CDebugProc::Print_Left("ボスのキャストタイム：%d\n", m_castcount);
+	CDebugProc::Print_Left("ボスのリキャストタイム：%d\n", m_recast);
 
 	UpdateMoveAI();
 	UpdateAttackAI();
@@ -114,7 +114,7 @@ void CBossAI::Update(void)
 void CBossAI::UpdateMoveAI(void)
 {
 	D3DXVECTOR3 MoveVec = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
+	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer(TAG::PLAYER_1);
 	if (pBossPass != nullptr || pPlayer != nullptr)
 	{
 		if (AI_CENTER == m_BossAItype) //中央
@@ -167,7 +167,7 @@ void CBossAI::UpdateMoveAI(void)
 void CBossAI::UpdateAttackAI(void)
 {
 	D3DXVECTOR3 MoveVec = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
+	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer(TAG::PLAYER_1);
 	float fAngle = 0.0f;
 	if (pBossPass != nullptr && pPlayer != nullptr)
 	{
@@ -183,7 +183,7 @@ void CBossAI::UpdateAttackAI(void)
 			pBossPass->GetGunPtr()->SetShotRot(D3DXVECTOR3(0.0f, 0.0f, atan2f(-m_ShotVec.x, m_ShotVec.y)));
 
 			//光る
-			CParticle::CreateFromText(pBossPass->GetPosition(), D3DXVECTOR3(0.0f, 0.0f, CHossoLibrary::Random_PI()), CParticleParam::EFFECT_FLASSHING, TAG::TAG_PLAYER, 0, D3DXCOLOR(0.7f,0.02f, 0.02f,1.0f));
+			CParticle::CreateFromText(pBossPass->GetPosition(), D3DXVECTOR3(0.0f, 0.0f, CHossoLibrary::Random_PI()), CParticleParam::EFFECT_FLASSHING, TAG::PLAYER_1, 0, D3DXCOLOR(0.7f,0.02f, 0.02f,1.0f));
 
 			//最初に音を再生
 			if (m_AttackCastCnt == 0)
@@ -233,7 +233,7 @@ void CBossAI::UpdateAttackAI(void)
 			pBossPass->GetGunPtr()->SetShotRot(D3DXVECTOR3(0.0f, 0.0f, D3DX_PI + fAngle));
 
 			//光る
-			CParticle::CreateFromText(pBossPass->GetPosition(), D3DXVECTOR3(0.0f, 0.0f, CHossoLibrary::Random_PI()), CParticleParam::EFFECT_FLASSHING, TAG::TAG_PLAYER, 0, D3DXCOLOR(0.7f, 0.7f, 0.01f, 0.2f));
+			CParticle::CreateFromText(pBossPass->GetPosition(), D3DXVECTOR3(0.0f, 0.0f, CHossoLibrary::Random_PI()), CParticleParam::EFFECT_FLASSHING, TAG::PLAYER_1, 0, D3DXCOLOR(0.7f, 0.7f, 0.01f, 0.2f));
 
 			//最初に音を再生
 			if (m_AttackCastCnt == 0)
@@ -343,7 +343,7 @@ void CBossAI::UpdateAttackAI(void)
 			}
 		}
 	}
-	CDebugProc::Print("ボスの攻撃回数   :%d\n", m_Attacks);
+	CDebugProc::Print_Left("ボスの攻撃回数   :%d\n", m_Attacks);
 }
 //=============================================================================
 // 描画

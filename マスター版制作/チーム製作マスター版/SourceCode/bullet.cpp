@@ -132,9 +132,11 @@ void CBullet::Update(void)
 	{
 		// 判定の座標を更新
 		GetCollision()->SetPos(&GetPosition());
+		// ゲームオブジェクト( タグ )の設定
+		GetCollision()->SetGameObject(this);
 
 		// プレイヤーの弾だった時
-		if (m_Tag == TAG_PLAYER)
+		if (GetTag() == TAG::PLAYER_1 || GetTag() == TAG::PLAYER_2)
 		{
 			// プレイヤーの弾の判定
 			if (GetCollision()->ForPlayerBulletCollision(m_BulletParam[m_GunType].nPower, m_BulletParam[m_GunType].nPower, false))
@@ -149,7 +151,7 @@ void CBullet::Update(void)
 		}
 
 		// エネミーの弾だった時
-		else if (m_Tag == TAG_ENEMY)
+		else if (GetTag() == TAG::ENEMY)
 		{
 			// エネミーの弾の判定
 			if (GetCollision()->ForEnemyCollision(m_BulletParam[m_GunType].nPower, m_BulletParam[m_GunType].nPower, false))

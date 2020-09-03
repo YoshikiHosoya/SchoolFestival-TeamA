@@ -35,7 +35,7 @@ public:
 	void ShowDebugInfo();						//デバッグ情報表記
 
 	CMap *GetMap() { return nullptr; };			//マップ
-	CPlayer* GetPlayer() { return nullptr; };	//プレイヤーのポインタ取得
+	CPlayer* GetPlayer(TAG Tag) { return nullptr; };	//プレイヤーのポインタ取得
 
 
 	static void OffsetViewer(std::vector<CModel*> vModelList);

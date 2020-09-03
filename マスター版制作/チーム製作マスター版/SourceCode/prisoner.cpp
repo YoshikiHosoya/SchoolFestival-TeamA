@@ -85,6 +85,7 @@ HRESULT CPrisoner::Init(void)
 	GetCollision()->SetSize2D(PRISONER_COLLISION_SIZE);
 	GetCollision()->SetMove(&GetMove());
 	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_CHARACTER);
+	GetCollision()->SetGameObject(this);
 
 	return S_OK;
 }
@@ -136,7 +137,7 @@ void CPrisoner::Draw(void)
 //====================================================================
 void CPrisoner::DebugInfo(void)
 {
-	//CDebugProc::Print("");
+	//CDebugProc::Print_Left("");
 	//CCharacter::DebugInfo();
 }
 //====================================================================
@@ -285,7 +286,7 @@ void CPrisoner::Collision()
 		}
 		if (GetFallFlag() == true)
 		{
-		CDebugProc::Print("トルゥーやで\n");
+		CDebugProc::Print_Left("トルゥーやで\n");
 		}
 	}
 
@@ -307,7 +308,8 @@ void CPrisoner::PrisonerState()
 		m_StateTime--;
 		if (m_StateTime <= 0)
 		{
-			CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
+			CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer(((CPlayer*)this)->GetTag());
+
 			if (pPlayer && pPlayer->GetPlayerUI())
 			{
 				pPlayer->GetPlayerUI()->SetScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_RESCUE_PRISONER));

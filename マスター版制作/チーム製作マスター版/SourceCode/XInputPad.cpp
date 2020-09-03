@@ -16,6 +16,7 @@
 //==========================================================
 CXInputPad::CXInputPad()
 {
+	m_Tag = TAG::NONE;
 	m_bVibration = false;
 	m_nCntVibration = 0;
 	Oldstate = 0;
@@ -30,8 +31,9 @@ CXInputPad::~CXInputPad()
 //==========================================================
 //‰Šú‰»
 //==========================================================
-HRESULT CXInputPad::Init(HINSTANCE hInstance, HWND hWnd)
+HRESULT CXInputPad::Init(HINSTANCE hInstance, HWND hWnd, TAG Tag)
 {
+	m_Tag = Tag;
 	return TRUE;
 }
 //==========================================================
@@ -52,7 +54,7 @@ void CXInputPad::Update(void)
 	ZeroMemory(&m_pState, sizeof(XINPUT_STATE));
 
 	// XInput‚Ì“ü—Íî•ñæ“¾
-	DWORD dwResult = XInputGetState(0, &m_pState);
+	DWORD dwResult = XInputGetState((int)m_Tag, &m_pState);
 
 	//Ú‘±‚³‚ê‚Ä‚¢‚é‚©
 	if (dwResult == ERROR_SUCCESS)

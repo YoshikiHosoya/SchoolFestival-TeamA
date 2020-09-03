@@ -66,7 +66,7 @@ HRESULT CBattlePlane::Init(void)
 	// マトリックス設定
 	m_pGun->SetHandMtx(GetVehicleModelPartsList(CModel::MODEL_PLANE_GUN)->GetMatrix());
 	// 銃の弾の種類
-	m_pGun->GetTag() = TAG_PLAYER;
+	m_pGun->SetTag(TAG::PLAYER_1);		// 仮止め)プレイヤータグを変数に(多分ポインタ)
 	// 銃の弾の種類
 	m_pGun->SetGunType(CGun::GUNTYPE_PLANEGUN);
 	// 発射位置のオフセットの設定
@@ -77,6 +77,8 @@ HRESULT CBattlePlane::Init(void)
 	GetCollision()->SetSize2D(PLANE_SIZE);
 	GetCollision()->SetMove(&GetMove());
 	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_CHARACTER);
+	// プレイヤーのポインタ
+	m_pPlayer = nullptr;
 
 	return S_OK;
 }
@@ -95,11 +97,9 @@ void CBattlePlane::Uninit(void)
 		m_pGun = nullptr;
 	}
 
-	// プレイヤーのポインタを取得
-	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
-	if (pPlayer != nullptr)
+	if (m_pPlayer != nullptr)
 	{
-		pPlayer->SetRideFlag(false);
+		m_pPlayer->SetRideFlag(false);
 	}
 
 	CVehicle::Uninit();
@@ -114,12 +114,10 @@ void CBattlePlane::Update(void)
 	// キー情報の取得
 	CKeyboard *key = CManager::GetInputKeyboard();
 
-	// プレイヤーのポインタを取得
-	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
-	if (pPlayer != nullptr)
+	if (m_pPlayer != nullptr)
 	{
 		// 乗り物に乗っている時
-		if (pPlayer->GetRideFlag())
+		if (m_pPlayer->GetRideFlag())
 		{
 			// 戦車が弾を撃つ処理
 			Shot(key);

@@ -69,6 +69,7 @@ public:
 	static void GetSceneList(OBJ_TYPE objtype, std::vector<CScene*> &rSceneList);
 	OBJ_TYPE GetObjType(void);
 	void Rerease(void);
+	int GetID() { return nID; };
 	static void StopUpdate(void);
 	static void SetStopFlag(bool bStop) { m_bStopFlag = bStop; };
 	static void Set1FUpdate() { m_b1FUpdateFlag = true; };
@@ -81,6 +82,7 @@ private:
 	static bool m_bStopFlag;			//画面停止のフラグ
 	static bool m_b1FUpdateFlag;		//画面停止中に1Fだけ更新するフラグ
 	bool m_bflag;
+	int nID;
 
 #ifdef _DEBUG
 	static std::vector<int> m_fUpdateTimeList;		//更新の経過時間のリスト

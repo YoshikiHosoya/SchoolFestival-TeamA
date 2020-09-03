@@ -24,7 +24,6 @@ int COneParticle::nNumParticleAll = 0;
 //------------------------------------------------------------------------------
 //マクロ
 //------------------------------------------------------------------------------
-#define PARAMATER_SAVE_FILENAME ("data/Load/EffectParamater/SaveParamater.txt")
 
 //------------------------------------------------------------------------------
 //コンストラクタ
@@ -46,8 +45,10 @@ CParticle::~CParticle()
 	//リストの開放
 	m_pParticleList.clear();
 
+	//nullcheck
 	if (m_pCollision)
 	{
+		//コリジョンの開放
 		delete m_pCollision;
 		m_pCollision = nullptr;
 	}
@@ -93,12 +94,12 @@ void CParticle::Update()
 		}
 	}
 
+	//アニメーションの処理をする場合
 	if (m_pParticleParam->GetAnimation())
 	{
 		//アニメーション更新処理
 		UpdateAnimation();
 	}
-
 
 	//ライフが0以下になった時かアニメーションが終了した時
 	if (m_pParticleParam->GetLife() <= 0 || CTexAnimationBase::GetEndFlag())
@@ -193,8 +194,6 @@ void CParticle::UpdateVertex()
 	//nullcheck
 	if (m_pPosOriginPtr)
 	{
-		CDebugProc::Print("PosOriginPtr >> %.2f %.2f %.2f", m_pPosOriginPtr->x, m_pPosOriginPtr->y, m_pPosOriginPtr->z);
-
 		if (m_pParticleParam->GetCollisionSizeCalc())
 		{
 			//マトリックス計算
@@ -357,7 +356,7 @@ void CParticle::CreateFromText(D3DXVECTOR3 pos, D3DXVECTOR3 rot, CParticleParam:
 	{
 		//初期化
 		pParticle->Init();
-		pParticle->m_Tag = tag;
+		pParticle->SetTag(tag);
 
 		//パーティクルのパラメータのメモリ確保
 		CParticleParam *pParam = new CParticleParam;
@@ -391,7 +390,7 @@ void CParticle::CreateFromText(D3DXVECTOR3 pos, D3DXVECTOR3 rot, CParticleParam:
 				pParticle->m_pParticleParam->GetCol() = col;
 			}
 
-			//オブジェタイプ設定してSceneに所有権を渡す
+			//ParticleManagerに所有権を渡す
 			CParticleManager::AddParticleList(std::move(pParticle));
 		}
 	}
@@ -673,22 +672,25 @@ void CParticle::Collision()
 //nullcheck
 	if (m_pCollision)
 	{
+		// ゲームオブジェクト( タグ )の設定
+		m_pCollision->SetGameObject(this);
+
 		//プレイヤーの攻撃だった場合
-		if (m_Tag == TAG_PLAYER)
+		if (GetTag() == TAG::PLAYER_1 || GetTag() == TAG::PLAYER_2)
 		{
 			if (CManager::GetMode() == CManager::MODE_GAME)
 			{
-				//当たり判定　敵、捕虜、オブジェクトに対して　貫通有
-				m_pCollision->ForPlayerBulletCollision(m_pParticleParam->GetCollisionAttackValue(), m_pParticleParam->GetCollisionAttackValue(), true);
+				//当たり判定　敵、捕虜、オブジェクトに対して
+				m_pCollision->ForPlayerBulletCollision(m_pParticleParam->GetCollisionAttackValue(), m_pParticleParam->GetCollisionAttackValue(), m_pParticleParam->GetPenetration());
 			}
 		}
 		//プレイヤーの攻撃だった場合
-		if (m_Tag == TAG_ENEMY)
+		if (GetTag() == TAG::ENEMY)
 		{
 			if (CManager::GetMode() == CManager::MODE_GAME)
 			{
-				//当たり判定　敵、捕虜、オブジェクトに対して　貫通有
-				m_pCollision->ForEnemyCollision(m_pParticleParam->GetCollisionAttackValue(), m_pParticleParam->GetCollisionAttackValue(), true);
+				//当たり判定　プレイヤーに対して
+				m_pCollision->ForEnemyCollision(m_pParticleParam->GetCollisionAttackValue(), m_pParticleParam->GetCollisionAttackValue(), m_pParticleParam->GetPenetration());
 			}
 		}
 	}

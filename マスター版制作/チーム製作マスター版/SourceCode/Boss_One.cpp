@@ -123,11 +123,10 @@ HRESULT CBoss_One::Init(void)
 	SetRotDest(D3DXVECTOR3(0.0f, 1.57f, 0.0f));
 	// モーションさせない設定
 	SetMotion(CCharacter::CHARACTER_MOTION_STATE_NONE);
-	// ボスの情報の設定
+// ボスの情報の設定
 	SetBossInfo();
 	// ガンの生成と設定
-	CreateGun();
-	// 当たり判定の設定
+	CreateGun();	// 当たり判定の設定
 	SetCollision();
 	// 回転の差分
 	m_fBalkanRotDifferencial -= D3DX_PI / 120.0f;
@@ -215,22 +214,10 @@ void CBoss_One::Draw(void)
 void CBoss_One::DebugInfo(void)
 {
 	// デバッグ用距離の計算
-	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
+	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer(TAG::PLAYER_1);
 	float fDist = this->GetPosition().x - pPlayer->GetPosition().x;
 
-	CDebugProc::Print("ボスとプレイヤーの距離 --- x --- %f\n", fDist);
-	CDebugProc::Print("ボスのステート %d\n", m_BossOneActionPattern);
-	CDebugProc::Print("ボスの攻撃ステート %d\n", m_AttckType);
-	CDebugProc::Print("ボスの姿勢 %d\n", m_PostureType);
-	CDebugProc::Print("ボスのガンの回転 %f\n", m_fBalkanRot);
-	CDebugProc::Print("ボスのガンの角度 %d\n", m_nBalkanAngle);
-	CDebugProc::Print("ボスのボディーの座標 %f\n", GetCharacterModelPartsList(CModel::MODEL_BOSSONE_BODY)->GetPosition().y);
-	CDebugProc::Print("ボスの体力 %d\n", GetLife());
 
-	CDebugProc::Print("ボスの体力----------------------------------------------------- %d\n", m_BossOneData.nLife);
-
-
-	//CDebugProc::Print("");
 	CCharacter::DebugInfo();
 }
 // =====================================================================================================================================================================
@@ -242,6 +229,8 @@ CBoss_One *CBoss_One::Create()
 {
 	// メモリを確保
 	CBoss_One*pBoss_One = new CBoss_One(OBJTYPE_BOSSONE);
+	// タグの設定
+	pBoss_One->SetTag(TAG::ENEMY);
 	// 初期化
 	pBoss_One->Init();
 	// 値を返す
@@ -1209,7 +1198,7 @@ void CBoss_One::RandomAttack()
 // =====================================================================================================================================================================
 void CBoss_One::SetRotBalkan(BOSS_ONE_STATE state)
 {
-	switch (state)
+	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer(TAG::PLAYER_1);
 	{
 	case CBoss_One::STATE_NORMAL:
 		if (m_fRotTarget >= -D3DX_PI / 4)

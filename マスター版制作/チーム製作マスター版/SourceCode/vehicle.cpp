@@ -207,7 +207,7 @@ void CVehicle::DebugInfo(void)
 	//CDebug_ModelViewer::OffsetViewer(m_vModelList);
 
 
-	//CDebugProc::Print("");
+	//CDebugProc::Print_Left("");
 }
 
 //====================================================================

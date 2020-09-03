@@ -69,6 +69,12 @@ CItem::CItem(OBJ_TYPE type) :CScene3D(type)
 
 	// アイテムをドロップさせる種類
 	m_Drop = ITEMDROP_WEAPON;
+
+	// プレイヤーのポインタ
+	for (int nCntPlayer = 0; nCntPlayer < MAX_CONTROLLER; nCntPlayer++)
+	{
+		m_pPlayer[nCntPlayer] = nullptr;
+	}
 }
 
 // =====================================================================================================================================================================
@@ -93,6 +99,11 @@ CItem::~CItem()
 // =====================================================================================================================================================================
 HRESULT CItem::Init()
 {
+	for (int nCntPlayer = 0; nCntPlayer < MAX_CONTROLLER; nCntPlayer++)
+	{
+		m_pPlayer[nCntPlayer] = CManager::GetBaseMode()->GetPlayer((TAG)(nCntPlayer));
+	}
+
 	// 初期化
 	CScene3D::Init();
 
@@ -178,11 +189,8 @@ void CItem::Draw(void)
 // アイテム取得時の種類別処理
 //
 // =====================================================================================================================================================================
-void CItem::ItemType(ITEMTYPE type)
+void CItem::ItemType(ITEMTYPE type, TAG Tag)
 {
-	// プレイヤーのポインタを取得
-	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
-
 	// アイテムの種類ごとの処理
 	switch (type)
 	{
@@ -192,7 +200,7 @@ void CItem::ItemType(ITEMTYPE type)
 		CManager::GetSound()->Play(CSound::LABEL_SE_GET_WEAPON);
 		CManager::GetSound()->Play(CSound::LABEL_SE_VOICE_HEAVYMACHINEGUN);
 
-		pPlayer->GetGun()->SetGunType(CGun::GUNTYPE_HEAVYMACHINEGUN);
+		m_pPlayer[(int)Tag]->GetGun()->SetGunType(CGun::GUNTYPE_HEAVYMACHINEGUN);
 	}break;
 
 		// ショットガン
@@ -200,7 +208,7 @@ void CItem::ItemType(ITEMTYPE type)
 		// SEを鳴らす
 		CManager::GetSound()->Play(CSound::LABEL_SE_GET_WEAPON);
 
-		pPlayer->GetGun()->SetGunType(CGun::GUNTYPE_SHOTGUN);
+		m_pPlayer[(int)Tag]->GetGun()->SetGunType(CGun::GUNTYPE_SHOTGUN);
 	}break;
 
 		// レーザーガン
@@ -208,7 +216,7 @@ void CItem::ItemType(ITEMTYPE type)
 		// SEを鳴らす
 		CManager::GetSound()->Play(CSound::LABEL_SE_GET_WEAPON);
 
-		pPlayer->GetGun()->SetGunType(CGun::GUNTYPE_LASERGUN);
+		m_pPlayer[(int)Tag]->GetGun()->SetGunType(CGun::GUNTYPE_LASERGUN);
 	}break;
 
 		// ロケットランチャー
@@ -216,7 +224,7 @@ void CItem::ItemType(ITEMTYPE type)
 		// SEを鳴らす
 		CManager::GetSound()->Play(CSound::LABEL_SE_GET_WEAPON);
 
-		pPlayer->GetGun()->SetGunType(CGun::GUNTYPE_ROCKETLAUNCHER);
+		m_pPlayer[(int)Tag]->GetGun()->SetGunType(CGun::GUNTYPE_ROCKETLAUNCHER);
 	}break;
 
 		// フレイムショット
@@ -224,7 +232,7 @@ void CItem::ItemType(ITEMTYPE type)
 		// SEを鳴らす
 		CManager::GetSound()->Play(CSound::LABEL_SE_GET_WEAPON);
 
-		pPlayer->GetGun()->SetGunType(CGun::GUNTYPE_FLAMESHOT);
+		m_pPlayer[(int)Tag]->GetGun()->SetGunType(CGun::GUNTYPE_FLAMESHOT);
 	}break;
 
 		// 熊
@@ -233,7 +241,7 @@ void CItem::ItemType(ITEMTYPE type)
 		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
 
 		// スコアアップ
-		pPlayer->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_BEAR));
+		m_pPlayer[(int)Tag]->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_BEAR));
 	}break;
 
 		// コイン
@@ -242,7 +250,7 @@ void CItem::ItemType(ITEMTYPE type)
 		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
 
 		// コインを取るたびにコインのスコアアップ
-		pPlayer->GetPlayerUI()->SetItemScore(AddCoinScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_COIN)));
+		m_pPlayer[(int)Tag]->GetPlayerUI()->SetItemScore(AddCoinScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_COIN)));
 	}break;
 		// 宝石
 	case (ITEMTYPE_JEWELRY): {
@@ -250,7 +258,7 @@ void CItem::ItemType(ITEMTYPE type)
 		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
 
 		// スコアアップ
-		pPlayer->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_JEWELRY));
+		m_pPlayer[(int)Tag]->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_JEWELRY));
 	}break;
 		// メダル
 	case (ITEMTYPE_MEDAL): {
@@ -258,14 +266,14 @@ void CItem::ItemType(ITEMTYPE type)
 		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
 
 		// スコアアップ
-		pPlayer->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_MEDAL));
+		m_pPlayer[(int)Tag]->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_MEDAL));
 	}break;
 
 		// 爆弾の数を増やす
 	case (ITEMTYPE_BOMBUP): {
 		// SEを鳴らす
 		CManager::GetSound()->Play(CSound::LABEL_SE_GET_WEAPON);
-		pPlayer->GetGrenadeFire()->GrenadeAddAmmo();
+		m_pPlayer[(int)Tag]->GetGrenadeFire()->GrenadeAddAmmo();
 	}break;
 
 		// 乗り物の耐久値を回復する
@@ -279,16 +287,18 @@ void CItem::ItemType(ITEMTYPE type)
 	case (ITEMTYPE_BULLETUP): {
 		// SEを鳴らす
 		CManager::GetSound()->Play(CSound::LABEL_SE_GET_WEAPON);
-		pPlayer->GetGun()->GunAddAmmo(pPlayer->GetGun()->GetGunType());
+		m_pPlayer[(int)Tag]->GetGun()->GunAddAmmo(m_pPlayer[(int)Tag]->GetGun()->GetGunType());
 	}break;
 
 	default:
 		break;
 	}
 
-	pPlayer->SetState(CCharacter::CHARACTER_STATE_ITEMGET_FLASH);
+	m_pPlayer[(int)Tag]->SetState(CCharacter::CHARACTER_STATE_ITEMGET_FLASH);
+
 	CParticle::CreateFromText(GetPosition(), ZeroVector3, CParticleParam::EFFECT_GETWEAPON);
 }
+
 // =====================================================================================================================================================================
 //
 // デバッグ
@@ -303,10 +313,10 @@ void CItem::DebugInfo()
 // アイテムが判定をもらった時
 //
 // =====================================================================================================================================================================
-void CItem::HitItem(ITEMTYPE type)
+void CItem::HitItem(ITEMTYPE type, TAG Tag)
 {
 	// 種類ごとの処理
-	ItemType(type);
+	ItemType(type, Tag);
 	// 削除
 	Rerease();
 }
@@ -319,7 +329,7 @@ void CItem::HitItem(ITEMTYPE type)
 void CItem::SetDropPos(D3DXVECTOR3 &characterpos)
 {
 	// プレイヤーのポインタ取得
-	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
+	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer(TAG::PLAYER_1);
 	// プレイヤーが存在した時
 	if (pPlayer != nullptr)
 	{
@@ -505,20 +515,20 @@ void CItem::DropPattern(ITEMDROP_PATTERN pattern , ITEMDROP drop, ITEMTYPE type)
 void CItem::DebugItemCommand(CKeyboard *key)
 {
 	//使い方説明
-	CDebugProc::Print("\n---------Debug ItemCommand----------\n");
+	CDebugProc::Print_Right("\n---------Debug ItemCommand----------\n");
 
-	CDebugProc::Print("[LShift] + テンキー [0] : ヘビーマシンガン\n");
-	CDebugProc::Print("[LShift] + テンキー [1] : ショットガン\n");
-	CDebugProc::Print("[LShift] + テンキー [2] : レーザーガン\n");
-	CDebugProc::Print("[LShift] + テンキー [3] : ロケットランチャー\n");
-	CDebugProc::Print("[LShift] + テンキー [4] : フレイムショット\n");
-	CDebugProc::Print("[LShift] + テンキー [5] : 熊\n");
-	CDebugProc::Print("[LShift] + テンキー [6] : コイン\n");
-	CDebugProc::Print("[LShift] + テンキー [7] : 宝石\n");
-	CDebugProc::Print("[LShift] + テンキー [8] : メダル\n");
-	CDebugProc::Print("[LShift] + テンキー [9] : BomUp\n");
-	CDebugProc::Print("[LShift] + テンキー [-] : ガソリン\n");
-	CDebugProc::Print("[LShift] + テンキー [+] : BulletUp\n");
+	CDebugProc::Print_Right("[LShift] + テンキー [0] : ヘビーマシンガン\n");
+	CDebugProc::Print_Right("[LShift] + テンキー [1] : ショットガン\n");
+	CDebugProc::Print_Right("[LShift] + テンキー [2] : レーザーガン\n");
+	CDebugProc::Print_Right("[LShift] + テンキー [3] : ロケットランチャー\n");
+	CDebugProc::Print_Right("[LShift] + テンキー [4] : フレイムショット\n");
+	CDebugProc::Print_Right("[LShift] + テンキー [5] : 熊\n");
+	CDebugProc::Print_Right("[LShift] + テンキー [6] : コイン\n");
+	CDebugProc::Print_Right("[LShift] + テンキー [7] : 宝石\n");
+	CDebugProc::Print_Right("[LShift] + テンキー [8] : メダル\n");
+	CDebugProc::Print_Right("[LShift] + テンキー [9] : BomUp\n");
+	CDebugProc::Print_Right("[LShift] + テンキー [-] : ガソリン\n");
+	CDebugProc::Print_Right("[LShift] + テンキー [+] : BulletUp\n");
 
 	//LShift押しながら
 	if (key->GetKeyboardPress(DIK_LSHIFT))
@@ -620,7 +630,7 @@ CItem * CItem::DebugCreate(ITEMTYPE type)
 		m_CollisionSize.z / 2));
 
 
-	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
+	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer(TAG::PLAYER_1);
 
 	if (pPlayer != nullptr)
 	{

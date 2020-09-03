@@ -39,11 +39,13 @@ class CGrenadeFire;
 class CPrisoner;
 class CKnife;
 class CPlayerUI;
+class CVehicle;
 
 // =====================================================================================================================================================================
 // プレイヤークラス
 // =====================================================================================================================================================================
-class CPlayer :public CCharacter
+
+class CPlayer :public CCharacter, public CGameObject
 {
 public:
 	// デバッグ時のステート
@@ -88,15 +90,17 @@ public:
 	bool			GetRideFlag()					{ return m_bRideVehicle; };		// ライドフラグの取得
 	bool			GetRespawnFlag()				{ return m_bRespawn; };			// リスポーンフラグの設定
 
+
 	/* 静的メンバ関数 */
-	static CPlayer *Create(void);					// 生成
+
+	static CPlayer *Create(TAG Tag);	// 生成
 	static	void	PlayerLoad();					// プレイヤーのロード
 private:
 	/* 静的メンバ関数 */
 	static void		SetPlayerData();				// 読み込んだデータの設定
 
 	/* メンバ関数 */
-	void Ride();									//
+	void Ride();									// 乗り物に乗っている時
 
 	/* 静的メンバ変数 */
 	static			PLAYER_DATA		m_PlayerData;		// プレイヤーのデータ
@@ -109,7 +113,7 @@ private:
 	static			float			m_fCrouchSpeed;		// しゃがみ歩き時のスピード
 	static			float			m_fJump;			// 通常時のジャンプ
 	static			float			m_fRideJump;		// 乗車中のジャンプ
-	static			D3DXVECTOR3						m_pos[2];				// 初期座標
+	static			D3DXVECTOR3		m_pos[2];			// 初期座標
 
 	/* メンバ変数 */
 	D3DXVECTOR3		m_ShotRot;							//撃つ向き
@@ -117,13 +121,15 @@ private:
 	bool			m_bAttack;							// 近接攻撃できるかどうか
 	bool			m_bKnifeAttack;						// 攻撃をしているかどうか
 	bool			m_bRespawn;							// リスポーンフラグ
-	float			m_Angle;							// アングル
 	bool			m_bCruch;							// クラッチ
+	bool			m_bRideVehicle;						// 乗り物に乗り込んでいるかどうかのフラグ
 	WORD			Oldstate;							// コントローラーの1frame前のステート
 	CGun			*m_pGun;							// ガンクラスのポインタ
 	CGrenadeFire	*m_pGrenadeFire;					// グレネード発射クラスのポインタ
 	CPlayerUI		*m_pPlayerUI;						// プレイヤーUIのポインタ
 	CKnife			*m_pKnife;							// ナイフのポインタ
-	bool			m_bRideVehicle;						// 乗り物に乗り込んでいるかどうかのフラグ
+
+	CVehicle		*m_pVehicle;						// 乗り物クラスのポインタ
+	CXInputPad		*m_pPad;							// パッドのポインタ
 };
 #endif

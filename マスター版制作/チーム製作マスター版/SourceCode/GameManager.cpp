@@ -57,7 +57,7 @@ CGameManager::~CGameManager()
 void CGameManager::Update()
 {
 	// それぞれのポインタ取得
-	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer();
+	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer(TAG::PLAYER_1);
 	CGame *pGame = (CGame*)CManager::GetBaseMode();
 
 	m_nCnt++;
@@ -86,7 +86,7 @@ void CGameManager::Update()
 				if (pWaveInfo->EventBeginMapNum == CManager::GetGame()->GetMap()->GetMapNum())
 				{
 					//特定の座標を超えた時
-					if (pPlayer->GetPosition().x >= pWaveInfo->EventPos.x)
+					if (pPlayer->GetPosition().x >= pWaveInfo->EventPos.x && pPlayer->GetCharacterState() != CCharacter::CHARACTER_STATE::CHARACTER_STATE_DEATH)
 					{
 						//ウェーブ開始
 						StartWave();
@@ -150,16 +150,16 @@ void CGameManager::Draw()
 void CGameManager::ShowDebugInfo()
 {
 #ifdef _DEBUG
-	CDebugProc::Print("------ GameManager ----------\n");
+	CDebugProc::Print_Left("------ GameManager ----------\n");
 
-	CDebugProc::Print("NowWaveNum >> %d\n", m_nNowWave);
-	CDebugProc::Print("GameState >> %d\n", m_state);
-	CDebugProc::Print("m_nCnt >> %d\n", m_nCnt);
-	CDebugProc::Print("m_nWavePrisonerCnt >> %d\n", m_nWavePrisonerCnt);
-	CDebugProc::Print("m_nWaveEnemyCnt >> %d\n", m_nWaveEnemyCnt);
+	CDebugProc::Print_Left("NowWaveNum >> %d\n", m_nNowWave);
+	CDebugProc::Print_Left("GameState >> %d\n", m_state);
+	CDebugProc::Print_Left("m_nCnt >> %d\n", m_nCnt);
+	CDebugProc::Print_Left("m_nWavePrisonerCnt >> %d\n", m_nWavePrisonerCnt);
+	CDebugProc::Print_Left("m_nWaveEnemyCnt >> %d\n", m_nWaveEnemyCnt);
 
-	CDebugProc::Print("m_nWaveEnemyNum >> %d\n", m_nWaveEnemyNum);
-	CDebugProc::Print("m_nWavePrisonerNum >> %d\n", m_nWavePrisonerNum);
+	CDebugProc::Print_Left("m_nWaveEnemyNum >> %d\n", m_nWaveEnemyNum);
+	CDebugProc::Print_Left("m_nWavePrisonerNum >> %d\n", m_nWavePrisonerNum);
 #endif
 }
 
@@ -189,6 +189,7 @@ std::unique_ptr<CGameManager> CGameManager::Create()
 void CGameManager::SetGameState(GAMESTATE state)
 {
 	m_state = state;
+	m_nCnt = 0;
 
 	if (m_state == CGameManager::GAMESTATE::GAMEOVER)
 	{
@@ -240,6 +241,9 @@ void CGameManager::MapTransitionWaveSet(int nNextID)
 	case CMap::MAP_1_BOSS:
 		m_nNowWave = CMap::WAVE::WAVE_1_BOSS;
 
+		//ボスマップに遷移したら無条件でウェーブ開始
+		StartWave();
+
 		break;
 	case CMap::MAP_2_1:
 		m_nNowWave = CMap::WAVE::WAVE_2_1_1;
@@ -256,6 +260,8 @@ void CGameManager::MapTransitionWaveSet(int nNextID)
 	case CMap::MAP_2_BOSS:
 		m_nNowWave = CMap::WAVE::WAVE_2_BOSS;
 
+		//ボスマップに遷移したら無条件でウェーブ開始
+		StartWave();
 
 	default:
 		break;
@@ -300,15 +306,14 @@ void CGameManager::UpdateWave()
 	//ウェーブのポインタ
 	CMap::WAVE_INFO *pWaveInfo = CManager::GetGame()->GetMap()->GetWaveInfo(m_nNowWave);
 
-	m_nWaveEnemyCnt++;
-	m_nWavePrisonerCnt++;
 
 	//まだ出てないのがいるとき
 	//敵
 	if (m_nWaveEnemyNum < (int)pWaveInfo->EnemyWaveInfo.size())
 	{
+		m_nWaveEnemyCnt++;
 		//フレーム数が一緒になった時
-		if (pWaveInfo->EnemyWaveInfo[m_nWaveEnemyNum]->nFrame == m_nWaveEnemyCnt)
+		if (pWaveInfo->EnemyWaveInfo[m_nWaveEnemyNum]->nFrame <= m_nWaveEnemyCnt)
 		{
 			//敵生成
 			CManager::GetGame()->GetMap()->WaveCreate(CMap::ARRANGEMENT_MODEL_ENEMY, pWaveInfo->EventPos, pWaveInfo->EnemyWaveInfo[m_nWaveEnemyNum]);
@@ -321,8 +326,9 @@ void CGameManager::UpdateWave()
 	//捕虜
 	if (m_nWavePrisonerNum < (int)pWaveInfo->PrisonerWaveInfo.size())
 	{
+		m_nWavePrisonerCnt++;
 		//フレーム数が一緒になった時
-		if (pWaveInfo->PrisonerWaveInfo[m_nWavePrisonerNum]->nFrame == m_nWavePrisonerCnt)
+		if (pWaveInfo->PrisonerWaveInfo[m_nWavePrisonerNum]->nFrame <= m_nWavePrisonerCnt)
 		{
 			//敵生成
 			CManager::GetGame()->GetMap()->WaveCreate(CMap::ARRANGEMENT_MODEL_PRISONER, pWaveInfo->EventPos, pWaveInfo->PrisonerWaveInfo[m_nWavePrisonerNum]);
@@ -375,13 +381,13 @@ void CGameManager::UpdateTimer()
 	// 5秒経過した時
 	if (m_nTimeCnt >= 300)
 	{
-		if (CManager::GetBaseMode()->GetPlayer()->GetPlayerUI())
+		if (CManager::GetBaseMode()->GetPlayer(TAG::PLAYER_1)->GetPlayerUI())
 		{
 			// タイマーの値を減少する
-			CManager::GetBaseMode()->GetPlayer()->GetPlayerUI()->DecrementTime();
+			CManager::GetBaseMode()->GetPlayer(TAG::PLAYER_1)->GetPlayerUI()->DecrementTime();
 
 			// タイムが0以下になった時
-			if (CManager::GetBaseMode()->GetPlayer()->GetPlayerUI()->GetTime() <= 0)
+			if (CManager::GetBaseMode()->GetPlayer(TAG::PLAYER_1)->GetPlayerUI()->GetTime() <= 0)
 			{
 				//ゲームオーバー
 				SetGameState(CGameManager::GAMESTATE::GAMEOVER);

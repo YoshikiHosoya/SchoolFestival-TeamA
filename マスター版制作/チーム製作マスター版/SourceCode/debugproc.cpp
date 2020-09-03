@@ -10,7 +10,9 @@
 #include "renderer.h"
 
 LPD3DXFONT CDebugProc::m_pFont = NULL;
-char CDebugProc::m_aStr[10000] = {};
+char CDebugProc::m_aStr_Left[10000] = {};
+char CDebugProc::m_aStr_Right[10000] = {};
+
 //==========================================================
 // ƒRƒ“ƒXƒgƒ‰ƒNƒ^
 //==========================================================
@@ -52,33 +54,51 @@ void CDebugProc::Uninit(void)
 	}
 }
 //==========================================================
-// •\Ž¦ŠÖ”
+// •\Ž¦ŠÖ” ¶‘¤
 //==========================================================
-void CDebugProc::Print(char * fmt, ...)
+void CDebugProc::Print_Left(char * fmt, ...)
 {
-#ifdef _DEBUG
-	int number = strlen(m_aStr);
+	int number = strlen(m_aStr_Left);
 	va_list ap;
 	// ‰Â•Ï’·ˆø”‚ð‚PŒÂ‚Ì•Ï”‚É‚Ü‚Æ‚ß‚é
 	va_start(ap, fmt);
-	vsprintf(&m_aStr[number],fmt,ap);
+	vsprintf(&m_aStr_Left[number],fmt,ap);
 	va_end(ap);
-#endif // DEBUG
 
+}
+
+//==========================================================
+// •\Ž¦ŠÖ” ‰E‘¤
+//==========================================================
+void CDebugProc::Print_Right(char * fmt, ...)
+{
+	int number = strlen(m_aStr_Right);
+	va_list ap;
+	// ‰Â•Ï’·ˆø”‚ð‚PŒÂ‚Ì•Ï”‚É‚Ü‚Æ‚ß‚é
+	va_start(ap, fmt);
+	vsprintf(&m_aStr_Right[number], fmt, ap);
+	va_end(ap);
 }
 //==========================================================
 // •`‰æ
 //==========================================================
 void CDebugProc::Draw(void)
 {
-
+	//¶‘¤‚Ì•`‰æ
 	RECT rect = { 0,0,1280,720 };
 	m_pFont->DrawText(NULL,
-		&m_aStr[0],
+		&m_aStr_Left[0],
 		-1,
 		&rect,
 		DT_LEFT,
 		D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
-	//•¶Žš—ñŒ^‚Ìæ“ª‚Ì‰Šú‰»
-	m_aStr[0] = '\0';
+
+	//‰E‘¤‚Ì•`‰æ
+	rect = { 700,0,1280,720 };
+	m_pFont->DrawText(NULL,
+		&m_aStr_Right[0],
+		-1,
+		&rect,
+		DT_LEFT,
+		D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 }

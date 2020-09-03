@@ -66,7 +66,7 @@ HRESULT CHelicopter::Init(void)
 	// グレネード放つ位置の生成
 	m_pGrenadeFire = CGrenadeFire::Create(GetVehicleModelPartsList(CModel::MODEL_HELIBODY)->GetMatrix(), CGrenadeFire::TANK_GRENADE);
 	// 銃の弾の種類
-	m_pGun->GetTag() = TAG_ENEMY;
+	m_pGun->SetTag(TAG::ENEMY);
 	// 銃の弾の種類
 	m_pGun->SetGunType(CGun::GUNTYPE_HELIGUN);
 	// 発射位置のオフセットの設定
@@ -77,6 +77,9 @@ HRESULT CHelicopter::Init(void)
 	GetCollision()->SetSize2D(HELICOPTER_SIZE);
 	GetCollision()->SetMove(&GetMove());
 	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_CHARACTER);
+
+	// プレイヤーのポインタ
+	m_pPlayer = nullptr;
 
 	return S_OK;
 }
@@ -101,7 +104,6 @@ void CHelicopter::Uninit(void)
 		m_pGrenadeFire->Rerease();
 		m_pGrenadeFire = nullptr;
 	}
-
 	CVehicle::Uninit();
 }
 //====================================================================

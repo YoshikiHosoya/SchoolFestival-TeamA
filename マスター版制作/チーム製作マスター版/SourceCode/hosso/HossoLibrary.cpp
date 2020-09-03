@@ -14,6 +14,7 @@
 #include "../inputKeyboard.h"
 #include "../XInputPad.h"
 #include "../sound.h"
+
 //------------------------------------------------------------------------------
 //マクロ
 //------------------------------------------------------------------------------
@@ -75,20 +76,24 @@ bool CHossoLibrary::PressAnyButton(void)
 {
 	CKeyboard *Keyboard;
 	Keyboard = CManager::GetInputKeyboard();
-	CXInputPad *InpudPad;
-	InpudPad = CManager::GetPad();
+	CXInputPad *InpudPad[MAX_CONTROLLER] = {};
 
-	if (Keyboard->GetKeyboardTrigger(DIK_RETURN)||
-		Keyboard->GetKeyboardTrigger(DIK_SPACE)||
-		InpudPad->GetTrigger(CXInputPad::JOYPADKEY_START,1)||
-		InpudPad->GetTrigger(CXInputPad::JOYPADKEY_A, 1) ||
-		InpudPad->GetTrigger(CXInputPad::JOYPADKEY_B, 1) ||
-		InpudPad->GetTrigger(CXInputPad::JOYPADKEY_X, 1) ||
-		InpudPad->GetTrigger(CXInputPad::JOYPADKEY_Y, 1))
+	for (int nCnt = 0; nCnt < MAX_CONTROLLER; nCnt++)
 	{
-		//CManager::GetSound()->Play(CSound::LABEL_SE_DECISION);
+		InpudPad[nCnt] = CManager::GetPad((TAG)nCnt);
 
-		return true;
+		if (Keyboard->GetKeyboardTrigger(DIK_RETURN) ||
+			Keyboard->GetKeyboardTrigger(DIK_SPACE) ||
+			InpudPad[nCnt]->GetTrigger(CXInputPad::JOYPADKEY_START, 1) ||
+			InpudPad[nCnt]->GetTrigger(CXInputPad::JOYPADKEY_A, 1) ||
+			InpudPad[nCnt]->GetTrigger(CXInputPad::JOYPADKEY_B, 1) ||
+			InpudPad[nCnt]->GetTrigger(CXInputPad::JOYPADKEY_X, 1) ||
+			InpudPad[nCnt]->GetTrigger(CXInputPad::JOYPADKEY_Y, 1))
+		{
+			//CManager::GetSound()->Play(CSound::LABEL_SE_DECISION);
+
+			return true;
+		}
 	}
 	return false;
 }
@@ -99,11 +104,15 @@ bool CHossoLibrary::PressStartButton(void)
 {
 	CKeyboard *Keyboard;
 	Keyboard = CManager::GetInputKeyboard();
-	CXInputPad *InpudPad;
-	InpudPad = CManager::GetPad();
-	if (Keyboard->GetKeyboardTrigger(DIK_RETURN) || InpudPad->GetTrigger(CXInputPad::JOYPADKEY_START, 1))
+	CXInputPad *InpudPad[MAX_CONTROLLER] = {};
+	for (int nCnt = 0; nCnt < MAX_CONTROLLER; nCnt++)
 	{
-		return true;
+		InpudPad[nCnt] = CManager::GetPad((TAG)nCnt);
+
+		if (Keyboard->GetKeyboardTrigger(DIK_RETURN) || InpudPad[nCnt]->GetTrigger(CXInputPad::JOYPADKEY_START, 1))
+		{
+			return true;
+		}
 	}
 	return false;
 }
@@ -145,18 +154,19 @@ bool CHossoLibrary::ImGui_Combobox(std::vector<std::string> aItemNameList, std::
 //------------------------------------------------------------------------------
 //パッドの入力処理
 //------------------------------------------------------------------------------
-bool CHossoLibrary::PadMoveInput(D3DXVECTOR3 & rMove, DIRECTION & direction,bool bJump)
+bool CHossoLibrary::PadMoveInput(D3DXVECTOR3 & rMove, DIRECTION & direction, bool bJump, TAG Tag)
 {
 	bool bInput = false;
 
 	CXInputPad *pad;
-	pad = CManager::GetPad();
+
+	pad = CManager::GetPad(Tag);
 	D3DXVECTOR3 InputValue = ZeroVector3;
 	pad->GetStickLeft(&InputValue.x, &InputValue.y);//パッドの入力値を代入
 	InputValue.x /= STICK_MAX_RANGE;//値の正規化
 	InputValue.y /= STICK_MAX_RANGE;//値の正規化
 
-	CDebugProc::Print("パッドの入力値 X : %2f Y : %2f\n", InputValue.x, InputValue.y);
+	CDebugProc::Print_Left("パッドの入力値 X : %2f Y : %2f\n", InputValue.x, InputValue.y);
 
 	//右
 	if (InputValue.x > 0.5f)

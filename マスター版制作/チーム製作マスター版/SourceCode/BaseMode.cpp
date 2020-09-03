@@ -30,19 +30,19 @@ void CBaseMode::DebugCommand(void)
 	CKeyboard *key = CManager::GetInputKeyboard();
 
 	//使い方説明
-	CDebugProc::Print("---------Debug Command----------\n");
-	CDebugProc::Print("[F3] : 一時停止\n");
-	CDebugProc::Print("[F4] : 一時停止中に1Fだけ更新\n");
-	CDebugProc::Print("[F5] : デバッグ表記 on/off\n");
-	CDebugProc::Print("[F6] : ミュート on/off\n");
+	CDebugProc::Print_Right("---------Debug Command----------\n");
+	CDebugProc::Print_Right("[F3] : 一時停止\n");
+	CDebugProc::Print_Right("[F4] : 一時停止中に1Fだけ更新\n");
+	CDebugProc::Print_Right("[F5] : デバッグ表記 on/off\n");
+	CDebugProc::Print_Right("[F6] : ミュート on/off\n");
 
-	CDebugProc::Print("[Ctrl] + テンキー [0] : 現在のModeに遷移\n");
-	CDebugProc::Print("[Ctrl] + テンキー [1] : Titleに遷移\n");
-	CDebugProc::Print("[Ctrl] + テンキー [2] : Gameに遷移\n");
-	CDebugProc::Print("[Ctrl] + テンキー [4] : Rankingに遷移\n");
-	CDebugProc::Print("[Ctrl] + テンキー [7] : MapEditorに遷移\n");
-	CDebugProc::Print("[Ctrl] + テンキー [8] : EffectViewerに遷移\n");
-	CDebugProc::Print("[Ctrl] + テンキー [9] : MotionViewerに遷移\n");
+	CDebugProc::Print_Right("[Ctrl] + テンキー [0] : 現在のModeに遷移\n");
+	CDebugProc::Print_Right("[Ctrl] + テンキー [1] : Titleに遷移\n");
+	CDebugProc::Print_Right("[Ctrl] + テンキー [2] : Gameに遷移\n");
+	CDebugProc::Print_Right("[Ctrl] + テンキー [4] : Rankingに遷移\n");
+	CDebugProc::Print_Right("[Ctrl] + テンキー [7] : MapEditorに遷移\n");
+	CDebugProc::Print_Right("[Ctrl] + テンキー [8] : EffectViewerに遷移\n");
+	CDebugProc::Print_Right("[Ctrl] + テンキー [9] : MotionViewerに遷移\n");
 
 
 	//一時停止

@@ -32,7 +32,8 @@
 // 静的メンバ変数の初期化
 // =====================================================================================================================================================================
 int			CGame::m_Counter	= 0;
-CPlayer		*CGame::m_pPlayer	= nullptr;
+
+CPlayer		*CGame::m_pPlayer[MAX_CONTROLLER] = {};
 CMap		*CGame::m_pMap		= nullptr;
 
 //==========================================================
@@ -61,7 +62,11 @@ HRESULT CGame::Init(void)
 	m_pMap		= CMap::MapCreate();		// マップの生成
 	m_pMap->MapLoad(CMap::MAP_1_1);			// マップのロード
 
-	m_pPlayer	= CPlayer::Create();
+	m_pPlayer[(int)TAG::PLAYER_1] = CPlayer::Create(TAG::PLAYER_1);
+	// 試験的プレイヤー2の配置
+
+	m_pPlayer[(int)TAG::PLAYER_2] = CPlayer::Create(TAG::PLAYER_2);
+	m_pPlayer[(int)TAG::PLAYER_2]->SetPosition(m_pPlayer[(int)TAG::PLAYER_2]->GetPosition() + D3DXVECTOR3(100.0f, 0.0f, 0.0f));
 
 	m_pPause->CreatePause();
 
@@ -93,6 +98,13 @@ void CGame::Uninit(void)
 		// リザルトマネジャーの破棄
 		delete m_pResultManager;
 		m_pResultManager = nullptr;
+	}
+
+	if (m_pGameManager)
+	{
+		// ゲームマネージャーのメモリ開放
+		m_pGameManager.reset();
+		m_pGameManager = nullptr;
 	}
 
 	if (m_pMap)
@@ -130,9 +142,11 @@ void CGame::Update(void)
 //==========================================================
 // プレイヤー取得
 //==========================================================
-CPlayer * CGame::GetPlayer(void)
+
+CPlayer * CGame::GetPlayer(TAG Tag)
 {
-	return m_pPlayer;
+
+	return m_pPlayer[(int)Tag];
 }
 //==========================================================
 // マップ取得
@@ -221,18 +235,18 @@ void CGame::ShowDebugInfo(void)
 void CGame::DebugCollision(CKeyboard *key)
 {
 	//使い方説明
-	CDebugProc::Print("\n---------Debug Collision----------\n");
-	CDebugProc::Print("[Ctrl] + テンキー [5] : 当たり判定のラインの表示非表示\n");
+	CDebugProc::Print_Right("\n---------Debug Collision----------\n");
+	CDebugProc::Print_Right("[Ctrl] + テンキー [5] : 当たり判定のラインの表示非表示\n");
+
 
 	if (C3DLine::GetDrawFlag())
 	{
-		CDebugProc::Print("デバッグ用当たり判定ラインを描画しています\n");
+		CDebugProc::Print_Right("デバッグ用当たり判定ラインを描画しています\n");
 	}
 	else
 	{
-		CDebugProc::Print("デバッグ用当たり判定ラインを描画していません\n");
+		CDebugProc::Print_Right("デバッグ用当たり判定ラインを描画していません\n");
 	}
-
 
 	//ボスマップ
 	if (key->GetKeyboardTrigger(DIK_F7))
@@ -276,7 +290,8 @@ void CGame::DebugCollision(CKeyboard *key)
 		if (key->GetKeyboardTrigger(DIK_0))
 		{
 			//タイマー減少
-			m_pPlayer->GetPlayerUI()->DecrementTime();
+
+			m_pPlayer[(int)TAG::PLAYER_1]->GetPlayerUI()->DecrementTime();
 		}
 	}
 }

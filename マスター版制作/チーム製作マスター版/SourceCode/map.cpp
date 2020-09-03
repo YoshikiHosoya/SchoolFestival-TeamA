@@ -1401,10 +1401,10 @@ void CMap::WaveCreate(int nModelType, D3DXVECTOR3 eventpos, WAVE_PARAM * pWavePa
 // =====================================================================================================================================================================
 void CMap::ShowDebugInfo()
 {
-	CDebugProc::Print("------ MapInfo ----------\n");
+	CDebugProc::Print_Left("------ MapInfo ----------\n");
 
-	CDebugProc::Print("EnemyNum >> %d\n", m_pEnemy.size());
-	CDebugProc::Print("PrisonerNum >> %d\n", m_pPrisoner.size());
+	CDebugProc::Print_Left("EnemyNum >> %d\n", m_pEnemy.size());
+	CDebugProc::Print_Left("PrisonerNum >> %d\n", m_pPrisoner.size());
 }
 
 // =====================================================================================================================================================================

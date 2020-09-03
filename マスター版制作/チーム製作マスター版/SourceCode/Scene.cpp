@@ -30,7 +30,7 @@ CScene::CScene(OBJ_TYPE type)
 	if (type != TYPE_NONE)
 	{
 		m_bflag = false;
-
+		nID = 0;
 		m_pSceneList[type].emplace_back(this);
 	}
 	else
@@ -70,6 +70,9 @@ void CScene::UpdateAll(void)
 					{
 						//更新処理
 						m_pSceneList[nCntObjtype][nCnt]->Update();
+
+						//ID保存
+						m_pSceneList[nCntObjtype][nCnt]->nID = nCnt;
 					}
 				}
 			}
@@ -230,8 +233,8 @@ void CScene::ShowUpdateGraph()
 	//出力用の配列
 	std::vector<float> OutputDataList(TYPE_MAX);
 
-	//CDebugProc::Print("FPS_IntervalCount >> %d\n", GetFPSInterval());
-	CDebugProc::Print("FPS >> %d\n", GetFps());
+	//CDebugProc::Print_Left("FPS_IntervalCount >> %d\n", GetFPSInterval());
+	CDebugProc::Print_Left("FPS >> %d\n", GetFps());
 
 	//更新のグラフ
 	if (ImGui::TreeNode("Update_Graph"))

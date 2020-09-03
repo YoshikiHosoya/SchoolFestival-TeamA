@@ -35,6 +35,7 @@ typedef struct
 // 前方宣言
 // =====================================================================================================================================================================
 class CCollision;
+class CPlayer;
 
 // =====================================================================================================================================================================
 // アイテムクラス
@@ -96,9 +97,9 @@ public:
 	void						Uninit();										// 終了
 	void						Update();										// 更新
 	void						Draw();											// 描画
-	void						ItemType(ITEMTYPE type);						// アイテム取得時の種類別処理
+	void						ItemType(ITEMTYPE type, TAG Tag);	// アイテム取得時の種類別処理
 	void						DebugInfo();									// デバッグ
-	void						HitItem(ITEMTYPE type);							// アイテム取得時の種類別処理
+	void						HitItem(ITEMTYPE type, TAG Tag);	// アイテム取得時の種類別処理
 	ITEMTYPE					GetItemType() { return m_Type; };				// アイテムタイプの取得
 	CCollision					*GetCollision() { return m_pCollision; };		// 当たり判定
 	void						SetDropPos(D3DXVECTOR3 &characterpos);			// アイテムを生成位置を設定
@@ -157,5 +158,6 @@ private:
 	CCollision					*m_pCollision;									// 当たり判定
 	int							m_nRemainTime;									// アイテムがマップに残る時間
 	int							m_nColCnt;										// αカラーカウント
+	CPlayer						*m_pPlayer[MAX_CONTROLLER];				// プレイヤーのポインタ
 };
 #endif

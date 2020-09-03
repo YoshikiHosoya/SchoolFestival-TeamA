@@ -36,7 +36,7 @@ public:
 	void ShowDebugInfo();				//デバッグ情報表記
 
 	CMap *GetMap() { return nullptr; };
-	CPlayer* GetPlayer() { return nullptr; };
+	CPlayer* GetPlayer(TAG Tag) { return nullptr; };
 
 private:
 	CDebug_WorldLine *m_pWorldLine;						//ワールド線

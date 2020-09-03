@@ -31,6 +31,7 @@ class CPrisoner;
 class CEnemy;
 class CPlayertank;
 class CBattlePlane;
+class CPlayer;
 
 //=============================================================================
 //
@@ -58,26 +59,29 @@ public:
 	void Init(void);
 	void Uninit(void);
 	void Update(void);
+	void ShowDebugInfo();
 
 	/* 静的メンバ関数 */
-	static CCollision * Create(void);									// 当たり判定の生成
+	static CCollision * Create();
 
 	/* メンバ関数 */
-	void SetPos(D3DXVECTOR3 *pos);										// 座標の設定
-	void SetPosOld(D3DXVECTOR3 *posold);								// 1フレーム前の座標の設定
-	void SetSize(D3DXVECTOR3 size);										// サイズの設定
-	void SetSize2D(D3DXVECTOR3 size);									// 2D用サイズの設定
-	void SetMove(D3DXVECTOR3 *move);									// 移動量の設定
-	void SetTime(int nTime) { m_nCollisionTime = nTime; };				// 継続時間の設定
-	void SetCanCollision(bool bCollision) { m_bCanCollision = bCollision; }; //当たり判定可能かどうか設定
-	bool GetCanCollison() { return m_bCanCollision; };					// 当たり判定できるかどうか取得
-	int	 GetTime() { return m_nCollisionTime; };						// 継続時間の設定
-	void SetHeight(float height);										// Rayの高さ設定
-	bool Collision2D(CCollision *pCollision);							// 板型の当たり判定
-	bool CharCollision2D(CCollision *pCollision);						// キャラクター用板型の当たり判定
-	bool OtherCollision2D(CCollision *pCollision);						// 板型の当たり判定
-	bool BlockCollision2D(CCollision *pCollision);						// 板型ブロックの当たり判定
-	bool BlockNotUpsideCollision2D(CCollision *pCollision);				// 板型ブロックの当たり判定
+
+	void SetPos(D3DXVECTOR3 *pos);													// 座標の設定
+	void SetPosOld(D3DXVECTOR3 *posold);											// 1フレーム前の座標の設定
+	void SetSize(D3DXVECTOR3 size);													// サイズの設定
+	void SetSize2D(D3DXVECTOR3 size);												// 2D用サイズの設定
+	void SetMove(D3DXVECTOR3 *move);												// 移動量の設定
+	void SetTime(int nTime) { m_nCollisionTime = nTime; };							// 継続時間の設定
+	void SetCanCollision(bool bCollision) { m_bCanCollision = bCollision; };		//当たり判定可能かどうか設定
+	void SetGameObject(CGameObject *GameObject) { m_pGameObject = GameObject; };	// ゲームオブジェクト( タグ )の設定
+	bool GetCanCollison() { return m_bCanCollision; };								// 当たり判定できるかどうか取得
+	int	 GetTime() { return m_nCollisionTime; };									// 継続時間の設定
+	void SetHeight(float height);													// Rayの高さ設定
+	bool Collision2D(CCollision *pCollision);										// 板型の当たり判定
+	bool CharCollision2D(CCollision *pCollision);									// キャラクター用板型の当たり判定
+	bool OtherCollision2D(CCollision *pCollision);									// 板型の当たり判定
+	bool BlockCollision2D(CCollision *pCollision);									// 板型ブロックの当たり判定
+	bool BlockNotUpsideCollision2D(CCollision *pCollision);							// 板型ブロックの当たり判定
 
 	// 代用
 	bool BlockCollision2D_Bottom(CCollision *pCollision);
@@ -102,7 +106,7 @@ public:
 
 	bool ForPlayer_PrisonerCollision(bool Penetration);					// プレイヤーと捕虜が行う判定 ダメージ量 貫通するかどうか
 
-	bool ForPlayer_ItemCollision();										// プレイヤーと捕虜が行う判定 ダメージ量 貫通するかどうか
+	bool ForPlayer_ItemCollision(TAG Tag);				// プレイヤーと捕虜が行う判定 ダメージ量 貫通するかどうか
 
 	CPrisoner		*ForPlayer_PrisonerCollision();						// プレイヤーと捕虜の接触判定 捕虜の状態変更
 	CEnemy			*ForPlayer_EnemyCollision();						// プレイヤーとエネミーの接触判定
@@ -110,7 +114,7 @@ public:
 	CBattlePlane	*ForPlayer_PlaneCollision();						// プレイヤーと戦闘機の接触判定
 
 	bool ForPlayer_VehicleCollision(CCollision * pCollision);	// プレイヤーと乗り物が行う判定
-	bool ForPlayer_VehicleCollision();							// プレイヤーと乗り物が行う判定
+	void *ForPlayer_VehicleCollision();							// プレイヤーと乗り物が行う判定
 	bool ForVehicleCollision();									// 乗り物が行う判定
 	bool ForTankCollision();									// 戦車が行う判定
 
@@ -134,7 +138,9 @@ private:
 	bool				m_bDeadFlag;					// 死亡フラグ
 	bool				m_bCanCollision;				// 判定をとるかどうか
 	int					m_nCollisionTime;				// 当たり判定が持続する時間
-	float				m_fHeight;	
+	float				m_fHeight;
+
+	CGameObject			*m_pGameObject;					// ゲームオブジェクト( タグ )のポインタ
 };
 
 #endif

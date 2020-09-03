@@ -25,6 +25,7 @@
 // =====================================================================================================================================================================
 class CModel;
 class CCollision;
+class CPlayer;
 
 // =====================================================================================================================================================================
 // 乗り物のパラメーター
@@ -98,6 +99,8 @@ public:
 	void AddDamage			(int Damage);					// ダメージ計算
 	void MovePlane			(D3DXVECTOR3 move, float fdest);// 移動
 	void Move				(float move, float fdest);// 移動
+
+	virtual void			SetPlayer(CPlayer *pPlayer) = 0;	//プレイヤーのポインタ設定
 
 	void					VehiclePartsRotCondition(
 							CModel *pModel,

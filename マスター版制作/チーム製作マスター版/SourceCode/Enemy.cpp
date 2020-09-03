@@ -40,7 +40,7 @@ HRESULT CEnemy::Init(void)
 
 	//ガンのポインタ生成
 	m_pGun = CGun::Create();
-	m_pGun->SetTag(TAG::TAG_ENEMY);
+	m_pGun->SetTag(TAG::ENEMY);
 	//イベントのフラグ
 	m_bEventFlag = false;
 
@@ -49,6 +49,7 @@ HRESULT CEnemy::Init(void)
 	GetCollision()->SetPosOld(&GetPositionOld());
 	GetCollision()->SetSize2D(ENEMY_SIZE);
 	GetCollision()->SetMove(&GetMove());
+	GetCollision()->SetGameObject(this);
 
 	CCharacter::SetLife(1);
 

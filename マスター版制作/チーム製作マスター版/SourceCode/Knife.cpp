@@ -119,7 +119,7 @@ void CKnife::DebugInfo()
 	//	sprintf(aDebugString, "Orbit_OFF\n");	//false
 
 	////デバッグ表記
-	//CDebugProc::Print("%s", aDebugString);
+	//CDebugProc::Print_Left("%s", aDebugString);
 }
 
 // =====================================================================================================================================================================
@@ -140,7 +140,7 @@ CKnife * CKnife::Create(D3DXMATRIX * mtx, D3DXVECTOR3 knifesize, TAG tag)
 	pKnife->m_HandMatrix = mtx;
 
 	// タグの設定
-	pKnife->m_tag = tag;
+	pKnife->SetTag(tag);
 
 	// 判定の大きさ設定
 	pKnife->m_KnifeCollisionSize = knifesize;
@@ -200,6 +200,7 @@ void CKnife::StartMeleeAttack()
 		m_pCollision->SetPos(&m_worldpos);
 		m_pCollision->SetSize(m_KnifeCollisionSize);
 		m_pCollision->DeCollisionCreate(CCollision::COLLISIONTYPE_NORMAL);
+		m_pCollision->SetGameObject(this);
 	}
 
 	//攻撃終了
@@ -246,7 +247,7 @@ void CKnife::CollisionKnife()
 		if (m_pCollision)
 		{
 			//持ち主がプレイヤーの場合
-			if (m_tag == TAG::TAG_PLAYER)
+			if (GetTag() == TAG::PLAYER_1 || GetTag() == TAG::PLAYER_2)
 			{
 				//敵、捕虜、障害物と判定
 				if (m_pCollision->ForPlayerBulletCollision(PLAYER_KNIFE_DAMAGE, PLAYER_KNIFE_DAMAGE, true))
@@ -256,7 +257,7 @@ void CKnife::CollisionKnife()
 				}
 			}
 			//持ち主が敵の場合
-			else if (m_tag == TAG::TAG_ENEMY)
+			else if (GetTag() == TAG::ENEMY)
 			{
 				//プレイヤー側との判定
 				if (m_pCollision->ForEnemyCollision(1, 1, true))

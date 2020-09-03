@@ -256,7 +256,10 @@ void CCharacter::DeathReaction()
 void CCharacter::State()
 {
 	//カウントダウン
-	m_nStateCnt--;
+	if (m_nStateCnt-- <= 0)
+	{
+		m_nStateCnt = 0;
+	}
 
 	//ステータスの処理
 	switch (m_state)
@@ -1019,13 +1022,47 @@ void CCharacter::CharacterUnLoad(void)
 //====================================================================
 void CCharacter::DebugInfo(void)
 {
-	CDebug_ModelViewer::OffsetViewer(m_vModelList);
+	//CDebug_ModelViewer::OffsetViewer(m_vModelList);
 
-	//CDebugProc::Print("腰の高さ%2f\n", m_vModelList[0]->GetPosition().y);
+	char aTreeName[MAX_TEXT] = {};
+	sprintf(aTreeName, "CharacterInfo [%d]", CScene::GetID());
 
-	//CDebugProc::Print("state >>%d\n", GetCharacterState());
+	if (ImGui::TreeNode(aTreeName))
+	{
+		ImGui::Text("m_pos [%.2f %.2f %.2f]", m_pos.x, m_pos.y, m_pos.z); ImGui::SameLine();
+		ImGui::Text("m_move [%.2f %.2f %.2f]", m_move.x, m_move.y, m_move.z);
 
-	//CDebugProc::Print("");
+		ImGui::Text("m_posfall [%.2f %.2f %.2f]", m_posfall.x, m_posfall.y, m_posfall.z); ImGui::SameLine();
+		ImGui::Text("m_ShotRotDest [%.2f %.2f %.2f]", m_ShotRotDest.x, m_ShotRotDest.y, m_ShotRotDest.z);
+
+		ImGui::Text("m_rot [%.2f %.2f %.2f]", m_rot.x, m_rot.y, m_rot.z); ImGui::SameLine();
+		ImGui::Text("m_rotDest [%.2f %.2f %.2f]", m_rotDest.x, m_rotDest.y, m_rotDest.z);
+
+		ImGui::Text("m_Life [%d]", m_Life); ImGui::SameLine();
+		ImGui::Text("m_state [%d]", m_state); ImGui::SameLine();
+		ImGui::Text("m_nStateCnt [%d]", m_nStateCnt);
+		ImGui::Text("m_CharaType [%d]", m_CharaType); ImGui::SameLine();
+		ImGui::Text("m_CharacterDirection [%d]", m_CharacterDirection);
+
+		ImGui::Text("m_bGravity [%d]", m_bGravity); ImGui::SameLine();
+		ImGui::Text("m_bCanJump [%d]", m_bCanJump); ImGui::SameLine();
+		ImGui::Text("m_bDieFlag [%d]", m_bDieFlag); ImGui::SameLine();
+		ImGui::Text("m_bDraw [%d]", m_bDraw);
+
+		if (ImGui::TreeNode("MotionInfo"))
+		{
+			ImGui::Text("m_MotionType [%d]", m_MotionType); ImGui::SameLine();
+			ImGui::Text("m_MotionOld [%d]", m_MotionOld);
+			ImGui::Text("m_CntKeySet [%d]", m_CntKeySet); ImGui::SameLine();
+			ImGui::Text("m_Fram [%d]", m_Fram);
+
+			ImGui::TreePop();
+		}
+		ImGui::TreePop();
+	}
+
+	m_pCollision->ShowDebugInfo();
+
 }
 //====================================================================
 //弾の撃つ方向設定

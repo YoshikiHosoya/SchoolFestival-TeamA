@@ -144,7 +144,7 @@ void CTutorialUI::Update(void)
 				m_apScene2D[nCnt]->Update();
 			}
 
-			CDebugProc::Print("TutorialUI %d,%d\n", m_apScene2D[nCnt]->GetDisp(), nCnt);
+			CDebugProc::Print_Left("TutorialUI %d,%d\n", m_apScene2D[nCnt]->GetDisp(), nCnt);
 		}
 	}
 }
