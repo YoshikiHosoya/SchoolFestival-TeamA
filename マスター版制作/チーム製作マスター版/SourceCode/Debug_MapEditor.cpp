@@ -129,16 +129,16 @@ void CDebugMapEditor::ShowDebugInfo(void)
 	CKeyboard *key = CManager::GetInputKeyboard();
 
 	//使い方説明
-	CDebugProc::Print("---------Debug Collision----------\n");
-	CDebugProc::Print("[Ctrl] + テンキー [5] : 当たり判定のラインの表示非表示\n");
+	CDebugProc::Print_Left("---------Debug Collision----------\n");
+	CDebugProc::Print_Left("[Ctrl] + テンキー [5] : 当たり判定のラインの表示非表示\n");
 
 	if (C3DLine::GetDrawFlag())
 	{
-		CDebugProc::Print("デバッグ用当たり判定ラインを描画しています\n");
+		CDebugProc::Print_Left("デバッグ用当たり判定ラインを描画しています\n");
 	}
 	else
 	{
-		CDebugProc::Print("デバッグ用当たり判定ラインを描画していません\n");
+		CDebugProc::Print_Left("デバッグ用当たり判定ラインを描画していません\n");
 	}
 
 	// 当たり判定ラインの表示非表示

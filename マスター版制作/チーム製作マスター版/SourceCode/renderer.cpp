@@ -231,7 +231,7 @@ void CRenderer::Update(void)
 	//Scene‚ÅŠÇ—‚µ‚Ä‚éî•ñ
 	ImGui::Begin("SceneInfo");
 
-	CDebugProc::Print("FPS : [%d]\n", GetFps());
+	CDebugProc::Print_Left("FPS : [%d]\n", GetFps());
 
 #endif // _DEBUG
 
@@ -592,8 +592,8 @@ void CRenderer::CalcScreenPos()
 	m_MaxScreenPos = nearpos + ((farpos - nearpos) * fScreenZValue);
 
 	//debug
-	CDebugProc::Print("ZValue >> %.2f\n", fScreenZValue);
-	CDebugProc::Print("ScreenPosMin >> %.2f,%.2f,%.2f\n", m_MinScreenPos.x, m_MinScreenPos.y, m_MinScreenPos.z);
-	CDebugProc::Print("ScreenPosMax >> %.2f,%.2f,%.2f\n", m_MaxScreenPos.x, m_MaxScreenPos.y, m_MaxScreenPos.z);
+	CDebugProc::Print_Left("ZValue >> %.2f\n", fScreenZValue);
+	CDebugProc::Print_Left("ScreenPosMin >> %.2f,%.2f,%.2f\n", m_MinScreenPos.x, m_MinScreenPos.y, m_MinScreenPos.z);
+	CDebugProc::Print_Left("ScreenPosMax >> %.2f,%.2f,%.2f\n", m_MaxScreenPos.x, m_MaxScreenPos.y, m_MaxScreenPos.z);
 }
 

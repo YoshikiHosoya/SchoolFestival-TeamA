@@ -86,6 +86,6 @@ void CLight::UpdateLight(void)
 	// ライトを有効にする
 	pDevice->LightEnable(0, TRUE);
 
-	//CDebugProc::Print("ライト[0] X:%0.2f Y:%0.2f Z:%0.2f\n", m_light[0].Direction.x, m_light[0].Direction.y, m_light[0].Direction.z);
+	//CDebugProc::Print_Left("ライト[0] X:%0.2f Y:%0.2f Z:%0.2f\n", m_light[0].Direction.x, m_light[0].Direction.y, m_light[0].Direction.z);
 }
 

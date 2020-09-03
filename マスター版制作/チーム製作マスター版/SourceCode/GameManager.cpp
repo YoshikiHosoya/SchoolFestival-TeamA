@@ -150,16 +150,16 @@ void CGameManager::Draw()
 void CGameManager::ShowDebugInfo()
 {
 #ifdef _DEBUG
-	CDebugProc::Print("------ GameManager ----------\n");
+	CDebugProc::Print_Left("------ GameManager ----------\n");
 
-	CDebugProc::Print("NowWaveNum >> %d\n", m_nNowWave);
-	CDebugProc::Print("GameState >> %d\n", m_state);
-	CDebugProc::Print("m_nCnt >> %d\n", m_nCnt);
-	CDebugProc::Print("m_nWavePrisonerCnt >> %d\n", m_nWavePrisonerCnt);
-	CDebugProc::Print("m_nWaveEnemyCnt >> %d\n", m_nWaveEnemyCnt);
+	CDebugProc::Print_Left("NowWaveNum >> %d\n", m_nNowWave);
+	CDebugProc::Print_Left("GameState >> %d\n", m_state);
+	CDebugProc::Print_Left("m_nCnt >> %d\n", m_nCnt);
+	CDebugProc::Print_Left("m_nWavePrisonerCnt >> %d\n", m_nWavePrisonerCnt);
+	CDebugProc::Print_Left("m_nWaveEnemyCnt >> %d\n", m_nWaveEnemyCnt);
 
-	CDebugProc::Print("m_nWaveEnemyNum >> %d\n", m_nWaveEnemyNum);
-	CDebugProc::Print("m_nWavePrisonerNum >> %d\n", m_nWavePrisonerNum);
+	CDebugProc::Print_Left("m_nWaveEnemyNum >> %d\n", m_nWaveEnemyNum);
+	CDebugProc::Print_Left("m_nWavePrisonerNum >> %d\n", m_nWavePrisonerNum);
 #endif
 }
 
@@ -189,6 +189,7 @@ std::unique_ptr<CGameManager> CGameManager::Create()
 void CGameManager::SetGameState(GAMESTATE state)
 {
 	m_state = state;
+	m_nCnt = 0;
 
 	if (m_state == CGameManager::GAMESTATE::GAMEOVER)
 	{

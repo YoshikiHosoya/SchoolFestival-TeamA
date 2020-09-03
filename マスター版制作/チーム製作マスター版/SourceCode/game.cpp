@@ -232,16 +232,17 @@ void CGame::ShowDebugInfo(void)
 void CGame::DebugCollision(CKeyboard *key)
 {
 	//使い方説明
-	CDebugProc::Print("\n---------Debug Collision----------\n");
-	CDebugProc::Print("[Ctrl] + テンキー [5] : 当たり判定のラインの表示非表示\n");
+	CDebugProc::Print_Right("\n---------Debug Collision----------\n");
+	CDebugProc::Print_Right("[Ctrl] + テンキー [5] : 当たり判定のラインの表示非表示\n");
+	CDebugProc::Print_Right("[Ctrl] + テンキー [5] : 当たり判定のラインの表示非表示\n");
 
 	if (C3DLine::GetDrawFlag())
 	{
-		CDebugProc::Print("デバッグ用当たり判定ラインを描画しています\n");
+		CDebugProc::Print_Right("デバッグ用当たり判定ラインを描画しています\n");
 	}
 	else
 	{
-		CDebugProc::Print("デバッグ用当たり判定ラインを描画していません\n");
+		CDebugProc::Print_Right("デバッグ用当たり判定ラインを描画していません\n");
 	}
 
 	//ボスマップ

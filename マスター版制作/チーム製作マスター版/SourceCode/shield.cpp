@@ -20,6 +20,7 @@
 #define SHIELD_OFFSET			(D3DXVECTOR3(0.0f,-30.0f,0.0f))
 #define SHIELD_DELETE_COUNT		(60)
 #define DAMAGE_FLASH_COUNT		(5)
+#define BREAK_SHIELD_DEFAULT	(D3DXVECTOR3(CHossoLibrary::Random(20.0f), 15.0f, 0.0f))
 // ===================================================================
 // コンストラクタ
 // ===================================================================
@@ -84,9 +85,11 @@ void CShield::Update(void)
 		//消えるカウントダウン
 		m_nDeleteCnt--;
 
-		m_ShieldPos.x += 2.0f;
-		m_ShieldPos.y += 12.0f;
+		//盾吹っ飛ばし
+		m_BreakShieldMoveValue.y -= 0.5f;
+		m_ShieldPos += m_BreakShieldMoveValue;
 
+		//盾回転
 		GetRot().x += 0.05f;
 		GetRot().z += 0.25f;
 
@@ -165,5 +168,5 @@ void CShield::AwayShield()
 	m_nDeleteCnt = SHIELD_DELETE_COUNT;
 	DeleteCollision();
 	SetRot(D3DXVECTOR3(D3DX_PI * 0.5f, D3DX_PI * 0.5f, 0.0f));
-
+	m_BreakShieldMoveValue = (BREAK_SHIELD_DEFAULT);
 }

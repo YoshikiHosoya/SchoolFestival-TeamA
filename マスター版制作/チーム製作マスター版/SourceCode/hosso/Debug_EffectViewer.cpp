@@ -158,8 +158,8 @@ void CDebug_EffectViewer::ParticleParamaterViewer()
 
 
 	//Debug
-	CDebugProc::Print("[Enter] パーティクル発生\n");
-	CDebugProc::Print("[Ctrl] + [Enter] Loop %d \n", m_bLoop);
+	CDebugProc::Print_Left("[Enter] パーティクル発生\n");
+	CDebugProc::Print_Left("[Ctrl] + [Enter] Loop %d \n", m_bLoop);
 
 	//コンボボックス　ファイル名
 	if (CHossoLibrary::ImGui_Combobox(CParticleParam::GetFileNameList(), "ParamFileName", (int&)NowText))

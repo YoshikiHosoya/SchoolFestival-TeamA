@@ -119,7 +119,7 @@ void CKnife::DebugInfo()
 	//	sprintf(aDebugString, "Orbit_OFF\n");	//false
 
 	////デバッグ表記
-	//CDebugProc::Print("%s", aDebugString);
+	//CDebugProc::Print_Left("%s", aDebugString);
 }
 
 // =====================================================================================================================================================================

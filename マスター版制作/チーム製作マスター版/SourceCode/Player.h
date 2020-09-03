@@ -119,14 +119,13 @@ private:
 	bool			m_bAttack;							// 近接攻撃できるかどうか
 	bool			m_bKnifeAttack;						// 攻撃をしているかどうか
 	bool			m_bRespawn;							// リスポーンフラグ
-	float			m_Angle;							// アングル
 	bool			m_bCruch;							// クラッチ
+	bool			m_bRideVehicle;						// 乗り物に乗り込んでいるかどうかのフラグ
 	WORD			Oldstate;							// コントローラーの1frame前のステート
 	CGun			*m_pGun;							// ガンクラスのポインタ
 	CGrenadeFire	*m_pGrenadeFire;					// グレネード発射クラスのポインタ
 	CPlayerUI		*m_pPlayerUI;						// プレイヤーUIのポインタ
 	CKnife			*m_pKnife;							// ナイフのポインタ
-	bool			m_bRideVehicle;						// 乗り物に乗り込んでいるかどうかのフラグ
 	CONTROLLER		m_Controller;						// コントローラータグ
 	CVehicle		*m_pVehicle;						// 乗り物クラスのポインタ
 };

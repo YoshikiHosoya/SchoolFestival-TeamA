@@ -42,14 +42,15 @@ public:
 
 private:
 	/* メンバ変数 */
-	int					m_nLife;				// 体力
-	int					m_nCntState;			// カウンタ
-	int					m_nDeleteCnt;			// 盾が破壊されてから消えるまでのカウント
-	D3DXVECTOR3			m_ShieldPos;			// 盾の座標　コリジョン用
-	D3DXMATRIX			*m_HasHandMtx;			// 持ち手のマトリックス
-	CWeakEnemy			*m_HasEnemyPtr;			// 持ってる敵のポインタ
-	bool				m_bBreak;				// 破壊状態
-
+	int					m_nLife;						// 体力
+	int					m_nCntState;					// カウンタ
+	int					m_nDeleteCnt;					// 盾が破壊されてから消えるまでのカウント
+	D3DXVECTOR3			m_ShieldPos;					// 盾の座標　コリジョン用
+	D3DXMATRIX			*m_HasHandMtx;					// 持ち手のマトリックス
+	CWeakEnemy			*m_HasEnemyPtr;					// 持ってる敵のポインタ
+	bool				m_bBreak;						// 破壊状態
+	D3DXVECTOR3			m_BreakShieldMoveValue;			// 盾が破壊された時の吹っ飛ぶ方向
+	D3DXVECTOR3			m_BreakShieldRotValue;			// 盾が破壊された時の回転量
 
 };
 #endif

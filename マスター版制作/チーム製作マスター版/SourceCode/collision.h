@@ -59,6 +59,7 @@ public:
 	void Init(void);
 	void Uninit(void);
 	void Update(void);
+	void ShowDebugInfo();
 
 	/* 静的メンバ関数 */
 	static CCollision * Create(void);									// 当たり判定の生成
@@ -135,7 +136,7 @@ private:
 	bool				m_bDeadFlag;					// 死亡フラグ
 	bool				m_bCanCollision;				// 判定をとるかどうか
 	int					m_nCollisionTime;				// 当たり判定が持続する時間
-	float				m_fHeight;	
+	float				m_fHeight;
 	CPlayer				*m_pPlayer[(int)CONTROLLER::P_MAX];	// プレイヤーのポインタ
 };
 

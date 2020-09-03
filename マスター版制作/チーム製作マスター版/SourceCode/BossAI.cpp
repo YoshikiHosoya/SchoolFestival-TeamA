@@ -101,9 +101,9 @@ void CBossAI::Update(void)
 			}
 		}
 	}
-	CDebugProc::Print("ボスのステート：%d\n", m_BossAItype);
-	CDebugProc::Print("ボスのキャストタイム：%d\n", m_castcount);
-	CDebugProc::Print("ボスのリキャストタイム：%d\n", m_recast);
+	CDebugProc::Print_Left("ボスのステート：%d\n", m_BossAItype);
+	CDebugProc::Print_Left("ボスのキャストタイム：%d\n", m_castcount);
+	CDebugProc::Print_Left("ボスのリキャストタイム：%d\n", m_recast);
 
 	UpdateMoveAI();
 	UpdateAttackAI();
@@ -343,7 +343,7 @@ void CBossAI::UpdateAttackAI(void)
 			}
 		}
 	}
-	CDebugProc::Print("ボスの攻撃回数   :%d\n", m_Attacks);
+	CDebugProc::Print_Left("ボスの攻撃回数   :%d\n", m_Attacks);
 }
 //=============================================================================
 // 描画

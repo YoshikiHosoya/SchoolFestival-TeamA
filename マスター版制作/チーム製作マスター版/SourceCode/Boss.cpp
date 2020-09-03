@@ -101,7 +101,7 @@ void CBoss::Draw(void)
 //====================================================================
 void CBoss::DebugInfo(void)
 {
-	CDebugProc::Print("BossLife >> %d\n", GetLife());
+	CDebugProc::Print_Left("BossLife >> %d\n", GetLife());
 }
 //====================================================================
 //モデルのクリエイト

@@ -515,20 +515,20 @@ void CItem::DropPattern(ITEMDROP_PATTERN pattern , ITEMDROP drop, ITEMTYPE type)
 void CItem::DebugItemCommand(CKeyboard *key)
 {
 	//使い方説明
-	CDebugProc::Print("\n---------Debug ItemCommand----------\n");
+	CDebugProc::Print_Right("\n---------Debug ItemCommand----------\n");
 
-	CDebugProc::Print("[LShift] + テンキー [0] : ヘビーマシンガン\n");
-	CDebugProc::Print("[LShift] + テンキー [1] : ショットガン\n");
-	CDebugProc::Print("[LShift] + テンキー [2] : レーザーガン\n");
-	CDebugProc::Print("[LShift] + テンキー [3] : ロケットランチャー\n");
-	CDebugProc::Print("[LShift] + テンキー [4] : フレイムショット\n");
-	CDebugProc::Print("[LShift] + テンキー [5] : 熊\n");
-	CDebugProc::Print("[LShift] + テンキー [6] : コイン\n");
-	CDebugProc::Print("[LShift] + テンキー [7] : 宝石\n");
-	CDebugProc::Print("[LShift] + テンキー [8] : メダル\n");
-	CDebugProc::Print("[LShift] + テンキー [9] : BomUp\n");
-	CDebugProc::Print("[LShift] + テンキー [-] : ガソリン\n");
-	CDebugProc::Print("[LShift] + テンキー [+] : BulletUp\n");
+	CDebugProc::Print_Right("[LShift] + テンキー [0] : ヘビーマシンガン\n");
+	CDebugProc::Print_Right("[LShift] + テンキー [1] : ショットガン\n");
+	CDebugProc::Print_Right("[LShift] + テンキー [2] : レーザーガン\n");
+	CDebugProc::Print_Right("[LShift] + テンキー [3] : ロケットランチャー\n");
+	CDebugProc::Print_Right("[LShift] + テンキー [4] : フレイムショット\n");
+	CDebugProc::Print_Right("[LShift] + テンキー [5] : 熊\n");
+	CDebugProc::Print_Right("[LShift] + テンキー [6] : コイン\n");
+	CDebugProc::Print_Right("[LShift] + テンキー [7] : 宝石\n");
+	CDebugProc::Print_Right("[LShift] + テンキー [8] : メダル\n");
+	CDebugProc::Print_Right("[LShift] + テンキー [9] : BomUp\n");
+	CDebugProc::Print_Right("[LShift] + テンキー [-] : ガソリン\n");
+	CDebugProc::Print_Right("[LShift] + テンキー [+] : BulletUp\n");
 
 	//LShift押しながら
 	if (key->GetKeyboardPress(DIK_LSHIFT))

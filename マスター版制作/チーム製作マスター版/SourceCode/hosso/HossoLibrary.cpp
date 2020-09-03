@@ -166,7 +166,7 @@ bool CHossoLibrary::PadMoveInput(D3DXVECTOR3 & rMove, DIRECTION & direction, boo
 	InputValue.x /= STICK_MAX_RANGE;//値の正規化
 	InputValue.y /= STICK_MAX_RANGE;//値の正規化
 
-	CDebugProc::Print("パッドの入力値 X : %2f Y : %2f\n", InputValue.x, InputValue.y);
+	CDebugProc::Print_Left("パッドの入力値 X : %2f Y : %2f\n", InputValue.x, InputValue.y);
 
 	//右
 	if (InputValue.x > 0.5f)

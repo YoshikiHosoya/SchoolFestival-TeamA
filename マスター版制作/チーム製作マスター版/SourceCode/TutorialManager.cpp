@@ -139,8 +139,8 @@ void CTutorialManager::Update(void)
 		}
 	}
 
-	CDebugProc::Print("Tutorialのステート %d\n", m_TutorialState);
-	CDebugProc::Print("Oldのステート %d\n", m_OldState);
+	CDebugProc::Print_Left("Tutorialのステート %d\n", m_TutorialState);
+	CDebugProc::Print_Left("Oldのステート %d\n", m_OldState);
 
 }
 

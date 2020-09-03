@@ -222,20 +222,20 @@ void CBoss_One::DebugInfo(void)
 	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer(CONTROLLER::P1);
 	float fDist = this->GetPosition().x - pPlayer->GetPosition().x;
 
-	CDebugProc::Print("ボスとプレイヤーの距離 --- x --- %f\n", fDist);
-	CDebugProc::Print("ボスのステート %d\n", m_BossOneState);
-	CDebugProc::Print("\n");
-	CDebugProc::Print("\n");
-	CDebugProc::Print("\n");
-	CDebugProc::Print("\n");
-	CDebugProc::Print("ボスの攻撃ステート %d\n", m_AttckType);
-	CDebugProc::Print("ボスの姿勢 %d\n", m_PostureType);
-	CDebugProc::Print("ボスのガンの回転 %f\n", m_fBalkanRot);
-	CDebugProc::Print("ボスのガンの角度 %d\n", m_nBalkanAngle);
-	CDebugProc::Print("ボスのボディーの座標 %f\n", GetCharacterModelPartsList(CModel::MODEL_BOSSONE_BODY)->GetPosition().y);
-	CDebugProc::Print("ボスの体力 %d\n", GetLife());
+	CDebugProc::Print_Left("ボスとプレイヤーの距離 --- x --- %f\n", fDist);
+	CDebugProc::Print_Left("ボスのステート %d\n", m_BossOneState);
+	CDebugProc::Print_Left("\n");
+	CDebugProc::Print_Left("\n");
+	CDebugProc::Print_Left("\n");
+	CDebugProc::Print_Left("\n");
+	CDebugProc::Print_Left("ボスの攻撃ステート %d\n", m_AttckType);
+	CDebugProc::Print_Left("ボスの姿勢 %d\n", m_PostureType);
+	CDebugProc::Print_Left("ボスのガンの回転 %f\n", m_fBalkanRot);
+	CDebugProc::Print_Left("ボスのガンの角度 %d\n", m_nBalkanAngle);
+	CDebugProc::Print_Left("ボスのボディーの座標 %f\n", GetCharacterModelPartsList(CModel::MODEL_BOSSONE_BODY)->GetPosition().y);
+	CDebugProc::Print_Left("ボスの体力 %d\n", GetLife());
 
-	//CDebugProc::Print("");
+	//CDebugProc::Print_Left("");
 	CCharacter::DebugInfo();
 }
 // =====================================================================================================================================================================

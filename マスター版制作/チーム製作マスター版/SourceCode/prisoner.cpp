@@ -136,7 +136,7 @@ void CPrisoner::Draw(void)
 //====================================================================
 void CPrisoner::DebugInfo(void)
 {
-	//CDebugProc::Print("");
+	//CDebugProc::Print_Left("");
 	//CCharacter::DebugInfo();
 }
 //====================================================================
@@ -285,7 +285,7 @@ void CPrisoner::Collision()
 		}
 		if (GetFallFlag() == true)
 		{
-		CDebugProc::Print("トルゥーやで\n");
+		CDebugProc::Print_Left("トルゥーやで\n");
 		}
 	}
 

@@ -225,6 +225,12 @@ private:
 	CHARACTER_TYPE m_CharaType;										//キャラクターのタイプ
 	int m_Life;														//ライフ
 	int m_nStateCnt;												//ステータスのカウント
+	bool m_bGravity;												//重力がかかっているか
+	bool m_bCanJump;												//ジャンプしているかどうか
+	bool m_bDieFlag;												// 死亡フラグ
+	bool m_bMotion;													//モーションするかどうか
+	bool m_bFall;													//モーションするかどうか
+	bool m_bDraw;													//描画するかどうか
 	DIRECTION	m_CharacterDirection;								//キャラクターの向き
 	DIRECTION	m_CharacterDirectionOld;							//1F前のキャラクターの向き
 
@@ -234,12 +240,7 @@ private:
 	CHARACTER_MOTION_STATE m_MotionOld;								//前のモーション
 	int m_CntKeySet;												//キーセットのカウント
 	int m_Fram;														//フレーム
-	bool m_bGravity;												//重力がかかっているか
-	bool m_bCanJump;												//ジャンプしているかどうか
-	bool m_bDieFlag;												// 死亡フラグ
-	bool m_bMotion;													//モーションするかどうか
-	bool m_bFall;													//モーションするかどうか
-	bool m_bDraw;													//描画するかどうか
+
 	CCollision				*m_pCollision;							//当たり判定のポインタ
 
 	void CalcShotDirection();										//撃つ方向決める

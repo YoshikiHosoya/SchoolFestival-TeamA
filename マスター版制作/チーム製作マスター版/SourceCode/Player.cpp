@@ -309,49 +309,47 @@ void CPlayer::DebugInfo(void)
 	CKeyboard *key;
 	key = CManager::GetInputKeyboard();
 
+	char aTreeName[MAX_TEXT] = {};
+	sprintf(aTreeName, "PlayerInfo [%d]", CScene::GetID());
+
+	if (ImGui::TreeNode(aTreeName))
+	{
+		ImGui::Text("m_ShotRot [%.2f %.2f %.2f]", m_ShotRot.x, m_ShotRot.y, m_ShotRot.z);
+
+		ImGui::Text("m_bAttack [%d]", m_bAttack); ImGui::SameLine();
+		ImGui::Text("m_bKnifeAttack [%d]", m_bKnifeAttack);
+		ImGui::Text("m_bRespawn [%d]", m_bRespawn); ImGui::SameLine();
+		ImGui::Text("m_bCruch [%d]", m_bCruch);
+		ImGui::Text("m_bRideVehicle [%d]", m_bRideVehicle);
+
+
+		ImGui::Text("---DebugCommand---");
+		ImGui::Text("[G] >> PlayerDamage");
+		ImGui::Text("[F2] >> DebugTrigger(Player Fly)"); ImGui::SameLine();
+		ImGui::Text("DebugTrigger [%d]", trigger);
+
+		CCharacter::DebugInfo();
+
+		m_pGun->DebugInfo();
+
+		m_pGrenadeFire->DebugInfo();
+
+		m_pKnife->DebugInfo();
+
+		ImGui::TreePop();
+	}
+
 	if (key->GetKeyboardTrigger(DIK_G))
 	{
 		AddDamage(1);
 	}
-
-	CDebugProc::Print("pos %f,%f,%f\n", GetPosition().x, GetPosition().y, GetPosition().z);
-	CDebugProc::Print("ShotRot >> %.2f %.2f %.2f\n", GetShotDirection().x, GetShotDirection().y, GetShotDirection().z);
-	CDebugProc::Print("PlayerState >> %d\n", GetCharacterState());
-	CDebugProc::Print("Direction >> %d\n", GetCharacterDirection());
-	CDebugProc::Print("DirectionOld >> %d\n", GetCharacterDirectionOld());
-
-	CDebugProc::Print("座標------------------------------------------%f,%f,%f\n", m_pos[0].x, m_pos[0].y, m_pos[0].z);
-
-	CDebugProc::Print("時機のライフ %d\n", GetLife());
-	if (m_bAttack == true)
-	{
-		CDebugProc::Print("攻撃可能\n");
-	}
-	else
-	{
-		CDebugProc::Print("攻撃不可能\n");
-	}
-	if (m_bKnifeAttack == true)
-	{
-		CDebugProc::Print("攻撃ちゅううう\n");
-	}
-	else
-	{
-		CDebugProc::Print("攻撃してないで\n");
-	}
-
-	// 特定のボタンを押した時に歩きモーションに変更
-	if (CHossoLibrary::PressAnyButton())
-	{
-		//SetMotion(CCharacter::PLAYER_MOTION_WALK);
-	}
-
 
 	//デバッグモードの切り替え
 	if (key->GetKeyboardTrigger(DIK_F2))
 	{
 		trigger ^= 1;
 	}
+
 	if (trigger == true)
 	{
 		m_DebugState = DEBUG_CREATE_MAP;
@@ -393,8 +391,8 @@ void CPlayer::MoveUpdate(void)
 		SetCharacterDirection(DIRECTION::RIGHT);
 	}
 
-	// W押してたら上むく
-	if (key->GetKeyboardPress(DIK_W))
+	// しゃがんでない時はW押してたら上むく
+	if (key->GetKeyboardPress(DIK_W) && !m_bCruch)
 	{
 		SetCharacterDirection(DIRECTION::UP);
 	}
@@ -433,14 +431,12 @@ void CPlayer::MoveUpdate(void)
 			else if ((key->GetKeyboardPress(DIK_S) || Pad_Y < -0.8f) && GetJump() == true)
 			{
 				SetMotion(PLAYER_MOTION_SQUATSTOP);
-				GetCollision()->SetSize2D(PLAYER_SIZE_CRUCH);
 				m_bCruch = true;
 			}
 			//ジャンプ、しゃがみをしてなかったらニュートラル
 			else
 			{
 				SetMotion(PLAYER_MOTION_NORMAL);
-				GetCollision()->SetSize2D(PLAYER_SIZE);
 				m_bCruch = false;
 			}
 		}
@@ -470,6 +466,11 @@ void CPlayer::MoveUpdate(void)
 		//正面を向く
 		ResetCharacterDirection();
 	}
+
+	//しゃがんでいるかどうかで当たり判定の大きさ設定
+	m_bCruch ?
+		GetCollision()->SetSize2D(PLAYER_SIZE_CRUCH):	//しゃがみ時の当たり判定サイズ
+		GetCollision()->SetSize2D(PLAYER_SIZE);			//通常時の当たり判定サイズ
 
 	PadMoveUpdate();//パッドの更新
 
@@ -727,7 +728,7 @@ void CPlayer::StateChangeReaction()
 
 	case CHARACTER_STATE_DEATH:
 		GetCollision()->SetCanCollision(false);
-		SetStateCount(240);
+		SetStateCount(120);
 		SetRespawnFlag(true);
 		//悲鳴
 		CManager::GetSound()->Play(CSound::LABEL_SE_VOICE_PLAYER_DEATH);

@@ -94,8 +94,11 @@ void CGun::Uninit(void)
 // =====================================================================================================================================================================
 void CGun::Update(void)
 {
-	// インターバルカウントアップ
-	m_nInterval++;
+	// インターバルカウントダウン
+	if (m_nInterval-- <= 0)
+	{
+		m_nInterval = 0;
+	}
 
 	// 複数撃つフラグをオンのとき
 	if (m_bMultiple)
@@ -111,7 +114,7 @@ void CGun::Update(void)
 	if (m_nAmmo <= 0)
 	{
 		// 弾薬数を0にする
-		m_nAmmo = 0;
+		m_nAmmo = -1;
 		// ハンドガンに戻す
 		m_GunType = GUN_TYPE::GUNTYPE_HANDGUN;
 	}
@@ -121,6 +124,9 @@ void CGun::Update(void)
 	{
 		m_nAmmo = MAX_AMMO;
 	}
+
+	//ShotPos計算
+	D3DXVec3TransformCoord(&m_ShotPos, &m_ShotOffsetPos, GetMatrix());
 
 	// 更新
 	CModel::Update();
@@ -149,6 +155,24 @@ void CGun::Draw(void)
 // =====================================================================================================================================================================
 void CGun::DebugInfo()
 {
+	char aTreeName[MAX_TEXT] = {};
+	sprintf(aTreeName, "GunInfo [%d]", CScene::GetID());
+
+	if (ImGui::TreeNode(aTreeName))
+	{
+		ImGui::Text("m_ShotPos [%.2f %.2f %.2f]", m_ShotPos.x, m_ShotPos.y, m_ShotPos.z); ImGui::SameLine();
+		ImGui::Text("m_ShotRot [%.2f %.2f %.2f]", m_ShotRot.x, m_ShotRot.y, m_ShotRot.z);
+
+		ImGui::Text("m_GunType [%d]", m_GunType); ImGui::SameLine();
+		ImGui::Text("m_nAmmo [%d]", m_nAmmo);
+		ImGui::Text("m_nInterval [%d]", m_nInterval); ImGui::SameLine();
+		ImGui::Text("m_nCntFrame [%d]", m_nCntFrame); ImGui::SameLine();
+		ImGui::Text("m_nCntBullet [%d]", m_nCntBullet);
+		ImGui::Text("m_bDraw [%d]", m_bDraw); ImGui::SameLine();
+		ImGui::Text("m_bMoveZero [%d]", m_bMoveZero);
+
+		ImGui::TreePop();
+	}
 }
 
 // =====================================================================================================================================================================
@@ -238,8 +262,6 @@ void CGun::GunAddAmmo(GUN_TYPE type)
 // =====================================================================================================================================================================
 void CGun::Shot()
 {
-	D3DXVec3TransformCoord(&m_ShotPos, &m_ShotOffsetPos, GetMatrix());
-
 	//画面外から発射不可
 	if (!CManager::GetRenderer()->CheckScreenRange(m_ShotPos))
 	{
@@ -250,7 +272,7 @@ void CGun::Shot()
 
 
 	// インターバルが経過したとき
-	if (m_nInterval >= CBullet::GetBulletParam(m_GunType)->nInterval)
+	if (m_nInterval <= 0)
 	{
 		// ハンドガンと戦車の銃以外のとき
 		if (m_GunType != GUNTYPE_HANDGUN && m_GunType != GUNTYPE_TANKGUN &&
@@ -260,7 +282,7 @@ void CGun::Shot()
 			// 残弾数を減らす
 			m_nAmmo--;
 		}
-		m_nInterval = 0;
+		m_nInterval = CBullet::GetBulletParam(m_GunType)->nInterval;
 
 		switch (m_GunType)
 		{

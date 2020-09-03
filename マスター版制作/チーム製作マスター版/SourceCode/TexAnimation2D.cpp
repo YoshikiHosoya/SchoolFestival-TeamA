@@ -112,8 +112,8 @@ void CTexAnimation2D::Draw()
 void CTexAnimation2D::ShowDebugInfo()
 {
 #ifdef _DEBUG
-	CDebugProc::Print("pos %.1f %.1f %.1f", GetPosition().x, GetPosition().x, GetPosition().x);
-	CDebugProc::Print("col %.1f %.1f %.1f %.1f", GetColor().r, GetColor().g, GetColor().b, GetColor().a);
+	CDebugProc::Print_Left("pos %.1f %.1f %.1f", GetPosition().x, GetPosition().x, GetPosition().x);
+	CDebugProc::Print_Left("col %.1f %.1f %.1f %.1f", GetColor().r, GetColor().g, GetColor().b, GetColor().a);
 
 
 #endif //_DEBUG
