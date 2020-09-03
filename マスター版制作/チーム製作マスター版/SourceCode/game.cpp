@@ -32,7 +32,7 @@
 // 静的メンバ変数の初期化
 // =====================================================================================================================================================================
 int			CGame::m_Counter	= 0;
-CPlayer		*CGame::m_pPlayer[MAX_TAG] = {};
+CPlayer		*CGame::m_pPlayer[MAX_CONTROLLER] = {};
 CMap		*CGame::m_pMap		= nullptr;
 
 //==========================================================
@@ -61,11 +61,10 @@ HRESULT CGame::Init(void)
 	m_pMap		= CMap::MapCreate();		// マップの生成
 	m_pMap->MapLoad(CMap::MAP_1_1);			// マップのロード
 
-	m_pPlayer[(int)TAG::PLAYER_1 - 1] = CPlayer::Create(TAG::PLAYER_1);
+	m_pPlayer[(int)TAG::PLAYER_1] = CPlayer::Create(TAG::PLAYER_1);
 	// 試験的プレイヤー2の配置
-	m_pPlayer[(int)TAG::PLAYER_2 - 1] = CPlayer::Create(TAG::PLAYER_2);
-	m_pPlayer[(int)TAG::PLAYER_2 - 1]->SetPosition(m_pPlayer[(int)TAG::PLAYER_2 - 1]->GetPosition() + D3DXVECTOR3(100.0f, 0.0f, 0.0f));
-	m_pPlayer[(int)TAG::PLAYER_2 - 1]->ChangeColor(true, D3DXCOLOR(0.5f, -0.5f, 1.0f, 0.0f));
+	m_pPlayer[(int)TAG::PLAYER_2] = CPlayer::Create(TAG::PLAYER_2);
+	m_pPlayer[(int)TAG::PLAYER_2]->SetPosition(m_pPlayer[(int)TAG::PLAYER_2]->GetPosition() + D3DXVECTOR3(100.0f, 0.0f, 0.0f));
 
 	m_pPause->CreatePause();
 
@@ -143,7 +142,7 @@ void CGame::Update(void)
 //==========================================================
 CPlayer * CGame::GetPlayer(TAG Tag)
 {
-	return m_pPlayer[(int)Tag - 1];
+	return m_pPlayer[(int)Tag];
 }
 //==========================================================
 // マップ取得
@@ -286,7 +285,7 @@ void CGame::DebugCollision(CKeyboard *key)
 		if (key->GetKeyboardTrigger(DIK_0))
 		{
 			//タイマー減少
-			m_pPlayer[(int)TAG::PLAYER_1 - 1]->GetPlayerUI()->DecrementTime();
+			m_pPlayer[(int)TAG::PLAYER_1]->GetPlayerUI()->DecrementTime();
 		}
 	}
 }

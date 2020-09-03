@@ -16,7 +16,7 @@
 // =====================================================================================================================================================================
 // ガンクラス
 // =====================================================================================================================================================================
-class CGun : public CModel
+class CGun : public CModel, public CGameObject
 {
 public:
 
@@ -61,7 +61,6 @@ public:
 
 	/* メンバ関数 */
 	GUN_TYPE			&GetGunType()				{ return m_GunType; };				// 銃の種類の取得
-	TAG					&GetTag()					{ return m_Tag; };					// タグの取得
 	bool				GetDrawFlag()				{ return m_bDraw; };				// 描画フラグの取得
 	int					GetGunAmmo()				{ return m_nAmmo; };				// 銃の残弾数取得
 	D3DXVECTOR3			GetShotOffsetPos()			{ return m_ShotOffsetPos; };		// 発射位置のオフセットの取得
@@ -76,7 +75,6 @@ public:
 	void				SetGunTypeOnly(GUN_TYPE type)				{ m_GunType = type; };					// 銃の種類だけ変更
 	void				SetHandMtx(D3DXMATRIX *pMtx)				{ m_HasHandMtx = pMtx; };				// 手のマトリックス設定
 	void				SetDrawFlag(bool bflag)						{ m_bDraw = bflag; };					// 描画フラグの設定
-	void				SetTag(TAG type)							{ m_Tag = type; };						// タグの設定
 	void				SetShotOffsetPos(D3DXVECTOR3 ShotOffsetPos)	{ m_ShotOffsetPos = ShotOffsetPos; };	// 発射位置のオフセットの設定
 	void				SetShotRot(D3DXVECTOR3 ShotRot)				{ m_ShotRot = ShotRot; };				// 撃つときの回転の向きの設定
 	void				SetShotVec(D3DXVECTOR3 ShotVec)				{ m_Shotvector = ShotVec; };			// 撃つときの向きの設定
@@ -90,7 +88,6 @@ private:
 	/* メンバ変数 */
 	GUN_TYPE			m_GunType;				// ガンの種類
 	GUN_TYPE			m_GunTypeOld;			// 前回のガンの種類
-	TAG					m_Tag;					// タグ
 	int					m_nAmmo;				// 弾薬数
 	int					m_nInterval;			// インターバル
 	D3DXMATRIX			*m_HasHandMtx;			// 持ち手のマトリックス

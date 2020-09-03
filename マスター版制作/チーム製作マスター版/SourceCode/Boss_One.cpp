@@ -119,7 +119,7 @@ HRESULT CBoss_One::Init(void)
 		m_pGun[nCnt]->SetHandMtx(GetCharacterModelPartsList(
 			static_cast<CModel::BOSSONE_PARTS_MODEL>(CModel::MODEL_BOSSONE_GUN_BALKAN + nCnt))->GetMatrix());
 		// 銃の弾の種類
-		m_pGun[nCnt]->GetTag() = TAG::ENEMY;
+		m_pGun[nCnt]->SetTag(TAG::ENEMY);
 		// 銃の弾の種類
 		m_pGun[nCnt]->SetGunType(static_cast<CGun::GUN_TYPE>(CGun::GUNTYPE_BALKAN + nCnt));
 		// 発射位置のオフセットの設定
@@ -247,6 +247,8 @@ CBoss_One *CBoss_One::Create()
 {
 	// メモリを確保
 	CBoss_One*pBoss_One = new CBoss_One(OBJTYPE_BOSSONE);
+	// タグの設定
+	pBoss_One->SetTag(TAG::ENEMY);
 	// 初期化
 	pBoss_One->Init();
 	// 値を返す

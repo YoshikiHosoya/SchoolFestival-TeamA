@@ -24,7 +24,7 @@ CParticle		*CManager::m_Particle						= nullptr;
 CBaseMode		*CManager::m_pBaseMode						= nullptr;
 CMouse			*CManager::m_pMouse							= nullptr;
 CManager::MODE	CManager::m_mode							= CManager::MODE_TITLE;
-CXInputPad		*CManager::m_pPad[MAX_TAG]	= {};
+CXInputPad		*CManager::m_pPad[MAX_CONTROLLER]	= {};
 CSound			*CManager::m_pSound							= nullptr;
 
 
@@ -45,7 +45,7 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	m_pInputKeyboard = new CKeyboard;
 	m_pMouse = new CMouse;
 	m_pSound = new CSound;
-	for (int nCnt = 0; nCnt < MAX_TAG; nCnt++)
+	for (int nCnt = 0; nCnt < MAX_CONTROLLER; nCnt++)
 	{
 		m_pPad[nCnt] = new CXInputPad;
 	}
@@ -57,7 +57,7 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	}
 	m_pInputKeyboard->InitInput(hInstance, hWnd);
 	m_pMouse->Init(hInstance, hWnd);
-	for (int nCnt = 0; nCnt < MAX_TAG; nCnt++)
+	for (int nCnt = 0; nCnt < MAX_CONTROLLER; nCnt++)
 	{
 		m_pPad[nCnt]->Init(hInstance, hWnd, (TAG)nCnt);
 	}
@@ -87,7 +87,7 @@ void CManager::Uninit(void)
 		delete m_pMouse;
 		m_pMouse = nullptr;
 	}
-	for (int nCnt = 0; nCnt < MAX_TAG; nCnt++)
+	for (int nCnt = 0; nCnt < MAX_CONTROLLER; nCnt++)
 	{
 		if (m_pPad[nCnt])
 		{
@@ -125,7 +125,7 @@ void CManager::Update(void)
 	m_pInputKeyboard->UpdateInput();
 	m_pRenderer->Update();
 	m_pMouse->Update();
-	for (int nCnt = 0; nCnt < MAX_TAG; nCnt++)
+	for (int nCnt = 0; nCnt < MAX_CONTROLLER; nCnt++)
 	{
 		m_pPad[nCnt]->Update();
 	}
@@ -267,9 +267,9 @@ CMouse * CManager::GetMouse()
 //===========================================
 CXInputPad * CManager::GetPad(TAG Tag)
 {
-	if (m_pPad[(int)Tag - 1])
+	if (m_pPad[(int)Tag])
 	{
-		return m_pPad[(int)Tag - 1];
+		return m_pPad[(int)Tag];
 	}
 	return nullptr;
 }

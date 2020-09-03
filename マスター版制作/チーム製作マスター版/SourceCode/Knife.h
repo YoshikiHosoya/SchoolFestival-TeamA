@@ -19,7 +19,7 @@
 class COrbit;
 class CCollision;
 
-class CKnife : public CModel
+class CKnife : public CModel, public CGameObject
 {
 public:
 	CKnife(OBJ_TYPE type);									//コンストラクタ
@@ -43,7 +43,6 @@ private:
 	COrbit		*m_pOrbit;					//軌跡のポインタ
 	CCollision	*m_pCollision;				//当たり判定のポインタ
 	D3DXMATRIX	*m_HandMatrix;				//ナイフを持つ手のマトリックスのポインタ
-	TAG			m_tag;						//タグ
 	bool		m_bAttack;					//攻撃中かどうか
 
 	D3DXVECTOR3 m_worldpos;					//ワールド座標　当たり判定用

@@ -32,7 +32,7 @@
 #define COMMENT01			("//\n")																//テキスト用　コメント　改行
 #define COMMENT02			("//------------------------------------------------------------\n")	//テキスト用　線
 #define EQUAL				("=")																	//テキスト用　イコール
-#define MAX_TAG		(2)																		//コントローラーの最大数
+#define MAX_CONTROLLER		(2)																		//コントローラーの最大数
 
 //------------------------------------------------------------------------------
 //構造体定義
@@ -86,7 +86,7 @@ typedef struct INTEGER3
 // タグ
 enum class TAG
 {
-	NONE = 0,
+	NONE = -1,
 	PLAYER_1,			// プレイヤー1
 	PLAYER_2,			// プレイヤー2
 	ENEMY,				// 敵
@@ -112,6 +112,18 @@ using FILENAME_LIST = std::vector<std::string>;		//ファイル名のリスト
 //------------------------------------------------------------------------------
 class CKeyboard;
 class CXInputPad;
+
+// タグを管理するクラス
+class CGameObject
+{
+public:
+	void	SetTag(TAG Tag) { m_Tag = Tag; };	// タグの設定
+	TAG		GetTag()		{ return m_Tag; };	// タグの取得
+
+private:
+	TAG		m_Tag;								// タグ
+};
+
 class CHossoLibrary
 {
 public:

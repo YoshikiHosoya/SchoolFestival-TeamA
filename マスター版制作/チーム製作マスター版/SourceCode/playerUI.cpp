@@ -403,7 +403,7 @@ void CPlayerUI::PlayerUICreate(TAG Tag)
 	{
 		m_PLAYER_2_UI_FramePos	= PLAYER_2_UI_FRAME_POS;
 		m_PLAYER_2_UI_ScorePos	= PLAYER_2_UI_SCORE_POS;
-		m_PLAYER_2_UI_LifePos		= PLAYER_2_UI_LIFE_POS;
+		m_PLAYER_2_UI_LifePos	= PLAYER_2_UI_LIFE_POS;
 	}
 
 	for (int nCnt = 0; nCnt < PLAYER_UI::PLAYER_UI_MAX; nCnt++)

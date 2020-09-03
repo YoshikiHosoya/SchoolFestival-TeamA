@@ -54,7 +54,7 @@ class COneParticle
 
 //パーティクルのまとまり
 //テクスチャアニメーション継承
-class CParticle : public CTexAnimationBase
+class CParticle : public CTexAnimationBase, public CGameObject
 {
 public:
 	CParticle();									//コンストラクタ
@@ -91,8 +91,6 @@ private:
 
 	std::vector<std::unique_ptr<COneParticle>> m_pParticleList;		//パーティクルの構造体のリスト
 	bool m_bDeleteFlag;												//消去フラグ
-	TAG m_Tag;														//タグ　プレイヤーかどうか
-
 
 	void SetParticle(D3DXVECTOR3 &pos, D3DXVECTOR3 const &rot, CParticleParam *pParam);				//パーティクル設定
 	void SetCollsionParam();										//当たり判定のパラメータ設定

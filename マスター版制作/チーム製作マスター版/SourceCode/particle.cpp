@@ -357,7 +357,7 @@ void CParticle::CreateFromText(D3DXVECTOR3 pos, D3DXVECTOR3 rot, CParticleParam:
 	{
 		//初期化
 		pParticle->Init();
-		pParticle->m_Tag = tag;
+		pParticle->SetTag(tag);
 
 		//パーティクルのパラメータのメモリ確保
 		CParticleParam *pParam = new CParticleParam;
@@ -673,8 +673,11 @@ void CParticle::Collision()
 //nullcheck
 	if (m_pCollision)
 	{
+		// ゲームオブジェクト( タグ )の設定
+		m_pCollision->SetGameObject(this);
+
 		//プレイヤーの攻撃だった場合
-		if (m_Tag == TAG::PLAYER_1 || m_Tag == TAG::PLAYER_2)
+		if (GetTag() == TAG::PLAYER_1 || GetTag() == TAG::PLAYER_2)
 		{
 			if (CManager::GetMode() == CManager::MODE_GAME)
 			{
@@ -683,7 +686,7 @@ void CParticle::Collision()
 			}
 		}
 		//プレイヤーの攻撃だった場合
-		if (m_Tag == TAG::ENEMY)
+		if (GetTag() == TAG::ENEMY)
 		{
 			if (CManager::GetMode() == CManager::MODE_GAME)
 			{

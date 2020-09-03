@@ -24,7 +24,7 @@ class CModel;
 class CGun;
 class CEnemyAI;
 //レンダリングクラス
-class CEnemy :public CCharacter
+class CEnemy :public CCharacter, public CGameObject
 {
 public:
 

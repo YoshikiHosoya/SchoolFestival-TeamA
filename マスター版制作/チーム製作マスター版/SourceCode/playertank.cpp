@@ -71,7 +71,7 @@ HRESULT CPlayertank::Init(void)
 	// マトリックス設定
 	m_pGun->SetHandMtx(GetVehicleModelPartsList(CModel::MODEL_TANK_TANKGUN)->GetMatrix());
 	// 銃の弾の種類
-	m_pGun->GetTag() = TAG::PLAYER_1;		// 仮止め)プレイヤー1、2どちらか入れる 変数?
+	m_pGun->SetTag(TAG::PLAYER_1);		// 仮止め)プレイヤー1、2どちらか入れる 変数?
 	// 銃の弾の種類
 	m_pGun->SetGunType(CGun::GUNTYPE_TANKGUN);
 	// 発射位置のオフセットの設定

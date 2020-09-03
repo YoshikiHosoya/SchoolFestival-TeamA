@@ -158,6 +158,8 @@ HRESULT CPlayer::Init(void)
 	GetCollision()->SetSize2D(PLAYER_SIZE);
 	GetCollision()->SetMove(&GetMove());
 	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_CHARACTER);
+	// ゲームオブジェクト( タグ )の設定
+	GetCollision()->SetGameObject(this);
 
 	// 試験的パッドのポインタ取得
 	m_pPad = CManager::CManager::GetPad(GetTag());
@@ -498,6 +500,8 @@ void CPlayer::CollisionUpdate(void)
 		// 座標の更新 posとposold
 		GetCollision()->SetPos(&GetPosition());
 		GetCollision()->SetPosOld(&GetPositionOld());
+		// ゲームオブジェクト( タグ )の設定
+		GetCollision()->SetGameObject(this);
 
 		// 乗り物に乗っている時に乗り物以外の判定をしない
 		if (m_bRideVehicle == false)

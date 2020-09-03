@@ -70,8 +70,6 @@ CCharacter::CCharacter(OBJ_TYPE type) :CScene(type)
 {
 	// 当たり判定のポインタをnullにする
 	m_pCollision = nullptr;
-
-	m_Tag	= TAG::NONE;	// タグ
 }
 //====================================================================
 //デストラクタ
@@ -1240,13 +1238,6 @@ std::vector<CModel*>& CCharacter::GetCharacterModelList()
 	return m_vModelList;
 }
 //====================================================================
-//タグの取得
-//====================================================================
-TAG CCharacter::GetTag()
-{
-	return m_Tag;
-}
-//====================================================================
 //モデルパーツのリストを返す	参照渡し
 //====================================================================
 CModel* CCharacter::GetCharacterModelPartsList(int nCnt)
@@ -1323,12 +1314,4 @@ void CCharacter::SetCharacterDirection(DIRECTION direction)
 void CCharacter::SetShotDirection(D3DXVECTOR3 direction)
 {
 	m_ShotRotDest = direction;
-}
-
-//====================================================================
-//タグの設定
-//====================================================================
-void CCharacter::SetTag(TAG Tag)
-{
-	m_Tag = Tag;
 }

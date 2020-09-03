@@ -27,7 +27,7 @@ public:
 	virtual void		Update()							= 0;	//更新
 	virtual void		Draw()								= 0;	//描画
 	virtual void		ShowDebugInfo()						= 0;	//デバッグ情報表記
-	virtual CPlayer*	GetPlayer(TAG Tag)	= 0;	//プレイヤーのポインタ取得
+	virtual CPlayer*	GetPlayer(TAG Tag)					= 0;	//プレイヤーのポインタ取得
 	virtual CMap*		GetMap()							= 0;	// マップのポインタ取得
 
 	void				DebugCommand(void);		//デバッグコマンド

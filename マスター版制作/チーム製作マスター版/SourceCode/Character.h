@@ -151,7 +151,6 @@ public:
 	void SetGravity(bool gravity);
 	void SetCharacterDirection(DIRECTION direction);
 	void SetShotDirection(D3DXVECTOR3 direction);
-	void SetTag(TAG Tag);
 
 	//モーション関連
 	void SetMotion(CHARACTER_MOTION_STATE type);
@@ -177,7 +176,6 @@ public:
 	DIRECTION &GetCharacterDirection(void);							//向きの取得
 	DIRECTION &GetCharacterDirectionOld(void);						//1F前の向きの取得
 	std::vector<CModel*> &GetCharacterModelList();					//キャラクターのモデル取得
-	TAG GetTag();													//タグの取得
 
 	//モーション関連
 	bool &GetMotion();
@@ -248,6 +246,5 @@ private:
 	void CalcMove();												//移動の計算
 	void CalcRotation();											//回転の計算
 	void Motion(void);												//モーション処理
-	TAG	m_Tag;														// タグ
 };
 #endif

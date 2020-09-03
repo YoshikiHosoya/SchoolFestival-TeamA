@@ -45,7 +45,7 @@ HRESULT CWeakEnemy::Init(void)
 	// e‚Ì¶¬
 	GetGunPtr()->SetHandMtx(GetCharacterModelPartsList(CModel::MODEL_ENEMY_RHAND)->GetMatrix());
 	// e‚Ì’e‚ÌŽí—Þ
-	GetGunPtr()->GetTag() = TAG::ENEMY;
+	GetGunPtr()->SetTag(TAG::ENEMY);
 
 	GetGunPtr()->SetGunTypeOnly(CGun::GUNTYPE_HANDGUN_ENEMY);
 	// ƒiƒCƒt‚Ì¶¬
@@ -77,7 +77,7 @@ HRESULT CWeakEnemy::Init(void)
 	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_CHARACTER);
 
 	CCharacter::SetLife(1);
-
+	
 	return S_OK;
 }
 //====================================================================
@@ -140,6 +140,8 @@ CWeakEnemy *CWeakEnemy::Create(WEAKENEMY_TYPE type)
 	CWeakEnemy*pWeakEnemy;
 	pWeakEnemy = new CWeakEnemy(OBJTYPE_ENEMY);
 	pWeakEnemy->SetEnemyType(type);
+	// ƒ^ƒO‚ÌÝ’è
+	pWeakEnemy->SetTag(TAG::ENEMY);
 	pWeakEnemy->Init();
 
 

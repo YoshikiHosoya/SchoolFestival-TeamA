@@ -158,6 +158,6 @@ private:
 	CCollision					*m_pCollision;									// 当たり判定
 	int							m_nRemainTime;									// アイテムがマップに残る時間
 	int							m_nColCnt;										// αカラーカウント
-	CPlayer						*m_pPlayer[MAX_TAG];				// プレイヤーのポインタ
+	CPlayer						*m_pPlayer[MAX_CONTROLLER];				// プレイヤーのポインタ
 };
 #endif

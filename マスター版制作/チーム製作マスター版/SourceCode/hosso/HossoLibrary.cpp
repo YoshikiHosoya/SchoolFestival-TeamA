@@ -76,9 +76,9 @@ bool CHossoLibrary::PressAnyButton(void)
 {
 	CKeyboard *Keyboard;
 	Keyboard = CManager::GetInputKeyboard();
-	CXInputPad *InpudPad[MAX_TAG] = {};
+	CXInputPad *InpudPad[MAX_CONTROLLER] = {};
 
-	for (int nCnt = 0; nCnt < MAX_TAG; nCnt++)
+	for (int nCnt = 0; nCnt < MAX_CONTROLLER; nCnt++)
 	{
 		InpudPad[nCnt] = CManager::GetPad((TAG)nCnt);
 
@@ -104,8 +104,8 @@ bool CHossoLibrary::PressStartButton(void)
 {
 	CKeyboard *Keyboard;
 	Keyboard = CManager::GetInputKeyboard();
-	CXInputPad *InpudPad[MAX_TAG] = {};
-	for (int nCnt = 0; nCnt < MAX_TAG; nCnt++)
+	CXInputPad *InpudPad[MAX_CONTROLLER] = {};
+	for (int nCnt = 0; nCnt < MAX_CONTROLLER; nCnt++)
 	{
 		InpudPad[nCnt] = CManager::GetPad((TAG)nCnt);
 

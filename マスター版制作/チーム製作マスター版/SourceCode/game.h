@@ -56,7 +56,7 @@ private:
 
 	/* Ã“Iƒƒ“ƒo•Ï” */
 	static LPDIRECT3DTEXTURE9			m_pTexture;
-	static CPlayer						*m_pPlayer[MAX_TAG];
+	static CPlayer						*m_pPlayer[MAX_CONTROLLER];
 	static CMap							*m_pMap;
 	static int							m_Counter;
 
