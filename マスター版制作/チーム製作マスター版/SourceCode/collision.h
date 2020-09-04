@@ -70,13 +70,15 @@ public:
 	void SetPosOld(D3DXVECTOR3 *posold);											// 1フレーム前の座標の設定
 	void SetSize(D3DXVECTOR3 size);													// サイズの設定
 	void SetSize2D(D3DXVECTOR3 size);												// 2D用サイズの設定
-	void SetMove(D3DXVECTOR3 *move);												// 移動量の設定
-	void SetTime(int nTime) { m_nCollisionTime = nTime; };							// 継続時間の設定
+	void SetMove(D3DXVECTOR3 *move) { m_pmove = move; };							// 移動量の設定
+	void SetHeight(float height) { m_fHeight = height; };													// Rayの高さ設定
 	void SetCanCollision(bool bCollision) { m_bCanCollision = bCollision; };		//当たり判定可能かどうか設定
 	void SetGameObject(CGameObject *GameObject) { m_pGameObject = GameObject; };	// ゲームオブジェクト( タグ )の設定
+
 	bool GetCanCollison() { return m_bCanCollision; };								// 当たり判定できるかどうか取得
-	int	 GetTime() { return m_nCollisionTime; };									// 継続時間の設定
-	void SetHeight(float height);													// Rayの高さ設定
+	D3DXVECTOR3 GetPos() { return *m_ppos; };										// 当たり判定の座標取得
+	D3DXVECTOR3 GetSize() { return m_size; };										// 当たり判定のサイズ取得
+
 	bool Collision2D(CCollision *pCollision);										// 板型の当たり判定
 	bool CharCollision2D(CCollision *pCollision);									// キャラクター用板型の当たり判定
 	bool OtherCollision2D(CCollision *pCollision);									// 板型の当たり判定
@@ -88,7 +90,9 @@ public:
 	bool BoxCollision2D_Character(CCollision *pCollision);// キャラクター同士
 
 	bool RayBlockCollision(CMap *pMap, D3DXMATRIX *pMat);				// Rayの判定 キャラクター
-	bool RayCollision(CMap *pMap);										// Rayの判定 弾など
+	bool RayCollision(CMap *pMap);
+	bool RayCollisionGetLength(D3DXVECTOR3 posOrigin, D3DXVECTOR3 posEndPoint,float & fLength);		//Rayの判定　長さを取得
+	// Rayの判定 弾など
 	bool RayFloorCollision(CMap *pMap, D3DXMATRIX *pMat,D3DXVECTOR3 pdirection,D3DXVECTOR3 ppos);// Rayの判定 前方の床
 
 	void DeCollisionCreate(COLLISIONTYPE collisiontype)	;				// デバッグ用当たり判定の生成
@@ -124,6 +128,8 @@ public:
 	bool KnifeCollision(D3DXVECTOR3 Knifepos,
 		CCollision *pCollision);						// ナイフとキャラクターの判定
 
+	bool LazerCollisionGetLength(D3DXVECTOR3 ShotPos,float &fLength);		// レーザーの判定　盾や障害物に当たった時の距離を求める
+
 	bool VehicleCollision(CCollision *pCollision);		// プレイヤーが乗り物に乗る時の判定
 
 protected:
@@ -137,7 +143,6 @@ private:
 	CDebugcollision		*m_Debugcollision;				// デバッグ用当たり判定のポインタ
 	bool				m_bDeadFlag;					// 死亡フラグ
 	bool				m_bCanCollision;				// 判定をとるかどうか
-	int					m_nCollisionTime;				// 当たり判定が持続する時間
 	float				m_fHeight;
 
 	CGameObject			*m_pGameObject;					// ゲームオブジェクト( タグ )のポインタ

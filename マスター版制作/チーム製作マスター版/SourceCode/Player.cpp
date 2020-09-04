@@ -37,7 +37,6 @@
 // =====================================================================================================================================================================
 PLAYER_DATA		CPlayer::m_PlayerData	 = {};
 int				CPlayer::m_nLife[2] = {};
-int				CPlayer::m_nRespawnCnt	 = 0;
 float			CPlayer::m_fRunSpeed	 = 0.0f;
 float			CPlayer::m_fCrouchSpeed	 = 0.0f;
 float			CPlayer::m_fJump		 = 0.0f;
@@ -62,7 +61,7 @@ char *CPlayer::m_PlayerFileName =
 #define SHOT_BULLET_POS_Y		(-15.0f)		// 弾の発射位置Y
 #define SHOT_BULLET_POS_Z		(-5.0f)			// 弾の発射位置Z
 #define KNIFE_COLLISOIN_SIZE	(D3DXVECTOR3(80.0f,80.0f,0.0f))
-#define RESPAWN_INTERVAL		(240)
+#define RESPAWN_INTERVAL		(120)
 #define DEFAULT_STOCK			(3)				// 初期残機
 
 // =====================================================================================================================================================================
@@ -79,6 +78,7 @@ CPlayer::CPlayer(OBJ_TYPE type) :CCharacter(type)
 	m_pPlayerUI		= nullptr;
 	m_pVehicle		= nullptr;
 	m_pPad			= nullptr;
+	m_nRespawnCnt = 0;
 }
 
 // =====================================================================================================================================================================
@@ -1024,8 +1024,6 @@ void CPlayer::SetPlayerData()
 	m_nLife[0] = m_PlayerData.nLife;
 	// 初期座標の情報を取得
 	m_pos[0] = m_PlayerData.pos;
-	// 復活時間の情報を取得
-	m_nRespawnCnt = m_PlayerData.nRespawnCnt;
 	// 移動速度の情報を取得
 	m_fRunSpeed = m_PlayerData.fRunSpeed;
 	// しゃがみ時の移動速度の情報を取得

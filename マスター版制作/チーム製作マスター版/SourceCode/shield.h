@@ -21,7 +21,7 @@
 //====================================================================
 class CWeakEnemy;
 
-class CShield : public CModel
+class CShield : public CModel , public CGameObject
 {
 public:
 	CShield() {};
@@ -39,6 +39,9 @@ public:
 	void	SetHandMtx(D3DXMATRIX *pMtx) { m_HasHandMtx = pMtx; };
 	void	SetHasEnemyPtr(CWeakEnemy *pEnemy) { m_HasEnemyPtr = pEnemy; };
 	void	AwayShield();
+
+
+	D3DXVECTOR3 GetShieldPos() { return m_ShieldPos; };
 
 private:
 	/* ƒƒ“ƒo•Ï” */

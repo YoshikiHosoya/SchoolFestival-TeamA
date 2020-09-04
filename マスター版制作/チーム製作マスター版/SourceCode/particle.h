@@ -75,12 +75,14 @@ public:
 	static void CreateFromText(D3DXVECTOR3 pos, D3DXVECTOR3 rot, CParticleParam::PARTICLE_TEXT type, TAG tag = TAG::PLAYER_1, int nAttack = -1, D3DXCOLOR color = D3DXCOLOR(1.0f, 1.0f, 1.0f, -1.0f), D3DXVECTOR3 *PosPtr = nullptr);
 
 	bool GetDeleteFlag() { return m_bDeleteFlag; };
+	void CalcCollisionSize(D3DXVECTOR3 size);						//コリジョンのサイズ計算
 
 private:
 	static LPDIRECT3DVERTEXBUFFER9	m_pVtxBuff;						//頂点バッファへのポインタ
 	static int m_nVertexID;											//頂点ID
 
 	D3DXVECTOR3 m_posOrigin;										//原点座標
+	D3DXVECTOR3 m_posEndPoint;										//終点座標
 	D3DXVECTOR3 m_rotOrigin;										//原点回転量
 	D3DXVECTOR3 m_CollisionOrigin;									//当たり判定用の原点
 	D3DXMATRIX m_WorldMtx;											//ワールドマトリックス
