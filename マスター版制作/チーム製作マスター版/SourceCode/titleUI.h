@@ -29,6 +29,12 @@ public:
 	{
 		TITLE_LOGO,				// タイトルロゴ
 		UI_START,				// スタート
+		UI_BULLETHOLE_1,		// 弾痕1
+		UI_BULLETHOLE_2,		// 弾痕2
+		UI_BULLETHOLE_3,		// 弾痕3
+		UI_PLAYER_COUNT_1,		// プレイ人数選択1
+		UI_PLAYER_COUNT_2,		// プレイ人数選択2
+		UI_ARROWMARK,			// 人数選択用矢印
 		TITLE_UI_MAX
 	};
 
@@ -46,6 +52,7 @@ public:
 
 	/* メンバ関数 */
 	void					Flashing(CScene2D *m_apScene2D);	// 点滅処理
+	void					SetDrawFlag(int nNum,bool bDraw) { m_bDrawFlag[nNum] = bDraw; };
 private:
 	/* メンバ関数 */
 	/* 静的メンバ変数 */
@@ -53,5 +60,6 @@ private:
 	/* メンバ変数 */
 	CScene2D				*m_apScene2D[TITLE_UI_MAX];		// シーン2Dのポインタ
 	int						m_nColCnt;						// カラーカウント
+	bool					m_bDrawFlag[TITLE_UI_MAX];					// 演出用の描画フラグ
 };
 #endif

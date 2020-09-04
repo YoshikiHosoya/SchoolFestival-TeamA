@@ -41,6 +41,9 @@ FILENAME_LIST CTexture::m_aTexFileName =
 
 	{ "data/TEXTURE/UI/Title_UI/title.png" },				//タイトルロゴ
 	{ "data/TEXTURE/UI/Title_UI/start.png" },				//スタート
+	{ "data/TEXTURE/UI/Title_UI/BulletHole1.png" },			//弾痕1
+	{ "data/TEXTURE/UI/Title_UI/BulletHole2.png" },			//弾痕2
+	{ "data/TEXTURE/UI/Title_UI/BulletHole3.png" },			//弾痕3
 
 	{ "data/TEXTURE/UI/Tutorial_UI/Tutorial_Name.png" },	//チュートリアル名前ロゴ
 	{ "data/TEXTURE/UI/Tutorial_UI/Tutorial_1.png" },		//チュートリアル開始

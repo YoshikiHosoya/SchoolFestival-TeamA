@@ -70,6 +70,36 @@ HRESULT CTitleUI::Init(void)
 				// テクスチャの割り当て
 				m_apScene2D[nCnt]->BindTexture(CTexture::GetTexture(CTexture::TEX_UI_START));
 				break;
+
+				// 弾痕1
+			case TITLE_UI::UI_BULLETHOLE_1:
+				// シーン2Dの生成
+				m_apScene2D[nCnt] = CScene2D::Create(D3DXVECTOR3(200.0f, 250.0f, 0.0f), D3DXVECTOR3(250.0f, 250.0f, 0.0f));
+				// テクスチャの割り当て
+				m_apScene2D[nCnt]->BindTexture(CTexture::GetTexture(CTexture::TEX_UI_BULLET_HOLE1));
+
+				m_apScene2D[nCnt]->SetDisp(false);
+				break;
+
+				// 弾痕2
+			case TITLE_UI::UI_BULLETHOLE_2:
+				// シーン2Dの生成
+				m_apScene2D[nCnt] = CScene2D::Create(D3DXVECTOR3(1000.0f, 250.0f, 0.0f), D3DXVECTOR3(250.0f, 250.0f, 0.0f));
+				// テクスチャの割り当て
+				m_apScene2D[nCnt]->BindTexture(CTexture::GetTexture(CTexture::TEX_UI_BULLET_HOLE2));
+
+				m_apScene2D[nCnt]->SetDisp(false);
+				break;
+
+				// 弾痕3
+			case TITLE_UI::UI_BULLETHOLE_3:
+				// シーン2Dの生成
+				m_apScene2D[nCnt] = CScene2D::Create(D3DXVECTOR3(1000.0f, 550.0f, 0.0f), D3DXVECTOR3(200.0f, 200.0f, 0.0f));
+				// テクスチャの割り当て
+				m_apScene2D[nCnt]->BindTexture(CTexture::GetTexture(CTexture::TEX_UI_BULLET_HOLE3));
+
+				m_apScene2D[nCnt]->SetDisp(false);
+				break;
 			}
 		}
 	}

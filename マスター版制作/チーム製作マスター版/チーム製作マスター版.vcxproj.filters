@@ -307,10 +307,8 @@
     <ClCompile Include="SourceCode\3Dline.cpp">
       <Filter>Collision</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\selectcharacter.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="SourceCode\selectcharacter.h" />
     <ClInclude Include="SourceCode\shield.h">
       <Filter>Model</Filter>
     </ClInclude>

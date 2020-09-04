@@ -52,8 +52,11 @@ public:
 		TEX_UI_INFINITY,						//弾数無限のUI
 		TEX_UI_FRAME,							//枠のUI
 
-		TEX_UI_TITLE,							//タイトルロゴ
-		TEX_UI_START,							//スタート
+		TEX_UI_TITLE,							// タイトルロゴ
+		TEX_UI_START,							// スタート
+		TEX_UI_BULLET_HOLE1,					// 弾痕1
+		TEX_UI_BULLET_HOLE2,					// 弾痕2
+		TEX_UI_BULLET_HOLE3,					// 弾痕3
 
 		TEX_UI_TUTORIAL_NAME,					// チュートリアル名前ロゴ
 		TEX_UI_TUTORIAL_START,					// 開始宣言

@@ -238,7 +238,6 @@
     <ClCompile Include="SourceCode\SceneBase.cpp" />
     <ClCompile Include="SourceCode\SceneX.cpp" />
     <ClCompile Include="SourceCode\ScoreManager.cpp" />
-    <ClCompile Include="SourceCode\selectcharacter.cpp" />
     <ClCompile Include="SourceCode\shield.cpp" />
     <ClCompile Include="SourceCode\ShieldEnemyAI.cpp" />
     <ClCompile Include="SourceCode\sound.cpp" />
@@ -347,7 +346,6 @@
     <ClInclude Include="SourceCode\SceneBase.h" />
     <ClInclude Include="SourceCode\SceneX.h" />
     <ClInclude Include="SourceCode\ScoreManager.h" />
-    <ClInclude Include="SourceCode\selectcharacter.h" />
     <ClInclude Include="SourceCode\shield.h" />
     <ClInclude Include="SourceCode\ShieldEnemyAI.h" />
     <ClInclude Include="SourceCode\sound.h" />
