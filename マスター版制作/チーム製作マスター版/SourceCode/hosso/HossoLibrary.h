@@ -91,6 +91,8 @@ enum class TAG
 	PLAYER_2,			// プレイヤー2
 	ENEMY,				// 敵
 	PRISONER,			// 捕虜
+	OBSTACLE,			// オブジェクト
+	SHIELD,				// 盾
 };
 
 enum class DIRECTION
