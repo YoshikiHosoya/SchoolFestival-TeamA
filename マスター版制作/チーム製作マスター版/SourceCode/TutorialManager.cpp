@@ -47,12 +47,13 @@
 // =====================================================================================================================================================================
 CTutorialManager::CTutorialManager()
 {
-	m_TutorialState = TUTORIAL_STATE_NONE;
-	m_OldState = TUTORIAL_STATE_NONE;
-	m_pTutorialUI = nullptr;
-	m_nWaitTime = 0;
-	m_bOneFlag = false;
-	m_bPushButton = false;
+	m_TutorialState		= TUTORIAL_STATE_NONE;
+	m_OldState			= TUTORIAL_STATE_NONE;
+	m_pTutorialUI		= nullptr;
+	m_nWaitTime			= 0;
+	m_bOneFlag			= false;
+	m_bPushButton		= false;
+	m_bAdd2PFlag		= false;
 }
 
 // =====================================================================================================================================================================
@@ -106,6 +107,12 @@ void CTutorialManager::Update(void)
 	{
 		// ゲームモードへステート遷移
 		CManager::GetRenderer()->GetFade()->SetFade(CFADE::FADETYPE::FADETYPE_MODE, CManager::MODE_GAME);
+	}
+
+	// 試験的2P配置
+	if (key->GetKeyboardTrigger(DIK_RSHIFT))
+	{
+		m_bAdd2PFlag = true;
 	}
 
 	// 各ステートごとの関数を管理する
