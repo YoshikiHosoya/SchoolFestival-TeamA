@@ -23,6 +23,8 @@
 #include "GameManager.h"
 #include "ResultManager.h"
 #include "shield.h"
+#include "title.h"
+
 // =====================================================================================================================================================================
 // マクロ定義
 // =====================================================================================================================================================================
@@ -65,8 +67,13 @@ HRESULT CGame::Init(void)
 	m_pPlayer[(int)TAG::PLAYER_1] = CPlayer::Create(TAG::PLAYER_1);
 	// 試験的プレイヤー2の配置
 
-	m_pPlayer[(int)TAG::PLAYER_2] = CPlayer::Create(TAG::PLAYER_2);
-	m_pPlayer[(int)TAG::PLAYER_2]->SetPosition(m_pPlayer[(int)TAG::PLAYER_2]->GetPosition() + D3DXVECTOR3(100.0f, 0.0f, 0.0f));
+	if (CTitle::GetPlayerNum() == CTitle::PLAYER_NUM_TWO && !m_pPlayer[(int)TAG::PLAYER_2])
+	{
+		// プレイヤー2の配置
+		m_pPlayer[(int)TAG::PLAYER_2] = CPlayer::Create(TAG::PLAYER_2);
+		m_pPlayer[(int)TAG::PLAYER_2]->SetPosition(m_pPlayer[(int)TAG::PLAYER_2]->GetPosition() + D3DXVECTOR3(100.0f, 0.0f, 0.0f));
+		m_pPlayer[(int)TAG::PLAYER_2]->ChangeColor(true, D3DXCOLOR(0.5f, -0.5f, 1.0f, 0.0f));
+	}
 
 	m_pPause->CreatePause();
 
@@ -142,7 +149,6 @@ void CGame::Update(void)
 //==========================================================
 // プレイヤー取得
 //==========================================================
-
 CPlayer * CGame::GetPlayer(TAG Tag)
 {
 

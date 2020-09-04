@@ -41,6 +41,14 @@ public:
 		MODE_MAX								// 最大数
 	};
 
+	// 選択中のプレイヤーの人数
+	enum PLAYER_NUM
+	{
+		PLAYER_NUM_ONE,							// 1人プレイ選択
+		PLAYER_NUM_TWO,							// 2人プレイ選択
+		//PLAYER_NUM_MAX						// 最大数
+	};
+
 	/* メンバ関数 */
 	CTitle();									// コンストラクタ
 	~CTitle();									// デストラクタ
@@ -53,12 +61,18 @@ public:
 	/* メンバ関数 */
 	CPlayer* GetPlayer(TAG Tag) { return nullptr; };
 	CMap* GetMap() { return nullptr; };
+
+	static PLAYER_NUM GetPlayerNum() { return m_PlayerNum; };
+
 private:
 	/* メンバ関数 */
-
 	void			TitleModeNext();			// 次のモードに移行する
 	void			TitleMode();				// タイトルのモードごとの処理
 	void			TitleStaging();				// タイトルの演出
+
+	/* 静的メンバ変数 */
+	static PLAYER_NUM		m_PlayerNum;		// 参加するプレイヤーの人数
+
 	/* メンバ変数 */
 	CTitleUI		*m_pTitleUI;				// タイトルUIのポインタ
 	TITLE_MODE		m_TitleMode;				// タイトルのモード

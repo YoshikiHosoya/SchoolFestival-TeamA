@@ -19,11 +19,11 @@
 // =====================================================================================================================================================================
 // マクロ定義
 // =====================================================================================================================================================================
-#define INTERBALCOUNT (40)
+#define INTERBALCOUNT (30)
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
 // =====================================================================================================================================================================
-
+CTitle::PLAYER_NUM		CTitle::m_PlayerNum = PLAYER_NUM_ONE;
 // =====================================================================================================================================================================
 // コンストラクタ
 // =====================================================================================================================================================================
@@ -34,6 +34,7 @@ CTitle::CTitle()
 	m_nStagingInterval = 0;
 	m_nStagingNum = 0;
 	m_bEndStaging = false;
+	m_PlayerNum = PLAYER_NUM_ONE;
 }
 
 //==========================================================
@@ -72,29 +73,26 @@ void CTitle::Update(void)
 {
 	TitleMode();
 
-	if (m_TitleMode == MODE_STAGING && m_bEndStaging)
+	if (m_TitleMode != MODE_FADE)
 	{
+		// エンターを押したとき
+		if (CHossoLibrary::PressAnyButton() && m_TitleMode != MODE_STAGING)
+		{
+			// タイトルのモードを次のモードに移行する
+			TitleModeNext();
+			//決定音
+			CManager::GetSound()->Play(CSound::LABEL_SE_DECISION);
+		}
 	}
 	else
 	{
-		// エンターを押したとき
-		if (CHossoLibrary::PressAnyButton() && CManager::GetRenderer()->GetFade()->GetFadeState() == CFADE::FADESTATE::FADESTATE_NONE)
+		if (CManager::GetRenderer()->GetFade()->GetFadeState() == CFADE::FADESTATE::FADESTATE_NONE)
 		{
-			if (m_TitleMode != MODE_FADE)
-			{
-				// タイトルのモードを次のモードに移行する
-				TitleModeNext();
-				//決定音
-				CManager::GetSound()->Play(CSound::LABEL_SE_DECISION);
-			}
-			else
-			{
-				// ゲームモードへ状態遷移7
-				CManager::GetRenderer()->GetFade()->SetFade(CFADE::FADETYPE::FADETYPE_MODE, CManager::MODE_TUTORIAL);
+			// ゲームモードへ状態遷移7
+			CManager::GetRenderer()->GetFade()->SetFade(CFADE::FADETYPE::FADETYPE_MODE, CManager::MODE_TUTORIAL);
 
-				//決定音
-				CManager::GetSound()->Play(CSound::LABEL_SE_DECISION);
-			}
+			//決定音
+			CManager::GetSound()->Play(CSound::LABEL_SE_DECISION);
 		}
 	}
 }
@@ -125,11 +123,6 @@ void CTitle::TitleModeNext()
 			m_TitleMode = (TITLE_MODE)nCnt;
 			break;
 		}
-		else if (m_TitleMode == MODE_PENDING)
-		{
-			m_TitleMode = MODE_STAGING;
-			break;
-		}
 	}
 }
 
@@ -138,6 +131,10 @@ void CTitle::TitleModeNext()
 //==========================================================
 void CTitle::TitleMode()
 {
+	CKeyboard *Keyboard;
+	Keyboard = CManager::GetInputKeyboard();
+	CXInputPad *InpudPad[MAX_CONTROLLER] = {};
+
 	switch (m_TitleMode)
 	{
 	case CTitle::MODE_PENDING:
@@ -154,13 +151,45 @@ void CTitle::TitleMode()
 		{
 			m_pTitleUI->SetDrawFlag(CTitleUI::UI_START, false);
 
-			// 描画フラグを変更する
-			for (int nCnt = 0; nCnt < 2; nCnt++)
+			if (m_nStagingInterval <= 0)
 			{
-				m_pTitleUI->SetDrawFlag(static_cast<CTitleUI::TITLE_UI> (nCnt + CTitleUI::UI_PLAYER_COUNT_1), true);
+				// 描画フラグを変更する
+				for (int nCnt = 0; nCnt < 3; nCnt++)
+				{
+					m_pTitleUI->SetDrawFlag(static_cast<CTitleUI::TITLE_UI> (nCnt + CTitleUI::UI_PLAYER_COUNT_1), true);
+				}
+			}
+			else
+			{
+				m_nStagingInterval--;
 			}
 		}
 
+		for (int nCnt = 0; nCnt < MAX_CONTROLLER; nCnt++)
+		{
+			InpudPad[nCnt] = CManager::GetPad((TAG)nCnt);
+
+			if (Keyboard->GetKeyboardTrigger(DIK_UP) || InpudPad[nCnt]->GetTrigger(CXInputPad::JOYPADKEY_UP, 1) ||
+				Keyboard->GetKeyboardTrigger(DIK_DOWN) || InpudPad[nCnt]->GetTrigger(CXInputPad::JOYPADKEY_DOWN, 1))
+			{
+				if (m_PlayerNum == PLAYER_NUM_ONE)
+				{
+					m_PlayerNum = PLAYER_NUM_TWO;
+					m_pTitleUI->SetPos(CTitleUI::UI_ARROWMARK, D3DXVECTOR3(400.0f, 650.0f, 0.0f));
+					//決定音
+					CManager::GetSound()->Play(CSound::LABEL_SE_SELECT);
+					break;
+				}
+				else
+				{
+					m_PlayerNum = PLAYER_NUM_ONE;
+					m_pTitleUI->SetPos(CTitleUI::UI_ARROWMARK, D3DXVECTOR3(400.0f, 550.0f, 0.0f));
+					//決定音
+					CManager::GetSound()->Play(CSound::LABEL_SE_SELECT);
+					break;
+				}
+			}
+		}
 		break;
 	case CTitle::MODE_FADE:
 		break;
@@ -179,15 +208,20 @@ void CTitle::TitleStaging()
 		{
 			// 描画フラグをtrueにする
 			m_pTitleUI->SetDrawFlag(static_cast<CTitleUI::TITLE_UI> (CTitleUI::UI_BULLETHOLE_1 + m_nStagingNum), true);
+			// 効果音
+			CManager::GetSound()->Play(CSound::LABEL_SE_SHOT_TITLE_BULLET);
 			// 次のカウントの設定
 			m_nStagingInterval = INTERBALCOUNT;
-		}
 
+			m_nStagingNum++;
+		}
 		m_nStagingInterval--;
-		m_nStagingNum++;
 	}
 	else
 	{
 		m_bEndStaging = true;
+		m_TitleMode = MODE_CHARACTERSELECT;
+		m_nStagingInterval = INTERBALCOUNT;
 	}
+
 }

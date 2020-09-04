@@ -13,6 +13,8 @@
 #include "player.h"
 #include "map.h"
 #include "ParticleManager.h"
+#include "title.h"
+
 // =====================================================================================================================================================================
 // マクロ定義
 // =====================================================================================================================================================================
@@ -49,6 +51,14 @@ HRESULT CTutorial::Init(void)
 
 	// プレイヤー1の生成
 	m_pPlayer[(int)TAG::PLAYER_1] = CPlayer::Create(TAG::PLAYER_1);
+
+	if (CTitle::GetPlayerNum() == CTitle::PLAYER_NUM_TWO && !m_pPlayer[(int)TAG::PLAYER_2])
+	{
+		// プレイヤー2の配置
+		m_pPlayer[(int)TAG::PLAYER_2] = CPlayer::Create(TAG::PLAYER_2);
+		m_pPlayer[(int)TAG::PLAYER_2]->SetPosition(m_pPlayer[(int)TAG::PLAYER_2]->GetPosition() + D3DXVECTOR3(100.0f, 0.0f, 0.0f));
+		m_pPlayer[(int)TAG::PLAYER_2]->ChangeColor(true, D3DXCOLOR(0.5f, -0.5f, 1.0f, 0.0f));
+	}
 
 	// UI生成
 	CUIManager::Create();
@@ -89,6 +99,7 @@ void CTutorial::Update(void)
 	m_pMap->UpdateDieFlag();
 	m_pTutorialManager->Update();
 
+#ifdef _DEBUG
 	// 2P追加
 	if (m_pTutorialManager->GetAdd2PFlag())
 	{
@@ -100,6 +111,7 @@ void CTutorial::Update(void)
 			m_pPlayer[(int)TAG::PLAYER_2]->ChangeColor(true, D3DXCOLOR(0.5f, -0.5f, 1.0f, 0.0f));
 		}
 	}
+#endif // _DEBUG
 }
 
 //==========================================================

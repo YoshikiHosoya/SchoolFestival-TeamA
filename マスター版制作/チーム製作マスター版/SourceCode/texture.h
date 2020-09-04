@@ -57,6 +57,9 @@ public:
 		TEX_UI_BULLET_HOLE1,					// 弾痕1
 		TEX_UI_BULLET_HOLE2,					// 弾痕2
 		TEX_UI_BULLET_HOLE3,					// 弾痕3
+		TEX_UI_PLAYER_1,						// プレイヤー選択1
+		TEX_UI_PLAYER_2,						// プレイヤー選択2
+		TEX_UI_ARROW,							// 選択用矢印
 
 		TEX_UI_TUTORIAL_NAME,					// チュートリアル名前ロゴ
 		TEX_UI_TUTORIAL_START,					// 開始宣言

@@ -18,6 +18,7 @@
 // =====================================================================================================================================================================
 class CScene2D;
 
+
 // =====================================================================================================================================================================
 // タイトルUIクラス
 // =====================================================================================================================================================================
@@ -52,14 +53,20 @@ public:
 
 	/* メンバ関数 */
 	void					Flashing(CScene2D *m_apScene2D);	// 点滅処理
-	void					SetDrawFlag(int nNum,bool bDraw) { m_bDrawFlag[nNum] = bDraw; };
+	void					SetDrawFlag(int nNum, bool bDraw);
+	void					SetPos(TITLE_UI Num, D3DXVECTOR3 pos);
+
 private:
 	/* メンバ関数 */
 	/* 静的メンバ変数 */
+	/* 静的メンバ変数 */
+	static LPDIRECT3DTEXTURE9	m_TexNum[TITLE_UI_MAX];		// バインドするテクスチャの情報
+	static D3DXVECTOR3			m_Pos[TITLE_UI_MAX];		// 座標情報
+	static D3DXVECTOR3			m_Size[TITLE_UI_MAX];		// サイズ情報
 
 	/* メンバ変数 */
 	CScene2D				*m_apScene2D[TITLE_UI_MAX];		// シーン2Dのポインタ
 	int						m_nColCnt;						// カラーカウント
-	bool					m_bDrawFlag[TITLE_UI_MAX];					// 演出用の描画フラグ
+	bool					m_bDrawFlag[TITLE_UI_MAX];		// 演出用の描画フラグ
 };
 #endif
