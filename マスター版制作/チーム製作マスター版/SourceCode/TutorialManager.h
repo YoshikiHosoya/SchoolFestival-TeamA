@@ -48,6 +48,7 @@ public:
 	static					CTutorialManager	*Create();					// 生成
 	/* メンバ関数 */
 	void					TutorialState();								// チュートリアルの順番管理
+	bool					GetAdd2PFlag() { return m_bAdd2PFlag; };		// 2Pを追加するフラグの取得
 
 private:
 	/* 静的メンバ変数 */
@@ -65,5 +66,6 @@ private:
 	bool					m_bOneFlag;										// 1回だけ処理を通すフラグ
 	bool					m_bPushButton;									// ボタンを押したかどうか
 	TUTORIAL_STATE			m_OldState;										// 1つ前のステート
+	bool					m_bAdd2PFlag;									// 2Pを追加するフラグ
 };
 #endif
