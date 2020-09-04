@@ -45,13 +45,10 @@ CTutorial::~CTutorial()
 HRESULT CTutorial::Init(void)
 {
 	m_pMap = CMap::MapCreate();				// マップの生成
-	m_pMap->MapLoad(CMap::MAP_TUTORIAL);			// マップのロード
+	m_pMap->MapLoad(CMap::MAP_TUTORIAL);	// マップのロード
 
+	// プレイヤー1の生成
 	m_pPlayer[(int)TAG::PLAYER_1] = CPlayer::Create(TAG::PLAYER_1);
-	// 試験的プレイヤー2の配置
-	m_pPlayer[(int)TAG::PLAYER_2] = CPlayer::Create(TAG::PLAYER_2);
-	m_pPlayer[(int)TAG::PLAYER_2]->SetPosition(m_pPlayer[(int)TAG::PLAYER_2]->GetPosition() + D3DXVECTOR3(100.0f, 0.0f, 0.0f));
-	//m_pPlayer[(int)TAG::PLAYER_2]->ChangeColor(true, D3DXCOLOR(0.5f, -0.5f, 1.0f, 0.0f));
 
 	// UI生成
 	CUIManager::Create();
@@ -91,6 +88,18 @@ void CTutorial::Update(void)
 	// 死亡判定が出ているかの確認
 	m_pMap->UpdateDieFlag();
 	m_pTutorialManager->Update();
+
+	// 2P追加
+	if (m_pTutorialManager->GetAdd2PFlag())
+	{
+		if (!m_pPlayer[(int)TAG::PLAYER_2])
+		{
+			// プレイヤー2の配置
+			m_pPlayer[(int)TAG::PLAYER_2] = CPlayer::Create(TAG::PLAYER_2);
+			m_pPlayer[(int)TAG::PLAYER_2]->SetPosition(m_pPlayer[(int)TAG::PLAYER_2]->GetPosition() + D3DXVECTOR3(100.0f, 0.0f, 0.0f));
+			m_pPlayer[(int)TAG::PLAYER_2]->ChangeColor(true, D3DXCOLOR(0.5f, -0.5f, 1.0f, 0.0f));
+		}
+	}
 }
 
 //==========================================================
@@ -105,4 +114,6 @@ void CTutorial::Draw(void)
 //==========================================================
 void CTutorial::ShowDebugInfo(void)
 {
+	// 試験的2P
+	CDebugProc::Print_Right("[RShift] : 2P生成\n");
 }
