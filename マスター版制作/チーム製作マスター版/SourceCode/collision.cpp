@@ -180,8 +180,8 @@ bool CCollision::ForPlayerBulletCollision(int nEnemyDamage, int nObstacleDamage,
 	// 弾を消すときに使うフラグ
 	bool bHitFlag = false;
 	std::vector<CScene*> pSceneList;
-	// プレイヤーのポインタ
-	CPlayer *pPlayer = nullptr;
+	// プレイヤーのポインタ取得
+	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer(m_pGameObject->GetTag());
 
 	CScene::GetSceneList(CScene::OBJTYPE_SHIELD, pSceneList);
 
@@ -234,12 +234,12 @@ bool CCollision::ForPlayerBulletCollision(int nEnemyDamage, int nObstacleDamage,
 						// 判定関数
 						if (this->OtherCollision2D(pBoss_One->GetCollision()))
 						{
-							// プレイヤーのポインタ取得
-							pPlayer = CManager::GetBaseMode()->GetPlayer(m_pGameObject->GetTag());
-
-							if (pPlayer != nullptr && pPlayer->GetPlayerUI())
+							if (pPlayer != nullptr)
 							{
-								pPlayer->GetPlayerUI()->SetScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_DAMAGE_BULLET));
+								if (pPlayer->GetPlayerUI())
+								{
+									pPlayer->GetPlayerUI()->SetScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_DAMAGE_BULLET));
+								}
 							}
 
 							// 敵のライフ減衰
@@ -265,9 +265,6 @@ bool CCollision::ForPlayerBulletCollision(int nEnemyDamage, int nObstacleDamage,
 					// 判定関数
 					if (this->OtherCollision2D(pEnemy->GetCollision()))
 					{
-						// プレイヤーのポインタ取得
-						pPlayer = CManager::GetBaseMode()->GetPlayer(m_pGameObject->GetTag());
-
 						if (pPlayer != nullptr)
 						{
 							if (pPlayer->GetPlayerUI())
@@ -367,6 +364,16 @@ bool CCollision::ForPlayerBulletCollision(int nEnemyDamage, int nObstacleDamage,
 			{
 				if (this->OtherCollision2D(pPrisoner->GetCollision()))
 				{
+					if (pPlayer != nullptr)
+					{
+						if (pPlayer->GetPlayerUI())
+						{
+							pPlayer->GetPlayerUI()->SetScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_RESCUE_PRISONER));
+							// 体力の加算
+							pPlayer->SetLife(pPlayer->GetLife() + 1);
+						}
+					}
+
 					// 捕虜の状態変化
 					pPrisoner->SetPrisonerState(CPrisoner::PRISONER_STATE_DROPITEM);
 					// ポインタをnullにする
@@ -713,7 +720,6 @@ bool CCollision::ForPlayer_VehicleCollision(CCollision * pCollision)
 	{
 		bHitFlag = true;
 	}
-
 	return bHitFlag;
 }
 
