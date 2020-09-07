@@ -39,6 +39,13 @@ CTutorial::CTutorial()
 //==========================================================
 CTutorial::~CTutorial()
 {
+	for (int nCnt = 0; nCnt < MAX_CONTROLLER; nCnt++)
+	{
+		if (m_pPlayer[nCnt])
+		{
+			m_pPlayer[nCnt] = nullptr;
+		}
+	}
 }
 
 //==========================================================
@@ -52,7 +59,7 @@ HRESULT CTutorial::Init(void)
 	// プレイヤー1の生成
 	m_pPlayer[(int)TAG::PLAYER_1] = CPlayer::Create(TAG::PLAYER_1);
 
-	if (CTitle::GetPlayerNum() == CTitle::PLAYER_NUM_TWO && !m_pPlayer[(int)TAG::PLAYER_2])
+	if (CPlayer::GetTwoPPlayFlag() && !m_pPlayer[(int)TAG::PLAYER_2])
 	{
 		// プレイヤー2の配置
 		m_pPlayer[(int)TAG::PLAYER_2] = CPlayer::Create(TAG::PLAYER_2);

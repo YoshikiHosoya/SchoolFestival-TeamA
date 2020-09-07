@@ -15,6 +15,7 @@
 #include "XInputPad.h"
 #include "UI.h"
 #include "sound.h"
+#include "player.h"
 
 // =====================================================================================================================================================================
 // マクロ定義
@@ -35,6 +36,7 @@ CTitle::CTitle()
 	m_nStagingNum = 0;
 	m_bEndStaging = false;
 	m_PlayerNum = PLAYER_NUM_ONE;
+	CPlayer::SetTwoPPlayFlag(false);
 }
 
 //==========================================================
@@ -78,6 +80,7 @@ void CTitle::Update(void)
 		// エンターを押したとき
 		if (CHossoLibrary::PressAnyButton() && m_TitleMode != MODE_STAGING)
 		{
+			CPlayer::SetTwoPPlayFlag(false);
 			// タイトルのモードを次のモードに移行する
 			TitleModeNext();
 			//決定音
@@ -88,6 +91,18 @@ void CTitle::Update(void)
 	{
 		if (CManager::GetRenderer()->GetFade()->GetFadeState() == CFADE::FADESTATE::FADESTATE_NONE)
 		{
+			if (m_PlayerNum == PLAYER_NUM_TWO)
+			{
+				// 2人プレイに設定
+				CPlayer::SetTwoPPlayFlag(true);
+			}
+
+			else
+			{
+				// 2人プレイに設定
+				CPlayer::SetTwoPPlayFlag(false);
+			}
+
 			// ゲームモードへ状態遷移7
 			CManager::GetRenderer()->GetFade()->SetFade(CFADE::FADETYPE::FADETYPE_MODE, CManager::MODE_TUTORIAL);
 

@@ -31,6 +31,7 @@ public:
 		EFFECT_EXPLOSION_SMOKE,					//煙っぽい爆発
 		EFFECT_EXPLOSION_OBJECTBREAK,			//オブジェクト破壊時の爆発
 		EFFECT_NO_COLLISION_EXPLOSION,			//当たり判定の無い爆発
+		EFFECT_NO_COLLISION_EXPLOSION_RANK,		//当たり判定の無い爆発ランキング用
 		EFFECT_BLOOD,							//血しぶき
 		EFFECT_FLASSHING,						//光る
 		EFFECT_SHOTFLASH,						//ノズルフラッシュ

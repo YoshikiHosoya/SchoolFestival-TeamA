@@ -164,11 +164,9 @@ private:
 	static BOSS_ONE_DATABASE m_BossOneData;										// ボスのデータ
 
 	// ステータス用 //
-	//static int				m_nLife;											// 体力
-	//static D3DXVECTOR3		m_CollisionSize[POSTURETYPE_MAX];					// 当たり判定の大きさ
-	//static D3DXVECTOR3		m_GunShotOfsetPos[WEAPONTYPE_MAX];					// ガンのオフセット
 
 	/* メンバ関数 */
+	void State();
 
 	// --- 状態管理関数 ---  //
 	void					BossOneStateManager();								// ボスの状態管理処理

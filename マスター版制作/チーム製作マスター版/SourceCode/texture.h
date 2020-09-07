@@ -87,6 +87,11 @@ public:
 		TEX_UI_RANKING_3rd,						//ランキング3位
 		TEX_UI_RANKING_4th,						//ランキング4位
 		TEX_UI_RANKING_5th,						//ランキング5位
+		TEX_UI_RANKING_6th,						//ランキング6位
+		TEX_UI_RANKING_7th,						//ランキング7位
+		TEX_UI_RANKING_TOTAL,					//総合
+		TEX_UI_RANKING_THANKS,					//遊んでくれてありがとう！
+
 
 		TEX_BG_SKY_SUNNY,						//空の背景	( 晴れ )
 		TEX_BG_SKY_CLOUDY,						//空の背景	( 曇り )
@@ -94,6 +99,9 @@ public:
 
 		TEX_UI_GAME_GO,							//Goサイン
 		TEX_UI_GAME_GAMEOVER,					//ゲームオーバー
+
+		TEX_UI_GAME_PLAYER_1P,					//2人プレイ時1P頭上に表示
+		TEX_UI_GAME_PLAYER_2P,					//2人プレイ時2P頭上に表示
 
 		TEX_MAX									//MAX
 	};
