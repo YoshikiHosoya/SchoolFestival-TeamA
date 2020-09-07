@@ -40,12 +40,19 @@ char *CRankingUI::m_SaveScoreFileName =
 // =====================================================================================================================================================================
 #define RANKINGSIZE (D3DXVECTOR3(80.0f, 30.0f, 0.0f))
 #define RANKING_SPACE (10)
-
 #define RANKINGSCORESIZE (D3DXVECTOR3(30.0f, 30.0f, 0.0f))
 #define RANKINGSCOREDIGITS (7)
 #define VERTICAL_SPACE (70.0f)
-
 #define WAITTIME_BASE (180)
+#define ONE_SECOND (60)
+
+#define ONE_HUNDRED (100)
+#define ONE_THOUSAND (1000)
+#define TEN_THOUSAND (10000)
+#define HUNDRED_THOUSAND (100000)
+#define MILLION (1000000)
+
+#define OUTSIDE_SCREEN (D3DXVECTOR3(0.0f, 1000.0f, 0.0f))
 
 // =====================================================================================================================================================================
 //
@@ -55,29 +62,29 @@ char *CRankingUI::m_SaveScoreFileName =
 CRankingUI::CRankingUI()
 {
 	// 初期化
-	m_apScene2D[RANKING_UI_MAX] = {};
-
-	m_pRankScore[SCORE_MAX] = {};
-
-	m_pPlayerScore[PLAYER_SCORE_MAX] = {};
-
-	m_nColCnt = 0;
+	m_apScene2D[RANKING_UI_MAX]			 = {};
+	m_pRankScore[SCORE_MAX]				 = {};
+	m_pPlayerScore[PLAYER_SCORE_MAX]	 = {};
+	m_bMoveRank[SCORE_MAX] = {};
+	m_bEvaluation[3] = {};
 
 	m_nRankingScore.clear();
 	m_nPlayerScore.clear();
-	m_WaitTime = 180;
-	m_nRankNum = 0;
-	m_TimeToExplosion = 180;
-	m_nTimeToFlash = 60;
-	m_RankScoreMove = ZeroVector3;
-	m_nTimeToDraw = 60;
-	m_nDrawCount = 0;
-	m_bCompleted = false;
-	m_bMoveRank[SCORE_MAX] = {};
 
-	m_bCompletedEnd = false;
-	m_fCol = 0.0f;
-	m_nTimeToTransition = 0;
+	m_WaitTime				= WAITTIME_BASE;
+	m_nTimeToExplosion		= WAITTIME_BASE;
+	m_nTimeToFireworks		= WAITTIME_BASE;
+	m_nTimeToFlash			= ONE_SECOND;
+	m_nTimeToDraw			= ONE_SECOND;
+	m_RankScoreMove			= ZeroVector3;
+	m_RankScoreMove			= ZeroVector3;
+	m_nRankNum				= 0;
+	m_nDrawCount			= 0;
+	m_nTimeToTransition		= 0;
+	m_nColCnt				= 0;
+	m_fCol					= 0.0f;
+	m_bCompleted			= false;
+	m_bCompletedEnd			= false;
 }
 
 // =====================================================================================================================================================================
@@ -117,7 +124,6 @@ HRESULT CRankingUI::Init(void)
 // =====================================================================================================================================================================
 void CRankingUI::Uninit(void)
 {
-
 	for (int nCnt = 0; nCnt < RANKING_UI::RANKING_UI_MAX; nCnt++)
 	{
 		if (m_apScene2D[nCnt])
@@ -139,7 +145,6 @@ void CRankingUI::Uninit(void)
 			m_pRankScore[nCnt] = nullptr;
 		}
 	}
-
 }
 
 // =====================================================================================================================================================================
@@ -158,43 +163,8 @@ void CRankingUI::Update(void)
 		}
 	}
 
-	switch (CRankingManager::GetRankingState())
-	{
-	case CRankingManager::RANKING_STATE_DRAW_SCORE:
-		RankingState_Draw_Score();
-		break;
-
-	case CRankingManager::RANKING_STATE_SCORE_CALCULATION:
-		RankingState_Score_Calculation();
-		break;
-
-	case CRankingManager::RANKING_STATE_COMPARE_RANKING:
-		RankingState_Compare_Ranking();
-		break;
-
-	case CRankingManager::RANKING_STATE_SORT_RANKING:
-		RankingState_Sort_Ranking();
-		break;
-
-	case CRankingManager::RANKING_STATE_RANKING:
-		RankingState_Ranking();
-		break;
-
-	case CRankingManager::RANKING_STATE_WAITTIME:
-
-		if (m_WaitTime < WAITTIME_BASE)
-		{
-			m_WaitTime = WAITTIME_BASE;
-		}
-
-		m_WaitTime--;
-		if (m_WaitTime <= 0)
-		{
-
-		}
-
-		break;
-	}
+	// ランキングのステートごとの処理
+	RankingState();
 }
 
 // =====================================================================================================================================================================
@@ -405,7 +375,7 @@ void CRankingUI::RankingCalculation()
 
 // =====================================================================================================================================================================
 //
-//
+// プレイヤーのスコアを保存
 //
 // =====================================================================================================================================================================
 void CRankingUI::PlayerScoreSave()
@@ -537,12 +507,12 @@ void CRankingUI::Flashing(CScene2D *m_apScene2D)
 	// カウント加算
 	m_nColCnt++;
 	// 余りが0の時透明にする
-	if (m_nColCnt % 60 == 0)
+	if (m_nColCnt % ONE_SECOND == 0)
 	{
 		m_apScene2D->SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f));
 	}
 	// 余りが0の時通常状態にする
-	else if (m_nColCnt % 30 == 0)
+	else if (m_nColCnt % (ONE_SECOND / 2) == 0)
 	{
 		m_apScene2D->SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 	}
@@ -594,7 +564,7 @@ bool CRankingUI::BubbleSort_Compare(std::vector<int> data)
 // 目標の値になるまで値を計算
 //
 // =====================================================================================================================================================================
-bool CRankingUI::TargetValue(const int &Target, int &Value, int Add, CMultiNumber *pMultiNumber)
+bool CRankingUI::TargetValueAdd(const int &Target, int &Value, int Add, CMultiNumber *pMultiNumber)
 {
 	bool bEnd = false;
 	// 目標値より値が小さかった時
@@ -695,7 +665,7 @@ void CRankingUI::RankUiCreate()
 	m_apScene2D[RANKING_SCORE_THANKS] = CScene2D::Create(D3DXVECTOR3(1000.0f, 650.0f, 0.0f), D3DXVECTOR3(240.0f, 60.0f, 0.0f));
 	// テクスチャの割り当て
 	m_apScene2D[RANKING_SCORE_THANKS]->BindTexture(CTexture::GetTexture((CTexture::TEX_TYPE)(CTexture::TEX_UI_RANKING_THANKS)));
-
+	// 非表示にしておく
 	m_apScene2D[RANKING_SCORE_THANKS]->SetDisp(false);
 }
 
@@ -789,6 +759,38 @@ void CRankingUI::PlayerScoreUiCreate()
 
 // =====================================================================================================================================================================
 //
+// ランキングステートごとの処理
+//
+// =====================================================================================================================================================================
+void CRankingUI::RankingState()
+{
+	// ランキングのステートごとの処理
+	switch (CRankingManager::GetRankingState())
+	{
+	case CRankingManager::RANKING_STATE_DRAW_SCORE:
+		RankingState_Draw_Score();
+		break;
+
+	case CRankingManager::RANKING_STATE_SCORE_CALCULATION:
+		RankingState_Score_Calculation();
+		break;
+
+	case CRankingManager::RANKING_STATE_COMPARE_RANKING:
+		RankingState_Compare_Ranking();
+		break;
+
+	case CRankingManager::RANKING_STATE_SORT_RANKING:
+		RankingState_Sort_Ranking();
+		break;
+
+	case CRankingManager::RANKING_STATE_RANKING:
+		RankingState_Ranking();
+		break;
+	}
+}
+
+// =====================================================================================================================================================================
+//
 // ランキングステートRANKING_STATE_DRAW_SCOREの時
 //
 // =====================================================================================================================================================================
@@ -812,7 +814,7 @@ void CRankingUI::RankingState_Draw_Score()
 			if (m_nTimeToDraw <= 0)
 			{
 				m_pPlayerScore[m_nDrawCount]->SetPos(pos[m_nDrawCount]);
-				m_nTimeToDraw = 60;
+				m_nTimeToDraw = ONE_SECOND;
 				m_nDrawCount++;
 			}
 		}
@@ -847,11 +849,46 @@ void CRankingUI::RankingState_Score_Calculation()
 {
 	if (CPlayer::GetTwoPPlayFlag())
 	{
-		TargetValueSubtract(0, m_nPlayerScore[PLAYER_SCORE_1P], 1000, m_pPlayerScore[PLAYER_SCORE_1P]);
-		TargetValueSubtract(0, m_nPlayerScore[PLAYER_SCORE_2P], 1000, m_pPlayerScore[PLAYER_SCORE_2P]);
+		// 1P
+		if (m_nPlayerScore[PLAYER_SCORE_1P] >= MILLION)
+		{
+			TargetValueSubtract(0, m_nPlayerScore[PLAYER_SCORE_1P], HUNDRED_THOUSAND, m_pPlayerScore[PLAYER_SCORE_1P]);
+		}
+		else if (m_nPlayerScore[PLAYER_SCORE_1P] >= HUNDRED_THOUSAND)
+		{
+			TargetValueSubtract(0, m_nPlayerScore[PLAYER_SCORE_1P], TEN_THOUSAND, m_pPlayerScore[PLAYER_SCORE_1P]);
+		}
+		else
+		{
+			TargetValueSubtract(0, m_nPlayerScore[PLAYER_SCORE_1P], ONE_THOUSAND, m_pPlayerScore[PLAYER_SCORE_1P]);
+		}
 
-		if (TargetValue(m_RunkingData.nScore[PLAYER_SCORE_1P] + m_RunkingData.nScore[PLAYER_SCORE_2P],
-			m_nPlayerScore[PLAYER_SCORE_TOTAL], 1000, m_pPlayerScore[PLAYER_SCORE_TOTAL]))
+		// 2P
+		if (m_nPlayerScore[PLAYER_SCORE_2P] <= MILLION)
+		{
+			TargetValueSubtract(0, m_nPlayerScore[PLAYER_SCORE_2P], HUNDRED_THOUSAND, m_pPlayerScore[PLAYER_SCORE_2P]);
+		}
+		else if (m_nPlayerScore[PLAYER_SCORE_2P] <= HUNDRED_THOUSAND)
+		{
+			TargetValueSubtract(0, m_nPlayerScore[PLAYER_SCORE_2P], TEN_THOUSAND, m_pPlayerScore[PLAYER_SCORE_2P]);
+		}
+		else
+		{
+			TargetValueSubtract(0, m_nPlayerScore[PLAYER_SCORE_1P], ONE_THOUSAND, m_pPlayerScore[PLAYER_SCORE_1P]);
+		}
+
+		int nAdd = ONE_THOUSAND;
+		if (m_RunkingData.nScore[PLAYER_SCORE_1P] + m_RunkingData.nScore[PLAYER_SCORE_2P] >= HUNDRED_THOUSAND)
+		{
+			nAdd = TEN_THOUSAND;
+		}
+		else if (m_RunkingData.nScore[PLAYER_SCORE_1P] + m_RunkingData.nScore[PLAYER_SCORE_2P] >= MILLION)
+		{
+			nAdd = HUNDRED_THOUSAND;
+		}
+
+		if (TargetValueAdd(m_RunkingData.nScore[PLAYER_SCORE_1P] + m_RunkingData.nScore[PLAYER_SCORE_2P],
+			m_nPlayerScore[PLAYER_SCORE_TOTAL], nAdd, m_pPlayerScore[PLAYER_SCORE_TOTAL]))
 		{
 			m_pPlayerScore[PLAYER_SCORE_TOTAL]->Settype(CMultiNumber::TYPE_FLASHING);
 			m_WaitTime--;
@@ -866,13 +903,12 @@ void CRankingUI::RankingState_Score_Calculation()
 					m_apScene2D[nCnt + RANKING_SCORE_1P]->SetDisp(false);
 				}
 
-				for (int nCnt = 0; nCnt < 7; nCnt++)
+				for (int nCnt = 0; nCnt < SCORE_MAX; nCnt++)
 				{
 					m_apScene2D[nCnt + RANKING_1st]->SetDisp(true);
 				}
 
-				m_WaitTime = 60;
-				//m_WaitTime = 180;
+				m_WaitTime = ONE_SECOND;
 
 				m_pPlayerScore[PLAYER_SCORE_TOTAL]->Settype(CMultiNumber::TYPE_NORMAL);
 				m_apScene2D[RANKING_SCORE_TOTAL]->SetPosition(D3DXVECTOR3(1000.0f, 350.0f, 0.0f));
@@ -891,23 +927,29 @@ void CRankingUI::RankingState_Score_Calculation()
 	}
 	else
 	{
+		int nAdd = ONE_THOUSAND;
+		if (m_RunkingData.nScore[PLAYER_SCORE_1P] >= HUNDRED_THOUSAND)
+		{
+			nAdd = TEN_THOUSAND;
+		}
+		else if (m_RunkingData.nScore[PLAYER_SCORE_1P] >= MILLION)
+		{
+			nAdd = HUNDRED_THOUSAND;
+		}
 
-		if (TargetValue(m_RunkingData.nScore[PLAYER_SCORE_1P],
-			m_nPlayerScore[PLAYER_SCORE_TOTAL], 1000, m_pPlayerScore[PLAYER_SCORE_TOTAL]))
+		if (TargetValueAdd(m_RunkingData.nScore[PLAYER_SCORE_1P],
+			m_nPlayerScore[PLAYER_SCORE_TOTAL], nAdd, m_pPlayerScore[PLAYER_SCORE_TOTAL]))
 		{
 			m_pPlayerScore[PLAYER_SCORE_TOTAL]->Settype(CMultiNumber::TYPE_FLASHING);
 			m_WaitTime--;
 			if (m_WaitTime <= 0)
 			{
-				for (int nCnt = 0; nCnt < 7; nCnt++)
+				for (int nCnt = 0; nCnt < SCORE_MAX; nCnt++)
 				{
 					m_apScene2D[nCnt + RANKING_1st]->SetDisp(true);
 				}
-				/*for (int nCnt = 0; nCnt < 2; nCnt++)
-				{
-					m_apScene2D[nCnt + RANKING_SCORE_1P]->SetDisp(false);
-				}*/
-				m_WaitTime = 180;
+
+				m_WaitTime = 120;
 
 				m_pPlayerScore[PLAYER_SCORE_TOTAL]->Settype(CMultiNumber::TYPE_NORMAL);
 				m_apScene2D[RANKING_SCORE_TOTAL]->SetPosition(D3DXVECTOR3(1000.0f, 350.0f, 0.0f));
@@ -954,7 +996,6 @@ void CRankingUI::RankingState_Compare_Ranking()
 				}
 			}
 		}
-		//m_RankScoreMove.y += 0.05f;
 	}
 
 	if (m_bCompleted)
@@ -968,22 +1009,22 @@ void CRankingUI::RankingState_Compare_Ranking()
 				m_nTimeToFlash--;
 				if (m_nTimeToFlash <= 0)
 				{
-					m_TimeToExplosion--;
-					if (m_TimeToExplosion <= 0)
+					m_nTimeToExplosion--;
+					if (m_nTimeToExplosion <= 0)
 					{
 						m_pRankScore[m_nRankNum]->Settype(CMultiNumber::TYPE_NORMAL);
 						// 画面外へ
-						m_pRankScore[m_nRankNum]->SetPos(D3DXVECTOR3(0.0f, 1000.0f, 0.0f));
+						m_pRankScore[m_nRankNum]->SetPos(OUTSIDE_SCREEN);
 					}
 					else
 					{
 						//爆発
-						if (m_TimeToExplosion % 3 == 0)
+						if (m_nTimeToExplosion % 3 == 0)
 						{
 							CParticle::CreateFromText(
 								D3DXVECTOR3(
-									(m_pRankScore[m_nRankNum]->GetPos().x + 680.0f) + CHossoLibrary::RandomVector3(100.0f).x,
-									(m_pRankScore[m_nRankNum]->GetPos().y + 200.0f) + CHossoLibrary::RandomVector3(100.0f).y,
+									(m_pRankScore[m_nRankNum]->GetPos().x) + CHossoLibrary::RandomVector3(100.0f).x,
+									(SCREEN_HEIGHT - m_pRankScore[m_nRankNum]->GetPos().y) + CHossoLibrary::RandomVector3(100.0f).y,
 									0.0f),
 								ZeroVector3,
 								CParticleParam::EFFECT_NO_COLLISION_EXPLOSION_RANK);
@@ -1000,17 +1041,17 @@ void CRankingUI::RankingState_Compare_Ranking()
 				m_nTimeToFlash--;
 				if (m_nTimeToFlash <= 0)
 				{
-					m_TimeToExplosion--;
-					if (m_TimeToExplosion <= 0)
+					m_nTimeToExplosion--;
+					if (m_nTimeToExplosion <= 0)
 					{
 						// 画面外へ
-						m_pPlayerScore[PLAYER_SCORE_TOTAL]->SetPos(D3DXVECTOR3(0.0f, 1000.0f, 0.0f));
+						m_pPlayerScore[PLAYER_SCORE_TOTAL]->SetPos(OUTSIDE_SCREEN);
 						m_pPlayerScore[PLAYER_SCORE_TOTAL]->Settype(CMultiNumber::TYPE_NORMAL);
 					}
 					else
 					{
 						//爆発
-						if (m_TimeToExplosion % 3 == 0)
+						if (m_nTimeToExplosion % 3 == 0)
 						{
 							CParticle::CreateFromText(m_pPlayerScore[PLAYER_SCORE_TOTAL]->GetPos() + CHossoLibrary::RandomVector3(100.0f),
 								ZeroVector3,
@@ -1024,7 +1065,7 @@ void CRankingUI::RankingState_Compare_Ranking()
 				}
 			}
 
-			if (m_TimeToExplosion <= 0)
+			if (m_nTimeToExplosion <= 0)
 			{
 				if (!m_bCompletedEnd)
 				{
@@ -1071,7 +1112,8 @@ void CRankingUI::RankingState_Compare_Ranking()
 // =====================================================================================================================================================================
 void CRankingUI::RankingState_Sort_Ranking()
 {
-	m_pPlayerScore[PLAYER_SCORE_TOTAL]->SetPos(D3DXVECTOR3(0.0f, 1000.0f, 0.0f));
+	// スコアを画面外に移動
+	m_pPlayerScore[PLAYER_SCORE_TOTAL]->SetPos(OUTSIDE_SCREEN);
 
 	// ランキング計算
 	RankingCalculation();
@@ -1080,10 +1122,9 @@ void CRankingUI::RankingState_Sort_Ranking()
 		m_apScene2D[nCnt + RANKING_SCORE_1P]->SetDisp(false);
 	}
 	m_bCompletedEnd = false;
-	//m_RankScoreMove.x = -30.0f;
 	// ランキングスコアのセーブ
 	RankingDataSave();
-	m_WaitTime = 120;
+	m_WaitTime = ONE_SECOND*4;
 	CRankingManager::SetRankingState(CRankingManager::RANKING_STATE_RANKING);
 }
 
@@ -1136,6 +1177,27 @@ void CRankingUI::RankingState_Ranking()
 						if (m_nRankingScore[m_nRankNum] == m_nPlayerScore[PLAYER_SCORE_TOTAL])
 						{
 							m_pRankScore[m_nRankNum]->Settype(CMultiNumber::TYPE_FLASHING);
+
+							// 1位だった時
+							if (m_nRankNum == SCORE_1st)
+							{
+								m_bEvaluation[RANKING_EVALUATION_BEST] = true;
+							}
+							// 2位から3位だった時
+							else if (m_nRankNum >= SCORE_2nd && m_nRankNum <= SCORE_3rd)
+							{
+								m_bEvaluation[RANKING_EVALUATION_SECONDBEDT] = true;
+							}
+							// 4位から7位だった時
+							else if (m_nRankNum >= SCORE_4th && m_nRankNum <= SCORE_7th)
+							{
+								m_bEvaluation[RANKING_EVALUATION_THIRDBEST] = true;
+							}
+							// 4位から7位だった時
+							else
+							{
+								m_bEvaluation[RANKING_EVALUATION_NONE] = true;
+							}
 						}
 					}
 
@@ -1151,7 +1213,10 @@ void CRankingUI::RankingState_Ranking()
 		m_RankScoreMove.x -= 0.25f;
 	}
 
+	// 順位ごとの評価
+	RankingEvaluation();
 
+	// 最後のuiが描画された時
 	if (m_apScene2D[RANKING_SCORE_THANKS]->GetDisp())
 	{
 		if (m_apScene2D[RANKING_SCORE_THANKS]->GetColor().a <= 0.0f)
@@ -1171,10 +1236,71 @@ void CRankingUI::RankingState_Ranking()
 
 		m_nTimeToTransition++;
 
-		if (m_nTimeToTransition >= 180)
+		if (m_nTimeToTransition >= WAITTIME_BASE)
 		{
 			// ゲームモードへ状態遷移
 			CManager::GetRenderer()->GetFade()->SetFade(CFADE::FADETYPE::FADETYPE_MODE, CManager::MODE_TITLE);
+		}
+	}
+}
+
+// =====================================================================================================================================================================
+//
+// 順位ごとの評価
+//
+// =====================================================================================================================================================================
+void CRankingUI::RankingEvaluation()
+{
+	if (m_bEvaluation[RANKING_EVALUATION_BEST])
+	{
+		m_nTimeToFireworks--;
+		// 花火
+		if (m_nTimeToFireworks % 3 == 0)
+		{
+			CParticle::CreateFromText(SCREEN_CENTER_POS + CHossoLibrary::RandomVector3(SCREEN_WIDTH * 0.5f),
+				ZeroVector3,
+				CParticleParam::EFFECT_NO_COLLISION_FIREWORKS1);
+		}
+		if (m_nTimeToFireworks % 4 == 0)
+		{
+			CParticle::CreateFromText(SCREEN_CENTER_POS + CHossoLibrary::RandomVector3(SCREEN_WIDTH * 0.5f),
+				ZeroVector3,
+				CParticleParam::EFFECT_NO_COLLISION_FIREWORKS2);
+		}
+		if (m_nTimeToFireworks % 5 == 0)
+		{
+			CParticle::CreateFromText(SCREEN_CENTER_POS + CHossoLibrary::RandomVector3(SCREEN_WIDTH * 0.5f),
+				ZeroVector3,
+				CParticleParam::EFFECT_NO_COLLISION_FIREWORKS3);
+		}
+	}
+	if (m_bEvaluation[RANKING_EVALUATION_SECONDBEDT])
+	{
+		m_nTimeToFireworks--;
+		// 花火
+		if (m_nTimeToFireworks % 20 == 0)
+		{
+			CParticle::CreateFromText(SCREEN_CENTER_POS + CHossoLibrary::RandomVector3(SCREEN_WIDTH * 0.5f),
+				ZeroVector3,
+				CParticleParam::EFFECT_NO_COLLISION_FIREWORKS1);
+		}
+		if (m_nTimeToFireworks % 30 == 0)
+		{
+			CParticle::CreateFromText(SCREEN_CENTER_POS + CHossoLibrary::RandomVector3(SCREEN_WIDTH * 0.5f),
+				ZeroVector3,
+				CParticleParam::EFFECT_NO_COLLISION_FIREWORKS2);
+		}
+	}
+
+	if (m_bEvaluation[RANKING_EVALUATION_THIRDBEST])
+	{
+		m_nTimeToFireworks--;
+		// 花火
+		if (m_nTimeToFireworks % 60 == 0)
+		{
+			CParticle::CreateFromText(SCREEN_CENTER_POS + CHossoLibrary::RandomVector3(SCREEN_WIDTH * 0.5f),
+				ZeroVector3,
+				CParticleParam::EFFECT_NO_COLLISION_FIREWORKS1);
 		}
 	}
 }

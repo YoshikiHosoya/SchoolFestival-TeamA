@@ -18,7 +18,7 @@ SCRIPT
 		BILLBOARD = 1							//ビルボードするか
 		ANIMATION = 1							//アニメーションするか
 		COLLISION = 0							//当たり判定があるかどうか
-		TEXTURE = 2							//テクスチャ
+		TEXTURE = 24							//テクスチャ
 		ANIMATION_LOOP = 0						//アニメーションループするか
 		ANIMATION_CNTSWITCH = 2					//切替のカウント
 		SHAPE = 0								//パーティクルの出し方
@@ -30,7 +30,7 @@ SCRIPT
 		GRAVITYPOWER = 0.80						//重力の強さ
 		LOCALPOS = -640.00 -360.00 0.00			//ローカル座標
 		LOCALPOS_RANGE = 0.00 0.00 0.00			//ローカル座標がランダム時の値の範囲
-		SIZE = 30.00 45.00 0.00					//サイズ
+		SIZE = 100.00 100.00 0.00					//サイズ
 		SIZEDAMPING = 1.00 1.00 0.00			//サイズ減衰量
 		COLOR = 1.0 1.0 1.0 1.0					//色
 		ROT = 0.00 0.00 0.00					//回転量

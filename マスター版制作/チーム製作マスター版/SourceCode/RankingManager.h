@@ -30,7 +30,6 @@ public:
 		RANKING_STATE_COMPARE_RANKING,
 		RANKING_STATE_SORT_RANKING,
 		RANKING_STATE_RANKING,
-		RANKING_STATE_WAITTIME,
 	};
 	CRankingManager();						// コンストラクタ
 	~CRankingManager();						// デストラクタ
