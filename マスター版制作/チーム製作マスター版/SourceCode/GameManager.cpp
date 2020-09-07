@@ -65,13 +65,21 @@ void CGameManager::Update()
 	//nullcheck
 	if (pPlayer)
 	{
-
 		//特定の座標を超えた時
 		if(pPlayer->GetPosition().x >= CManager::GetGame()->GetMap()->GetTransitionPos().x)
 		{
 			//マップ遷移
 			CManager::GetRenderer()->GetFade()->SetFade(CFADE::FADETYPE::FADETYPE_MAPMOVE, CManager::GetGame()->GetMap()->GetTransitionMapID());
 		}
+	}
+
+	//stateに応じた処理
+	switch (m_state)
+	{
+		//通常かウェーブ状態のとき
+	case CGameManager::GAMESTATE::NORMAL:
+		//GoSign更新
+		UpdateGoSign();
 
 		//まだウェーブが残っている時
 		if (m_nNowWave <= CMap::WAVE::WAVE_MAX)
@@ -94,15 +102,6 @@ void CGameManager::Update()
 				}
 			}
 		}
-	}
-
-	//stateに応じた処理
-	switch (m_state)
-	{
-		//通常かウェーブ状態のとき
-	case CGameManager::GAMESTATE::NORMAL:
-		//GoSign更新
-		UpdateGoSign();
 
 	case CGameManager::GAMESTATE::WAVE:
 
@@ -188,19 +187,24 @@ std::unique_ptr<CGameManager> CGameManager::Create()
 //------------------------------------------------------------------------------
 void CGameManager::SetGameState(GAMESTATE state)
 {
-	m_state = state;
-	m_nCnt = 0;
-
-	if (m_state == CGameManager::GAMESTATE::GAMEOVER)
+	//ステートが切り替わった時
+	if (m_state != state)
 	{
-		//ゲームオーバー表示されていない時
-		if (!m_pScene2D_GameOver)
-		{
-			//ゲームオーバーUI生成
-			m_pScene2D_GameOver = CScene2D::CreateSceneManagement(SCREEN_CENTER_POS, GAMEOVER_SIZE, CScene::OBJTYPE_UI);
-			m_pScene2D_GameOver->BindTexture(CTexture::GetTexture(CTexture::TEX_UI_GAME_GAMEOVER));
+		m_state = state;
+		m_nCnt = 0;
 
-			m_nCnt = 0;
+		//ゲームオーバー時
+		if (m_state == CGameManager::GAMESTATE::GAMEOVER)
+		{
+			//ゲームオーバー表示されていない時
+			if (!m_pScene2D_GameOver)
+			{
+				//ゲームオーバーUI生成
+				m_pScene2D_GameOver = CScene2D::CreateSceneManagement(SCREEN_CENTER_POS, GAMEOVER_SIZE, CScene::OBJTYPE_UI);
+				m_pScene2D_GameOver->BindTexture(CTexture::GetTexture(CTexture::TEX_UI_GAME_GAMEOVER));
+
+				m_nCnt = 0;
+			}
 		}
 	}
 

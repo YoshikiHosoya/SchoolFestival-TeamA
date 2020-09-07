@@ -41,6 +41,12 @@ FILENAME_LIST CTexture::m_aTexFileName =
 
 	{ "data/TEXTURE/UI/Title_UI/title.png" },				//タイトルロゴ
 	{ "data/TEXTURE/UI/Title_UI/start.png" },				//スタート
+	{ "data/TEXTURE/UI/Title_UI/BulletHole1.png" },			//弾痕1
+	{ "data/TEXTURE/UI/Title_UI/BulletHole2.png" },			//弾痕2
+	{ "data/TEXTURE/UI/Title_UI/BulletHole3.png" },			//弾痕3
+	{ "data/TEXTURE/UI/Title_UI/Player_1.png" },			//プレイヤー選択1
+	{ "data/TEXTURE/UI/Title_UI/Player_2.png" },			//プレイヤー選択2
+	{ "data/TEXTURE/UI/Title_UI/Arrow.png" },				//矢印
 
 	{ "data/TEXTURE/UI/Tutorial_UI/Tutorial_Name.png" },	//チュートリアル名前ロゴ
 	{ "data/TEXTURE/UI/Tutorial_UI/Tutorial_1.png" },		//チュートリアル開始
@@ -61,12 +67,17 @@ FILENAME_LIST CTexture::m_aTexFileName =
 	{ "data/TEXTURE/UI/Result_UI/NOPRISONER.png" },			//評価2
 	{ "data/TEXTURE/UI/Result_UI/MISSION1COMPRLETE.png" },	//ミッションクリア0
 	{ "data/TEXTURE/UI/Result_UI/MISSION2COMPRLETE.png" },	//ミッションクリア1
+
 	{ "data/TEXTURE/UI/Ranking_UI/RANKING_NAME.png" },		//ランキング
 	{ "data/TEXTURE/UI/Ranking_UI/1st.png" },				//ランキング
 	{ "data/TEXTURE/UI/Ranking_UI/2nd.png" },				//ランキング
 	{ "data/TEXTURE/UI/Ranking_UI/3rd.png" },				//ランキング
 	{ "data/TEXTURE/UI/Ranking_UI/4th.png" },				//ランキング
 	{ "data/TEXTURE/UI/Ranking_UI/5th.png" },				//ランキング
+	{ "data/TEXTURE/UI/Ranking_UI/6th.png" },				//ランキング
+	{ "data/TEXTURE/UI/Ranking_UI/7th.png" },				//ランキング
+	{ "data/TEXTURE/UI/Ranking_UI/Total.png" },				//ランキング
+	{ "data/TEXTURE/UI/Ranking_UI/ThankYouForPlaying.png" },//ランキング
 
 	{ "data/TEXTURE/BG/sky01.jpg" },						//空の背景	( 晴れ )
 	{ "data/TEXTURE/BG/sky02.jpg" },						//空の背景	( 曇り )
@@ -74,6 +85,9 @@ FILENAME_LIST CTexture::m_aTexFileName =
 
 	{ "data/TEXTURE/UI/Game_UI/go.png" },					//Goサイン
 	{ "data/TEXTURE/UI/Game_UI/Gameover.png" },				//ゲームオーバー
+
+	{ "data/TEXTURE/UI/Game_UI/P1.png" },				//ゲームオーバー
+	{ "data/TEXTURE/UI/Game_UI/P2.png" },				//ゲームオーバー
 
 };
 

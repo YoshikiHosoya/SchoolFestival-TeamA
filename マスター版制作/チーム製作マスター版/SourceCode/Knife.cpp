@@ -23,6 +23,7 @@
 // =====================================================================================================================================================================
 #define KNIFE_ORBIT_OFFSET (D3DXVECTOR3(0.0,0.0,-30.0f))
 #define PLAYER_KNIFE_DAMAGE (20)
+#define KNIFE_COLLISION_COUNT (1)
 
 // =====================================================================================================================================================================
 // コンストラクタ
@@ -48,6 +49,7 @@ HRESULT CKnife::Init()
 
 	m_bAttack = false;
 	m_pOrbit = nullptr;
+	m_nCnt = 0;
 
 	return S_OK;
 }
@@ -77,21 +79,6 @@ void CKnife::Update(void)
 		//当たり判定処理
 		CollisionKnife();
 	}
-
-	if (m_pCollision != nullptr)
-	{
-		// 継続時間をマイナスする
-		m_pCollision->SetTime(m_pCollision->GetTime() - 1);
-
-		// 継続時間が0以下になったら削除
-		if (m_pCollision->GetTime() <= 0)
-		{
-			//当たり判定削除
-			delete m_pCollision;
-			m_pCollision = nullptr;
-		}
-	}
-
 }
 
 // =====================================================================================================================================================================
@@ -191,8 +178,6 @@ void CKnife::StartMeleeAttack()
 
 	// 判定の生成
 	m_pCollision = CCollision::Create();
-	// 当たり判定が継続する時間の設定
-	m_pCollision->SetTime(60);
 
 	if (m_pCollision)
 	{
@@ -203,8 +188,11 @@ void CKnife::StartMeleeAttack()
 		m_pCollision->SetGameObject(this);
 	}
 
-	//攻撃終了
+	//攻撃開始
 	m_bAttack = true;
+
+	//カウント設定
+	m_nCnt = KNIFE_COLLISION_COUNT;
 
 }
 
@@ -255,6 +243,18 @@ void CKnife::CollisionKnife()
 					//true
 					bHit = true;
 				}
+
+				//カウントダウン
+				m_nCnt--;
+
+				// 継続時間が0以下になったら削除
+				if (m_nCnt <= 0)
+				{
+					//当たり判定削除
+					delete m_pCollision;
+					m_pCollision = nullptr;
+				}
+
 			}
 			//持ち主が敵の場合
 			else if (GetTag() == TAG::ENEMY)
@@ -264,6 +264,10 @@ void CKnife::CollisionKnife()
 				{
 					//当たってた時
 					bHit = true;
+
+					//一度当たったら当たり判定削除
+					delete m_pCollision;
+					m_pCollision = nullptr;
 				}
 			}
 		}

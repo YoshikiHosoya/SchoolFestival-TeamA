@@ -7,7 +7,7 @@
 #include "shield.h"
 #include "WeakEnemy.h"
 #include "collision.h"
-
+#include "particle.h"
 // ===================================================================
 // 静的メンバ変数の初期化
 // ===================================================================
@@ -43,6 +43,10 @@ HRESULT CShield::Init()
 	m_bBreak = false;
 
 	CModel::Init();
+
+	//タグ設定
+	CGameObject::SetTag(TAG::SHIELD);
+
 	// 変数初期化
 	m_nLife = SHIELD_LIFE;				// 体力
 	// 初期化
@@ -150,7 +154,6 @@ void CShield::AddDamage(int nDamage)
 	//赤く点滅
 	SetColorChangeFlag(true);
 	m_nCntState = DAMAGE_FLASH_COUNT;
-
 
 	//ライフがなくなった時
 	if (m_nLife <= 0)

@@ -22,10 +22,12 @@ public:
 	void SetDisp(bool bDisp) { m_bDisp = bDisp; };		// 表示・非表示の設定
 
 	bool GetDisp() { return m_bDisp; };
+	void Flashing();					// 点滅処理
 protected:
 
 private:
 	void MakeVertex(void);
 	bool m_bDisp;			// 表示・非表示するフラグ
+	int m_nColCnt;
 };
 #endif

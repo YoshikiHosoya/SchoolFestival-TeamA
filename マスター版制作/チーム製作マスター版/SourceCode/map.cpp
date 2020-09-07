@@ -282,8 +282,8 @@ void CMap::MapModelLoad()
 							else if (nModelType == BG_ID)
 							{
 								// ”wŒi‚Ì¶¬‚ÆƒeƒNƒXƒ`ƒƒ‚ÌÝ’è
-								CScene2D *pScene2D = CScene2D::CreateSceneManagement(SCREEN_CENTER_POS, SCREEN_SIZE, CScene::OBJTYPE_BG);;
-								pScene2D->BindTexture(CTexture::GetTexture((CTexture::TEX_TYPE)nBGTexID));
+								CScene2D *pScene2D = CScene2D::CreateSceneManagement(SCREEN_CENTER_POS, SCREEN_SIZE, CScene::OBJTYPE_BG);
+								pScene2D->BindTexture(CTexture::GetTexture(CTexture::TEX_BG_SKY_SUNNY));
 							}
 							nModelType = -1;
 						}

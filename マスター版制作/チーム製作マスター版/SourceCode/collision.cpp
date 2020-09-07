@@ -61,7 +61,6 @@ CCollision::CCollision()
 	m_size				= D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// サイズ情報
 	m_pmove				= nullptr;							// 移動情報
 	m_Debugcollision	= nullptr;							// デバッグ用当たり判定のポインタ
-	m_nCollisionTime	= 0;								// 当たり判定が持続する時間
 	m_fHeight			= 30;								// 腰の高さの初期化
 	m_bCanCollision		= true;
 	m_pGameObject		= nullptr;							// ゲームオブジェクト( タグ )のポインタ
@@ -331,14 +330,6 @@ bool CCollision::ForPlayerBulletCollision(int nEnemyDamage, int nObstacleDamage,
 				{
 					// 障害物のライフ減衰
 					pObstacle->Hit(CObstacle::TYPE_BOX, nObstacleDamage);
-
-					// 敵のライフが0以下になった時
-					if (pObstacle->GetLife() <= 0)
-					{
-						pObstacle->SetDieFlag(true);
-						// ポインタをnullにする
-						pObstacle = nullptr;
-					}
 
 					// 当たり範囲フラグをtrueにする
 					bHitFlag = true;
@@ -919,6 +910,140 @@ bool CCollision::KnifeCollision(D3DXVECTOR3 Knifepos, CCollision *pCollision)
 }
 
 //======================================================================================================================
+// レーザーの判定
+//======================================================================================================================
+bool CCollision::LazerCollisionGetLength(D3DXVECTOR3 ShotPos, float &fLength)
+{
+	bool bHitFlag = false;								//フラグ
+	float fValue = 0.0f;								//計算した値
+	CShield *pShield = nullptr;							//盾のポインタ
+	CObstacle *pObstacle = nullptr;						//オブジェクトのポインタ
+
+	CGameObject *pMostNearObject = nullptr;				//一番近いオブジェクトのポインタ
+	std::vector<CScene*> pSceneList = {};				//Sceneのリスト
+
+	//盾のリスト取得
+	CScene::GetSceneList(CScene::OBJTYPE_SHIELD, pSceneList);
+
+	//当たり判定処理
+	//盾相手の場合
+	if (!pSceneList.empty())
+	{
+		for (size_t nCnt = 0; nCnt < pSceneList.size(); nCnt++)
+		{
+			//pShield型にキャスト
+			pShield = (CShield*)pSceneList[nCnt];
+
+			//nullcheck
+			if (!pShield)
+			{
+				continue;
+			}
+			//判定が存在する時
+			if (!pShield->GetCollision())
+			{
+				continue;
+			}
+			//判定が取れるとき
+			if (!pShield->GetCollision()->GetCanCollison())
+			{
+				continue;
+			}
+			//接触してるか判定
+			if (this->OtherCollision2D(pShield->GetCollision()))
+			{
+				//距離を求める
+				fValue = (fabsf(ShotPos.x - pShield->GetShieldPos().x) / 2) - pShield->GetCollision()->GetSize().x * 0.4f;
+
+				//元々の長さよりも短かった場合
+				if (fValue <= fLength)
+				{
+					//短い方を設定
+					fLength = fValue;
+
+					//ポインタ保存
+					pMostNearObject = (CGameObject*)pShield;
+				}
+				bHitFlag = true;
+			}
+		}
+	}
+
+
+	//オブジェクトのリスト取得
+	CScene::GetSceneList(CScene::OBJTYPE_OBSTACLE, pSceneList);
+
+	//当たり判定処理
+	//盾相手の場合
+	if (!pSceneList.empty())
+	{
+		for (size_t nCnt = 0; nCnt < pSceneList.size(); nCnt++)
+		{
+			//Obstacle型にキャスト
+			pObstacle = (CObstacle*)pSceneList[nCnt];
+
+			//nullcheck
+			if (!pObstacle)
+			{
+				continue;
+			}
+			//判定が存在する時
+			if (!pObstacle->GetCollision())
+			{
+				continue;
+			}
+			//判定が取れるとき
+			if (!pObstacle->GetCollision()->GetCanCollison())
+			{
+				continue;
+			}
+			//接触してるか判定
+			if (this->OtherCollision2D(pObstacle->GetCollision()))
+			{
+				//距離を求める
+				fValue = (fabsf(ShotPos.x - pObstacle->GetCollision()->GetPos().x) / 2) - pObstacle->GetCollision()->GetSize().x * 0.4f;
+
+				//元々の長さよりも短かった場合
+				if (fValue <= fLength)
+				{
+					//短い方を設定
+					fLength = fValue;
+
+					//ポインタ保存
+					pMostNearObject = (CGameObject*)pObstacle;
+				}
+				bHitFlag = true;
+			}
+		}
+	}
+	//当たってた場合
+	if (bHitFlag)
+	{
+		//nullcheck
+		if (pMostNearObject)
+		{
+			switch (pMostNearObject->GetTag())
+			{
+			case TAG::SHIELD:
+				pShield = (CShield*)pMostNearObject;
+				pShield->AddDamage(1);
+
+				break;
+			case TAG::OBSTACLE:
+				pObstacle = (CObstacle*)pMostNearObject;
+				pObstacle->Hit(CObstacle::TYPE_BOX, 1);
+
+				break;
+			default:
+				break;
+			}
+
+		}
+	}
+	return bHitFlag;
+}
+
+//======================================================================================================================
 // プレイヤーが乗り物に乗る時の判定
 //======================================================================================================================
 bool CCollision::VehicleCollision(CCollision * pCollision)
@@ -1034,20 +1159,6 @@ void CCollision::SetSize2D(D3DXVECTOR3 size)
 
 }
 
-//======================================================================================================================
-// 移動設定処理
-//======================================================================================================================
-void CCollision::SetMove(D3DXVECTOR3 * move)
-{
-	m_pmove = move;
-}
-//======================================================================================================================
-// 腰高さの設定
-//======================================================================================================================
-void CCollision::SetHeight(float height)
-{
-	m_fHeight = height;
-}
 //======================================================================================================================
 // 板型の当たり判定処理
 //======================================================================================================================
@@ -1554,6 +1665,78 @@ bool CCollision::RayCollision(CMap *pMap)
 	// 判定フラグを返す
 	return bJudg;
 }
+//======================================================================================================================
+// レイの判定
+//======================================================================================================================
+bool CCollision::RayCollisionGetLength(D3DXVECTOR3 posOrigin,D3DXVECTOR3 posEndPoint, float &fLength)
+{
+	// 地形判定 変数宣言
+	BOOL				bHitFlag = false;			// 判定が出たかのフラグ
+	bool				bJudg = false;				// 判定が出たかのフラグ
+	float				fLandDistance = 0;			// 距離
+	DWORD				dwHitIndex = -1;			// インデックス
+	float				fHitU = 0;					// U
+	float				fHitV = 0;					// V
+	D3DXMATRIX			invmat;						// 逆行列を格納する変数
+	D3DXVECTOR3			direction;					// 変換後の位置、方向を格納する変数：
+	std::vector<float>	vDistance;					// 長さの配列保存
+
+	//マップ情報取得
+	CMap *pMap = CManager::GetBaseMode()->GetMap();
+
+	//nullcheck
+	if (!pMap)
+	{
+		//nullだったらリターン
+		return false;
+	}
+
+	// マップモデルの最大数分繰り返す
+	for (int nCnt = 0; nCnt < pMap->GetMaxModel(); nCnt++)
+	{
+		//初期化
+		bHitFlag = false;
+
+		//	逆行列の取得
+		D3DXMatrixInverse(&invmat, NULL, pMap->GetModel(nCnt)->GetMatrix());
+		//	逆行列を使用し、レイ始点情報を変換　位置と向きで変換する関数が異なるので要注意
+		D3DXVec3TransformCoord(&posOrigin, &posOrigin, &invmat);
+		//	レイ終点情報を変換
+		D3DXVec3TransformCoord(&posEndPoint, &posEndPoint, &invmat);
+		//	レイ方向情報を変換
+		D3DXVec3Normalize(&direction, &(posEndPoint - posOrigin));
+		//Rayを飛ばす
+		D3DXIntersect(pMap->GetMesh(nCnt), &posOrigin, &direction, &bHitFlag, &dwHitIndex, &fHitU, &fHitV, &fLandDistance, NULL, NULL);
+
+		//なんかしらに当たっていた時
+		if (bHitFlag)
+		{
+			//長さの保存追加
+			vDistance.emplace_back(fLandDistance * 0.5f);
+		}
+
+	}
+	//Rayのヒットした物があったとき
+	if (!vDistance.empty())
+	{
+		for (unsigned int nCnt = 0; vDistance.size() > nCnt; nCnt++)
+		{
+			if (vDistance[nCnt] < fLength)
+			{
+				//比較対象が小さかったら代入
+				fLength = vDistance[nCnt];
+				bJudg = true;
+			}
+		}
+	}
+
+	//配列を空にしておく
+	vDistance.clear();
+
+	// 判定フラグを返す
+	return bJudg;
+}
+
 
 bool CCollision::RayFloorCollision(CMap * pMap, D3DXMATRIX * pMat, D3DXVECTOR3 pdirection,D3DXVECTOR3 ppos)
 {

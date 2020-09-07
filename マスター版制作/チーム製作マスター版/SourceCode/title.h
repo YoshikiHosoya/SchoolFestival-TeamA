@@ -24,13 +24,31 @@ class CUIManager;
 // =====================================================================================================================================================================
 // マクロ定義
 // =====================================================================================================================================================================
-#define MAX_TITLE_TEXTURE (5)
+#define MAX_TITLE_TEXTURE (CTitleUI::TITLE_UI_MAX)
 // =====================================================================================================================================================================
 // タイトルクラス
 // =====================================================================================================================================================================
 class CTitle :public CBaseMode
 {
 public:
+	// タイトルのモード
+	enum TITLE_MODE
+	{
+		MODE_PENDING,							// 初期状態
+		MODE_STAGING,							// 演出中
+		MODE_CHARACTERSELECT, 					// プレイ人数を選択する画面
+		MODE_FADE, 								// 次の状態へ遷移する状態
+		MODE_MAX								// 最大数
+	};
+
+	// 選択中のプレイヤーの人数
+	enum PLAYER_NUM
+	{
+		PLAYER_NUM_ONE,							// 1人プレイ選択
+		PLAYER_NUM_TWO,							// 2人プレイ選択
+		//PLAYER_NUM_MAX						// 最大数
+	};
+
 	/* メンバ関数 */
 	CTitle();									// コンストラクタ
 	~CTitle();									// デストラクタ
@@ -43,8 +61,23 @@ public:
 	/* メンバ関数 */
 	CPlayer* GetPlayer(TAG Tag) { return nullptr; };
 	CMap* GetMap() { return nullptr; };
+
+	static PLAYER_NUM GetPlayerNum() { return m_PlayerNum; };
+
 private:
+	/* メンバ関数 */
+	void			TitleModeNext();			// 次のモードに移行する
+	void			TitleMode();				// タイトルのモードごとの処理
+	void			TitleStaging();				// タイトルの演出
+
+	/* 静的メンバ変数 */
+	static PLAYER_NUM		m_PlayerNum;		// 参加するプレイヤーの人数
+
 	/* メンバ変数 */
 	CTitleUI		*m_pTitleUI;				// タイトルUIのポインタ
+	TITLE_MODE		m_TitleMode;				// タイトルのモード
+	int				m_nStagingInterval;			// 演出一つ一つが出現する間隔の時間
+	int				m_nStagingNum;				// 演出を出した分カウント加算
+	bool			m_bEndStaging;				// 演出が終わっていない時
 };
 #endif

@@ -66,6 +66,11 @@ void CMultiNumber::Update()
 	// タイプによって処理を変える
 	switch (m_type)
 	{
+	case CMultiNumber::TYPE_NORMAL:
+		// 通常
+		SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+		break;
+
 		//点滅タイプ
 	case CMultiNumber::TYPE_FLASHING:
 		//2Fごとに色を変える

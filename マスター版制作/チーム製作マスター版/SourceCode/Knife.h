@@ -44,6 +44,7 @@ private:
 	CCollision	*m_pCollision;				//当たり判定のポインタ
 	D3DXMATRIX	*m_HandMatrix;				//ナイフを持つ手のマトリックスのポインタ
 	bool		m_bAttack;					//攻撃中かどうか
+	int			m_nCnt;						//カウント
 
 	D3DXVECTOR3 m_worldpos;					//ワールド座標　当たり判定用
 	D3DXVECTOR3 m_KnifeCollisionSize;		//ナイフのコリジョンの大きさ

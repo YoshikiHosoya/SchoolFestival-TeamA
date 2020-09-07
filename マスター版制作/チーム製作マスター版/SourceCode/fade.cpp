@@ -305,9 +305,22 @@ void CFADE::FadeOut()
 		CMap *pMap = CManager::GetBaseMode()->GetMap();
 
 		//プレイヤーのマップ遷移時の処理
-		for (int nCntPlayer = 0; nCntPlayer < MAX_CONTROLLER; nCntPlayer++)
+		if (CPlayer::GetTwoPPlayFlag())
 		{
-			CManager::GetBaseMode()->GetPlayer((TAG)(nCntPlayer))->MapChangePlayerRespawn();
+			for (int nCntPlayer = 0; nCntPlayer < MAX_CONTROLLER; nCntPlayer++)
+			{
+				if (CManager::GetBaseMode()->GetPlayer((TAG)(nCntPlayer)))
+				{
+					CManager::GetBaseMode()->GetPlayer((TAG)(nCntPlayer))->MapChangePlayerRespawn();
+				}
+			}
+		}
+		else
+		{
+			if (CManager::GetBaseMode()->GetPlayer((TAG)(0)))
+			{
+				CManager::GetBaseMode()->GetPlayer((TAG)(0))->MapChangePlayerRespawn();
+			}
 		}
 		//レンダラー設定初期化
 		CManager::GetRenderer()->ResetRenderer();

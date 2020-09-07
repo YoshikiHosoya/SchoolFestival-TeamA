@@ -43,6 +43,9 @@ CObstacle::CObstacle(OBJ_TYPE type) :CModel(type)
 	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);				// 移動値
 	m_nLife = 0;										// 体力
 	m_ObstacleType = TYPE_BOX;							// タイプの初期化
+	//タグ設定
+	CGameObject::SetTag(TAG::OBSTACLE);
+
 }
 
 // =====================================================================================================================================================================
