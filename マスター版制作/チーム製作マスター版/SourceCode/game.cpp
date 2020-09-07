@@ -198,8 +198,18 @@ void CGame::StateChangeReaction()
 			m_pResultManager = nullptr;
 
 		}
+
 		// リザルト管理クラスの生成
+		for (int nCnt = 0; nCnt < MAX_CONTROLLER; nCnt++)
+		{
+			if (m_pPlayer[nCnt])
+			{
+				m_pPlayer[nCnt]->SetState(CPlayer::CHARACTER_STATE_INVINCIBLE);
+			}
+		}
+
 		m_pResultManager = CResultManager::Create();
+
 		break;
 
 	case CGameManager::GAMESTATE::GAMEOVER:

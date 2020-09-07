@@ -12,6 +12,7 @@
 #include "multinumber.h"
 #include "UIManager.h"
 #include "playergetscoreui.h"
+#include "scoremanager.h"
 
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
@@ -212,6 +213,11 @@ void CPlayerUI::SetScore(int nScore)
 	// スコア加算
 	m_nScore += nScore;
 
+	if (m_nScore >= SCORE_LIMIT)
+	{
+		m_nScore = SCORE_LIMIT;
+	}
+
 	// スコアの設定
 	m_pScore->SetMultiNumber(m_nScore);
 }
@@ -225,6 +231,11 @@ void CPlayerUI::SetItemScore(int nScore)
 {
 	// スコア加算
 	m_nScore += nScore;
+
+	if (m_nScore >= SCORE_LIMIT)
+	{
+		m_nScore = SCORE_LIMIT;
+	}
 
 	// スコアの設定
 	m_pScore->SetMultiNumber(m_nScore);

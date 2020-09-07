@@ -80,6 +80,16 @@ public:
 		PLAYER_SCORE_MAX
 	};
 
+	// ランキングの評価ランク
+	enum RANKING_EVALUATION
+	{
+		RANKING_EVALUATION_BEST,			// 最高評価 1
+		RANKING_EVALUATION_SECONDBEDT,		// 評価	2から3位
+		RANKING_EVALUATION_THIRDBEST,		// 評価 4から7位
+		RANKING_EVALUATION_NONE,			// 評価無し
+		RANKING_EVALUATION_MAXNUM			// 最大数
+	};
+
 	CRankingUI();							// コンストラクタ
 	~CRankingUI();							// デストラクタ
 
@@ -108,7 +118,7 @@ private:
 	void					BubbleSort(std::vector<int> &data);			// 優先度の入れ替え 高い順に0番目から
 	bool					BubbleSort_Compare(std::vector<int> data);	// ランキングの値とスコアの値を比較
 
-	bool					TargetValue(const int &Target,
+	bool					TargetValueAdd(const int &Target,
 		int &Value,
 		int Add,
 		CMultiNumber *pMultiNumber);			// 目標の値になるまで値を計算する
@@ -122,11 +132,15 @@ private:
 	void					RankScoreUiCreate();
 	void					PlayerScoreUiCreate();
 
+	void					RankingState();// ステートごとの評価
 	void					RankingState_Draw_Score();
 	void					RankingState_Score_Calculation();
 	void					RankingState_Compare_Ranking();
 	void					RankingState_Sort_Ranking();
 	void					RankingState_Ranking();
+
+	void					RankingEvaluation();// 順位ごとの評価
+
 
 
 	/* 静的メンバ変数 */
@@ -143,10 +157,12 @@ private:
 	int						m_nColCnt;									// カラーカウント
 	int						m_WaitTime;
 	int						m_nRankNum;
-	int						m_TimeToExplosion;
+	int						m_nTimeToExplosion;
 	D3DXVECTOR3				m_RankScoreMove;
 	int						m_nTimeToDraw;
 	int						m_nTimeToFlash;
+	int						m_nTimeToFireworks;
+
 
 	int						m_nDrawCount;
 	bool					m_bCompleted;
@@ -155,5 +171,6 @@ private:
 	bool					m_bMoveRank[SCORE_MAX];
 	float					m_fCol;
 	int						m_nTimeToTransition;
+	bool					m_bEvaluation[3];
 };
 #endif
