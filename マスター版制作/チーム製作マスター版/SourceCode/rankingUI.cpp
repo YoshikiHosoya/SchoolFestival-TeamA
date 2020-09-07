@@ -982,8 +982,8 @@ void CRankingUI::RankingState_Compare_Ranking()
 						{
 							CParticle::CreateFromText(
 								D3DXVECTOR3(
-									m_pRankScore[m_nRankNum]->GetPos().x + CHossoLibrary::RandomVector3(100.0f).x,
-									(m_pRankScore[m_nRankNum]->GetPos().y + (SCREEN_HEIGHT*0.5f)) + CHossoLibrary::RandomVector3(100.0f).y,
+									(m_pRankScore[m_nRankNum]->GetPos().x + 680.0f) + CHossoLibrary::RandomVector3(100.0f).x,
+									(m_pRankScore[m_nRankNum]->GetPos().y + 200.0f) + CHossoLibrary::RandomVector3(100.0f).y,
 									0.0f),
 								ZeroVector3,
 								CParticleParam::EFFECT_NO_COLLISION_EXPLOSION_RANK);

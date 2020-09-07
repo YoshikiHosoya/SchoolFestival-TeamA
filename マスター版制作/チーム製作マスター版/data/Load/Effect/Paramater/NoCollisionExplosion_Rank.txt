@@ -28,7 +28,7 @@ SCRIPT
 		RANGE = 0.5								//範囲
 		ALPHADAMPING = 1.00						//アルファ値の減衰値
 		GRAVITYPOWER = 0.80						//重力の強さ
-		LOCALPOS = -640.00 -360.00 0.00			//ローカル座標
+		LOCALPOS = -640.00 360.00 0.00			//ローカル座標
 		LOCALPOS_RANGE = 0.00 0.00 0.00			//ローカル座標がランダム時の値の範囲
 		SIZE = 30.00 45.00 0.00					//サイズ
 		SIZEDAMPING = 1.00 1.00 0.00			//サイズ減衰量
