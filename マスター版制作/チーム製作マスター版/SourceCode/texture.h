@@ -103,6 +103,13 @@ public:
 		TEX_UI_GAME_PLAYER_1P,					//2人プレイ時1P頭上に表示
 		TEX_UI_GAME_PLAYER_2P,					//2人プレイ時2P頭上に表示
 
+		TEX_UI_PAUSE_BG,						//ポーズの背景
+		TEX_UI_PAUSE_RESUME,					//再開
+		TEX_UI_PAUSE_RESTART,					//リスタート
+		TEX_UI_PAUSE_EXIT,						//タイトルに戻る
+		TEX_UI_PAUSE_LOGO,						//ポーズロゴ
+		TEX_UI_PAUSE_ICON,						//アイコン
+
 		TEX_MAX									//MAX
 	};
 

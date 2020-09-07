@@ -307,6 +307,9 @@
     <ClCompile Include="SourceCode\3Dline.cpp">
       <Filter>Collision</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\pauseUI.cpp">
+      <Filter>Scene2D.3D\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SourceCode\shield.h">
@@ -626,6 +629,9 @@
     </ClInclude>
     <ClInclude Include="SourceCode\Resource\resource.h">
       <Filter>Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\pauseUI.h">
+      <Filter>Scene2D.3D\UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

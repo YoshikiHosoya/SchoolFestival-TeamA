@@ -86,8 +86,15 @@ FILENAME_LIST CTexture::m_aTexFileName =
 	{ "data/TEXTURE/UI/Game_UI/go.png" },					//Goサイン
 	{ "data/TEXTURE/UI/Game_UI/Gameover.png" },				//ゲームオーバー
 
-	{ "data/TEXTURE/UI/Game_UI/P1.png" },				//ゲームオーバー
-	{ "data/TEXTURE/UI/Game_UI/P2.png" },				//ゲームオーバー
+	{ "data/TEXTURE/UI/Game_UI/P1.png" },					//2人プレイ時1P頭上に表示
+	{ "data/TEXTURE/UI/Game_UI/P2.png" },					//2人プレイ時2P頭上に表示
+
+	{ "data/TEXTURE/UI/Pause_UI/black.jpg" },				//ポーズの背景
+	{ "data/TEXTURE/UI/Pause_UI/resume.png" },				//再開
+	{ "data/TEXTURE/UI/Pause_UI/restart.png" },				//リスタート
+	{ "data/TEXTURE/UI/Pause_UI/exit.png" },				//タイトルに戻る
+	{ "data/TEXTURE/UI/Pause_UI/pause.png" },				//ポーズロゴ
+	{ "data/TEXTURE/UI/Pause_UI/icon.png" },				//アイコン
 
 };
 
