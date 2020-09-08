@@ -41,6 +41,12 @@ FILENAME_LIST CTexture::m_aTexFileName =
 
 	{ "data/TEXTURE/UI/Title_UI/title.png" },				//タイトルロゴ
 	{ "data/TEXTURE/UI/Title_UI/start.png" },				//スタート
+	{ "data/TEXTURE/UI/Title_UI/BulletHole1.png" },			//弾痕1
+	{ "data/TEXTURE/UI/Title_UI/BulletHole2.png" },			//弾痕2
+	{ "data/TEXTURE/UI/Title_UI/BulletHole3.png" },			//弾痕3
+	{ "data/TEXTURE/UI/Title_UI/Player_1.png" },			//プレイヤー選択1
+	{ "data/TEXTURE/UI/Title_UI/Player_2.png" },			//プレイヤー選択2
+	{ "data/TEXTURE/UI/Title_UI/Arrow.png" },				//矢印
 
 	{ "data/TEXTURE/UI/Tutorial_UI/Tutorial_Name.png" },	//チュートリアル名前ロゴ
 	{ "data/TEXTURE/UI/Tutorial_UI/Tutorial_1.png" },		//チュートリアル開始
@@ -61,12 +67,17 @@ FILENAME_LIST CTexture::m_aTexFileName =
 	{ "data/TEXTURE/UI/Result_UI/NOPRISONER.png" },			//評価2
 	{ "data/TEXTURE/UI/Result_UI/MISSION1COMPRLETE.png" },	//ミッションクリア0
 	{ "data/TEXTURE/UI/Result_UI/MISSION2COMPRLETE.png" },	//ミッションクリア1
+
 	{ "data/TEXTURE/UI/Ranking_UI/RANKING_NAME.png" },		//ランキング
 	{ "data/TEXTURE/UI/Ranking_UI/1st.png" },				//ランキング
 	{ "data/TEXTURE/UI/Ranking_UI/2nd.png" },				//ランキング
 	{ "data/TEXTURE/UI/Ranking_UI/3rd.png" },				//ランキング
 	{ "data/TEXTURE/UI/Ranking_UI/4th.png" },				//ランキング
 	{ "data/TEXTURE/UI/Ranking_UI/5th.png" },				//ランキング
+	{ "data/TEXTURE/UI/Ranking_UI/6th.png" },				//ランキング
+	{ "data/TEXTURE/UI/Ranking_UI/7th.png" },				//ランキング
+	{ "data/TEXTURE/UI/Ranking_UI/Total.png" },				//ランキング
+	{ "data/TEXTURE/UI/Ranking_UI/ThankYouForPlaying.png" },//ランキング
 
 	{ "data/TEXTURE/BG/sky01.jpg" },						//空の背景	( 晴れ )
 	{ "data/TEXTURE/BG/sky02.jpg" },						//空の背景	( 曇り )
@@ -74,6 +85,16 @@ FILENAME_LIST CTexture::m_aTexFileName =
 
 	{ "data/TEXTURE/UI/Game_UI/go.png" },					//Goサイン
 	{ "data/TEXTURE/UI/Game_UI/Gameover.png" },				//ゲームオーバー
+
+	{ "data/TEXTURE/UI/Game_UI/P1.png" },					//2人プレイ時1P頭上に表示
+	{ "data/TEXTURE/UI/Game_UI/P2.png" },					//2人プレイ時2P頭上に表示
+
+	{ "data/TEXTURE/UI/Pause_UI/black.jpg" },				//ポーズの背景
+	{ "data/TEXTURE/UI/Pause_UI/resume.png" },				//再開
+	{ "data/TEXTURE/UI/Pause_UI/restart.png" },				//リスタート
+	{ "data/TEXTURE/UI/Pause_UI/exit.png" },				//タイトルに戻る
+	{ "data/TEXTURE/UI/Pause_UI/pause.png" },				//ポーズロゴ
+	{ "data/TEXTURE/UI/Pause_UI/icon.png" },				//アイコン
 
 };
 
@@ -103,6 +124,10 @@ FILENAME_LIST CTexture::m_aSeparateTexFileNameList =
 	{ "data/TEXTURE/Effect/Flashing.jpg" },						//フラッシュ
 	{ "data/TEXTURE/Effect/Charge00.png" },						//チャージ
 	{ "data/TEXTURE/Effect/Charge01.png" },						//チャージ
+
+	{ "data/TEXTURE/Effect/Fireworks1.png" },					//花火1
+	{ "data/TEXTURE/Effect/Fireworks3.png" },					//花火2
+	{ "data/TEXTURE/Effect/Fireworks5.png" },					//花火3
 
 	{ "data/TEXTURE/UI/num.png" },								//ナンバー
 	{ "data/TEXTURE/UI/Player_UI/life.png" },					//体力のUI
@@ -138,6 +163,10 @@ std::vector<CTexture::SEPARATE_TEX_INFO> CTexture::m_apSeparateTexInfoList =
 	{ nullptr, CTexture::SEPARATE_TEX_EFFECT_FLASH,			D3DXVECTOR2(5,1),	ZeroVector2 },		//フラッシュ
 	{ nullptr, CTexture::SEPARATE_TEX_EFFECT_CHARGE00,		D3DXVECTOR2(5,2),	ZeroVector2 },		//チャージ
 	{ nullptr, CTexture::SEPARATE_TEX_EFFECT_CHARGE01,		D3DXVECTOR2(5,2),	ZeroVector2 },		//チャージ
+
+	{ nullptr, CTexture::SEPARATE_TEX_EFFECT_FIREWORKS1,	D3DXVECTOR2(14,1),	ZeroVector2 },		//花火1
+	{ nullptr, CTexture::SEPARATE_TEX_EFFECT_FIREWORKS2,	D3DXVECTOR2(14,1),	ZeroVector2 },		//花火2
+	{ nullptr, CTexture::SEPARATE_TEX_EFFECT_FIREWORKS3,	D3DXVECTOR2(14,1),	ZeroVector2 },		//花火3
 
 	{ nullptr, CTexture::SEPARATE_TEX_NUM,					D3DXVECTOR2(10,1),	ZeroVector2 },		//ナンバー
 	{ nullptr, CTexture::SEPARATE_TEX_UI_LIFE,				D3DXVECTOR2(5,1),	ZeroVector2 },		//体力のUI

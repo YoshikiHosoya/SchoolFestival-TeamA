@@ -19,6 +19,8 @@
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
 // =====================================================================================================================================================================
+CRankingManager::RANKING_STATE		CRankingManager::m_RankingState = RANKING_STATE_SCORE_CALCULATION;
+CRankingManager::RANKING_STATE		CRankingManager::m_RankingStateOld = RANKING_STATE_SCORE_CALCULATION;
 
 // =====================================================================================================================================================================
 // マクロ定義
@@ -31,7 +33,8 @@
 // =====================================================================================================================================================================
 CRankingManager::CRankingManager()
 {
-	m_RankingState = RANKING_STATE_0;
+	m_RankingState = RANKING_STATE_DRAW_SCORE;
+	m_RankingStateOld = RANKING_STATE_DRAW_SCORE;
 	m_pRankingUI = nullptr;
 }
 
@@ -78,20 +81,23 @@ void CRankingManager::Update(void)
 	//キーボード情報取得
 	CKeyboard *key = CManager::GetInputKeyboard();
 
-	for (int nCnt = 0; nCnt < MAX_CONTROLLER; nCnt++)
+	if (m_RankingState == RANKING_STATE_RANKING)
 	{
-		// パッド取得
-		pad[nCnt] = CManager::GetPad((TAG)nCnt);
-		// エンターを押したとき
-
-		if (key->GetKeyboardTrigger(DIK_RETURN) ||
-			pad[nCnt]->GetTrigger(pad[nCnt]->JOYPADKEY_B, 1) ||
-			pad[nCnt]->GetTrigger(pad[nCnt]->JOYPADKEY_A, 1) ||
-			pad[nCnt]->GetTrigger(pad[nCnt]->JOYPADKEY_X, 1) ||
-			pad[nCnt]->GetTrigger(pad[nCnt]->JOYPADKEY_Y, 1))
+		for (int nCnt = 0; nCnt < MAX_CONTROLLER; nCnt++)
 		{
-			// ゲームモードへ状態遷移
-			CManager::GetRenderer()->GetFade()->SetFade(CFADE::FADETYPE::FADETYPE_MODE, CManager::MODE_TITLE);
+			// パッド取得
+			pad[nCnt] = CManager::GetPad((TAG)nCnt);
+			// エンターを押したとき
+
+			if (key->GetKeyboardTrigger(DIK_RETURN) ||
+				pad[nCnt]->GetTrigger(pad[nCnt]->JOYPADKEY_B, 1) ||
+				pad[nCnt]->GetTrigger(pad[nCnt]->JOYPADKEY_A, 1) ||
+				pad[nCnt]->GetTrigger(pad[nCnt]->JOYPADKEY_X, 1) ||
+				pad[nCnt]->GetTrigger(pad[nCnt]->JOYPADKEY_Y, 1))
+			{
+				// ゲームモードへ状態遷移
+				CManager::GetRenderer()->GetFade()->SetFade(CFADE::FADETYPE::FADETYPE_MODE, CManager::MODE_TITLE);
+			}
 		}
 	}
 }

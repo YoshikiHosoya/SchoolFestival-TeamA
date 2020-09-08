@@ -23,6 +23,8 @@
 #include "GameManager.h"
 #include "ResultManager.h"
 #include "shield.h"
+#include "title.h"
+
 // =====================================================================================================================================================================
 // マクロ定義
 // =====================================================================================================================================================================
@@ -50,6 +52,13 @@ CGame::~CGame()
 {
 	m_pGameManager = nullptr;
 
+	for (int nCnt = 0; nCnt < MAX_CONTROLLER; nCnt++)
+	{
+		if (m_pPlayer[nCnt])
+		{
+			m_pPlayer[nCnt] = nullptr;
+		}
+	}
 }
 //==========================================================
 // 初期化
@@ -65,10 +74,13 @@ HRESULT CGame::Init(void)
 	m_pPlayer[(int)TAG::PLAYER_1] = CPlayer::Create(TAG::PLAYER_1);
 	// 試験的プレイヤー2の配置
 
-	m_pPlayer[(int)TAG::PLAYER_2] = CPlayer::Create(TAG::PLAYER_2);
-	m_pPlayer[(int)TAG::PLAYER_2]->SetPosition(m_pPlayer[(int)TAG::PLAYER_2]->GetPosition() + D3DXVECTOR3(100.0f, 0.0f, 0.0f));
-
-	m_pPause->CreatePause();
+	if (CPlayer::GetTwoPPlayFlag() && !m_pPlayer[(int)TAG::PLAYER_2])
+	{
+		// プレイヤー2の配置
+		m_pPlayer[(int)TAG::PLAYER_2] = CPlayer::Create(TAG::PLAYER_2);
+		m_pPlayer[(int)TAG::PLAYER_2]->SetPosition(m_pPlayer[(int)TAG::PLAYER_2]->GetPosition() + D3DXVECTOR3(100.0f, 0.0f, 0.0f));
+		m_pPlayer[(int)TAG::PLAYER_2]->ChangeColor(true, D3DXCOLOR(0.5f, -0.5f, 1.0f, 0.0f));
+	}
 
 	//ゲームの進行管理クラス作成
 	m_pGameManager = CGameManager::Create();
@@ -142,7 +154,6 @@ void CGame::Update(void)
 //==========================================================
 // プレイヤー取得
 //==========================================================
-
 CPlayer * CGame::GetPlayer(TAG Tag)
 {
 
@@ -187,8 +198,18 @@ void CGame::StateChangeReaction()
 			m_pResultManager = nullptr;
 
 		}
+
 		// リザルト管理クラスの生成
+		for (int nCnt = 0; nCnt < MAX_CONTROLLER; nCnt++)
+		{
+			if (m_pPlayer[nCnt])
+			{
+				m_pPlayer[nCnt]->SetState(CPlayer::CHARACTER_STATE_INVINCIBLE);
+			}
+		}
+
 		m_pResultManager = CResultManager::Create();
+
 		break;
 
 	case CGameManager::GAMESTATE::GAMEOVER:

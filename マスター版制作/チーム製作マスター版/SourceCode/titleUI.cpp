@@ -11,12 +11,55 @@
 #include "scene2D.h"
 
 // =====================================================================================================================================================================
-// 静的メンバ変数の初期化
-// =====================================================================================================================================================================
-
-// =====================================================================================================================================================================
 // マクロ定義
 // =====================================================================================================================================================================
+
+// UIの座標
+#define TUTORIAL_UI_LOGO_POS			(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 325.0f, 0.0f))
+#define TUTORIAL_UI_START_POS			(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 600.0f, 0.0f))
+#define TUTORIAL_UI_BOLLETHOLE1_POS		(D3DXVECTOR3(200.0f, 250.0f, 0.0f))
+#define TUTORIAL_UI_BOLLETHOLE2_POS		(D3DXVECTOR3(1000.0f, 250.0f, 0.0f))
+#define TUTORIAL_UI_BOLLETHOLE3_POS		(D3DXVECTOR3(1000.0f, 550.0f, 0.0f))
+#define TUTORIAL_UI_PLAYER_COUNT_1_POS	(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 550.0f, 0.0f))
+#define TUTORIAL_UI_PLAYER_COUNT_2_POS	(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 650.0f, 0.0f))
+#define TUTORIAL_UI_ARROWMARK_POS		(D3DXVECTOR3(400.0f, 550.0f, 0.0f))
+
+// UIの大きさ
+#define TUTORIAL_UI_LOGO_SIZE			(D3DXVECTOR3(400.0f, 300.0f, 0.0f))
+#define TUTORIAL_UI_START_SIZE			(D3DXVECTOR3(250.0f, 30.0f, 0.0f))
+#define TUTORIAL_UI_BOLLETHOLE1_SIZE	(D3DXVECTOR3(250.0f, 250.0f, 0.0f))
+#define TUTORIAL_UI_BOLLETHOLE2_SIZE	(D3DXVECTOR3(250.0f, 250.0f, 0.0f))
+#define TUTORIAL_UI_BOLLETHOLE3_SIZE	(D3DXVECTOR3(200.0f, 200.0f, 0.0f))
+#define TUTORIAL_UI_PLAYER_COUNT_1_SIZE	(D3DXVECTOR3(200.0f, 40.0f, 0.0f))
+#define TUTORIAL_UI_PLAYER_COUNT_2_SIZE	(D3DXVECTOR3(200.0f, 40.0f, 0.0f))
+#define TUTORIAL_UI_ARROWMARK_SIZE		(D3DXVECTOR3(50.0f, 50.0f, 0.0f))
+
+// =====================================================================================================================================================================
+// 静的メンバ変数の初期化
+// =====================================================================================================================================================================
+LPDIRECT3DTEXTURE9		CTitleUI::m_TexNum[TITLE_UI_MAX] = {};					// バインドするテクスチャの情報
+
+D3DXVECTOR3				CTitleUI::m_Pos[TITLE_UI_MAX] = {
+	TUTORIAL_UI_LOGO_POS,
+	TUTORIAL_UI_START_POS,
+	TUTORIAL_UI_BOLLETHOLE1_POS,
+	TUTORIAL_UI_BOLLETHOLE2_POS,
+	TUTORIAL_UI_BOLLETHOLE3_POS,
+	TUTORIAL_UI_PLAYER_COUNT_1_POS,
+	TUTORIAL_UI_PLAYER_COUNT_2_POS,
+	TUTORIAL_UI_ARROWMARK_POS
+};
+
+D3DXVECTOR3				CTitleUI::m_Size[TITLE_UI_MAX] = {
+	TUTORIAL_UI_LOGO_SIZE,
+	TUTORIAL_UI_START_SIZE,
+	TUTORIAL_UI_BOLLETHOLE1_SIZE,
+	TUTORIAL_UI_BOLLETHOLE2_SIZE,
+	TUTORIAL_UI_BOLLETHOLE3_SIZE,
+	TUTORIAL_UI_PLAYER_COUNT_1_SIZE,
+	TUTORIAL_UI_PLAYER_COUNT_2_SIZE,
+	TUTORIAL_UI_ARROWMARK_SIZE
+};
 
 // =====================================================================================================================================================================
 //
@@ -49,30 +92,29 @@ CTitleUI::~CTitleUI()
 // =====================================================================================================================================================================
 HRESULT CTitleUI::Init(void)
 {
-	for (int nCnt = 0; nCnt < TITLE_UI::TITLE_UI_MAX; nCnt++)
+	// テクスチャの取得
+	for (int nCntNum = 0, nCnt = CTexture::TEX_UI_TITLE; nCntNum < TITLE_UI_MAX; nCntNum++, nCnt++)
+	{
+		m_TexNum[nCntNum] = CTexture::GetTexture((CTexture::TEX_TYPE)nCnt);	// バインドするテクスチャの情報
+	}
+
+	// UIの生成
+	for (int nCnt = 0; nCnt < TITLE_UI_MAX; nCnt++)
 	{
 		if (!m_apScene2D[nCnt])
 		{
-			switch (nCnt)
-			{
-			// タイトルロゴ
-			case TITLE_UI::TITLE_LOGO:
-				// シーン2Dの生成
-				m_apScene2D[nCnt] = CScene2D::Create(D3DXVECTOR3((SCREEN_WIDTH * 0.5f), 325.0f, 0.0f), D3DXVECTOR3(400.0f, 300.0f, 0.0f));
-				// テクスチャの割り当て
-				m_apScene2D[nCnt]->BindTexture(CTexture::GetTexture(CTexture::TEX_UI_TITLE));
-				break;
+			// シーン2Dの生成
+			m_apScene2D[nCnt] = CScene2D::Create(m_Pos[nCnt], m_Size[nCnt]);
+			// テクスチャの割り当て
+			m_apScene2D[nCnt]->BindTexture(m_TexNum[nCnt]);
 
-			// スタート
-			case TITLE_UI::UI_START:
-				// シーン2Dの生成
-				m_apScene2D[nCnt] = CScene2D::Create(D3DXVECTOR3((SCREEN_WIDTH * 0.5f), 600.0f, 0.0f), D3DXVECTOR3(250.0f, 30.0f, 0.0f));
-				// テクスチャの割り当て
-				m_apScene2D[nCnt]->BindTexture(CTexture::GetTexture(CTexture::TEX_UI_START));
-				break;
+			if (nCnt != TITLE_LOGO && nCnt != UI_START)
+			{
+				m_apScene2D[nCnt]->SetDisp(false);
 			}
 		}
 	}
+
 	return S_OK;
 }
 
@@ -174,4 +216,24 @@ void CTitleUI::Flashing(CScene2D *m_apScene2D)
 	{
 		m_apScene2D->SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 	}
+}
+
+// =====================================================================================================================================================================
+//
+// 描画設定
+//
+// =====================================================================================================================================================================
+void CTitleUI::SetDrawFlag(int nNum, bool bDraw)
+{
+	m_apScene2D[nNum]->SetDisp(bDraw);
+}
+
+// =====================================================================================================================================================================
+//
+// 座標の設定
+//
+// =====================================================================================================================================================================
+void CTitleUI::SetPos(TITLE_UI Num, D3DXVECTOR3 pos)
+{
+	m_apScene2D[Num]->SetPosition(pos);
 }

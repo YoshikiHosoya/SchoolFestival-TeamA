@@ -109,11 +109,14 @@ void CTutorialManager::Update(void)
 		CManager::GetRenderer()->GetFade()->SetFade(CFADE::FADETYPE::FADETYPE_MODE, CManager::MODE_GAME);
 	}
 
+	// デバッグ用
+#ifdef _DEBUG
 	// 試験的2P配置
 	if (key->GetKeyboardTrigger(DIK_RSHIFT))
 	{
 		m_bAdd2PFlag = true;
 	}
+#endif // DEBUG
 
 	// 各ステートごとの関数を管理する
 	StateManager();

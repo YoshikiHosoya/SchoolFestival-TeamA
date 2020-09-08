@@ -52,8 +52,14 @@ public:
 		TEX_UI_INFINITY,						//弾数無限のUI
 		TEX_UI_FRAME,							//枠のUI
 
-		TEX_UI_TITLE,							//タイトルロゴ
-		TEX_UI_START,							//スタート
+		TEX_UI_TITLE,							// タイトルロゴ
+		TEX_UI_START,							// スタート
+		TEX_UI_BULLET_HOLE1,					// 弾痕1
+		TEX_UI_BULLET_HOLE2,					// 弾痕2
+		TEX_UI_BULLET_HOLE3,					// 弾痕3
+		TEX_UI_PLAYER_1,						// プレイヤー選択1
+		TEX_UI_PLAYER_2,						// プレイヤー選択2
+		TEX_UI_ARROW,							// 選択用矢印
 
 		TEX_UI_TUTORIAL_NAME,					// チュートリアル名前ロゴ
 		TEX_UI_TUTORIAL_START,					// 開始宣言
@@ -81,6 +87,11 @@ public:
 		TEX_UI_RANKING_3rd,						//ランキング3位
 		TEX_UI_RANKING_4th,						//ランキング4位
 		TEX_UI_RANKING_5th,						//ランキング5位
+		TEX_UI_RANKING_6th,						//ランキング6位
+		TEX_UI_RANKING_7th,						//ランキング7位
+		TEX_UI_RANKING_TOTAL,					//総合
+		TEX_UI_RANKING_THANKS,					//遊んでくれてありがとう！
+
 
 		TEX_BG_SKY_SUNNY,						//空の背景	( 晴れ )
 		TEX_BG_SKY_CLOUDY,						//空の背景	( 曇り )
@@ -88,6 +99,16 @@ public:
 
 		TEX_UI_GAME_GO,							//Goサイン
 		TEX_UI_GAME_GAMEOVER,					//ゲームオーバー
+
+		TEX_UI_GAME_PLAYER_1P,					//2人プレイ時1P頭上に表示
+		TEX_UI_GAME_PLAYER_2P,					//2人プレイ時2P頭上に表示
+
+		TEX_UI_PAUSE_BG,						//ポーズの背景
+		TEX_UI_PAUSE_RESUME,					//再開
+		TEX_UI_PAUSE_RESTART,					//リスタート
+		TEX_UI_PAUSE_EXIT,						//タイトルに戻る
+		TEX_UI_PAUSE_LOGO,						//ポーズロゴ
+		TEX_UI_PAUSE_ICON,						//アイコン
 
 		TEX_MAX									//MAX
 	};
@@ -120,6 +141,10 @@ public:
 		SEPARATE_TEX_EFFECT_FLASH,					//フラッシュ
 		SEPARATE_TEX_EFFECT_CHARGE00,				//チャージ
 		SEPARATE_TEX_EFFECT_CHARGE01,				//チャージ
+
+		SEPARATE_TEX_EFFECT_FIREWORKS1,				//花火1
+		SEPARATE_TEX_EFFECT_FIREWORKS2,				//花火2
+		SEPARATE_TEX_EFFECT_FIREWORKS3,				//花火3
 
 		SEPARATE_TEX_NUM,							//ナンバー
 		SEPARATE_TEX_UI_LIFE,						//体力のUI

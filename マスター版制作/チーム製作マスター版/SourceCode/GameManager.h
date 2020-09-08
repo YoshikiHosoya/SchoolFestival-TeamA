@@ -19,6 +19,7 @@
 //クラス定義
 //------------------------------------------------------------------------------
 class CScene2D;
+class CPause;
 
 class CGameManager
 {
@@ -31,6 +32,7 @@ public:
 		WAVE,
 		RESULT,
 		GAMEOVER,
+		PAUSE,
 	};
 
 	void Update();
@@ -42,6 +44,7 @@ public:
 	static std::unique_ptr<CGameManager> Create();
 
 	GAMESTATE GetGameState() { return m_state; };				//ステート取得
+	GAMESTATE GetGameStateOld() { return m_stateOld; };			//前回のステート取得
 	void SetGameState(GAMESTATE state);	//ステート設定
 	void EventClear();											//イベントクリア
 	void MapTransitionWaveSet(int nNextID);						//マップ遷移時にウェーブ設定
@@ -56,8 +59,11 @@ private:
 	int			m_nNowWave;				//ウェーブ
 	CScene2D	*m_pScene2D_GoSign;		//2Dポリゴン　Goサイン
 	CScene2D	*m_pScene2D_GameOver;	//2Dポリゴン　ゲームオーバー
+	CPause		*m_pPause;				//ポーズ
 
 	GAMESTATE	m_state;				//ゲームの状態
+	GAMESTATE	m_stateOld;				//前回のゲームの状態
+
 	int			m_nTimeCnt;				//時間のカウント
 
 	void StartWave();
@@ -66,6 +72,7 @@ private:
 	void UpdateGoSign();
 	void UpdateTimer();
 	void UpdateGameover();
+	void PauseSet();					// ポーズ
 };
 
 #endif

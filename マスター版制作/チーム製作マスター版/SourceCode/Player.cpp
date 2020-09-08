@@ -42,6 +42,7 @@ float			CPlayer::m_fCrouchSpeed	 = 0.0f;
 float			CPlayer::m_fJump		 = 0.0f;
 float			CPlayer::m_fRideJump	 = 0.0f;
 D3DXVECTOR3		CPlayer::m_pos[2] = {};
+bool			CPlayer::m_bTwoPPlay = false;
 
 // =====================================================================================================================================================================
 // テキストファイル名
@@ -657,7 +658,20 @@ bool CPlayer::DefaultMotion(void)
 void CPlayer::MapChangePlayerRespawn()
 {
 	SetState(CCharacter::CHARACTER_STATE_INVINCIBLE);
-	SetPosition(m_pos[0]);
+
+	if (GetTwoPPlayFlag())
+	{
+		for (int nCnt = 0; nCnt < PLAYER_NUM_MAX; nCnt++)
+		{
+			// プレイヤー2の配置
+			SetPosition(GetPosition() + D3DXVECTOR3(100.0f, 0.0f, 0.0f));
+		}
+	}
+	else
+	{
+		SetPosition(m_pos[0]);
+	}
+
 	m_bRideVehicle = false;
 	SetMotion(CCharacter::PLAYER_MOTION_NORMAL);
 }
@@ -667,7 +681,8 @@ void CPlayer::MapChangePlayerRespawn()
 //====================================================================
 void CPlayer::ResetPlayer()
 {
-	SetPosition(m_pos[0]);
+	D3DXVECTOR3 pos = D3DXVECTOR3(m_pos[0].x - 200.0f, m_pos[0].y, m_pos[0].z);
+	SetPosition(pos);
 	SetLife(m_nLife[0]);
 	SetState(CCharacter::CHARACTER_STATE_INVINCIBLE);
 	SetMotion(CCharacter::PLAYER_MOTION_NORMAL);
