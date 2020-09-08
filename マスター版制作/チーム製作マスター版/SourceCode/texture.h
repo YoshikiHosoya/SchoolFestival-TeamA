@@ -105,7 +105,6 @@ public:
 
 		TEX_UI_PAUSE_BG,						//ポーズの背景
 		TEX_UI_PAUSE_RESUME,					//再開
-		TEX_UI_PAUSE_RESTART,					//リスタート
 		TEX_UI_PAUSE_EXIT,						//タイトルに戻る
 		TEX_UI_PAUSE_LOGO,						//ポーズロゴ
 		TEX_UI_PAUSE_ICON,						//アイコン
