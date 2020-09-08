@@ -61,12 +61,12 @@ public:
 	bool				GetEventFlag()		{ return m_bEventFlag; };
 	WEAKENEMY_TYPE		GetEnemyType()		{ return m_type; };				// 雑魚敵の種類の取得
 
-	bool m_bEventFlag;								// イベントフラグ
 
  private:
 	CGun			*m_pGun;								// ガンクラスのポインタ
 	CBaseAI			*m_pAI;									// AIのポインタ
 	WEAKENEMY_TYPE	m_type;							//敵のタイプ
+	bool m_bEventFlag;								// イベントフラグ
 
 };
 #endif

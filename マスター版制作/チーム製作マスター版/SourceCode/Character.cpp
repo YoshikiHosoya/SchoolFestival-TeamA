@@ -1059,9 +1059,13 @@ void CCharacter::DebugInfo(void)
 			ImGui::TreePop();
 		}
 		ImGui::TreePop();
+
+		if (m_pCollision)
+		{
+			m_pCollision->ShowDebugInfo();
+		}
 	}
 
-	m_pCollision->ShowDebugInfo();
 
 }
 //====================================================================

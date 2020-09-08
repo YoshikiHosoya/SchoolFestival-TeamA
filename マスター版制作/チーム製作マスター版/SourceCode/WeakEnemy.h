@@ -43,7 +43,6 @@ public:
 
 private:
 	bool m_Attack;									//UŒ‚
-	float m_Angle;
 	CShield *m_pShield;								//‚
 	CKnife  *m_pKnife;
 };
