@@ -115,8 +115,29 @@ void CEnemy::Draw(void)
 //====================================================================
 void CEnemy::DebugInfo(void)
 {
-	m_pAI->DebugInfo();
-	m_pGun->DebugInfo();
+	char aTreeName[MAX_TEXT] = {};
+	sprintf(aTreeName, "EnemyInfo [%d]", CScene::GetID());
+
+	if (ImGui::TreeNode(aTreeName))
+	{
+		ImGui::Text("m_bEventFlag [%d]", m_bEventFlag); ImGui::SameLine();
+		ImGui::Text("m_type [%d]", m_type);
+
+		CCharacter::DebugInfo();
+
+		if (m_pAI)
+		{
+			m_pAI->DebugInfo();
+		}
+
+		if (m_pGun)
+		{
+			m_pGun->DebugInfo();
+		}
+
+		ImGui::TreePop();
+	}
+
 }
 
 //====================================================================

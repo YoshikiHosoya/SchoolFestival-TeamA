@@ -16,7 +16,7 @@ public:
 	virtual HRESULT Init(void);
 	virtual void Uninit(void);
 	virtual void Update(void);
-	virtual void DebugInfo() {};
+	virtual void DebugInfo();
 private:
 
 };

@@ -1,11 +1,11 @@
 // =====================================================================================================================================================================
 //
-// タイトルUIの処理 [titleUI.h]
+// ポーズUIの処理 [pauseUI.h]
 // Author : Sato Yoshiki
 //
 // =====================================================================================================================================================================
-#ifndef _TITLEUI_H_
-#define _TITLEUI_H_
+#ifndef _PAUSEUI_H_
+#define _PAUSEUI_H_
 
 // =====================================================================================================================================================================
 // インクルードファイル
@@ -19,52 +19,42 @@
 class CScene2D;
 
 // =====================================================================================================================================================================
-// タイトルUIクラス
+// ポーズUIクラス
 // =====================================================================================================================================================================
-class CTitleUI : CUI
+class CPauseUI : public CUI
 {
 public:
-	// タイトルUIの種類
-	enum TITLE_UI
+
+	// UIの種類
+	enum PAUSEUITYPE
 	{
-		TITLE_LOGO,				// タイトルロゴ
-		UI_START,				// スタート
-		UI_BULLETHOLE_1,		// 弾痕1
-		UI_BULLETHOLE_2,		// 弾痕2
-		UI_BULLETHOLE_3,		// 弾痕3
-		UI_PLAYER_COUNT_1,		// プレイ人数選択1
-		UI_PLAYER_COUNT_2,		// プレイ人数選択2
-		UI_ARROWMARK,			// 人数選択用矢印
-		TITLE_UI_MAX
+		P_UI_NONE = -1,
+		P_UI_BG	,								// 背景
+		P_UI_RESUME,							// 再開
+		P_UI_EXIT,								// タイトルに戻る
+		P_UI_LOGO,								// ポーズロゴ
+		P_UI_ICON,								// アイコン
+		P_UI_MAX,
 	};
 
-	CTitleUI();								// コンストラクタ
-	~CTitleUI();							// デストラクタ
+	CPauseUI();									// コンストラクタ
+	~CPauseUI();								// デストラクタ
 
 	/* メンバ関数 */
-	HRESULT					Init(void);		// 初期化
-	void					Uninit(void);	// 終了
-	void					Update(void);	// 更新
-	void					Draw(void);		// 描画
+	HRESULT				Init();					// 初期化
+	void				Uninit();				// 終了
+	void				Update();				// 更新
+	void				Draw();					// 描画
 
 	/* 静的メンバ関数 */
-	static  CTitleUI		*Create();		// タイトルUIの生成
-
-	/* メンバ関数 */
-	void					Flashing(CScene2D *m_apScene2D);	// 点滅処理
-	void					SetDrawFlag(int nNum, bool bDraw);
-	void					SetPos(TITLE_UI Num, D3DXVECTOR3 pos);
+	static  CPauseUI	*Create();				// ポーズUIの生成
 
 private:
 	/* メンバ関数 */
+	void						UIConfig(int nCnt);						// UIの内容設定
 	/* 静的メンバ変数 */
-	static LPDIRECT3DTEXTURE9	m_TexNum[TITLE_UI_MAX];		// バインドするテクスチャの情報
-	static D3DXVECTOR3			m_Pos[TITLE_UI_MAX];		// 座標情報
-	static D3DXVECTOR3			m_Size[TITLE_UI_MAX];		// サイズ情報
-
+	static	int					m_nNum;									// アイコン移動のナンバー
 	/* メンバ変数 */
-	CScene2D				*m_apScene2D[TITLE_UI_MAX];		// シーン2Dのポインタ
-	int						m_nColCnt;						// カラーカウント
-	bool					m_bDrawFlag[TITLE_UI_MAX];		// 演出用の描画フラグ
+	CScene2D					*m_apScene2D[PAUSEUITYPE::P_UI_MAX];	// シーン2Dのポインタ
 };
 #endif

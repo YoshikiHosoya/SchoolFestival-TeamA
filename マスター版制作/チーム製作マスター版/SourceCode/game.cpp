@@ -82,8 +82,6 @@ HRESULT CGame::Init(void)
 		m_pPlayer[(int)TAG::PLAYER_2]->ChangeColor(true, D3DXCOLOR(0.5f, -0.5f, 1.0f, 0.0f));
 	}
 
-	m_pPause->CreatePause();
-
 	//ゲームの進行管理クラス作成
 	m_pGameManager = CGameManager::Create();
 	m_pGameManager->SetGameState(CGameManager::GAMESTATE::NORMAL);

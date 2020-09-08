@@ -356,18 +356,25 @@ void CBossAI::Draw(void)
 //=============================================================================
 void CBossAI::DebugInfo(void)
 {
-	CKeyboard *pkeyBoard = CManager::GetInputKeyboard();
-
-	if (pkeyBoard->GetKeyboardTrigger(DIK_9))
+	if (ImGui::TreeNode("BossAIInfo"))
 	{
-		m_BossAItype = AI_LASER;
-	}
+		ImGui::Text("m_pos [%.2f %.2f %.2f]", m_pos.x, m_pos.y, m_pos.z);
 
+		ImGui::Text("m_recast [%d]", m_recast); ImGui::SameLine();
+		ImGui::Text("m_castcount [%d]", m_castcount);
+		ImGui::Text("m_AttackCnt [%d]", m_AttackCnt); ImGui::SameLine();
+		ImGui::Text("m_AttackCastCnt [%d]", m_AttackCastCnt);
+
+		ImGui::Text("m_BossAItype [%d]", m_BossAItype);
+
+		ImGui::Text("m_bShot [%d]", m_bShot); ImGui::SameLine();
+		ImGui::Text("m_bReStartFlag [%d]", m_bReStartFlag); ImGui::SameLine();
+		ImGui::Text("m_Attack [%d]", m_Attack); ImGui::SameLine();
+
+		ImGui::TreePop();
+	}
 }
-D3DXVECTOR3 CBossAI::GetTrackingShotRot(void)
-{
-	return m_ShotVec;
-}
+
 //=============================================================================
 // AIのクリエイト
 //=============================================================================
@@ -378,33 +385,4 @@ CBossAI * CBossAI::CreateAI(CBoss *pBoss)
 	pBossAI->Init();
 	pBossAI->pBossPass = pBoss;
 	return pBossAI;
-}
-//=============================================================================
-// AIの攻撃タイプ取得
-//=============================================================================
-CBossAI::AI_BOSS_STATE CBossAI::GetBossAIType(void)
-{
-	return m_BossAItype;
-}
-//=============================================================================
-//
-//=============================================================================
-bool CBossAI::GetShot(void)
-{
-	return m_bShot;
-}
-void CBossAI::SetShot(bool shot)
-{
-	m_bShot = shot;
-}
-void CBossAI::SetRestartFlag(bool flag)
-{
-	m_bReStartFlag = flag;
-}
-//=============================================================================
-// AIの行動タイプ設定
-//=============================================================================
-void CBossAI::SetBossAI(AI_BOSS_STATE attack)
-{
-	m_BossAItype = attack;
 }

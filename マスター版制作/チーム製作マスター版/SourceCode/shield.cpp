@@ -130,6 +130,29 @@ void CShield::Draw(void)
 	}
 }
 //====================================================================
+//デバッグ情報表記
+//====================================================================
+void CShield::DebugInfo()
+{
+	char aTreeName[MAX_TEXT] = {};
+	sprintf(aTreeName, "ShieldInfo [%d]", CScene::GetID());
+
+	if (ImGui::TreeNode(aTreeName))
+	{
+		ImGui::Text("m_ShieldPos [%.2f %.2f %.2f]", m_ShieldPos.x, m_ShieldPos.y, m_ShieldPos.z);
+		ImGui::Text("m_BreakShieldMoveValue [%.2f %.2f %.2f]", m_BreakShieldMoveValue.x, m_BreakShieldMoveValue.y, m_BreakShieldMoveValue.z);
+		ImGui::Text("m_BreakShieldRotValue [%.2f %.2f %.2f]", m_BreakShieldRotValue.x, m_BreakShieldRotValue.y, m_BreakShieldRotValue.z);
+
+		ImGui::Text("m_nLife [%d]", m_nLife); ImGui::SameLine();
+		ImGui::Text("m_nCntState [%d]", m_nCntState);
+
+		ImGui::Text("m_bBreak [%d]", m_bBreak); ImGui::SameLine();
+		ImGui::Text("m_nDeleteCnt [%d]", m_nDeleteCnt);
+
+		ImGui::TreePop();
+	}
+}
+//====================================================================
 //モデルのクリエイト
 //====================================================================
 CShield *CShield::Create()

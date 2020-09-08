@@ -69,25 +69,28 @@ public:
 	CPlayer(OBJ_TYPE type);
 	~CPlayer();
 
-	HRESULT Init(void);						//初期化
-	void Uninit(void);						//終了
-	void Update(void);						//更新
-	void Draw(void);						//描画
-	void DrawWepon(void);					//武器の描画
-	void DebugInfo(void);					//デバッグ情報表記
-	void MoveUpdate(void);					//移動に関する更新
-	void CollisionUpdate(void);				//当たり判定に関する更新
-	void AttackUpdate(void);				//攻撃に関する更新
-	void PadMoveUpdate(void);				//パッドによる移動
-	void ReSpawn(void);						//リスポーン処理
-	void DamageReaction();					//ダメージ受けた時のリアクション
-	void DeathReaction();					//死亡時のリアクション
-	void StateChangeReaction();				//状態が変わった時のリアクション
-	DEBUG_STATE GetDebugState(void);		//STATE取得
-	bool DefaultMotion(void);				//デフォルトのモーションセット
-	void MapChangePlayerRespawn();			//マップ遷移時のプレイヤー設定
-	void ResetPlayer();						//プレイヤー初期状態にリセット
-	void State();							//ステートに応じた処理
+	HRESULT Init(void) override;						//初期化
+	void Uninit(void) override;							//終了
+	void Update(void) override;							//更新
+	void Draw(void) override;							//描画
+	void DebugInfo(void) override;						//デバッグ情報表記
+
+	void DrawWepon(void);								//武器の描画
+	void MoveUpdate(void);								//移動に関する更新
+	void CollisionUpdate(void);							//当たり判定に関する更新
+	void AttackUpdate(void);							//攻撃に関する更新
+	void PadMoveUpdate(void);							//パッドによる移動
+	void ReSpawn(void);									//リスポーン処理
+
+	void DamageReaction() override;						//ダメージ受けた時のリアクション
+	void DeathReaction() override;						//死亡時のリアクション
+	void StateChangeReaction() override;				//状態が変わった時のリアクション
+	bool DefaultMotion(void) override;					//デフォルトのモーションセット
+	void State() override;								//ステートに応じた処理
+
+	DEBUG_STATE GetDebugState(void);					//STATE取得
+	void MapChangePlayerRespawn();						//マップ遷移時のプレイヤー設定
+	void ResetPlayer();									//プレイヤー初期状態にリセット
 
 	/* 設定 取得 関数 */
 	void			SetRideFlag(bool bRide)			{ m_bRideVehicle = bRide; };	// ライドフラグの設定

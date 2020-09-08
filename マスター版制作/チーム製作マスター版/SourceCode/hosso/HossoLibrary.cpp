@@ -91,7 +91,6 @@ bool CHossoLibrary::PressAnyButton(void)
 			InpudPad[nCnt]->GetTrigger(CXInputPad::JOYPADKEY_Y, 1))
 		{
 			//CManager::GetSound()->Play(CSound::LABEL_SE_DECISION);
-
 			return true;
 		}
 	}

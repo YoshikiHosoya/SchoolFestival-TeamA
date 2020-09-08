@@ -77,7 +77,7 @@ HRESULT CWeakEnemy::Init(void)
 	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_CHARACTER);
 
 	CCharacter::SetLife(1);
-	
+
 	return S_OK;
 }
 //====================================================================
@@ -129,7 +129,27 @@ void CWeakEnemy::Draw(void)
 //====================================================================
 void CWeakEnemy::DebugInfo(void)
 {
+	char aTreeName[MAX_TEXT] = {};
+	sprintf(aTreeName, "WeakEnemyInfo [%d]", CScene::GetID());
 
+	if (ImGui::TreeNode(aTreeName))
+	{
+		ImGui::Text("m_Attack [%d]", m_Attack);
+
+		CEnemy::DebugInfo();
+
+		if (m_pShield)
+		{
+			m_pShield->DebugInfo();
+		}
+
+		if (m_pKnife)
+		{
+			m_pKnife->DebugInfo();
+		}
+
+		ImGui::TreePop();
+	}
 }
 //====================================================================
 //モデルのクリエイト
