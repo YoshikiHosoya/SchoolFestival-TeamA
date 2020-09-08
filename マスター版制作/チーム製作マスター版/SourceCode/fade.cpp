@@ -348,7 +348,10 @@ void CFADE::FadeOut()
 			//プレイヤーリセット
 			for (int nCntPlayer = 0; nCntPlayer < MAX_CONTROLLER; nCntPlayer++)
 			{
-				CManager::GetBaseMode()->GetPlayer((TAG)(nCntPlayer))->ResetPlayer();
+				if (CManager::GetBaseMode()->GetPlayer((TAG)(nCntPlayer)))
+				{
+					CManager::GetBaseMode()->GetPlayer((TAG)(nCntPlayer))->ResetPlayer();
+				}
 			}
 		}
 		break;

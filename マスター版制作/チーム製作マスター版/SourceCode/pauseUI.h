@@ -31,7 +31,6 @@ public:
 		P_UI_NONE = -1,
 		P_UI_BG	,								// 背景
 		P_UI_RESUME,							// 再開
-		P_UI_RESTART,							// リスタート
 		P_UI_EXIT,								// タイトルに戻る
 		P_UI_LOGO,								// ポーズロゴ
 		P_UI_ICON,								// アイコン

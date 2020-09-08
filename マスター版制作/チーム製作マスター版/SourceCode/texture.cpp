@@ -91,7 +91,6 @@ FILENAME_LIST CTexture::m_aTexFileName =
 
 	{ "data/TEXTURE/UI/Pause_UI/black.jpg" },				//ポーズの背景
 	{ "data/TEXTURE/UI/Pause_UI/resume.png" },				//再開
-	{ "data/TEXTURE/UI/Pause_UI/restart.png" },				//リスタート
 	{ "data/TEXTURE/UI/Pause_UI/exit.png" },				//タイトルに戻る
 	{ "data/TEXTURE/UI/Pause_UI/pause.png" },				//ポーズロゴ
 	{ "data/TEXTURE/UI/Pause_UI/icon.png" },				//アイコン

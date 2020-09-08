@@ -24,7 +24,7 @@ int					CPauseUI::m_nNum								= 0;
 
 #define BG_SIZE				(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.0f))					// 背景のサイズ
 #define MENU_POS			(D3DXVECTOR3(SCREEN_WIDTH / 2, (MENU_POSY + MENU_SPACE * nCnt), 0.0f))		// メニューの位置
-#define MENU_SIZE			(D3DXVECTOR3(125.0f, 40.0f, 0.0f))											// メニューのサイズ
+#define MENU_SIZE			(D3DXVECTOR3(200.0f, 80.0f, 0.0f))											// メニューのサイズ
 
 #define LOGO_POS			(D3DXVECTOR3(SCREEN_WIDTH / 2, 150.0f, 0.0f))								// ロゴの位置
 #define LOGO_SIZE			(D3DXVECTOR3(250.0f, 75.0f, 0.0f))											// ロゴのサイズ
@@ -86,14 +86,6 @@ HRESULT CPauseUI::Init()
 				m_apScene2D[nCnt] = CScene2D::Create(MENU_POS, MENU_SIZE);
 				// テクスチャの割り当て
 				m_apScene2D[nCnt]->BindTexture(CTexture::GetTexture(CTexture::TEX_UI_PAUSE_RESUME));
-				break;
-
-			case PAUSEUITYPE::P_UI_RESTART:
-
-				// シーン2Dの生成
-				m_apScene2D[nCnt] = CScene2D::Create(MENU_POS, MENU_SIZE);
-				// テクスチャの割り当て
-				m_apScene2D[nCnt]->BindTexture(CTexture::GetTexture(CTexture::TEX_UI_PAUSE_RESTART));
 				break;
 
 			case PAUSEUITYPE::P_UI_EXIT:
