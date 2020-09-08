@@ -684,12 +684,18 @@ void CParticle::SetCollsionParam()
 //------------------------------------------------------------------------------
 void CParticle::Collision()
 {
+
 //nullcheck
 	if (m_pCollision)
 	{
-
+		//レーザーの場合
 		if (m_pParticleParam->GetType() == CParticleParam::EFFECT_LAZER)
 		{
+			//コリジョンの長さが変わったかどうかのフラグ
+			bool bChangeLength = false;
+
+			//レイによる判定
+			//床との判定
 			if (m_pCollision->RayCollisionGetLength(m_posOrigin, m_posEndPoint, m_pParticleParam->GetSize().y))
 			{
 				//サイズを合わせる
@@ -698,13 +704,12 @@ void CParticle::Collision()
 				//当たり判定のサイズ計算
 				CalcCollisionSize(m_pParticleParam->GetSize());
 
-				//エフェクト発生
-				CParticle::CreateFromText(m_posEndPoint, ZeroVector3, CParticleParam::EFFECT_LAZERGRASE);
-
+				//フラグをtrueにする
+				bChangeLength = true;
 			}
 
 
-			//盾までの距離を求める
+			//盾かオブジェクトまでの距離を求める
 			if (m_pCollision->LazerCollisionGetLength(m_posOrigin, m_pParticleParam->GetSize().y))
 			{
 				//サイズを合わせる
@@ -713,13 +718,17 @@ void CParticle::Collision()
 				//当たり判定のサイズ計算
 				CalcCollisionSize(m_pParticleParam->GetSize());
 
-				//エフェクト発生
-				CParticle::CreateFromText(m_posEndPoint, ZeroVector3, CParticleParam::EFFECT_LAZERGRASE);
+				//フラグをtrueにする
+				bChangeLength = true;
+			}
 
+			//フラグがtrueの時
+			if (bChangeLength)
+			{
+				//終点にエフェクト発生
+				CParticle::CreateFromText(m_posEndPoint, ZeroVector3, CParticleParam::EFFECT_LAZERGRASE);
 			}
 		}
-
-
 
 
 		// ゲームオブジェクト( タグ )の設定

@@ -260,16 +260,17 @@ void CPlayertank::TankSE()
 			m_nCntEngineSE++;
 
 			//一定周期
-			if (m_nCntEngineSE % 120 == 1)
+			if (m_nCntEngineSE % 10 == 1)
 			{
 				//エンジン音再生
 				CManager::GetSound()->Play(CSound::LABEL_SE_TANK_ENGINE);
-			}
-			//横移動しててジャンプしてない時
-			if (fabsf(GetMove().x) >= 1.0f && !GetJump() && m_nCntEngineSE % 10 == 0)
-			{
-				//音再生
-				CManager::GetSound()->Play(CSound::LABEL_SE_TANK_CATERPILLAR);
+
+				//横移動しててジャンプしてない時
+				if (fabsf(GetMove().x) >= 1.0f && !GetJump())
+				{
+					//音再生
+					CManager::GetSound()->Play(CSound::LABEL_SE_TANK_CATERPILLAR);
+				}
 			}
 		}
 		else

@@ -9,12 +9,9 @@
 // マクロ定義
 //=============================================================================
 #define DEFAULT_BACKCOLOR (D3DXCOLOR(0.0f,0.0f,0.0f,1.0f))
-#define SCREEN_LIMIT_COMPLEMENT_VALUE (80.0f)
+#define SCREEN_LIMIT_COMPLEMENT_VALUE_X (80.0f)
+#define SCREEN_LIMIT_COMPLEMENT_VALUE_Y (200.0f)
 
-//プロトタイプ宣言
-#ifdef _DEBUG
-LPD3DXFONT			g_pFont = NULL;	 // フォントへのポインタ
-#endif
 //=============================================================================
 CRenderer::CRenderer()
 {
@@ -101,26 +98,18 @@ HRESULT  CRenderer::Init(HWND hWnd, BOOL bWindow)
 	m_pD3DDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);				// αブレンドを行う
 	m_pD3DDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);		// αソースカラーの指定
 	m_pD3DDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);	// αデスティネーションカラーの指定
-																			// サンプラーステートの設定
+	// サンプラーステートの設定
 	m_pD3DDevice->SetSamplerState(0, D3DSAMP_ADDRESSU, D3DTADDRESS_WRAP);
 	m_pD3DDevice->SetSamplerState(0, D3DSAMP_ADDRESSV, D3DTADDRESS_WRAP);
 	m_pD3DDevice->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
 	//m_pD3DDevice->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
+
 	// テクスチャステージステートの設定
 	m_pD3DDevice->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_MODULATE);	// アルファブレンディング処理
 	m_pD3DDevice->SetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);	// 最初のアルファ引数
 	m_pD3DDevice->SetTextureStageState(0, D3DTSS_ALPHAARG2, D3DTA_CURRENT);	// ２番目のアルファ引数
 
 #ifdef _DEBUG
-	D3DXCreateFont(m_pD3DDevice,
-		0, 0,
-		5, 0,
-		false,
-		SHIFTJIS_CHARSET,
-		OUT_DEFAULT_PRECIS, DEFAULT_QUALITY,
-		DEFAULT_PITCH, "MSEゴシック",
-		&g_pFont);
-
 	//生成
 	ImGui::CreateContext();
 
@@ -184,11 +173,6 @@ void CRenderer::Uninit(void)
 		m_pLight = nullptr;
 	}
 #ifdef _DEBUG
-	if (g_pFont != NULL)
-	{
-		g_pFont->Release();
-		g_pFont = NULL;
-	}
 
 	ImGui_ImplDX9_Shutdown();
 	ImGui_ImplWin32_Shutdown();
@@ -509,10 +493,10 @@ bool CRenderer::CheckScreenRange(D3DXVECTOR3 const &pos)
 {
 	//画面の範囲内であれば描画
 	//それ以外は描画しない
-	if (pos.x > m_MinScreenPos.x - SCREEN_LIMIT_COMPLEMENT_VALUE &&
-		pos.x < m_MaxScreenPos.x + SCREEN_LIMIT_COMPLEMENT_VALUE &&
-		pos.y > m_MinScreenPos.y - SCREEN_LIMIT_COMPLEMENT_VALUE &&
-		pos.y < m_MaxScreenPos.y + SCREEN_LIMIT_COMPLEMENT_VALUE)
+	if (pos.x > m_MinScreenPos.x - SCREEN_LIMIT_COMPLEMENT_VALUE_X &&
+		pos.x < m_MaxScreenPos.x + SCREEN_LIMIT_COMPLEMENT_VALUE_X &&
+		pos.y > m_MinScreenPos.y - SCREEN_LIMIT_COMPLEMENT_VALUE_Y &&
+		pos.y < m_MaxScreenPos.y + SCREEN_LIMIT_COMPLEMENT_VALUE_Y)
 	{
 		return true;
 	}
@@ -527,7 +511,7 @@ bool CRenderer::CheckScreenRange(D3DXVECTOR3 const &pos)
 void CRenderer::ScreenLimitRange(D3DXVECTOR3 &pos)
 {
 	//画面の範囲内になるように描画
-	CHossoLibrary::RangeLimit_Equal(pos.x, m_MinScreenPos.x + SCREEN_LIMIT_COMPLEMENT_VALUE, m_MaxScreenPos.x - SCREEN_LIMIT_COMPLEMENT_VALUE);
+	CHossoLibrary::RangeLimit_Equal(pos.x, m_MinScreenPos.x + SCREEN_LIMIT_COMPLEMENT_VALUE_X, m_MaxScreenPos.x - SCREEN_LIMIT_COMPLEMENT_VALUE_X);
 }
 //=============================================================================
 //デバイスリセット imGui用の処理含む
