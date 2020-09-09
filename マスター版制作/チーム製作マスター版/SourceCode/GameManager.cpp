@@ -77,9 +77,6 @@ void CGameManager::Update()
 		}
 	}
 
-	//ポーズ
-	PauseSet();
-
 	//stateに応じた処理
 	switch (m_state)
 	{
@@ -149,6 +146,9 @@ void CGameManager::Update()
 		break;
 
 	}
+
+	//ポーズ
+	PauseSet();
 }
 
 //------------------------------------------------------------------------------
@@ -457,24 +457,22 @@ void CGameManager::UpdateGameover()
 //------------------------------------------------------------------------------
 void CGameManager::PauseSet()
 {
-	// 変数
-	CKeyboard	*pKeyboard = CManager::GetInputKeyboard();
-	CXInputPad	*pXinputPad[MAX_CONTROLLER] = {};
-
-	for (int nCnt = 0; nCnt < MAX_CONTROLLER; nCnt++)
+	// ポーズボタンを押したとき
+	if (CHossoLibrary::PressPauseButton())
 	{
-		// ゲームパッドの取得
-		pXinputPad[nCnt] = CManager::GetPad((TAG)nCnt);
+		// ポーズで止める設定
+		CScene::StopUpdate();
 
-		// ポーズボタンを押したとき
-		if (pKeyboard->GetKeyboardTrigger(DIK_L) || pXinputPad[nCnt]->GetTrigger(CXInputPad::JOYPADKEY_START, 1))
+		if (m_state != GAMESTATE::PAUSE)
 		{
-			if (m_state != GAMESTATE::PAUSE)
-			{
-				SetGameState(GAMESTATE::PAUSE);
-				// ポーズで止める設定
-				CScene::StopUpdate();
-			}
+			SetGameState(GAMESTATE::PAUSE);
+			return;
+		}
+		else
+		{
+			// ポーズを解除、前回のステートに戻す
+			SetGameState(m_stateOld);
+			return;
 		}
 	}
 }

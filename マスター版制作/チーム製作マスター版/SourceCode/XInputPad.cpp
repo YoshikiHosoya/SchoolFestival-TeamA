@@ -182,7 +182,6 @@ void CXInputPad::GetStickLeft(float * pValueX, float * pValueZ)
 {
 	*pValueX = m_pState.Gamepad.sThumbLX;
 	*pValueZ = m_pState.Gamepad.sThumbLY;
-
 }
 //==========================================================
 //右スティックの入力取得

@@ -5,7 +5,6 @@
 //
 // =====================================================================================================================================================================
 #include "pause.h"			// インクルードファイル
-//#include "pauseUI.h"
 #include "inputKeyboard.h"
 #include "renderer.h"
 #include "scene.h"
@@ -26,7 +25,6 @@ int					CPause::m_nNum = 1;
 // =====================================================================================================================================================================
 // マクロ定義
 // =====================================================================================================================================================================
-#define MAX_NUM		(2)
 
 // =====================================================================================================================================================================
 //
@@ -57,8 +55,6 @@ CPause::~CPause()
 // =====================================================================================================================================================================
 HRESULT CPause::Init()
 {
-	// UI生成
-	CUIManager::Create();
 	// タイトルUIの生成
 	m_pPauseUI = CPauseUI::Create();
 
@@ -81,17 +77,8 @@ void CPause::Uninit(void)
 // =====================================================================================================================================================================
 void CPause::Update(void)
 {
-	// 変数
-	CKeyboard	*pKeyboard	= CManager::GetInputKeyboard();
-	CXInputPad	*pXinputPad = nullptr;
-
-	for (int nCnt = 0; nCnt < MAX_CONTROLLER; nCnt++)
-	{
-		// ゲームパッドの取得
-		pXinputPad = CManager::GetPad((TAG)nCnt);
-	}
-	// アイコンの移動
-	IconMove(pKeyboard, pXinputPad);
+	// 矢印の移動
+	ArrowMove();
 
 	// ポーズの更新
 	if (m_pPauseUI)
@@ -100,8 +87,7 @@ void CPause::Update(void)
 	}
 
 	// ポーズの設定
-	PauseConfig(pKeyboard, pXinputPad);
-
+	PauseConfig();
 }
 
 // =====================================================================================================================================================================
@@ -110,10 +96,6 @@ void CPause::Update(void)
 //
 // =====================================================================================================================================================================
 void CPause::Draw(void)
-{
-}
-
-void CPause::SetPos(D3DXVECTOR3 pos)
 {
 }
 
@@ -141,16 +123,16 @@ CPause * CPause::Create()
 // ポーズの設定
 //
 // =====================================================================================================================================================================
-void CPause::PauseConfig(CKeyboard *pKeyboard, CXInputPad *pXinputGpad)
+void CPause::PauseConfig()
 {
 	CGameManager *pGameManager = CManager::GetGame()->GetGameManager();
 
 	// ポーズで選択し遷移
 	switch (m_nNum)
 	{
-	case PAUSE_RESUME:					// 再開
-		// ポーズ解除
-		if (pKeyboard->GetKeyboardTrigger(DIK_RETURN) || pXinputGpad->GetTrigger(CXInputPad::JOYPADKEY_A, 1) || pXinputGpad->GetTrigger(CXInputPad::JOYPADKEY_START, 1))
+	case PAUSE_EXIT:					// 再開
+		// 決定ボタンを押したとき
+		if (CHossoLibrary::PressDeterminationButton())
 		{
 			//決定音
 			CManager::GetSound()->Play(CSound::LABEL_SE_DECISION);
@@ -158,7 +140,7 @@ void CPause::PauseConfig(CKeyboard *pKeyboard, CXInputPad *pXinputGpad)
 			// ポーズで止める設定
 			CScene::StopUpdate();
 
-			// 前の状態に戻す
+			// 前回のステートに戻す
 			if (pGameManager)
 			{
 				pGameManager->SetGameState(pGameManager->GetGameStateOld());
@@ -166,24 +148,13 @@ void CPause::PauseConfig(CKeyboard *pKeyboard, CXInputPad *pXinputGpad)
 		}
 		break;
 
-	case PAUSE_RESTART:					// リスタート
-			// ゲームへ遷移
-		if (pKeyboard->GetKeyboardTrigger(DIK_RETURN) || pXinputGpad->GetTrigger(CXInputPad::JOYPADKEY_A, 1) || pXinputGpad->GetTrigger(CXInputPad::JOYPADKEY_START, 1))
+	case PAUSE_RESET:					// タイトル
+		// 決定ボタンを押したとき
+		if (CHossoLibrary::PressDeterminationButton())
 		{
 			//決定音
 			CManager::GetSound()->Play(CSound::LABEL_SE_DECISION);
-			// ゲームへ
-			CManager::GetRenderer()->GetFade()->SetFade(CFADE::FADETYPE::FADETYPE_MODE, CManager::MODE_GAME);
-		}
-		break;
-
-	case PAUSE_TITLE:					// タイトル
 			// タイトルへ遷移
-		if (pKeyboard->GetKeyboardTrigger(DIK_RETURN) || pXinputGpad->GetTrigger(CXInputPad::JOYPADKEY_A, 1) || pXinputGpad->GetTrigger(CXInputPad::JOYPADKEY_START, 1))
-		{
-			//決定音
-			CManager::GetSound()->Play(CSound::LABEL_SE_DECISION);
-			// タイトルへ
 			CManager::GetRenderer()->GetFade()->SetFade(CFADE::FADETYPE::FADETYPE_MODE, CManager::MODE_TITLE);
 
 		}
@@ -193,32 +164,32 @@ void CPause::PauseConfig(CKeyboard *pKeyboard, CXInputPad *pXinputGpad)
 
 // =====================================================================================================================================================================
 //
-// アイコンの移動移動
+// 矢印の移動
 //
 // =====================================================================================================================================================================
-void CPause::IconMove(CKeyboard *pKeyboard, CXInputPad *pXinputGpad)
+void CPause::ArrowMove()
 {
 	// === アイコン移動 ===
-	if (pKeyboard->GetKeyboardTrigger(DIK_W) || pXinputGpad->GetTrigger(CXInputPad::JOYPADKEY_UP,1))
+	if (CHossoLibrary::CheckPadStick() == DIRECTION::UP)
 	{
 		// デクリメント
 		m_nNum--;
 
 		// 最後に戻す
-		if (m_nNum < PAUSE_RESUME)
+		if (m_nNum < PAUSE_MENU::PAUSE_EXIT)
 		{
-			m_nNum = PAUSE_TITLE;
+			m_nNum = PAUSE_MENU::PAUSE_RESET;
 		}
 	}
-	if (pKeyboard->GetKeyboardTrigger(DIK_S) || pXinputGpad->GetTrigger(CXInputPad::JOYPADKEY_DOWN, 1))
+	if (CHossoLibrary::CheckPadStick() == DIRECTION::DOWN)
 	{
 		// インクリメント
 		m_nNum++;
 
 		// 最初に戻す
-		if (m_nNum > PAUSE_TITLE)
+		if (m_nNum > PAUSE_MENU::PAUSE_RESET)
 		{
-			m_nNum = PAUSE_RESUME;
+			m_nNum = PAUSE_MENU::PAUSE_EXIT;
 		}
 	}
 }

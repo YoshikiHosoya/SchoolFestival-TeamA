@@ -35,7 +35,7 @@
 #define KEY_A (key->GetKeyboardPress(DIK_A))					// 移動左
 #define KEY_D (key->GetKeyboardPress(DIK_D))					// 移動右
 #define KEY_O (key->GetKeyboardPress(DIK_O))					// グレネード
-#define KEY_P (key->GetKeyboardPress(DIK_P))					// 弾
+#define KEY_U (key->GetKeyboardPress(DIK_U))					// 弾
 #define KEY_SPACE (key->GetKeyboardTrigger(DIK_SPACE))			// ジャンプ
 
 #define WAITTIME (180)											// ステート間の待ち時間
@@ -334,7 +334,7 @@ void CTutorialManager::JudgPushButton()
 		// padAまたはkeyPで弾発射
 	case CTutorialManager::TUTORIAL_STATE_3:
 		if (PAD_A ||
-			KEY_P)
+			KEY_U)
 		{
 			m_bPushButton = true;
 		}

@@ -156,7 +156,6 @@ void CGame::Update(void)
 //==========================================================
 CPlayer * CGame::GetPlayer(TAG Tag)
 {
-
 	return m_pPlayer[(int)Tag];
 }
 //==========================================================
@@ -213,9 +212,11 @@ void CGame::StateChangeReaction()
 		break;
 
 	case CGameManager::GAMESTATE::GAMEOVER:
-
-
 		break;
+
+	case CGameManager::GAMESTATE::PAUSE:
+		break;
+
 	default:
 
 		break;

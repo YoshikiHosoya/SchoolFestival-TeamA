@@ -30,9 +30,8 @@ public:
 	enum PAUSE_MENU
 	{
 		PAUSE_NONE = 0,
-		PAUSE_RESUME,							// 再開
-		PAUSE_RESTART,							// リスタート
-		PAUSE_TITLE,							// タイトル
+		PAUSE_EXIT,								// 再開
+		PAUSE_RESET,							// タイトルに戻る
 	};
 
 	CPause();												// コンストラクタ
@@ -42,7 +41,6 @@ public:
 	void	Uninit();										// 終了
 	void	Update();										// 更新
 	void	Draw();											// 描画
-	void	SetPos(D3DXVECTOR3 pos);						// セットポジション
 
 	/* 静的メンバ関数 */
 	static CPause		*Create();							// ポーズの生成
@@ -50,8 +48,8 @@ public:
 
 private:
 	/* メンバ関数 */
-	void	PauseConfig(CKeyboard *pKeyboard, CXInputPad *pXinputGpad);			// ポーズの設定
-	void	IconMove(CKeyboard *pKeyboard, CXInputPad *pXinputGpad);			// アイコンの移動
+	void				PauseConfig();						// ポーズの設定
+	void				ArrowMove();						// 矢印の移動
 	/* 静的メンバ変数 */
 	static	int			m_nNum;								// ナンバー
 	/* メンバ変数 */

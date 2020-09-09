@@ -563,7 +563,7 @@ void CPlayer::AttackUpdate(void)
 	if (m_pPad || key)
 	{
 		// e‚ğŒ‚‚Â or ‹ßÚUŒ‚
-		if (key->GetKeyboardTrigger(DIK_P) || m_pPad->GetTrigger(m_pPad->JOYPADKEY_X, 1))
+		if (key->GetKeyboardTrigger(DIK_U) || m_pPad->GetTrigger(m_pPad->JOYPADKEY_X, 1))
 		{
 			// e‚ğŒ‚‚Ä‚éó‘Ô‚¾‚Á‚½
 			if (m_bAttack == false && m_bKnifeAttack == false)

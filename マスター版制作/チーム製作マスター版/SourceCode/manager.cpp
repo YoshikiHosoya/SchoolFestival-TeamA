@@ -122,18 +122,21 @@ void CManager::Uninit(void)
 //===========================================
 void CManager::Update(void)
 {
-	m_pInputKeyboard->UpdateInput();
-	m_pRenderer->Update();
-	m_pMouse->Update();
 	for (int nCnt = 0; nCnt < MAX_CONTROLLER; nCnt++)
 	{
 		m_pPad[nCnt]->Update();
 	}
+
+	m_pInputKeyboard->UpdateInput();
+	m_pRenderer->Update();
+	m_pMouse->Update();
+
 	if (m_pBaseMode)
 	{	//モード
 		m_pBaseMode->Update();
 	}
-
+	// 前回のスティック情報
+	CHossoLibrary::SaveLastStickInfo();
 }
 //===========================================
 //描画

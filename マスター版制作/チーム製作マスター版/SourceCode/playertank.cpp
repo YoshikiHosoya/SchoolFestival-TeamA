@@ -217,7 +217,7 @@ void CPlayertank::Shot(CKeyboard *key, TAG Tag)
 	m_pGun->SetShotRot(D3DXVECTOR3(0.0f, 0.0f, (GetVehicleModelPartsList(CModel::MODEL_TANK_TANKGUN)->GetRot().x)));
 
 	// ƒ}ƒVƒ“ƒKƒ“‚ðŒ‚‚Â
-	if (key->GetKeyboardTrigger(DIK_P) || pXInput->GetTrigger(CXInputPad::JOYPADKEY_X, 1))
+	if (key->GetKeyboardTrigger(DIK_U) || pXInput->GetTrigger(CXInputPad::JOYPADKEY_X, 1))
 	{
 		// ƒKƒ“‚Ìƒ‚ƒfƒ‹‚Ì”­ŽËŒû‚©‚ç’e‚ð¶¬
 		m_pGun->Shot();

@@ -22,6 +22,8 @@
 //------------------------------------------------------------------------------
 //静的メンバ変数の初期化
 //------------------------------------------------------------------------------
+PAD_STICK CHossoLibrary::m_PadStick[MAX_CONTROLLER] = {};
+DIRECTION CHossoLibrary::m_direction				= DIRECTION::LEFT;
 
 //------------------------------------------------------------------------------
 //2Dの外積計算
@@ -70,6 +72,78 @@ void CHossoLibrary::CalcRotation(float &fRot)
 	}
 }
 //------------------------------------------------------------------------------
+//前回のスティック情報を保存
+//------------------------------------------------------------------------------
+void CHossoLibrary::SaveLastStickInfo()
+{
+	CXInputPad *InpudPad[MAX_CONTROLLER] = {};
+
+	for (int nCnt = 0; nCnt < MAX_CONTROLLER; nCnt++)
+	{
+		InpudPad[nCnt] = CManager::GetPad((TAG)nCnt);
+
+		// 上下の入力判定
+		if(fabsf(m_PadStick[nCnt].fLeftStickValue_Y / STICK_MAX_RANGE) > 0.8f)
+		{
+			m_PadStick[nCnt].bLeftStickDown_Y = true;
+		}
+		else
+		{
+			m_PadStick[nCnt].bLeftStickDown_Y = false;
+		}
+		// 左スティックの入力取得
+		InpudPad[nCnt]->GetStickLeft(&m_PadStick[nCnt].fLeftStickValue_X, &m_PadStick[nCnt].fLeftStickValue_Y);
+	}
+}
+
+//------------------------------------------------------------------------------
+//スティックを倒している方向をチェック
+//------------------------------------------------------------------------------
+DIRECTION CHossoLibrary::CheckPadStick()
+{
+	// 変数
+	CKeyboard	*Keyboard					= CManager::GetInputKeyboard();
+	CXInputPad	*InpudPad[MAX_CONTROLLER]	= {};
+	DIRECTION	Direction					= (DIRECTION)-1;
+
+	// ゲームパッド
+	for (int nCnt = 0; nCnt < MAX_CONTROLLER; nCnt++)
+	{
+		InpudPad[nCnt] = CManager::GetPad((TAG)nCnt);
+
+		// 上
+		if (InpudPad[nCnt]->GetTrigger(CXInputPad::JOYPADKEY_UP, 1) || ((m_PadStick[nCnt].fLeftStickValue_Y / STICK_MAX_RANGE) > 0.8f && m_PadStick[nCnt].bLeftStickDown_Y == false))
+		{
+			Direction = DIRECTION::UP;
+			return Direction;
+		}
+		// 下
+		if (InpudPad[nCnt]->GetTrigger(CXInputPad::JOYPADKEY_DOWN, 1) || ((m_PadStick[nCnt].fLeftStickValue_Y / STICK_MAX_RANGE) <= -0.8f && m_PadStick[nCnt].bLeftStickDown_Y == false))
+		{
+			Direction = DIRECTION::DOWN;
+			return Direction;
+		}
+
+		CDebugProc::Print_Left("bLeftStickDown_Y	%d\n", m_PadStick[nCnt].bLeftStickDown_Y);
+		CDebugProc::Print_Left("fLeftStickValue_Y	%f\n", m_PadStick[nCnt].fLeftStickValue_Y);
+	}
+	// キーボード
+	// 上
+	if (Keyboard->GetKeyboardTrigger(DIK_UP) || Keyboard->GetKeyboardTrigger(DIK_W))
+	{
+		Direction = DIRECTION::UP;
+		return Direction;
+	}
+	// 下
+	if (Keyboard->GetKeyboardTrigger(DIK_DOWN) || Keyboard->GetKeyboardTrigger(DIK_S))
+	{
+		Direction = DIRECTION::DOWN;
+		return Direction;
+	}
+
+	return Direction;
+}
+//------------------------------------------------------------------------------
 //何かしらキーを押したとき
 //------------------------------------------------------------------------------
 bool CHossoLibrary::PressAnyButton(void)
@@ -109,6 +183,52 @@ bool CHossoLibrary::PressStartButton(void)
 		InpudPad[nCnt] = CManager::GetPad((TAG)nCnt);
 
 		if (Keyboard->GetKeyboardTrigger(DIK_RETURN) || InpudPad[nCnt]->GetTrigger(CXInputPad::JOYPADKEY_START, 1))
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+//------------------------------------------------------------------------------
+//ポーズボタンを押したとき
+//------------------------------------------------------------------------------
+bool CHossoLibrary::PressPauseButton()
+{
+	// 変数
+	CKeyboard *Keyboard = CManager::GetInputKeyboard();
+	CXInputPad *InpudPad[MAX_CONTROLLER] = {};
+
+	for (int nCnt = 0; nCnt < MAX_CONTROLLER; nCnt++)
+	{
+		InpudPad[nCnt] = CManager::GetPad((TAG)nCnt);
+
+		if (InpudPad[nCnt]->GetTrigger(CXInputPad::JOYPADKEY_START, 1))
+		{
+			return true;
+		}
+	}
+	if (Keyboard->GetKeyboardTrigger(DIK_P))
+	{
+		return true;
+	}
+	return false;
+}
+
+//------------------------------------------------------------------------------
+//決定ボタンを押したとき
+//------------------------------------------------------------------------------
+bool CHossoLibrary::PressDeterminationButton(void)
+{
+	// 変数
+	CKeyboard *Keyboard = CManager::GetInputKeyboard();
+	CXInputPad *InpudPad[MAX_CONTROLLER] = {};
+
+	for (int nCnt = 0; nCnt < MAX_CONTROLLER; nCnt++)
+	{
+		InpudPad[nCnt] = CManager::GetPad((TAG)nCnt);
+
+		if (Keyboard->GetKeyboardTrigger(DIK_RETURN) || InpudPad[nCnt]->GetTrigger(CXInputPad::JOYPADKEY_A, 1))
 		{
 			return true;
 		}

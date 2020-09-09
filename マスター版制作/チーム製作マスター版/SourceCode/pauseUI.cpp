@@ -18,18 +18,18 @@ int					CPauseUI::m_nNum								= 0;
 // =====================================================================================================================================================================
 // マクロ定義
 // =====================================================================================================================================================================
-#define MENU_POSY			(200.0f)		// メニューの位置Y					( メニュー )
-#define MENU_SPACE			(100.0f)		// メニューのスペース				( メニュー )
-#define ICON_POSX			(450.0f)		// アイコンの位置X					( アイコン )
+#define MENU_POSY			(150.0f)		// メニューの位置Y
+#define MENU_SPACE			(200.0f)		// メニューのスペース
+#define ARROW_POSX			(400.0f)		// 矢印の位置X
 
 #define BG_SIZE				(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.0f))					// 背景のサイズ
 #define MENU_POS			(D3DXVECTOR3(SCREEN_WIDTH / 2, (MENU_POSY + MENU_SPACE * nCnt), 0.0f))		// メニューの位置
-#define MENU_SIZE			(D3DXVECTOR3(200.0f, 80.0f, 0.0f))											// メニューのサイズ
+#define MENU_SIZE			(D3DXVECTOR3(180.0f, 100.0f, 0.0f))											// メニューのサイズ
 
-#define LOGO_POS			(D3DXVECTOR3(SCREEN_WIDTH / 2, 150.0f, 0.0f))								// ロゴの位置
-#define LOGO_SIZE			(D3DXVECTOR3(250.0f, 75.0f, 0.0f))											// ロゴのサイズ
-#define ICON_POS			(D3DXVECTOR3(450.0f, (MENU_POSY + MENU_SPACE), 0.0f))						// アイコンの位置
-#define ICON_SIZE			(D3DXVECTOR3(40.0f, 40.0f, 0.0f))											// アイコンのサイズ
+#define TEXT_POS			(D3DXVECTOR3(SCREEN_WIDTH / 2, 120.0f, 0.0f))								// ポーズ(文字)の位置
+#define TEXT_SIZE			(D3DXVECTOR3(400.0f, 125.0f, 0.0f))											// ポーズ(文字)のサイズ
+#define ARROW_POS			(D3DXVECTOR3(450.0f, (MENU_POSY + MENU_SPACE), 0.0f))						// 矢印の位置
+#define ARROW_SIZE			(D3DXVECTOR3(40.0f, 40.0f, 0.0f))											// 矢印のサイズ
 
 // =====================================================================================================================================================================
 //
@@ -80,14 +80,6 @@ HRESULT CPauseUI::Init()
 				m_apScene2D[nCnt]->SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.5f));
 				break;
 
-			case PAUSEUITYPE::P_UI_RESUME:
-
-				// シーン2Dの生成
-				m_apScene2D[nCnt] = CScene2D::Create(MENU_POS, MENU_SIZE);
-				// テクスチャの割り当て
-				m_apScene2D[nCnt]->BindTexture(CTexture::GetTexture(CTexture::TEX_UI_PAUSE_RESUME));
-				break;
-
 			case PAUSEUITYPE::P_UI_EXIT:
 
 				// シーン2Dの生成
@@ -96,20 +88,28 @@ HRESULT CPauseUI::Init()
 				m_apScene2D[nCnt]->BindTexture(CTexture::GetTexture(CTexture::TEX_UI_PAUSE_EXIT));
 				break;
 
-			case PAUSEUITYPE::P_UI_LOGO:
+			case PAUSEUITYPE::P_UI_RESET:
 
 				// シーン2Dの生成
-				m_apScene2D[nCnt] = CScene2D::Create(LOGO_POS, LOGO_SIZE);
+				m_apScene2D[nCnt] = CScene2D::Create(MENU_POS, MENU_SIZE);
 				// テクスチャの割り当て
-				m_apScene2D[nCnt]->BindTexture(CTexture::GetTexture(CTexture::TEX_UI_PAUSE_LOGO));
+				m_apScene2D[nCnt]->BindTexture(CTexture::GetTexture(CTexture::TEX_UI_PAUSE_RESET));
 				break;
 
-			case PAUSEUITYPE::P_UI_ICON:
+			case PAUSEUITYPE::P_UI_TEXT:
 
 				// シーン2Dの生成
-				m_apScene2D[nCnt] = CScene2D::Create(ICON_POS, ICON_SIZE);
+				m_apScene2D[nCnt] = CScene2D::Create(TEXT_POS, TEXT_SIZE);
 				// テクスチャの割り当て
-				m_apScene2D[nCnt]->BindTexture(CTexture::GetTexture(CTexture::TEX_UI_PAUSE_ICON));
+				m_apScene2D[nCnt]->BindTexture(CTexture::GetTexture(CTexture::TEX_UI_PAUSE_TEXT));
+				break;
+
+			case PAUSEUITYPE::P_UI_ARROW:
+
+				// シーン2Dの生成
+				m_apScene2D[nCnt] = CScene2D::Create(ARROW_POS, ARROW_SIZE);
+				// テクスチャの割り当て
+				m_apScene2D[nCnt]->BindTexture(CTexture::GetTexture(CTexture::TEX_UI_PAUSE_ARROW));
 				break;
 			}
 		}
@@ -205,26 +205,20 @@ void CPauseUI::UIConfig(int nCnt)
 {
 	switch (nCnt)
 	{
-	case PAUSEUITYPE::P_UI_ICON:
+	case PAUSEUITYPE::P_UI_ARROW:
 		// アイコンの移動座標
 		switch (m_nNum)
 		{
 		// 再開
-		case CPause::PAUSE_RESUME:
+		case CPause::PAUSE_EXIT:
 			//位置の設定
-			m_apScene2D[nCnt]->SetPosition(D3DXVECTOR3(ICON_POSX, (MENU_POSY + MENU_SPACE * m_nNum), 0.0f));
+			m_apScene2D[nCnt]->SetPosition(D3DXVECTOR3(ARROW_POSX, (MENU_POSY + MENU_SPACE * m_nNum), 0.0f));
 			break;
 
-		// リスタート
-		case CPause::PAUSE_RESTART:
+		// タイトルに戻る
+		case CPause::PAUSE_RESET:
 			//位置の設定
-			m_apScene2D[nCnt]->SetPosition(D3DXVECTOR3(ICON_POSX, (MENU_POSY + MENU_SPACE * m_nNum), 0.0f));
-			break;
-
-		// タイトル
-		case CPause::PAUSE_TITLE:
-			//位置の設定
-			m_apScene2D[nCnt]->SetPosition(D3DXVECTOR3(ICON_POSX, (MENU_POSY + MENU_SPACE * m_nNum), 0.0f));
+			m_apScene2D[nCnt]->SetPosition(D3DXVECTOR3(ARROW_POSX, (MENU_POSY + MENU_SPACE * m_nNum), 0.0f));
 			break;
 		}
 		break;

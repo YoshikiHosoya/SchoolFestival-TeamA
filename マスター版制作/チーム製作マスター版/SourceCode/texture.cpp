@@ -90,10 +90,10 @@ FILENAME_LIST CTexture::m_aTexFileName =
 	{ "data/TEXTURE/UI/Game_UI/P2.png" },					//2人プレイ時2P頭上に表示
 
 	{ "data/TEXTURE/UI/Pause_UI/black.jpg" },				//ポーズの背景
-	{ "data/TEXTURE/UI/Pause_UI/resume.png" },				//再開
-	{ "data/TEXTURE/UI/Pause_UI/exit.png" },				//タイトルに戻る
-	{ "data/TEXTURE/UI/Pause_UI/pause.png" },				//ポーズロゴ
-	{ "data/TEXTURE/UI/Pause_UI/icon.png" },				//アイコン
+	{ "data/TEXTURE/UI/Pause_UI/exit.png" },				//再開
+	{ "data/TEXTURE/UI/Pause_UI/reset.png" },				//タイトルに戻る
+	{ "data/TEXTURE/UI/Pause_UI/GamePause.png" },			//ポーズ(文字)
+	{ "data/TEXTURE/UI/Pause_UI/arrow.png" },				//矢印
 
 };
 

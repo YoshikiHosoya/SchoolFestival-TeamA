@@ -30,10 +30,10 @@ public:
 	{
 		P_UI_NONE = -1,
 		P_UI_BG	,								// 背景
-		P_UI_RESUME,							// 再開
-		P_UI_EXIT,								// タイトルに戻る
-		P_UI_LOGO,								// ポーズロゴ
-		P_UI_ICON,								// アイコン
+		P_UI_EXIT,								// 再開
+		P_UI_RESET,								// タイトルに戻る
+		P_UI_TEXT,								// ポーズ(文字)
+		P_UI_ARROW,								// 矢印
 		P_UI_MAX,
 	};
 
