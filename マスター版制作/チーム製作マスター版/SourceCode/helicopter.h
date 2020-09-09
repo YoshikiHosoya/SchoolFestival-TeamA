@@ -13,6 +13,7 @@
 #include "main.h"
 #include "Scene.h"
 #include "vehicle.h"
+#include "Character.h"
 // =====================================================================================================================================================================
 // 前方宣言
 // =====================================================================================================================================================================
@@ -21,9 +22,9 @@ class CGrenadeFire;
 // =====================================================================================================================================================================
 // プレイヤーの戦車クラス
 // =====================================================================================================================================================================
-class CHelicopter :public CVehicle
+class CHelicopter :public CCharacter, public CVehicle
 {
-public:
+//public:
 	CHelicopter(OBJ_TYPE type);								// コンストラクタ
 	~CHelicopter();											// デストラクタ
 
@@ -32,12 +33,11 @@ public:
 	void	Uninit(void);									// 終了
 	void	Update(void);									// 更新
 	void	Draw(void);										// 描画
-
+	bool	DefaultMotion(void) { return false; };
 	/* 静的メンバ関数 */
 	static CHelicopter	*Create();							// 生成
 
 	/* メンバ関数 */
-	void				SetPlayer(CPlayer *pPlayer) { m_pPlayer = pPlayer; };
 	void				DebugInfo(void);					// デバッグ
 	CGun				*GetGun() { return  m_pGun; };					// 銃のポインタ取得
 	CGrenadeFire		*GetGrenadeFire() { return  m_pGrenadeFire; };	// グレネード発射位置のポインタ取得
@@ -50,6 +50,5 @@ private:
 	/* メンバ変数 */
 	CGun				*m_pGun;							// ガンクラスのポインタ
 	CGrenadeFire		*m_pGrenadeFire;					// グレネード発射クラスのポインタ
-	CPlayer				*m_pPlayer;							// プレイヤーのポインタ
 };
 #endif

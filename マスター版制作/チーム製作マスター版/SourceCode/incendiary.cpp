@@ -16,7 +16,7 @@
 #include "BaseMode.h"
 #include "map.h"
 #include "enemy.h"
-
+#include "ModelSet.h"
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
 // =====================================================================================================================================================================
@@ -155,7 +155,7 @@ void CIncendiary::VelocityAttenuation()
 		CEnemy *pEnemy = CManager::GetBaseMode()->GetMap()->GetEnemy(nCnt);
 		if (pEnemy != nullptr)
 		{
-			if (pEnemy->GetCharacterType() == CCharacter::CHARACTER_TYPE_BOSS_ONE)
+			if (pEnemy->GetModelSet()->GetCharacterType() == CModelSet::CHARACTER_TYPE_BOSS_ONE)
 			{
 				pBoss_One = (CBoss_One*)pEnemy;
 			}
@@ -286,7 +286,7 @@ CIncendiary * CIncendiary::Create(D3DXVECTOR3 rot)
 	pIncendiary->SetType(BULLET_MODEL);
 
 	// モデルカウントの設定
-	pIncendiary->SetModelConut(MODEL_BULLET_SPHERE);
+	pIncendiary->SetModelID(MODEL_BULLET_SPHERE);
 
 	return pIncendiary;
 }
@@ -305,7 +305,7 @@ void CIncendiary::CalcBulletSpeed(D3DXVECTOR3 Target)
 	{
 		CEnemy *pEnemy = CManager::GetBaseMode()->GetMap()->GetEnemy(nCnt);
 
-		if (pEnemy->GetCharacterType() == CCharacter::CHARACTER_TYPE_BOSS_ONE)
+		if (pEnemy->GetModelSet()->GetCharacterType() == CModelSet::CHARACTER_TYPE_BOSS_ONE)
 		{
 			if (pEnemy != nullptr)
 			{

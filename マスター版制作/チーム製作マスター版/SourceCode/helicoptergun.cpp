@@ -146,7 +146,7 @@ CHeliGun * CHeliGun::Create(D3DXVECTOR3 rot)
 	pHeliGun->GetRot() = rot;
 
 	// モデルカウントの設定
-	pHeliGun->SetModelConut(MODEL_BULLET_SPHERE);
+	pHeliGun->SetModelID(MODEL_BULLET_SPHERE);
 
 	return pHeliGun;
 }

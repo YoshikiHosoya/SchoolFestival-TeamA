@@ -12,6 +12,7 @@
 #include "collision.h"
 #include "gun.h"
 #include "Knife.h"
+#include "ModelSet.h"
 #define MAX_RECASTTIME (120)
 #define MAX_DISTANCE (180)
 #define MAX_ATTACKDISTANCE (70)
@@ -85,7 +86,7 @@ void CShieldEnemyAI::Update(void)
 						pEnemyPass->GetRotDest().y = D3DX_PI * 0.5f;
 						pEnemyPass->SetCharacterDirection(DIRECTION::LEFT);
 						//Ray‚Ì”»’è‚ª‚ ‚é‚Æ‚«
-						if (GetCollision()->RayFloorCollision(pMap, pEnemyPass->GetCharacterModelPartsList(0)->GetMatrix(),
+						if (GetCollision()->RayFloorCollision(pMap, pEnemyPass->GetModelSet()->GetCharacterModelList()[0]->GetMatrix(),
 							D3DXVECTOR3(0.0f, -1.0f, 0.0f),
 							D3DXVECTOR3(pEnemyPass->GetPosition().x - 30, pEnemyPass->GetPosition().y, pEnemyPass->GetPosition().z)))
 						{
@@ -111,7 +112,7 @@ void CShieldEnemyAI::Update(void)
 						pEnemyPass->GetRotDest().y = D3DX_PI * -0.5f;
 						pEnemyPass->SetCharacterDirection(DIRECTION::RIGHT);
 						//Ray‚Ì”»’è‚ª‚ ‚é‚Æ‚«
-						if (GetCollision()->RayFloorCollision(pMap, pEnemyPass->GetCharacterModelPartsList(0)->GetMatrix(),
+						if (GetCollision()->RayFloorCollision(pMap, pEnemyPass->GetModelSet()->GetCharacterModelList()[0]->GetMatrix(),
 							D3DXVECTOR3(0.0f, -1.0f, 0.0f),
 							D3DXVECTOR3(pEnemyPass->GetPosition().x + 30, pEnemyPass->GetPosition().y, pEnemyPass->GetPosition().z)))
 						{
@@ -139,25 +140,25 @@ void CShieldEnemyAI::Update(void)
 			switch (m_AItype)
 			{
 			case AI_NONE://s“®‚È‚µ
-				pEnemyPass->SetMotion(CCharacter::ENEMY_MOTION_NORMAL);
+				pEnemyPass->GetModelSet()->SetMotion(CModelSet::ENEMY_MOTION_NORMAL);
 				break;
 			case AI_ATTACK://‹ßÚUŒ‚
-				pEnemyPass->SetMotion(CCharacter::ENEMY_MOTION_KNIFEATTACK);
+				pEnemyPass->GetModelSet()->SetMotion(CModelSet::ENEMY_MOTION_KNIFEATTACK);
 				break;
 			case AI_STOP://ˆÚ“®‚µ‚È‚¢
-				pEnemyPass->SetMotion(CCharacter::ENEMY_MOTION_NORMAL);
+				pEnemyPass->GetModelSet()->SetMotion(CModelSet::ENEMY_MOTION_NORMAL);
 				break;
 			case AI_WALK_LEFT://¶ˆÚ“®
 				pEnemyPass->GetMove().x -= 1.0f;
 				pEnemyPass->GetRotDest().y = D3DX_PI * 0.5f;
 				pEnemyPass->SetCharacterDirection(DIRECTION::LEFT);
-				pEnemyPass->SetMotion(CCharacter::ENEMY_MOTION_WALK);
+				pEnemyPass->GetModelSet()->SetMotion(CModelSet::ENEMY_MOTION_WALK);
 				break;
 			case AI_WALK_RIGHT://‰EˆÚ“®
 				pEnemyPass->GetMove().x += 1.0f;
 				pEnemyPass->GetRotDest().y = D3DX_PI * -0.5f;
 				pEnemyPass->SetCharacterDirection(DIRECTION::RIGHT);
-				pEnemyPass->SetMotion(CCharacter::ENEMY_MOTION_WALK);
+				pEnemyPass->GetModelSet()->SetMotion(CModelSet::ENEMY_MOTION_WALK);
 
 				break;
 			}
@@ -177,12 +178,14 @@ void CShieldEnemyAI::AttackUpdate(void)
 	if(m_bKnifeAttack == true)
 	{
 		m_AItype = AI_ATTACK;
-		if (pEnemyPass->GetMotionType() == CCharacter::ENEMY_MOTION_KNIFEATTACK &&pEnemyPass->GetKeySet() == 4 && pEnemyPass->GetFram() == 0)
+		if (pEnemyPass->GetModelSet()->GetMotionType() == CModelSet::ENEMY_MOTION_KNIFEATTACK &&
+			pEnemyPass->GetModelSet()->GetKeySet() == 4 && pEnemyPass->GetModelSet()->GetFram() == 0)
 		{
 			pEnemyPass->GetKnifePtr()->StartMeleeAttack();
 		}
 	}
-	if(pEnemyPass->GetMotionType() == CCharacter::ENEMY_MOTION_KNIFEATTACK &&pEnemyPass->GetKeySet() == 7 && m_bKnifeAttack == true&& pEnemyPass->GetFram() == 0)
+	if(pEnemyPass->GetModelSet()->GetMotionType() == CModelSet::ENEMY_MOTION_KNIFEATTACK &&
+		pEnemyPass->GetModelSet()->GetKeySet() == 7 && m_bKnifeAttack == true&& pEnemyPass->GetModelSet()->GetFram() == 0)
 	{
 		m_bKnifeAttack = false;
 		m_AItype = AI_STOP;

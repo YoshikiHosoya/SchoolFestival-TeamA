@@ -12,6 +12,7 @@
 // =====================================================================================================================================================================
 #include "main.h"
 #include "Scene.h"
+#include "Character.h"
 #include "vehicle.h"
 // =====================================================================================================================================================================
 // 前方宣言
@@ -23,7 +24,7 @@ class CPlayer;
 // =====================================================================================================================================================================
 // プレイヤーの戦車クラス
 // =====================================================================================================================================================================
-class CPlayertank :public CVehicle
+class CPlayertank :public CCharacter, public CVehicle
 {
 public:
 	CPlayertank(OBJ_TYPE type);								// コンストラクタ
@@ -34,12 +35,11 @@ public:
 	void	Uninit(void);									// 終了
 	void	Update(void);									// 更新
 	void	Draw(void);										// 描画
-
+	bool	DefaultMotion(void);
 	/* 静的メンバ関数 */
 	static CPlayertank	*Create();							// 生成
 
 	/* メンバ関数 */
-	void				SetPlayer(CPlayer *pPlayer) { m_pPlayer = pPlayer; };
 	void				DebugInfo(void);					// デバッグ
 	CGun				*GetGun() { return  m_pGun; };					// 銃のポインタ取得
 	CGrenadeFire		*GetGrenadeFire() { return  m_pGrenadeFire; };	// グレネード発射位置のポインタ取得
@@ -57,7 +57,6 @@ private:
 	/* メンバ変数 */
 	CGun				*m_pGun;							// ガンクラスのポインタ
 	CGrenadeFire		*m_pGrenadeFire;					// グレネード発射クラスのポインタ
-	CPlayer				*m_pPlayer;							// プレイヤーのポインタ
 	bool				m_bLand;							// 地面についているかどうか
 	int					m_nCntEngineSE;						// カウント　SE用
 };

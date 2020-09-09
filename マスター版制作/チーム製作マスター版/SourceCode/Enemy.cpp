@@ -15,6 +15,7 @@
 #include "particle.h"
 #include "sound.h"
 #include "GameManager.h"
+#include "ModelSet.h"
 //====================================================================
 //ƒ}ƒNƒ’è‹`
 //====================================================================
@@ -124,7 +125,7 @@ void CEnemy::DebugInfo(void)
 //====================================================================
 bool CEnemy::DefaultMotion(void)
 {
-	SetMotion(CCharacter::ENEMY_MOTION_NORMAL);
+	GetModelSet()->SetMotion(CModelSet::ENEMY_MOTION_NORMAL);
 	return true;
 }
 //====================================================================

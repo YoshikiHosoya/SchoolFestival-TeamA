@@ -31,7 +31,7 @@
 #include "resultmanager.h"
 #include "GameManager.h"
 #include "sound.h"
-
+#include "ModelSet.h"
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
 // =====================================================================================================================================================================
@@ -99,26 +99,27 @@ HRESULT CPlayer::Init(void)
 
 	//キャラの初期化
 	CCharacter::Init();
-	LoadOffset(CCharacter::CHARACTER_TYPE_PLAYER);
-	SetCharacterType(CCharacter::CHARACTER_TYPE_PLAYER);
+	GetModelSet()->LoadOffset(CModelSet::CHARACTER_TYPE_PLAYER);
+	GetModelSet()->SetCharacterType(CModelSet::CHARACTER_TYPE_PLAYER);
 
 	 // 銃の生成
 	m_pGun = CGun::Create();
 	// 手のポインタ設定
-	m_pGun->SetHandMtx(GetCharacterModelPartsList(CModel::MODEL_PLAYER_RHAND)->GetMatrix());
+	m_pGun->SetHandMtx(GetModelSet()->GetCharacterModelList()[8]->GetMatrix());
 
 	// グレネード放つ位置の生成
-	m_pGrenadeFire = CGrenadeFire::Create(GetCharacterModelPartsList(CModel::MODEL_PLAYER_LHAND)->GetMatrix(), CGrenadeFire::HAND_GRENADE);
+	m_pGrenadeFire = CGrenadeFire::Create(GetModelSet()->GetCharacterModelList()[7]->GetMatrix(), CGrenadeFire::HAND_GRENADE);
 	// 銃の弾の種類
 	m_pGun->SetTag(GetTag());
 	// 発射位置のオフセットの設定
 	m_pGun->SetShotOffsetPos(D3DXVECTOR3(0.0f, SHOT_BULLET_POS_Y, SHOT_BULLET_POS_Z));
 
 	// ナイフの生成
-	m_pKnife = CKnife::Create(GetCharacterModelPartsList(CModel::MODEL_PLAYER_LHAND)->GetMatrix(), KNIFE_COLLISOIN_SIZE, TAG::PLAYER_1);
+	m_pKnife = CKnife::Create(GetModelSet()->GetCharacterModelList()[7]->GetMatrix(), KNIFE_COLLISOIN_SIZE, TAG::PLAYER_1);
 	// 乗り物に乗り込んでいるかどうかのフラグ
 	m_bRideVehicle = false;
-
+	//腕が回転するか
+	SetRotArm(true);
 	// ゲームモードだった時
 	if (CManager::GetMode() == CManager::MODE_GAME)
 	{
@@ -228,7 +229,7 @@ void CPlayer::Update(void)
 		{
 			//ずっと死亡
 			SetLife(0);
-			SetMotion(CCharacter::PLAYER_MOTION_DEAD);
+			GetModelSet()->SetMotion(CModelSet::PLAYER_MOTION_DEAD);
 
 		}
 		//リザルト画面以外のとき
@@ -416,12 +417,12 @@ void CPlayer::MoveUpdate(void)
 	if ((key->GetKeyboardTrigger(DIK_SPACE) || m_pPad->GetTrigger(m_pPad->JOYPADKEY_A, 1)) && GetJump() == true && m_DebugState == DEBUG_NORMAL)
 	{
 		GetMove().y += m_fJump;
-		SetMotion(PLAYER_MOTION_JUMP);
+		GetModelSet()->SetMotion(CModelSet::PLAYER_MOTION_JUMP);
 	}
 	//ジャンプ中はジャンプモーション
-	else if (GetJump() == false && GetMotionType() != PLAYER_MOTION_JUMPSTOP)
+	else if (GetJump() == false && GetModelSet()->GetMotionType() != CModelSet::PLAYER_MOTION_JUMPSTOP)
 	{
-		SetMotion(PLAYER_MOTION_JUMP);
+		GetModelSet()->SetMotion(CModelSet::PLAYER_MOTION_JUMP);
 	}
 
 	//デバッグ用
@@ -434,38 +435,38 @@ void CPlayer::MoveUpdate(void)
 	if (GetJump())
 	{
 		//攻撃してない時
-		if (GetMotionType() != PLAYER_MOTION_ATTACK01)
+		if (GetModelSet()->GetMotionType() != CModelSet::PLAYER_MOTION_ATTACK01)
 		{
 			//移動したらウォークモーション
 			if (fabsf(GetMove().x) > 0.3f)
 			{
-				SetMotion(PLAYER_MOTION_WALK);
+				GetModelSet()->SetMotion(CModelSet::PLAYER_MOTION_WALK);
 				m_bCruch = false;
 			}
 			//Sを押したらしゃがみモーション
 			else if ((key->GetKeyboardPress(DIK_S) || Pad_Y < -0.8f) && GetJump() == true)
 			{
-				SetMotion(PLAYER_MOTION_SQUATSTOP);
+				GetModelSet()->SetMotion(CModelSet::PLAYER_MOTION_SQUATSTOP);
 				m_bCruch = true;
 			}
 			//ジャンプ、しゃがみをしてなかったらニュートラル
 			else
 			{
-				SetMotion(PLAYER_MOTION_NORMAL);
+				GetModelSet()->SetMotion(CModelSet::PLAYER_MOTION_NORMAL);
 				m_bCruch = false;
 			}
 		}
 	}
 
 	//ジャンプしたとき
-	else if (GetMotionType() == PLAYER_MOTION_JUMP)
+	else if (GetModelSet()->GetMotionType() == CModelSet::PLAYER_MOTION_JUMP)
 	{
 		m_bCruch = false;
 
 		//キーセットが３になったらストップモーションへ
-		if (GetKeySet() == 3)
+		if (GetModelSet()->GetKeySet() == 3)
 		{
-			SetMotion(PLAYER_MOTION_JUMPSTOP);
+			GetModelSet()->SetMotion(CModelSet::PLAYER_MOTION_JUMPSTOP);
 		}
 	}
 
@@ -537,7 +538,7 @@ void CPlayer::CollisionUpdate(void)
 			{
 				// 乗り込んだ時
 				m_bRideVehicle = true;
-				m_pVehicle->SetPlayer(this);
+				m_pVehicle->SetTag(GetTag());
 			}
 			else
 			{
@@ -577,7 +578,7 @@ void CPlayer::AttackUpdate(void)
 				// 近接攻撃
 				m_bKnifeAttack = true;
 				m_pKnife->StartMeleeAttack();
-				SetMotion(CCharacter::PLAYER_MOTION_ATTACK01);
+				GetModelSet()->SetMotion(CModelSet::PLAYER_MOTION_ATTACK01);
 			}
 		}
 		// グレネードを投げる
@@ -589,12 +590,12 @@ void CPlayer::AttackUpdate(void)
 				// グレネード生成
 				m_pGrenadeFire->Fire(GetShotDirection());
 
-				SetMotion(CCharacter::PLAYER_MOTION_GRENADE);
+				GetModelSet()->SetMotion(CModelSet::PLAYER_MOTION_GRENADE);
 			}
 		}
 	}
 	// 攻撃モーションから別のモーションになった時
-	if (GetMotionType() != CCharacter::PLAYER_MOTION_ATTACK01)
+	if (GetModelSet()->GetMotionType() != CModelSet::PLAYER_MOTION_ATTACK01)
 	{
 		m_bKnifeAttack = false;
 		m_pKnife->EndMeleeAttack();
@@ -626,14 +627,16 @@ void CPlayer::PadMoveUpdate(void)
 		InputValue.y /= STICK_MAX_RANGE;//値の正規化
 	}
 	//ジャンプモーションじゃない時かつジャンプストップモーションじゃない時
-	if (GetMotionType() != PLAYER_MOTION_JUMP && GetMotionType() != PLAYER_MOTION_JUMPSTOP && GetMotionType() != PLAYER_MOTION_ATTACK01)
+	if (GetModelSet()->GetMotionType() != CModelSet::PLAYER_MOTION_JUMP &&
+		GetModelSet()->GetMotionType() != CModelSet::PLAYER_MOTION_JUMPSTOP &&
+		GetModelSet()->GetMotionType() != CModelSet::PLAYER_MOTION_ATTACK01)
 	{
 		//Sを押したらしゃがみモーション
 		if (InputValue.y < -0.8f && GetJump() == true)
 		{
-			if (m_bCruch == false && GetMotionType() != PLAYER_MOTION_WALK)
+			if (m_bCruch == false && GetModelSet()->GetMotionType() != CModelSet::PLAYER_MOTION_WALK)
 			{
-				SetMotion(PLAYER_MOTION_SQUATSTOP);
+				GetModelSet()->SetMotion(CModelSet::PLAYER_MOTION_SQUATSTOP);
 				m_bCruch = true;
 			}
 		}
@@ -647,7 +650,7 @@ bool CPlayer::DefaultMotion(void)
 {
 	if (GetJump() == true)
 	{
-		SetMotion(CCharacter::PLAYER_MOTION_NORMAL);
+		GetModelSet()->SetMotion(CModelSet::PLAYER_MOTION_NORMAL);
 	}
 	return true;
 }
@@ -659,7 +662,7 @@ void CPlayer::MapChangePlayerRespawn()
 	SetState(CCharacter::CHARACTER_STATE_INVINCIBLE);
 	SetPosition(m_pos[0]);
 	m_bRideVehicle = false;
-	SetMotion(CCharacter::PLAYER_MOTION_NORMAL);
+	GetModelSet()->SetMotion(CModelSet::PLAYER_MOTION_NORMAL);
 }
 
 //====================================================================
@@ -670,7 +673,7 @@ void CPlayer::ResetPlayer()
 	SetPosition(m_pos[0]);
 	SetLife(m_nLife[0]);
 	SetState(CCharacter::CHARACTER_STATE_INVINCIBLE);
-	SetMotion(CCharacter::PLAYER_MOTION_NORMAL);
+	GetModelSet()->SetMotion(CModelSet::PLAYER_MOTION_NORMAL);
 	m_pGun->SetGunType(CGun::GUNTYPE_HANDGUN);
 	m_pKnife->EndMeleeAttack();
 	SetCharacterDirection(DIRECTION::RIGHT);
@@ -741,7 +744,7 @@ void CPlayer::StateChangeReaction()
 
 		break;
 	case CHARACTER_STATE_ITEMGET_FLASH:
-		ChangeColor(true, FlashColor);
+		GetModelSet()->ChangeColor(true, FlashColor);
 		SetStateCount(3);
 		break;
 
@@ -752,7 +755,7 @@ void CPlayer::StateChangeReaction()
 		//悲鳴
 		CManager::GetSound()->Play(CSound::LABEL_SE_VOICE_PLAYER_DEATH);
 
-		SetMotion(CCharacter::PLAYER_MOTION_DEAD);
+		GetModelSet()->SetMotion(CModelSet::PLAYER_MOTION_DEAD);
 		break;
 	}
 }
@@ -873,9 +876,14 @@ void CPlayer::Ride()
 		//プレイヤーが乗り物から降りるとき
 		if (key->GetKeyboardTrigger(DIK_SPACE)|| m_pPad->GetTrigger(m_pPad->JOYPADKEY_B,1) && GetJump() == false)
 		{
+			if(m_pVehicle != nullptr)
+			{
+				m_pVehicle->SetTag(TAG::NONE);
+				m_pVehicle = nullptr;
+			}
 			m_bRideVehicle = false;
 			GetMove().y += m_fRideJump;
-			SetMotion(PLAYER_MOTION_JUMP);
+			GetModelSet()->SetMotion(CModelSet::PLAYER_MOTION_JUMP);
 		}
 	}
 }
@@ -900,7 +908,7 @@ void CPlayer::ReSpawn(void)
 			m_nRespawnCnt = 0;
 			m_bRespawn = false;
 			m_pGun->SetGunType(CGun::GUNTYPE_HANDGUN);
-			SetMotion(CCharacter::PLAYER_MOTION_NORMAL);
+			GetModelSet()->SetMotion(CModelSet::PLAYER_MOTION_NORMAL);
 			SetState(CHARACTER_STATE_INVINCIBLE);
 			SetLife(m_nLife[0]);
 			m_pPlayerUI->SetStockUI(m_pPlayerUI->GetStock() - 1);

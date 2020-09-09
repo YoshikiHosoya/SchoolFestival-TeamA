@@ -136,7 +136,7 @@ CShield *CShield::Create()
 	// モデルタイプの設定
 	pShield->SetType(WEPON_MODEL);
 	// モデルカウントの設定
-	pShield->SetModelConut(MODEL_WEPON_SHIELD);
+	pShield->SetModelID(MODEL_WEPON_SHIELD);
 
 	return pShield;
 }

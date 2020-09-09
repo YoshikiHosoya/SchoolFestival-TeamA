@@ -16,6 +16,7 @@
 #include "shield.h"
 #include "Knife.h"
 #include "item.h"
+#include "ModelSet.h"
 //====================================================================
 //ƒ}ƒNƒ’è‹`
 //====================================================================
@@ -37,20 +38,22 @@ HRESULT CWeakEnemy::Init(void)
 {
 	// ƒLƒƒƒ‰‚Ì‰Šú‰»
 	CEnemy::Init();
-	LoadOffset(CCharacter::CHARACTER_TYPE_ENEMY);
-	SetCharacterType(CCharacter::CHARACTER_TYPE_ENEMY);
+	GetModelSet()->LoadOffset(CModelSet::CHARACTER_TYPE_ENEMY);
+	GetModelSet()->SetCharacterType(CModelSet::CHARACTER_TYPE_ENEMY);
 	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
 	m_Attack = false;
 
 	// e‚Ì¶¬
-	GetGunPtr()->SetHandMtx(GetCharacterModelPartsList(CModel::MODEL_ENEMY_RHAND)->GetMatrix());
+	GetGunPtr()->SetHandMtx(GetModelSet()->GetCharacterModelList()[8]->GetMatrix());
 	// e‚Ì’e‚ÌŽí—Þ
 	GetGunPtr()->SetTag(TAG::ENEMY);
 
 	GetGunPtr()->SetGunTypeOnly(CGun::GUNTYPE_HANDGUN_ENEMY);
 	// ƒiƒCƒt‚Ì¶¬
 
-	m_pKnife = CKnife::Create(GetCharacterModelPartsList(CModel::MODEL_ENEMY_LHAND)->GetMatrix(), KNIFE_COLLISOIN_SIZE,TAG::ENEMY);
+	m_pKnife = CKnife::Create(GetModelSet()->GetCharacterModelList()[7]->GetMatrix(), KNIFE_COLLISOIN_SIZE,TAG::ENEMY);
+	//˜r‚ª‰ñ“]‚·‚é‚©
+	SetRotArm(true);
 
 	// “G‚Ìƒ^ƒCƒvÝ’è
 	switch (GetEnemyType())
@@ -64,7 +67,7 @@ HRESULT CWeakEnemy::Init(void)
 		//‚¶¬
 		m_pShield = nullptr;
 		m_pShield = CShield::Create();
-		m_pShield->SetHandMtx(GetCharacterModelPartsList(CModel::MODEL_ENEMY_RHAND)->GetMatrix());
+		m_pShield->SetHandMtx(GetModelSet()->GetCharacterModelList()[8]->GetMatrix());
 		m_pShield->SetHasEnemyPtr(this);
 		break;
 	default:
@@ -152,7 +155,7 @@ CWeakEnemy *CWeakEnemy::Create(WEAKENEMY_TYPE type)
 //====================================================================
 bool CWeakEnemy::DefaultMotion(void)
 {
-	SetMotion(CCharacter::ENEMY_MOTION_NORMAL);
+	GetModelSet()->SetMotion(CModelSet::ENEMY_MOTION_NORMAL);
 	return true;
 }
 //====================================================================
@@ -202,7 +205,7 @@ void CWeakEnemy::StateChangeReaction()
 	case CHARACTER_STATE_DEATH:
 		SetStateCount(60);
 		m_pKnife->EndMeleeAttack();
-		SetMotion(CCharacter::ENEMY_MOTION_DEAD_1);
+		GetModelSet()->SetMotion(CModelSet::ENEMY_MOTION_DEAD_1);
 
 		switch (GetEnemyType())
 		{

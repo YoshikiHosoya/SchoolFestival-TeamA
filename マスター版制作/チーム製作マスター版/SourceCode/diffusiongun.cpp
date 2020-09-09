@@ -143,7 +143,7 @@ CDiffusion * CDiffusion::Create(D3DXVECTOR3 rot)
 	pTracking->SetType(BULLET_MODEL);
 
 	// モデルカウントの設定
-	pTracking->SetModelConut(MODEL_BULLET_SPHERE);
+	pTracking->SetModelID(MODEL_BULLET_SPHERE);
 
 	return pTracking;
 }

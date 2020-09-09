@@ -22,9 +22,6 @@
     <ClCompile Include="SourceCode\ImGui\imgui_widgets.cpp">
       <Filter>ImGui</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\incendiary.cpp">
-      <Filter>ImGui</Filter>
-    </ClCompile>
     <ClCompile Include="SourceCode\hosso\Debug_EffectViewer.cpp">
       <Filter>Debug</Filter>
     </ClCompile>
@@ -308,6 +305,12 @@
       <Filter>Collision</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\selectcharacter.cpp" />
+    <ClCompile Include="SourceCode\ModelSet.cpp">
+      <Filter>Model\character</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\incendiary.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SourceCode\selectcharacter.h" />
@@ -342,9 +345,6 @@
       <Filter>ImGui</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\ImGui\imstb_truetype.h">
-      <Filter>ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\incendiary.h">
       <Filter>ImGui</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\hosso\Debug_EffectViewer.h">
@@ -628,6 +628,12 @@
     </ClInclude>
     <ClInclude Include="SourceCode\Resource\resource.h">
       <Filter>Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\ModelSet.h">
+      <Filter>Model\character</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\incendiary.h">
+      <Filter>ImGui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

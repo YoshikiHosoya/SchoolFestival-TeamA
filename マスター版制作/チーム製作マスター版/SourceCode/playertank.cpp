@@ -21,7 +21,8 @@
 #include "prisoner.h"
 #include "grenadefire.h"
 #include "sound.h"
-
+#include "ModelSet.h"
+#include "Character.h"
 //====================================================================
 //マクロ定義
 //====================================================================
@@ -36,7 +37,7 @@
 // コンストラクタ
 //
 // =====================================================================================================================================================================
-CPlayertank::CPlayertank(OBJ_TYPE type) :CVehicle(type)
+CPlayertank::CPlayertank(OBJ_TYPE type) :CCharacter(type)
 {
 	// オブジェクトの設定
 	SetObjType(OBJTYPE_PLAYER_VEHICLE);
@@ -59,17 +60,21 @@ CPlayertank::~CPlayertank()
 HRESULT CPlayertank::Init(void)
 {
 	// 乗り物の初期設定
-	CVehicle::Init();
+	CCharacter::Init();
+
 	// オフセットの読み込み
-	LoadOffset(CVehicle::VEHICLE_TYPE_TANK);
+	GetModelSet()->LoadOffset(CModelSet::CHARACTER_TYPE_TANK);
 	// 乗り物のタイプの設定
-	SetVehicleType(CVehicle::VEHICLE_TYPE_TANK);
+	//SetVehicleType(CVehicle::VEHICLE_TYPE_TANK);
+	GetModelSet()->SetCharacterType(CModelSet::CHARACTER_TYPE_TANK);
 	// 銃の生成
 	m_pGun = CGun::Create();
 	// グレネード放つ位置の生成
-	m_pGrenadeFire = CGrenadeFire::Create(GetVehicleModelPartsList(CModel::MODEL_TANK_TANKBODY)->GetMatrix(), CGrenadeFire::TANK_GRENADE);
+	//m_pGrenadeFire = CGrenadeFire::Create(GetVehicleModelPartsList(CModel::MODEL_TANK_TANKBODY)->GetMatrix(), CGrenadeFire::TANK_GRENADE);
+	m_pGrenadeFire = CGrenadeFire::Create(GetModelSet()->GetCharacterModelList()[0] ->GetMatrix(), CGrenadeFire::TANK_GRENADE);
 	// マトリックス設定
-	m_pGun->SetHandMtx(GetVehicleModelPartsList(CModel::MODEL_TANK_TANKGUN)->GetMatrix());
+	//m_pGun->SetHandMtx(GetVehicleModelPartsList(CModel::MODEL_TANK_TANKGUN)->GetMatrix());
+	m_pGun->SetHandMtx(GetModelSet()->GetCharacterModelList()[3]->GetMatrix());
 	// 銃の弾の種類
 	m_pGun->SetTag(TAG::PLAYER_1);		// 仮止め)プレイヤー1、2どちらか入れる 変数?
 	// 銃の弾の種類
@@ -78,10 +83,13 @@ HRESULT CPlayertank::Init(void)
 	m_pGun->SetShotOffsetPos(D3DXVECTOR3(SHOT_BULLET_POS_X, SHOT_BULLET_POS_Y, SHOT_BULLET_POS_Z));
 	// 地面についているかのフラグ
 	m_bLand = true;
+	//タグの初期化
+	m_Tag = TAG::NONE;
 	// プレイヤーのポインタ
-	m_pPlayer = nullptr;
+	//CVehicle::SetPlayerTank(nullptr);
 	//初期化
 	m_nCntEngineSE = 0;
+	CCharacter::GetModelSet()->SetMotion(CModelSet::CHARACTER_MOTION_STATE_NONE);
 	// 当たり判定生成
 	GetCollision()->SetPos(&GetPosition());
 	GetCollision()->SetPosOld(&GetPositionOld());
@@ -113,12 +121,12 @@ void CPlayertank::Uninit(void)
 		m_pGrenadeFire = nullptr;
 	}
 
-	if (m_pPlayer != nullptr)
-	{
-		m_pPlayer->SetRideFlag(false);
-	}
+	//if (CVehicle::GetPlayer() != nullptr)
+	//{
+	//	CVehicle::GetPlayer()->SetRideFlag(false);
+	//}
 
-	CVehicle::Uninit();
+	CCharacter::Uninit();
 }
 //====================================================================
 //
@@ -129,47 +137,47 @@ void CPlayertank::Update(void)
 {
 	// キー情報の取得
 	CKeyboard *key = CManager::GetInputKeyboard();
+	// 乗り物クラスの更新
+	CCharacter::Update();
 
-	if (m_pPlayer != nullptr)
+	if (CVehicle::GetTag() != TAG::NONE)
 	{
-		// 乗り物に乗っている時
-		if (m_pPlayer->GetRideFlag())
+		 //乗り物に乗っている時
+		//if (CVehicle::GetPlayer()->GetRideFlag())
 		{
 			// 戦車が弾を撃つ処理
-			Shot(key, m_pPlayer->GetTag());
+			Shot(key, m_Tag);
 
 			// 戦車を操作する処理
-			Operation(key, m_pPlayer->GetTag());
+			Operation(key, m_Tag);
 
 			// 戦車の操作
-			PadInput(m_pPlayer->GetTag());
+			PadInput(m_Tag);
 
 			// パーツの回転処理
-			VehiclePartsRotCondition(GetVehicleModelPartsList(CModel::MODEL_TANK_TANK_FRONTWHEEL), MODEL_ROT_TYPE_MOVING);
-			VehiclePartsRotCondition(GetVehicleModelPartsList(CModel::MODEL_TANK_TANK_BACKWHEEL), MODEL_ROT_TYPE_MOVING);
-			VehiclePartsRotCondition(GetVehicleModelPartsList(CModel::MODEL_TANK_TANKGUN), MODEL_ROT_TYPE_OPERATION);
+			VehiclePartsRotCondition(GetModelSet()->GetCharacterModelList()[1], MODEL_ROT_TYPE_MOVING,CCharacter::GetMove(),CCharacter::GetShotDirection());
+			VehiclePartsRotCondition(GetModelSet()->GetCharacterModelList()[2], MODEL_ROT_TYPE_MOVING, CCharacter::GetMove(), CCharacter::GetShotDirection());
+			VehiclePartsRotCondition(GetModelSet()->GetCharacterModelList()[3], MODEL_ROT_TYPE_OPERATION, CCharacter::GetMove(), CCharacter::GetShotDirection());
 
 			// 乗り物の判定
 			GetCollision()->ForVehicleCollision();
 			// 戦車の判定
 			GetCollision()->ForTankCollision();
 		}
-		else
+		//else
 		{
-			m_pPlayer = nullptr;
+			//CVehicle::SetPlayerTank(nullptr);
 		}
 	}
 	//乗り物のSE
 	TankSE();
 
 	// 判定をまとめて行う
-	Collision();
+	//Collision();
 
 	m_pGun->Update();
 
 
-	// 乗り物クラスの更新
-	CVehicle::Update();
 }
 //====================================================================
 //
@@ -180,8 +188,15 @@ void CPlayertank::Draw(void)
 {
 	//ガンのマトリックスの計算だけ
 	m_pGun->NoDrawCalcMatrixOnly();
-
-	CVehicle::Draw();
+	GetModelSet();
+	CCharacter::Draw();
+}
+//====================================================================
+// デフォルトのモーション（使用なし）
+//====================================================================
+bool CPlayertank::DefaultMotion(void)
+{
+	return false;
 }
 
 //====================================================================
@@ -189,7 +204,7 @@ void CPlayertank::Draw(void)
 //====================================================================
 void CPlayertank::DebugInfo(void)
 {
-	CVehicle::DebugInfo();
+	CCharacter::DebugInfo();
 }
 
 //====================================================================
@@ -214,7 +229,7 @@ void CPlayertank::Shot(CKeyboard *key, TAG Tag)
 
 	// 弾を撃つ方向を設定
 	// モデルの回転の向きと弾の発射方向の計算の回転を合わせる
-	m_pGun->SetShotRot(D3DXVECTOR3(0.0f, 0.0f, (GetVehicleModelPartsList(CModel::MODEL_TANK_TANKGUN)->GetRot().x)));
+	m_pGun->SetShotRot(D3DXVECTOR3(0.0f, 0.0f, (GetModelSet()->GetCharacterModelList()[3]->GetRot().x)));
 
 	// マシンガンを撃つ
 	if (key->GetKeyboardTrigger(DIK_P) || pXInput->GetTrigger(CXInputPad::JOYPADKEY_X, 1))
@@ -241,9 +256,9 @@ void CPlayertank::PadInput(TAG Tag)
 {
 	D3DXVECTOR3 MoveValue = ZeroVector3;
 
-	if (CHossoLibrary::PadMoveInput(MoveValue, GetVehicleDirection(), false, Tag))
+	if (CHossoLibrary::PadMoveInput(MoveValue, CCharacter::GetCharacterDirection(), false, Tag))
 	{
-		Move(MoveValue.x, -0.5f);
+		CCharacter::Move(MoveValue.x, -0.5f);
 	}
 
 }
@@ -253,30 +268,30 @@ void CPlayertank::PadInput(TAG Tag)
 void CPlayertank::TankSE()
 {
 	//nullcheck
-	if (m_pPlayer)
-	{
-		if (m_pPlayer->GetRideFlag())
-		{
-			m_nCntEngineSE++;
+	//if (CVehicle::GetPlayer())
+	//{
+	//	if (CVehicle::GetPlayer()->GetRideFlag())
+	//	{
+	//		m_nCntEngineSE++;
 
-			//一定周期
-			if (m_nCntEngineSE % 120 == 1)
-			{
-				//エンジン音再生
-				CManager::GetSound()->Play(CSound::LABEL_SE_TANK_ENGINE);
-			}
-			//横移動しててジャンプしてない時
-			if (fabsf(GetMove().x) >= 1.0f && !GetJump() && m_nCntEngineSE % 10 == 0)
-			{
-				//音再生
-				CManager::GetSound()->Play(CSound::LABEL_SE_TANK_CATERPILLAR);
-			}
-		}
-		else
-		{
-			m_nCntEngineSE = 0;
-		}
-	}
+	//		//一定周期
+	//		if (m_nCntEngineSE % 120 == 1)
+	//		{
+	//			//エンジン音再生
+	//			CManager::GetSound()->Play(CSound::LABEL_SE_TANK_ENGINE);
+	//		}
+	//		//横移動しててジャンプしてない時
+	//		if (fabsf(GetMove().x) >= 1.0f && !GetJump() && m_nCntEngineSE % 10 == 0)
+	//		{
+	//			//音再生
+	//			CManager::GetSound()->Play(CSound::LABEL_SE_TANK_CATERPILLAR);
+	//		}
+	//	}
+	//	else
+	//	{
+	//		m_nCntEngineSE = 0;
+	//	}
+	//}
 }
 
 //====================================================================
@@ -289,12 +304,12 @@ void CPlayertank::Operation(CKeyboard * key, TAG Tag)
 	// 上を向く
 	if (key->GetKeyboardPress(DIK_W))
 	{
-		SetVehicleDirection(DIRECTION::UP);
+		SetCharacterDirection(DIRECTION::UP);
 	}
 	// 上を向く
 	else if (key->GetKeyboardPress(DIK_S))
 	{
-		SetVehicleDirection(DIRECTION::DOWN);
+		SetCharacterDirection(DIRECTION::DOWN);
 	}
 
 	// 左に動かせる
@@ -302,29 +317,29 @@ void CPlayertank::Operation(CKeyboard * key, TAG Tag)
 	{
 		if (m_bLand == true)
 		{
-			CVehicle::Move(0.5f, -0.5f);
+			CCharacter::Move(0.5f, -0.5f);
 		}
 		else if(m_bLand == false)
 		{
-			CVehicle::Move(0.3f, -0.5f);
+			CCharacter::Move(0.5f, -0.5f);
 		}
 
 		// 上を向く
 		if (key->GetKeyboardPress(DIK_W))
 		{
-			SetVehicleDirection(DIRECTION::UP);
+			SetCharacterDirection(DIRECTION::UP);
 		}
 
 		// 下を向く
 		else if (key->GetKeyboardPress(DIK_S))
 		{
-			SetVehicleDirection(DIRECTION::DOWN);
+			SetCharacterDirection(DIRECTION::DOWN);
 		}
 
 		// 左を向く
 		else
 		{
-			SetVehicleDirection(DIRECTION::LEFT);
+			SetCharacterDirection(DIRECTION::LEFT);
 		}
 	}
 
@@ -333,28 +348,28 @@ void CPlayertank::Operation(CKeyboard * key, TAG Tag)
 	{
 		if (m_bLand == true)
 		{
-			CVehicle::Move(-0.5f, -0.5f);
+			CCharacter::Move(-0.5f, -0.5f);
 		}
 		else if (m_bLand == false)
 		{
-			CVehicle::Move(-0.3f, -0.5f);
+			CCharacter::Move(-0.5f, -0.5f);
 		}
 		// 上を向く
 		if (key->GetKeyboardPress(DIK_W))
 		{
-			SetVehicleDirection(DIRECTION::UP);
+			SetCharacterDirection(DIRECTION::UP);
 		}
 
 		// 下を向く
 		else if (key->GetKeyboardPress(DIK_S))
 		{
-			SetVehicleDirection(DIRECTION::DOWN);
+			SetCharacterDirection(DIRECTION::DOWN);
 		}
 
 		// 右を向く
 		else
 		{
-			SetVehicleDirection(DIRECTION::RIGHT);
+			SetCharacterDirection(DIRECTION::RIGHT);
 		}
 	}
 

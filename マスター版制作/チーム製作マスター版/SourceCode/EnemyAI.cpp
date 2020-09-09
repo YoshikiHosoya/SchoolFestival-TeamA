@@ -11,6 +11,7 @@
 #include "map.h"
 #include "collision.h"
 #include "gun.h"
+#include "ModelSet.h"
 #define MAX_RECASTTIME (120)
 CEnemyAI::CEnemyAI()
 {
@@ -114,21 +115,21 @@ void CEnemyAI::Update(void)
 		//しゃがみ状態に設定（移動以外のAIになってもしゃがみを継続するため）
 		if (m_bCrouch == true)
 		{
-			pEnemyPass->SetMotion(CCharacter::ENEMY_MOTION_SQUAT);
+			pEnemyPass->GetModelSet()->SetMotion(CModelSet::ENEMY_MOTION_SQUAT);
 		}
 		if (pPlayer != nullptr)
 		{
 			switch (m_AItype)
 			{
 			case AI_NONE:
-				pEnemyPass->SetMotion(CCharacter::ENEMY_MOTION_NORMAL);
+				pEnemyPass->GetModelSet()->SetMotion(CModelSet::ENEMY_MOTION_NORMAL);
 				break;
 			case AI_STOP:
-				pEnemyPass->SetMotion(CCharacter::ENEMY_MOTION_NORMAL);
+				pEnemyPass->GetModelSet()->SetMotion(CModelSet::ENEMY_MOTION_NORMAL);
 				break;
 			case AI_STAND:
 				m_bCrouch = false;
-				pEnemyPass->SetMotion(CCharacter::ENEMY_MOTION_NORMAL);
+				pEnemyPass->GetModelSet()->SetMotion(CModelSet::ENEMY_MOTION_NORMAL);
 				break;
 			case AI_CROUCH:
 				m_bCrouch = true;
@@ -138,17 +139,17 @@ void CEnemyAI::Update(void)
 				pEnemyPass->GetMove().x -= 0.5f;
 				pEnemyPass->GetRotDest().y = D3DX_PI * 0.5f;
 				pEnemyPass->SetCharacterDirection(DIRECTION::LEFT);
-				pEnemyPass->SetMotion(CCharacter::ENEMY_MOTION_WALK);
+				pEnemyPass->GetModelSet()->SetMotion(CModelSet::ENEMY_MOTION_WALK);
 				break;
 			case AI_WALK_RIGHT:
 				m_bCrouch = false;
 				pEnemyPass->GetMove().x += 0.5f;
 				pEnemyPass->GetRotDest().y = D3DX_PI * -0.5f;
 				pEnemyPass->SetCharacterDirection(DIRECTION::RIGHT);
-				pEnemyPass->SetMotion(CCharacter::ENEMY_MOTION_WALK);
+				pEnemyPass->GetModelSet()->SetMotion(CModelSet::ENEMY_MOTION_WALK);
 				break;
 			case AI_SHOT:
-				pEnemyPass->SetMotion(CCharacter::ENEMY_MOTION_NORMAL);
+				pEnemyPass->GetModelSet()->SetMotion(CModelSet::ENEMY_MOTION_NORMAL);
 				//プレイヤーのいる方向に撃ってくるぞ　気をつけろ！
 				if (pEnemyPass->GetPosition().x > pPlayer->GetPosition().x)
 				{
@@ -172,7 +173,7 @@ void CEnemyAI::Update(void)
 
 				break;
 			case AI_GRENADE:
-				pEnemyPass->SetMotion(CCharacter::ENEMY_MOTION_NORMAL);
+				pEnemyPass->GetModelSet()->SetMotion(CModelSet::ENEMY_MOTION_NORMAL);
 				break;
 			}
 		}

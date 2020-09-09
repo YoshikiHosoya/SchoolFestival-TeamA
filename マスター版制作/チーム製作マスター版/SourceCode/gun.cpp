@@ -195,7 +195,7 @@ CGun * CGun::Create()
 	pGun->SetType(GUN_MODEL);
 
 	// モデルカウントの設定
-	pGun->SetModelConut(MODEL_GUN_HANDGUN);
+	pGun->SetModelID(MODEL_GUN_HANDGUN);
 
 	return pGun;
 }

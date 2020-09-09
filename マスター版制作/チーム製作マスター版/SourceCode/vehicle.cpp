@@ -17,7 +17,8 @@
 #include "playertank.h"
 #include "battleplane.h"
 #include "helicopter.h"
-
+#include "Character.h"
+#include "ModelSet.h"
 //====================================================================
 // モデルのオフセット読み込みファイルの設定
 //====================================================================
@@ -40,10 +41,15 @@ char *CVehicle::m_LoadOffsetFileName[VEHICLE_TYPE_MAX] =
 // コンストラクタ
 //
 // =====================================================================================================================================================================
-CVehicle::CVehicle(OBJ_TYPE type) :CScene(type)
+CVehicle::CVehicle()
 {
-	// 当たり判定のポインタをnullにする
-	m_pCollision = nullptr;
+	// 乗り物の行動状態を初期化
+	m_Behaviorstate = VEHICLE_BEHAVIOR_NORMAL;
+	// 種類を初期化
+	m_VehicleType = VEHICLE_TYPE_TANK;
+	// 重力加算用カウント
+	m_nGravityCnt = 0;
+
 }
 // =====================================================================================================================================================================
 //
@@ -52,152 +58,19 @@ CVehicle::CVehicle(OBJ_TYPE type) :CScene(type)
 // =====================================================================================================================================================================
 CVehicle::~CVehicle()
 {
-	// 当たり判定の削除
-	if (m_pCollision != nullptr)
-	{
-		delete m_pCollision;
-		m_pCollision = nullptr;
-	}
 	//nullcheck
-	if (!m_vModelList.empty())
-	{
-		//パーツ数分
-		for (size_t nCnt = 0; nCnt < m_vModelList.size(); nCnt++)
-		{
-			//メモリ開放
-			delete m_vModelList[nCnt];
-			m_vModelList[nCnt] = nullptr;
-		}
-		//配列を空にする
-		m_vModelList.clear();
-	}
-}
-// =====================================================================================================================================================================
-//
-// 初期化処理
-//
-// =====================================================================================================================================================================
-HRESULT CVehicle::Init(void)
-{
-	// 座標の初期化
-	m_pos			= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	// 1フレーム前の座標の初期化
-	m_posOld		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	// 移動量の初期化
-	m_move			= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	// 回転の初期化
-	m_rot			= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	// 加算する回転量の初期化
-	m_AddRot		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	// 体力の初期化
-	m_nLife			= 1000;
-	// 状態の初期化
-	m_state			= VEHICLE_STATE_NORMAL;
-	// 回転量の初期化
-	m_rotDest.y		= -0.5f*  D3DX_PI;
-	// 重力フラグの初期化
-	m_bGravity		= true;
-	// 死亡フラグの初期化
-	m_bDieFlag		= false;
-	// 弾の回転の初期化
-	m_ShotRot		= D3DXVECTOR3(0.0f, 0.0f, -0.5f*  D3DX_PI);
-	// 当たり判定生成
-	m_pCollision	= CCollision::Create();
-	// マトリックス初期化
-	D3DXMatrixIdentity(&m_mtxWorld);
-	// 乗り物の行動状態を初期化
-	m_Behaviorstate = VEHICLE_BEHAVIOR_NORMAL;
-	// 種類を初期化
-	m_VehicleType = VEHICLE_TYPE_TANK;
-	// 無敵状態から通常状態に戻るまでのカウント
-	m_nStateCnt = 0;
-	// 向き
-	m_VehicleDirection = DIRECTION::RIGHT;
-	// ジャンプしているかのフラグを初期化
-	m_bJump = false;
-	// 重力加算用カウント
-	m_nGravityCnt = 0;
-
-	return S_OK;
-}
-//====================================================================
-//
-//終了
-//
-//====================================================================
-void CVehicle::Uninit(void)
-{
-}
-//====================================================================
-//
-//更新
-//
-//====================================================================
-void CVehicle::Update(void)
-{
-	// 慣性処理
-	Inertia();
-
-	if (this->m_VehicleType != VEHICLE_TYPE_PLANE && this->m_VehicleType != VEHICLE_TYPE_HELICOPTER)
-	{
-		// 重力処理
-		Gravity();
-	}
-
-	// 回転量計算処理
-	Rot();
-
-	// 状態別処理
-	State();
-
-	// 弾を撃つ方向の計算
-	ShotDirection();
-
-	// 座標の更新
-	m_pos += m_move;
-
-	// 体力が0以下になった時
-	if (this->m_nLife <= 0)
-	{
-		// 状態を破壊に変更
-		m_state = VEHICLE_STATE_BREAK;
-	}
-}
-//====================================================================
-//
-//描画
-//
-//====================================================================
-void CVehicle::Draw(void)
-{
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
-	D3DXMATRIX mtxRot, mtxTrans;
-	// ワールドマトリックスの初期化
-	D3DXMatrixIdentity(&m_mtxWorld);
-
-	// 回転を反映
-	D3DXMatrixRotationYawPitchRoll(&mtxRot, m_rot.y,
-		m_rot.x,
-		m_rot.z);
-	D3DXMatrixMultiply(&m_mtxWorld,
-		&m_mtxWorld,
-		&mtxRot);
-
-	// 移動を反映
-	D3DXMatrixTranslation(&mtxTrans,
-		m_pos.x,
-		m_pos.y,
-		m_pos.z);
-	D3DXMatrixMultiply(&m_mtxWorld,
-		&m_mtxWorld,
-		&mtxTrans);
-
-	// 特定のパーツだけを回転させる
-	for (unsigned int nCnt = 0; nCnt < m_vModelList.size(); nCnt++)
-	{
-		// 描画処理
-		m_vModelList[nCnt]->Draw(m_mtxWorld);
-	}
+	//if (!m_vModelList.empty())
+	//{
+	//	//パーツ数分
+	//	for (size_t nCnt = 0; nCnt < m_vModelList.size(); nCnt++)
+	//	{
+	//		//メモリ開放
+	//		delete m_vModelList[nCnt];
+	//		m_vModelList[nCnt] = nullptr;
+	//	}
+	//	//配列を空にする
+	//	m_vModelList.clear();
+	//}
 }
 //====================================================================
 //デバッグ
@@ -213,7 +86,7 @@ void CVehicle::DebugInfo(void)
 //====================================================================
 // パーツの回転条件別処理
 //====================================================================
-void CVehicle::VehiclePartsRotCondition(CModel *pModel, PARTS_ROT_TYPE type)
+void CVehicle::VehiclePartsRotCondition(CModel *pModel, PARTS_ROT_TYPE type,D3DXVECTOR3 move, D3DXVECTOR3 rot)
 {
 	switch (type)
 	{
@@ -230,13 +103,13 @@ void CVehicle::VehiclePartsRotCondition(CModel *pModel, PARTS_ROT_TYPE type)
 		// 移動している時のみ
 	case MODEL_ROT_TYPE_MOVING:
 		// 車輪の回転処理
-		WheelRot(pModel);
+		WheelRot(pModel,move);
 		break;
 
 		// 操作している時のみ
 	case MODEL_ROT_TYPE_OPERATION:
 		// 銃の回転処理
-		GunRot(pModel);
+		GunRot(pModel, rot);
 		break;
 
 	default:
@@ -282,150 +155,26 @@ void CVehicle::VehiclePartsRotLimit(CModel * pModel, float fRot)
 	pModel->SetRot(pModel->GetRot());
 }
 
-//====================================================================
-// 慣性処理
-//====================================================================
-void CVehicle::Inertia()
-{
-	m_move.x += (0 - m_move.x)* 0.2f;
-	m_move.z += (0 - m_move.z)* 0.2f;
-	m_move.y += (0 - m_move.y)* 0.2f;
-
-	//m_move.y += m_move.y * -0.1f;
-}
-
-//====================================================================
-// 重力処理
-//====================================================================
-void CVehicle::Gravity()
-{
-	// ジャンプ中だった時
-	if (this->GetJump() == true)
-	{
-		// 重力加速度を元に加算
-		m_pos.y -= (VEHICLE_GRAVITY + m_nGravityCnt * VEHICLE_GRAVITY);
-		m_nGravityCnt++;
-	}
-	else
-	{
-		// 強制的に地面につかせる
-		m_pos.y -= 5.0f;
-		m_nGravityCnt = 0;
-	}
-}
-
-//====================================================================
-// 回転量計算処理
-//====================================================================
-void CVehicle::Rot()
-{
-	//目標点と現在の差分（回転）
-	float diffRot = m_rotDest.y - m_rot.y;
-	//3.14の超過分の初期化（回転）
-	if (m_rot.y > D3DX_PI)
-	{
-		m_rot.y -= D3DX_PI * 2;
-	}
-	else if (m_rot.y < -D3DX_PI)
-	{
-		m_rot.y += D3DX_PI * 2;
-	}
-	if (diffRot > D3DX_PI)
-	{
-		diffRot -= D3DX_PI * 2;
-	}
-	else if (diffRot < -D3DX_PI)
-	{
-		diffRot += D3DX_PI * 2;
-	}
-	//求めた差分だけ追従する計算
-	m_rot.y += diffRot * 0.1f;
-}
-
-//====================================================================
-// 乗り物の状態別処理
-//====================================================================
-void CVehicle::State()
-{
-	//ステータスの処理
-	switch (m_state)
-	{
-		// 通常状態
-	case VEHICLE_STATE_NORMAL:
-		break;
-
-		// ダメージを受けた時
-	case VEHICLE_STATE_DAMAGE:
-		m_state = VEHICLE_STATE_NORMAL;
-		break;
-
-		// 無敵時間
-	case VEHICLE_STATE_INVINCIBLE:
-		m_nStateCnt++;
-		if (m_nStateCnt % 30 == 0)
-		{
-			m_state = VEHICLE_STATE_NORMAL;
-		}
-		break;
-
-	case VEHICLE_STATE_BREAK:
-		// 破壊時のエフェクト
-
-		// 削除
-		this->SetDieFlag(true);
-		break;
-	}
-}
-
-//====================================================================
-// 弾を撃つ方向の計算
-//====================================================================
-void CVehicle::ShotDirection()
-{
-	switch (m_VehicleDirection)
-	{
-	case DIRECTION::LEFT:
-		m_ShotRot.z = 0.5f * D3DX_PI;
-		m_AddRot.x = 0.0f;
-		break;
-
-	case DIRECTION::RIGHT:
-		m_ShotRot.z = -D3DX_PI * 0.5f;
-		m_AddRot.x = 0.0f;
-		break;
-	case DIRECTION::UP:
-		m_ShotRot.z = 0.0f;
-		m_AddRot.x = 0.75f;
-		break;
-	case DIRECTION::DOWN:
-		m_ShotRot.z = D3DX_PI;
-		m_AddRot.x = -0.75f;
-		break;
-
-	default:
-		break;
-	}
-}
 
 //====================================================================
 // 車輪の回転車輪
 //====================================================================
-void CVehicle::WheelRot(CModel *pModel)
+void CVehicle::WheelRot(CModel *pModel , D3DXVECTOR3 move)
 {
 	// 左回転
-	if (this->GetMove().x <= -2)
+	if (move.x <= -2)
 	{
 		// 条件ごと回転させる
 		this->VehiclePartsRot(pModel, 0.1f);
 	}
 	// 右回転
-	else if (this->GetMove().x >= 2)
+	else if (move.x >= 2)
 	{
 		// 条件ごと回転させる
 		this->VehiclePartsRot(pModel, -0.1f);
 	}
 	// 無回転
-	else if (this->GetMove().x <= 1.0f && this->GetMove().x >= -1.0f)
+	else if (move.x <= 1.0f && move.x >= -1.0f)
 	{
 		// 条件ごと回転させる
 		this->VehiclePartsRot(pModel, 0.0f);
@@ -435,7 +184,7 @@ void CVehicle::WheelRot(CModel *pModel)
 //====================================================================
 // 銃の回転車輪
 //====================================================================
-void CVehicle::GunRot(CModel * pModel)
+void CVehicle::GunRot(CModel * pModel,D3DXVECTOR3 shotrot)
 {
 	// 戦車の総数分
 	for (int nCntVehicle = 0; nCntVehicle < CManager::GetBaseMode()->GetMap()->GetMaxPlayerTank(); nCntVehicle++)
@@ -445,211 +194,89 @@ void CVehicle::GunRot(CModel * pModel)
 		// 戦車が存在した時
 		if (pPlayertank != nullptr)
 		{
-			if (pPlayertank->GetVehicleDirection() == DIRECTION::LEFT)
+			if (pPlayertank->GetCharacterDirection() == DIRECTION::LEFT)
 			{
 				// 条件ごと回転させる
-				this->VehiclePartsRotLimit(pModel, m_ShotRot.z);
+				this->VehiclePartsRotLimit(pModel, shotrot.z);
 			}
-			else if (pPlayertank->GetVehicleDirection() == DIRECTION::RIGHT)
+			else if (pPlayertank->GetCharacterDirection() == DIRECTION::RIGHT)
 			{
 				// 条件ごと回転させる
-				this->VehiclePartsRotLimit(pModel, m_ShotRot.z);
+				this->VehiclePartsRotLimit(pModel, shotrot.z);
 			}
-			else if (pPlayertank->GetVehicleDirection() == DIRECTION::UP)
+			else if (pPlayertank->GetCharacterDirection() == DIRECTION::UP)
 			{
 				// 条件ごと回転させる
-				this->VehiclePartsRotLimit(pModel, m_ShotRot.z);
+				this->VehiclePartsRotLimit(pModel, shotrot.z);
 			}
-			else if (pPlayertank->GetVehicleDirection() == DIRECTION::DOWN)
+			else if (pPlayertank->GetCharacterDirection() == DIRECTION::DOWN)
 			{
 				// 条件ごと回転させる
-				this->VehiclePartsRotLimit(pModel, m_ShotRot.z);
+				this->VehiclePartsRotLimit(pModel, shotrot.z);
 			}
 		}
 	}
 
-	// 戦闘機の総数分
-	for (int nCntVehicle = 0; nCntVehicle < CManager::GetBaseMode()->GetMap()->GetMaxBattlePlane(); nCntVehicle++)
-	{
-		// 乗り物のポインタ取得
-		CBattlePlane *pBattlePlane = CManager::GetBaseMode()->GetMap()->GetBattlePlane(nCntVehicle);
-		// 戦車が存在した時
-		if (pBattlePlane != nullptr)
-		{
-			if (pBattlePlane->GetVehicleDirection() == DIRECTION::LEFT)
-			{
-				// 条件ごと回転させる
-				this->VehiclePartsRotLimit(pModel, D3DX_PI * 0.5f);
-			}
-			else if (pBattlePlane->GetVehicleDirection() == DIRECTION::RIGHT)
-			{
-				// 条件ごと回転させる
-				this->VehiclePartsRotLimit(pModel, -D3DX_PI * 0.5f);
-			}
-			else if (pBattlePlane->GetVehicleDirection() == DIRECTION::UP)
-			{
-				// 条件ごと回転させる
-				this->VehiclePartsRotLimit(pModel, D3DX_PI * 0.0f);
-			}
-			else if (pBattlePlane->GetVehicleDirection() == DIRECTION::DOWN)
-			{
-				// 条件ごと回転させる
-				this->VehiclePartsRotLimit(pModel, D3DX_PI * 1.0f);
-			}
-		}
-	}
+	//// 戦闘機の総数分
+	//for (int nCntVehicle = 0; nCntVehicle < CManager::GetBaseMode()->GetMap()->GetMaxBattlePlane(); nCntVehicle++)
+	//{
+	//	// 乗り物のポインタ取得
+	//	CBattlePlane *pBattlePlane = CManager::GetBaseMode()->GetMap()->GetBattlePlane(nCntVehicle);
+	//	// 戦車が存在した時
+	//	if (pBattlePlane != nullptr)
+	//	{
+	//		if (pBattlePlane->GetVehicleDirection() == DIRECTION::LEFT)
+	//		{
+	//			// 条件ごと回転させる
+	//			this->VehiclePartsRotLimit(pModel, D3DX_PI * 0.5f);
+	//		}
+	//		else if (pBattlePlane->GetVehicleDirection() == DIRECTION::RIGHT)
+	//		{
+	//			// 条件ごと回転させる
+	//			this->VehiclePartsRotLimit(pModel, -D3DX_PI * 0.5f);
+	//		}
+	//		else if (pBattlePlane->GetVehicleDirection() == DIRECTION::UP)
+	//		{
+	//			// 条件ごと回転させる
+	//			this->VehiclePartsRotLimit(pModel, D3DX_PI * 0.0f);
+	//		}
+	//		else if (pBattlePlane->GetVehicleDirection() == DIRECTION::DOWN)
+	//		{
+	//			// 条件ごと回転させる
+	//			this->VehiclePartsRotLimit(pModel, D3DX_PI * 1.0f);
+	//		}
+	//	}
+	//}
 
-	// ヘリコプターの総数分
-	for (int nCntVehicle = 0; nCntVehicle < CManager::GetBaseMode()->GetMap()->GetMaxHelicopter(); nCntVehicle++)
-	{
-		// 乗り物のポインタ取得
-		CHelicopter *pHelicopter = CManager::GetBaseMode()->GetMap()->GetHelicopter(nCntVehicle);
-		// 戦車が存在した時
-		if (pHelicopter != nullptr)
-		{
-			if (pHelicopter->GetVehicleDirection() == DIRECTION::LEFT)
-			{
-				// 条件ごと回転させる
-				this->VehiclePartsRotLimit(pModel, D3DX_PI * 0.5f);
-			}
-			else if (pHelicopter->GetVehicleDirection() == DIRECTION::RIGHT)
-			{
-				// 条件ごと回転させる
-				this->VehiclePartsRotLimit(pModel, -D3DX_PI * 0.5f);
-			}
-			else if (pHelicopter->GetVehicleDirection() == DIRECTION::UP)
-			{
-				// 条件ごと回転させる
-				this->VehiclePartsRotLimit(pModel, D3DX_PI * 0.0f);
-			}
-			else if (pHelicopter->GetVehicleDirection() == DIRECTION::DOWN)
-			{
-				// 条件ごと回転させる
-				this->VehiclePartsRotLimit(pModel, D3DX_PI * 1.0f);
-			}
-		}
-	}
+	//// ヘリコプターの総数分
+	//for (int nCntVehicle = 0; nCntVehicle < CManager::GetBaseMode()->GetMap()->GetMaxHelicopter(); nCntVehicle++)
+	//{
+	//	// 乗り物のポインタ取得
+	//	CHelicopter *pHelicopter = CManager::GetBaseMode()->GetMap()->GetHelicopter(nCntVehicle);
+	//	// 戦車が存在した時
+	//	if (pHelicopter != nullptr)
+	//	{
+	//		if (pHelicopter->GetVehicleDirection() == DIRECTION::LEFT)
+	//		{
+	//			// 条件ごと回転させる
+	//			this->VehiclePartsRotLimit(pModel, D3DX_PI * 0.5f);
+	//		}
+	//		else if (pHelicopter->GetVehicleDirection() == DIRECTION::RIGHT)
+	//		{
+	//			// 条件ごと回転させる
+	//			this->VehiclePartsRotLimit(pModel, -D3DX_PI * 0.5f);
+	//		}
+	//		else if (pHelicopter->GetVehicleDirection() == DIRECTION::UP)
+	//		{
+	//			// 条件ごと回転させる
+	//			this->VehiclePartsRotLimit(pModel, D3DX_PI * 0.0f);
+	//		}
+	//		else if (pHelicopter->GetVehicleDirection() == DIRECTION::DOWN)
+	//		{
+	//			// 条件ごと回転させる
+	//			this->VehiclePartsRotLimit(pModel, D3DX_PI * 1.0f);
+	//		}
+	//	}
+	//}
 }
 
-//====================================================================
-// 戦闘機の移動
-//====================================================================
-void CVehicle::MovePlane(D3DXVECTOR3 move, float fdest)
-{
-	D3DXVec3Normalize(&move, &move);
-	GetMove() = move * VESSEL_SPEED;
-	GetRotDest().y = fdest *  D3DX_PI;
-}
-
-//====================================================================
-// 乗り物の移動 基本版
-//====================================================================
-void CVehicle::Move(float move, float fdest)
-{
-	m_move.x += sinf(move * -D3DX_PI) * VEHICLE_SPEED;
-	//m_move.z += cosf(move * -D3DX_PI) * VEHICLE_SPEED;
-	m_rotDest.y = fdest *  D3DX_PI;
-}
-
-//====================================================================
-//ダメージを受けた時の処理
-//====================================================================
-void CVehicle::AddDamage(int Damage)
-{
-	// 乗り物の状態を変更
-	m_state = VEHICLE_STATE_DAMAGE;
-	// 体力からダメージ量分を減算
-	this->m_nLife -= Damage;
-	// 結果を更新
-	SetLife(m_nLife);
-}
-
-//====================================================================
-//オフセットの読み込み
-//====================================================================
-void CVehicle::LoadOffset(VEHICLE_TYPE nType)
-{
-	char cReadText[1080];	//文字として読み取り用
-	char cHeadText[1080];	//比較する用
-	char cDie[1080];		//不要な文字
-	int nCnt = 0;
-	FILE *pFile;
-
-	D3DXVECTOR3 pos;
-	int nIdxParent;			//親のインデックス
-	int nIdx;				//モデルのインデックス
-	int type;
-
-	pFile = fopen(m_LoadOffsetFileName[nType], "r");
-	if (pFile != NULL)
-	{
-		while (strcmp(cHeadText, "MODEL_OFFSET_END") != 0)
-		{
-			fgets(cReadText, sizeof(cReadText), pFile);
-			sscanf(cReadText, "%s", &cHeadText);
-			//配置するモデルの最大数の読み込み
-			if (strcmp(cHeadText, "SET_START") == 0)
-			{
-				//END_SETが来るまでループ
-				while (strcmp(cHeadText, "SET_END") != 0)
-				{
-					fgets(cReadText, sizeof(cReadText), pFile);
-					sscanf(cReadText, "%s", &cHeadText);
-					//MODEL_TYPEだったら
-					if (strcmp(cHeadText, "MODEL_TYPE") == 0)
-					{
-						sscanf(cReadText, "%s %s %d",
-							&cDie, &cDie,
-							&type);
-					}
-					//IDXだったら
-					else if (strcmp(cHeadText, "INDEX") == 0)
-					{
-						sscanf(cReadText, "%s %s %d",
-							&cDie, &cDie,
-							&nIdx);
-					}
-					//PARENTだったら
-					else if (strcmp(cHeadText, "PARENT") == 0)
-					{
-						sscanf(cReadText, "%s %s %d",
-							&cDie, &cDie,
-							&nIdxParent);
-					}
-					//POSだったら
-					else if (strcmp(cHeadText, "POS") == 0)
-					{
-						sscanf(cReadText, "%s %s %f %f %f",
-							&cDie, &cDie,
-							&pos.x,
-							&pos.y,
-							&pos.z);
-					}
-					//SET_ENDが来たら作成し追加
-					else if (strcmp(cHeadText, "SET_END") == 0)
-					{
-						CModel *pModel = CModel::Create(type, nIdx);
-						pModel->SetPosition(pos);
-						pModel->SetParentIdx(nIdxParent);
-						if (nIdxParent == -1)
-						{
-							pModel->SetParent(NULL);
-						}
-						else
-						{
-							pModel->SetParent(m_vModelList[nIdxParent]);
-						}
-						m_vModelList.emplace_back(pModel);
-					}
-				}
-			}
-		}
-
-		fclose(pFile);
-	}
-	else
-	{
-
-	}
-
-}

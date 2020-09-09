@@ -11,6 +11,7 @@
 //------------------------------------------------------------------------------
 #include "../main.h"
 #include "../character.h"
+#include "../ModelSet.h"
 //------------------------------------------------------------------------------
 //クラス定義
 //------------------------------------------------------------------------------
@@ -33,17 +34,17 @@ public:
 	void Draw();									//描画
 	void DebugInfo();								//デバッグ情報表記
 	static CDebug_ViewerCharacter* Create();		//生成関数
-	bool DefaultMotion() { GetMotion() = false; CCharacter::GetKeySet()--; return false; };
+	bool DefaultMotion() { GetModelSet()->GetMotion() = false; GetModelSet()->GetKeySet()--; return false; };
 
 	void MotionViewer();							//モーションビューワ
 private:
-	bool ShowMotionComboBox(CCharacter::CHARACTER_MOTION_STATE &motiontype);		//モーションのコンボボックス
+	bool ShowMotionComboBox(CModelSet::CHARACTER_MOTION_STATE &motiontype);		//モーションのコンボボックス
 
-	void AddKeyInfo(CCharacter::MOTION *pMotion);
-	void PopbackKeyInfo(CCharacter::MOTION *pMotion);
+	void AddKeyInfo(CModelSet::MOTION *pMotion);
+	void PopbackKeyInfo(CModelSet::MOTION *pMotion);
 	void ResetKey();
-	void CopyMotionPaste(CCharacter::CHARACTER_MOTION_STATE CopyMotionType, int nCopyKey, CCharacter::CHARACTER_MOTION_STATE NowMotion, int nNowKey);
-	HRESULT SaveMotion(CCharacter::CHARACTER_MOTION_STATE motiontype);
+	void CopyMotionPaste(CModelSet::CHARACTER_MOTION_STATE CopyMotionType, int nCopyKey, CModelSet::CHARACTER_MOTION_STATE NowMotion, int nNowKey);
+	HRESULT SaveMotion(CModelSet::CHARACTER_MOTION_STATE motiontype);
 
 	CGun *m_pGun;				//ナイフ銃ポインタ
 	CKnife *m_pKnife;			//ナイフのポインタ

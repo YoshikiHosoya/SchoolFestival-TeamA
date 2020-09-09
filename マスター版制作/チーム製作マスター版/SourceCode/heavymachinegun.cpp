@@ -142,7 +142,7 @@ CHeavyMachinegun * CHeavyMachinegun::Create(D3DXVECTOR3 rot)
 	pHeavyMachinegun->SetType(BULLET_MODEL);
 
 	// モデルカウントの設定
-	pHeavyMachinegun->SetModelConut(MODEL_BULLET_SPHERE);
+	pHeavyMachinegun->SetModelID(MODEL_BULLET_SPHERE);
 
 	return pHeavyMachinegun;
 }

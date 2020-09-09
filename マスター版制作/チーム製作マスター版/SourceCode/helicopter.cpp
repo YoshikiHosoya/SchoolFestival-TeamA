@@ -31,7 +31,7 @@
 // コンストラクタ
 //
 // =====================================================================================================================================================================
-CHelicopter::CHelicopter(OBJ_TYPE type) :CVehicle(type)
+CHelicopter::CHelicopter(OBJ_TYPE type) :CCharacter(type)
 {
 	// オブジェクトの設定
 	SetObjType(OBJTYPE_ENEMY_VEHICLE);
@@ -53,33 +53,33 @@ CHelicopter::~CHelicopter()
 // =====================================================================================================================================================================
 HRESULT CHelicopter::Init(void)
 {
-	// 乗り物の初期設定
-	CVehicle::Init();
-	// オフセットの読み込み
-	LoadOffset(CVehicle::VEHICLE_TYPE_HELICOPTER);
-	// 乗り物のタイプの設定
-	SetVehicleType(CVehicle::VEHICLE_TYPE_HELICOPTER);
-	// 銃の生成
-	m_pGun = CGun::Create();
-	// 銃のマトリックス設定
-	m_pGun->SetHandMtx(GetVehicleModelPartsList(CModel::MODEL_HELIGUN)->GetMatrix());
-	// グレネード放つ位置の生成
-	m_pGrenadeFire = CGrenadeFire::Create(GetVehicleModelPartsList(CModel::MODEL_HELIBODY)->GetMatrix(), CGrenadeFire::TANK_GRENADE);
-	// 銃の弾の種類
-	m_pGun->SetTag(TAG::ENEMY);
-	// 銃の弾の種類
-	m_pGun->SetGunType(CGun::GUNTYPE_HELIGUN);
-	// 発射位置のオフセットの設定
-	m_pGun->SetShotOffsetPos(D3DXVECTOR3(SHOT_BULLET_POS_X, SHOT_BULLET_POS_Y, SHOT_BULLET_POS_Z));
-	// 当たり判定生成
-	GetCollision()->SetPos(&GetPosition());
-	GetCollision()->SetPosOld(&GetPositionOld());
-	GetCollision()->SetSize2D(HELICOPTER_SIZE);
-	GetCollision()->SetMove(&GetMove());
-	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_CHARACTER);
+	//// 乗り物の初期設定
+	//CVehicle::Init();
+	//// オフセットの読み込み
+	//LoadOffset(CVehicle::VEHICLE_TYPE_HELICOPTER);
+	//// 乗り物のタイプの設定
+	//SetVehicleType(CVehicle::VEHICLE_TYPE_HELICOPTER);
+	//// 銃の生成
+	//m_pGun = CGun::Create();
+	//// 銃のマトリックス設定
+	//m_pGun->SetHandMtx(GetVehicleModelPartsList(CModel::MODEL_HELIGUN)->GetMatrix());
+	//// グレネード放つ位置の生成
+	//m_pGrenadeFire = CGrenadeFire::Create(GetVehicleModelPartsList(CModel::MODEL_HELIBODY)->GetMatrix(), CGrenadeFire::TANK_GRENADE);
+	//// 銃の弾の種類
+	//m_pGun->SetTag(TAG::ENEMY);
+	//// 銃の弾の種類
+	//m_pGun->SetGunType(CGun::GUNTYPE_HELIGUN);
+	//// 発射位置のオフセットの設定
+	//m_pGun->SetShotOffsetPos(D3DXVECTOR3(SHOT_BULLET_POS_X, SHOT_BULLET_POS_Y, SHOT_BULLET_POS_Z));
+	//// 当たり判定生成
+	//GetCollision()->SetPos(&GetPosition());
+	//GetCollision()->SetPosOld(&GetPositionOld());
+	//GetCollision()->SetSize2D(HELICOPTER_SIZE);
+	//GetCollision()->SetMove(&GetMove());
+	//GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_CHARACTER);
 
-	// プレイヤーのポインタ
-	m_pPlayer = nullptr;
+	//// プレイヤーのポインタ
+	//m_pPlayer = nullptr;
 
 	return S_OK;
 }
@@ -104,7 +104,6 @@ void CHelicopter::Uninit(void)
 		m_pGrenadeFire->Rerease();
 		m_pGrenadeFire = nullptr;
 	}
-	CVehicle::Uninit();
 }
 //====================================================================
 //
@@ -119,17 +118,15 @@ void CHelicopter::Update(void)
 	// ヘリコプターの移動用
 	//Operation();
 
-	// パーツの回転処理
-	VehiclePartsRotCondition(GetVehicleModelPartsList(CModel::MODEL_HELIPROPELLER), MODEL_ROT_TYPE_ALWAYS);
-	VehiclePartsRotCondition(GetVehicleModelPartsList(CModel::MODEL_HELIGUN), MODEL_ROT_TYPE_OPERATION);
+	//// パーツの回転処理
+	//VehiclePartsRotCondition(GetVehicleModelPartsList(CModel::MODEL_HELIPROPELLER), MODEL_ROT_TYPE_ALWAYS);
+	//VehiclePartsRotCondition(GetVehicleModelPartsList(CModel::MODEL_HELIGUN), MODEL_ROT_TYPE_OPERATION);
 
 	// 判定をまとめて行う
 	Collision();
 
 	m_pGun->Update();
 
-	// 乗り物クラスの更新
-	CVehicle::Update();
 }
 //====================================================================
 //
@@ -138,7 +135,6 @@ void CHelicopter::Update(void)
 //====================================================================
 void CHelicopter::Draw(void)
 {
-	CVehicle::Draw();
 
 	m_pGun->Draw();
 
@@ -170,14 +166,14 @@ CHelicopter *CHelicopter::Create(void)
 //====================================================================
 void CHelicopter::Shot()
 {
-	// ガンのモデルの発射口から弾を生成
-	m_pGun->Shot();
+	//// ガンのモデルの発射口から弾を生成
+	//m_pGun->Shot();
 
-	// 弾を撃つ方向を設定
-	m_pGun->SetShotRot(GetVehicleModelPartsList(CModel::MODEL_HELIGUN)->GetRot());
+	//// 弾を撃つ方向を設定
+	//m_pGun->SetShotRot(GetVehicleModelPartsList(CModel::MODEL_HELIGUN)->GetRot());
 
-	// グレネード
-	m_pGrenadeFire->Fire(GetShotDirection());
+	//// グレネード
+	//m_pGrenadeFire->Fire(GetShotDirection());
 }
 
 //====================================================================

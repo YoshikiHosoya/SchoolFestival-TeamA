@@ -155,7 +155,7 @@ CKnife * CKnife::Create(D3DXMATRIX * mtx, D3DXVECTOR3 knifesize, TAG tag)
 	pKnife->SetType(GUN_MODEL);
 
 	// モデルカウントの設定
-	pKnife->SetModelConut(MODEL_KNIFE);
+	pKnife->SetModelID(MODEL_KNIFE);
 
 	return pKnife;
 }
