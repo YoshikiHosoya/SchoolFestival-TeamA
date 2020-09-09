@@ -50,7 +50,7 @@ HRESULT CShield::Init()
 	// 変数初期化
 	m_nLife = SHIELD_LIFE;				// 体力
 	// 初期化
-	SetPosition(D3DXVECTOR3(0.0f,-20.0f,0.0f));
+	SetPosition(SHIELD_OFFSET);
 	// 当たり判定生成
 	GetCollision()->SetPos(&GetPosition());
 	GetCollision()->SetSize2D(SHIELD_SIZE);
@@ -78,12 +78,14 @@ void CShield::Update(void)
 	// 更新
 	CModel::Update();
 
-
+	//カウントダウン
 	if (m_nCntState-- <= 0)
 	{
+		//色を元に戻す
 		SetColorChangeFlag(false);
 	}
 
+	//盾破損時
 	if (m_bBreak)
 	{
 		//消えるカウントダウン
@@ -119,13 +121,18 @@ void CShield::Update(void)
 // ===================================================================
 void CShield::Draw(void)
 {
+	//破壊時
 	if (m_bBreak)
 	{
+		//盾の設定
 		SetPosition(m_ShieldPos);
+
+		//描画
 		CModel::Draw();
 	}
 	else
 	{
+		//手のマトリックスを基に描画
 		CModel::Draw(*m_HasHandMtx);
 	}
 }
@@ -190,9 +197,9 @@ void CShield::AddDamage(int nDamage)
 //====================================================================
 void CShield::AwayShield()
 {
+	DeleteCollision();
 	m_bBreak = true;
 	m_nDeleteCnt = SHIELD_DELETE_COUNT;
-	DeleteCollision();
 	SetRot(D3DXVECTOR3(D3DX_PI * 0.5f, D3DX_PI * 0.5f, 0.0f));
 	m_BreakShieldMoveValue = (BREAK_SHIELD_DEFAULT);
 }

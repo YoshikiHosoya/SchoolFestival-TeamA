@@ -23,7 +23,7 @@ SCRIPT
 		COLLISION_ATTACK_VALUE = 1				//攻撃力
 		COLLISION_COUNT = 5					//判定のカウント
 		PENETRATION = 1					//貫通するかどうか
-		COLLISION_SIZE = 50.00 1000.00 0.00		//コリジョンのサイズ
+		COLLISION_SIZE = 40.00 1000.00 0.00		//コリジョンのサイズ
 		SHAPE = 3								//パーティクルの出し方
 		LIFE = 50								//ライフ
 		NUMBER = 50								//個数
