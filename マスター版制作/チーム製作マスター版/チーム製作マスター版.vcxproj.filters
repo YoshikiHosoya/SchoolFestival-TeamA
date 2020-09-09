@@ -311,7 +311,7 @@
       <Filter>Model\character</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\incendiary.cpp">
-      <Filter>ImGui</Filter>
+      <Filter>Wepon\Gun</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -637,7 +637,7 @@
       <Filter>Model\character</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\incendiary.h">
-      <Filter>ImGui</Filter>
+      <Filter>Wepon\Gun</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
