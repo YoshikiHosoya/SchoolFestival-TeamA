@@ -53,6 +53,7 @@ public:
 		LABEL_SE_SHOT_BOSSLASER,					//レーザー
 		LABEL_SE_SHOT_CHARGE,						//チャージ
 		LABEL_SE_SHOT_FLASHING,						//光るやつ
+		LABEL_SE_SHOT_TITLE_BULLET,					//タイトルの演出の銃の音
 
 		//環境音とか
 		LABEL_SE_DECISION,							//決定
@@ -148,6 +149,7 @@ private:
 		{ "data/SE/Weapon/boss_laser.wav", 0 },						//SE ボスレーザー
 		{ "data/SE/Weapon/boss_charge.wav", 0 },					//SE チャージ
 		{ "data/SE/Weapon/boss_flashing.wav", 0 },					//SE 何か光るやつ
+		{ "data/SE/Weapon/Bullet_Tilte.wav", 0 },					//SE タイトルの演出の銃の音
 
 		//環境音
 		{ "data/SE/System/decision.wav", 0 },						//SE 決定

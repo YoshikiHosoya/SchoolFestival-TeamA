@@ -18,6 +18,9 @@
 #include "camera.h"
 #include "map.h"
 #include "sound.h"
+#include "pause.h"
+#include "XInputPad.h"
+
 //------------------------------------------------------------------------------
 //静的メンバ変数の初期化
 //------------------------------------------------------------------------------
@@ -42,6 +45,7 @@ CGameManager::CGameManager()
 	m_nWavePrisonerCnt = 0;
 	m_nWaveEnemyNum = 0;
 	m_nWavePrisonerNum = 0;
+	m_pPause = nullptr;
 }
 //------------------------------------------------------------------------------
 //デストラクタ
@@ -65,13 +69,21 @@ void CGameManager::Update()
 	//nullcheck
 	if (pPlayer)
 	{
-
 		//特定の座標を超えた時
 		if(pPlayer->GetPosition().x >= CManager::GetGame()->GetMap()->GetTransitionPos().x)
 		{
 			//マップ遷移
 			CManager::GetRenderer()->GetFade()->SetFade(CFADE::FADETYPE::FADETYPE_MAPMOVE, CManager::GetGame()->GetMap()->GetTransitionMapID());
 		}
+	}
+
+	//stateに応じた処理
+	switch (m_state)
+	{
+		//通常かウェーブ状態のとき
+	case CGameManager::GAMESTATE::NORMAL:
+		//GoSign更新
+		UpdateGoSign();
 
 		//まだウェーブが残っている時
 		if (m_nNowWave <= CMap::WAVE::WAVE_MAX)
@@ -94,15 +106,6 @@ void CGameManager::Update()
 				}
 			}
 		}
-	}
-
-	//stateに応じた処理
-	switch (m_state)
-	{
-		//通常かウェーブ状態のとき
-	case CGameManager::GAMESTATE::NORMAL:
-		//GoSign更新
-		UpdateGoSign();
 
 	case CGameManager::GAMESTATE::WAVE:
 
@@ -130,10 +133,22 @@ void CGameManager::Update()
 		UpdateGameover();
 
 		break;
+
+	case CGameManager::GAMESTATE::PAUSE:
+		// ポーズ
+		if (m_pPause)
+		{
+			m_pPause->Update();
+		}
+		break;
+
 	default:
 		break;
 
 	}
+
+	//ポーズ
+	PauseSet();
 }
 
 //------------------------------------------------------------------------------
@@ -141,7 +156,6 @@ void CGameManager::Update()
 //------------------------------------------------------------------------------
 void CGameManager::Draw()
 {
-
 }
 
 //------------------------------------------------------------------------------
@@ -178,7 +192,6 @@ std::unique_ptr<CGameManager> CGameManager::Create()
 		pGameManager->m_pScene2D_GoSign = CScene2D::CreateSceneManagement(GO_SIGN_POS, GO_SIGN_SIZE,CScene::OBJTYPE_UI);
 		pGameManager->m_pScene2D_GoSign->BindTexture(CTexture::GetTexture(CTexture::TEX_UI_GAME_GO));
 		pGameManager->m_pScene2D_GoSign->SetColor(WhiteColor);
-
 		return pGameManager;
 	}
 	return nullptr;
@@ -188,19 +201,44 @@ std::unique_ptr<CGameManager> CGameManager::Create()
 //------------------------------------------------------------------------------
 void CGameManager::SetGameState(GAMESTATE state)
 {
-	m_state = state;
-	m_nCnt = 0;
-
-	if (m_state == CGameManager::GAMESTATE::GAMEOVER)
+	//ステートが切り替わった時
+	if (m_state != state)
 	{
-		//ゲームオーバー表示されていない時
-		if (!m_pScene2D_GameOver)
-		{
-			//ゲームオーバーUI生成
-			m_pScene2D_GameOver = CScene2D::CreateSceneManagement(SCREEN_CENTER_POS, GAMEOVER_SIZE, CScene::OBJTYPE_UI);
-			m_pScene2D_GameOver->BindTexture(CTexture::GetTexture(CTexture::TEX_UI_GAME_GAMEOVER));
+		// 前回の状態を保存
+		m_stateOld = m_state;
 
-			m_nCnt = 0;
+		m_state = state;
+		m_nCnt = 0;
+
+		switch (m_state)
+		{
+		case CGameManager::GAMESTATE::GAMEOVER:
+			//ゲームオーバー表示されていない時
+			if (!m_pScene2D_GameOver)
+			{
+				//ゲームオーバーUI生成
+				m_pScene2D_GameOver = CScene2D::CreateSceneManagement(SCREEN_CENTER_POS, GAMEOVER_SIZE, CScene::OBJTYPE_UI);
+				m_pScene2D_GameOver->BindTexture(CTexture::GetTexture(CTexture::TEX_UI_GAME_GAMEOVER));
+
+				m_nCnt = 0;
+			}
+			break;
+		case CGameManager::GAMESTATE::PAUSE:
+			if (!m_pPause)
+			{
+				// ポーズの生成
+				m_pPause = CPause::Create();
+			}
+			break;
+		}
+		if (m_state != GAMESTATE::PAUSE)
+		{
+			// ポーズの破棄
+			if (m_pPause)
+			{
+				delete m_pPause;
+				m_pPause = nullptr;
+			}
 		}
 	}
 
@@ -411,5 +449,30 @@ void CGameManager::UpdateGameover()
 		//タイトルに遷移
 		CManager::GetRenderer()->GetFade()->SetFade(CFADE::FADETYPE::FADETYPE_MODE, CManager::MODE::MODE_TITLE);
 		SetGameState(CGameManager::GAMESTATE::NONE);
+	}
+}
+
+//------------------------------------------------------------------------------
+//ポーズ
+//------------------------------------------------------------------------------
+void CGameManager::PauseSet()
+{
+	// ポーズボタンを押したとき
+	if (CHossoLibrary::PressPauseButton())
+	{
+		// ポーズで止める設定
+		CScene::StopUpdate();
+
+		if (m_state != GAMESTATE::PAUSE)
+		{
+			SetGameState(GAMESTATE::PAUSE);
+			return;
+		}
+		else
+		{
+			// ポーズを解除、前回のステートに戻す
+			SetGameState(m_stateOld);
+			return;
+		}
 	}
 }

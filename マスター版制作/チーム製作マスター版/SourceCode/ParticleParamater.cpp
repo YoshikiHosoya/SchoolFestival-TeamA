@@ -24,6 +24,12 @@ FILENAME_LIST CParticleParam::m_aFileNameList =
 	{ "data/Load/Effect/Paramater/ExplosionSmoke.txt" },
 	{ "data/Load/Effect/Paramater/Explosion_ObjectBreak.txt" },
 	{ "data/Load/Effect/Paramater/NoCollisionExplosion.txt" },
+	{ "data/Load/Effect/Paramater/NoCollisionExplosion_Rank.txt" },
+
+	{ "data/Load/Effect/Paramater/NoCollisionFireworks1.txt" },
+	{ "data/Load/Effect/Paramater/NoCollisionFireworks2.txt" },
+	{ "data/Load/Effect/Paramater/NoCollisionFireworks3.txt" },
+
 	{ "data/Load/Effect/Paramater/Blood.txt" },
 	{ "data/Load/Effect/Paramater/Flashing.txt" },
 	{ "data/Load/Effect/Paramater/ShotFlash.txt" },
@@ -33,6 +39,7 @@ FILENAME_LIST CParticleParam::m_aFileNameList =
 	{ "data/Load/Effect/Paramater/ShotGun.txt" },
 	{ "data/Load/Effect/Paramater/ShotGunAddEffect.txt" },
 	{ "data/Load/Effect/Paramater/Lazer.txt" },
+	{ "data/Load/Effect/Paramater/LazerGrase.txt" },
 	{ "data/Load/Effect/Paramater/BossLazer.txt" },
 	{ "data/Load/Effect/Paramater/Smoke.txt" },
 	{ "data/Load/Effect/Paramater/Fire.txt" },

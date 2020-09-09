@@ -83,6 +83,14 @@ typedef struct INTEGER3
 	};
 }INTEGER3;
 
+typedef struct
+{
+	float		fLeftStickValue_X;			//Lスティック( 横 )
+	float		fLeftStickValue_Y;			//Lスティック( 縦 )
+	bool		bLeftStickDown_X;			//Lスティック( 横 )が入力されているか
+	bool		bLeftStickDown_Y;			//Lスティック( 縦 )が入力されているか
+}PAD_STICK;
+
 // タグ
 enum class TAG
 {
@@ -91,6 +99,8 @@ enum class TAG
 	PLAYER_2,			// プレイヤー2
 	ENEMY,				// 敵
 	PRISONER,			// 捕虜
+	OBSTACLE,			// オブジェクト
+	SHIELD,				// 盾
 };
 
 enum class DIRECTION
@@ -138,11 +148,18 @@ public:
 	static D3DXVECTOR3 RandomVector3(float Max);																//ランダムなvector3型で値を返す
 	static void CalcRotation(float &fRot);																		//回転を360度以内にする計算
 
+	static void SaveLastStickInfo();																			//前回のスティック情報
+	static DIRECTION CheckPadStick();																			//スティックを倒している方向をチェック
 	static bool PressAnyButton(void);
 	static bool PressStartButton(void);
+	static bool PressPauseButton(void);																			//ポーズボタンを押したとき
+	static bool PressDeterminationButton(void);																	//決定ボタンを押したとき
 	static bool ImGui_Combobox(std::vector<std::string> aItemNameList, std::string aTitle, int &nValue);
 
 	static bool PadMoveInput(D3DXVECTOR3 & rMove, DIRECTION & direction, bool bJump, TAG Tag);
+
+	static PAD_STICK	m_PadStick[MAX_CONTROLLER];		// コントローラーのスティック情報
+	static DIRECTION	m_direction;					//方向
 
 	//------------------------------------------------------------------------------
 	//範囲内の値に修正する関数

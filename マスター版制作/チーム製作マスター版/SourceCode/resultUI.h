@@ -13,12 +13,14 @@
 #include "main.h"
 #include "UI.h"
 #include "game.h"
+#include "player.h"
 
 // =====================================================================================================================================================================
 // 前方宣言
 // =====================================================================================================================================================================
 class CScene2D;
 class CMultiNumber;
+
 // =====================================================================================================================================================================
 // リザルトUIクラス
 // =====================================================================================================================================================================
@@ -54,12 +56,14 @@ public:
 
 	/* 静的メンバ関数 */
 	static  CResultUI		*Create();									// リザルトUIの生成
-	static	int				GetTotalScore() { return m_nTotalScore; };	// トータルスコアの取得
+	static	int				GetTotalScore(int num) { return m_nTotalScore[num]; };	// トータルスコアの取得
 	static	void			TotalScoreCalculation();					// ゲームスコアとボーナススコアの計算
 
 	/* メンバ関数 */
 
 private:
+	/* 静的メンバ関数 */
+
 	/* メンバ関数 */
 	void					DrawConditions();									// 描画条件
 	void					ResultUICreate();									// リザルトUIをまとめて生成する
@@ -83,16 +87,16 @@ private:
 	static LPDIRECT3DTEXTURE9	m_TexNum[RESULT_UI_MAX];						// バインドするテクスチャの情報
 	static D3DXVECTOR3			m_Pos[RESULT_UI_MAX];							// 座標情報
 	static D3DXVECTOR3			m_Size[RESULT_UI_MAX];							// サイズ情報
-	static int					m_nTotalScore;									// スコアとボーナスを加算したスコア
-	static int					m_nBonusScore;									// ボーナススコア
-	static int					m_PlayerScore;									// ゲームモードで稼いだスコア
+	static int					m_nTotalScore[CPlayer::PLAYER_NUM_TWO];			// スコアとボーナスを加算したスコア
+	static int					m_nBonusScore[CPlayer::PLAYER_NUM_TWO];									// ボーナススコア
+	static int					m_PlayerScore[CPlayer::PLAYER_NUM_TWO];			// ゲームモードで稼いだスコア
 
 	/* メンバ変数 */
 	CScene2D				*m_apScene2D[RESULT_UI_MAX];						// シーン2Dのポインタ
-	CMultiNumber			*m_pPrisonerNum;									// プレイヤーの残機の数のUI
-	CMultiNumber			*m_pBonusScore;										// ボーナススコアのUI
+	CMultiNumber			*m_pPrisonerNum[CPlayer::PLAYER_NUM_TWO];			// プレイヤーの残機の数のUI
+	CMultiNumber			*m_pBonusScore[CPlayer::PLAYER_NUM_TWO];			// ボーナススコアのUI
 
-	int						m_nPrisonerNum;										// プレイヤーの残機の数
+	int						m_nPrisonerNum[CPlayer::PLAYER_NUM_TWO];			// プレイヤーの残機の数
 	bool					m_bPrisonerNum;										// 捕虜の数を表示更新していいかどうか
 	bool					m_bBonusScore;										// 追加得点を表示更新していいかどうか
 	bool					m_bEvaluation;										// 評価を表示していいかどうか

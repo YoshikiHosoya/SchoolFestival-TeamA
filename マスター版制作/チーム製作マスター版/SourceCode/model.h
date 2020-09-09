@@ -198,7 +198,7 @@ public:
 	void Update(void);					// 更新処理
 	void Draw(D3DXMATRIX mat);			// 描画処理
 	void Draw();						// 描画処理
-	void DebugInfo();					// デバッグ情報
+	virtual void DebugInfo();			// デバッグ情報
 
 	/* 静的メンバ関数 */
 	static void LoadModel(void);									// モデルのロード

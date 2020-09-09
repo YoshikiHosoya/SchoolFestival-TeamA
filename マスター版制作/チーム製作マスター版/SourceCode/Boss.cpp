@@ -102,6 +102,21 @@ void CBoss::Draw(void)
 //====================================================================
 void CBoss::DebugInfo(void)
 {
+	char aTreeName[MAX_TEXT] = {};
+	sprintf(aTreeName, "BossInfo [%d]", CScene::GetID());
+
+	if (ImGui::TreeNode(aTreeName))
+	{
+
+		ImGui::Text("m_Attack [%d]", m_Attack);
+		ImGui::Text("m_AttackCnt [%d]", m_AttackCnt); ImGui::SameLine();
+		ImGui::Text("m_AttackCastCnt [%d]", m_AttackCastCnt);
+
+		CEnemy::DebugInfo();
+
+		ImGui::TreePop();
+	}
+
 	CDebugProc::Print_Left("BossLife >> %d\n", GetLife());
 }
 //====================================================================

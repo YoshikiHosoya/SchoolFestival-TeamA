@@ -31,6 +31,7 @@
 // マクロ定義
 // =====================================================================================================================================================================
 #define HEAVYMACHINEGUN_SHOT_FRAME				(5)			// ヘビーマシンガンの弾の間隔
+#define LAZERGUN_SHOT_FRAME						(4)			// レーザーガン弾の間隔
 #define MAX_AMMO								(999)		// 残弾数の最大値
 
 // =====================================================================================================================================================================
@@ -334,8 +335,8 @@ void CGun::Shot()
 			//音再生
 			CManager::GetSound()->Play(CSound::LABEL_SE_SHOT_LASER);
 
-			//ノズルフラッシュ
-			CParticle::CreateFromText(m_ShotPos, ZeroVector3, CParticleParam::EFFECT_SHOTFLASH, GetTag());
+			// フラグをオン
+			m_bMultiple = true;
 
 			break;
 
@@ -445,51 +446,77 @@ void CGun::MultipleShot()
 
 	if (m_nCntBullet < (CBullet::GetBulletParam(m_GunType)->nTrigger))
 	{
-		if (m_nCntFrame >= HEAVYMACHINEGUN_SHOT_FRAME)
+		switch (m_GunType)
 		{
-			// フレームカウント初期化
-			m_nCntFrame = 0;
-
-			// 残弾数を減らす
-			m_nAmmo--;
-
-			// ヘビーマシンガンのとき
-			if (m_GunType == GUNTYPE_HEAVYMACHINEGUN)
+		case CGun::GUNTYPE_HEAVYMACHINEGUN:
+		case CGun::GUNTYPE_TANKGUN:
+		case CGun::GUNTYPE_PLANEGUN:
+		case CGun::GUNTYPE_HELIGUN:
+			if (m_nCntFrame >= HEAVYMACHINEGUN_SHOT_FRAME)
 			{
-				// 弾の生成
-				pBullet = CHeavyMachinegun::Create(m_ShotRot);
-			}
-			// 戦車の銃のとき
-			if (m_GunType == GUNTYPE_TANKGUN)
-			{
-				// 弾の生成
-				pBullet = CTankGun::Create(m_ShotRot);
-			}
+				// フレームカウント初期化
+				m_nCntFrame = 0;
 
-			// 弾のカウントアップ
-			m_nCntBullet++;
+				// 弾のカウントアップ
+				m_nCntBullet++;
 
-			if (pBullet)
-			{
-				D3DXVec3TransformCoord(&m_ShotPos, &m_ShotOffsetPos, GetMatrix());
-
-				// 位置の設定
-				pBullet->SetPosition(D3DXVECTOR3(m_ShotPos.x, m_ShotPos.y + randPos_y, m_ShotPos.z));
-
-				// 弾の種類の設定
-				pBullet->SetTag(GetTag());
-
-				// 弾のパラメーターの設定
-				pBullet->SetBulletParam(m_GunType);
-
-				// 弾の反応
-				pBullet->BulletReaction(m_ShotRot);
+				// 残弾数を減らす
+				m_nAmmo--;
 
 				//音再生
 				CManager::GetSound()->Play(CSound::LABEL_SE_SHOT_MACHINEGUN);
 
-
+				// ヘビーマシンガンのとき
+				if (m_GunType == GUNTYPE_HEAVYMACHINEGUN)
+				{
+					// 弾の生成
+					pBullet = CHeavyMachinegun::Create(m_ShotRot);
+				}
+				// 戦車の銃のとき
+				if (m_GunType == GUNTYPE_TANKGUN)
+				{
+					// 弾の生成
+					pBullet = CTankGun::Create(m_ShotRot);
+				}
 			}
+			break;
+
+			//レーザーガン
+		case CGun::GUNTYPE_LASERGUN:
+			if (m_nCntFrame >= LAZERGUN_SHOT_FRAME)
+			{
+				// 弾の生成
+				CParticle::CreateFromText(m_ShotPos, m_ShotRot, CParticleParam::EFFECT_LAZER, GetTag(), CBullet::GetBulletParam((int)CGun::GUNTYPE_LASERGUN)->nPower, D3DXCOLOR(0.0f, 0.0f, 0.0f, -1.0f), GetShotPosPtr());
+
+				// フレームカウント初期化
+				m_nCntFrame = 0;
+
+				// 弾のカウントアップ
+				m_nCntBullet++;
+
+				// 残弾数を減らす
+				m_nAmmo--;
+			}
+			break;
+
+		default:
+			break;
+		}
+
+		//弾が生成された場合
+		if (pBullet)
+		{
+			// 位置の設定
+			pBullet->SetPosition(D3DXVECTOR3(m_ShotPos.x, m_ShotPos.y + randPos_y, m_ShotPos.z));
+
+			// 弾の種類の設定
+			pBullet->SetTag(GetTag());
+
+			// 弾のパラメーターの設定
+			pBullet->SetBulletParam(m_GunType);
+
+			// 弾の反応
+			pBullet->BulletReaction(m_ShotRot);
 		}
 	}
 	else

@@ -19,7 +19,6 @@
 class CRenderer;
 class CKeyboard;
 class CPlayer;
-class CPause;
 class CMap;
 class CResultManager;
 class CGameManager;
@@ -61,7 +60,6 @@ private:
 	static int							m_Counter;
 
 	/* メンバ変数 */
-	CPause								*m_pPause;
 	CResultManager						*m_pResultManager;
 	std::unique_ptr<CGameManager>		m_pGameManager;			//ゲームの進行管理
 	int									m_nFrame;

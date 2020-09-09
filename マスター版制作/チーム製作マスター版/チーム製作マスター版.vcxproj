@@ -220,6 +220,7 @@
     <ClCompile Include="SourceCode\ParticleManager.cpp" />
     <ClCompile Include="SourceCode\ParticleParamater.cpp" />
     <ClCompile Include="SourceCode\pause.cpp" />
+    <ClCompile Include="SourceCode\pauseUI.cpp" />
     <ClCompile Include="SourceCode\planegun.cpp" />
     <ClCompile Include="SourceCode\Player.cpp" />
     <ClCompile Include="SourceCode\PlayerGetScoreUI_.cpp" />
@@ -239,7 +240,6 @@
     <ClCompile Include="SourceCode\SceneBase.cpp" />
     <ClCompile Include="SourceCode\SceneX.cpp" />
     <ClCompile Include="SourceCode\ScoreManager.cpp" />
-    <ClCompile Include="SourceCode\selectcharacter.cpp" />
     <ClCompile Include="SourceCode\shield.cpp" />
     <ClCompile Include="SourceCode\ShieldEnemyAI.cpp" />
     <ClCompile Include="SourceCode\sound.cpp" />
@@ -329,6 +329,7 @@
     <ClInclude Include="SourceCode\ParticleManager.h" />
     <ClInclude Include="SourceCode\ParticleParamater.h" />
     <ClInclude Include="SourceCode\pause.h" />
+    <ClInclude Include="SourceCode\pauseUI.h" />
     <ClInclude Include="SourceCode\planegun.h" />
     <ClInclude Include="SourceCode\Player.h" />
     <ClInclude Include="SourceCode\PlayerGetScoreUI.h" />
@@ -349,7 +350,6 @@
     <ClInclude Include="SourceCode\SceneBase.h" />
     <ClInclude Include="SourceCode\SceneX.h" />
     <ClInclude Include="SourceCode\ScoreManager.h" />
-    <ClInclude Include="SourceCode\selectcharacter.h" />
     <ClInclude Include="SourceCode\shield.h" />
     <ClInclude Include="SourceCode\ShieldEnemyAI.h" />
     <ClInclude Include="SourceCode\sound.h" />

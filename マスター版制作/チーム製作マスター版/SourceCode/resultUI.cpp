@@ -119,9 +119,9 @@ D3DXVECTOR3				CResultUI::m_Size[RESULT_UI_MAX] = {
 	RESULT_UI_MISSIONCOMPLAYER_2_SIZE,
 };
 
-int				CResultUI::m_nTotalScore = 0;
-int				CResultUI::m_nBonusScore = 0;
-int				CResultUI::m_PlayerScore = 0;
+int				CResultUI::m_nTotalScore[CPlayer::PLAYER_NUM_TWO] = {};
+int				CResultUI::m_nBonusScore[CPlayer::PLAYER_NUM_TWO] = {};
+int				CResultUI::m_PlayerScore[CPlayer::PLAYER_NUM_TWO] = {};
 
 // =====================================================================================================================================================================
 //
@@ -142,18 +142,22 @@ CResultUI::CResultUI()
 		m_bUse_One[nCnt] = false;
 	}
 
-	m_pBonusScore = nullptr;
-	m_pPrisonerNum = nullptr;
-	m_nPrisonerNum = 0;
-	m_nBonusScore = 0;
+	for (int nCnt = 0; nCnt < CPlayer::PLAYER_NUM_MAX; nCnt++)
+	{
+		m_pBonusScore[nCnt] = nullptr;
+		m_pPrisonerNum[nCnt] = nullptr;
+		m_nPrisonerNum[nCnt] = 0;
+	}
+
+	m_nBonusScore[CPlayer::PLAYER_NUM_TWO] = {};
 	m_bPrisonerNum = false;
 	m_bBonusScore = false;
 	m_bEvaluation = false;
 	m_nWaitTime = 0;
 	m_bWaitFlag = false;
 	m_nColCnt = 0;
-	m_nTotalScore = 0;
-	m_PlayerScore = 0;
+	m_nTotalScore[CPlayer::PLAYER_NUM_TWO] = {};
+	m_PlayerScore[CPlayer::PLAYER_NUM_TWO] = {};
 }
 
 // =====================================================================================================================================================================
@@ -174,10 +178,25 @@ HRESULT CResultUI::Init(void)
 {
 	// ゲームクラスのポインタ取得
 	CGame *pGame = (CGame*)CManager::GetBaseMode();
-	if (pGame->GetPlayer(TAG::PLAYER_1)->GetPlayerUI() != nullptr)
+
+	if (CPlayer::GetTwoPPlayFlag())
 	{
-		// スコアの取得
-		m_PlayerScore = pGame->GetPlayer(TAG::PLAYER_1)->GetPlayerUI()->GetScore();
+		for (int nCnt = 0; nCnt < CPlayer::PLAYER_NUM_MAX; nCnt++)
+		{
+			if (pGame->GetPlayer((TAG)nCnt) && pGame->GetPlayer((TAG)nCnt)->GetPlayerUI())
+			{
+				// スコアの取得
+				m_PlayerScore[nCnt] = pGame->GetPlayer((TAG)nCnt)->GetPlayerUI()->GetScore();
+			}
+		}
+	}
+	else
+	{
+		if (pGame->GetPlayer((TAG)0) && pGame->GetPlayer((TAG)0)->GetPlayerUI())
+		{
+			// スコアの取得
+			m_PlayerScore[0] = pGame->GetPlayer((TAG)0)->GetPlayerUI()->GetScore();
+		}
 	}
 
 	// UIをまとめて生成する
@@ -213,16 +232,19 @@ void CResultUI::Uninit(void)
 		}
 	}
 
-	// ナンバー形の解放
-	if (m_pBonusScore != nullptr)
+	for (int nCnt = 0; nCnt < CPlayer::PLAYER_NUM_MAX; nCnt++)
 	{
-		m_pBonusScore->Rerease();
-		m_pBonusScore = nullptr;
-	}
-	if (m_pPrisonerNum != nullptr)
-	{
-		m_pPrisonerNum->Rerease();
-		m_pPrisonerNum = nullptr;
+		// ナンバー形の解放
+		if (m_pBonusScore[nCnt] != nullptr)
+		{
+			m_pBonusScore[nCnt]->Rerease();
+			m_pBonusScore[nCnt] = nullptr;
+		}
+		if (m_pPrisonerNum[nCnt] != nullptr)
+		{
+			m_pPrisonerNum[nCnt]->Rerease();
+			m_pPrisonerNum[nCnt] = nullptr;
+		}
 	}
 }
 
@@ -312,26 +334,11 @@ void CResultUI::ResultUICreate()
 			// 一旦全て非表示にする
 			m_apScene2D[nCnt]->SetDisp(false);
 
-			if (nCnt == RESULT_UI_EVALUATION01P)
-			{
-				// テクスチャの割り当て
-				m_apScene2D[nCnt]->BindTexture(CTexture::GetTexture((CTexture::TEX_TYPE)(nCnt + CTexture::TEX_UI_RESULT_GOOD-3)));
-			}
-			else if (nCnt == RESULT_UI_EVALUATION11P)
-			{
-				// テクスチャの割り当て
-				m_apScene2D[nCnt]->BindTexture(CTexture::GetTexture((CTexture::TEX_TYPE)(nCnt + CTexture::TEX_UI_RESULT_GREATE)));
-			}
-			else if (nCnt == RESULT_UI_EVALUATION21P)
-			{
-				// テクスチャの割り当て
-				m_apScene2D[nCnt]->BindTexture(CTexture::GetTexture((CTexture::TEX_TYPE)(nCnt + CTexture::TEX_UI_RESULT_NOPRISONER)));
-			}
 
-			else if (nCnt >= RESULT_UI_MISSIONCOMPLAYER_1)
+			if (nCnt >= RESULT_UI_EVALUATION02P)
 			{
 				// テクスチャの割り当て
-				m_apScene2D[nCnt]->BindTexture(CTexture::GetTexture((CTexture::TEX_TYPE)(CTexture::TEX_UI_RESULT_MISSION1COMPLETE)));
+				m_apScene2D[nCnt]->BindTexture(CTexture::GetTexture((CTexture::TEX_TYPE)(nCnt + CTexture::TEX_UI_RESULT_BG -3)));
 			}
 			else
 			{
@@ -341,21 +348,38 @@ void CResultUI::ResultUICreate()
 		}
 	}
 
-	// 残りの捕虜の数用UI
-	m_pPrisonerNum = CMultiNumber::Create(
-		RESULT_UI_PRISONERNUM_POS_1P,
-		RESULT_UI_PRISONERNUM_SIZE_1P,
-		m_nPrisonerNum,
-		RESULT_UI_PRISONERNUM_DIGIT,
-		CScene::OBJTYPE_UI);
+	D3DXVECTOR3 pos[2];
+	D3DXVECTOR3 size[2];
+	pos[0] = RESULT_UI_PRISONERNUM_POS_1P;
+	pos[1] = RESULT_UI_PRISONERNUM_POS_2P;
+	size[0] = RESULT_UI_PRISONERNUM_SIZE_1P;
+	size[1] = RESULT_UI_PRISONERNUM_SIZE_2P;
+	D3DXVECTOR3 Scorepos[2];
+	D3DXVECTOR3 Scoresize[2];
+	Scorepos[0] = RESULT_UI_BONUS_POS_1P;
+	Scorepos[1] = RESULT_UI_BONUS_POS_2P;
+	Scoresize[0] = RESULT_UI_BONUS_SIZE_1P;
+	Scoresize[1] = RESULT_UI_BONUS_SIZE_2P;
 
-	// 追加得点用UI
-	m_pBonusScore = CMultiNumber::Create(
-		RESULT_UI_BONUS_POS_1P,
-		RESULT_UI_BONUS_SIZE_1P,
-		m_nBonusScore,
-		RESULT_UI_BONUS_DIGIT,
-		CScene::OBJTYPE_UI);
+
+	for (int nCnt = 0; nCnt < CPlayer::PLAYER_NUM_MAX; nCnt++)
+	{
+		// 残りの捕虜の数用UI
+		m_pPrisonerNum[nCnt] = CMultiNumber::Create(
+			pos[nCnt],
+			size[nCnt],
+			m_nPrisonerNum[nCnt],
+			RESULT_UI_PRISONERNUM_DIGIT,
+			CScene::OBJTYPE_UI);
+
+		// 追加得点用UI
+		m_pBonusScore[nCnt] = CMultiNumber::Create(
+			Scorepos[nCnt],
+			Scoresize[nCnt],
+			m_nBonusScore[nCnt],
+			RESULT_UI_BONUS_DIGIT,
+			CScene::OBJTYPE_UI);
+	}
 }
 
 // =====================================================================================================================================================================
@@ -373,10 +397,13 @@ void CResultUI::AllDraw()
 		}
 	}
 
-	if (m_pPrisonerNum != nullptr && m_pBonusScore != nullptr)
+	for (int nCnt = 0; nCnt < CPlayer::PLAYER_NUM_MAX; nCnt++)
 	{
-		m_pPrisonerNum->SetDisp(true);
-		m_pBonusScore->SetDisp(true);
+		if (m_pPrisonerNum[nCnt] != nullptr && m_pBonusScore[nCnt] != nullptr)
+		{
+			m_pPrisonerNum[nCnt]->SetDisp(true);
+			m_pBonusScore[nCnt]->SetDisp(true);
+		}
 	}
 }
 // =====================================================================================================================================================================
@@ -394,10 +421,13 @@ void CResultUI::AllNotDraw()
 		}
 	}
 
-	if (m_pPrisonerNum != nullptr && m_pBonusScore != nullptr)
+	for (int nCnt = 0; nCnt < CPlayer::PLAYER_NUM_MAX; nCnt++)
 	{
-		m_pPrisonerNum->SetDisp(false);
-		m_pBonusScore->SetDisp(false);
+		if (m_pPrisonerNum[nCnt] != nullptr && m_pBonusScore[nCnt] != nullptr)
+		{
+			m_pPrisonerNum[nCnt]->SetDisp(false);
+			m_pBonusScore[nCnt]->SetDisp(false);
+		}
 	}
 }
 
@@ -411,11 +441,17 @@ void CResultUI::Result0Draw()
 	// 描画する列挙型を指定
 	if (m_apScene2D[RESULT_UI_BG] != nullptr &&
 		m_apScene2D[RESULT_UI_NAME] != nullptr &&
-		m_apScene2D[RESULT_UI_1P] != nullptr)
+		m_apScene2D[RESULT_UI_1P] != nullptr&&
+		m_apScene2D[RESULT_UI_2P] != nullptr)
 	{
 		m_apScene2D[RESULT_UI_BG]->SetDisp(true);
 		m_apScene2D[RESULT_UI_NAME]->SetDisp(true);
 		m_apScene2D[RESULT_UI_1P]->SetDisp(true);
+
+		if (CPlayer::GetTwoPPlayFlag())
+		{
+			m_apScene2D[RESULT_UI_2P]->SetDisp(true);
+		}
 	}
 }
 
@@ -439,10 +475,13 @@ void CResultUI::Result1Draw()
 			}
 		}
 
-		if (m_pPrisonerNum != nullptr && m_pBonusScore != nullptr)
+		for (int nCnt = 0; nCnt < CPlayer::PLAYER_NUM_MAX; nCnt++)
 		{
-			m_pPrisonerNum->SetDisp(false);
-			m_pBonusScore->SetDisp(false);
+			if (m_pPrisonerNum[nCnt] != nullptr && m_pBonusScore[nCnt] != nullptr)
+			{
+				m_pPrisonerNum[nCnt]->SetDisp(false);
+				m_pBonusScore[nCnt]->SetDisp(false);
+			}
 		}
 
 		if (CManager::GetGame()->GetMap()->GetMapNum() == CMap::MAP_1_BOSS)
@@ -480,37 +519,94 @@ void CResultUI::Result1Draw()
 // =====================================================================================================================================================================
 void CResultUI::ScoreCal()
 {
-	// プレイヤーのポインタを取得
-	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer(TAG::PLAYER_1);
+	CPlayer *pPlayer[CPlayer::PLAYER_NUM_TWO];
 
-	if (pPlayer != nullptr)
+	if (CPlayer::GetTwoPPlayFlag())
 	{
-		// 基準となるプレイヤーの残機数の値
-		const int nReferenceValue_PrisonerNum = pPlayer->GetLife();
-		// 基準となる追加得点の値
-		const int nReferenceValue_BonusScore = pPlayer->GetLife() * CScoreManager::GetScorePoint(CScoreManager::SCORE_BONUS);
+		// プレイヤーのポインタを取得
+		for (int nCnt = 0; nCnt < CPlayer::PLAYER_NUM_MAX; nCnt++)
+		{
+			pPlayer[nCnt] = CManager::GetBaseMode()->GetPlayer((TAG)nCnt);
 
-		// 描画許可が出たら処理を通す
-		if (m_bPrisonerNum)
-		{
-			// 数字の描画許可
-			if (m_pPrisonerNum != nullptr)
+			if (pPlayer[nCnt] != nullptr)
 			{
-				m_pPrisonerNum->SetDisp(true);
+				// 描画許可が出たら処理を通す
+				if (m_bPrisonerNum)
+				{
+					// 数字の描画許可
+					if (m_pPrisonerNum[nCnt] != nullptr)
+					{
+						m_pPrisonerNum[nCnt]->SetDisp(true);
+					}
+					// 目標の値になるまで値を計算
+					TargetValue(pPlayer[nCnt]->GetLife(), m_nPrisonerNum[nCnt], 1, m_pPrisonerNum[nCnt]);
+				}
+				// 描画許可が出たら処理を通す
+				if (m_bBonusScore)
+				{
+					// 数字の描画許可
+					if (m_pBonusScore[nCnt] != nullptr)
+					{
+						m_pBonusScore[nCnt]->SetDisp(true);
+					}
+
+					if (m_nBonusScore[nCnt] >= 100000)
+					{
+						// 目標の値になるまで値を計算
+						TargetValue(pPlayer[nCnt]->GetLife() * CScoreManager::GetScorePoint(CScoreManager::SCORE_BONUS), m_nBonusScore[nCnt], 10000, m_pBonusScore[nCnt]);
+					}
+					else
+					{
+						// 目標の値になるまで値を計算
+						TargetValue(pPlayer[nCnt]->GetLife() * CScoreManager::GetScorePoint(CScoreManager::SCORE_BONUS), m_nBonusScore[nCnt], 1000, m_pBonusScore[nCnt]);
+
+					}
+				}
 			}
-			// 目標の値になるまで値を計算
-			TargetValue(nReferenceValue_PrisonerNum, m_nPrisonerNum, 1, m_pPrisonerNum);
 		}
-		// 描画許可が出たら処理を通す
-		if (m_bBonusScore)
+	}
+	else
+	{
+		pPlayer[0] = CManager::GetBaseMode()->GetPlayer((TAG)0);
+
+		if (pPlayer[0] != nullptr)
 		{
-			// 数字の描画許可
-			if (m_pBonusScore != nullptr)
+			// 描画許可が出たら処理を通す
+			if (m_bPrisonerNum)
 			{
-				m_pBonusScore->SetDisp(true);
+				// 数字の描画許可
+				if (m_pPrisonerNum[0] != nullptr)
+				{
+					m_pPrisonerNum[0]->SetDisp(true);
+					m_pPrisonerNum[1]->SetMultiNumber(0);
+					m_pPrisonerNum[1]->SetDisp(false);
+				}
+				// 目標の値になるまで値を計算
+				TargetValue(pPlayer[0]->GetLife(), m_nPrisonerNum[0], 1, m_pPrisonerNum[0]);
 			}
-			// 目標の値になるまで値を計算
-			TargetValue(nReferenceValue_BonusScore, m_nBonusScore, 1000, m_pBonusScore);
+			// 描画許可が出たら処理を通す
+			if (m_bBonusScore)
+			{
+				// 数字の描画許可
+				if (m_pBonusScore[0] != nullptr)
+				{
+					m_pBonusScore[0]->SetDisp(true);
+					m_pBonusScore[1]->SetMultiNumber(0);
+					m_pBonusScore[1]->SetDisp(false);
+				}
+
+				if (m_nBonusScore[0] >= 100000)
+				{
+					// 目標の値になるまで値を計算
+					TargetValue(pPlayer[0]->GetLife() * CScoreManager::GetScorePoint(CScoreManager::SCORE_BONUS), m_nBonusScore[0], 10000, m_pBonusScore[0]);
+				}
+				else
+				{
+					// 目標の値になるまで値を計算
+					TargetValue(pPlayer[0]->GetLife() * CScoreManager::GetScorePoint(CScoreManager::SCORE_BONUS), m_nBonusScore[0], 1000, m_pBonusScore[0]);
+
+				}
+			}
 		}
 	}
 }
@@ -539,11 +635,18 @@ void CResultUI::Conditions()
 				{
 					// 捕虜の数によって結果が変わる
 					// 条件によって描画する 評価
-					if (m_apScene2D[RESULT_UI_EVALUATION01P] != nullptr)
+					if (m_apScene2D[RESULT_UI_EVALUATION01P] != nullptr&&
+						m_apScene2D[RESULT_UI_EVALUATION02P] != nullptr)
 					{
 						m_apScene2D[RESULT_UI_EVALUATION01P]->SetDisp(true);
 
-						Flashing(m_apScene2D[RESULT_UI_EVALUATION01P]);
+						if (CPlayer::GetTwoPPlayFlag())
+						{
+							m_apScene2D[RESULT_UI_EVALUATION02P]->SetDisp(true);
+						}
+
+						m_apScene2D[RESULT_UI_EVALUATION01P]->Flashing();
+						m_apScene2D[RESULT_UI_EVALUATION02P]->Flashing();
 					}
 
 					// リザルトモードを次のモードに移行するためのフラグをtrueにする
@@ -583,15 +686,18 @@ void CResultUI::TargetValue(const int &Target, int &Value, int Add , CMultiNumbe
 
 	else
 	{
-		if (pMultiNumber == m_pPrisonerNum)
+		for (int nCnt = 0; nCnt < CPlayer::PLAYER_NUM_MAX; nCnt++)
 		{
-			// 出現フラグの1番目を許可
-			m_bUseUIFlag[1] = true;
-		}
-		if (pMultiNumber == m_pBonusScore)
-		{
-			// 出現フラグの2番目を許可
-			m_bUseUIFlag[2] = true;
+			if (pMultiNumber == m_pPrisonerNum[nCnt])
+			{
+				// 出現フラグの1番目を許可
+				m_bUseUIFlag[1] = true;
+			}
+			if (pMultiNumber == m_pBonusScore[nCnt])
+			{
+				// 出現フラグの2番目を許可
+				m_bUseUIFlag[2] = true;
+			}
 		}
 	}
 }
@@ -668,7 +774,6 @@ void CResultUI::DrawConditions()
 	// 一度全てのリザルトUIを非表示にしてから次に表示するUIを決める
 	AllNotDraw();
 
-
 	CResultManager::RESULT_STATE state = CManager::GetGame()->GetResultManager()->GetResultState();
 
 	switch (state)
@@ -713,7 +818,11 @@ void CResultUI::Flashing(CScene2D *m_apScene2D)
 // =====================================================================================================================================================================
 void CResultUI::TotalScoreCalculation()
 {
-	// ゲームスコアとボーナススコアの計算
-	m_nTotalScore = m_nBonusScore + m_PlayerScore;
-	CRankingUI::ScoreSave();
+	for (int nCnt = 0; nCnt < CPlayer::PLAYER_NUM_MAX; nCnt++)
+	{
+		// ゲームスコアとボーナススコアの計算
+		m_nTotalScore[nCnt] = m_nBonusScore[nCnt] + m_PlayerScore[nCnt];
+	}
+	// スコアのセーブ
+	CRankingUI::PlayerScoreSave();
 }

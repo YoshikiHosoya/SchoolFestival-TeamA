@@ -21,7 +21,7 @@
 //====================================================================
 class CWeakEnemy;
 
-class CShield : public CModel
+class CShield : public CModel , public CGameObject
 {
 public:
 	CShield() {};
@@ -32,6 +32,7 @@ public:
 	void	Uninit();												// 終了
 	void	Update();												// 更新
 	void	Draw();													// 描画
+	void	DebugInfo();											// デバッグ情報表記
 	static	CShield	* Create();
 	int		GetLife() { return m_nLife; };
 	int		SetLife(int life) { m_nLife = life;};					//体力の設定
@@ -40,17 +41,20 @@ public:
 	void	SetHasEnemyPtr(CWeakEnemy *pEnemy) { m_HasEnemyPtr = pEnemy; };
 	void	AwayShield();
 
+
+	D3DXVECTOR3 GetShieldPos() { return m_ShieldPos; };
+
 private:
 	/* メンバ変数 */
+	D3DXVECTOR3			m_ShieldPos;					// 盾の座標　コリジョン用
+	D3DXVECTOR3			m_BreakShieldMoveValue;			// 盾が破壊された時の吹っ飛ぶ方向
+	D3DXVECTOR3			m_BreakShieldRotValue;			// 盾が破壊された時の回転量
+	D3DXMATRIX			*m_HasHandMtx;					// 持ち手のマトリックス
+	CWeakEnemy			*m_HasEnemyPtr;					// 持ってる敵のポインタ
 	int					m_nLife;						// 体力
 	int					m_nCntState;					// カウンタ
 	int					m_nDeleteCnt;					// 盾が破壊されてから消えるまでのカウント
-	D3DXVECTOR3			m_ShieldPos;					// 盾の座標　コリジョン用
-	D3DXMATRIX			*m_HasHandMtx;					// 持ち手のマトリックス
-	CWeakEnemy			*m_HasEnemyPtr;					// 持ってる敵のポインタ
 	bool				m_bBreak;						// 破壊状態
-	D3DXVECTOR3			m_BreakShieldMoveValue;			// 盾が破壊された時の吹っ飛ぶ方向
-	D3DXVECTOR3			m_BreakShieldRotValue;			// 盾が破壊された時の回転量
 
 };
 #endif

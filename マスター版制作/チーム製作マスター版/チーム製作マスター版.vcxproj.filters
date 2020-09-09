@@ -304,7 +304,9 @@
     <ClCompile Include="SourceCode\3Dline.cpp">
       <Filter>Collision</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\selectcharacter.cpp" />
+    <ClCompile Include="SourceCode\pauseUI.cpp">
+      <Filter>Scene2D.3D\UI</Filter>
+    </ClCompile>
     <ClCompile Include="SourceCode\ModelSet.cpp">
       <Filter>Model\character</Filter>
     </ClCompile>
@@ -313,7 +315,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="SourceCode\selectcharacter.h" />
     <ClInclude Include="SourceCode\shield.h">
       <Filter>Model</Filter>
     </ClInclude>
@@ -628,6 +629,9 @@
     </ClInclude>
     <ClInclude Include="SourceCode\Resource\resource.h">
       <Filter>Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\pauseUI.h">
+      <Filter>Scene2D.3D\UI</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\ModelSet.h">
       <Filter>Model\character</Filter>

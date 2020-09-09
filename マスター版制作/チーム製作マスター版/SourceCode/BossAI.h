@@ -40,14 +40,16 @@ public:
 	void UpdateAttackAI(void);
 	void Draw(void);
 	void DebugInfo(void);
-	D3DXVECTOR3 GetTrackingShotRot(void);
 	static CBossAI* CreateAI(CBoss *pBoss);
-	AI_BOSS_STATE GetBossAIType(void);
-	bool GetShot(void);
-	void SetShot(bool shot);
-	void SetRestartFlag(bool flag);
-	CCollision *GetCollision() { return m_pCollision; };			// 当たり判定のポインタ取得
-	void SetBossAI(AI_BOSS_STATE attack);
+
+	void SetShot(bool shot)						{m_bShot = shot;};
+	void SetRestartFlag(bool flag)				{ m_bReStartFlag = flag; };
+	void SetBossAI(AI_BOSS_STATE attack)		{ m_BossAItype = attack; };
+
+	bool GetShot(void)							{ return m_bShot;};
+	AI_BOSS_STATE GetBossAIType(void)			{ return m_BossAItype; };
+	D3DXVECTOR3 GetTrackingShotRot(void)		{ return m_ShotVec; };
+	CCollision *GetCollision()					{ return m_pCollision; };			// 当たり判定のポインタ取得
 private:
 	CBoss	*pBossPass;					//敵の情報の格納用
 	AI_BOSS_STATE m_BossAItype;			//攻撃の種類

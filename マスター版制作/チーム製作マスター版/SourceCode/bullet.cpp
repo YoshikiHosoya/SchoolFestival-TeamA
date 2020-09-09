@@ -132,8 +132,23 @@ void CBullet::Update(void)
 	{
 		// 判定の座標を更新
 		GetCollision()->SetPos(&GetPosition());
+
 		// ゲームオブジェクト( タグ )の設定
 		GetCollision()->SetGameObject(this);
+
+		// マップのポインタ取得
+		CMap *pMap;
+		pMap = CManager::GetBaseMode()->GetMap();
+
+		if (pMap != nullptr)
+		{
+			// レイの判定
+			if (GetCollision()->RayCollision(pMap))
+			{
+				DeleteBullet();
+				return;
+			}
+		}
 
 		// プレイヤーの弾だった時
 		if (GetTag() == TAG::PLAYER_1 || GetTag() == TAG::PLAYER_2)
@@ -147,6 +162,7 @@ void CBullet::Update(void)
 
 				// 弾の削除
 				DeleteBullet();
+				return;
 			}
 		}
 
@@ -158,24 +174,8 @@ void CBullet::Update(void)
 			{
 				// 弾の削除
 				DeleteBullet();
+				return;
 			}
-		}
-	}
-
-	// マップのポインタ取得
-	CMap *pMap;
-	pMap = CManager::GetBaseMode()->GetMap();
-
-	// マップモデルが存在した時
-	if (pMap != nullptr)
-	{
-		// レイの判定
-		if (GetCollision()->RayCollision(pMap))
-		{
-			DeleteBullet();
-		}
-		else
-		{
 		}
 	}
 
@@ -215,6 +215,7 @@ void CBullet::DeleteBullet()
 void CBullet::BulletReaction(D3DXVECTOR3 rot)
 {
 }
+
 
 // =====================================================================================================================================================================
 //

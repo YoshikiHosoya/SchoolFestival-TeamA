@@ -34,11 +34,12 @@ public:
 	CCharacter() {};
 	CCharacter(OBJ_TYPE type);
 	~CCharacter();
-	virtual HRESULT Init(void);
-	virtual void Uninit(void);
-	virtual void Update(void);
-	virtual void Draw(void);
-	virtual bool DefaultMotion(void) = 0;
+	virtual HRESULT Init(void) override;			//初期化
+	virtual void Uninit(void) override;				//終了
+	virtual void Update(void) override;				//更新
+	virtual void Draw(void) override;				//描画
+	virtual void DebugInfo(void) override;			//デバッグ用関数
+	virtual bool DefaultMotion(void) = 0;			//デフォルトのモーションセット
 	virtual void DamageReaction();					//ダメージ時のリアクション
 	virtual void DeathReaction();					//死亡のリアクション
 	virtual void State();							//ステートに応じた処理
@@ -94,10 +95,9 @@ public:
 
 	//void ChangeColor(bool ColorChangeFlag, D3DXCOLOR AddColor);									// 色変更
 	bool CheckDrawRange();
-	//void SetAllModelDisp(bool bDisp);								//点滅の切り替え
+
 
 	CCollision *GetCollision() { return m_pCollision; };			// 当たり判定のポインタ取得
-	virtual void		DebugInfo(void);						// デバッグ用関数
 	virtual void Collision();										//当たり判定処理
 
 private:

@@ -11,8 +11,6 @@
 #include "manager.h"
 #include "map.h"
 #include "item.h"
-#include "player.h"
-#include "playerui.h"
 #include "scoremanager.h"
 #include "ModelSet.h"
 //====================================================================
@@ -308,14 +306,6 @@ void CPrisoner::PrisonerState()
 		m_StateTime--;
 		if (m_StateTime <= 0)
 		{
-			CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer(((CPlayer*)this)->GetTag());
-
-			if (pPlayer && pPlayer->GetPlayerUI())
-			{
-				pPlayer->GetPlayerUI()->SetScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_RESCUE_PRISONER));
-				// 体力の加算
-				pPlayer->SetLife(pPlayer->GetLife() + 1);
-			}
 			SetStateTime(40);
 			// 捕虜の状態の変更
 			// 捕虜のタイプ別ドロップ処理

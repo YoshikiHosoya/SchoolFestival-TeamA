@@ -174,7 +174,7 @@ CBattlePlane *CBattlePlane::Create(void)
 void CBattlePlane::Shot(CKeyboard *key)
 {
 	// ƒ}ƒVƒ“ƒKƒ“‚ðŒ‚‚Â
-	if (key->GetKeyboardTrigger(DIK_P))
+	if (key->GetKeyboardTrigger(DIK_U))
 	{
 		// ƒKƒ“‚Ìƒ‚ƒfƒ‹‚Ì”­ŽËŒû‚©‚ç’e‚ð¶¬
 		m_pGun->Shot();

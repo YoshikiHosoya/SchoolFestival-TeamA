@@ -28,7 +28,6 @@ public:
 	void StateChangeReaction();				//ステート変更処理
 private:
 	bool m_Attack;									//攻撃時
-	float m_Angle;
 	int m_AttackCnt;					//攻撃をしている時間
 	int m_AttackCastCnt;				//攻撃に入るまでの時間
 

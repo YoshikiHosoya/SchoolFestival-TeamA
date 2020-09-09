@@ -33,6 +33,7 @@ CParticle::CParticle()
 	//初期化
 	m_bDeleteFlag = false;
 	m_posOrigin = ZeroVector3;
+	m_posEndPoint = ZeroVector3;
 	m_rotOrigin = ZeroVector3;
 	m_CollisionOrigin = ZeroVector3;
 	m_pPosOriginPtr = nullptr;
@@ -84,8 +85,11 @@ void CParticle::Update()
 			//当たり判定処理
 			Collision();
 
+			//カウントダウン
+			m_pParticleParam->GetCollisionCnt()--;
+
 			//当たり判定のカウントが0になったら消す
-			if (m_pParticleParam->GetCollisionCnt()-- <= 0)
+			if (m_pParticleParam->GetCollisionCnt() <= 0)
 			{
 				//メモリ開放
 				delete m_pCollision;
@@ -396,6 +400,55 @@ void CParticle::CreateFromText(D3DXVECTOR3 pos, D3DXVECTOR3 rot, CParticleParam:
 	}
 }
 //------------------------------------------------------------------------------
+//コリジョンのサイズ計算
+//------------------------------------------------------------------------------
+void CParticle::CalcCollisionSize(D3DXVECTOR3 size)
+{
+	D3DXMATRIX RotationMatrix;
+
+	//マトリックス計算
+	CHossoLibrary::CalcMatrix(&RotationMatrix, m_posOrigin, m_rotOrigin);
+
+	//頂点座標
+	D3DXVECTOR3 VtxPos[4] = {};
+
+	//頂点座標算出
+	D3DXVec3TransformCoord(&VtxPos[0], &D3DXVECTOR3(-size.x, +size.y * 2.0f, 0.0f), &RotationMatrix);
+	D3DXVec3TransformCoord(&VtxPos[1], &D3DXVECTOR3(+size.x, +size.y * 2.0f, 0.0f), &RotationMatrix);
+	D3DXVec3TransformCoord(&VtxPos[2], &D3DXVECTOR3(-size.x, 0.0f, 0.0f), &RotationMatrix);
+	D3DXVec3TransformCoord(&VtxPos[3], &D3DXVECTOR3(+size.x, 0.0f, 0.0f), &RotationMatrix);
+
+	//終点座標計算
+	D3DXVec3TransformCoord(&m_posEndPoint, &D3DXVECTOR3(0.0f, +size.y * 2.0f, 0.0f), &RotationMatrix);
+
+	//当たり判定用のローカル座標計算
+	D3DXVec3TransformCoord(&m_CollisionOrigin, &D3DXVECTOR3(0.0f, m_pParticleParam->GetCollisionSize().y, 0.0f), &RotationMatrix);
+
+	//計算用の変数　当たり判定のサイズ
+	D3DXVECTOR3 Max = D3DXVECTOR3(-1000.0f, -1000.0f, -0.0f);
+
+	//4頂点分
+	for (int nCnt = 0; nCnt < 4; nCnt++)
+	{
+		//頂点情報を取得
+		D3DXVECTOR3 vtx = VtxPos[nCnt];
+		//最大の頂点座標を比較して出す
+		if (Max.x < vtx.x)
+		{
+			Max.x = vtx.x;
+		}
+		if (Max.y < vtx.y)
+		{
+			Max.y = vtx.y;
+		}
+	}
+
+	//当たり判定の設定
+	m_pCollision->SetPos(&m_CollisionOrigin);
+	m_pCollision->SetSize(D3DXVECTOR3(fabsf(m_CollisionOrigin.x - Max.x), fabsf(m_CollisionOrigin.y - Max.y), 0.0f) * 2.0f);
+
+}
+//------------------------------------------------------------------------------
 //頂点バッファ確保
 //------------------------------------------------------------------------------
 HRESULT CParticle::MakeVertex()
@@ -600,7 +653,6 @@ void CParticle::SetAnimationParam()
 //------------------------------------------------------------------------------
 void CParticle::SetCollsionParam()
 {
-	D3DXMATRIX RotationMatrix;
 
 	//当たり判定生成
 	m_pCollision = CCollision::Create();
@@ -616,46 +668,9 @@ void CParticle::SetCollsionParam()
 		}
 		else
 		{
-			//マトリックス計算
-			CHossoLibrary::CalcMatrix(&RotationMatrix, m_posOrigin, m_rotOrigin);
-
-			//頂点座標
-			D3DXVECTOR3 VtxPos[4] = {};
-
-			//サイズ
-			D3DXVECTOR3 size = m_pParticleParam->GetCollisionSize();
-
-			//頂点座標算出
-			D3DXVec3TransformCoord(&VtxPos[0], &D3DXVECTOR3(-size.x, +size.y * 2.0f, 0.0f), &RotationMatrix);
-			D3DXVec3TransformCoord(&VtxPos[1], &D3DXVECTOR3(+size.x, +size.y * 2.0f, 0.0f), &RotationMatrix);
-			D3DXVec3TransformCoord(&VtxPos[2], &D3DXVECTOR3(-size.x, 0.0f, 0.0f), &RotationMatrix);
-			D3DXVec3TransformCoord(&VtxPos[3], &D3DXVECTOR3(+size.x, 0.0f, 0.0f), &RotationMatrix);
-
-			//当たり判定用のローカル座標計算
-			D3DXVec3TransformCoord(&m_CollisionOrigin, &D3DXVECTOR3(0.0f, m_pParticleParam->GetCollisionSize().y, 0.0f), &RotationMatrix);
-
-			//計算用の変数　当たり判定のサイズ
-			D3DXVECTOR3 Max = D3DXVECTOR3(-1000.0f, -1000.0f, -0.0f);
-
-			//4頂点分
-			for (int nCnt = 0; nCnt < 4; nCnt++)
-			{
-				//頂点情報を取得
-				D3DXVECTOR3 vtx = VtxPos[nCnt];
-				//最大の頂点座標を比較して出す
-				if (Max.x < vtx.x)
-				{
-					Max.x = vtx.x;
-				}
-				if (Max.y < vtx.y)
-				{
-					Max.y = vtx.y;
-				}
-			}
-
-			//当たり判定の設定
-			m_pCollision->SetPos(&m_CollisionOrigin);
-			m_pCollision->SetSize(D3DXVECTOR3(fabsf(m_CollisionOrigin.x - Max.x), fabsf(m_CollisionOrigin.y - Max.y), 0.0f) * 2.0f);
+			//コリジョンの大きさを基に当たり判定の設定
+			//回転した時にも対応するように
+			CalcCollisionSize(m_pParticleParam->GetCollisionSize());
 		}
 
 		//デバッグの線表示
@@ -669,9 +684,53 @@ void CParticle::SetCollsionParam()
 //------------------------------------------------------------------------------
 void CParticle::Collision()
 {
+
 //nullcheck
 	if (m_pCollision)
 	{
+		//レーザーの場合
+		if (m_pParticleParam->GetType() == CParticleParam::EFFECT_LAZER)
+		{
+			//コリジョンの長さが変わったかどうかのフラグ
+			bool bChangeLength = false;
+
+			//レイによる判定
+			//床との判定
+			if (m_pCollision->RayCollisionGetLength(m_posOrigin, m_posEndPoint, m_pParticleParam->GetSize().y))
+			{
+				//サイズを合わせる
+				m_pParticleParam->GetCollisionSize().y = m_pParticleParam->GetSize().y;
+
+				//当たり判定のサイズ計算
+				CalcCollisionSize(m_pParticleParam->GetSize());
+
+				//フラグをtrueにする
+				bChangeLength = true;
+			}
+
+
+			//盾かオブジェクトまでの距離を求める
+			if (m_pCollision->LazerCollisionGetLength(m_posOrigin, m_pParticleParam->GetSize().y))
+			{
+				//サイズを合わせる
+				m_pParticleParam->GetCollisionSize().y = m_pParticleParam->GetSize().y;
+
+				//当たり判定のサイズ計算
+				CalcCollisionSize(m_pParticleParam->GetSize());
+
+				//フラグをtrueにする
+				bChangeLength = true;
+			}
+
+			//フラグがtrueの時
+			if (bChangeLength)
+			{
+				//終点にエフェクト発生
+				CParticle::CreateFromText(m_posEndPoint, ZeroVector3, CParticleParam::EFFECT_LAZERGRASE);
+			}
+		}
+
+
 		// ゲームオブジェクト( タグ )の設定
 		m_pCollision->SetGameObject(this);
 

@@ -7,7 +7,7 @@
 #include "shield.h"
 #include "WeakEnemy.h"
 #include "collision.h"
-
+#include "particle.h"
 // ===================================================================
 // 静的メンバ変数の初期化
 // ===================================================================
@@ -43,10 +43,14 @@ HRESULT CShield::Init()
 	m_bBreak = false;
 
 	CModel::Init();
+
+	//タグ設定
+	CGameObject::SetTag(TAG::SHIELD);
+
 	// 変数初期化
 	m_nLife = SHIELD_LIFE;				// 体力
 	// 初期化
-	SetPosition(D3DXVECTOR3(0.0f,-20.0f,0.0f));
+	SetPosition(SHIELD_OFFSET);
 	// 当たり判定生成
 	GetCollision()->SetPos(&GetPosition());
 	GetCollision()->SetSize2D(SHIELD_SIZE);
@@ -74,12 +78,14 @@ void CShield::Update(void)
 	// 更新
 	CModel::Update();
 
-
+	//カウントダウン
 	if (m_nCntState-- <= 0)
 	{
+		//色を元に戻す
 		SetColorChangeFlag(false);
 	}
 
+	//盾破損時
 	if (m_bBreak)
 	{
 		//消えるカウントダウン
@@ -115,14 +121,42 @@ void CShield::Update(void)
 // ===================================================================
 void CShield::Draw(void)
 {
+	//破壊時
 	if (m_bBreak)
 	{
+		//盾の設定
 		SetPosition(m_ShieldPos);
+
+		//描画
 		CModel::Draw();
 	}
 	else
 	{
+		//手のマトリックスを基に描画
 		CModel::Draw(*m_HasHandMtx);
+	}
+}
+//====================================================================
+//デバッグ情報表記
+//====================================================================
+void CShield::DebugInfo()
+{
+	char aTreeName[MAX_TEXT] = {};
+	sprintf(aTreeName, "ShieldInfo [%d]", CScene::GetID());
+
+	if (ImGui::TreeNode(aTreeName))
+	{
+		ImGui::Text("m_ShieldPos [%.2f %.2f %.2f]", m_ShieldPos.x, m_ShieldPos.y, m_ShieldPos.z);
+		ImGui::Text("m_BreakShieldMoveValue [%.2f %.2f %.2f]", m_BreakShieldMoveValue.x, m_BreakShieldMoveValue.y, m_BreakShieldMoveValue.z);
+		ImGui::Text("m_BreakShieldRotValue [%.2f %.2f %.2f]", m_BreakShieldRotValue.x, m_BreakShieldRotValue.y, m_BreakShieldRotValue.z);
+
+		ImGui::Text("m_nLife [%d]", m_nLife); ImGui::SameLine();
+		ImGui::Text("m_nCntState [%d]", m_nCntState);
+
+		ImGui::Text("m_bBreak [%d]", m_bBreak); ImGui::SameLine();
+		ImGui::Text("m_nDeleteCnt [%d]", m_nDeleteCnt);
+
+		ImGui::TreePop();
 	}
 }
 //====================================================================
@@ -151,7 +185,6 @@ void CShield::AddDamage(int nDamage)
 	SetColorChangeFlag(true);
 	m_nCntState = DAMAGE_FLASH_COUNT;
 
-
 	//ライフがなくなった時
 	if (m_nLife <= 0)
 	{
@@ -164,9 +197,9 @@ void CShield::AddDamage(int nDamage)
 //====================================================================
 void CShield::AwayShield()
 {
+	DeleteCollision();
 	m_bBreak = true;
 	m_nDeleteCnt = SHIELD_DELETE_COUNT;
-	DeleteCollision();
 	SetRot(D3DXVECTOR3(D3DX_PI * 0.5f, D3DX_PI * 0.5f, 0.0f));
 	m_BreakShieldMoveValue = (BREAK_SHIELD_DEFAULT);
 }

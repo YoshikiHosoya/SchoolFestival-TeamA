@@ -20,6 +20,8 @@
 #include <iostream>
 #include <algorithm>
 #include "ModelSet.h"
+#include "particle.h"
+
 // =====================================================================================================================================================================
 //マクロ定義
 // =====================================================================================================================================================================
@@ -176,8 +178,13 @@ void CBoss_One::Update(void)
 	SetGunOffsetPos(D3DXVECTOR3(GetModelSet()->GetCharacterModelList()[21]->GetPosition()));
 	// ガンの座標の更新
 	SetGunPos();
-	// ボスの行動管理
-	Behavior();
+
+	if (CCharacter::GetCharacterState() != CHARACTER_STATE_DEATH)
+	{
+		// ボスの行動管理
+		Behavior();
+	}
+
 	// 回転の計算
 	CalcRotationBalkan(m_fRotTarget, GetModelSet()->GetCharacterModelList()[20]->GetRot().x);
 	// 回転量の更新
@@ -214,12 +221,7 @@ void CBoss_One::Draw(void)
 // =====================================================================================================================================================================
 void CBoss_One::DebugInfo(void)
 {
-	// デバッグ用距離の計算
-	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer(TAG::PLAYER_1);
-	float fDist = this->GetPosition().x - pPlayer->GetPosition().x;
 
-
-	CCharacter::DebugInfo();
 }
 // =====================================================================================================================================================================
 //
@@ -431,10 +433,32 @@ void CBoss_One::StateChangeReaction()
 
 		break;
 	case CHARACTER_STATE_DEATH:
-		SetStateCount(60);
+		SetStateCount(240);
 		break;
 	}
 }
+// =====================================================================================================================================================================
+//
+// ステート
+//
+// =====================================================================================================================================================================
+void CBoss_One::State()
+{
+	CCharacter::State();
+
+	//ステータスの処理
+	switch (CCharacter::GetCharacterState())
+	{
+	case CHARACTER_STATE_DEATH:
+		//爆発
+		if (GetCharacterStateCnt() % 3 == 0)
+		{
+			CParticle::CreateFromText(GetPosition() + CHossoLibrary::RandomVector3(250.0f), ZeroVector3, CParticleParam::EFFECT_NO_COLLISION_EXPLOSION);
+		}
+		break;
+	}
+}
+
 
 // =====================================================================================================================================================================
 //

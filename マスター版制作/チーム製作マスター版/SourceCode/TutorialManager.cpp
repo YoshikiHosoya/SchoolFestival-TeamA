@@ -35,7 +35,7 @@
 #define KEY_A (key->GetKeyboardPress(DIK_A))					// 移動左
 #define KEY_D (key->GetKeyboardPress(DIK_D))					// 移動右
 #define KEY_O (key->GetKeyboardPress(DIK_O))					// グレネード
-#define KEY_P (key->GetKeyboardPress(DIK_P))					// 弾
+#define KEY_U (key->GetKeyboardPress(DIK_U))					// 弾
 #define KEY_SPACE (key->GetKeyboardTrigger(DIK_SPACE))			// ジャンプ
 
 #define WAITTIME (180)											// ステート間の待ち時間
@@ -47,12 +47,13 @@
 // =====================================================================================================================================================================
 CTutorialManager::CTutorialManager()
 {
-	m_TutorialState = TUTORIAL_STATE_NONE;
-	m_OldState = TUTORIAL_STATE_NONE;
-	m_pTutorialUI = nullptr;
-	m_nWaitTime = 0;
-	m_bOneFlag = false;
-	m_bPushButton = false;
+	m_TutorialState		= TUTORIAL_STATE_NONE;
+	m_OldState			= TUTORIAL_STATE_NONE;
+	m_pTutorialUI		= nullptr;
+	m_nWaitTime			= 0;
+	m_bOneFlag			= false;
+	m_bPushButton		= false;
+	m_bAdd2PFlag		= false;
 }
 
 // =====================================================================================================================================================================
@@ -107,6 +108,15 @@ void CTutorialManager::Update(void)
 		// ゲームモードへステート遷移
 		CManager::GetRenderer()->GetFade()->SetFade(CFADE::FADETYPE::FADETYPE_MODE, CManager::MODE_GAME);
 	}
+
+	// デバッグ用
+#ifdef _DEBUG
+	// 試験的2P配置
+	if (key->GetKeyboardTrigger(DIK_RSHIFT))
+	{
+		m_bAdd2PFlag = true;
+	}
+#endif // DEBUG
 
 	// 各ステートごとの関数を管理する
 	StateManager();
@@ -324,7 +334,7 @@ void CTutorialManager::JudgPushButton()
 		// padAまたはkeyPで弾発射
 	case CTutorialManager::TUTORIAL_STATE_3:
 		if (PAD_A ||
-			KEY_P)
+			KEY_U)
 		{
 			m_bPushButton = true;
 		}

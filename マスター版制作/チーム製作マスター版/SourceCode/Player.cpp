@@ -37,12 +37,12 @@
 // =====================================================================================================================================================================
 PLAYER_DATA		CPlayer::m_PlayerData	 = {};
 int				CPlayer::m_nLife[2] = {};
-int				CPlayer::m_nRespawnCnt	 = 0;
 float			CPlayer::m_fRunSpeed	 = 0.0f;
 float			CPlayer::m_fCrouchSpeed	 = 0.0f;
 float			CPlayer::m_fJump		 = 0.0f;
 float			CPlayer::m_fRideJump	 = 0.0f;
 D3DXVECTOR3		CPlayer::m_pos[2] = {};
+bool			CPlayer::m_bTwoPPlay = false;
 
 // =====================================================================================================================================================================
 // テキストファイル名
@@ -62,7 +62,7 @@ char *CPlayer::m_PlayerFileName =
 #define SHOT_BULLET_POS_Y		(-15.0f)		// 弾の発射位置Y
 #define SHOT_BULLET_POS_Z		(-5.0f)			// 弾の発射位置Z
 #define KNIFE_COLLISOIN_SIZE	(D3DXVECTOR3(80.0f,80.0f,0.0f))
-#define RESPAWN_INTERVAL		(240)
+#define RESPAWN_INTERVAL		(120)
 #define DEFAULT_STOCK			(3)				// 初期残機
 
 // =====================================================================================================================================================================
@@ -79,6 +79,7 @@ CPlayer::CPlayer(OBJ_TYPE type) :CCharacter(type)
 	m_pPlayerUI		= nullptr;
 	m_pVehicle		= nullptr;
 	m_pPad			= nullptr;
+	m_nRespawnCnt = 0;
 }
 
 // =====================================================================================================================================================================
@@ -563,7 +564,7 @@ void CPlayer::AttackUpdate(void)
 	if (m_pPad || key)
 	{
 		// 銃を撃つ or 近接攻撃
-		if (key->GetKeyboardTrigger(DIK_P) || m_pPad->GetTrigger(m_pPad->JOYPADKEY_X, 1))
+		if (key->GetKeyboardTrigger(DIK_U) || m_pPad->GetTrigger(m_pPad->JOYPADKEY_X, 1))
 		{
 			// 銃を撃てる状態だった時
 			if (m_bAttack == false && m_bKnifeAttack == false)
@@ -660,7 +661,20 @@ bool CPlayer::DefaultMotion(void)
 void CPlayer::MapChangePlayerRespawn()
 {
 	SetState(CCharacter::CHARACTER_STATE_INVINCIBLE);
-	SetPosition(m_pos[0]);
+
+	if (GetTwoPPlayFlag())
+	{
+		for (int nCnt = 0; nCnt < PLAYER_NUM_MAX; nCnt++)
+		{
+			// プレイヤー2の配置
+			SetPosition(GetPosition() + D3DXVECTOR3(100.0f, 0.0f, 0.0f));
+		}
+	}
+	else
+	{
+		SetPosition(m_pos[0]);
+	}
+
 	m_bRideVehicle = false;
 	GetModelSet()->SetMotion(CModelSet::PLAYER_MOTION_NORMAL);
 }
@@ -670,7 +684,8 @@ void CPlayer::MapChangePlayerRespawn()
 //====================================================================
 void CPlayer::ResetPlayer()
 {
-	SetPosition(m_pos[0]);
+	D3DXVECTOR3 pos = D3DXVECTOR3(m_pos[0].x - 200.0f, m_pos[0].y, m_pos[0].z);
+	SetPosition(pos);
 	SetLife(m_nLife[0]);
 	SetState(CCharacter::CHARACTER_STATE_INVINCIBLE);
 	GetModelSet()->SetMotion(CModelSet::PLAYER_MOTION_NORMAL);
@@ -1032,8 +1047,6 @@ void CPlayer::SetPlayerData()
 	m_nLife[0] = m_PlayerData.nLife;
 	// 初期座標の情報を取得
 	m_pos[0] = m_PlayerData.pos;
-	// 復活時間の情報を取得
-	m_nRespawnCnt = m_PlayerData.nRespawnCnt;
 	// 移動速度の情報を取得
 	m_fRunSpeed = m_PlayerData.fRunSpeed;
 	// しゃがみ時の移動速度の情報を取得

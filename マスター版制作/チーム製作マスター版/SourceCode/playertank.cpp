@@ -232,7 +232,7 @@ void CPlayertank::Shot(CKeyboard *key, TAG Tag)
 	m_pGun->SetShotRot(D3DXVECTOR3(0.0f, 0.0f, (GetModelSet()->GetCharacterModelList()[3]->GetRot().x)));
 
 	// マシンガンを撃つ
-	if (key->GetKeyboardTrigger(DIK_P) || pXInput->GetTrigger(CXInputPad::JOYPADKEY_X, 1))
+	if (key->GetKeyboardTrigger(DIK_U) || pXInput->GetTrigger(CXInputPad::JOYPADKEY_X, 1))
 	{
 		// ガンのモデルの発射口から弾を生成
 		m_pGun->Shot();
@@ -274,23 +274,24 @@ void CPlayertank::TankSE()
 	//	{
 	//		m_nCntEngineSE++;
 
-	//		//一定周期
-	//		if (m_nCntEngineSE % 120 == 1)
-	//		{
-	//			//エンジン音再生
-	//			CManager::GetSound()->Play(CSound::LABEL_SE_TANK_ENGINE);
-	//		}
-	//		//横移動しててジャンプしてない時
-	//		if (fabsf(GetMove().x) >= 1.0f && !GetJump() && m_nCntEngineSE % 10 == 0)
-	//		{
-	//			//音再生
-	//			CManager::GetSound()->Play(CSound::LABEL_SE_TANK_CATERPILLAR);
-	//		}
-	//	}
-	//	else
-	//	{
-	//		m_nCntEngineSE = 0;
-	//	}
+			//一定周期
+			//if (m_nCntEngineSE % 10 == 1)
+			//{
+				//エンジン音再生
+				//CManager::GetSound()->Play(CSound::LABEL_SE_TANK_ENGINE);
+
+				//横移動しててジャンプしてない時
+				//if (fabsf(GetMove().x) >= 1.0f && !GetJump())
+				//{
+					//音再生
+					//CManager::GetSound()->Play(CSound::LABEL_SE_TANK_CATERPILLAR);
+				//}
+			//}
+		//}
+		//else
+		//{
+			//m_nCntEngineSE = 0;
+		//}
 	//}
 }
 
