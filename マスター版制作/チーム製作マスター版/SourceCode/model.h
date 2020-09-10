@@ -41,21 +41,35 @@ public:
 		MODEL_PLAYER_LFOOT,				// プレイヤーの左足
 		MODEL_PLAYER_RFOOT,				// プレイヤーの右足
 		//===敵のモデル===
-		MODEL_ENEMY_WAIST=100,			// 腰
-		MODEL_ENEMY_HEAD,				// 頭
-		MODEL_ENEMY_BODY,				// 体
-		MODEL_ENEMY_L_SHOLDER,			// 左肩
-		MODEL_ENEMY_R_SHOLDER,			// 右肩
-		MODEL_ENEMY_LARM,				// 左腕
-		MODEL_ENEMY_RARM,				// 右腕
-		MODEL_ENEMY_LHAND,				// 左手
-		MODEL_ENEMY_RHAND,				// 右手
-		MODEL_ENEMY_LKNEE,				// 左膝
-		MODEL_ENEMY_RKNEE,				// 右膝
-		MODEL_ENEMY_LLEG,				// 左脚
-		MODEL_ENEMY_RLEG,				// 右脚
-		MODEL_ENEMY_LFOOT,				// 左足
-		MODEL_ENEMY_RFOOT,				// 右足
+		//人型
+		MODEL_ENEMY_HUMAN_WAIST=100,			// 腰
+		MODEL_ENEMY_HUMAN_HEAD,					// 頭
+		MODEL_ENEMY_HUMAN_BODY,					// 体
+		MODEL_ENEMY_HUMAN_L_SHOLDER,			// 左肩
+		MODEL_ENEMY_HUMAN_R_SHOLDER,			// 右肩
+		MODEL_ENEMY_HUMAN_LARM,					// 左腕
+		MODEL_ENEMY_HUMAN_RARM,					// 右腕
+		MODEL_ENEMY_HUMAN_LHAND,				// 左手
+		MODEL_ENEMY_HUMAN_RHAND,				// 右手
+		MODEL_ENEMY_HUMAN_LKNEE,				// 左膝
+		MODEL_ENEMY_HUMAN_RKNEE,				// 右膝
+		MODEL_ENEMY_HUMAN_LLEG,					// 左脚
+		MODEL_ENEMY_HUMAN_RLEG,					// 右脚
+		MODEL_ENEMY_HUMAN_LFOOT,				// 左足
+		MODEL_ENEMY_HUMAN_RFOOT,				// 右足
+
+		//ヘリ
+		MODEL_ENEMY_HELICOPTER_BODY,			// 胴体
+		MODEL_ENEMY_HELICOPTER_PROPELLER,		// プロペラ
+
+		//MeltyHoney(???)
+		MODEL_ENEMY_MELTYHONEY_BODY,			// 胴体
+		MODEL_ENEMY_MELTYHONEY_WHEEL,			// ホイール
+
+		//Zycocca(???)
+		MODEL_ENEMY_ZYCOCCA_BODY,				// 胴体
+		MODEL_ENEMY_ZYCOCCA_WHEEL,				// ホイール
+
 		//===マップのモデル===
 		MODEL_MAP_TUTORIAL=200,			// チュートリアルマップ
 		MODEL_MAP_STAGE1_1,				// ステージ1-1
@@ -225,21 +239,21 @@ public:
 	D3DXVECTOR3 *GetPositionPtr()					{ return &m_pos; };									// 位置の取得　ポインタで
 	D3DXVECTOR3 &GetRot(void)						{ return m_rot; };									// 回転の取得
 	D3DXVECTOR3 &GetSize(void)						{ return m_size; };									// サイズの取得
-	D3DXVECTOR3 GetvtxMax(int nCnt)					{ return m_vModel[nCnt]->vtxMax;};			// 頂点情報のMAX取得
-	D3DXVECTOR3 GetvtxMin(int nCnt)					{ return m_vModel[nCnt]->vtxMin; };		// 頂点情報のMIN取得
+	D3DXVECTOR3 GetvtxMax(int nCnt)					{ return m_vModel[nCnt]->vtxMax;};					// 頂点情報のMAX取得
+	D3DXVECTOR3 GetvtxMin(int nCnt)					{ return m_vModel[nCnt]->vtxMin; };					// 頂点情報のMIN取得
 	int GetType()									{ return m_type; };									// モデルタイプの取得
 	int &GetModelCount()							{ return m_modelCount; };							// モデルカウントの取得
 	int &GetParentIdx()								{ return m_nParentIdx; };							// 親番号取得
 	D3DXMATRIX *GetMatrix(void)						{ return &m_mtxWorld; };							// マトリックスの取得
-	LPD3DXMESH GetMesh(void);// メッシュ取得
+	LPD3DXMESH GetMesh(void);																			// メッシュ取得
 	CCollision *GetCollision()						{ return m_pCollision; };							// 当たり判定のポインタ取得
 	bool GetDieFlag()								{ return m_bDieFlag; };								// 死亡フラグの取得
 	bool GetColorChangeFlag()						{ return m_bColorChangeFlag; };						// 色変更フラグの取得
 	D3DXCOLOR	GetAddColor()						{ return m_AddColor; };								// 加算する色の取得
-	D3DXCOLOR	GetDisp()							{ return m_bDisp; };								// 描画するかどうか取得
+	bool		GetDisp()							{ return m_bDisp; };								// 描画するかどうか取得
 	void DeleteCollision();																				// 判定の消去
 	void SetModelID(CHARA_MODEL model);
-	int GetModelID(CHARA_MODEL model);
+	static int GetModelID(CHARA_MODEL model);
 
 private:
 	/* メンバ関数 */

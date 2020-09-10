@@ -12,127 +12,148 @@ std::vector<CModel::MODEL*> CModel::m_vModel = {};
 
 std::vector<CModel::MODEL_FILE_NAME> CModel::m_vModelFileName =
 {
-	{ "data/MODEL/character/Player/Waist.x",			MODEL_PLAYER_WAIST				},// プレイヤーの腰
-	{ "data/MODEL/character/Player/Body.x" ,			MODEL_PLAYER_BODY				},// プレイヤーの体
-	{ "data/MODEL/character/Player/Head.x" ,			MODEL_PLAYER_HEAD				},// プレイヤーの頭
-	{ "data/MODEL/character/Player/L_Sholder.x",		MODEL_PLAYER_L_SHOLDER			},// プレイヤーの左肩
-	{ "data/MODEL/character/Player/R_Sholder.x",		MODEL_PLAYER_R_SHOLDER			},// プレイヤーの右肩
-	{ "data/MODEL/character/Player/L_Arm.x" ,			MODEL_PLAYER_LARM				},// プレイヤーの左腕
-	{ "data/MODEL/character/Player/R_Arm.x" ,			MODEL_PLAYER_RARM				},// プレイヤーの右腕
-	{ "data/MODEL/character/Player/L_Hand.x",			MODEL_PLAYER_LHAND				},// プレイヤーの左手
-	{ "data/MODEL/character/Player/R_Hand.x",			MODEL_PLAYER_RHAND				},// プレイヤーの右手
-	{ "data/MODEL/character/Player/L_Knee.x",			MODEL_PLAYER_LKNEE				},// プレイヤーの左膝
-	{ "data/MODEL/character/Player/R_Knee.x",			MODEL_PLAYER_RKNEE				},// プレイヤーの右膝
-	{ "data/MODEL/character/Player/L_Foot.x",			MODEL_PLAYER_LLEG				},// プレイヤーの左脚
-	{ "data/MODEL/character/Player/R_Foot.x",			MODEL_PLAYER_RLEG				},// プレイヤーの右脚
-	{ "data/MODEL/character/Player/L_Leg.x",			MODEL_PLAYER_LFOOT				},// プレイヤーの左足
-	{ "data/MODEL/character/Player/R_Leg.x",			MODEL_PLAYER_RFOOT				},// プレイヤーの右足
-	
-	{ "data/MODEL/Enemy/Waist.x",						MODEL_ENEMY_WAIST },// 腰
-	{ "data/MODEL/Enemy/Body.x" ,						MODEL_ENEMY_HEAD },// 頭
-	{ "data/MODEL/Enemy/Head.x" ,						MODEL_ENEMY_BODY },// 体
-	{ "data/MODEL/Enemy/L_Sholder.x" ,					MODEL_ENEMY_L_SHOLDER },// 左肩
-	{ "data/MODEL/Enemy/R_Sholder.x" ,					MODEL_ENEMY_R_SHOLDER },// 右肩
-	{ "data/MODEL/Enemy/L_Arm.x" ,						MODEL_ENEMY_LARM },// 左腕
-	{ "data/MODEL/Enemy/R_Arm.x" ,						MODEL_ENEMY_RARM },// 右腕
-	{ "data/MODEL/Enemy/L_Hand.x" ,						MODEL_ENEMY_LHAND },// 左手
-	{ "data/MODEL/Enemy/R_Hand.x" ,						MODEL_ENEMY_RHAND },// 右手
-	{ "data/MODEL/Enemy/L_Knee.x" ,						MODEL_ENEMY_LKNEE },// 左膝
-	{ "data/MODEL/Enemy/R_Knee.x" ,						MODEL_ENEMY_RKNEE },// 右膝
-	{ "data/MODEL/Enemy/L_Foot.x" ,						MODEL_ENEMY_LLEG },// 左脚
-	{ "data/MODEL/Enemy/R_Foot.x" ,						MODEL_ENEMY_RLEG },// 右脚
-	{ "data/MODEL/Enemy/L_Leg.x" ,						MODEL_ENEMY_LFOOT },// 左足
-	{ "data/MODEL/Enemy/R_Leg.x" ,						MODEL_ENEMY_RFOOT },// 右足
+	//プレイヤー
+	{ "data/MODEL/character/Player/Waist.x",				MODEL_PLAYER_WAIST				},		// プレイヤーの腰
+	{ "data/MODEL/character/Player/Body.x" ,				MODEL_PLAYER_BODY				},		// プレイヤーの体
+	{ "data/MODEL/character/Player/Head.x" ,				MODEL_PLAYER_HEAD				},		// プレイヤーの頭
+	{ "data/MODEL/character/Player/L_Sholder.x",			MODEL_PLAYER_L_SHOLDER			},		// プレイヤーの左肩
+	{ "data/MODEL/character/Player/R_Sholder.x",			MODEL_PLAYER_R_SHOLDER			},		// プレイヤーの右肩
+	{ "data/MODEL/character/Player/L_Arm.x" ,				MODEL_PLAYER_LARM				},		// プレイヤーの左腕
+	{ "data/MODEL/character/Player/R_Arm.x" ,				MODEL_PLAYER_RARM				},		// プレイヤーの右腕
+	{ "data/MODEL/character/Player/L_Hand.x",				MODEL_PLAYER_LHAND				},		// プレイヤーの左手
+	{ "data/MODEL/character/Player/R_Hand.x",				MODEL_PLAYER_RHAND				},		// プレイヤーの右手
+	{ "data/MODEL/character/Player/L_Knee.x",				MODEL_PLAYER_LKNEE				},		// プレイヤーの左膝
+	{ "data/MODEL/character/Player/R_Knee.x",				MODEL_PLAYER_RKNEE				},		// プレイヤーの右膝
+	{ "data/MODEL/character/Player/L_Foot.x",				MODEL_PLAYER_LLEG				},		// プレイヤーの左脚
+	{ "data/MODEL/character/Player/R_Foot.x",				MODEL_PLAYER_RLEG				},		// プレイヤーの右脚
+	{ "data/MODEL/character/Player/L_Leg.x",				MODEL_PLAYER_LFOOT				},		// プレイヤーの左足
+	{ "data/MODEL/character/Player/R_Leg.x",				MODEL_PLAYER_RFOOT				},		// プレイヤーの右足
 
-	{ "data/MODEL/map/Map1_Boss stage.x" ,				MODEL_MAP_TUTORIAL },// チュートリアルマップ
-	{ "data/MODEL/map/Stage1-1.x" ,						MODEL_MAP_STAGE1_1 },// ステージ1-1
-	{ "data/MODEL/map/Stage1-2.x" ,						MODEL_MAP_STAGE1_2 },// ステージ1-2
-	{ "data/MODEL/map/Stage1-3.x" ,						MODEL_MAP_STAGE1_3 },// ステージ1-3
-	{ "data/MODEL/map/Map1_Boss stage.x" ,				MODEL_MAP_STAGE1_BOSS },// ボスステージ1
-	{ "data/MODEL/map/Stage2-1.x" ,						MODEL_MAP_STAGE2_1 },// ステージ2-1
-	{ "data/MODEL/map/Stage2-2.x" ,						MODEL_MAP_STAGE2_2 },// ステージ2-2
-	{ "data/MODEL/map/Stage2-3.x" ,						MODEL_MAP_STAGE2_3 },// ステージ2-3
-	{ "data/MODEL/map/Map1_Boss stage.x" ,				MODEL_MAP_STAGE2_BOSS },// ボスステージ2
+	//敵
+	{ "data/MODEL/Enemy/EnemyHuman/Waist.x",				MODEL_ENEMY_HUMAN_WAIST },				// 腰
+	{ "data/MODEL/Enemy/EnemyHuman/Body.x" ,				MODEL_ENEMY_HUMAN_HEAD },				// 頭
+	{ "data/MODEL/Enemy/EnemyHuman/Head.x" ,				MODEL_ENEMY_HUMAN_BODY },				// 体
+	{ "data/MODEL/Enemy/EnemyHuman/L_Sholder.x" ,			MODEL_ENEMY_HUMAN_L_SHOLDER },			// 左肩
+	{ "data/MODEL/Enemy/EnemyHuman/R_Sholder.x" ,			MODEL_ENEMY_HUMAN_R_SHOLDER },			// 右肩
+	{ "data/MODEL/Enemy/EnemyHuman/L_Arm.x" ,				MODEL_ENEMY_HUMAN_LARM },				// 左腕
+	{ "data/MODEL/Enemy/EnemyHuman/R_Arm.x" ,				MODEL_ENEMY_HUMAN_RARM },				// 右腕
+	{ "data/MODEL/Enemy/EnemyHuman/L_Hand.x" ,				MODEL_ENEMY_HUMAN_LHAND },				// 左手
+	{ "data/MODEL/Enemy/EnemyHuman/R_Hand.x" ,				MODEL_ENEMY_HUMAN_RHAND },				// 右手
+	{ "data/MODEL/Enemy/EnemyHuman/L_Knee.x" ,				MODEL_ENEMY_HUMAN_LKNEE },				// 左膝
+	{ "data/MODEL/Enemy/EnemyHuman/R_Knee.x" ,				MODEL_ENEMY_HUMAN_RKNEE },				// 右膝
+	{ "data/MODEL/Enemy/EnemyHuman/L_Foot.x" ,				MODEL_ENEMY_HUMAN_LLEG },				// 左脚
+	{ "data/MODEL/Enemy/EnemyHuman/R_Foot.x" ,				MODEL_ENEMY_HUMAN_RLEG },				// 右脚
+	{ "data/MODEL/Enemy/EnemyHuman/L_Leg.x" ,				MODEL_ENEMY_HUMAN_LFOOT },				// 左足
+	{ "data/MODEL/Enemy/EnemyHuman/R_Leg.x" ,				MODEL_ENEMY_HUMAN_RFOOT },				// 右足
+	//
+	{ "data/MODEL/Enemy/EnemyHelicopter/Body.x" ,			MODEL_ENEMY_HELICOPTER_BODY },			// 右足
+	{ "data/MODEL/Enemy/EnemyHelicopter/Propeller.x" ,		MODEL_ENEMY_HELICOPTER_PROPELLER },		// 右足
+	//
+	{ "data/MODEL/Enemy/MeltyHoney/Body.x" ,				MODEL_ENEMY_MELTYHONEY_BODY },			// 右足
+	{ "data/MODEL/Enemy/MeltyHoney/wheel.x" ,				MODEL_ENEMY_MELTYHONEY_WHEEL },			// 右足
+	//
+	{ "data/MODEL/Enemy/Zycocca/Body.x" ,					MODEL_ENEMY_ZYCOCCA_BODY },				// 右足
+	{ "data/MODEL/Enemy/Zycocca/wheel.x" ,					MODEL_ENEMY_ZYCOCCA_WHEEL },			// 右足
 
-	{ "data/MODEL/Gun/Gun.x" ,							MODEL_GUN_HANDGUN },// ハンドガン
-	{ "data/MODEL/Gun/Assaultrifle.x" ,					MODEL_GUN_HEAVYMACHINEGUN },// ヘビーマシンガン
-	{ "data/MODEL/Gun/Shootgun.x" ,						MODEL_GUN_SHOTGUN },// ショットガン
-	{ "data/MODEL/Gun/Chargerifle.x" ,					MODEL_GUN_LASERGUN },// レーザーガン
-	{ "data/MODEL/Gun/Rocketlauncher.x" ,				MODEL_GUN_ROCKETLAUNCHER },// ロケットランチャー
-	{ "data/MODEL/Gun/Flameshoot.x" ,					MODEL_GUN_FLAMESHOT },// フレイムショット
-	{ "data/MODEL/Gun/TankGun.x" ,						MODEL_GUN_TANKGUN },// 戦車の銃
-	{ "data/MODEL/Gun/PlaneGun.x" ,						MODEL_GUN_PLANEGUN },// 戦闘機の銃
-	{ "data/MODEL/Gun/HeliGun.x" ,						MODEL_GUN_HELIGUN },// ヘリの銃
-	{ "data/MODEL/Gun/Balkan.x" ,						MODEL_GUN_BALKAN },// バルカン
-	{ "data/MODEL/Gun/Flamethrower.x" ,					MODEL_GUN_FLAMETHROWER },// 火炎放射器
-	{ "data/MODEL/Gun/Incendiary.x" ,					MODEL_GUN_INCENDIARY },// 焼夷弾
-	{ "data/MODEL/Gun/Knife.x" ,						MODEL_KNIFE },// ナイフ
+	//マップ
+	{ "data/MODEL/map/Map1_Boss stage.x" ,					MODEL_MAP_TUTORIAL },					// チュートリアルマップ
+	{ "data/MODEL/map/Stage1-1.x" ,							MODEL_MAP_STAGE1_1 },					// ステージ1-1
+	{ "data/MODEL/map/Stage1-2.x" ,							MODEL_MAP_STAGE1_2 },					// ステージ1-2
+	{ "data/MODEL/map/Stage1-3.x" ,							MODEL_MAP_STAGE1_3 },					// ステージ1-3
+	{ "data/MODEL/map/Map1_Boss stage.x" ,					MODEL_MAP_STAGE1_BOSS },				// ボスステージ1
+	{ "data/MODEL/map/Stage2-1.x" ,							MODEL_MAP_STAGE2_1 },					// ステージ2-1
+	{ "data/MODEL/map/Stage2-2.x" ,							MODEL_MAP_STAGE2_2 },					// ステージ2-2
+	{ "data/MODEL/map/Stage2-3.x" ,							MODEL_MAP_STAGE2_3 },					// ステージ2-3
+	{ "data/MODEL/map/Map1_Boss stage.x" ,					MODEL_MAP_STAGE2_BOSS },				// ボスステージ2
 
-	{ "data/MODEL/Bullet/Sphere.x" ,					MODEL_BULLET_SPHERE, },// 丸
-	{ "data/MODEL/Bullet/Rockets.x" ,					MODEL_BULLET_ROCKETLAUNCHER, },// ロケットランチャー
-	{ "data/MODEL/Bullet/Grenade.x" ,					MODEL_BULLET_GRENADE, },// グレネード
-	{ "data/MODEL/Bullet/Tankmissile.x" ,				MODEL_BULLET_TANKGRENADE, },// 戦車のグレネード
+	//武器
+	{ "data/MODEL/Gun/Gun.x" ,								MODEL_GUN_HANDGUN },					// ハンドガン
+	{ "data/MODEL/Gun/Assaultrifle.x" ,						MODEL_GUN_HEAVYMACHINEGUN },			// ヘビーマシンガン
+	{ "data/MODEL/Gun/Shootgun.x" ,							MODEL_GUN_SHOTGUN },					// ショットガン
+	{ "data/MODEL/Gun/Chargerifle.x" ,						MODEL_GUN_LASERGUN },					// レーザーガン
+	{ "data/MODEL/Gun/Rocketlauncher.x" ,					MODEL_GUN_ROCKETLAUNCHER },				// ロケットランチャー
+	{ "data/MODEL/Gun/Flameshoot.x" ,						MODEL_GUN_FLAMESHOT },					// フレイムショット
+	{ "data/MODEL/Gun/TankGun.x" ,							MODEL_GUN_TANKGUN },					// 戦車の銃
+	{ "data/MODEL/Gun/PlaneGun.x" ,							MODEL_GUN_PLANEGUN },					// 戦闘機の銃
+	{ "data/MODEL/Gun/HeliGun.x" ,							MODEL_GUN_HELIGUN },					// ヘリの銃
+	{ "data/MODEL/Gun/Balkan.x" ,							MODEL_GUN_BALKAN },						// バルカン
+	{ "data/MODEL/Gun/Flamethrower.x" ,						MODEL_GUN_FLAMETHROWER },				// 火炎放射器
+	{ "data/MODEL/Gun/Incendiary.x" ,						MODEL_GUN_INCENDIARY },					// 焼夷弾
+	{ "data/MODEL/Gun/Knife.x" ,							MODEL_KNIFE },							// ナイフ
 
-	{ "data/MODEL/Object/Obstacle_Box.x" ,				OBSTACLE_TYPE_BOX },// 箱
-	{ "data/MODEL/Object/Obstacle_Barrel.x" ,			OBSTACLE_TYPE_BARREL },// 樽
-	{ "data/MODEL/Object/Obstacle_Tree.x" ,				OBSTACLE_TYPE_TREE },// 木
-	{ "data/MODEL/Object/Obstacle_Chest.x" ,			OBSTACLE_TYPE_CHEST },// 金庫
-	{ "data/MODEL/Object/Obstacle_Sandbags.x" ,			OBSTACLE_TYPE_SANDBAGS },// 土嚢
+	//弾
+	{ "data/MODEL/Bullet/Sphere.x" ,						MODEL_BULLET_SPHERE, },					// 丸
+	{ "data/MODEL/Bullet/Rockets.x" ,						MODEL_BULLET_ROCKETLAUNCHER, },			// ロケットランチャー
+	{ "data/MODEL/Bullet/Grenade.x" ,						MODEL_BULLET_GRENADE, },				// グレネード
+	{ "data/MODEL/Bullet/Tankmissile.x" ,					MODEL_BULLET_TANKGRENADE, },			// 戦車のグレネード
 
-	{ "data/MODEL/Prisoner/Waist.x",					MODEL_PRISONER_WAIST			},// 捕虜の腰
-	{ "data/MODEL/Prisoner/Body.x" ,					MODEL_PRISONER_BODY				},// 捕虜の体
-	{ "data/MODEL/Prisoner/Head.x" ,					MODEL_PRISONER_HEAD				},// 捕虜の頭
-	{ "data/MODEL/Prisoner/L_Sholder.x" ,				MODEL_PRISONER_L_SHOLDER		},// 捕虜の左肩
-	{ "data/MODEL/Prisoner/R_Sholder.x" ,				MODEL_PRISONER_R_SHOLDER		},// 捕虜の右肩
-	{ "data/MODEL/Prisoner/L_Arm.x" ,					MODEL_PRISONER_LARM				},// 捕虜の左腕
-	{ "data/MODEL/Prisoner/R_Arm.x" ,					MODEL_PRISONER_RARM				},// 捕虜の右腕
-	{ "data/MODEL/Prisoner/L_Hand.x" ,					MODEL_PRISONER_LHAND			},// 捕虜の左手
-	{ "data/MODEL/Prisoner/R_Hand.x" ,					MODEL_PRISONER_RHAND			},// 捕虜の右手
-	{ "data/MODEL/Prisoner/L_Knee.x" ,					MODEL_PRISONER_LKNEE			},// 捕虜の左膝
-	{ "data/MODEL/Prisoner/R_Knee.x" ,					MODEL_PRISONER_RKNEE			},// 捕虜の右膝
-	{ "data/MODEL/Prisoner/L_Foot.x" ,					MODEL_PRISONER_LLEG				},// 捕虜の左脚
-	{ "data/MODEL/Prisoner/R_Foot.x" ,					MODEL_PRISONER_RLEG				},// 捕虜の右脚
-	{ "data/MODEL/Prisoner/L_Leg.x" ,					MODEL_PRISONER_LFOOT			},// 捕虜の左足
-	{ "data/MODEL/Prisoner/R_Leg.x" ,					MODEL_PRISONER_RFOOT			},// 捕虜の右足
-																						
-	{ "data/MODEL/Tank/Tankbody.x" ,					MODEL_TANK_TANKBODY,			},// 戦車の体
-	{ "data/MODEL/Tank/Tank_frontwheel.x" ,				MODEL_TANK_TANK_FRONTWHEEL,		},// 戦車の前タイヤ
-	{ "data/MODEL/Tank/Tank_backwheel.x" ,				MODEL_TANK_TANK_BACKWHEEL,		},// 戦車の後タイヤ
-	{ "data/MODEL/Tank/Tankgun.x" ,						MODEL_TANK_TANKGUN,				},// 戦車の銃
+	//オブジェクト
+	{ "data/MODEL/Object/Obstacle_Box.x" ,					OBSTACLE_TYPE_BOX },					// 箱
+	{ "data/MODEL/Object/Obstacle_Barrel.x" ,				OBSTACLE_TYPE_BARREL },					// 樽
+	{ "data/MODEL/Object/Obstacle_Tree.x" ,					OBSTACLE_TYPE_TREE },					// 木
+	{ "data/MODEL/Object/Obstacle_Chest.x" ,				OBSTACLE_TYPE_CHEST },					// 金庫
+	{ "data/MODEL/Object/Obstacle_Sandbags.x" ,				OBSTACLE_TYPE_SANDBAGS },				// 土嚢
+
+	//捕虜
+	{ "data/MODEL/Prisoner/Waist.x",						MODEL_PRISONER_WAIST			},		// 捕虜の腰
+	{ "data/MODEL/Prisoner/Body.x" ,						MODEL_PRISONER_BODY				},		// 捕虜の体
+	{ "data/MODEL/Prisoner/Head.x" ,						MODEL_PRISONER_HEAD				},		// 捕虜の頭
+	{ "data/MODEL/Prisoner/L_Sholder.x" ,					MODEL_PRISONER_L_SHOLDER		},		// 捕虜の左肩
+	{ "data/MODEL/Prisoner/R_Sholder.x" ,					MODEL_PRISONER_R_SHOLDER		},		// 捕虜の右肩
+	{ "data/MODEL/Prisoner/L_Arm.x" ,						MODEL_PRISONER_LARM				},		// 捕虜の左腕
+	{ "data/MODEL/Prisoner/R_Arm.x" ,						MODEL_PRISONER_RARM				},		// 捕虜の右腕
+	{ "data/MODEL/Prisoner/L_Hand.x" ,						MODEL_PRISONER_LHAND			},		// 捕虜の左手
+	{ "data/MODEL/Prisoner/R_Hand.x" ,						MODEL_PRISONER_RHAND			},		// 捕虜の右手
+	{ "data/MODEL/Prisoner/L_Knee.x" ,						MODEL_PRISONER_LKNEE			},		// 捕虜の左膝
+	{ "data/MODEL/Prisoner/R_Knee.x" ,						MODEL_PRISONER_RKNEE			},		// 捕虜の右膝
+	{ "data/MODEL/Prisoner/L_Foot.x" ,						MODEL_PRISONER_LLEG				},		// 捕虜の左脚
+	{ "data/MODEL/Prisoner/R_Foot.x" ,						MODEL_PRISONER_RLEG				},		// 捕虜の右脚
+	{ "data/MODEL/Prisoner/L_Leg.x" ,						MODEL_PRISONER_LFOOT			},		// 捕虜の左足
+	{ "data/MODEL/Prisoner/R_Leg.x" ,						MODEL_PRISONER_RFOOT			},		// 捕虜の右足
+
+	//戦車
+	{ "data/MODEL/Tank/Tankbody.x" ,					MODEL_TANK_TANKBODY,			},		// 戦車の体
+	{ "data/MODEL/Tank/Tank_frontwheel.x" ,				MODEL_TANK_TANK_FRONTWHEEL,		},		// 戦車の前タイヤ
+	{ "data/MODEL/Tank/Tank_backwheel.x" ,				MODEL_TANK_TANK_BACKWHEEL,		},		// 戦車の後タイヤ
+	{ "data/MODEL/Tank/Tankgun.x" ,						MODEL_TANK_TANKGUN,				},		// 戦車の銃
 	//{ "data/MODEL/Tank/Tankgun.x" ,						MODEL_TANK_TANKHEAD,				},// 戦車の銃
 
-	{ "data/MODEL/BattlePlane/BattlePlane_Body.x",		MODEL_PLANE_BODY,				},// 戦闘機の機体
-	{ "data/MODEL/BattlePlane/BattlePlane_Gun.x",		MODEL_PLANE_GUN,				},// 戦闘機の銃
-																						
-	{ "data/MODEL/Helicopter/Helicopter_Body.x" ,		MODEL_HELIBODY,					},// ヘリコプターの機体
-	{ "data/MODEL/Helicopter/Helicopter_Propeller.x",	MODEL_HELIPROPELLER				},// ヘリコプターのプロペラ
-	{ "data/MODEL/Helicopter/Helicopter_Gun.x" ,		MODEL_HELIGUN					},// ヘリコプターの銃
-																						
-	{ "data/MODEL/Boss/SolodeRoca.x" ,					MODEL_BOSS_BODY					},// ソルデロカ
-																																												
-	{ "data/MODEL/DragonNosuke/Body.x" ,				MODEL_BOSSONE_BODY				},// 体
-	{ "data/MODEL/DragonNosuke/Head.x" ,				MODEL_BOSSONE_HEAD				},// 頭
-	{ "data/MODEL/DragonNosuke/Knee_L_F.x" ,			MODEL_BOSSONE_KNEE_L_FRONT		},// 左前大腿
-	{ "data/MODEL/DragonNosuke/Knee_L_R.x" ,			MODEL_BOSSONE_KNEE_L_REAR		},// 左後大腿
-	{ "data/MODEL/DragonNosuke/Knee_R_F.x" ,			MODEL_BOSSONE_KNEE_R_FRONT		},// 右前大腿
-	{ "data/MODEL/DragonNosuke/Knee_R_R.x" ,			MODEL_BOSSONE_KNEE_R_REAR		},// 右後大腿
-	{ "data/MODEL/DragonNosuke/Knee2_L_F.x" ,			MODEL_BOSSONE_KNEE2_L_FRONT		},// 左前大腿2
-	{ "data/MODEL/DragonNosuke/Knee2_L_R.x" ,			MODEL_BOSSONE_KNEE2_L_REAR		},// 左後大腿2
-	{ "data/MODEL/DragonNosuke/Knee2_R_F.x" ,			MODEL_BOSSONE_KNEE2_R_FRONT		},// 右前大腿2
-	{ "data/MODEL/DragonNosuke/Knee2_R_R.x" ,			MODEL_BOSSONE_KNEE2_R_REAR		},// 右後大腿2
-	{ "data/MODEL/DragonNosuke/Leg_L_F.x" ,				MODEL_BOSSONE_LEG_L_FRONT		},// 左前下腿
-	{ "data/MODEL/DragonNosuke/Leg_L_R.x" ,				MODEL_BOSSONE_LEG_L_REAR		},// 左後下腿
-	{ "data/MODEL/DragonNosuke/Leg_R_F.x" ,				MODEL_BOSSONE_LEG_R_FRONT		},// 右前下腿
-	{ "data/MODEL/DragonNosuke/Leg_R_R.x" ,				MODEL_BOSSONE_LEG_R_REAR		},// 右後下腿
-	{ "data/MODEL/DragonNosuke/R_Ventilation.x" ,		MODEL_BOSSONE_L_VENTILATION		},// 鉄板
-	{ "data/MODEL/DragonNosuke/L_Ventilation.x" ,		MODEL_BOSSONE_R_VENTILATION		},// 鉄板
-	{ "data/MODEL/DragonNosuke/Light_L_F.x" ,			MODEL_BOSSONE_LIGHT_L_FRONT		},// 青電気
-	{ "data/MODEL/DragonNosuke/Light_L_R.x" ,			MODEL_BOSSONE_LIGHT_L_REAR		},// 青電気
-	{ "data/MODEL/DragonNosuke/Light_R_F.x" ,			MODEL_BOSSONE_LIGHT_R_FRONT		},// 青電気
-	{ "data/MODEL/DragonNosuke/Light_R_R.x" ,			MODEL_BOSSONE_LIGHT_R_REAR		},// 青電気
-	{ "data/MODEL/DragonNosuke/Balkan.x" ,				MODEL_BOSSONE_GUN_BALKAN		},// 武器の場所に置く仮モデル
-	{ "data/MODEL/DragonNosuke/Flamethrower.x" ,		MODEL_BOSSONE_GUN_FLAMETHROWER	},// 武器の場所に置く仮モデル
-	{ "data/MODEL/DragonNosuke/Incendiary.x" ,			MODEL_BOSSONE_GUN_INCENDIARY	},// 武器の場所に置く仮モデル
+	//戦闘機
+	{ "data/MODEL/BattlePlane/BattlePlane_Body.x",		MODEL_PLANE_BODY,				},		// 戦闘機の機体
+	{ "data/MODEL/BattlePlane/BattlePlane_Gun.x",		MODEL_PLANE_GUN,				},		// 戦闘機の銃
+
+	//ヘリ
+	{ "data/MODEL/Helicopter/Helicopter_Body.x" ,		MODEL_HELIBODY,					},		// ヘリコプターの機体
+	{ "data/MODEL/Helicopter/Helicopter_Propeller.x",	MODEL_HELIPROPELLER				},		// ヘリコプターのプロペラ
+	{ "data/MODEL/Helicopter/Helicopter_Gun.x" ,		MODEL_HELIGUN					},		// ヘリコプターの銃
+
+	//ボス　ソルデロカ
+	{ "data/MODEL/Boss/SolodeRoca.x" ,					MODEL_BOSS_BODY					},		// ソルデロカ
+
+	//ボス　ドラコンノスケ
+	{ "data/MODEL/DragonNosuke/Body.x" ,				MODEL_BOSSONE_BODY				},		// 体
+	{ "data/MODEL/DragonNosuke/Head.x" ,				MODEL_BOSSONE_HEAD				},		// 頭
+	{ "data/MODEL/DragonNosuke/Knee_L_F.x" ,			MODEL_BOSSONE_KNEE_L_FRONT		},		// 左前大腿
+	{ "data/MODEL/DragonNosuke/Knee_L_R.x" ,			MODEL_BOSSONE_KNEE_L_REAR		},		// 左後大腿
+	{ "data/MODEL/DragonNosuke/Knee_R_F.x" ,			MODEL_BOSSONE_KNEE_R_FRONT		},		// 右前大腿
+	{ "data/MODEL/DragonNosuke/Knee_R_R.x" ,			MODEL_BOSSONE_KNEE_R_REAR		},		// 右後大腿
+	{ "data/MODEL/DragonNosuke/Knee2_L_F.x" ,			MODEL_BOSSONE_KNEE2_L_FRONT		},		// 左前大腿2
+	{ "data/MODEL/DragonNosuke/Knee2_L_R.x" ,			MODEL_BOSSONE_KNEE2_L_REAR		},		// 左後大腿2
+	{ "data/MODEL/DragonNosuke/Knee2_R_F.x" ,			MODEL_BOSSONE_KNEE2_R_FRONT		},		// 右前大腿2
+	{ "data/MODEL/DragonNosuke/Knee2_R_R.x" ,			MODEL_BOSSONE_KNEE2_R_REAR		},		// 右後大腿2
+	{ "data/MODEL/DragonNosuke/Leg_L_F.x" ,				MODEL_BOSSONE_LEG_L_FRONT		},		// 左前下腿
+	{ "data/MODEL/DragonNosuke/Leg_L_R.x" ,				MODEL_BOSSONE_LEG_L_REAR		},		// 左後下腿
+	{ "data/MODEL/DragonNosuke/Leg_R_F.x" ,				MODEL_BOSSONE_LEG_R_FRONT		},		// 右前下腿
+	{ "data/MODEL/DragonNosuke/Leg_R_R.x" ,				MODEL_BOSSONE_LEG_R_REAR		},		// 右後下腿
+	{ "data/MODEL/DragonNosuke/R_Ventilation.x" ,		MODEL_BOSSONE_L_VENTILATION		},		// 鉄板
+	{ "data/MODEL/DragonNosuke/L_Ventilation.x" ,		MODEL_BOSSONE_R_VENTILATION		},		// 鉄板
+	{ "data/MODEL/DragonNosuke/Light_L_F.x" ,			MODEL_BOSSONE_LIGHT_L_FRONT		},		// 青電気
+	{ "data/MODEL/DragonNosuke/Light_L_R.x" ,			MODEL_BOSSONE_LIGHT_L_REAR		},		// 青電気
+	{ "data/MODEL/DragonNosuke/Light_R_F.x" ,			MODEL_BOSSONE_LIGHT_R_FRONT		},		// 青電気
+	{ "data/MODEL/DragonNosuke/Light_R_R.x" ,			MODEL_BOSSONE_LIGHT_R_REAR		},		// 青電気
+	{ "data/MODEL/DragonNosuke/Balkan.x" ,				MODEL_BOSSONE_GUN_BALKAN		},		// 武器の場所に置く仮モデル
+	{ "data/MODEL/DragonNosuke/Flamethrower.x" ,		MODEL_BOSSONE_GUN_FLAMETHROWER	},		// 武器の場所に置く仮モデル
+	{ "data/MODEL/DragonNosuke/Incendiary.x" ,			MODEL_BOSSONE_GUN_INCENDIARY	},		// 武器の場所に置く仮モデル
 
 	{ "data/MODEL/Wepon/Shield.x" ,						MODEL_WEPON_SHIELD },// 盾
 };
@@ -175,11 +196,15 @@ void CModel::LoadModel(void)
 			&m_vModel[nCnt]->pMesh
 		)))
 		{
+			std::cout << "LOAD FAILED!!! ModelFile - " << nCnt << m_vModelFileName[nCnt].modelFileName << NEWLINE;
 		}
 		else
 		{
+			std::cout << "Model Load - " << nCnt << m_vModelFileName[nCnt].modelFileName << NEWLINE;
+
 			m_vModel[nCnt]->m_pTexture = new LPDIRECT3DTEXTURE9[(int)m_vModel[nCnt]->nNumMat];
 			pMat = (D3DXMATERIAL*)m_vModel[nCnt]->pBuffmat->GetBufferPointer();
+
 			for (int nCntmat = 0; nCntmat < (int)m_vModel[nCnt]->nNumMat; nCntmat++)
 			{
 				m_vModel[nCnt]->m_pTexture[nCntmat] = NULL;
@@ -195,7 +220,7 @@ void CModel::LoadModel(void)
 void CModel::UnLoad(void)
 {
 	//マップのモデル読み込み
-	for (int nCnt = 0; nCnt < m_vModel.size(); nCnt++)
+	for (size_t nCnt = 0; nCnt < m_vModel.size(); nCnt++)
 	{
 		if (m_vModel[nCnt]->pBuffmat != NULL)
 		{
@@ -243,7 +268,7 @@ HRESULT CModel::Init(void)
 	// 当たり判定生成
 	m_pCollision = CCollision::Create();
 	int nCntID = GetModelID(m_modelID);
-	for (int nCnt = 0; nCnt < m_vModel.size(); nCnt++)
+	for (size_t nCnt = 0; nCnt < m_vModel.size(); nCnt++)
 	{
 		if (nCnt > 200 && nCnt < 208)
 		{
@@ -391,7 +416,7 @@ CModel * CModel::CreateSceneManagement(int type, int modelCount)
 char * CModel::GetModelFileName(int nType, int nModelCount)
 {
 	int nCntID =((nType * 100) + nModelCount);
-	return m_vModelFileName[nCntID].modelFileName;
+	return m_vModelFileName[GetModelID((CHARA_MODEL)nCntID)].modelFileName;
 }
 
 //====================================================================
@@ -457,7 +482,7 @@ void CModel::SetModelID(CHARA_MODEL model)
 //====================================================================
 int CModel::GetModelID(CHARA_MODEL model)
 {
-	for (int nCnt = 0; nCnt < m_vModel.size(); nCnt++)
+	for (size_t nCnt = 0; nCnt < m_vModel.size(); nCnt++)
 	{
 		if (m_vModelFileName[nCnt].FileModelID == model)
 		{

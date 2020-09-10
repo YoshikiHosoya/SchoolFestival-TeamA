@@ -273,12 +273,12 @@ void CPlayer::Update(void)
 void CPlayer::Draw(void)
 {
 	// 乗り物に乗っていたら描画しない またはライフが0でflagが立ったら
-	if (m_bRideVehicle == false )
+	if (m_bRideVehicle == false)
 	{
 		CCharacter::Draw();
+		DrawWepon();
+		m_pGun->Draw();
 	}
-	DrawWepon();
-	m_pGun->Draw();
 
 }
 //====================================================================
@@ -549,9 +549,6 @@ void CPlayer::CollisionUpdate(void)
 			}
 		}
 	}
-
-	// 銃の描画フラグの設定
-	m_pGun->SetDrawFlag(m_bRideVehicle);
 }
 //====================================================================
 //攻撃関連
