@@ -729,7 +729,7 @@ CVehicle *CCollision::ForPlayer_VehicleCollision()
 
 		if (pPlayertank != nullptr)
 		{
-			if (pPlayertank->GetTag() == TAG::NONE)
+			if (pPlayertank->GetRideerTag() == TAG::NONE)
 			{
 				if (this->VehicleCollision(pPlayertank->GetCollision()))
 				{
