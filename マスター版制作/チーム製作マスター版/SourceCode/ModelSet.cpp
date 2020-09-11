@@ -308,7 +308,7 @@ bool CModelSet::Motion(void)
 		m_Fram = 0;
 		m_CntKeySet = 0;
 	}
-	if (m_MotionType != -1)
+	if (m_MotionType != -1 && m_bMotion == true)
 	{
 		for (unsigned int nCnt = 0; nCnt < m_vModelList.size(); nCnt++)
 		{

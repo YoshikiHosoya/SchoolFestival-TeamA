@@ -84,11 +84,8 @@ HRESULT CPlayertank::Init(void)
 	// 地面についているかのフラグ
 	m_bLand = true;
 	//タグの初期化
-	m_Tag = TAG::NONE;
-	// プレイヤーのポインタ
-	//CVehicle::SetPlayerTank(nullptr);
+	CVehicle::SetRideerTag(TAG::NONE);
 	//初期化
-	m_nCntEngineSE = 0;
 	CCharacter::GetModelSet()->SetMotion(CModelSet::CHARACTER_MOTION_STATE_NONE);
 	// 当たり判定生成
 	GetCollision()->SetPos(&GetPosition());
@@ -140,24 +137,24 @@ void CPlayertank::Update(void)
 	// 乗り物クラスの更新
 	CCharacter::Update();
 
-	if (CVehicle::GetTag() != TAG::NONE)
+	if (CVehicle::GetRideerTag() != TAG::NONE)
 	{
 		 //乗り物に乗っている時
 		//if (CVehicle::GetPlayer()->GetRideFlag())
 		{
 			// 戦車が弾を撃つ処理
-			Shot(key, m_Tag);
+			Shot(key, GetRideerTag());
 
 			// 戦車を操作する処理
-			Operation(key, m_Tag);
+			Operation(key, GetRideerTag());
 
 			// 戦車の操作
-			PadInput(m_Tag);
+			PadInput(GetRideerTag());
 
 			// パーツの回転処理
-			VehiclePartsRotCondition(GetModelSet()->GetCharacterModelList()[1], MODEL_ROT_TYPE_MOVING,CCharacter::GetMove(),CCharacter::GetShotDirection());
-			VehiclePartsRotCondition(GetModelSet()->GetCharacterModelList()[2], MODEL_ROT_TYPE_MOVING, CCharacter::GetMove(), CCharacter::GetShotDirection());
-			VehiclePartsRotCondition(GetModelSet()->GetCharacterModelList()[3], MODEL_ROT_TYPE_OPERATION, CCharacter::GetMove(), CCharacter::GetShotDirection());
+			VehiclePartsRotCondition(GetModelSet()->GetCharacterModelList()[1], MODEL_ROT_TYPE_MOVING,CCharacter::GetMove(),CCharacter::GetShotDirection(),CCharacter::GetCharacterDirection());
+			VehiclePartsRotCondition(GetModelSet()->GetCharacterModelList()[2], MODEL_ROT_TYPE_MOVING, CCharacter::GetMove(), CCharacter::GetShotDirection(), CCharacter::GetCharacterDirection());
+			VehiclePartsRotCondition(GetModelSet()->GetCharacterModelList()[3], MODEL_ROT_TYPE_OPERATION, CCharacter::GetMove(), CCharacter::GetShotDirection(), CCharacter::GetCharacterDirection());
 
 			// 乗り物の判定
 			GetCollision()->ForVehicleCollision();

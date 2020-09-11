@@ -219,7 +219,7 @@ void CRankingUI::RankingDataLoad()
 
 	static int nRnak[SCORE_MAX] = {};
 
-									// ファイルを開く
+	// ファイルを開く
 	pFile = fopen(m_RankingFileName, "r");
 
 	// 開いているとき
@@ -241,10 +241,10 @@ void CRankingUI::RankingDataLoad()
 				fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
 				sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
 
-															// ITEMSETが来たら
+				// RANKINGSETが来たら
 				if (strcmp(cHeadText, "RANKINGSET") == 0)
 				{
-					// END_ITEMSETが来るまでループ
+					// END_RANKINGSETが来るまでループ
 					while (strcmp(cHeadText, "END_RANKINGSET") != 0)
 					{
 						fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
@@ -458,16 +458,15 @@ void CRankingUI::PlayerScoreLoad()
 				fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
 				sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
 
-															// ITEMSETが来たら
+				// SCORESETが来たら
 				if (strcmp(cHeadText, "SCORESET") == 0)
 				{
-					// END_ITEMSETが来るまでループ
+					// END_SCORESETが来るまでループ
 					while (strcmp(cHeadText, "END_SCORESET") != 0)
 					{
 						fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
 						sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
 
-																	// SPEEDが来たら
 						if (strcmp(cHeadText, "SCORE_ONE") == 0)
 						{
 							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_RunkingData.nScore[PLAYER_SCORE_1P]);

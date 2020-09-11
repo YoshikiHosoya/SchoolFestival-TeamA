@@ -539,7 +539,7 @@ void CPlayer::CollisionUpdate(void)
 			{
 				// æ‚èž‚ñ‚¾Žž
 				m_bRideVehicle = true;
-				m_pVehicle->SetTag(GetTag());
+				m_pVehicle->SetRideerTag(GetTag());
 			}
 			else
 			{
@@ -890,7 +890,7 @@ void CPlayer::Ride()
 		{
 			if(m_pVehicle != nullptr)
 			{
-				m_pVehicle->SetTag(TAG::NONE);
+				m_pVehicle->SetRideerTag(TAG::NONE);
 				m_pVehicle = nullptr;
 			}
 			m_bRideVehicle = false;
