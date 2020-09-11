@@ -79,6 +79,11 @@ public:
 
 		//武器系アイテム取得時のボイス
 		LABEL_SE_VOICE_HEAVYMACHINEGUN,				//ヘビーマシンガン
+		LABEL_SE_VOICE_ROCKETLAUNCHER,				//ロケットランチャー
+		LABEL_SE_VOICE_LAZERGUN,					//レーザーガン
+		LABEL_SE_VOICE_SHOTGUN,						//ショットガン
+		LABEL_SE_VOICE_FLAMESHOT,					//フレイムショット
+
 		LABEL_SE_VOICE_ENEMY_DEATH,					//敵死亡時
 		LABEL_SE_VOICE_PLAYER_DAMAGE,				//プレイヤー被弾時
 		LABEL_SE_VOICE_PLAYER_DEATH,				//プレイヤー死亡
@@ -167,7 +172,7 @@ private:
 		{ "data/SE/Game/score_bonus.wav", 0 },						//SE リザルト時のスコア加算
 		{ "data/SE/Game/hit_bullet.wav", 0 },						//SE 弾ダメージ
 		{ "data/SE/Game/hit_knife.wav", 0 },						//SE ナイフダメージ
-		{ "data/SE/Game/GoSign.wav", 0 },						//SE ナイフダメージ
+		{ "data/SE/Game/GoSign.wav", 0 },							//SE Goサイン
 
 		//乗り物系の効果音
 		{ "data/SE/Rides/engine.wav", 0 },							//SE エンジン
@@ -176,6 +181,12 @@ private:
 
 		//武器系アイテム取得時
 		{ "data/SE/Voice/HeavyMachineGun.wav", 0 },					//ヘビーマシンガン
+		{ "data/SE/Voice/RocketLauncher.wav", 0 },					//ロケットランチャー
+		{ "data/SE/Voice/LazerGun.wav", 0 },						//レーザーガン
+		{ "data/SE/Voice/ShotGun.wav", 0 },							//ショットガン
+		{ "data/SE/Voice/FlameShot.wav", 0 },						//フレイムショット
+
+		//ボイス
 		{ "data/SE/Voice/EnemyDeath.wav", 0 },						//敵死亡時
 		{ "data/SE/Voice/PlayerDamage.wav", 0 },					//プレイヤー被弾時
 		{ "data/SE/Voice/PlayerDeath.wav", 0 },						//プレイヤー死亡

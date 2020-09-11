@@ -207,6 +207,7 @@ void CItem::ItemType(ITEMTYPE type, TAG Tag)
 	case (ITEMTYPE_SHOTGUN): {
 		// SE‚ð–Â‚ç‚·
 		CManager::GetSound()->Play(CSound::LABEL_SE_GET_WEAPON);
+		CManager::GetSound()->Play(CSound::LABEL_SE_VOICE_SHOTGUN);
 
 		m_pPlayer[(int)Tag]->GetGun()->SetGunType(CGun::GUNTYPE_SHOTGUN);
 	}break;
@@ -215,6 +216,7 @@ void CItem::ItemType(ITEMTYPE type, TAG Tag)
 	case (ITEMTYPE_LASERGUN): {
 		// SE‚ð–Â‚ç‚·
 		CManager::GetSound()->Play(CSound::LABEL_SE_GET_WEAPON);
+		CManager::GetSound()->Play(CSound::LABEL_SE_VOICE_LAZERGUN);
 
 		m_pPlayer[(int)Tag]->GetGun()->SetGunType(CGun::GUNTYPE_LASERGUN);
 	}break;
@@ -223,6 +225,7 @@ void CItem::ItemType(ITEMTYPE type, TAG Tag)
 	case (ITEMTYPE_ROCKETLAUNCHER): {
 		// SE‚ð–Â‚ç‚·
 		CManager::GetSound()->Play(CSound::LABEL_SE_GET_WEAPON);
+		CManager::GetSound()->Play(CSound::LABEL_SE_VOICE_ROCKETLAUNCHER);
 
 		m_pPlayer[(int)Tag]->GetGun()->SetGunType(CGun::GUNTYPE_ROCKETLAUNCHER);
 	}break;
@@ -231,6 +234,7 @@ void CItem::ItemType(ITEMTYPE type, TAG Tag)
 	case (ITEMTYPE_FLAMESHOT): {
 		// SE‚ð–Â‚ç‚·
 		CManager::GetSound()->Play(CSound::LABEL_SE_GET_WEAPON);
+		CManager::GetSound()->Play(CSound::LABEL_SE_VOICE_FLAMESHOT);
 
 		m_pPlayer[(int)Tag]->GetGun()->SetGunType(CGun::GUNTYPE_FLAMESHOT);
 	}break;

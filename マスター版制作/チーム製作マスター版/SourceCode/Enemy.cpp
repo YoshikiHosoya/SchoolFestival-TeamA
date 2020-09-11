@@ -42,6 +42,8 @@ HRESULT CEnemy::Init(void)
 	//ガンのポインタ生成
 	m_pGun = CGun::Create();
 	m_pGun->SetTag(TAG::ENEMY);
+	m_pGun->SetDisp(false);
+
 	//イベントのフラグ
 	m_bEventFlag = false;
 
