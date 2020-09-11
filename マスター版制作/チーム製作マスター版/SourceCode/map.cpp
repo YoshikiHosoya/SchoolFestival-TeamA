@@ -1870,7 +1870,7 @@ void CMap::ObstacleTypeComboBox(int &nSelectType, int nNowSelect)
 	std::vector<std::string > aFileName = {};
 
 	//for
-	for (int nCnt = 0; nCnt < (CModel::OBSTACLE_TYPE_MAX-900); nCnt++)
+	for (int nCnt = 0; nCnt < (CModel::OBSTACLE_TYPE_MAX - CModel::OBSTACLE_TYPE_BOX); nCnt++)
 	{
 		//”z—ñ‚É’Ç‰Á
 		aFileName.emplace_back(CModel::GetModelFileName(CModel::MODEL_TYPE::OBSTACLE_MODEL, nCnt));
