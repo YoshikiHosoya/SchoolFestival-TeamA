@@ -53,7 +53,6 @@ CTutorialManager::CTutorialManager()
 	m_nWaitTime			= 0;
 	m_bOneFlag			= false;
 	m_bPushButton		= false;
-	m_bAdd2PFlag		= false;
 }
 
 // =====================================================================================================================================================================
@@ -111,11 +110,6 @@ void CTutorialManager::Update(void)
 
 	// デバッグ用
 #ifdef _DEBUG
-	// 試験的2P配置
-	if (key->GetKeyboardTrigger(DIK_RSHIFT))
-	{
-		m_bAdd2PFlag = true;
-	}
 #endif // DEBUG
 
 	// 各ステートごとの関数を管理する

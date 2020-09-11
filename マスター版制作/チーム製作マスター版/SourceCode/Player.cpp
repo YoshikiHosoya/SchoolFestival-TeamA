@@ -162,7 +162,7 @@ HRESULT CPlayer::Init(void)
 	// ゲームオブジェクト( タグ )の設定
 	GetCollision()->SetGameObject(this);
 
-	// 試験的パッドのポインタ取得
+	// パッドのポインタ取得
 	m_pPad = CManager::CManager::GetPad(GetTag());
 
 	return S_OK;
