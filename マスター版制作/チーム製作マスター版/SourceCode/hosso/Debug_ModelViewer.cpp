@@ -111,7 +111,7 @@ void CDebug_ModelViewer::ShowDebugInfo()
 			if (ImGui::BeginTabItem("OffsetViewer"))
 			{
 				//オフセットビューワ
-				OffsetViewer(m_pViewerCharacter->GetCharacterModelList());
+				OffsetViewer(m_pViewerCharacter->GetModelSet()->GetCharacterModelList());
 				ImGui::EndTabItem();
 			}
 			//TabEnd

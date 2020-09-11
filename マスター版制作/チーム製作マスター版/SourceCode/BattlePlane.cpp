@@ -33,7 +33,7 @@
 // コンストラクタ
 //
 // =====================================================================================================================================================================
-CBattlePlane::CBattlePlane(OBJ_TYPE type) :CVehicle(type)
+CBattlePlane::CBattlePlane(OBJ_TYPE type) :CCharacter(type)
 {
 	// オブジェクトの設定
 	SetObjType(OBJTYPE_PLAYER_VEHICLE);
@@ -55,30 +55,30 @@ CBattlePlane::~CBattlePlane()
 // =====================================================================================================================================================================
 HRESULT CBattlePlane::Init(void)
 {
-	// 乗り物の初期設定
-	CVehicle::Init();
-	// オフセットの読み込み
-	LoadOffset(CVehicle::VEHICLE_TYPE_PLANE);
-	// 乗り物のタイプの設定
-	SetVehicleType(CVehicle::VEHICLE_TYPE_PLANE);
-	// 銃の生成
-	m_pGun = CGun::Create();
-	// マトリックス設定
-	m_pGun->SetHandMtx(GetVehicleModelPartsList(CModel::MODEL_PLANE_GUN)->GetMatrix());
-	// 銃の弾の種類
-	m_pGun->SetTag(TAG::PLAYER_1);		// 仮止め)プレイヤータグを変数に(多分ポインタ)
-	// 銃の弾の種類
-	m_pGun->SetGunType(CGun::GUNTYPE_PLANEGUN);
-	// 発射位置のオフセットの設定
-	m_pGun->SetShotOffsetPos(D3DXVECTOR3(SHOT_BULLET_POS_X, SHOT_BULLET_POS_Y, SHOT_BULLET_POS_Z));
-	// 当たり判定生成
-	GetCollision()->SetPos(&GetPosition());
-	GetCollision()->SetPosOld(&GetPositionOld());
-	GetCollision()->SetSize2D(PLANE_SIZE);
-	GetCollision()->SetMove(&GetMove());
-	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_CHARACTER);
-	// プレイヤーのポインタ
-	m_pPlayer = nullptr;
+	//// 乗り物の初期設定
+	//CVehicle::Init();
+	//// オフセットの読み込み
+	//LoadOffset(CVehicle::VEHICLE_TYPE_PLANE);
+	//// 乗り物のタイプの設定
+	//SetVehicleType(CVehicle::VEHICLE_TYPE_PLANE);
+	//// 銃の生成
+	//m_pGun = CGun::Create();
+	//// マトリックス設定
+	////m_pGun->SetHandMtx(GetVehicleModelPartsList(CModel::MODEL_PLANE_GUN)->GetMatrix());
+	//// 銃の弾の種類
+	//m_pGun->SetTag(TAG::PLAYER_1);		// 仮止め)プレイヤータグを変数に(多分ポインタ)
+	//// 銃の弾の種類
+	//m_pGun->SetGunType(CGun::GUNTYPE_PLANEGUN);
+	//// 発射位置のオフセットの設定
+	//m_pGun->SetShotOffsetPos(D3DXVECTOR3(SHOT_BULLET_POS_X, SHOT_BULLET_POS_Y, SHOT_BULLET_POS_Z));
+	//// 当たり判定生成
+	//GetCollision()->SetPos(&GetPosition());
+	//GetCollision()->SetPosOld(&GetPositionOld());
+	//GetCollision()->SetSize2D(PLANE_SIZE);
+	//GetCollision()->SetMove(&GetMove());
+	//GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_CHARACTER);
+	//// プレイヤーのポインタ
+	//CVehicle::GetPlayer() = nullptr;
 
 	return S_OK;
 }
@@ -97,12 +97,11 @@ void CBattlePlane::Uninit(void)
 		m_pGun = nullptr;
 	}
 
-	if (m_pPlayer != nullptr)
-	{
-		m_pPlayer->SetRideFlag(false);
-	}
+	//if (CVehicle::GetPlayer() != nullptr)
+	//{
+	//	CVehicle::GetPlayer()->SetRideFlag(false);
+	//}
 
-	CVehicle::Uninit();
 }
 //====================================================================
 //
@@ -114,10 +113,10 @@ void CBattlePlane::Update(void)
 	// キー情報の取得
 	CKeyboard *key = CManager::GetInputKeyboard();
 
-	if (m_pPlayer != nullptr)
+	//if (CVehicle::GetPlayer() != nullptr)
 	{
 		// 乗り物に乗っている時
-		if (m_pPlayer->GetRideFlag())
+		//if (CVehicle::GetPlayer()->GetRideFlag())
 		{
 			// 戦車が弾を撃つ処理
 			Shot(key);
@@ -126,7 +125,7 @@ void CBattlePlane::Update(void)
 			Operation(key);
 
 			// パーツの回転処理
-			VehiclePartsRotCondition(GetVehicleModelPartsList(CModel::MODEL_PLANE_GUN), MODEL_ROT_TYPE_OPERATION);
+			//VehiclePartsRotCondition(GetVehicleModelPartsList(CModel::MODEL_PLANE_GUN), MODEL_ROT_TYPE_OPERATION);
 		}
 	}
 
@@ -135,8 +134,6 @@ void CBattlePlane::Update(void)
 
 	m_pGun->Update();
 
-	// 乗り物クラスの更新
-	CVehicle::Update();
 }
 //====================================================================
 //
@@ -145,7 +142,6 @@ void CBattlePlane::Update(void)
 //====================================================================
 void CBattlePlane::Draw(void)
 {
-	CVehicle::Draw();
 
 	m_pGun->Draw();
 
@@ -184,7 +180,7 @@ void CBattlePlane::Shot(CKeyboard *key)
 		m_pGun->Shot();
 	}
 	// 弾を撃つ方向を設定
-	m_pGun->SetShotRot(GetVehicleModelPartsList(CModel::MODEL_PLANE_GUN)->GetRot());
+	//m_pGun->SetShotRot(GetVehicleModelPartsList(CModel::MODEL_PLANE_GUN)->GetRot());
 }
 
 //====================================================================
@@ -195,14 +191,14 @@ void CBattlePlane::Operation(CKeyboard * key)
 	// 上を向く
 	if (key->GetKeyboardPress(DIK_W))
 	{
-		CVehicle::MovePlane(D3DXVECTOR3(0.0f, 1.0f, 0.0f), -0.5f);
-		SetVehicleDirection(DIRECTION::UP);
+		CCharacter::Move(1.0f, -0.5f);
+		CCharacter::SetCharacterDirection(DIRECTION::UP);
 	}
 	// 上を向く
 	else if (key->GetKeyboardPress(DIK_S))
 	{
-		CVehicle::MovePlane(D3DXVECTOR3(0.0f, -1.0f, 0.0f), -0.5f);
-		SetVehicleDirection(DIRECTION::DOWN);
+		CCharacter::Move(0.0f, -0.5f);
+		CCharacter::SetCharacterDirection(DIRECTION::DOWN);
 	}
 
 	// 左に動かせる
@@ -211,22 +207,22 @@ void CBattlePlane::Operation(CKeyboard * key)
 		// 上を向く
 		if (key->GetKeyboardPress(DIK_W))
 		{
-			CVehicle::MovePlane(D3DXVECTOR3(-1.0f, 1.0f, 0.0f), -0.5f);
-			SetVehicleDirection(DIRECTION::UP);
+			CCharacter::Move(-0.75f, -0.5f);
+			CCharacter::SetCharacterDirection(DIRECTION::UP);
 		}
 
 		// 下を向く
 		else if (key->GetKeyboardPress(DIK_S))
 		{
-			CVehicle::MovePlane(D3DXVECTOR3(-1.0f, -1.0f, 0.0f), -0.5f);
-			SetVehicleDirection(DIRECTION::DOWN);
+			CCharacter::Move(-0.25f, -0.5f);
+			CCharacter::SetCharacterDirection(DIRECTION::DOWN);
 		}
 
 		// 左を向く
 		else
 		{
-			CVehicle::MovePlane(D3DXVECTOR3(-1.0f, 0.0f, 0.0f), -0.5f);
-			SetVehicleDirection(DIRECTION::LEFT);
+			CCharacter::Move(-0.5f, -0.5f);
+			CCharacter::SetCharacterDirection(DIRECTION::LEFT);
 		}
 	}
 
@@ -236,22 +232,22 @@ void CBattlePlane::Operation(CKeyboard * key)
 		// 上を向く
 		if (key->GetKeyboardPress(DIK_W))
 		{
-			CVehicle::MovePlane(D3DXVECTOR3(1.0f, 1.0f, 0.0f), -0.5f);
-			SetVehicleDirection(DIRECTION::UP);
+			CCharacter::Move(0.75f, -0.5f);
+			CCharacter::SetCharacterDirection(DIRECTION::UP);
 		}
 
 		// 下を向く
 		else if (key->GetKeyboardPress(DIK_S))
 		{
-			CVehicle::MovePlane(D3DXVECTOR3(1.0f, -1.0f, 0.0f), -0.5f);
-			SetVehicleDirection(DIRECTION::DOWN);
+			CCharacter::Move(0.25f, -0.5f);
+			CCharacter::SetCharacterDirection(DIRECTION::DOWN);
 		}
 
 		// 右を向く
 		else
 		{
-			CVehicle::MovePlane(D3DXVECTOR3(1.0f, 0.0f, 0.0f), -0.5f);
-			SetVehicleDirection(DIRECTION::RIGHT);
+			CCharacter::Move(0.5f, -0.5f);
+			CCharacter::SetCharacterDirection(DIRECTION::RIGHT);
 		}
 	}
 }

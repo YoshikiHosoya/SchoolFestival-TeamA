@@ -152,7 +152,7 @@ CHandgun * CHandgun::Create(D3DXVECTOR3 rot, TAG tag)
 	pHandgun->SetType(BULLET_MODEL);
 
 	// モデルカウントの設定
-	pHandgun->SetModelConut(MODEL_BULLET_SPHERE);
+	pHandgun->SetModelID(MODEL_BULLET_SPHERE);
 
 	return pHandgun;
 }

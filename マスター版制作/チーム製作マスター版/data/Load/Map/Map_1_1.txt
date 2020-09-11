@@ -41,6 +41,21 @@ END_MAPSET
 //
 //------------------------------------------------------------
 
+
+ENEMYSET									# 1
+	TYPE		= 2
+	POS			= 400 100 0
+END_ENEMYSET
+ENEMYSET									# 1
+	TYPE		= 3
+	POS			= 800 100 0
+END_ENEMYSET
+ENEMYSET									# 1
+	TYPE		= 4
+	POS			= 1200 100 0
+END_ENEMYSET
+
+
 ENEMYSET									# 1
 	TYPE		= 0
 	POS			= 1704 191 0

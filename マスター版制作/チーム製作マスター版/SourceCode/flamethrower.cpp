@@ -145,7 +145,7 @@ CFlamethrower * CFlamethrower::Create(D3DXVECTOR3 rot)
 	pFlamethrower->SetType(BULLET_MODEL);
 
 	// モデルカウントの設定
-	pFlamethrower->SetModelConut(MODEL_BULLET_SPHERE);
+	pFlamethrower->SetModelID(MODEL_BULLET_SPHERE);
 
 	return pFlamethrower;
 }

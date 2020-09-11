@@ -68,7 +68,6 @@ HRESULT CGun::Init()
 	m_ShotPos		= ZeroVector3;									// 発射位置
 	m_ShotOffsetPos	= ZeroVector3;									// 発射位置のオフセット
 	m_ShotRot		= ZeroVector3;									// 撃つときの回転の向き
-	m_bDraw			= false;										// 描画フラグ
 	m_bMoveZero		= false;										// 移動を無効にするフラグ
 
 	// 初期化
@@ -140,8 +139,8 @@ void CGun::Update(void)
 // =====================================================================================================================================================================
 void CGun::Draw(void)
 {
-	// 乗り物に乗っていたら描画しない
-	if (m_bDraw == false)
+	// 描画するかチェック
+	if (CModel::GetDisp())
 	{
 		// 描画
 		CModel::Draw(*m_HasHandMtx);
@@ -169,7 +168,6 @@ void CGun::DebugInfo()
 		ImGui::Text("m_nInterval [%d]", m_nInterval); ImGui::SameLine();
 		ImGui::Text("m_nCntFrame [%d]", m_nCntFrame); ImGui::SameLine();
 		ImGui::Text("m_nCntBullet [%d]", m_nCntBullet);
-		ImGui::Text("m_bDraw [%d]", m_bDraw); ImGui::SameLine();
 		ImGui::Text("m_bMoveZero [%d]", m_bMoveZero);
 
 		ImGui::TreePop();
@@ -196,7 +194,7 @@ CGun * CGun::Create()
 	pGun->SetType(GUN_MODEL);
 
 	// モデルカウントの設定
-	pGun->SetModelConut(MODEL_GUN_HANDGUN);
+	pGun->SetModelID(MODEL_GUN_HANDGUN);
 
 	return pGun;
 }

@@ -15,6 +15,7 @@
 #define MAX_MODEL (20)			//モデルのパーツ数
 class CModel;
 class CCollision;
+class CModelSet;
 //レンダリングクラス
 class CCharacter :public CScene
 {
@@ -28,92 +29,7 @@ public:
 		CHARACTER_STATE_DAMAGE_RED,
 		CHARACTER_STATE_DEATH,
 		CHARACTER_STATE_INVINCIBLE,
-
 	}CHARACTER_STATE;
-
-	typedef enum
-	{
-		CHARACTER_TYPE_PLAYER,			// プレイヤー
-		CHARACTER_TYPE_ENEMY,			// エネミー
-		CHARACTER_TYPE_PRISONER,		// 捕虜
-		CHARACTER_TYPE_BOSS,			// ボス
-		CHARACTER_TYPE_BOSS_ONE,		// ボス
-		CHARACTER_TYPE_MAX
-	}CHARACTER_TYPE;
-
-
-	//キー要素
-	typedef struct KEY
-	{
-		D3DXVECTOR3 pos;			//位置
-		D3DXVECTOR3 rot;			//回転
-
-		//コンストラクタ　初期化しておく
-		KEY()
-		{
-			pos = ZeroVector3;
-			rot = ZeroVector3;
-		}
-	}KEY;
-
-	//キー情報
-	typedef struct KEY_INFO
-	{
-		int nFram;					//フレーム数
-		std::vector<KEY*> key;
-		float fHeight;					//高さ
-		//コンストラクタ
-		KEY_INFO()
-		{
-			nFram = 60;
-			fHeight = 0.0f;
-			key = {};
-		}
-	}KEY_INFO;
-	//モデルのモーション
-	typedef struct
-	{
-		int nLoop;					//ループ
-		int nNumKey;				//キー情報の数
-		std::vector<KEY_INFO*> key_info;
-	}MOTION;
-	typedef enum
-	{
-		// プレイヤーのモーション
-		CHARACTER_MOTION_STATE_NONE = -1,	//何もしないモーションステート
-		PLAYER_MOTION_NORMAL = 0,			//ニュートラル
-		PLAYER_MOTION_WALK,					//歩き
-		PLAYER_MOTION_ATTACK01,				//通常攻撃1
-		PLAYER_MOTION_GRENADE,				//グレネード
-		PLAYER_MOTION_JUMP,					//ジャンプ
-		PLAYER_MOTION_JUMPSTOP,				//ジャンプしている状態
-		PLAYER_MOTION_SHOOT,				//撃つ
-		PLAYER_MOTION_SQUAT,				//しゃがむ
-		PLAYER_MOTION_SQUATSTOP,			//しゃがんでる状態
-		PLAYER_MOTION_DEAD,					//死んだ
-
-		// 敵のモーション
-		ENEMY_MOTION_NORMAL,				//ニュートラル
-		ENEMY_MOTION_WALK,					//歩き
-		ENEMY_MOTION_SQUAT,					//通常攻撃1
-		ENEMY_MOTION_DEAD_1,				//死んだ
-		ENEMY_MOTION_DEAD_2,				//死んだ2
-		ENEMY_MOTION_GRENADE,				//グレネード
-		ENEMY_MOTION_JUMPATTACK,			//近接攻撃
-		ENEMY_MOTION_KNIFEATTACK,			//近接攻撃2
-
-		// ソル・デ・ロカのモーション
-		BOSS_MOTION_NORMAL,					//ニュートラル
-
-		// 捕虜のモーション
-		PRISONER_MOTION_STAY,				//ニュートラル
-		PRISONER_MOTION_RELEASE,			//立ってる
-		PRISONER_MOTION_RUN,				//走る
-		PRISONER_MOTION_SALUTE,				//敬礼
-		PRISONER_MOTION_FALL,				//落下
-		PRISONER_MOTION_SKIP,				//スキップをしながら走る
-		CHARACTER_MOTION_MAX				//最大数
-	}CHARACTER_MOTION_STATE;
 
 	CCharacter() {};
 	CCharacter(OBJ_TYPE type);
@@ -131,11 +47,8 @@ public:
 
 	void Move(float move, float fdest, float fSpeed = 3.0f);
 	void AddDamage(int Damage);
-	static void LoadMotion(void);
-	void LoadOffset(CHARACTER_TYPE nType);
 	void ForcedUpdate();						//強制的にモーションチェンジ
 	void ResetCharacterDirection();				//回転量を基に向きを設定しなおす
-	static void CharacterUnLoad(void);
 
 	//セッツ
 	void SetPosition(D3DXVECTOR3 pos);
@@ -148,47 +61,29 @@ public:
 	void SetState(CHARACTER_STATE state);
 	void SetStateCount(int nCntState);
 	void SetMtxWorld(D3DXMATRIX mtxWorld);
-	void SetCharacterType(CHARACTER_TYPE CharaType);
 	void SetGravity(bool gravity);
 	void SetCharacterDirection(DIRECTION direction);
 	void SetShotDirection(D3DXVECTOR3 direction);
-
-	//モーション関連
-	void SetMotion(CHARACTER_MOTION_STATE type);
-	void SetMotionOldType(CHARACTER_MOTION_STATE type);
-	void SetKeySet(int keyset);
-	void SetFram(int fram);
-
+	void SetRotArm(bool use);
+	void SetArmCalculation(int nCnt);
 	//ゲット
-	D3DXVECTOR3 &GetPosition(void);				//参照渡し
-	D3DXVECTOR3 &GetPositionOld(void);			//参照渡し
-	D3DXVECTOR3 &GetMove(void);					//参照渡し
-	D3DXVECTOR3 &GetRot(void);					//参照渡し
-	D3DXVECTOR3 &GetRotDest(void);				//参照渡し
+	D3DXVECTOR3 &GetPosition(void);				//ポジション
+	D3DXVECTOR3 &GetPositionOld(void);			//前のポジション
+	D3DXVECTOR3 &GetMove(void);					//移動
+	D3DXVECTOR3 &GetRot(void);					//回転
+	D3DXVECTOR3 &GetRotDest(void);				//回転の差分
 	D3DXVECTOR3 GetShotDirection(void);
 	D3DXMATRIX *GetMtxWorld(void);
 	CHARACTER_STATE GetCharacterState(void);
+	CModelSet *GetModelSet(void);
 	int &GetLife(void);
 	bool GetJump(void);
 	bool GetGravity(void);
 	float GetHeightBet(void);
-	CHARACTER_TYPE GetCharacterType();								//キャラクターの種類取得
-	CModel* GetCharacterModelPartsList(int nCnt);					//キャラクターのモデルパーツ取得
 	DIRECTION &GetCharacterDirection(void);							//向きの取得
 	DIRECTION &GetCharacterDirectionOld(void);						//1F前の向きの取得
-	std::vector<CModel*> &GetCharacterModelList();					//キャラクターのモデル取得
 
 	//モーション関連
-	bool &GetMotion();
-	int &GetKeySet(void);											//キーセットの取得
-	int &GetFram(void);												//フレームの取得
-	MOTION *GetCharacterMotion(CHARACTER_MOTION_STATE type);		//キャラクターモーション情報の取得
-	CHARACTER_MOTION_STATE &GetMotionType(void);					//モーションタイプの取得
-	CHARACTER_MOTION_STATE GetMotionOldType(void);					//前のモーションタイプ取得
-
-	char* GetOffsetFileName(CHARACTER_TYPE type);
-	char* GetMotionFileName(CHARACTER_MOTION_STATE motionstate);
-
 	void SetDieFlag(bool DieFlag)					{ m_bDieFlag = DieFlag; };					// 死亡フラグの設定
 	void SetFallFlag(bool bFall)					{ m_bFall = bFall; };						// 落下フラグの設定
 
@@ -198,17 +93,14 @@ public:
 	bool GetFallFlag()								{ return m_bFall; };						// 落下フラグの取得
 	int GetCharacterStateCnt()						{ return m_nStateCnt; };					// キャラクターのステートのカウント
 
-	void ChangeColor(bool ColorChangeFlag, D3DXCOLOR AddColor);									// 色変更
+	//void ChangeColor(bool ColorChangeFlag, D3DXCOLOR AddColor);									// 色変更
 	bool CheckDrawRange();
-	void SetAllModelDisp(bool bDisp);								//点滅の切り替え
+
 
 	CCollision *GetCollision() { return m_pCollision; };			// 当たり判定のポインタ取得
 	virtual void Collision();										//当たり判定処理
 
 private:
-	static char *m_LoadOffsetFileName[CHARACTER_TYPE_MAX];			//読み込むファイル名
-	static char *m_LoadMotionFileName[CHARACTER_MOTION_MAX];		//読み込むファイル名
-	std::vector<CModel*> m_vModelList;								//可変長配列 設置したモデル
 	D3DXVECTOR3 m_rotBET[MAX_MODEL];
 	float m_HeightBet;
 	D3DXVECTOR3 m_pos;												//位置
@@ -222,7 +114,7 @@ private:
 	D3DXVECTOR3 m_AddArmRot;
 	D3DXMATRIX  m_mtxWorld;											//マトリックス
 	CHARACTER_STATE m_state;										//
-	CHARACTER_TYPE m_CharaType;										//キャラクターのタイプ
+
 	int m_Life;														//ライフ
 	int m_nStateCnt;												//ステータスのカウント
 	bool m_bGravity;												//重力がかかっているか
@@ -231,21 +123,16 @@ private:
 	bool m_bMotion;													//モーションするかどうか
 	bool m_bFall;													//モーションするかどうか
 	bool m_bDraw;													//描画するかどうか
+	bool m_bRotArm;
 	DIRECTION	m_CharacterDirection;								//キャラクターの向き
 	DIRECTION	m_CharacterDirectionOld;							//1F前のキャラクターの向き
 
 	//モーション関連の情報
-	static std::vector<MOTION*>m_CharacterMotion;					//キャラクターのモーション情報
-	CHARACTER_MOTION_STATE m_MotionType;							//現在のモーション
-	CHARACTER_MOTION_STATE m_MotionOld;								//前のモーション
-	int m_CntKeySet;												//キーセットのカウント
-	int m_Fram;														//フレーム
-
 	CCollision				*m_pCollision;							//当たり判定のポインタ
+	CModelSet *m_pModelSet;											//モデルの情報
 
 	void CalcShotDirection();										//撃つ方向決める
 	void CalcMove();												//移動の計算
 	void CalcRotation();											//回転の計算
-	void Motion(void);												//モーション処理
 };
 #endif

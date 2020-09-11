@@ -16,6 +16,8 @@
 #include "shield.h"
 #include "Knife.h"
 #include "item.h"
+#include "ModelSet.h"
+#include "hosso/Debug_ModelViewer.h"
 //====================================================================
 //マクロ定義
 //====================================================================
@@ -37,36 +39,89 @@ HRESULT CWeakEnemy::Init(void)
 {
 	// キャラの初期化
 	CEnemy::Init();
-	LoadOffset(CCharacter::CHARACTER_TYPE_ENEMY);
-	SetCharacterType(CCharacter::CHARACTER_TYPE_ENEMY);
 	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
 	m_Attack = false;
 
-	// 銃の生成
-	GetGunPtr()->SetHandMtx(GetCharacterModelPartsList(CModel::MODEL_ENEMY_RHAND)->GetMatrix());
-	// 銃の弾の種類
-	GetGunPtr()->SetTag(TAG::ENEMY);
-
-	GetGunPtr()->SetGunTypeOnly(CGun::GUNTYPE_HANDGUN_ENEMY);
-	// ナイフの生成
-
-	m_pKnife = CKnife::Create(GetCharacterModelPartsList(CModel::MODEL_ENEMY_LHAND)->GetMatrix(), KNIFE_COLLISOIN_SIZE,TAG::ENEMY);
 
 	// 敵のタイプ設定
 	switch (GetEnemyType())
 	{
 	case CWeakEnemy::WEAKENEMY_TYPE::ENEMY_NORMAL:
+		//オフセット設定
+		GetModelSet()->SetCharacterType(CModelSet::CHARACTER_TYPE_ENEMY_HUMAN);
+		GetModelSet()->LoadOffset(CModelSet::CHARACTER_TYPE_ENEMY_HUMAN);
+
 		SetAIPtr(CEnemyAI::CreateAI(this));
+
+		// 銃の生成
+		GetGunPtr()->SetHandMtx(GetModelSet()->GetCharacterModelList()[8]->GetMatrix());
+		// 銃の弾の種類
+		//GetGunPtr()->SetDisp(true);
+		GetGunPtr()->SetGunTypeOnly(CGun::GUNTYPE_HANDGUN_ENEMY);
+
+		// ナイフの生成
+		m_pKnife = CKnife::Create(GetModelSet()->GetCharacterModelList()[7]->GetMatrix(), KNIFE_COLLISOIN_SIZE, TAG::ENEMY);
+		//腕が回転するか
+		SetRotArm(true);
+
+
+
 		break;
 	case CWeakEnemy::WEAKENEMY_TYPE::ENEMY_SHIELD:
+		//オフセット設定
+		GetModelSet()->SetCharacterType(CModelSet::CHARACTER_TYPE_ENEMY_HUMAN);
+		GetModelSet()->LoadOffset(CModelSet::CHARACTER_TYPE_ENEMY_HUMAN);
+
 		//AIの追加
 		SetAIPtr(CShieldEnemyAI::CreateAI(this));
+
 		//盾生成
 		m_pShield = nullptr;
 		m_pShield = CShield::Create();
-		m_pShield->SetHandMtx(GetCharacterModelPartsList(CModel::MODEL_ENEMY_RHAND)->GetMatrix());
+		m_pShield->SetHandMtx(GetModelSet()->GetCharacterModelList()[8]->GetMatrix());
 		m_pShield->SetHasEnemyPtr(this);
+
+
+		// 銃の生成
+		GetGunPtr()->SetHandMtx(GetModelSet()->GetCharacterModelList()[8]->GetMatrix());
+		// 銃の弾の種類
+		//GetGunPtr()->SetDisp(true);
+		GetGunPtr()->SetGunTypeOnly(CGun::GUNTYPE_HANDGUN_ENEMY);
+
+		// ナイフの生成
+		m_pKnife = CKnife::Create(GetModelSet()->GetCharacterModelList()[7]->GetMatrix(), KNIFE_COLLISOIN_SIZE, TAG::ENEMY);
+		//腕が回転するか
+		SetRotArm(true);
 		break;
+
+	case CWeakEnemy::WEAKENEMY_TYPE::ENEMY_HELICOPTER:
+		//オフセット設定
+		GetModelSet()->SetCharacterType(CModelSet::CHARACTER_TYPE_ENEMY_HELICOPTER);
+		GetModelSet()->LoadOffset(CModelSet::CHARACTER_TYPE_ENEMY_HELICOPTER);
+
+		//モーションoff
+		CCharacter::GetModelSet()->SetUseMotion(false);
+		break;
+
+	case CWeakEnemy::WEAKENEMY_TYPE::ENEMY_MELTYHONEY:
+		//オフセット設定
+		GetModelSet()->SetCharacterType(CModelSet::CHARACTER_TYPE_ENEMY_MELTYHONEY);
+		GetModelSet()->LoadOffset(CModelSet::CHARACTER_TYPE_ENEMY_MELTYHONEY);
+
+		//モーションoff
+		CCharacter::GetModelSet()->SetUseMotion(false);
+
+		break;
+
+	case CWeakEnemy::WEAKENEMY_TYPE::ENEMY_ZYCOCCA:
+		//オフセット設定
+		GetModelSet()->SetCharacterType(CModelSet::CHARACTER_TYPE_ENEMY_ZYCOCCA);
+		GetModelSet()->LoadOffset(CModelSet::CHARACTER_TYPE_ENEMY_ZYCOCCA);
+
+		//モーションoff
+		CCharacter::GetModelSet()->SetUseMotion(false);
+		break;
+
 	default:
 		break;
 	}
@@ -78,6 +133,7 @@ HRESULT CWeakEnemy::Init(void)
 
 	CCharacter::SetLife(1);
 
+	GetGunPtr()->SetDisp(false);
 	return S_OK;
 }
 //====================================================================
@@ -150,6 +206,12 @@ void CWeakEnemy::DebugInfo(void)
 
 		ImGui::TreePop();
 	}
+
+	if (GetEnemyType() == CWeakEnemy::WEAKENEMY_TYPE::ENEMY_MELTYHONEY)
+	{
+		CDebug_ModelViewer::OffsetViewer(CCharacter::GetModelSet()->GetCharacterModelList());
+	}
+
 }
 //====================================================================
 //モデルのクリエイト
@@ -172,7 +234,7 @@ CWeakEnemy *CWeakEnemy::Create(WEAKENEMY_TYPE type)
 //====================================================================
 bool CWeakEnemy::DefaultMotion(void)
 {
-	SetMotion(CCharacter::ENEMY_MOTION_NORMAL);
+	GetModelSet()->SetMotion(CModelSet::ENEMY_MOTION_NORMAL);
 	return true;
 }
 //====================================================================
@@ -221,8 +283,6 @@ void CWeakEnemy::StateChangeReaction()
 		break;
 	case CHARACTER_STATE_DEATH:
 		SetStateCount(60);
-		m_pKnife->EndMeleeAttack();
-		SetMotion(CCharacter::ENEMY_MOTION_DEAD_1);
 
 		switch (GetEnemyType())
 		{
@@ -231,8 +291,15 @@ void CWeakEnemy::StateChangeReaction()
 			//悲鳴
 			CManager::GetSound()->Play(CSound::LABEL_SE_VOICE_ENEMY_DEATH);
 
+			GetModelSet()->SetMotion(CModelSet::ENEMY_MOTION_DEAD_1);
+
 			//血のエフェクト
 			CParticle::CreateFromText(GetPosition(), GetShotDirection(), CParticleParam::EFFECT_BLOOD);
+
+			if (m_pKnife)
+			{
+				m_pKnife->EndMeleeAttack();
+			}
 		default:
 			break;
 		}

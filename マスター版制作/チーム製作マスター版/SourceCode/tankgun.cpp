@@ -142,7 +142,7 @@ CTankGun * CTankGun::Create(D3DXVECTOR3 rot)
 	pTankGun->SetType(BULLET_MODEL);
 
 	// モデルカウントの設定
-	pTankGun->SetModelConut(MODEL_BULLET_SPHERE);
+	pTankGun->SetModelID(MODEL_BULLET_SPHERE);
 
 	return pTankGun;
 }

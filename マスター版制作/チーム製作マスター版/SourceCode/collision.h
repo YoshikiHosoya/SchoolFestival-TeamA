@@ -32,7 +32,7 @@ class CEnemy;
 class CPlayertank;
 class CBattlePlane;
 class CPlayer;
-
+class CVehicle;
 //=============================================================================
 //
 // クラス
@@ -118,7 +118,7 @@ public:
 	CBattlePlane	*ForPlayer_PlaneCollision();						// プレイヤーと戦闘機の接触判定
 
 	bool ForPlayer_VehicleCollision(CCollision * pCollision);	// プレイヤーと乗り物が行う判定
-	void *ForPlayer_VehicleCollision();							// プレイヤーと乗り物が行う判定
+	CVehicle *ForPlayer_VehicleCollision();							// プレイヤーと乗り物が行う判定
 	bool ForVehicleCollision();									// 乗り物が行う判定
 	bool ForTankCollision();									// 戦車が行う判定
 

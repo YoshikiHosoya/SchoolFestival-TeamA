@@ -12,7 +12,7 @@
 #include "map.h"
 #include "item.h"
 #include "scoremanager.h"
-
+#include "ModelSet.h"
 //====================================================================
 //マクロ定義
 //====================================================================
@@ -70,11 +70,11 @@ HRESULT CPrisoner::Init(void)
 	// キャラの初期化
 	CCharacter::Init();
 	// オフセットの取得
-	LoadOffset(CCharacter::CHARACTER_TYPE_PRISONER);
+	GetModelSet()->LoadOffset(CModelSet::CHARACTER_TYPE_PRISONER);
 	// キャラクタータイプの設定
-	SetCharacterType(CCharacter::CHARACTER_TYPE_PRISONER);
+	GetModelSet()->SetCharacterType(CModelSet::CHARACTER_TYPE_PRISONER);
 
-	SetMotion(CCharacter::PRISONER_MOTION_STAY);
+	GetModelSet()->SetMotion(CModelSet::PRISONER_MOTION_STAY);
 	CCharacter::SetState(CCharacter::CHARACTER_STATE_NONE);
 
 	Move(0.0f, -1.57f);
@@ -251,7 +251,7 @@ void CPrisoner::SetPrisonerData()
 //====================================================================
 bool CPrisoner::DefaultMotion(void)
 {
-	SetMotion(CCharacter::PRISONER_MOTION_STAY);
+	GetModelSet()->SetMotion(CModelSet::PRISONER_MOTION_STAY);
 	return false;
 }
 //====================================================================
@@ -267,10 +267,10 @@ void CPrisoner::Collision()
 	{
 		GetCollision()->SetPos(&GetPosition());
 
-		GetCollision()->SetHeight(CCharacter::GetCharacterModelPartsList(0)->GetPosition().y);
+		GetCollision()->SetHeight(GetModelSet()->GetCharacterModelList()[0]->GetPosition().y);
 
 		// レイの判定
-		if (GetCollision()->RayBlockCollision(pMap, CCharacter::GetCharacterModelPartsList(0)->GetMatrix()))
+		if (GetCollision()->RayBlockCollision(pMap, GetModelSet()->GetCharacterModelList()[0]->GetMatrix()))
 		{
 			// ジャンプすることを承認する
 			SetJump(true);
@@ -301,7 +301,7 @@ void CPrisoner::PrisonerState()
 	case CPrisoner::PRISONER_STATE_DROPITEM:
 	{
 		// アイテムを落とすモーション
-		SetMotion(CCharacter::PRISONER_MOTION_RELEASE);
+		GetModelSet()->SetMotion(CModelSet::PRISONER_MOTION_RELEASE);
 
 		m_StateTime--;
 		if (m_StateTime <= 0)
@@ -318,7 +318,7 @@ void CPrisoner::PrisonerState()
 		// 暴れるする
 	case CPrisoner::PRISONER_STATE_SALUTE:
 
-		SetMotion(CCharacter::PRISONER_MOTION_SALUTE);
+		GetModelSet()->SetMotion(CModelSet::PRISONER_MOTION_SALUTE);
 
 		m_StateTime--;
 		if (m_StateTime <= 0)
@@ -334,12 +334,12 @@ void CPrisoner::PrisonerState()
 
 		if (GetFallFlag())
 		{
-			SetMotion(CCharacter::PRISONER_MOTION_FALL);
+			GetModelSet()->SetMotion(CModelSet::PRISONER_MOTION_FALL);
 		}
 		else
 		{
 			// 横に走る
-			SetMotion(CCharacter::PRISONER_MOTION_RUN);
+			GetModelSet()->SetMotion(CModelSet::PRISONER_MOTION_RUN);
 			SetMove(D3DXVECTOR3(-15.0f, 0.0f, 1.0f));
 
 			// 消滅までのカウントを加算

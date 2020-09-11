@@ -168,7 +168,7 @@ CFlameshot * CFlameshot::Create(D3DXVECTOR3 rot)
 	pFlameshot->SetType(BULLET_MODEL);
 
 	// モデルカウントの設定
-	pFlameshot->SetModelConut(MODEL_BULLET_SPHERE);
+	pFlameshot->SetModelID(MODEL_BULLET_SPHERE);
 
 	return pFlameshot;
 }

@@ -159,12 +159,12 @@ CGrenade * CGrenade::Create(D3DXVECTOR3 rot, CGrenadeFire::GRENADE_TYPE type)
 	{
 	case CGrenadeFire::HAND_GRENADE:
 		// モデルカウントの設定
-		pGrenade->SetModelConut(MODEL_BULLET_GRENADE);
+		pGrenade->SetModelID(MODEL_BULLET_GRENADE);
 		break;
 	case CGrenadeFire::TANK_GRENADE:
 		// 放つ方向に合わせる
 		pGrenade->GetMove() = D3DXVECTOR3(1.0f * pGrenade->m_move.x, pGrenade->m_move.y, 0.0f);
-		pGrenade->SetModelConut(MODEL_BULLET_TANKGRENADE);
+		pGrenade->SetModelID(MODEL_BULLET_TANKGRENADE);
 		break;
 	}
 

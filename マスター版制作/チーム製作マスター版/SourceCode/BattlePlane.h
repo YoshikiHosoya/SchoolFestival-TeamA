@@ -13,6 +13,7 @@
 #include "main.h"
 #include "Scene.h"
 #include "vehicle.h"
+#include "Character.h"
 // =====================================================================================================================================================================
 // 前方宣言
 // =====================================================================================================================================================================
@@ -20,7 +21,7 @@ class CGun;
 // =====================================================================================================================================================================
 // プレイヤーの戦車クラス
 // =====================================================================================================================================================================
-class CBattlePlane :public CVehicle
+class CBattlePlane :public CVehicle ,public CCharacter
 {
 public:
 	CBattlePlane(OBJ_TYPE type);							// コンストラクタ
@@ -31,12 +32,12 @@ public:
 	void	Uninit(void);									// 終了
 	void	Update(void);									// 更新
 	void	Draw(void);										// 描画
+	bool	DefaultMotion(void) { return false; };
 
 	/* 静的メンバ関数 */
 	static CBattlePlane	*Create();							// 生成
 
 	/* メンバ関数 */
-	void				SetPlayer(CPlayer *pPlayer) { m_pPlayer = pPlayer; };
 	void				DebugInfo(void);					// デバッグ
 	CGun				*GetGun() { return  m_pGun; };		// 銃のポインタ取得
 
@@ -47,6 +48,5 @@ private:
 	void				Collision();						// 当たり判定をまとめてする処理
 	/* メンバ変数 */
 	CGun				*m_pGun;							// ガンクラスのポインタ
-	CPlayer				*m_pPlayer;							// プレイヤーのポインタ
 };
 #endif

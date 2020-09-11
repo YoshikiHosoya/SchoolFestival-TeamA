@@ -19,7 +19,7 @@
 #include "boss_one.h"
 #include "grenade.h"
 #include "map.h"
-
+#include "ModelSet.h"
 //==========================================================
 //デバッグコマンド
 //==========================================================
@@ -125,7 +125,7 @@ void CBaseMode::BaseLoad(HWND hWnd)
 	//モデルロード
 	CModel::LoadModel();
 	//モーションロード
-	CCharacter::LoadMotion();
+	CModelSet::LoadMotion();
 	//弾のパラメーターロード
 	CBullet::BulletLoad();
 	//グレネードのパラメーターロード
@@ -154,7 +154,7 @@ void CBaseMode::BaseUnload(void)
 {
 	CModel::UnLoad();
 	CTexture::TexUnload();
-	CCharacter::CharacterUnLoad();
+	CModelSet::CharacterUnLoad();
 	CMap::WaveUnLoad();
 
 }

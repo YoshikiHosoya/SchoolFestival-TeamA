@@ -15,6 +15,7 @@
 #include "particle.h"
 #include "sound.h"
 #include "GameManager.h"
+#include "ModelSet.h"
 //====================================================================
 //マクロ定義
 //====================================================================
@@ -41,6 +42,8 @@ HRESULT CEnemy::Init(void)
 	//ガンのポインタ生成
 	m_pGun = CGun::Create();
 	m_pGun->SetTag(TAG::ENEMY);
+	m_pGun->SetDisp(false);
+
 	//イベントのフラグ
 	m_bEventFlag = false;
 
@@ -145,7 +148,7 @@ void CEnemy::DebugInfo(void)
 //====================================================================
 bool CEnemy::DefaultMotion(void)
 {
-	SetMotion(CCharacter::ENEMY_MOTION_NORMAL);
+	GetModelSet()->SetMotion(CModelSet::ENEMY_MOTION_NORMAL);
 	return true;
 }
 //====================================================================

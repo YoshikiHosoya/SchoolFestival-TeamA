@@ -23,7 +23,8 @@
 #include "Boss_One.h"
 #include "WeakEnemy.h"
 #include "sound.h"
-
+#include "ModelSet.h"
+#include "model.h"
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
 // =====================================================================================================================================================================
@@ -1296,7 +1297,7 @@ void CMap::ModelCreat()
 
 	case CMap::ARRANGEMENT_MODEL_HELICOPTER:
 		// ヘリコプター
-		m_pHelicopter.emplace_back(CHelicopter::Create());
+		//m_pHelicopter.emplace_back(CHelicopter::Create());
 		break;
 	}
 }
@@ -1512,12 +1513,12 @@ void CMap::SetMapModelColorChangeFlag(bool bFlag, int nNowSelect)
 		{
 		case CMap::ARRANGEMENT_MODEL_ENEMY:
 			// 敵
-			m_pEnemy[nNowSelect]->ChangeColor(true, -TranslucentColor);
+			m_pEnemy[nNowSelect]->GetModelSet()->ChangeColor(true, -TranslucentColor);
 			break;
 
 		case CMap::ARRANGEMENT_MODEL_PRISONER:
 			// 捕虜
-			m_pPrisoner[nNowSelect]->ChangeColor(true, -TranslucentColor);
+			m_pPrisoner[nNowSelect]->GetModelSet()->ChangeColor(true, -TranslucentColor);
 			break;
 
 		case CMap::ARRANGEMENT_MODEL_OBSTACLE:
@@ -1546,12 +1547,12 @@ void CMap::SetMapModelColorChangeFlag(bool bFlag, int nNowSelect)
 		{
 		case CMap::ARRANGEMENT_MODEL_ENEMY:
 			// 敵の位置の設定
-			m_pEnemy[m_nOldSelect]->ChangeColor(false, ZeroColor);
+			m_pEnemy[m_nOldSelect]->GetModelSet()->ChangeColor(false, ZeroColor);
 			break;
 
 		case CMap::ARRANGEMENT_MODEL_PRISONER:
 			// 捕虜
-			m_pPrisoner[m_nOldSelect]->ChangeColor(false, ZeroColor);
+			m_pPrisoner[m_nOldSelect]->GetModelSet()->ChangeColor(false, ZeroColor);
 			break;
 
 		case CMap::ARRANGEMENT_MODEL_OBSTACLE:
@@ -1823,36 +1824,37 @@ void CMap::MapComboBox(int & nSelectType, int nNowSelect)
 void CMap::MapTypeComboBox()
 {
 #ifdef _DEBUG
-	static int nSelectType = 0;		// 選んでいる種類
-	int nNowSelect = 0;
-	// ファイル名格納用
-	std::vector<std::string > aFileName = {};
+	//static int nSelectType = 0;		// 選んでいる種類
+	//int nNowSelect = 0;
+	//// ファイル名格納用
+	//std::vector<std::string > aFileName = {};
 
-	//for
-	for (int nCnt = 0; nCnt < CModel::MODEL_MAP_MAX; nCnt++)
-	{
-		//配列に追加
-		aFileName.emplace_back(CModel::GetModelFileName(CModel::MODEL_TYPE::MAP_MODEL, nCnt));
-	}
+	//	int nCnt = GetModelSet()->
+	////for
+	//for (int nCnt = 0; nCnt < CModel::MODEL_MAP_MAX; nCnt++)
+	//{
+	//	//配列に追加
+	//	aFileName.emplace_back(CModel::GetModelFileName(CModel::MODEL_TYPE::MAP_MODEL, nCnt));
+	//}
 
-	if (CHossoLibrary::ImGui_Combobox(aFileName, "MapModelType", nSelectType))
-	{
-		// NULLチェック
-		if (m_pMapModel[nNowSelect])
-		{
-			// マップの種類の取得
-			int MapType = m_pMapModel[nNowSelect]->GetModelCount();
+	//if (CHossoLibrary::ImGui_Combobox(aFileName, "MapModelType", nSelectType))
+	//{
+	//	// NULLチェック
+	//	if (m_pMapModel[nNowSelect])
+	//	{
+	//		// マップの種類の取得
+	//		int MapType = m_pMapModel[nNowSelect]->GetModelCount();
 
-			// 前回と違うとき
-			if (MapType != nSelectType)
-			{
-				// 種類代入
-				MapType = nSelectType;
-				// マップのの種類の設定
-				m_pMapModel[nNowSelect]->SetModelConut(MapType);
-			}
-		}
-	}
+	//		// 前回と違うとき
+	//		if (MapType != nSelectType)
+	//		{
+	//			// 種類代入
+	//			MapType = nSelectType;
+	//			// マップのの種類の設定
+	//			m_pMapModel[nNowSelect]->SetModelConut(MapType);
+	//		}
+	//	}
+	//}
 #endif
 }
 
@@ -1868,7 +1870,7 @@ void CMap::ObstacleTypeComboBox(int &nSelectType, int nNowSelect)
 	std::vector<std::string > aFileName = {};
 
 	//for
-	for (int nCnt = 0; nCnt < CModel::OBSTACLE_TYPE_MAX; nCnt++)
+	for (int nCnt = 0; nCnt < (CModel::OBSTACLE_TYPE_MAX-900); nCnt++)
 	{
 		//配列に追加
 		aFileName.emplace_back(CModel::GetModelFileName(CModel::MODEL_TYPE::OBSTACLE_MODEL, nCnt));

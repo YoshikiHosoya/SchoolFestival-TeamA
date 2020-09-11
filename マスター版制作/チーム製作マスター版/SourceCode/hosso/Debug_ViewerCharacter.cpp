@@ -17,7 +17,7 @@
 #include "../model.h"
 #include "../gun.h"
 #include "../knife.h"
-
+#include "../ModelSet.h"
 //------------------------------------------------------------------------------
 //静的メンバ変数の初期化
 //------------------------------------------------------------------------------
@@ -54,7 +54,7 @@ HRESULT CDebug_ViewerCharacter::Init()
 	CCharacter::Init();
 
 	//オフセット設定
-	CCharacter::LoadOffset(CCharacter::CHARACTER_TYPE_BOSS_ONE);
+	GetModelSet()->LoadOffset(CModelSet::CHARACTER_TYPE_BOSS_ONE);
 
 	//初期化
 	SetRotDest(ZeroVector3);
@@ -129,7 +129,7 @@ CDebug_ViewerCharacter* CDebug_ViewerCharacter::Create()
 //------------------------------------------------------------------------------
 //コンボボックス
 //------------------------------------------------------------------------------
-bool CDebug_ViewerCharacter::ShowMotionComboBox(CCharacter::CHARACTER_MOTION_STATE &motiontype)
+bool CDebug_ViewerCharacter::ShowMotionComboBox(CModelSet::CHARACTER_MOTION_STATE &motiontype)
 {
 	bool bChange = false;
 
@@ -139,10 +139,10 @@ bool CDebug_ViewerCharacter::ShowMotionComboBox(CCharacter::CHARACTER_MOTION_STA
 	FILENAME_LIST aFileName = {};
 
 	//for
-	for (int nCnt = 0; nCnt < CCharacter::CHARACTER_MOTION_MAX; nCnt++)
+	for (int nCnt = 0; nCnt < CModelSet::CHARACTER_MOTION_MAX; nCnt++)
 	{
 		//配列に追加
-		aFileName.emplace_back(CCharacter::GetMotionFileName((CCharacter::CHARACTER_MOTION_STATE)nCnt));
+		aFileName.emplace_back(GetModelSet()->GetMotionFileName((CModelSet::CHARACTER_MOTION_STATE)nCnt));
 	}
 
 	//combo開始
@@ -158,7 +158,7 @@ bool CDebug_ViewerCharacter::ShowMotionComboBox(CCharacter::CHARACTER_MOTION_STA
 			if (ImGui::Selectable(aFileName[nCnt].data(), is_selected))
 			{
 				//現在の選択項目設定
-				motiontype = (CCharacter::CHARACTER_MOTION_STATE)nCnt;
+				motiontype = (CModelSet::CHARACTER_MOTION_STATE)nCnt;
 				bChange = true;
 			}
 		}
@@ -178,19 +178,19 @@ void CDebug_ViewerCharacter::MotionViewer()
 	CKeyboard *pKeyboard = CManager::GetInputKeyboard();
 
 	//現在のキー
-	int &nNowKey = CCharacter::GetKeySet();
-	int &nNowFrame = CCharacter::GetFram();
+	int &nNowKey = GetModelSet()->GetKeySet();
+	int &nNowFrame = GetModelSet()->GetFram();
 
 	//モーションに関する情報
-	CCharacter::CHARACTER_MOTION_STATE &NowMotionType = GetMotionType();
-	CCharacter::MOTION *pMotionInfo = CCharacter::GetCharacterMotion(NowMotionType);
+	CModelSet::CHARACTER_MOTION_STATE &NowMotionType = GetModelSet()->GetMotionType();
+	CModelSet::MOTION *pMotionInfo = GetModelSet()->GetCharacterMotion(NowMotionType);
 
 	//攻撃系の情報が変わったかどうか
 	bool bChangeAttackInfo = false;
 	bool bChangeNowKey = false;
 
 	//コピペ用のキー
-	static CCharacter::CHARACTER_MOTION_STATE CopyMotionType = CHARACTER_MOTION_STATE_NONE;
+	static CModelSet::CHARACTER_MOTION_STATE CopyMotionType = CModelSet::CHARACTER_MOTION_STATE_NONE;
 	static int nCopyKey = -1;
 
 	int *pLoop = &pMotionInfo->nLoop;
@@ -205,19 +205,19 @@ void CDebug_ViewerCharacter::MotionViewer()
 	if (ShowMotionComboBox(NowMotionType))
 	{
 		ResetKey();
-		SetMotion(NowMotionType);
+		GetModelSet()->SetMotion(NowMotionType);
 		ForcedUpdate();
-		pMotionInfo = CCharacter::GetCharacterMotion(NowMotionType);
+		pMotionInfo = GetModelSet()->GetCharacterMotion(NowMotionType);
 	}
 
 	//モーションリスタート
 	if (ImGui::Button("ReStart") || pKeyboard->GetKeyboardTrigger(DIK_RETURN))
 	{
 		ResetKey();
-		SetMotion(NowMotionType);
+		GetModelSet()->SetMotion(NowMotionType);
 		ForcedUpdate();
-		pMotionInfo = CCharacter::GetCharacterMotion(NowMotionType);
-		GetMotion() = true;
+		pMotionInfo = GetModelSet()->GetCharacterMotion(NowMotionType);
+		GetModelSet()->GetMotion() = true;
 	}
 
 	//Widgetの大きさ設定
@@ -336,7 +336,7 @@ void CDebug_ViewerCharacter::MotionViewer()
 	//パーツ回転
 	if (ImGui::TreeNode("PartsRot"))
 	{
-		std::vector<CModel*> vModelList = GetCharacterModelList();
+		std::vector<CModel*> vModelList = GetModelSet()->GetCharacterModelList();
 
 		//モデル数分繰り替えす
 		for (size_t nCnt = 0; nCnt < vModelList.size(); nCnt++)
@@ -389,23 +389,23 @@ void CDebug_ViewerCharacter::MotionViewer()
 //------------------------------------------------------------------------------
 //キー追加
 //------------------------------------------------------------------------------
-void CDebug_ViewerCharacter::AddKeyInfo(CCharacter::MOTION *pMotion)
+void CDebug_ViewerCharacter::AddKeyInfo(CModelSet::MOTION *pMotion)
 {
-	KEY *pKey;						//仮のポインタ
-	KEY_INFO *pKeyInfo;				//仮のポインタ
+	CModelSet::KEY *pKey;						//仮のポインタ
+	CModelSet::KEY_INFO *pKeyInfo;				//仮のポインタ
 
 	//メモリ確保
-	pKeyInfo = new KEY_INFO;
+	pKeyInfo = new CModelSet::KEY_INFO;
 
 	//配列に追加
 	pMotion->key_info.emplace_back(pKeyInfo);
 
 	//キー分も追加
 	//キャラクタのモデル数分
-	for (size_t nCnt = 0; nCnt < GetCharacterModelList().size(); nCnt++)
+	for (size_t nCnt = 0; nCnt < GetModelSet()->GetCharacterModelList().size(); nCnt++)
 	{
 		//メモリ確保
-		pKey = new KEY;
+		pKey = new CModelSet::KEY;
 
 		//配列に追加
 		pMotion->key_info[pMotion->nNumKey - 1]->key.emplace_back(pKey);
@@ -414,7 +414,7 @@ void CDebug_ViewerCharacter::AddKeyInfo(CCharacter::MOTION *pMotion)
 //------------------------------------------------------------------------------
 //キー消去
 //------------------------------------------------------------------------------
-void CDebug_ViewerCharacter::PopbackKeyInfo(CCharacter::MOTION *pMotion)
+void CDebug_ViewerCharacter::PopbackKeyInfo(CModelSet::MOTION *pMotion)
 {
 	pMotion->key_info.pop_back();
 }
@@ -425,24 +425,24 @@ void CDebug_ViewerCharacter::PopbackKeyInfo(CCharacter::MOTION *pMotion)
 void CDebug_ViewerCharacter::ResetKey()
 {
 	//現在のキー
-	CCharacter::GetKeySet() = 0;
-	CCharacter::GetFram() = 0;
+	GetModelSet()->GetKeySet() = 0;
+	GetModelSet()->GetFram() = 0;
 
 }
 
 //------------------------------------------------------------------------------
 //コピーしたモーションペースト
 //------------------------------------------------------------------------------
-void CDebug_ViewerCharacter::CopyMotionPaste(CCharacter::CHARACTER_MOTION_STATE NowMotion, int nNowKey ,CCharacter::CHARACTER_MOTION_STATE CopyMotionType,int nCopyKey)
+void CDebug_ViewerCharacter::CopyMotionPaste(CModelSet::CHARACTER_MOTION_STATE NowMotion, int nNowKey , CModelSet::CHARACTER_MOTION_STATE CopyMotionType,int nCopyKey)
 {
 	//範囲外じゃないかどうか
-	if (CopyMotionType != CCharacter::CHARACTER_MOTION_STATE_NONE && nCopyKey != -1)
+	if (CopyMotionType != CModelSet::CHARACTER_MOTION_STATE_NONE && nCopyKey != -1)
 	{
-		CCharacter::MOTION *pCopyMotion = CCharacter::GetCharacterMotion(CopyMotionType);
-		CCharacter::MOTION *pNowMotion = CCharacter::GetCharacterMotion(NowMotion);
+		CModelSet::MOTION *pCopyMotion = GetModelSet()->GetCharacterMotion(CopyMotionType);
+		CModelSet::MOTION *pNowMotion  = GetModelSet()->GetCharacterMotion(NowMotion);
 
 		//コピー
-		for (size_t nCnt = 0; nCnt < GetCharacterModelList().size(); nCnt++)
+		for (size_t nCnt = 0; nCnt < GetModelSet()->GetCharacterModelList().size(); nCnt++)
 		{
 			pNowMotion->key_info[nNowKey]->key[nCnt]->rot = pCopyMotion->key_info[nCopyKey]->key[nCnt]->rot;
 		}
@@ -452,7 +452,7 @@ void CDebug_ViewerCharacter::CopyMotionPaste(CCharacter::CHARACTER_MOTION_STATE 
 //------------------------------------------------------------------------------
 //モーションの保存
 //------------------------------------------------------------------------------
-HRESULT CDebug_ViewerCharacter::SaveMotion(CCharacter::CHARACTER_MOTION_STATE motiontype)
+HRESULT CDebug_ViewerCharacter::SaveMotion(CModelSet::CHARACTER_MOTION_STATE motiontype)
 {
 	FILE *pFile;
 
@@ -461,10 +461,10 @@ HRESULT CDebug_ViewerCharacter::SaveMotion(CCharacter::CHARACTER_MOTION_STATE mo
 	char cWriteText[128];
 
 	//ファイル読み込み
-	pFile = fopen(GetMotionFileName(motiontype), "w");
+	pFile = fopen(GetModelSet()->GetMotionFileName(motiontype), "w");
 	//pFile = fopen("test.txt", "w");
 
-	CCharacter::MOTION *pMotionInfo = CCharacter::GetCharacterMotion(motiontype);
+	CModelSet::MOTION *pMotionInfo = GetModelSet()->GetCharacterMotion(motiontype);
 
 	//nullcheck
 	if (pFile && pMotionInfo)
@@ -549,7 +549,7 @@ HRESULT CDebug_ViewerCharacter::SaveMotion(CCharacter::CHARACTER_MOTION_STATE mo
 		fputs(NEWLINE, pFile);
 
 		//保存成功
-		std::cout << "Motion Save Succsess!! >>" << GetMotionFileName(motiontype) << NEWLINE;
+		std::cout << "Motion Save Succsess!! >>" << GetModelSet()->GetMotionFileName(motiontype) << NEWLINE;
 
 		//ファイルを閉じる
 		fclose(pFile);

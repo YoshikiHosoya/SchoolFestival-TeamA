@@ -137,7 +137,7 @@ CPlaneGun * CPlaneGun::Create(D3DXVECTOR3 rot)
 	pPlaneGun->SetType(BULLET_MODEL);
 
 	// モデルカウントの設定
-	pPlaneGun->SetModelConut(MODEL_BULLET_SPHERE);
+	pPlaneGun->SetModelID(MODEL_BULLET_SPHERE);
 
 	return pPlaneGun;
 }

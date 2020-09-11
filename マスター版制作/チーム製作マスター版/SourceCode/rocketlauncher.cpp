@@ -145,7 +145,7 @@ CRocketlauncher * CRocketlauncher::Create(D3DXVECTOR3 rot)
 	pRocketlauncher->SetType(BULLET_MODEL);
 
 	// モデルカウントの設定
-	pRocketlauncher->SetModelConut(MODEL_BULLET_ROCKETLAUNCHER);
+	pRocketlauncher->SetModelID(MODEL_BULLET_ROCKETLAUNCHER);
 
 	return pRocketlauncher;
 }

@@ -7,167 +7,159 @@
 #include "scene.h"
 #include "debugproc.h"
 #include "collision.h"
+#include "ModelSet.h"
+std::vector<CModel::MODEL*> CModel::m_vModel = {};
 
-CModel::MODEL CModel::m_Model[TYPE_MAX][MAX_ALLMODEL] = {};
-char *CModel::m_PlayerFileName[MODEL_PLAYER_MAX] =
+std::vector<CModel::MODEL_FILE_NAME> CModel::m_vModelFileName =
 {
-	{ "data/MODEL/character/Player/Waist.x" },
-	{ "data/MODEL/character/Player/Body.x" },
-	{ "data/MODEL/character/Player/Head.x"},
-	{ "data/MODEL/character/Player/L_Sholder.x" },
-	{ "data/MODEL/character/Player/R_Sholder.x" },
-	{ "data/MODEL/character/Player/L_Arm.x" },
-	{ "data/MODEL/character/Player/R_Arm.x" },
-	{ "data/MODEL/character/Player/L_Hand.x" },
-	{ "data/MODEL/character/Player/R_Hand.x" },
-	{ "data/MODEL/character/Player/L_Knee.x" },
-	{ "data/MODEL/character/Player/R_Knee.x" },
-	{ "data/MODEL/character/Player/L_Foot.x" },
-	{ "data/MODEL/character/Player/R_Foot.x" },
-	{ "data/MODEL/character/Player/L_Leg.x" },
-	{ "data/MODEL/character/Player/R_Leg.x" },
+	//プレイヤー
+	{ "data/MODEL/character/Player/Waist.x",				MODEL_PLAYER_WAIST				},		// プレイヤーの腰
+	{ "data/MODEL/character/Player/Body.x" ,				MODEL_PLAYER_BODY				},		// プレイヤーの体
+	{ "data/MODEL/character/Player/Head.x" ,				MODEL_PLAYER_HEAD				},		// プレイヤーの頭
+	{ "data/MODEL/character/Player/L_Sholder.x",			MODEL_PLAYER_L_SHOLDER			},		// プレイヤーの左肩
+	{ "data/MODEL/character/Player/R_Sholder.x",			MODEL_PLAYER_R_SHOLDER			},		// プレイヤーの右肩
+	{ "data/MODEL/character/Player/L_Arm.x" ,				MODEL_PLAYER_LARM				},		// プレイヤーの左腕
+	{ "data/MODEL/character/Player/R_Arm.x" ,				MODEL_PLAYER_RARM				},		// プレイヤーの右腕
+	{ "data/MODEL/character/Player/L_Hand.x",				MODEL_PLAYER_LHAND				},		// プレイヤーの左手
+	{ "data/MODEL/character/Player/R_Hand.x",				MODEL_PLAYER_RHAND				},		// プレイヤーの右手
+	{ "data/MODEL/character/Player/L_Knee.x",				MODEL_PLAYER_LKNEE				},		// プレイヤーの左膝
+	{ "data/MODEL/character/Player/R_Knee.x",				MODEL_PLAYER_RKNEE				},		// プレイヤーの右膝
+	{ "data/MODEL/character/Player/L_Foot.x",				MODEL_PLAYER_LLEG				},		// プレイヤーの左脚
+	{ "data/MODEL/character/Player/R_Foot.x",				MODEL_PLAYER_RLEG				},		// プレイヤーの右脚
+	{ "data/MODEL/character/Player/L_Leg.x",				MODEL_PLAYER_LFOOT				},		// プレイヤーの左足
+	{ "data/MODEL/character/Player/R_Leg.x",				MODEL_PLAYER_RFOOT				},		// プレイヤーの右足
+
+	//敵
+	{ "data/MODEL/Enemy/EnemyHuman/Waist.x",				MODEL_ENEMY_HUMAN_WAIST },				// 腰
+	{ "data/MODEL/Enemy/EnemyHuman/Body.x" ,				MODEL_ENEMY_HUMAN_HEAD },				// 頭
+	{ "data/MODEL/Enemy/EnemyHuman/Head.x" ,				MODEL_ENEMY_HUMAN_BODY },				// 体
+	{ "data/MODEL/Enemy/EnemyHuman/L_Sholder.x" ,			MODEL_ENEMY_HUMAN_L_SHOLDER },			// 左肩
+	{ "data/MODEL/Enemy/EnemyHuman/R_Sholder.x" ,			MODEL_ENEMY_HUMAN_R_SHOLDER },			// 右肩
+	{ "data/MODEL/Enemy/EnemyHuman/L_Arm.x" ,				MODEL_ENEMY_HUMAN_LARM },				// 左腕
+	{ "data/MODEL/Enemy/EnemyHuman/R_Arm.x" ,				MODEL_ENEMY_HUMAN_RARM },				// 右腕
+	{ "data/MODEL/Enemy/EnemyHuman/L_Hand.x" ,				MODEL_ENEMY_HUMAN_LHAND },				// 左手
+	{ "data/MODEL/Enemy/EnemyHuman/R_Hand.x" ,				MODEL_ENEMY_HUMAN_RHAND },				// 右手
+	{ "data/MODEL/Enemy/EnemyHuman/L_Knee.x" ,				MODEL_ENEMY_HUMAN_LKNEE },				// 左膝
+	{ "data/MODEL/Enemy/EnemyHuman/R_Knee.x" ,				MODEL_ENEMY_HUMAN_RKNEE },				// 右膝
+	{ "data/MODEL/Enemy/EnemyHuman/L_Foot.x" ,				MODEL_ENEMY_HUMAN_LLEG },				// 左脚
+	{ "data/MODEL/Enemy/EnemyHuman/R_Foot.x" ,				MODEL_ENEMY_HUMAN_RLEG },				// 右脚
+	{ "data/MODEL/Enemy/EnemyHuman/L_Leg.x" ,				MODEL_ENEMY_HUMAN_LFOOT },				// 左足
+	{ "data/MODEL/Enemy/EnemyHuman/R_Leg.x" ,				MODEL_ENEMY_HUMAN_RFOOT },				// 右足
+	//
+	{ "data/MODEL/Enemy/EnemyHelicopter/Body.x" ,			MODEL_ENEMY_HELICOPTER_BODY },			// 右足
+	{ "data/MODEL/Enemy/EnemyHelicopter/Propeller.x" ,		MODEL_ENEMY_HELICOPTER_PROPELLER },		// 右足
+	//
+	{ "data/MODEL/Enemy/MeltyHoney/Body.x" ,				MODEL_ENEMY_MELTYHONEY_BODY },			// 右足
+	{ "data/MODEL/Enemy/MeltyHoney/wheel.x" ,				MODEL_ENEMY_MELTYHONEY_WHEEL },			// 右足
+	//
+	{ "data/MODEL/Enemy/Zycocca/Body.x" ,					MODEL_ENEMY_ZYCOCCA_BODY },				// 右足
+	{ "data/MODEL/Enemy/Zycocca/wheel.x" ,					MODEL_ENEMY_ZYCOCCA_WHEEL },			// 右足
+
+	//マップ
+	{ "data/MODEL/map/Map1_Boss stage.x" ,					MODEL_MAP_TUTORIAL },					// チュートリアルマップ
+	{ "data/MODEL/map/Stage1-1.x" ,							MODEL_MAP_STAGE1_1 },					// ステージ1-1
+	{ "data/MODEL/map/Stage1-2.x" ,							MODEL_MAP_STAGE1_2 },					// ステージ1-2
+	{ "data/MODEL/map/Stage1-3.x" ,							MODEL_MAP_STAGE1_3 },					// ステージ1-3
+	{ "data/MODEL/map/Map1_Boss stage.x" ,					MODEL_MAP_STAGE1_BOSS },				// ボスステージ1
+	{ "data/MODEL/map/Stage2-1.x" ,							MODEL_MAP_STAGE2_1 },					// ステージ2-1
+	{ "data/MODEL/map/Stage2-2.x" ,							MODEL_MAP_STAGE2_2 },					// ステージ2-2
+	{ "data/MODEL/map/Stage2-3.x" ,							MODEL_MAP_STAGE2_3 },					// ステージ2-3
+	{ "data/MODEL/map/Map1_Boss stage.x" ,					MODEL_MAP_STAGE2_BOSS },				// ボスステージ2
+
+	//武器
+	{ "data/MODEL/Gun/Gun.x" ,								MODEL_GUN_HANDGUN },					// ハンドガン
+	{ "data/MODEL/Gun/Assaultrifle.x" ,						MODEL_GUN_HEAVYMACHINEGUN },			// ヘビーマシンガン
+	{ "data/MODEL/Gun/Shootgun.x" ,							MODEL_GUN_SHOTGUN },					// ショットガン
+	{ "data/MODEL/Gun/Chargerifle.x" ,						MODEL_GUN_LASERGUN },					// レーザーガン
+	{ "data/MODEL/Gun/Rocketlauncher.x" ,					MODEL_GUN_ROCKETLAUNCHER },				// ロケットランチャー
+	{ "data/MODEL/Gun/Flameshoot.x" ,						MODEL_GUN_FLAMESHOT },					// フレイムショット
+	{ "data/MODEL/Gun/TankGun.x" ,							MODEL_GUN_TANKGUN },					// 戦車の銃
+	{ "data/MODEL/Gun/PlaneGun.x" ,							MODEL_GUN_PLANEGUN },					// 戦闘機の銃
+	{ "data/MODEL/Gun/HeliGun.x" ,							MODEL_GUN_HELIGUN },					// ヘリの銃
+	{ "data/MODEL/Gun/Balkan.x" ,							MODEL_GUN_BALKAN },						// バルカン
+	{ "data/MODEL/Gun/Flamethrower.x" ,						MODEL_GUN_FLAMETHROWER },				// 火炎放射器
+	{ "data/MODEL/Gun/Incendiary.x" ,						MODEL_GUN_INCENDIARY },					// 焼夷弾
+	{ "data/MODEL/Gun/Knife.x" ,							MODEL_KNIFE },							// ナイフ
+
+	//弾
+	{ "data/MODEL/Bullet/Sphere.x" ,						MODEL_BULLET_SPHERE, },					// 丸
+	{ "data/MODEL/Bullet/Rockets.x" ,						MODEL_BULLET_ROCKETLAUNCHER, },			// ロケットランチャー
+	{ "data/MODEL/Bullet/Grenade.x" ,						MODEL_BULLET_GRENADE, },				// グレネード
+	{ "data/MODEL/Bullet/Tankmissile.x" ,					MODEL_BULLET_TANKGRENADE, },			// 戦車のグレネード
+
+	//オブジェクト
+	{ "data/MODEL/Object/Obstacle_Box.x" ,					OBSTACLE_TYPE_BOX },					// 箱
+	{ "data/MODEL/Object/Obstacle_Barrel.x" ,				OBSTACLE_TYPE_BARREL },					// 樽
+	{ "data/MODEL/Object/Obstacle_Tree.x" ,					OBSTACLE_TYPE_TREE },					// 木
+	{ "data/MODEL/Object/Obstacle_Chest.x" ,				OBSTACLE_TYPE_CHEST },					// 金庫
+	{ "data/MODEL/Object/Obstacle_Sandbags.x" ,				OBSTACLE_TYPE_SANDBAGS },				// 土嚢
+
+	//捕虜
+	{ "data/MODEL/Prisoner/Waist.x",						MODEL_PRISONER_WAIST			},		// 捕虜の腰
+	{ "data/MODEL/Prisoner/Body.x" ,						MODEL_PRISONER_BODY				},		// 捕虜の体
+	{ "data/MODEL/Prisoner/Head.x" ,						MODEL_PRISONER_HEAD				},		// 捕虜の頭
+	{ "data/MODEL/Prisoner/L_Sholder.x" ,					MODEL_PRISONER_L_SHOLDER		},		// 捕虜の左肩
+	{ "data/MODEL/Prisoner/R_Sholder.x" ,					MODEL_PRISONER_R_SHOLDER		},		// 捕虜の右肩
+	{ "data/MODEL/Prisoner/L_Arm.x" ,						MODEL_PRISONER_LARM				},		// 捕虜の左腕
+	{ "data/MODEL/Prisoner/R_Arm.x" ,						MODEL_PRISONER_RARM				},		// 捕虜の右腕
+	{ "data/MODEL/Prisoner/L_Hand.x" ,						MODEL_PRISONER_LHAND			},		// 捕虜の左手
+	{ "data/MODEL/Prisoner/R_Hand.x" ,						MODEL_PRISONER_RHAND			},		// 捕虜の右手
+	{ "data/MODEL/Prisoner/L_Knee.x" ,						MODEL_PRISONER_LKNEE			},		// 捕虜の左膝
+	{ "data/MODEL/Prisoner/R_Knee.x" ,						MODEL_PRISONER_RKNEE			},		// 捕虜の右膝
+	{ "data/MODEL/Prisoner/L_Foot.x" ,						MODEL_PRISONER_LLEG				},		// 捕虜の左脚
+	{ "data/MODEL/Prisoner/R_Foot.x" ,						MODEL_PRISONER_RLEG				},		// 捕虜の右脚
+	{ "data/MODEL/Prisoner/L_Leg.x" ,						MODEL_PRISONER_LFOOT			},		// 捕虜の左足
+	{ "data/MODEL/Prisoner/R_Leg.x" ,						MODEL_PRISONER_RFOOT			},		// 捕虜の右足
+
+	//戦車
+	{ "data/MODEL/Tank/Tankbody.x" ,					MODEL_TANK_TANKBODY,			},		// 戦車の体
+	{ "data/MODEL/Tank/Tank_frontwheel.x" ,				MODEL_TANK_TANK_FRONTWHEEL,		},		// 戦車の前タイヤ
+	{ "data/MODEL/Tank/Tank_backwheel.x" ,				MODEL_TANK_TANK_BACKWHEEL,		},		// 戦車の後タイヤ
+	{ "data/MODEL/Tank/Tankgun.x" ,						MODEL_TANK_TANKGUN,				},		// 戦車の銃
+	//{ "data/MODEL/Tank/Tankgun.x" ,						MODEL_TANK_TANKHEAD,				},// 戦車の銃
+
+	//戦闘機
+	{ "data/MODEL/BattlePlane/BattlePlane_Body.x",		MODEL_PLANE_BODY,				},		// 戦闘機の機体
+	{ "data/MODEL/BattlePlane/BattlePlane_Gun.x",		MODEL_PLANE_GUN,				},		// 戦闘機の銃
+
+	//ヘリ
+	{ "data/MODEL/Helicopter/Helicopter_Body.x" ,		MODEL_HELIBODY,					},		// ヘリコプターの機体
+	{ "data/MODEL/Helicopter/Helicopter_Propeller.x",	MODEL_HELIPROPELLER				},		// ヘリコプターのプロペラ
+	{ "data/MODEL/Helicopter/Helicopter_Gun.x" ,		MODEL_HELIGUN					},		// ヘリコプターの銃
+
+	//ボス　ソルデロカ
+	{ "data/MODEL/Boss/SolodeRoca.x" ,					MODEL_BOSS_BODY					},		// ソルデロカ
+
+	//ボス　ドラコンノスケ
+	{ "data/MODEL/DragonNosuke/Body.x" ,				MODEL_BOSSONE_BODY				},		// 体
+	{ "data/MODEL/DragonNosuke/Head.x" ,				MODEL_BOSSONE_HEAD				},		// 頭
+	{ "data/MODEL/DragonNosuke/Knee_L_F.x" ,			MODEL_BOSSONE_KNEE_L_FRONT		},		// 左前大腿
+	{ "data/MODEL/DragonNosuke/Knee_L_R.x" ,			MODEL_BOSSONE_KNEE_L_REAR		},		// 左後大腿
+	{ "data/MODEL/DragonNosuke/Knee_R_F.x" ,			MODEL_BOSSONE_KNEE_R_FRONT		},		// 右前大腿
+	{ "data/MODEL/DragonNosuke/Knee_R_R.x" ,			MODEL_BOSSONE_KNEE_R_REAR		},		// 右後大腿
+	{ "data/MODEL/DragonNosuke/Knee2_L_F.x" ,			MODEL_BOSSONE_KNEE2_L_FRONT		},		// 左前大腿2
+	{ "data/MODEL/DragonNosuke/Knee2_L_R.x" ,			MODEL_BOSSONE_KNEE2_L_REAR		},		// 左後大腿2
+	{ "data/MODEL/DragonNosuke/Knee2_R_F.x" ,			MODEL_BOSSONE_KNEE2_R_FRONT		},		// 右前大腿2
+	{ "data/MODEL/DragonNosuke/Knee2_R_R.x" ,			MODEL_BOSSONE_KNEE2_R_REAR		},		// 右後大腿2
+	{ "data/MODEL/DragonNosuke/Leg_L_F.x" ,				MODEL_BOSSONE_LEG_L_FRONT		},		// 左前下腿
+	{ "data/MODEL/DragonNosuke/Leg_L_R.x" ,				MODEL_BOSSONE_LEG_L_REAR		},		// 左後下腿
+	{ "data/MODEL/DragonNosuke/Leg_R_F.x" ,				MODEL_BOSSONE_LEG_R_FRONT		},		// 右前下腿
+	{ "data/MODEL/DragonNosuke/Leg_R_R.x" ,				MODEL_BOSSONE_LEG_R_REAR		},		// 右後下腿
+	{ "data/MODEL/DragonNosuke/R_Ventilation.x" ,		MODEL_BOSSONE_L_VENTILATION		},		// 鉄板
+	{ "data/MODEL/DragonNosuke/L_Ventilation.x" ,		MODEL_BOSSONE_R_VENTILATION		},		// 鉄板
+	{ "data/MODEL/DragonNosuke/Light_L_F.x" ,			MODEL_BOSSONE_LIGHT_L_FRONT		},		// 青電気
+	{ "data/MODEL/DragonNosuke/Light_L_R.x" ,			MODEL_BOSSONE_LIGHT_L_REAR		},		// 青電気
+	{ "data/MODEL/DragonNosuke/Light_R_F.x" ,			MODEL_BOSSONE_LIGHT_R_FRONT		},		// 青電気
+	{ "data/MODEL/DragonNosuke/Light_R_R.x" ,			MODEL_BOSSONE_LIGHT_R_REAR		},		// 青電気
+	{ "data/MODEL/DragonNosuke/Balkan.x" ,				MODEL_BOSSONE_GUN_BALKAN		},		// 武器の場所に置く仮モデル
+	{ "data/MODEL/DragonNosuke/Flamethrower.x" ,		MODEL_BOSSONE_GUN_FLAMETHROWER	},		// 武器の場所に置く仮モデル
+	{ "data/MODEL/DragonNosuke/Incendiary.x" ,			MODEL_BOSSONE_GUN_INCENDIARY	},		// 武器の場所に置く仮モデル
+
+	{ "data/MODEL/Wepon/Shield.x" ,						MODEL_WEPON_SHIELD },// 盾
 };
 
-char *CModel::m_PrisonerFileName[MODEL_PRISONER_MAX] =
-{
-	{ "data/MODEL/Prisoner/Waist.x" },
-	{ "data/MODEL/Prisoner/Body.x" },
-	{ "data/MODEL/Prisoner/Head.x" },
-	{ "data/MODEL/Prisoner/L_Sholder.x" },
-	{ "data/MODEL/Prisoner/R_Sholder.x" },
-	{ "data/MODEL/Prisoner/L_Arm.x" },
-	{ "data/MODEL/Prisoner/R_Arm.x" },
-	{ "data/MODEL/Prisoner/L_Hand.x" },
-	{ "data/MODEL/Prisoner/R_Hand.x" },
-	{ "data/MODEL/Prisoner/L_Knee.x" },
-	{ "data/MODEL/Prisoner/R_Knee.x" },
-	{ "data/MODEL/Prisoner/L_Foot.x" },
-	{ "data/MODEL/Prisoner/R_Foot.x" },
-	{ "data/MODEL/Prisoner/L_Leg.x" },
-	{ "data/MODEL/Prisoner/R_Leg.x" },
-};
 
-char *CModel::m_MapFileName[MODEL_MAP_MAX] =
-{
-	{ "data/MODEL/map/Map1_Boss stage.x" },
-	{ "data/MODEL/map/Stage1-1.x" },
-	{ "data/MODEL/map/Stage1-2.x" },
-	{ "data/MODEL/map/Stage1-3.x" },
-	{ "data/MODEL/map/Map1_Boss stage.x" },
-	{ "data/MODEL/map/Stage2-1.x" },
-	{ "data/MODEL/map/Stage2-2.x" },
-	{ "data/MODEL/map/Stage2-3.x" },
-	{ "data/MODEL/map/Map1_Boss stage.x" },
-};
-char *CModel::m_EnemyFileName[MODEL_ENEMY_MAX] =
-{
-	{ "data/MODEL/Enemy/Waist.x" },
-	{ "data/MODEL/Enemy/Body.x" },
-	{ "data/MODEL/Enemy/Head.x" },
-	{ "data/MODEL/Enemy/L_Sholder.x" },
-	{ "data/MODEL/Enemy/R_Sholder.x" },
-	{ "data/MODEL/Enemy/L_Arm.x" },
-	{ "data/MODEL/Enemy/R_Arm.x" },
-	{ "data/MODEL/Enemy/L_Hand.x" },
-	{ "data/MODEL/Enemy/R_Hand.x" },
-	{ "data/MODEL/Enemy/L_Knee.x" },
-	{ "data/MODEL/Enemy/R_Knee.x" },
-	{ "data/MODEL/Enemy/L_Foot.x" },
-	{ "data/MODEL/Enemy/R_Foot.x" },
-	{ "data/MODEL/Enemy/L_Leg.x" },
-	{ "data/MODEL/Enemy/R_Leg.x" },
-};
-char *CModel::m_GunFileName[MODEL_GUN_MAX] =
-{
-	{ "data/MODEL/Gun/Gun.x" },						// ハンドガン
-	{ "data/MODEL/Gun/Assaultrifle.x" },			// ヘビーマシンガン
-	{ "data/MODEL/Gun/Shootgun.x" },				// ショットガン
-	{ "data/MODEL/Gun/Chargerifle.x" },				// レーザーガン
-	{ "data/MODEL/Gun/Rocketlauncher.x" },			// ロケットランチャー
-	{ "data/MODEL/Gun/Flameshoot.x" },				// フレイムショット
-	{ "data/MODEL/Gun/TankGun.x" },					// 戦車の銃
-	{ "data/MODEL/Gun/PlaneGun.x" },				// 戦闘機の銃
-	{ "data/MODEL/Gun/HeliGun.x" },					// ヘリの銃
-	{ "data/MODEL/Gun/Balkan.x" },					// バルカン
-	{ "data/MODEL/Gun/Flamethrower.x" },			// 火炎放射器
-	{ "data/MODEL/Gun/Incendiary.x" },				// 焼夷弾
-	{ "data/MODEL/Gun/Knife.x" },					// ナイフ
-};
-char *CModel::m_BulletFileName[MODEL_BULLET_MAX] =
-{
-	{ "data/MODEL/Bullet/Sphere.x" },				// 丸
-	{ "data/MODEL/Bullet/Rockets.x" },				// ロケットランチャー
-	{ "data/MODEL/Bullet/Grenade.x" },				// グレネード
-	{ "data/MODEL/Bullet/Tankmissile.x" },			// 戦車のグレネード
-};
-
-char *CModel::m_TankFileName[MODEL_TANK_MAX] =
-{
-	{ "data/MODEL/Tank/Tankbody.x" },				// 戦車の体
-	{ "data/MODEL/Tank/Tank_frontwheel.x" },		// 戦車の前タイヤ
-	{ "data/MODEL/Tank/Tank_backwheel.x" },			// 戦車の後タイヤ
-	{ "data/MODEL/Tank/Tankgun.x" },				// 戦車の銃
-};
-
-char *CModel::m_PlaneFileName[MODEL_PLANE_MAX] =
-{
-	{ "data/MODEL/BattlePlane/BattlePlane_Body.x" },// 戦闘機の機体
-	{ "data/MODEL/BattlePlane/BattlePlane_Gun.x" },	// 戦闘機の銃
-};
-
-char *CModel::m_HeliFileName[MODEL_HELI_MAX] =
-{
-	{ "data/MODEL/Helicopter/Helicopter_Body.x" },		// ヘリコプターの機体
-	{ "data/MODEL/Helicopter/Helicopter_Propeller.x" },	// ヘリコプターのプロペラ
-	{ "data/MODEL/Helicopter/Helicopter_Gun.x" },		// ヘリコプターの銃
-};
-
-
-char *CModel::m_ObstacleFileName[OBSTACLE_TYPE_MAX] =
-{
-	{ "data/MODEL/Object/Obstacle_Box.x" },			// 箱
-	{ "data/MODEL/Object/Obstacle_Barrel.x" },		// 樽
-	{ "data/MODEL/Object/Obstacle_Tree.x" },		// 木
-	{ "data/MODEL/Object/Obstacle_Chest.x" },		// 金庫
-	{ "data/MODEL/Object/Obstacle_Sandbags.x" },	// 土嚢
-};
-
-char *CModel::m_BossFileName[MODEL_BOSS_MAX] =
-{
-	{ "data/MODEL/Boss/SolodeRoca.x" },			// ソルデロカ
-};
-
-char *CModel::m_WeponFileName[MODEL_WEPON_MAX] =
-{
-	{ "data/MODEL/Wepon/Shield.x" },			// 盾
-};
-// ボス1ドラゴンノスケ
-char *CModel::m_BossOneFileName[MODEL_BOSSONE_MAX] =
-{
-	{ "data/MODEL/DragonNosuke/Body.x" },			// 体
-	{ "data/MODEL/DragonNosuke/Head.x" },			// 頭
-	{ "data/MODEL/DragonNosuke/Knee_L_F.x" },		// 左前大腿
-	{ "data/MODEL/DragonNosuke/Knee_L_R.x" },		// 左後大腿
-	{ "data/MODEL/DragonNosuke/Knee_R_F.x" },		// 右前大腿
-	{ "data/MODEL/DragonNosuke/Knee_R_R.x" },		// 右後大腿
-	{ "data/MODEL/DragonNosuke/Knee2_L_F.x" },		// 左前大腿2
-	{ "data/MODEL/DragonNosuke/Knee2_L_R.x" },		// 左後大腿2
-	{ "data/MODEL/DragonNosuke/Knee2_R_F.x" },		// 右前大腿2
-	{ "data/MODEL/DragonNosuke/Knee2_R_R.x" },		// 右後大腿2
-	{ "data/MODEL/DragonNosuke/Leg_L_F.x" },		// 左前下腿
-	{ "data/MODEL/DragonNosuke/Leg_L_R.x" },		// 左後下腿
-	{ "data/MODEL/DragonNosuke/Leg_R_F.x" },		// 右前下腿
-	{ "data/MODEL/DragonNosuke/Leg_R_R.x" },		// 右後下腿
-	{ "data/MODEL/DragonNosuke/R_Ventilation.x" },	// 鉄板
-	{ "data/MODEL/DragonNosuke/L_Ventilation.x" },	// 鉄板
-	{ "data/MODEL/DragonNosuke/Light_L_F.x" },		// 青電気
-	{ "data/MODEL/DragonNosuke/Light_L_R.x" },		// 青電気
-	{ "data/MODEL/DragonNosuke/Light_R_F.x" },		// 青電気
-	{ "data/MODEL/DragonNosuke/Light_R_R.x" },		// 青電気
-	{ "data/MODEL/DragonNosuke/Balkan.x" },			// 武器の場所に置く仮モデル
-	{ "data/MODEL/DragonNosuke/Flamethrower.x" },	// 武器の場所に置く仮モデル
-	{ "data/MODEL/DragonNosuke/Incendiary.x" },		// 武器の場所に置く仮モデル
-};CModel::CModel(OBJ_TYPE type) : CScene(type)
+CModel::CModel(OBJ_TYPE type) : CScene(type)
 {
 	m_pCollision = nullptr;							// 当たり判定のポインタ
 }
@@ -188,736 +180,70 @@ void CModel::LoadModel(void)
 {
 	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
 	D3DXMATERIAL *pMat;
-
-	//プレイヤーのモデル読み込み
-	for (int nCnt = 0; nCnt < MODEL_PLAYER_MAX; nCnt++)
+	//モデル読み込み
+	for (int nCnt = 0; nCnt < (signed)m_vModelFileName.size(); nCnt++)
 	{
+		m_vModel.emplace_back(new CModel::MODEL);
 		// Xファイルの読み込み
 		if (FAILED(D3DXLoadMeshFromX(
-			m_PlayerFileName[nCnt],
+			m_vModelFileName[nCnt].modelFileName,
 			D3DXMESH_SYSTEMMEM,
 			pDevice,
 			NULL,
-			&m_Model[PLAYER_MODEL][nCnt].pBuffmat,
+			&m_vModel[nCnt]->pBuffmat,
 			NULL,
-			&m_Model[PLAYER_MODEL][nCnt].nNumMat,
-			&m_Model[PLAYER_MODEL][nCnt].pMesh
+			&m_vModel[nCnt]->nNumMat,
+			&m_vModel[nCnt]->pMesh
 		)))
 		{
-			//保存成功
-			std::cout << "LoadFailed!! >>" << m_PlayerFileName[nCnt] << NEWLINE;
+			std::cout << "LOAD FAILED!!! ModelFile - " << nCnt << m_vModelFileName[nCnt].modelFileName << NEWLINE;
 		}
 		else
 		{
-			m_Model[PLAYER_MODEL][nCnt].m_pTexture = new LPDIRECT3DTEXTURE9[(int)m_Model[PLAYER_MODEL][nCnt].nNumMat];
-			pMat = (D3DXMATERIAL*)m_Model[PLAYER_MODEL][nCnt].pBuffmat->GetBufferPointer();
-			for (int nCntmat = 0; nCntmat < (int)m_Model[PLAYER_MODEL][nCnt].nNumMat; nCntmat++)
+			std::cout << "Model Load - " << nCnt << m_vModelFileName[nCnt].modelFileName << NEWLINE;
+
+			m_vModel[nCnt]->m_pTexture = new LPDIRECT3DTEXTURE9[(int)m_vModel[nCnt]->nNumMat];
+			pMat = (D3DXMATERIAL*)m_vModel[nCnt]->pBuffmat->GetBufferPointer();
+
+			for (int nCntmat = 0; nCntmat < (int)m_vModel[nCnt]->nNumMat; nCntmat++)
 			{
-				m_Model[PLAYER_MODEL][nCnt].m_pTexture[nCntmat] = NULL;
-				D3DXCreateTextureFromFile(pDevice, pMat[nCntmat].pTextureFilename, &m_Model[PLAYER_MODEL][nCnt].m_pTexture[nCntmat]);
+				m_vModel[nCnt]->m_pTexture[nCntmat] = NULL;
+				D3DXCreateTextureFromFile(pDevice, pMat[nCntmat].pTextureFilename, &m_vModel[nCnt]->m_pTexture[nCntmat]);
 			}
 		}
-
-		//保存成功
-		std::cout << "PlayerModelLoad >>" << m_PlayerFileName[nCnt] << NEWLINE;
-
 	}
 
-	//マップのモデル読み込み
-	for (int nCnt = 0; nCnt < MODEL_MAP_MAX; nCnt++)
-	{
-		// Xファイルの読み込み
-		if (FAILED(D3DXLoadMeshFromX(
-			m_MapFileName[nCnt],
-			D3DXMESH_SYSTEMMEM,
-			pDevice,
-			NULL,
-			&m_Model[MAP_MODEL][nCnt].pBuffmat,
-			NULL,
-			&m_Model[MAP_MODEL][nCnt].nNumMat,
-			&m_Model[MAP_MODEL][nCnt].pMesh
-		)))
-		{
-			//保存成功
-			std::cout << "LoadFailed!! >>" << m_PlayerFileName[nCnt] << NEWLINE;
-		}
-		else
-		{
-			m_Model[MAP_MODEL][nCnt].vtxMin = D3DXVECTOR3(1000, 1000, 1000);
-			m_Model[MAP_MODEL][nCnt].vtxMax = D3DXVECTOR3(-1000, -1000, -1000);
-			//テクスチャのメモリ確保
-			m_Model[MAP_MODEL][nCnt].m_pTexture = new LPDIRECT3DTEXTURE9[(int)m_Model[MAP_MODEL][nCnt].nNumMat];
-			pMat = (D3DXMATERIAL*)m_Model[MAP_MODEL][nCnt].pBuffmat->GetBufferPointer();
-
-			//テクスチャマテリアル情報の格納
-			for (int nCntmat = 0; nCntmat < (int)m_Model[MAP_MODEL][nCnt].nNumMat; nCntmat++)
-			{
-				m_Model[MAP_MODEL][nCnt].m_pTexture[nCntmat] = NULL;
-				D3DXCreateTextureFromFile(pDevice, pMat[nCntmat].pTextureFilename, &m_Model[MAP_MODEL][nCnt].m_pTexture[nCntmat]);
-			}
-
-			std::cout << "MapModelLoad >>" << m_MapFileName[nCnt] << NEWLINE;
-		}
-
-	}
-	//エネミーのモデル読み込み
-	for (int nCnt = 0; nCnt < MODEL_ENEMY_MAX; nCnt++)
-	{
-		// Xファイルの読み込み
-		if (FAILED(D3DXLoadMeshFromX(
-			m_EnemyFileName[nCnt],
-			D3DXMESH_SYSTEMMEM,
-			pDevice,
-			NULL,
-			&m_Model[ENEMY_MODEL][nCnt].pBuffmat,
-			NULL,
-			&m_Model[ENEMY_MODEL][nCnt].nNumMat,
-			&m_Model[ENEMY_MODEL][nCnt].pMesh
-		)))
-		{
-			//保存成功
-			std::cout << "LoadFailed!! >>" << m_PlayerFileName[nCnt] << NEWLINE;
-		}
-		else
-		{
-				//テクスチャのメモリ確保
-				m_Model[ENEMY_MODEL][nCnt].m_pTexture = new LPDIRECT3DTEXTURE9[(int)m_Model[ENEMY_MODEL][nCnt].nNumMat];
-			pMat = (D3DXMATERIAL*)m_Model[ENEMY_MODEL][nCnt].pBuffmat->GetBufferPointer();
-
-			for (int nCntmat = 0; nCntmat < (int)m_Model[ENEMY_MODEL][nCnt].nNumMat; nCntmat++)
-			{
-				m_Model[ENEMY_MODEL][nCnt].m_pTexture[nCntmat] = NULL;
-				D3DXCreateTextureFromFile(pDevice, pMat[nCntmat].pTextureFilename, &m_Model[ENEMY_MODEL][nCnt].m_pTexture[nCntmat]);
-			}
-
-			std::cout << "EnemyLoad >>" << m_EnemyFileName[nCnt] << NEWLINE;
-		}
-	}
-
-	//捕虜のモデル読み込み
-	for (int nCnt = 0; nCnt < MODEL_PRISONER_MAX; nCnt++)
-	{
-		// Xファイルの読み込み
-		D3DXLoadMeshFromX(
-			m_PrisonerFileName[nCnt],
-			D3DXMESH_SYSTEMMEM,
-			pDevice,
-			NULL,
-			&m_Model[PRISONER_MODEL][nCnt].pBuffmat,
-			NULL,
-			&m_Model[PRISONER_MODEL][nCnt].nNumMat,
-			&m_Model[PRISONER_MODEL][nCnt].pMesh
-		);
-		//テクスチャのメモリ確保
-		m_Model[PRISONER_MODEL][nCnt].m_pTexture = new LPDIRECT3DTEXTURE9[(int)m_Model[PRISONER_MODEL][nCnt].nNumMat];
-		pMat = (D3DXMATERIAL*)m_Model[PRISONER_MODEL][nCnt].pBuffmat->GetBufferPointer();
-
-		for (int nCntmat = 0; nCntmat < (int)m_Model[PRISONER_MODEL][nCnt].nNumMat; nCntmat++)
-		{
-			m_Model[PRISONER_MODEL][nCnt].m_pTexture[nCntmat] = NULL;
-			D3DXCreateTextureFromFile(pDevice, pMat[nCntmat].pTextureFilename, &m_Model[PRISONER_MODEL][nCnt].m_pTexture[nCntmat]);
-		}
-
-		std::cout << "PrisonerLoad >>" << m_PrisonerFileName[nCnt] << NEWLINE;
-
-	}
-	//銃のモデル読み込み
-	for (int nCnt = 0; nCnt < MODEL_GUN_MAX; nCnt++)
-	{
-		// Xファイルの読み込み
-		D3DXLoadMeshFromX(
-			m_GunFileName[nCnt],
-			D3DXMESH_SYSTEMMEM,
-			pDevice,
-			NULL,
-			&m_Model[GUN_MODEL][nCnt].pBuffmat,
-			NULL,
-			&m_Model[GUN_MODEL][nCnt].nNumMat,
-			&m_Model[GUN_MODEL][nCnt].pMesh
-		);
-		//テクスチャのメモリ確保
-		m_Model[GUN_MODEL][nCnt].m_pTexture = new LPDIRECT3DTEXTURE9[(int)m_Model[GUN_MODEL][nCnt].nNumMat];
-		pMat = (D3DXMATERIAL*)m_Model[GUN_MODEL][nCnt].pBuffmat->GetBufferPointer();
-
-		for (int nCntmat = 0; nCntmat < (int)m_Model[GUN_MODEL][nCnt].nNumMat; nCntmat++)
-		{
-			m_Model[GUN_MODEL][nCnt].m_pTexture[nCntmat] = NULL;
-			D3DXCreateTextureFromFile(pDevice, pMat[nCntmat].pTextureFilename, &m_Model[GUN_MODEL][nCnt].m_pTexture[nCntmat]);
-		}
-
-		std::cout << "GunModelLoad >>" << m_GunFileName[nCnt] << NEWLINE;
-
-	}
-	//弾のモデル読み込み
-	for (int nCnt = 0; nCnt < MODEL_BULLET_MAX; nCnt++)
-	{
-		// Xファイルの読み込み
-		D3DXLoadMeshFromX(
-			m_BulletFileName[nCnt],
-			D3DXMESH_SYSTEMMEM,
-			pDevice,
-			NULL,
-			&m_Model[BULLET_MODEL][nCnt].pBuffmat,
-			NULL,
-			&m_Model[BULLET_MODEL][nCnt].nNumMat,
-			&m_Model[BULLET_MODEL][nCnt].pMesh
-		);
-		//テクスチャのメモリ確保
-		m_Model[BULLET_MODEL][nCnt].m_pTexture = new LPDIRECT3DTEXTURE9[(int)m_Model[BULLET_MODEL][nCnt].nNumMat];
-		pMat = (D3DXMATERIAL*)m_Model[BULLET_MODEL][nCnt].pBuffmat->GetBufferPointer();
-
-		for (int nCntmat = 0; nCntmat < (int)m_Model[BULLET_MODEL][nCnt].nNumMat; nCntmat++)
-		{
-			m_Model[BULLET_MODEL][nCnt].m_pTexture[nCntmat] = NULL;
-			D3DXCreateTextureFromFile(pDevice, pMat[nCntmat].pTextureFilename, &m_Model[BULLET_MODEL][nCnt].m_pTexture[nCntmat]);
-		}
-	}
-
-	//障害物箱のモデル読み込み
-	for (int nCnt = 0; nCnt < OBSTACLE_TYPE_MAX; nCnt++)
-	{
-		// Xファイルの読み込み
-		D3DXLoadMeshFromX(
-			m_ObstacleFileName[nCnt],
-			D3DXMESH_SYSTEMMEM,
-			pDevice,
-			NULL,
-			&m_Model[OBSTACLE_MODEL][nCnt].pBuffmat,
-			NULL,
-			&m_Model[OBSTACLE_MODEL][nCnt].nNumMat,
-			&m_Model[OBSTACLE_MODEL][nCnt].pMesh
-		);
-		//テクスチャのメモリ確保
-		m_Model[OBSTACLE_MODEL][nCnt].m_pTexture = new LPDIRECT3DTEXTURE9[(int)m_Model[OBSTACLE_MODEL][nCnt].nNumMat];
-		pMat = (D3DXMATERIAL*)m_Model[OBSTACLE_MODEL][nCnt].pBuffmat->GetBufferPointer();
-
-		for (int nCntmat = 0; nCntmat < (int)m_Model[OBSTACLE_MODEL][nCnt].nNumMat; nCntmat++)
-		{
-			m_Model[OBSTACLE_MODEL][nCnt].m_pTexture[nCntmat] = NULL;
-			D3DXCreateTextureFromFile(pDevice, pMat[nCntmat].pTextureFilename, &m_Model[OBSTACLE_MODEL][nCnt].m_pTexture[nCntmat]);
-		}
-
-		std::cout << "OBSTACLE Load >>" << m_ObstacleFileName[nCnt] << NEWLINE;
-
-	}
-	//戦車のモデル読み込み
-	for (int nCnt = 0; nCnt < MODEL_TANK_MAX; nCnt++)
-	{
-		// Xファイルの読み込み
-		D3DXLoadMeshFromX(
-			m_TankFileName[nCnt],
-			D3DXMESH_SYSTEMMEM,
-			pDevice,
-			NULL,
-			&m_Model[TANK_MODEL][nCnt].pBuffmat,
-			NULL,
-			&m_Model[TANK_MODEL][nCnt].nNumMat,
-			&m_Model[TANK_MODEL][nCnt].pMesh
-		);
-		//テクスチャのメモリ確保
-		m_Model[TANK_MODEL][nCnt].m_pTexture = new LPDIRECT3DTEXTURE9[(int)m_Model[TANK_MODEL][nCnt].nNumMat];
-		pMat = (D3DXMATERIAL*)m_Model[TANK_MODEL][nCnt].pBuffmat->GetBufferPointer();
-
-		for (int nCntmat = 0; nCntmat < (int)m_Model[TANK_MODEL][nCnt].nNumMat; nCntmat++)
-		{
-			m_Model[TANK_MODEL][nCnt].m_pTexture[nCntmat] = NULL;
-			D3DXCreateTextureFromFile(pDevice, pMat[nCntmat].pTextureFilename, &m_Model[TANK_MODEL][nCnt].m_pTexture[nCntmat]);
-		}
-
-		std::cout << "TANKMODEL Load >>" << m_TankFileName[nCnt] << NEWLINE;
-
-	}
-
-	//戦闘機のモデル読み込み
-	for (int nCnt = 0; nCnt < MODEL_PLANE_MAX; nCnt++)
-	{
-		// Xファイルの読み込み
-		D3DXLoadMeshFromX(
-			m_PlaneFileName[nCnt],
-			D3DXMESH_SYSTEMMEM,
-			pDevice,
-			NULL,
-			&m_Model[PLANE_MODEL][nCnt].pBuffmat,
-			NULL,
-			&m_Model[PLANE_MODEL][nCnt].nNumMat,
-			&m_Model[PLANE_MODEL][nCnt].pMesh
-		);
-		//テクスチャのメモリ確保
-		m_Model[PLANE_MODEL][nCnt].m_pTexture = new LPDIRECT3DTEXTURE9[(int)m_Model[PLANE_MODEL][nCnt].nNumMat];
-		pMat = (D3DXMATERIAL*)m_Model[PLANE_MODEL][nCnt].pBuffmat->GetBufferPointer();
-
-		for (int nCntmat = 0; nCntmat < (int)m_Model[PLANE_MODEL][nCnt].nNumMat; nCntmat++)
-		{
-			m_Model[PLANE_MODEL][nCnt].m_pTexture[nCntmat] = NULL;
-			D3DXCreateTextureFromFile(pDevice, pMat[nCntmat].pTextureFilename, &m_Model[PLANE_MODEL][nCnt].m_pTexture[nCntmat]);
-		}
-
-		std::cout << "PLANEMODEL Load >>" << m_PlaneFileName[nCnt] << NEWLINE;
-	}
-
-	// ヘリのモデル読み込み
-	for (int nCnt = 0; nCnt < MODEL_HELI_MAX; nCnt++)
-	{
-		// Xファイルの読み込み
-		D3DXLoadMeshFromX(
-			m_HeliFileName[nCnt],
-			D3DXMESH_SYSTEMMEM,
-			pDevice,
-			NULL,
-			&m_Model[HELI_MODEL][nCnt].pBuffmat,
-			NULL,
-			&m_Model[HELI_MODEL][nCnt].nNumMat,
-			&m_Model[HELI_MODEL][nCnt].pMesh
-		);
-		//テクスチャのメモリ確保
-		m_Model[HELI_MODEL][nCnt].m_pTexture = new LPDIRECT3DTEXTURE9[(int)m_Model[HELI_MODEL][nCnt].nNumMat];
-		pMat = (D3DXMATERIAL*)m_Model[HELI_MODEL][nCnt].pBuffmat->GetBufferPointer();
-
-		for (int nCntmat = 0; nCntmat < (int)m_Model[HELI_MODEL][nCnt].nNumMat; nCntmat++)
-		{
-			m_Model[HELI_MODEL][nCnt].m_pTexture[nCntmat] = NULL;
-			D3DXCreateTextureFromFile(pDevice, pMat[nCntmat].pTextureFilename, &m_Model[HELI_MODEL][nCnt].m_pTexture[nCntmat]);
-		}
-
-		std::cout << "HELIMODEL Load >>" << m_HeliFileName[nCnt] << NEWLINE;
-	}
-	// ボスのモデル読み込み
-	for (int nCnt = 0; nCnt < MODEL_BOSS_MAX; nCnt++)
-	{
-		// Xファイルの読み込み
-		D3DXLoadMeshFromX(
-			m_BossFileName[nCnt],
-			D3DXMESH_SYSTEMMEM,
-			pDevice,
-			NULL,
-			&m_Model[BOSS_MODEL][nCnt].pBuffmat,
-			NULL,
-			&m_Model[BOSS_MODEL][nCnt].nNumMat,
-			&m_Model[BOSS_MODEL][nCnt].pMesh
-		);
-		//テクスチャのメモリ確保
-		m_Model[BOSS_MODEL][nCnt].m_pTexture = new LPDIRECT3DTEXTURE9[(int)m_Model[BOSS_MODEL][nCnt].nNumMat];
-		pMat = (D3DXMATERIAL*)m_Model[BOSS_MODEL][nCnt].pBuffmat->GetBufferPointer();
-
-		for (int nCntmat = 0; nCntmat < (int)m_Model[BOSS_MODEL][nCnt].nNumMat; nCntmat++)
-		{
-			m_Model[BOSS_MODEL][nCnt].m_pTexture[nCntmat] = NULL;
-			D3DXCreateTextureFromFile(pDevice, pMat[nCntmat].pTextureFilename, &m_Model[BOSS_MODEL][nCnt].m_pTexture[nCntmat]);
-		}
-
-		std::cout << "BOSSMODEL Load >>" << m_BossFileName[nCnt] << NEWLINE;
-	}
-	// 特殊武器のモデル読み込み
-	for (int nCnt = 0; nCnt < MODEL_WEPON_MAX; nCnt++)
-	{
-		// Xファイルの読み込み
-		if (FAILED(D3DXLoadMeshFromX(
-			m_WeponFileName[nCnt],
-			D3DXMESH_SYSTEMMEM,
-			pDevice,
-			NULL,
-			&m_Model[WEPON_MODEL][nCnt].pBuffmat,
-			NULL,
-			&m_Model[WEPON_MODEL][nCnt].nNumMat,
-			&m_Model[WEPON_MODEL][nCnt].pMesh
-		)))
-		{
-			//保存成功
-			std::cout << "LoadFailed!! >>" << m_WeponFileName[nCnt] << NEWLINE;
-		}
-		else
-		{
-			//テクスチャのメモリ確保
-			m_Model[WEPON_MODEL][nCnt].m_pTexture = new LPDIRECT3DTEXTURE9[(int)m_Model[WEPON_MODEL][nCnt].nNumMat];
-			pMat = (D3DXMATERIAL*)m_Model[WEPON_MODEL][nCnt].pBuffmat->GetBufferPointer();
-for (int nCntmat = 0; nCntmat < (int)m_Model[WEPON_MODEL][nCnt].nNumMat; nCntmat++)
-			{
-				m_Model[WEPON_MODEL][nCnt].m_pTexture[nCntmat] = NULL;
-				D3DXCreateTextureFromFile(pDevice, pMat[nCntmat].pTextureFilename, &m_Model[WEPON_MODEL][nCnt].m_pTexture[nCntmat]);
-			}
-		}
-		std::cout << "WEPON_MODEL Load >>" << m_WeponFileName[nCnt] << NEWLINE;
-	}
-// ボス1ドラゴンノスケのモデル読み込み
-	for (int nCnt = 0; nCnt < MODEL_BOSSONE_MAX; nCnt++)
-	{
-		// Xファイルの読み込み
-		D3DXLoadMeshFromX(
-			m_BossOneFileName[nCnt],
-			D3DXMESH_SYSTEMMEM,
-			pDevice,
-			NULL,
-			&m_Model[BOSS_ONE_MODEL][nCnt].pBuffmat,
-			NULL,
-			&m_Model[BOSS_ONE_MODEL][nCnt].nNumMat,
-			&m_Model[BOSS_ONE_MODEL][nCnt].pMesh
-		);
-		//テクスチャのメモリ確保
-		m_Model[BOSS_ONE_MODEL][nCnt].m_pTexture = new LPDIRECT3DTEXTURE9[(int)m_Model[BOSS_ONE_MODEL][nCnt].nNumMat];
-		pMat = (D3DXMATERIAL*)m_Model[BOSS_ONE_MODEL][nCnt].pBuffmat->GetBufferPointer();
-
-		for (int nCntmat = 0; nCntmat < (int)m_Model[BOSS_ONE_MODEL][nCnt].nNumMat; nCntmat++)
-		{
-			m_Model[BOSS_ONE_MODEL][nCnt].m_pTexture[nCntmat] = NULL;
-			D3DXCreateTextureFromFile(pDevice, pMat[nCntmat].pTextureFilename, &m_Model[BOSS_ONE_MODEL][nCnt].m_pTexture[nCntmat]);
-		}
-
-		std::cout << "BOSS_ONEMODEL Load >>" << m_BossOneFileName[nCnt] << NEWLINE;
-	}}
+}
 //====================================================================
 //モデルの開放
 //====================================================================
 void CModel::UnLoad(void)
 {
-	for (int nCnt = 0; nCnt < MODEL_PLAYER_MAX; nCnt++)
-	{
-		if (m_Model[PLAYER_MODEL][nCnt].pBuffmat != NULL)
-		{
-			m_Model[PLAYER_MODEL][nCnt].pBuffmat->Release();
-			m_Model[PLAYER_MODEL][nCnt].pBuffmat = NULL;
-		}
-		if (m_Model[PLAYER_MODEL][nCnt].pMesh != NULL)
-		{
-			m_Model[PLAYER_MODEL][nCnt].pMesh->Release();
-			m_Model[PLAYER_MODEL][nCnt].pMesh = NULL;
-		}
-		if (m_Model[PLAYER_MODEL][nCnt].m_pTexture != NULL)
-		{
-			for (int nCntmat = 0; nCntmat < (int)m_Model[PLAYER_MODEL][nCnt].nNumMat; nCntmat++)
-			{
-				if (m_Model[PLAYER_MODEL][nCnt].m_pTexture[nCntmat] != NULL)
-				{
-					m_Model[PLAYER_MODEL][nCnt].m_pTexture[nCntmat]->Release();
-					m_Model[PLAYER_MODEL][nCnt].m_pTexture[nCntmat] = NULL;
-				}
-			}
-			delete[] m_Model[PLAYER_MODEL][nCnt].m_pTexture;
-			m_Model[PLAYER_MODEL][nCnt].m_pTexture = NULL;
-		}
-	}
 	//マップのモデル読み込み
-	for (int nCnt = 0; nCnt < MODEL_MAP_MAX; nCnt++)
+	for (size_t nCnt = 0; nCnt < m_vModel.size(); nCnt++)
 	{
-		if (m_Model[MAP_MODEL][nCnt].pBuffmat != NULL)
+		if (m_vModel[nCnt]->pBuffmat != NULL)
 		{
-			m_Model[MAP_MODEL][nCnt].pBuffmat->Release();
-			m_Model[MAP_MODEL][nCnt].pBuffmat = NULL;
+			m_vModel[nCnt]->pBuffmat->Release();
+			m_vModel[nCnt]->pBuffmat = NULL;
 		}
-		if (m_Model[MAP_MODEL][nCnt].pMesh != NULL)
+		if (m_vModel[nCnt]->pMesh != NULL)
 		{
-			m_Model[MAP_MODEL][nCnt].pMesh->Release();
-			m_Model[MAP_MODEL][nCnt].pMesh = NULL;
+			m_vModel[nCnt]->pMesh->Release();
+			m_vModel[nCnt]->pMesh = NULL;
 		}
-		if (m_Model[MAP_MODEL][nCnt].m_pTexture != NULL)
+		if (m_vModel[nCnt]->m_pTexture != NULL)
 		{
-			for (int nCntmat = 0; nCntmat < (int)m_Model[MAP_MODEL][nCnt].nNumMat; nCntmat++)
+			for (int nCntmat = 0; nCntmat < (int)m_vModel[nCnt]->nNumMat; nCntmat++)
 			{
-				if (m_Model[MAP_MODEL][nCnt].m_pTexture[nCntmat] != NULL)
+				if (m_vModel[nCnt]->m_pTexture[nCntmat] != NULL)
 				{
-					m_Model[MAP_MODEL][nCnt].m_pTexture[nCntmat]->Release();
-					m_Model[MAP_MODEL][nCnt].m_pTexture[nCntmat] = NULL;
+					m_vModel[nCnt]->m_pTexture[nCntmat]->Release();
+					m_vModel[nCnt]->m_pTexture[nCntmat] = NULL;
 				}
 			}
-			delete[] m_Model[MAP_MODEL][nCnt].m_pTexture;
-			m_Model[MAP_MODEL][nCnt].m_pTexture = NULL;
-		}
-	}
-	for (int nCnt = 0; nCnt < MODEL_ENEMY_MAX; nCnt++)
-	{
-		if (m_Model[ENEMY_MODEL][nCnt].pBuffmat != NULL)
-		{
-			m_Model[ENEMY_MODEL][nCnt].pBuffmat->Release();
-			m_Model[ENEMY_MODEL][nCnt].pBuffmat = NULL;
-		}
-		if (m_Model[ENEMY_MODEL][nCnt].pMesh != NULL)
-		{
-			m_Model[ENEMY_MODEL][nCnt].pMesh->Release();
-			m_Model[ENEMY_MODEL][nCnt].pMesh = NULL;
-		}
-		if (m_Model[ENEMY_MODEL][nCnt].m_pTexture != NULL)
-		{
-			for (int nCntmat = 0; nCntmat < (int)m_Model[ENEMY_MODEL][nCnt].nNumMat; nCntmat++)
-			{
-				if (m_Model[ENEMY_MODEL][nCnt].m_pTexture[nCntmat] != NULL)
-				{
-					m_Model[ENEMY_MODEL][nCnt].m_pTexture[nCntmat]->Release();
-					m_Model[ENEMY_MODEL][nCnt].m_pTexture[nCntmat] = NULL;
-				}
-			}
-			delete[] m_Model[ENEMY_MODEL][nCnt].m_pTexture;
-			m_Model[ENEMY_MODEL][nCnt].m_pTexture = NULL;
-		}
-	}
-	for (int nCnt = 0; nCnt < MODEL_PRISONER_MAX; nCnt++)
-	{
-		if (m_Model[PRISONER_MODEL][nCnt].pBuffmat != NULL)
-		{
-			m_Model[PRISONER_MODEL][nCnt].pBuffmat->Release();
-			m_Model[PRISONER_MODEL][nCnt].pBuffmat = NULL;
-		}
-		if (m_Model[PRISONER_MODEL][nCnt].pMesh != NULL)
-		{
-			m_Model[PRISONER_MODEL][nCnt].pMesh->Release();
-			m_Model[PRISONER_MODEL][nCnt].pMesh = NULL;
-		}
-		if (m_Model[PRISONER_MODEL][nCnt].m_pTexture != NULL)
-		{
-			for (int nCntmat = 0; nCntmat < (int)m_Model[PRISONER_MODEL][nCnt].nNumMat; nCntmat++)
-			{
-				if (m_Model[PRISONER_MODEL][nCnt].m_pTexture[nCntmat] != NULL)
-				{
-					m_Model[PRISONER_MODEL][nCnt].m_pTexture[nCntmat]->Release();
-					m_Model[PRISONER_MODEL][nCnt].m_pTexture[nCntmat] = NULL;
-				}
-			}
-			delete[] m_Model[PRISONER_MODEL][nCnt].m_pTexture;
-			m_Model[PRISONER_MODEL][nCnt].m_pTexture = NULL;
-		}
-	}
-	// 銃のモデル
-	for (int nCnt = 0; nCnt < MODEL_GUN_MAX; nCnt++)
-	{
-		if (m_Model[GUN_MODEL][nCnt].pBuffmat != NULL)
-		{
-			m_Model[GUN_MODEL][nCnt].pBuffmat->Release();
-			m_Model[GUN_MODEL][nCnt].pBuffmat = NULL;
-		}
-		if (m_Model[GUN_MODEL][nCnt].pMesh != NULL)
-		{
-			m_Model[GUN_MODEL][nCnt].pMesh->Release();
-			m_Model[GUN_MODEL][nCnt].pMesh = NULL;
-		}
-		if (m_Model[GUN_MODEL][nCnt].m_pTexture != NULL)
-		{
-			for (int nCntmat = 0; nCntmat < (int)m_Model[GUN_MODEL][nCnt].nNumMat; nCntmat++)
-			{
-				if (m_Model[GUN_MODEL][nCnt].m_pTexture[nCntmat] != NULL)
-				{
-					m_Model[GUN_MODEL][nCnt].m_pTexture[nCntmat]->Release();
-					m_Model[GUN_MODEL][nCnt].m_pTexture[nCntmat] = NULL;
-				}
-			}
-			delete[] m_Model[GUN_MODEL][nCnt].m_pTexture;
-			m_Model[GUN_MODEL][nCnt].m_pTexture = NULL;
-		}
-	}
-	// 弾のモデル
-	for (int nCnt = 0; nCnt < MODEL_BULLET_MAX; nCnt++)
-	{
-		if (m_Model[BULLET_MODEL][nCnt].pBuffmat != NULL)
-		{
-			m_Model[BULLET_MODEL][nCnt].pBuffmat->Release();
-			m_Model[BULLET_MODEL][nCnt].pBuffmat = NULL;
-		}
-		if (m_Model[BULLET_MODEL][nCnt].pMesh != NULL)
-		{
-			m_Model[BULLET_MODEL][nCnt].pMesh->Release();
-			m_Model[BULLET_MODEL][nCnt].pMesh = NULL;
-		}
-		if (m_Model[BULLET_MODEL][nCnt].m_pTexture != NULL)
-		{
-			for (int nCntmat = 0; nCntmat < (int)m_Model[BULLET_MODEL][nCnt].nNumMat; nCntmat++)
-			{
-				if (m_Model[BULLET_MODEL][nCnt].m_pTexture[nCntmat] != NULL)
-				{
-					m_Model[BULLET_MODEL][nCnt].m_pTexture[nCntmat]->Release();
-					m_Model[BULLET_MODEL][nCnt].m_pTexture[nCntmat] = NULL;
-				}
-			}
-			delete[] m_Model[BULLET_MODEL][nCnt].m_pTexture;
-			m_Model[BULLET_MODEL][nCnt].m_pTexture = NULL;
-		}
-	}
-
-	for (int nCnt = 0; nCnt < OBSTACLE_TYPE_MAX; nCnt++)
-	{
-		if (m_Model[OBSTACLE_MODEL][nCnt].pBuffmat != NULL)
-		{
-			m_Model[OBSTACLE_MODEL][nCnt].pBuffmat->Release();
-			m_Model[OBSTACLE_MODEL][nCnt].pBuffmat = NULL;
-		}
-		if (m_Model[OBSTACLE_MODEL][nCnt].pMesh != NULL)
-		{
-			m_Model[OBSTACLE_MODEL][nCnt].pMesh->Release();
-			m_Model[OBSTACLE_MODEL][nCnt].pMesh = NULL;
-		}
-		if (m_Model[OBSTACLE_MODEL][nCnt].m_pTexture != NULL)
-		{
-			for (int nCntmat = 0; nCntmat < (int)m_Model[OBSTACLE_MODEL][nCnt].nNumMat; nCntmat++)
-			{
-				if (m_Model[OBSTACLE_MODEL][nCnt].m_pTexture[nCntmat] != NULL)
-				{
-					m_Model[OBSTACLE_MODEL][nCnt].m_pTexture[nCntmat]->Release();
-					m_Model[OBSTACLE_MODEL][nCnt].m_pTexture[nCntmat] = NULL;
-				}
-			}
-			delete[] m_Model[OBSTACLE_MODEL][nCnt].m_pTexture;
-			m_Model[OBSTACLE_MODEL][nCnt].m_pTexture = NULL;
-		}
-	}
-	//タンク
-	for (int nCnt = 0; nCnt < MODEL_TANK_MAX; nCnt++)
-	{
-		if (m_Model[TANK_MODEL][nCnt].pBuffmat != NULL)
-		{
-			m_Model[TANK_MODEL][nCnt].pBuffmat->Release();
-			m_Model[TANK_MODEL][nCnt].pBuffmat = NULL;
-		}
-		if (m_Model[TANK_MODEL][nCnt].pMesh != NULL)
-		{
-			m_Model[TANK_MODEL][nCnt].pMesh->Release();
-			m_Model[TANK_MODEL][nCnt].pMesh = NULL;
-		}
-		if (m_Model[TANK_MODEL][nCnt].m_pTexture != NULL)
-		{
-			for (int nCntmat = 0; nCntmat < (int)m_Model[TANK_MODEL][nCnt].nNumMat; nCntmat++)
-			{
-				if (m_Model[TANK_MODEL][nCnt].m_pTexture[nCntmat] != NULL)
-				{
-					m_Model[TANK_MODEL][nCnt].m_pTexture[nCntmat]->Release();
-					m_Model[TANK_MODEL][nCnt].m_pTexture[nCntmat] = NULL;
-				}
-			}
-			delete[] m_Model[TANK_MODEL][nCnt].m_pTexture;
-			m_Model[TANK_MODEL][nCnt].m_pTexture = NULL;
-		}
-	}
-
-	// 戦闘機
-	for (int nCnt = 0; nCnt < MODEL_PLANE_MAX; nCnt++)
-	{
-		if (m_Model[PLANE_MODEL][nCnt].pBuffmat != NULL)
-		{
-			m_Model[PLANE_MODEL][nCnt].pBuffmat->Release();
-			m_Model[PLANE_MODEL][nCnt].pBuffmat = NULL;
-		}
-		if (m_Model[PLANE_MODEL][nCnt].pMesh != NULL)
-		{
-			m_Model[PLANE_MODEL][nCnt].pMesh->Release();
-			m_Model[PLANE_MODEL][nCnt].pMesh = NULL;
-		}
-		if (m_Model[PLANE_MODEL][nCnt].m_pTexture != NULL)
-		{
-			for (int nCntmat = 0; nCntmat < (int)m_Model[PLANE_MODEL][nCnt].nNumMat; nCntmat++)
-			{
-				if (m_Model[PLANE_MODEL][nCnt].m_pTexture[nCntmat] != NULL)
-				{
-					m_Model[PLANE_MODEL][nCnt].m_pTexture[nCntmat]->Release();
-					m_Model[PLANE_MODEL][nCnt].m_pTexture[nCntmat] = NULL;
-				}
-			}
-			delete[] m_Model[PLANE_MODEL][nCnt].m_pTexture;
-			m_Model[PLANE_MODEL][nCnt].m_pTexture = NULL;
-		}
-	}
-
-	// ヘリコプター
-	for (int nCnt = 0; nCnt < MODEL_HELI_MAX; nCnt++)
-	{
-		if (m_Model[HELI_MODEL][nCnt].pBuffmat != NULL)
-		{
-			m_Model[HELI_MODEL][nCnt].pBuffmat->Release();
-			m_Model[HELI_MODEL][nCnt].pBuffmat = NULL;
-		}
-		if (m_Model[HELI_MODEL][nCnt].pMesh != NULL)
-		{
-			m_Model[HELI_MODEL][nCnt].pMesh->Release();
-			m_Model[HELI_MODEL][nCnt].pMesh = NULL;
-		}
-		if (m_Model[HELI_MODEL][nCnt].m_pTexture != NULL)
-		{
-			for (int nCntmat = 0; nCntmat < (int)m_Model[HELI_MODEL][nCnt].nNumMat; nCntmat++)
-			{
-				if (m_Model[HELI_MODEL][nCnt].m_pTexture[nCntmat] != NULL)
-				{
-					m_Model[HELI_MODEL][nCnt].m_pTexture[nCntmat]->Release();
-					m_Model[HELI_MODEL][nCnt].m_pTexture[nCntmat] = NULL;
-				}
-			}
-			delete[] m_Model[HELI_MODEL][nCnt].m_pTexture;
-			m_Model[HELI_MODEL][nCnt].m_pTexture = NULL;
-		}
-	}
-	// ボス
-	for (int nCnt = 0; nCnt < MODEL_BOSS_MAX; nCnt++)
-	{
-		if (m_Model[BOSS_MODEL][nCnt].pBuffmat != NULL)
-		{
-			m_Model[BOSS_MODEL][nCnt].pBuffmat->Release();
-			m_Model[BOSS_MODEL][nCnt].pBuffmat = NULL;
-		}
-		if (m_Model[BOSS_MODEL][nCnt].pMesh != NULL)
-		{
-			m_Model[BOSS_MODEL][nCnt].pMesh->Release();
-			m_Model[BOSS_MODEL][nCnt].pMesh = NULL;
-		}
-		if (m_Model[BOSS_MODEL][nCnt].m_pTexture != NULL)
-		{
-			for (int nCntmat = 0; nCntmat < (int)m_Model[BOSS_MODEL][nCnt].nNumMat; nCntmat++)
-			{
-				if (m_Model[BOSS_MODEL][nCnt].m_pTexture[nCntmat] != NULL)
-				{
-					m_Model[BOSS_MODEL][nCnt].m_pTexture[nCntmat]->Release();
-					m_Model[BOSS_MODEL][nCnt].m_pTexture[nCntmat] = NULL;
-				}
-			}
-			delete[] m_Model[BOSS_MODEL][nCnt].m_pTexture;
-			m_Model[BOSS_MODEL][nCnt].m_pTexture = NULL;
-		}
-	}
-	// 特殊武器
-	for (int nCnt = 0; nCnt < MODEL_WEPON_MAX; nCnt++)
-	{
-		if (m_Model[WEPON_MODEL][nCnt].pBuffmat != NULL)
-		{
-			m_Model[WEPON_MODEL][nCnt].pBuffmat->Release();
-			m_Model[WEPON_MODEL][nCnt].pBuffmat = NULL;
-		}
-		if (m_Model[WEPON_MODEL][nCnt].pMesh != NULL)
-		{
-			m_Model[WEPON_MODEL][nCnt].pMesh->Release();
-			m_Model[WEPON_MODEL][nCnt].pMesh = NULL;
-		}
-		if (m_Model[WEPON_MODEL][nCnt].m_pTexture != NULL)
-		{
-			for (int nCntmat = 0; nCntmat < (int)m_Model[WEPON_MODEL][nCnt].nNumMat; nCntmat++)
-			{
-				if (m_Model[WEPON_MODEL][nCnt].m_pTexture[nCntmat] != NULL)
-				{
-					m_Model[WEPON_MODEL][nCnt].m_pTexture[nCntmat]->Release();
-					m_Model[WEPON_MODEL][nCnt].m_pTexture[nCntmat] = NULL;
-				}
-			}
-			delete[] m_Model[WEPON_MODEL][nCnt].m_pTexture;
-			m_Model[WEPON_MODEL][nCnt].m_pTexture = NULL;
-		}
-	}
-
-	// ドラゴンノスケ
-	for (int nCnt = 0; nCnt < MODEL_BOSSONE_MAX; nCnt++)
-	{
-		if (m_Model[BOSS_ONE_MODEL][nCnt].pBuffmat != NULL)
-		{
-			m_Model[BOSS_ONE_MODEL][nCnt].pBuffmat->Release();
-			m_Model[BOSS_ONE_MODEL][nCnt].pBuffmat = NULL;
-		}
-		if (m_Model[BOSS_ONE_MODEL][nCnt].pMesh != NULL)
-		{
-			m_Model[BOSS_ONE_MODEL][nCnt].pMesh->Release();
-			m_Model[BOSS_ONE_MODEL][nCnt].pMesh = NULL;
-		}
-		if (m_Model[BOSS_ONE_MODEL][nCnt].m_pTexture != NULL)
-		{
-			for (int nCntmat = 0; nCntmat < (int)m_Model[BOSS_ONE_MODEL][nCnt].nNumMat; nCntmat++)
-			{
-				if (m_Model[BOSS_ONE_MODEL][nCnt].m_pTexture[nCntmat] != NULL)
-				{
-					m_Model[BOSS_ONE_MODEL][nCnt].m_pTexture[nCntmat]->Release();
-					m_Model[BOSS_ONE_MODEL][nCnt].m_pTexture[nCntmat] = NULL;
-				}
-			}
-			delete[] m_Model[BOSS_ONE_MODEL][nCnt].m_pTexture;
-			m_Model[BOSS_ONE_MODEL][nCnt].m_pTexture = NULL;
+			delete[] m_vModel[nCnt]->m_pTexture;
+			m_vModel[nCnt]->m_pTexture = NULL;
 		}
 	}
 }
@@ -926,63 +252,67 @@ void CModel::UnLoad(void)
 //====================================================================
 HRESULT CModel::Init(void)
 {
-	m_pos				= D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// 位置
-	m_move				= D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// 移動量
-	m_rot				= D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// 回転
-	m_col				= D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);	// カラー
-	m_AddColor			= D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);	// 加算する色
-	m_bDieFlag			= false;								// 死亡フラグ
-	m_bColorChangeFlag	= false;									// 色変更フラグ
-	m_bDisp				= true;									// 描画する
-	m_type				= 0;									// 種類
+	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// 位置
+	m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// 移動量
+	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// 回転
+	m_col = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);	// カラー
+	m_AddColor = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);	// 加算する色
+	m_bDieFlag = false;								// 死亡フラグ
+	m_bColorChangeFlag = false;									// 色変更フラグ
+	m_bDisp = true;									// 描画する
+	m_type = 0;									// 種類
+	m_modelCount = 0;
 	int nNumVertices;
 	DWORD sizeFVF;
 	BYTE *pVertexBuffer;
-															// 当たり判定生成
+	// 当たり判定生成
 	m_pCollision = CCollision::Create();
-
-	for (int nCnt = 0; nCnt < MODEL_MAP_MAX; nCnt++)
+	int nCntID = GetModelID(m_modelID);
+	for (size_t nCnt = 0; nCnt < m_vModel.size(); nCnt++)
 	{
-		if (m_Model[MAP_MODEL][nCnt].pMesh != NULL)
+		if (nCnt > 200 && nCnt < 208)
 		{
-			//頂点数を取得
-			nNumVertices = m_Model[MAP_MODEL][nCnt].pMesh->GetNumVertices();
-			//頂点フォーマットのサイズを取得
-			sizeFVF = D3DXGetFVFVertexSize(m_Model[MAP_MODEL][nCnt].pMesh->GetFVF());
-			//頂点バッファをロック
-			m_Model[MAP_MODEL][nCnt].pMesh->LockVertexBuffer(D3DLOCK_READONLY, (void**)&pVertexBuffer);
-			for (int nCntVtx = 0; nCntVtx < nNumVertices; nCntVtx++)
+			if (m_vModel[nCnt]->pMesh != NULL)
 			{
-				D3DXVECTOR3 vtx = *(D3DXVECTOR3*)pVertexBuffer;
-				//すべての頂点情報を比較して最小、最大を抜き出す
-				if (m_Model[MAP_MODEL][nCnt].vtxMin.x > vtx.x)
+				//頂点数を取得
+				nNumVertices = m_vModel[nCnt]->pMesh->GetNumVertices();
+				//頂点フォーマットのサイズを取得
+				sizeFVF = D3DXGetFVFVertexSize(m_vModel[nCnt]->pMesh->GetFVF());
+				//頂点バッファをロック
+				m_vModel[nCnt]->pMesh->LockVertexBuffer(D3DLOCK_READONLY, (void**)&pVertexBuffer);
+				for (int nCntVtx = 0; nCntVtx < nNumVertices; nCntVtx++)
 				{
-					m_Model[MAP_MODEL][nCnt].vtxMin.x = vtx.x;
+					D3DXVECTOR3 vtx = *(D3DXVECTOR3*)pVertexBuffer;
+					//すべての頂点情報を比較して最小、最大を抜き出す
+					if (m_vModel[nCnt]->vtxMin.x > vtx.x)
+					{
+						m_vModel[nCnt]->vtxMin.x = vtx.x;
+					}
+					if (m_vModel[nCnt]->vtxMin.y > vtx.y)
+					{
+						m_vModel[nCnt]->vtxMin.y = vtx.y;
+					}
+					if (m_vModel[nCnt]->vtxMin.z > vtx.z)
+					{
+						m_vModel[nCnt]->vtxMin.z = vtx.z;
+					}
+					if (m_vModel[nCnt]->vtxMax.x < vtx.x)
+					{
+						m_vModel[nCnt]->vtxMax.x = vtx.x;
+					}
+					if (m_vModel[nCnt]->vtxMax.y < vtx.y)
+					{
+						m_vModel[nCnt]->vtxMax.y = vtx.y;
+					}
+					if (m_vModel[nCnt]->vtxMax.z < vtx.z)
+					{
+						m_vModel[nCnt]->vtxMax.z = vtx.z;
+					}
+					pVertexBuffer += sizeFVF; // サイズ分ポインタを進める
 				}
-				if (m_Model[MAP_MODEL][nCnt].vtxMin.y > vtx.y)
-				{
-					m_Model[MAP_MODEL][nCnt].vtxMin.y = vtx.y;
-				}
-				if (m_Model[MAP_MODEL][nCnt].vtxMin.z > vtx.z)
-				{
-					m_Model[MAP_MODEL][nCnt].vtxMin.z = vtx.z;
-				}
-				if (m_Model[MAP_MODEL][nCnt].vtxMax.x < vtx.x)
-				{
-					m_Model[MAP_MODEL][nCnt].vtxMax.x = vtx.x;
-				}
-				if (m_Model[MAP_MODEL][nCnt].vtxMax.y < vtx.y)
-				{
-					m_Model[MAP_MODEL][nCnt].vtxMax.y = vtx.y;
-				}
-				if (m_Model[MAP_MODEL][nCnt].vtxMax.z < vtx.z)
-				{
-					m_Model[MAP_MODEL][nCnt].vtxMax.z = vtx.z;
-				}
-				pVertexBuffer += sizeFVF; // サイズ分ポインタを進める
+				//頂点バッファをアンロック
+				m_vModel[nCnt]->pMesh->UnlockVertexBuffer();
 			}
-			//頂点バッファをアンロック
-			m_Model[MAP_MODEL][nCnt].pMesh->UnlockVertexBuffer();
 		}
 	}
 	return S_OK;
@@ -1063,6 +393,8 @@ CModel *CModel::Create(int type, int modelCount)
 	pModel->Init();
 	pModel->m_type = type;
 	pModel->m_modelCount = modelCount;
+	pModel->m_modelID = (CHARA_MODEL)((type * 100) + modelCount);
+
 	return pModel;
 }
 //====================================================================
@@ -1075,6 +407,7 @@ CModel * CModel::CreateSceneManagement(int type, int modelCount)
 	pModel->Init();
 	pModel->m_type = type;
 	pModel->m_modelCount = modelCount;
+	pModel->m_modelID = (CHARA_MODEL)((type * 100) + modelCount);
 	return pModel;
 }
 //====================================================================
@@ -1082,54 +415,8 @@ CModel * CModel::CreateSceneManagement(int type, int modelCount)
 //====================================================================
 char * CModel::GetModelFileName(int nType, int nModelCount)
 {
-	//タイプで読み込む配列を変える
-	switch (nType)
-	{
-		//プレイヤー
-	case PLAYER_MODEL:
-		return m_PlayerFileName[nModelCount];
-		break;
-		//敵
-	case ENEMY_MODEL:
-		return m_EnemyFileName[nModelCount];
-		break;
-		//マップ
-	case MAP_MODEL:
-		return m_MapFileName[nModelCount];
-		break;
-		//障害物
-	case OBSTACLE_MODEL:
-		return m_ObstacleFileName[nModelCount];
-		break;
-		//捕虜
-	case PRISONER_MODEL:
-		return m_PrisonerFileName[nModelCount];
-		break;
-		//戦車
-	case TANK_MODEL:
-		return m_TankFileName[nModelCount];
-		break;
-		//戦車
-	case PLANE_MODEL:
-		return m_PlaneFileName[nModelCount];
-		break;
-		//ヘリ
-	case HELI_MODEL:
-		return m_HeliFileName[nModelCount];
-		break;
-		//ボス
-	case BOSS_MODEL:
-		return m_BossFileName[nModelCount];
-		break;
-
-	case BOSS_ONE_MODEL:
-		return m_BossOneFileName[nModelCount];
-		break;
-//特殊武器
-	case WEPON_MODEL:
-		return m_WeponFileName[nModelCount];
-		break;	}
-	return nullptr;
+	int nCntID =((nType * 100) + nModelCount);
+	return m_vModelFileName[GetModelID((CHARA_MODEL)nCntID)].modelFileName;
 }
 
 //====================================================================
@@ -1146,6 +433,30 @@ void CModel::NotDrawCalcMtxOnly(D3DXMATRIX * pParentMtx)
 		pParentMtx);
 }
 //====================================================================
+//タイプの設定
+//====================================================================
+void CModel::SetType(int type)
+{
+	m_type = type;
+	m_modelID = (CHARA_MODEL)((m_type * 100) + m_modelCount);
+}
+//====================================================================
+//モデルの種類の設定
+//====================================================================
+void CModel::SetModelConut(int nModelCount)
+{
+	m_modelCount = nModelCount;
+	m_modelID = (CHARA_MODEL)((m_type * 100) + m_modelCount);
+}
+//====================================================================
+//メッシュ情報の取得
+//====================================================================
+LPD3DXMESH CModel::GetMesh(void)
+{
+	int nCntID = GetModelID(m_modelID);
+	return m_vModel[nCntID]->pMesh;
+}
+//====================================================================
 //コリジョン消去
 //====================================================================
 void CModel::DeleteCollision()
@@ -1158,6 +469,30 @@ void CModel::DeleteCollision()
 	}
 }
 //====================================================================
+//モデルIDの設定
+//====================================================================
+void CModel::SetModelID(CHARA_MODEL model)
+{
+	m_modelID = model;
+	m_type = m_modelID / 100;
+	m_modelCount = m_modelID % 100;
+}
+//====================================================================
+//モデルの番数の取得
+//====================================================================
+int CModel::GetModelID(CHARA_MODEL model)
+{
+	for (size_t nCnt = 0; nCnt < m_vModel.size(); nCnt++)
+	{
+		if (m_vModelFileName[nCnt].FileModelID == model)
+		{
+			return nCnt;
+		}
+	}
+	return -1;
+}
+
+//====================================================================
 //描画
 //====================================================================
 void CModel::DrawMesh()
@@ -1167,20 +502,19 @@ void CModel::DrawMesh()
 	{
 		return;
 	}
-
 	// デバイスの取得
 	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
 	D3DXMATERIAL *pMat;
-
+	int nCntID = GetModelID(m_modelID);
 	// ワールドマトリックスの設定
 	pDevice->SetTransform(D3DTS_WORLD, &m_mtxWorld);
-
 	// マテリアル情報に対するポインタを取得
-	if (m_Model[m_type][m_modelCount].pBuffmat != NULL)
+	if (m_vModel[nCntID]->pBuffmat != NULL)
 	{
-		pMat = (D3DXMATERIAL*)m_Model[m_type][m_modelCount].pBuffmat->GetBufferPointer();
+		pMat = (D3DXMATERIAL*)m_vModel[nCntID]->pBuffmat->GetBufferPointer();
 		pDevice->SetRenderState(D3DRS_SPECULARENABLE, TRUE);						// すぺきゅらモード有効
-		for (int nCnt = 0; nCnt < (int)m_Model[m_type][m_modelCount].nNumMat; nCnt++)
+
+		for (int nCnt = 0; nCnt < (int)m_vModel[nCntID]->nNumMat; nCnt++)
 		{
 			// ローカルのマテリアル
 			D3DMATERIAL9 LocalMat = pMat[nCnt].MatD3D;
@@ -1195,14 +529,13 @@ void CModel::DrawMesh()
 				// ローカルマテリアルの色変更
 				LocalMat.Diffuse = MatCol;
 			}
-			pDevice->SetTexture(0, m_Model[m_type][m_modelCount].m_pTexture[nCnt]);
+			pDevice->SetTexture(0, m_vModel[nCntID]->m_pTexture[nCnt]);
 			// マテリアルの設定
 			pDevice->SetMaterial(&LocalMat);
 			// 描画
-			m_Model[m_type][m_modelCount].pMesh->DrawSubset(nCnt);
+			m_vModel[nCntID]->pMesh->DrawSubset(nCnt);
 		}
 	}
 	pDevice->SetRenderState(D3DRS_SPECULARENABLE, FALSE);						// すぺきゅらモード無効
-
 }
 

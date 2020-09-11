@@ -145,7 +145,7 @@ CBalkan * CBalkan::Create(D3DXVECTOR3 rot)
 	pBalkan->SetType(BULLET_MODEL);
 
 	// モデルカウントの設定
-	pBalkan->SetModelConut(MODEL_BULLET_SPHERE);
+	pBalkan->SetModelID(MODEL_BULLET_SPHERE);
 
 	return pBalkan;
 }

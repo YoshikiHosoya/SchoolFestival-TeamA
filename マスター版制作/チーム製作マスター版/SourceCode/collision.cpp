@@ -35,7 +35,7 @@
 #include "playerui.h"
 #include "shield.h"
 #include "boss_One.h"
-
+#include "ModelSet.h"
 //======================================================================================================================
 //
 // マクロ定義
@@ -219,7 +219,7 @@ bool CCollision::ForPlayerBulletCollision(int nEnemyDamage, int nObstacleDamage,
 
 		if (pEnemy != nullptr)
 		{
-			if (pEnemy->GetCharacterType() == CCharacter::CHARACTER_TYPE_BOSS_ONE)
+			if (pEnemy->GetModelSet()->GetCharacterType() == CModelSet::CHARACTER_TYPE_BOSS_ONE)
 			{
 				CBoss_One *pBoss_One = (CBoss_One*)pEnemy;
 
@@ -409,16 +409,16 @@ bool CCollision::ForEnemyCollision(int nPlayerDamage, int nPlayerTankDamage, boo
 						// 判定関数
 						if (this->OtherCollision2D(pPlayertank->GetCollision()))
 						{
-							// プレイヤーのライフ減衰
-							pPlayertank->CVehicle::AddDamage(nPlayerTankDamage);
+							//// プレイヤーのライフ減衰
+							//pPlayertank->CVehicle::AddDamage(nPlayerTankDamage);
 
-							// プレイヤーのライフが0以下になった時
-							if (pPlayertank->CVehicle::GetLife() <= 0)
-							{
-								pPlayertank->SetDieFlag(true);
-								// ポインタをnullにする
-								pPlayertank = nullptr;
-							}
+							//// プレイヤーのライフが0以下になった時
+							//if (pPlayertank->CVehicle::GetLife() <= 0)
+							//{
+							//	pPlayertank->SetDieFlag(true);
+							//	// ポインタをnullにする
+							//	pPlayertank = nullptr;
+							//}
 
 							// 当たり範囲フラグをtrueにする
 							bHitFlag = true;
@@ -477,7 +477,7 @@ bool CCollision::ForPlayer_EnemyCollision(bool Penetration)
 		{
 			if (pEnemy->GetCollision())
 			{
-				if (pEnemy->GetCharacterType() == CCharacter::CHARACTER_TYPE_BOSS_ONE)
+				if (pEnemy->GetModelSet()->GetCharacterType() == CModelSet::CHARACTER_TYPE_BOSS_ONE)
 				{
 					CBoss_One *pBoss_One = (CBoss_One*)pEnemy;
 
@@ -717,7 +717,7 @@ bool CCollision::ForPlayer_VehicleCollision(CCollision * pCollision)
 //======================================================================================================================
 // プレイヤーが乗り物に乗る時の判定
 //======================================================================================================================
-void *CCollision::ForPlayer_VehicleCollision()
+CVehicle *CCollision::ForPlayer_VehicleCollision()
 {
 	CPlayertank *pPlayertank = nullptr;
 
@@ -729,9 +729,12 @@ void *CCollision::ForPlayer_VehicleCollision()
 
 		if (pPlayertank != nullptr)
 		{
-			if (this->VehicleCollision(pPlayertank->GetCollision()))
+			if (pPlayertank->GetTag() == TAG::NONE)
 			{
-				return pPlayertank;
+				if (this->VehicleCollision(pPlayertank->GetCollision()))
+				{
+					return pPlayertank;
+				}
 			}
 		}
 	}
@@ -847,7 +850,7 @@ bool CCollision::BossOne_PlayerCollision()
 		CEnemy *pEnemy = CManager::GetBaseMode()->GetMap()->GetEnemy(nCnt);
 		if (pEnemy != nullptr)
 		{
-			if (pEnemy->GetCharacterType() == CCharacter::CHARACTER_TYPE_BOSS_ONE)
+			if (pEnemy->GetModelSet()->GetCharacterType() == CModelSet::CHARACTER_TYPE_BOSS_ONE)
 			{
 				CBoss_One *pBoss_One = (CBoss_One*)pEnemy;
 

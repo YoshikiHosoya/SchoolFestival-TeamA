@@ -22,9 +22,6 @@
     <ClCompile Include="SourceCode\ImGui\imgui_widgets.cpp">
       <Filter>ImGui</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\incendiary.cpp">
-      <Filter>ImGui</Filter>
-    </ClCompile>
     <ClCompile Include="SourceCode\hosso\Debug_EffectViewer.cpp">
       <Filter>Debug</Filter>
     </ClCompile>
@@ -310,6 +307,12 @@
     <ClCompile Include="SourceCode\pauseUI.cpp">
       <Filter>Scene2D.3D\UI</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\ModelSet.cpp">
+      <Filter>Model\character</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\incendiary.cpp">
+      <Filter>Wepon\Gun</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SourceCode\shield.h">
@@ -343,9 +346,6 @@
       <Filter>ImGui</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\ImGui\imstb_truetype.h">
-      <Filter>ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\incendiary.h">
       <Filter>ImGui</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\hosso\Debug_EffectViewer.h">
@@ -632,6 +632,12 @@
     </ClInclude>
     <ClInclude Include="SourceCode\pauseUI.h">
       <Filter>Scene2D.3D\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\ModelSet.h">
+      <Filter>Model\character</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\incendiary.h">
+      <Filter>Wepon\Gun</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

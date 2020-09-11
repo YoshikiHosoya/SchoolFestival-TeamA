@@ -15,6 +15,7 @@
 #include "gun.h"
 #include "particle.h"
 #include "BossAI.h"
+#include "ModelSet.h"
 //====================================================================
 //ƒ}ƒNƒ’è‹`
 //====================================================================
@@ -43,11 +44,11 @@ HRESULT CBoss::Init(void)
 {
 	//ƒLƒƒƒ‰‚Ì‰Šú‰»
 	CEnemy::Init();
-	LoadOffset(CCharacter::CHARACTER_TYPE_BOSS);
-	SetMotion(CCharacter::BOSS_MOTION_NORMAL);
+	GetModelSet()->LoadOffset(CModelSet::CHARACTER_TYPE_BOSS);
+	GetModelSet()->SetMotion(CModelSet::BOSS_MOTION_NORMAL);
 
 	CCharacter::SetLife(BOSS_LIFE);
-	SetCharacterType(CCharacter::CHARACTER_TYPE_BOSS);
+	GetModelSet()->SetCharacterType(CModelSet::CHARACTER_TYPE_BOSS);
 
 	m_Attack = false;
 	m_AttackCastCnt = 0;
@@ -57,7 +58,7 @@ HRESULT CBoss::Init(void)
 	SetGravity(false);
 
 	// e‚Ì¶¬
-	GetGunPtr()->SetHandMtx(GetCharacterModelPartsList(CModel::MODEL_BOSS_BODY)->GetMatrix());
+	GetGunPtr()->SetHandMtx(GetModelSet()->GetCharacterModelList()[0]->GetMatrix());
 	GetGunPtr()->SetGunType(CGun::GUNTYPE_TRACKINGGUN);
 
 	// e‚Ì’e‚ÌŽí—Þ
@@ -137,7 +138,7 @@ CBoss *CBoss::Create(void)
 //====================================================================
 bool CBoss::DefaultMotion(void)
 {
-	SetMotion(CCharacter::BOSS_MOTION_NORMAL);
+	GetModelSet()->SetMotion(CModelSet::BOSS_MOTION_NORMAL);
 	return true;
 }
 //====================================================================
