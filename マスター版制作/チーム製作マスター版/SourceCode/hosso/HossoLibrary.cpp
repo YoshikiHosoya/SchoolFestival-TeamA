@@ -123,9 +123,6 @@ DIRECTION CHossoLibrary::CheckPadStick()
 			Direction = DIRECTION::DOWN;
 			return Direction;
 		}
-
-		CDebugProc::Print_Left("bLeftStickDown_Y	%d\n", m_PadStick[nCnt].bLeftStickDown_Y);
-		CDebugProc::Print_Left("fLeftStickValue_Y	%f\n", m_PadStick[nCnt].fLeftStickValue_Y);
 	}
 	// キーボード
 	// 上
