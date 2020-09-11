@@ -14974,7 +14974,7 @@ Mesh {
    0.300000;0.300000;0.300000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "C:\\Users\\game305\\Desktop\\SchoolFestival-TeamA\\マスター版制作\\チーム製作マスター版\\data\\materialtexture\\t M\\1.png";
+    "data\\materialtexture\\t M\\1.png";
    }
   }
   Material {
@@ -14983,7 +14983,7 @@ Mesh {
    0.300000;0.300000;0.300000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "C:\\Users\\game305\\Desktop\\SchoolFestival-TeamA\\マスター版制作\\チーム製作マスター版\\data\\materialtexture\\t M\\2.png";
+    "data\\materialtexture\\t M\\2.png";
    }
   }
   Material {
@@ -14992,7 +14992,7 @@ Mesh {
    0.300000;0.300000;0.300000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "C:\\Users\\game305\\Desktop\\SchoolFestival-TeamA\\マスター版制作\\チーム製作マスター版\\data\\materialtexture\\t M\\3.png";
+    "data\\materialtexture\\t M\\3.png";
    }
   }
   Material {
