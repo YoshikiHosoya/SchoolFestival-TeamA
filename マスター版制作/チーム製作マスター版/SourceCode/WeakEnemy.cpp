@@ -101,6 +101,8 @@ HRESULT CWeakEnemy::Init(void)
 
 		//モーションoff
 		CCharacter::GetModelSet()->SetUseMotion(false);
+		CCharacter::GetModelSet()->SetMotion(CModelSet::CHARACTER_MOTION_STATE_NONE);
+
 		break;
 
 	case CWeakEnemy::WEAKENEMY_TYPE::ENEMY_MELTYHONEY:
@@ -110,7 +112,7 @@ HRESULT CWeakEnemy::Init(void)
 
 		//モーションoff
 		CCharacter::GetModelSet()->SetUseMotion(false);
-
+		CCharacter::GetModelSet()->SetMotion(CModelSet::CHARACTER_MOTION_STATE_NONE);
 		break;
 
 	case CWeakEnemy::WEAKENEMY_TYPE::ENEMY_ZYCOCCA:
@@ -120,6 +122,7 @@ HRESULT CWeakEnemy::Init(void)
 
 		//モーションoff
 		CCharacter::GetModelSet()->SetUseMotion(false);
+		CCharacter::GetModelSet()->SetMotion(CModelSet::CHARACTER_MOTION_STATE_NONE);
 		break;
 
 	default:
@@ -170,6 +173,10 @@ void CWeakEnemy::Update(void)
 		}
 		return;
 	}
+
+	//更新
+	UpdateVehicle();
+
 	CEnemy::Update();
 }
 //====================================================================
@@ -207,11 +214,44 @@ void CWeakEnemy::DebugInfo(void)
 		ImGui::TreePop();
 	}
 
-	if (GetEnemyType() == CWeakEnemy::WEAKENEMY_TYPE::ENEMY_MELTYHONEY)
+	//オフセットビューワ
+	if (GetEnemyType() == CWeakEnemy::WEAKENEMY_TYPE::ENEMY_ZYCOCCA)
 	{
 		CDebug_ModelViewer::OffsetViewer(CCharacter::GetModelSet()->GetCharacterModelList());
 	}
 
+}
+//====================================================================
+//乗り物の更新
+//====================================================================
+void CWeakEnemy::UpdateVehicle()
+{
+	switch (GetEnemyType())
+	{
+	case CEnemy::WEAKENEMY_TYPE::ENEMY_MELTYHONEY:
+		//車輪の回転処理
+		VehiclePartsRotCondition(GetModelSet()->GetCharacterModelList()[1], MODEL_ROT_TYPE_MOVING, CCharacter::GetMove(), CCharacter::GetShotDirection(), CCharacter::GetCharacterDirection());
+		VehiclePartsRotCondition(GetModelSet()->GetCharacterModelList()[2], MODEL_ROT_TYPE_MOVING, CCharacter::GetMove(), CCharacter::GetShotDirection(), CCharacter::GetCharacterDirection());
+		VehiclePartsRotCondition(GetModelSet()->GetCharacterModelList()[3], MODEL_ROT_TYPE_MOVING, CCharacter::GetMove(), CCharacter::GetShotDirection(), CCharacter::GetCharacterDirection());
+		VehiclePartsRotCondition(GetModelSet()->GetCharacterModelList()[4], MODEL_ROT_TYPE_MOVING, CCharacter::GetMove(), CCharacter::GetShotDirection(), CCharacter::GetCharacterDirection());
+
+		break;
+
+	case CEnemy::WEAKENEMY_TYPE::ENEMY_HELICOPTER:
+		//プロペラの回転
+		VehiclePartsRotCondition(GetModelSet()->GetCharacterModelList()[1], MODEL_ROT_TYPE_ALWAYS, CCharacter::GetMove(), CCharacter::GetShotDirection(), CCharacter::GetCharacterDirection());
+
+		break;
+
+	case CEnemy::WEAKENEMY_TYPE::ENEMY_ZYCOCCA:
+		//車輪の回転処理
+		VehiclePartsRotCondition(GetModelSet()->GetCharacterModelList()[1], MODEL_ROT_TYPE_MOVING, CCharacter::GetMove(), CCharacter::GetShotDirection(), CCharacter::GetCharacterDirection());
+		VehiclePartsRotCondition(GetModelSet()->GetCharacterModelList()[2], MODEL_ROT_TYPE_MOVING, CCharacter::GetMove(), CCharacter::GetShotDirection(), CCharacter::GetCharacterDirection());
+
+		break;
+	default:
+		break;
+	}
 }
 //====================================================================
 //モデルのクリエイト
@@ -234,8 +274,26 @@ CWeakEnemy *CWeakEnemy::Create(WEAKENEMY_TYPE type)
 //====================================================================
 bool CWeakEnemy::DefaultMotion(void)
 {
-	GetModelSet()->SetMotion(CModelSet::ENEMY_MOTION_NORMAL);
-	return true;
+	bool bContinue = false;
+	switch (GetEnemyType())
+	{
+	case CEnemy::WEAKENEMY_TYPE::ENEMY_MELTYHONEY:
+	case CEnemy::WEAKENEMY_TYPE::ENEMY_ZYCOCCA:
+	case CEnemy::WEAKENEMY_TYPE::ENEMY_HELICOPTER:
+
+		GetModelSet()->SetMotion(CModelSet::CHARACTER_MOTION_STATE_NONE);
+		bContinue = false;
+
+		break;
+	case CEnemy::WEAKENEMY_TYPE::ENEMY_NORMAL:
+	case CEnemy::WEAKENEMY_TYPE::ENEMY_SHIELD:
+
+		GetModelSet()->SetMotion(CModelSet::ENEMY_MOTION_NORMAL);
+		bContinue = true;
+
+		break;
+	}
+	return bContinue;
 }
 //====================================================================
 //ダメージを受けた時のリアクション

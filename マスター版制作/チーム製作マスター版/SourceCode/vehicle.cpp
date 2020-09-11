@@ -58,19 +58,7 @@ CVehicle::CVehicle()
 // =====================================================================================================================================================================
 CVehicle::~CVehicle()
 {
-	//nullcheck
-	//if (!m_vModelList.empty())
-	//{
-	//	//パーツ数分
-	//	for (size_t nCnt = 0; nCnt < m_vModelList.size(); nCnt++)
-	//	{
-	//		//メモリ開放
-	//		delete m_vModelList[nCnt];
-	//		m_vModelList[nCnt] = nullptr;
-	//	}
-	//	//配列を空にする
-	//	m_vModelList.clear();
-	//}
+
 }
 //====================================================================
 //デバッグ
@@ -86,7 +74,7 @@ void CVehicle::DebugInfo(void)
 //====================================================================
 // パーツの回転条件別処理
 //====================================================================
-void CVehicle::VehiclePartsRotCondition(CModel *pModel, PARTS_ROT_TYPE type,D3DXVECTOR3 move, D3DXVECTOR3 rot)
+void CVehicle::VehiclePartsRotCondition(CModel *pModel, PARTS_ROT_TYPE type,D3DXVECTOR3 move, D3DXVECTOR3 rot,DIRECTION direction)
 {
 	switch (type)
 	{
@@ -109,7 +97,7 @@ void CVehicle::VehiclePartsRotCondition(CModel *pModel, PARTS_ROT_TYPE type,D3DX
 		// 操作している時のみ
 	case MODEL_ROT_TYPE_OPERATION:
 		// 銃の回転処理
-		GunRot(pModel, rot);
+		GunRot(pModel, rot, direction);
 		break;
 
 	default:
@@ -184,7 +172,7 @@ void CVehicle::WheelRot(CModel *pModel , D3DXVECTOR3 move)
 //====================================================================
 // 銃の回転車輪
 //====================================================================
-void CVehicle::GunRot(CModel * pModel,D3DXVECTOR3 shotrot)
+void CVehicle::GunRot(CModel *pModel, D3DXVECTOR3 shotrot, DIRECTION direction)
 {
 	// 戦車の総数分
 	for (int nCntVehicle = 0; nCntVehicle < CManager::GetBaseMode()->GetMap()->GetMaxPlayerTank(); nCntVehicle++)

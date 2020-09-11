@@ -49,15 +49,6 @@ public:
 		VEHICLE_TYPE_MAX									// 乗り物の最大数
 	}VEHICLE_TYPE;
 
-	/* 乗り物を使うキャラクターの種類 */
-	//typedef enum
-	//{
-	//	VEHICLE_USE_TYPE_TYPE_PLAYER,						// プレイヤー用乗り物
-	//	VEHICLE_USE_TYPE_TYPE_ENEMY,						// エネミー用乗り物
-	//	VEHICLE_USE_TYPE_TYPE_BOSS,							// ボス用乗り物
-	//	VEHICLE_USE_TYPE_TYPE_MAX							// 乗り物を使うキャラクターの最大数
-	//}VEHICLE_USE_TYPE;
-
 	/* 戦車の挙動 */
 	typedef enum
 	{
@@ -84,14 +75,14 @@ public:
 
 	//virtual void			SetPlayerTank(CPlayer *pPlayer)	{ m_pPlayer = pPlayer; };	//プレイヤーのポインタ設定
 	//CPlayer					*GetPlayer(void)				{return m_pPlayer; };
-	TAG	m_Tag;
-	void SetTag(TAG tag) { m_Tag = tag; };
-	TAG GetTag(void) { return m_Tag; };
+	void SetRideerTag(TAG tag) { m_RideerTag = tag; };
+	TAG GetRideerTag(void) { return m_RideerTag; };
 	void					VehiclePartsRotCondition(
 							CModel *pModel,
 							PARTS_ROT_TYPE type,
 							D3DXVECTOR3 move,
-							D3DXVECTOR3 rot);			// パーツを回転させるための条件
+							D3DXVECTOR3 rot,
+							DIRECTION direction);			// パーツを回転させるための条件
 
 	/* パラメータ設定関数 */
 	void SetBehaviorState	(VEHICLE_BEHAVIOR_STATE state)			{ m_Behaviorstate = state; };			// 乗り物の状態の設定
@@ -110,8 +101,8 @@ protected:
 
 private:
 	/* メンバ関数 */
-	void					WheelRot(CModel *pModel, D3DXVECTOR3 move);				// 車輪モデルの回転処理
-	void					GunRot(CModel *pModel, D3DXVECTOR3 shotrot);					// 銃モデルの回転処理
+	void					WheelRot(CModel *pModel, D3DXVECTOR3 move);										// 車輪モデルの回転処理
+	void					GunRot(CModel *pModel, D3DXVECTOR3 shotrot,DIRECTION direction);					// 銃モデルの回転処理
 	void					VehiclePartsRot(
 											CModel *pModel,
 											float fRot);			// 種類や条件ごとのパーツの回転処理
@@ -128,6 +119,7 @@ private:
 	PARTS_ROT_TYPE			m_RotType;								// パーツが回転する種類
 	int						m_nGravityCnt;							// 重力用カウント
 	CPlayer				*m_pPlayer;							// プレイヤーのポインタ
+	TAG	m_RideerTag;
 
 };
 #endif
