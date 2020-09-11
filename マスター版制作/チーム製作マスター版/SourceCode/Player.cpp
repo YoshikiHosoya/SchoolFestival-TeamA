@@ -528,6 +528,8 @@ void CPlayer::CollisionUpdate(void)
 			if (GetCollision()->ForPlayer_ItemCollision(GetTag()))
 			{
 			}
+
+
 		}
 
 		if (m_bRideVehicle == false)

@@ -21,17 +21,33 @@
 //====================================================================
 //マクロ定義
 //====================================================================
-#define ENEMY_SIZE			(D3DXVECTOR3(50.0f,75.0f,0.0f)) //敵のサイズ
-#define KNIFE_COLLISOIN_SIZE	(D3DXVECTOR3(40.0f,60.0f,0.0f))
+#define ENEMY_HUMAN_COLLISIONSIZE				(D3DXVECTOR3(50.0f,75.0f,0.0f))			//敵の当たり判定サイズ
+#define ENEMY_HELICOPTER_COLLISIONSIZE			(D3DXVECTOR3(350.0f,150.0f,0.0f))		//敵の当たり判定サイズ
+#define ENEMY_MELTYHONEY_COLLISIONSIZE			(D3DXVECTOR3(250.0f,200.0f,0.0f))		//敵の当たり判定サイズ
+#define ENEMY_ZYCOCCA_COLLISIONSIZE				(D3DXVECTOR3(110.0f,95.0f,0.0f))		//敵の当たり判定サイズ
 
+#define ENEMY_HUMAN_LIFE						(1)										//ライフ
+#define ENEMY_HELICOPTER_LIFE					(20)									//ライフ
+#define ENEMY_MELTYHONEY_LIFE					(50)									//ライフ
+#define ENEMY_ZYCOCCA_LIFE						(20)									//ライフ
+
+
+#define KNIFE_COLLISOIN_SIZE	(D3DXVECTOR3(40.0f,60.0f,0.0f))
+//====================================================================
+//コンストラクタ
+//====================================================================
 CWeakEnemy::CWeakEnemy(OBJ_TYPE type) :CEnemy(type)
 {
 	SetObjType(OBJTYPE_ENEMY);
 }
 
+//====================================================================
+//デストラクタ
+//====================================================================
 CWeakEnemy::~CWeakEnemy()
 {
 }
+
 //====================================================================
 //初期化
 //====================================================================
@@ -42,11 +58,10 @@ HRESULT CWeakEnemy::Init(void)
 	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
 	m_Attack = false;
 
-
 	// 敵のタイプ設定
 	switch (GetEnemyType())
 	{
-	case CWeakEnemy::WEAKENEMY_TYPE::ENEMY_NORMAL:
+	case CWeakEnemy::ENEMY_TYPE::ENEMY_NORMAL:
 		//オフセット設定
 		GetModelSet()->SetCharacterType(CModelSet::CHARACTER_TYPE_ENEMY_HUMAN);
 		GetModelSet()->LoadOffset(CModelSet::CHARACTER_TYPE_ENEMY_HUMAN);
@@ -56,7 +71,7 @@ HRESULT CWeakEnemy::Init(void)
 		// 銃の生成
 		GetGunPtr()->SetHandMtx(GetModelSet()->GetCharacterModelList()[8]->GetMatrix());
 		// 銃の弾の種類
-		//GetGunPtr()->SetDisp(true);
+		GetGunPtr()->SetDisp(true);
 		GetGunPtr()->SetGunTypeOnly(CGun::GUNTYPE_HANDGUN_ENEMY);
 
 		// ナイフの生成
@@ -64,10 +79,14 @@ HRESULT CWeakEnemy::Init(void)
 		//腕が回転するか
 		SetRotArm(true);
 
+		// 当たり判定生成
+		GetCollision()->SetSize2D(ENEMY_HUMAN_COLLISIONSIZE);
 
+		//HP設定
+		CCharacter::SetLife(ENEMY_HUMAN_LIFE);
 
 		break;
-	case CWeakEnemy::WEAKENEMY_TYPE::ENEMY_SHIELD:
+	case CWeakEnemy::ENEMY_TYPE::ENEMY_SHIELD:
 		//オフセット設定
 		GetModelSet()->SetCharacterType(CModelSet::CHARACTER_TYPE_ENEMY_HUMAN);
 		GetModelSet()->LoadOffset(CModelSet::CHARACTER_TYPE_ENEMY_HUMAN);
@@ -81,20 +100,22 @@ HRESULT CWeakEnemy::Init(void)
 		m_pShield->SetHandMtx(GetModelSet()->GetCharacterModelList()[8]->GetMatrix());
 		m_pShield->SetHasEnemyPtr(this);
 
-
-		// 銃の生成
-		GetGunPtr()->SetHandMtx(GetModelSet()->GetCharacterModelList()[8]->GetMatrix());
 		// 銃の弾の種類
-		//GetGunPtr()->SetDisp(true);
-		GetGunPtr()->SetGunTypeOnly(CGun::GUNTYPE_HANDGUN_ENEMY);
+		GetGunPtr()->SetDisp(false);
 
 		// ナイフの生成
 		m_pKnife = CKnife::Create(GetModelSet()->GetCharacterModelList()[7]->GetMatrix(), KNIFE_COLLISOIN_SIZE, TAG::ENEMY);
 		//腕が回転するか
 		SetRotArm(true);
+
+		//HP設定
+		CCharacter::SetLife(ENEMY_HUMAN_LIFE);
+
+		// 当たり判定生成
+		GetCollision()->SetSize2D(ENEMY_HUMAN_COLLISIONSIZE);
 		break;
 
-	case CWeakEnemy::WEAKENEMY_TYPE::ENEMY_HELICOPTER:
+	case CWeakEnemy::ENEMY_TYPE::ENEMY_HELICOPTER:
 		//オフセット設定
 		GetModelSet()->SetCharacterType(CModelSet::CHARACTER_TYPE_ENEMY_HELICOPTER);
 		GetModelSet()->LoadOffset(CModelSet::CHARACTER_TYPE_ENEMY_HELICOPTER);
@@ -103,9 +124,18 @@ HRESULT CWeakEnemy::Init(void)
 		CCharacter::GetModelSet()->SetUseMotion(false);
 		CCharacter::GetModelSet()->SetMotion(CModelSet::CHARACTER_MOTION_STATE_NONE);
 
+		//重力無効
+		CCharacter::SetGravity(false);
+
+		// 当たり判定生成
+		GetCollision()->SetSize2D(ENEMY_HELICOPTER_COLLISIONSIZE);
+
+		//HP設定
+		CCharacter::SetLife(ENEMY_HELICOPTER_LIFE);
+
 		break;
 
-	case CWeakEnemy::WEAKENEMY_TYPE::ENEMY_MELTYHONEY:
+	case CWeakEnemy::ENEMY_TYPE::ENEMY_MELTYHONEY:
 		//オフセット設定
 		GetModelSet()->SetCharacterType(CModelSet::CHARACTER_TYPE_ENEMY_MELTYHONEY);
 		GetModelSet()->LoadOffset(CModelSet::CHARACTER_TYPE_ENEMY_MELTYHONEY);
@@ -113,9 +143,16 @@ HRESULT CWeakEnemy::Init(void)
 		//モーションoff
 		CCharacter::GetModelSet()->SetUseMotion(false);
 		CCharacter::GetModelSet()->SetMotion(CModelSet::CHARACTER_MOTION_STATE_NONE);
+
+		// 当たり判定生成
+		GetCollision()->SetSize2D(ENEMY_MELTYHONEY_COLLISIONSIZE);
+
+		//HP設定
+		CCharacter::SetLife(ENEMY_MELTYHONEY_LIFE);
+
 		break;
 
-	case CWeakEnemy::WEAKENEMY_TYPE::ENEMY_ZYCOCCA:
+	case CWeakEnemy::ENEMY_TYPE::ENEMY_ZYCOCCA:
 		//オフセット設定
 		GetModelSet()->SetCharacterType(CModelSet::CHARACTER_TYPE_ENEMY_ZYCOCCA);
 		GetModelSet()->LoadOffset(CModelSet::CHARACTER_TYPE_ENEMY_ZYCOCCA);
@@ -123,20 +160,23 @@ HRESULT CWeakEnemy::Init(void)
 		//モーションoff
 		CCharacter::GetModelSet()->SetUseMotion(false);
 		CCharacter::GetModelSet()->SetMotion(CModelSet::CHARACTER_MOTION_STATE_NONE);
+
+		// 当たり判定生成
+		GetCollision()->SetSize2D(ENEMY_ZYCOCCA_COLLISIONSIZE);
+
+		//HP設定
+		CCharacter::SetLife(ENEMY_ZYCOCCA_LIFE);
+
+
 		break;
 
 	default:
 		break;
 	}
 
-
-	// 当たり判定生成
-	GetCollision()->SetSize2D(ENEMY_SIZE);
+	//判定線表示
 	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_CHARACTER);
 
-	CCharacter::SetLife(1);
-
-	GetGunPtr()->SetDisp(false);
 	return S_OK;
 }
 //====================================================================
@@ -177,6 +217,9 @@ void CWeakEnemy::Update(void)
 	//更新
 	UpdateVehicle();
 
+	//debug
+	//CCharacter::GetMove().x += 1.0f;
+
 	CEnemy::Update();
 }
 //====================================================================
@@ -215,7 +258,7 @@ void CWeakEnemy::DebugInfo(void)
 	}
 
 	//オフセットビューワ
-	if (GetEnemyType() == CWeakEnemy::WEAKENEMY_TYPE::ENEMY_ZYCOCCA)
+	if (GetEnemyType() == CWeakEnemy::ENEMY_TYPE::ENEMY_ZYCOCCA)
 	{
 		CDebug_ModelViewer::OffsetViewer(CCharacter::GetModelSet()->GetCharacterModelList());
 	}
@@ -228,7 +271,7 @@ void CWeakEnemy::UpdateVehicle()
 {
 	switch (GetEnemyType())
 	{
-	case CEnemy::WEAKENEMY_TYPE::ENEMY_MELTYHONEY:
+	case CEnemy::ENEMY_TYPE::ENEMY_MELTYHONEY:
 		//車輪の回転処理
 		VehiclePartsRotCondition(GetModelSet()->GetCharacterModelList()[1], MODEL_ROT_TYPE_MOVING, CCharacter::GetMove(), CCharacter::GetShotDirection(), CCharacter::GetCharacterDirection());
 		VehiclePartsRotCondition(GetModelSet()->GetCharacterModelList()[2], MODEL_ROT_TYPE_MOVING, CCharacter::GetMove(), CCharacter::GetShotDirection(), CCharacter::GetCharacterDirection());
@@ -237,13 +280,13 @@ void CWeakEnemy::UpdateVehicle()
 
 		break;
 
-	case CEnemy::WEAKENEMY_TYPE::ENEMY_HELICOPTER:
+	case CEnemy::ENEMY_TYPE::ENEMY_HELICOPTER:
 		//プロペラの回転
 		VehiclePartsRotCondition(GetModelSet()->GetCharacterModelList()[1], MODEL_ROT_TYPE_ALWAYS, CCharacter::GetMove(), CCharacter::GetShotDirection(), CCharacter::GetCharacterDirection());
 
 		break;
 
-	case CEnemy::WEAKENEMY_TYPE::ENEMY_ZYCOCCA:
+	case CEnemy::ENEMY_TYPE::ENEMY_ZYCOCCA:
 		//車輪の回転処理
 		VehiclePartsRotCondition(GetModelSet()->GetCharacterModelList()[1], MODEL_ROT_TYPE_MOVING, CCharacter::GetMove(), CCharacter::GetShotDirection(), CCharacter::GetCharacterDirection());
 		VehiclePartsRotCondition(GetModelSet()->GetCharacterModelList()[2], MODEL_ROT_TYPE_MOVING, CCharacter::GetMove(), CCharacter::GetShotDirection(), CCharacter::GetCharacterDirection());
@@ -256,7 +299,7 @@ void CWeakEnemy::UpdateVehicle()
 //====================================================================
 //モデルのクリエイト
 //====================================================================
-CWeakEnemy *CWeakEnemy::Create(WEAKENEMY_TYPE type)
+CWeakEnemy *CWeakEnemy::Create(ENEMY_TYPE type)
 {
 	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
 	CWeakEnemy*pWeakEnemy;
@@ -277,16 +320,16 @@ bool CWeakEnemy::DefaultMotion(void)
 	bool bContinue = false;
 	switch (GetEnemyType())
 	{
-	case CEnemy::WEAKENEMY_TYPE::ENEMY_MELTYHONEY:
-	case CEnemy::WEAKENEMY_TYPE::ENEMY_ZYCOCCA:
-	case CEnemy::WEAKENEMY_TYPE::ENEMY_HELICOPTER:
+	case CEnemy::ENEMY_TYPE::ENEMY_MELTYHONEY:
+	case CEnemy::ENEMY_TYPE::ENEMY_ZYCOCCA:
+	case CEnemy::ENEMY_TYPE::ENEMY_HELICOPTER:
 
 		GetModelSet()->SetMotion(CModelSet::CHARACTER_MOTION_STATE_NONE);
 		bContinue = false;
 
 		break;
-	case CEnemy::WEAKENEMY_TYPE::ENEMY_NORMAL:
-	case CEnemy::WEAKENEMY_TYPE::ENEMY_SHIELD:
+	case CEnemy::ENEMY_TYPE::ENEMY_NORMAL:
+	case CEnemy::ENEMY_TYPE::ENEMY_SHIELD:
 
 		GetModelSet()->SetMotion(CModelSet::ENEMY_MOTION_NORMAL);
 		bContinue = true;
@@ -344,8 +387,8 @@ void CWeakEnemy::StateChangeReaction()
 
 		switch (GetEnemyType())
 		{
-		case CEnemy::WEAKENEMY_TYPE::ENEMY_NORMAL:
-		case CEnemy::WEAKENEMY_TYPE::ENEMY_SHIELD:
+		case CEnemy::ENEMY_TYPE::ENEMY_NORMAL:
+		case CEnemy::ENEMY_TYPE::ENEMY_SHIELD:
 			//悲鳴
 			CManager::GetSound()->Play(CSound::LABEL_SE_VOICE_ENEMY_DEATH);
 
@@ -358,6 +401,16 @@ void CWeakEnemy::StateChangeReaction()
 			{
 				m_pKnife->EndMeleeAttack();
 			}
+
+			break;
+
+		case CEnemy::ENEMY_TYPE::ENEMY_MELTYHONEY:
+		case CEnemy::ENEMY_TYPE::ENEMY_ZYCOCCA:
+		case CEnemy::ENEMY_TYPE::ENEMY_HELICOPTER:
+			CParticle::CreateFromText(GetPosition(), ZeroVector3, CParticleParam::EFFECT_NO_COLLISION_EXPLOSION);
+			SetStateCount(1);
+
+			break;
 		default:
 			break;
 		}

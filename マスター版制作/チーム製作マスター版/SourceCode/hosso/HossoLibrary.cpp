@@ -72,6 +72,16 @@ void CHossoLibrary::CalcRotation(float &fRot)
 	}
 }
 //------------------------------------------------------------------------------
+//XYZ軸全部3.14以内に収める
+//------------------------------------------------------------------------------
+void CHossoLibrary::CalcRotation_XYZ(D3DXVECTOR3 & rot)
+{
+	CHossoLibrary::CalcRotation(rot.x);
+	CHossoLibrary::CalcRotation(rot.y);
+	CHossoLibrary::CalcRotation(rot.z);
+
+}
+//------------------------------------------------------------------------------
 //前回のスティック情報を保存
 //------------------------------------------------------------------------------
 void CHossoLibrary::SaveLastStickInfo()

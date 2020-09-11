@@ -34,7 +34,7 @@ public:
 	virtual void Draw(void);
 	void DebugInfo(void);
 	void UpdateVehicle();
-	static CWeakEnemy *Create(WEAKENEMY_TYPE type);
+	static CWeakEnemy *Create(ENEMY_TYPE type);
 	bool DefaultMotion(void);
 	virtual void DamageReaction();
 	virtual void DeathReaction();

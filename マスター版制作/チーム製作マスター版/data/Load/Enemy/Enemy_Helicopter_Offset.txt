@@ -9,14 +9,14 @@ SET_START ---------[0]----------
 	MODEL_TYPE = 1
 	INDEX = 15
 	PARENT = -1
-	POS = 0.0 44.0 0.0
+	POS = 0.0 80.2 0.0
 SET_END
 
 SET_START ---------[1]----------
 	MODEL_TYPE = 1
 	INDEX = 16
 	PARENT = 0
-	POS = 0.0 15.4 0.0
+	POS = 0.0 54.5 0.0
 SET_END
 
 MODEL_OFFSET_END

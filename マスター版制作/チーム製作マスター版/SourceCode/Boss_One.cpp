@@ -119,6 +119,8 @@ HRESULT CBoss_One::Init(void)
 	GetModelSet()->LoadOffset(CModelSet::CHARACTER_TYPE_BOSS_ONE);
 	// キャラクタータイプの設定
 	GetModelSet()->SetCharacterType(CModelSet::CHARACTER_TYPE_BOSS_ONE);
+	//タイプ設定
+	CEnemy::SetEnemyType(ENEMY_TYPE::ENEMY_BOSS_DRAGON_NOSUKE);
 	//重力無し
 	SetGravity(false);
 	// ボスの角度の設定_左向き

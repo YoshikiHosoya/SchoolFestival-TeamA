@@ -28,13 +28,16 @@ class CEnemy :public CCharacter, public CGameObject
 {
 public:
 
-	enum class WEAKENEMY_TYPE
+	enum class ENEMY_TYPE
 	{
 		ENEMY_NORMAL,
 		ENEMY_SHIELD,
 		ENEMY_HELICOPTER,
 		ENEMY_MELTYHONEY,
 		ENEMY_ZYCOCCA,
+
+		ENEMY_BOSS_DRAGON_NOSUKE,
+		ENEMY_BOSS_SOL_DE_ROCA,
 
 	};
 
@@ -57,19 +60,19 @@ public:
 	void SetGunPtr(CGun *pGun)				{ m_pGun = pGun; };
 	void SetAIPtr(CBaseAI *pAI)				{ m_pAI = pAI; };
 	void SetEventFlag(bool bFlag)			{ m_bEventFlag = bFlag; };
-	void SetEnemyType(WEAKENEMY_TYPE type)	{ m_type = type; };				// 雑魚敵の種類の設定
+	void SetEnemyType(ENEMY_TYPE type)	{ m_type = type; };				// 雑魚敵の種類の設定
 
 	//Get関数
 	CGun				*GetGunPtr()		{ return m_pGun; };
 	CBaseAI				*GetAIPtr()			{ return m_pAI; };
 	bool				GetEventFlag()		{ return m_bEventFlag; };
-	WEAKENEMY_TYPE		GetEnemyType()		{ return m_type; };				// 雑魚敵の種類の取得
+	ENEMY_TYPE			GetEnemyType()		{ return m_type; };				// 雑魚敵の種類の取得
 
 
  private:
 	CGun			*m_pGun;								// ガンクラスのポインタ
 	CBaseAI			*m_pAI;									// AIのポインタ
-	WEAKENEMY_TYPE	m_type;							//敵のタイプ
+	ENEMY_TYPE		m_type;							//敵のタイプ
 	bool m_bEventFlag;								// イベントフラグ
 
 };

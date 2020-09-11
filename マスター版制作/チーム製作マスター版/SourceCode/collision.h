@@ -87,7 +87,9 @@ public:
 
 	// 代用
 	bool BlockCollision2D_Bottom(CCollision *pCollision);
-	bool BoxCollision2D_Character(CCollision *pCollision);// キャラクター同士
+	bool BoxCollision2D_Character(CCollision *pCollision);			// キャラクター同士
+	bool BoxCollision2D_Vehicle(CCollision *pCollision);			// 乗り物とプレイヤー
+
 
 	bool RayBlockCollision(CMap *pMap, D3DXMATRIX *pMat);				// Rayの判定 キャラクター
 	bool RayCollision(CMap *pMap);

@@ -193,7 +193,7 @@ bool CCollision::ForPlayerBulletCollision(int nEnemyDamage, int nObstacleDamage,
 			CShield *pShield = (CShield*)pSceneList[nCnt];
 			if (pShield)
 			{
-				if (this->OtherCollision2D(pShield->GetCollision()))
+				if (this->Collision2D(pShield->GetCollision()))
 				{
 					pShield->AddDamage(nEnemyDamage);
 
@@ -492,12 +492,29 @@ bool CCollision::ForPlayer_EnemyCollision(bool Penetration)
 				}
 				else
 				{
-					//判定が取れるとき
-					if (pEnemy->GetCollision()->GetCanCollison())
+					//通常の雑魚的の時
+					if (pEnemy->GetEnemyType() == CEnemy::ENEMY_TYPE::ENEMY_NORMAL ||
+						pEnemy->GetEnemyType() == CEnemy::ENEMY_TYPE::ENEMY_SHIELD)
 					{
-						if (this->CharCollision2D(pEnemy->GetCollision()))
+						//判定が取れるとき
+						if (pEnemy->GetCollision()->GetCanCollison())
 						{
-							bHitFlag = true;
+							if (this->CharCollision2D(pEnemy->GetCollision()))
+							{
+								bHitFlag = true;
+							}
+						}
+					}
+					//敵の乗り物の場合
+					else if (pEnemy->GetEnemyType() == CEnemy::ENEMY_TYPE::ENEMY_HELICOPTER ||
+						pEnemy->GetEnemyType() == CEnemy::ENEMY_TYPE::ENEMY_MELTYHONEY ||
+						pEnemy->GetEnemyType() == CEnemy::ENEMY_TYPE::ENEMY_ZYCOCCA)
+					{
+						//衝突判定
+						if (this->BoxCollision2D_Vehicle(pEnemy->GetCollision()))
+						{
+							//横から接触したプレイヤーにダメージ判定
+							CManager::GetGame()->GetPlayer(m_pGameObject->GetTag())->AddDamage(1);
 						}
 					}
 				}
@@ -831,6 +848,20 @@ bool CCollision::ForTankCollision()
 //======================================================================================================================
 void CCollision::ForBossOne_PlayerCollision()
 {
+	//相手がエネミーだったら
+	// 敵の総数分
+	for (int nCnt = 0; nCnt < CManager::GetBaseMode()->GetMap()->GetMaxEnemy(); nCnt++)
+	{
+		CEnemy *pEnemy = CManager::GetBaseMode()->GetMap()->GetEnemy(nCnt);
+		if (pEnemy != nullptr)
+		{
+			if (pEnemy->GetEnemyType() == CEnemy::ENEMY_TYPE::ENEMY_NORMAL)
+			{
+				CBoss_One *pBoss_One = (CBoss_One*)pEnemy;
+
+			}
+		}
+	}
 }
 
 //======================================================================================================================
@@ -921,6 +952,7 @@ bool CCollision::LazerCollisionGetLength(D3DXVECTOR3 ShotPos, float &fLength)
 	float fValue = 0.0f;								//計算した値
 	CShield *pShield = nullptr;							//盾のポインタ
 	CObstacle *pObstacle = nullptr;						//オブジェクトのポインタ
+	CEnemy *pEnemy = nullptr;						//敵のポインタ
 
 	CGameObject *pMostNearObject = nullptr;				//一番近いオブジェクトのポインタ
 	std::vector<CScene*> pSceneList = {};				//Sceneのリスト
@@ -953,7 +985,7 @@ bool CCollision::LazerCollisionGetLength(D3DXVECTOR3 ShotPos, float &fLength)
 				continue;
 			}
 			//接触してるか判定
-			if (this->OtherCollision2D(pShield->GetCollision()))
+			if (this->Collision2D(pShield->GetCollision()))
 			{
 				//距離を求める
 				fValue = (fabsf(ShotPos.x - pShield->GetShieldPos().x) / 2) - pShield->GetCollision()->GetSize().x * 0.4f;
@@ -1001,7 +1033,7 @@ bool CCollision::LazerCollisionGetLength(D3DXVECTOR3 ShotPos, float &fLength)
 				continue;
 			}
 			//接触してるか判定
-			if (this->OtherCollision2D(pObstacle->GetCollision()))
+			if (this->Collision2D(pObstacle->GetCollision()))
 			{
 				//距離を求める
 				fValue = (fabsf(ShotPos.x - pObstacle->GetCollision()->GetPos().x) / 2) - pObstacle->GetCollision()->GetSize().x * 0.4f;
@@ -1014,6 +1046,70 @@ bool CCollision::LazerCollisionGetLength(D3DXVECTOR3 ShotPos, float &fLength)
 
 					//ポインタ保存
 					pMostNearObject = (CGameObject*)pObstacle;
+				}
+				bHitFlag = true;
+			}
+		}
+	}
+
+
+	//オブジェクトのリスト取得
+	CScene::GetSceneList(CScene::OBJTYPE_ENEMY, pSceneList);
+
+	//当たり判定処理
+	//盾相手の場合
+	if (!pSceneList.empty())
+	{
+		for (size_t nCnt = 0; nCnt < pSceneList.size(); nCnt++)
+		{
+			//Obstacle型にキャスト
+			pEnemy = (CEnemy*)pSceneList[nCnt];
+			bool bHit = false;
+
+			//nullcheck
+			if (!pEnemy)
+			{
+				continue;
+			}
+			//判定が存在する時
+			if (!pEnemy->GetCollision())
+			{
+				continue;
+			}
+			//判定が取れるとき
+			if (!pEnemy->GetCollision()->GetCanCollison())
+			{
+				continue;
+			}
+
+			switch (pEnemy->GetEnemyType())
+			{
+			case::CEnemy::ENEMY_TYPE::ENEMY_HELICOPTER:
+			case::CEnemy::ENEMY_TYPE::ENEMY_MELTYHONEY:
+			case::CEnemy::ENEMY_TYPE::ENEMY_ZYCOCCA:
+				bHit = this->OtherCollision2D(pEnemy->GetCollision());
+				break;
+
+			case::CEnemy::ENEMY_TYPE::ENEMY_BOSS_DRAGON_NOSUKE:
+			case::CEnemy::ENEMY_TYPE::ENEMY_BOSS_SOL_DE_ROCA:
+				bHit = this->CharCollision2D(pEnemy->GetCollision());
+				break;
+			}
+
+			//接触してるか判定
+			if (bHit)
+			{
+				//距離を求める
+				fValue = (fabsf(ShotPos.x - pEnemy->GetCollision()->GetPos().x) / 2) - pEnemy->GetCollision()->GetSize().x * 0.4f;
+
+				//元々の長さよりも短かった場合
+				if (fValue <= fLength)
+				{
+					//短い方を設定
+					fLength = fValue;
+
+					//ポインタ保存
+					pMostNearObject = (CGameObject*)pEnemy;
 				}
 				bHitFlag = true;
 			}
@@ -1035,6 +1131,11 @@ bool CCollision::LazerCollisionGetLength(D3DXVECTOR3 ShotPos, float &fLength)
 			case TAG::OBSTACLE:
 				pObstacle = (CObstacle*)pMostNearObject;
 				pObstacle->Hit(CObstacle::TYPE_BOX, 1);
+
+				break;
+			case TAG::ENEMY:
+				pEnemy = (CEnemy*)pMostNearObject;
+				pEnemy->AddDamage(1);
 
 				break;
 			default:
@@ -1204,7 +1305,7 @@ bool CCollision::CharCollision2D(CCollision * pCollision)
 	{
 		// X Yの範囲
 		if (this->m_ppos->y + this->m_size.y >= pCollision->m_ppos->y&&
-			this->m_ppos->y <= pCollision->m_ppos->y + pCollision->m_size.y&&
+			this->m_ppos->y						<= pCollision->m_ppos->y + pCollision->m_size.y&&
 			this->m_ppos->x + this->m_size.x * 0.5f > pCollision->m_ppos->x - pCollision->m_size.x * 0.5f&&
 			this->m_ppos->x - this->m_size.x * 0.5f < pCollision->m_ppos->x + pCollision->m_size.x * 0.5f)
 		{
@@ -1481,6 +1582,63 @@ bool CCollision::BoxCollision2D_Character(CCollision * pCollision)
 			this->m_ppos->x = pCollision->m_ppos->x + pCollision->m_size.x + this->m_size.x;
 			// オブジェクトに当たったフラグ
 			bHitFlag = true;
+		}
+	}
+
+	// 当たっているかいないかを返す
+	return bHitFlag;
+}
+
+//======================================================================================================================
+// 敵乗り物とプレイヤーの判定
+// 横から当たるとプレイヤーダメージ
+// 上は弾かれる
+//======================================================================================================================
+bool CCollision::BoxCollision2D_Vehicle(CCollision * pCollision)
+{
+	// 横から衝突したときのフラグ
+	bool bHitFlag = false;
+
+	// 素材のY範囲
+	if (this->m_ppos->y + this->m_size.y	> pCollision->m_ppos->y&&
+		this->m_ppos->y						< pCollision->m_ppos->y + pCollision->m_size.y)
+	{
+		// 当たり判定(左)
+		if ((this->m_ppos->x + this->m_size.x * 0.5f > pCollision->m_ppos->x - pCollision->m_size.x * 0.5f &&
+				this->m_posOld->x + this->m_size.x * 0.5f <= pCollision->m_posOld->x - pCollision->m_size.x * 0.5f))
+
+		{
+			// 素材状の左に
+			this->m_ppos->x = pCollision->m_ppos->x - pCollision->m_size.x * 0.5f - this->m_size.x * 0.5f;
+
+			// オブジェクトに当たったフラグ
+			bHitFlag = true;
+		}
+
+		// 当たり判定(右)
+		else if ((this->m_ppos->x - this->m_size.x * 0.5f < pCollision->m_ppos->x + pCollision->m_size.x * 0.5f &&
+				this->m_posOld->x - this->m_size.x * 0.5f >= pCollision->m_posOld->x + pCollision->m_size.x * 0.5f))
+		{
+			// 素材状の左に
+			this->m_ppos->x = pCollision->m_ppos->x + pCollision->m_size.x * 0.5f + this->m_size.x * 0.5f;
+
+			// オブジェクトに当たったフラグ
+			bHitFlag = true;
+		}
+	}
+
+	// 素材のX範囲
+	if (this->m_ppos->x + this->m_size.x * 0.5f > pCollision->m_ppos->x - pCollision->m_size.x * 0.5f &&
+		this->m_ppos->x - this->m_size.x * 0.5f < pCollision->m_ppos->x + pCollision->m_size.x * 0.5f)
+	{
+		// 当たり判定(上)
+		if (this->m_ppos->y < pCollision->m_ppos->y + pCollision->m_size.y * 0.8f &&
+			this->m_posOld->y >= pCollision->m_ppos->y + pCollision->m_size.y * 0.8f)
+		{
+			// 素材状の上に
+			// 移動量の初期化
+			this->m_pmove->y = 10.0f;
+			this->m_pmove->x *= -1.0f;
 		}
 	}
 

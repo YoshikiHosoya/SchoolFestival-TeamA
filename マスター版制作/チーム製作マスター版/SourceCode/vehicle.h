@@ -105,7 +105,7 @@ private:
 	void					GunRot(CModel *pModel, D3DXVECTOR3 shotrot,DIRECTION direction);					// 銃モデルの回転処理
 	void					VehiclePartsRot(
 											CModel *pModel,
-											float fRot);			// 種類や条件ごとのパーツの回転処理
+											D3DXVECTOR3 rot);			// 種類や条件ごとのパーツの回転処理
 	void					VehiclePartsRotLimit(
 												CModel *pModel,
 												float fRot);		// 種類や条件ごとのパーツの回転処理 回転上限
