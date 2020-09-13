@@ -80,7 +80,7 @@ HRESULT CWeakEnemy::Init(void)
 		SetRotArm(true);
 
 		// “–‚½‚è”»’è¶¬
-		GetCollision()->SetSize2D(ENEMY_HUMAN_COLLISIONSIZE);
+		GetCollision()->SetSize(ENEMY_HUMAN_COLLISIONSIZE);
 
 		//HPÝ’è
 		CCharacter::SetLife(ENEMY_HUMAN_LIFE);
@@ -112,7 +112,7 @@ HRESULT CWeakEnemy::Init(void)
 		CCharacter::SetLife(ENEMY_HUMAN_LIFE);
 
 		// “–‚½‚è”»’è¶¬
-		GetCollision()->SetSize2D(ENEMY_HUMAN_COLLISIONSIZE);
+		GetCollision()->SetSize(ENEMY_HUMAN_COLLISIONSIZE);
 		break;
 
 	case CWeakEnemy::ENEMY_TYPE::ENEMY_HELICOPTER:
@@ -128,7 +128,7 @@ HRESULT CWeakEnemy::Init(void)
 		CCharacter::SetGravity(false);
 
 		// “–‚½‚è”»’è¶¬
-		GetCollision()->SetSize2D(ENEMY_HELICOPTER_COLLISIONSIZE);
+		GetCollision()->SetSize(ENEMY_HELICOPTER_COLLISIONSIZE);
 
 		//HPÝ’è
 		CCharacter::SetLife(ENEMY_HELICOPTER_LIFE);
@@ -145,7 +145,7 @@ HRESULT CWeakEnemy::Init(void)
 		CCharacter::GetModelSet()->SetMotion(CModelSet::CHARACTER_MOTION_STATE_NONE);
 
 		// “–‚½‚è”»’è¶¬
-		GetCollision()->SetSize2D(ENEMY_MELTYHONEY_COLLISIONSIZE);
+		GetCollision()->SetSize(ENEMY_MELTYHONEY_COLLISIONSIZE);
 
 		//HPÝ’è
 		CCharacter::SetLife(ENEMY_MELTYHONEY_LIFE);
@@ -162,7 +162,7 @@ HRESULT CWeakEnemy::Init(void)
 		CCharacter::GetModelSet()->SetMotion(CModelSet::CHARACTER_MOTION_STATE_NONE);
 
 		// “–‚½‚è”»’è¶¬
-		GetCollision()->SetSize2D(ENEMY_ZYCOCCA_COLLISIONSIZE);
+		GetCollision()->SetSize(ENEMY_ZYCOCCA_COLLISIONSIZE);
 
 		//HPÝ’è
 		CCharacter::SetLife(ENEMY_ZYCOCCA_LIFE);
@@ -174,16 +174,6 @@ HRESULT CWeakEnemy::Init(void)
 		break;
 	}
 
-	GetCollision()->SetSize(ENEMY_SIZE);
-<<<<<<< .mine
-
-	// “–‚½‚è”»’è¶¬
-	GetCollision()->SetSize(ENEMY_SIZE);
-=======
-	//”»’èü•\Ž¦
-
-
->>>>>>> .theirs
 	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_CHARACTER);
 
 	return S_OK;
