@@ -131,8 +131,8 @@ public:
 	int				GetMaxHelicopter();												// ヘリの最大数取得
 	int				GetMaxShield();													// 盾の最大数取得
 
-	MAP				GetMapNum() { return m_MapNum; };								// マップ番号取得
 	LPD3DXMESH		GetMesh(int nCnt);												// メッシュの取得
+	MAP				GetMapNum() { return m_MapNum; };								// マップ番号取得
 	CModel			*GetModel(int nCnt) { return m_pMapModel[nCnt]; };				// モデルの取得
 	CEnemy			*GetEnemy(int nCnt) { return m_pEnemy[nCnt]; };					// 敵の取得
 	CPrisoner		*GetPrisoner(int nCnt) { return m_pPrisoner[nCnt]; };			// 捕虜の取得
@@ -140,7 +140,6 @@ public:
 	CPlayertank		*GetPlayertank(int nCnt) { return m_pPlayerTank[nCnt]; };		// 戦車の取得
 	CBattlePlane	*GetBattlePlane(int nCnt) { return m_pBattlePlane[nCnt]; };		// 戦闘機の取得
 	CHelicopter		*GetHelicopter(int nCnt) { return m_pHelicopter[nCnt]; };		// ヘリコプターの取得
-
 	WAVE_INFO		*GetWaveInfo(int nWaveNum) { return &m_aWaveInfo[nWaveNum]; };	// ウェーブ情報の取得
 	D3DXVECTOR3		GetTransitionPos() { return m_TransitionPos; };					// 遷移するための位置の取得
 	int				GetTransitionMapID() { return m_TransitionMapID; }				// 次に遷移するためのマップ番号の取得
@@ -150,17 +149,13 @@ private:
 	/* メンバ関数 */
 	void			MapModelLoad();																// 配置するモデルのロード
 	void			MapModelSave();																// 配置するモデルのセーブ
-
 	void			MapModelCreate(int ModelType, int nType, D3DXVECTOR3 pos, int nItemType);	// 配置するモデルの生成
 	void			LoadSuccessMessage(int ModelType);											// 読み込み成功時の結果表示
-
 	void			SaveModelHeader(FILE *pFile, int ModelType);								// セーブするモデルのヘッダー
 	void			SaveModelContents(FILE *pFile, int ModelType, int nCnt, int nNum);			// セーブするモデルの情報
 	void			SaveBGContents(FILE *pFile);												// セーブする背景の情報
-
 	size_t			GetMaxMapModel(int ModelType);												// 配置するモデルの最大数取得
 	void			*GetMapModel(int ModelType, int nCnt);										// 配置するモデルのポインタ
-
 	void			ModelDelete(int nNowSelect);												// 配置するモデルをデリート
 	void			ModelCreat();																// 配置するモデルを生成
 

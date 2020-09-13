@@ -163,7 +163,7 @@ HRESULT CPlayer::Init(void)
 	// ゲームオブジェクト( タグ )の設定
 	GetCollision()->SetGameObject(this);
 
-	// 試験的パッドのポインタ取得
+	// パッドのポインタ取得
 	m_pPad = CManager::CManager::GetPad(GetTag());
 
 	return S_OK;
@@ -528,6 +528,8 @@ void CPlayer::CollisionUpdate(void)
 			if (GetCollision()->ForPlayer_ItemCollision(GetTag()))
 			{
 			}
+
+
 		}
 
 		if (m_bRideVehicle == false)
@@ -539,7 +541,7 @@ void CPlayer::CollisionUpdate(void)
 			{
 				// 乗り込んだ時
 				m_bRideVehicle = true;
-				m_pVehicle->SetTag(GetTag());
+				m_pVehicle->SetRideerTag(GetTag());
 			}
 			else
 			{
@@ -890,7 +892,7 @@ void CPlayer::Ride()
 		{
 			if(m_pVehicle != nullptr)
 			{
-				m_pVehicle->SetTag(TAG::NONE);
+				m_pVehicle->SetRideerTag(TAG::NONE);
 				m_pVehicle = nullptr;
 			}
 			m_bRideVehicle = false;

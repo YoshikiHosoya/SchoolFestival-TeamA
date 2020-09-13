@@ -16,8 +16,8 @@
 // É}ÉNÉçíËã`
 // ===================================================================
 #define SHIELD_LIFE				(12)			// shieldÇÃëÃóÕ
-#define SHIELD_SIZE				(D3DXVECTOR3(30.0f,100.0f,0.0f))
-#define SHIELD_OFFSET			(D3DXVECTOR3(0.0f,-30.0f,0.0f))
+#define SHIELD_SIZE				(D3DXVECTOR3(40.0f,100.0f,0.0f))
+#define SHIELD_OFFSET			(D3DXVECTOR3(0.0f,-20.0f,0.0f))
 #define SHIELD_DELETE_COUNT		(60)
 #define DAMAGE_FLASH_COUNT		(5)
 #define BREAK_SHIELD_DEFAULT	(D3DXVECTOR3(CHossoLibrary::Random(20.0f), 15.0f, 0.0f))

@@ -11,7 +11,7 @@
 //------------------------------------------------------------------------------
 #include "main.h"
 #include "Enemy.h"
-
+#include "vehicle.h"
 //------------------------------------------------------------------------------
 //É}ÉNÉç
 //------------------------------------------------------------------------------
@@ -21,7 +21,7 @@
 //------------------------------------------------------------------------------
 class CShield;
 class CKnife;
-class CWeakEnemy :public CEnemy
+class CWeakEnemy :public CEnemy , public CVehicle
 {
 public:
 	CWeakEnemy() {};
@@ -33,7 +33,8 @@ public:
 	virtual void Update(void);
 	virtual void Draw(void);
 	void DebugInfo(void);
-	static CWeakEnemy *Create(WEAKENEMY_TYPE type);
+	void UpdateVehicle();
+	static CWeakEnemy *Create(ENEMY_TYPE type);
 	bool DefaultMotion(void);
 	virtual void DamageReaction();
 	virtual void DeathReaction();

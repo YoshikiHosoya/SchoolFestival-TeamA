@@ -147,6 +147,7 @@ public:
 	static float Random(float fInputValue);																		//入力された値の+-ランダムな値で返す
 	static D3DXVECTOR3 RandomVector3(float Max);																//ランダムなvector3型で値を返す
 	static void CalcRotation(float &fRot);																		//回転を360度以内にする計算
+	static void CalcRotation_XYZ(D3DXVECTOR3 &rot);																		//回転を360度以内にする計算
 
 	static void SaveLastStickInfo();																			//前回のスティック情報
 	static DIRECTION CheckPadStick();																			//スティックを倒している方向をチェック

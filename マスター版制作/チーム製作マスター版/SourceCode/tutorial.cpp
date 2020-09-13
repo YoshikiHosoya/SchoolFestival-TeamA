@@ -105,20 +105,6 @@ void CTutorial::Update(void)
 	// 死亡判定が出ているかの確認
 	m_pMap->UpdateDieFlag();
 	m_pTutorialManager->Update();
-
-#ifdef _DEBUG
-	// 2P追加
-	if (m_pTutorialManager->GetAdd2PFlag())
-	{
-		if (!m_pPlayer[(int)TAG::PLAYER_2])
-		{
-			// プレイヤー2の配置
-			m_pPlayer[(int)TAG::PLAYER_2] = CPlayer::Create(TAG::PLAYER_2);
-			m_pPlayer[(int)TAG::PLAYER_2]->SetPosition(m_pPlayer[(int)TAG::PLAYER_2]->GetPosition() + D3DXVECTOR3(100.0f, 0.0f, 0.0f));
-			m_pPlayer[(int)TAG::PLAYER_2]->GetModelSet()->ChangeColor(true, D3DXCOLOR(0.5f, -0.5f, 1.0f, 0.0f));
-		}
-	}
-#endif // _DEBUG
 }
 
 //==========================================================
@@ -133,6 +119,4 @@ void CTutorial::Draw(void)
 //==========================================================
 void CTutorial::ShowDebugInfo(void)
 {
-	// 試験的2P
-	CDebugProc::Print_Right("[RShift] : 2P生成\n");
 }

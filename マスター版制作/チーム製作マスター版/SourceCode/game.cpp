@@ -72,7 +72,6 @@ HRESULT CGame::Init(void)
 	m_pMap->MapLoad(CMap::MAP_1_1);			// マップのロード
 
 	m_pPlayer[(int)TAG::PLAYER_1] = CPlayer::Create(TAG::PLAYER_1);
-	// 試験的プレイヤー2の配置
 
 	if (CPlayer::GetTwoPPlayFlag() && !m_pPlayer[(int)TAG::PLAYER_2])
 	{

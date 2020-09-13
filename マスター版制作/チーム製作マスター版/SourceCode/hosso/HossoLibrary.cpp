@@ -72,6 +72,16 @@ void CHossoLibrary::CalcRotation(float &fRot)
 	}
 }
 //------------------------------------------------------------------------------
+//XYZ軸全部3.14以内に収める
+//------------------------------------------------------------------------------
+void CHossoLibrary::CalcRotation_XYZ(D3DXVECTOR3 & rot)
+{
+	CHossoLibrary::CalcRotation(rot.x);
+	CHossoLibrary::CalcRotation(rot.y);
+	CHossoLibrary::CalcRotation(rot.z);
+
+}
+//------------------------------------------------------------------------------
 //前回のスティック情報を保存
 //------------------------------------------------------------------------------
 void CHossoLibrary::SaveLastStickInfo()
@@ -123,9 +133,6 @@ DIRECTION CHossoLibrary::CheckPadStick()
 			Direction = DIRECTION::DOWN;
 			return Direction;
 		}
-
-		CDebugProc::Print_Left("bLeftStickDown_Y	%d\n", m_PadStick[nCnt].bLeftStickDown_Y);
-		CDebugProc::Print_Left("fLeftStickValue_Y	%f\n", m_PadStick[nCnt].fLeftStickValue_Y);
 	}
 	// キーボード
 	// 上

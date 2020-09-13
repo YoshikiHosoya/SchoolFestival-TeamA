@@ -245,7 +245,10 @@ void CModel::UnLoad(void)
 			delete[] m_vModel[nCnt]->m_pTexture;
 			m_vModel[nCnt]->m_pTexture = NULL;
 		}
+		delete m_vModel[nCnt];
+		m_vModel[nCnt] = nullptr;
 	}
+	m_vModel.clear();
 }
 //====================================================================
 //èâä˙âª

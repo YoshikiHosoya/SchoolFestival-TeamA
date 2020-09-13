@@ -50,6 +50,9 @@ HRESULT CBoss::Init(void)
 	CCharacter::SetLife(BOSS_LIFE);
 	GetModelSet()->SetCharacterType(CModelSet::CHARACTER_TYPE_BOSS);
 
+	//É^ÉCÉvê›íË
+	CEnemy::SetEnemyType(ENEMY_TYPE::ENEMY_BOSS_SOL_DE_ROCA);
+
 	m_Attack = false;
 	m_AttackCastCnt = 0;
 	m_AttackCnt = 0;

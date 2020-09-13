@@ -49,12 +49,15 @@ private:
 	CGun	*m_pGun;			//ガンクラスのポインタ
 	AI_STATE m_AItype;			//行動の種類
 	AI_STATE m_AItypeOld;		//前の行動の格納
+	D3DXVECTOR3 m_Distance;
+	float m_fDistance;
 	int m_recast;
 	int m_castcount;
 	bool m_bShot;
 	bool m_bReStartFlag;
 	int m_random;
 	bool m_bCrouch;
+
 	CCollision				*m_pCollision;							//当たり判定のポインタ
 };
 

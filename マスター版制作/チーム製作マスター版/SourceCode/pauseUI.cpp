@@ -28,7 +28,7 @@ int					CPauseUI::m_nNum								= 0;
 
 #define TEXT_POS			(D3DXVECTOR3(SCREEN_WIDTH / 2, 120.0f, 0.0f))								// ポーズ(文字)の位置
 #define TEXT_SIZE			(D3DXVECTOR3(400.0f, 125.0f, 0.0f))											// ポーズ(文字)のサイズ
-#define ARROW_POS			(D3DXVECTOR3(450.0f, (MENU_POSY + MENU_SPACE), 0.0f))						// 矢印の位置
+#define ARROW_POS			(D3DXVECTOR3(ARROW_POSX, (MENU_POSY + MENU_SPACE), 0.0f))		// 矢印の位置
 #define ARROW_SIZE			(D3DXVECTOR3(40.0f, 40.0f, 0.0f))											// 矢印のサイズ
 
 // =====================================================================================================================================================================

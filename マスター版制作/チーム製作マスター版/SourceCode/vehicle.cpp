@@ -58,19 +58,7 @@ CVehicle::CVehicle()
 // =====================================================================================================================================================================
 CVehicle::~CVehicle()
 {
-	//nullcheck
-	//if (!m_vModelList.empty())
-	//{
-	//	//パーツ数分
-	//	for (size_t nCnt = 0; nCnt < m_vModelList.size(); nCnt++)
-	//	{
-	//		//メモリ開放
-	//		delete m_vModelList[nCnt];
-	//		m_vModelList[nCnt] = nullptr;
-	//	}
-	//	//配列を空にする
-	//	m_vModelList.clear();
-	//}
+
 }
 //====================================================================
 //デバッグ
@@ -86,7 +74,7 @@ void CVehicle::DebugInfo(void)
 //====================================================================
 // パーツの回転条件別処理
 //====================================================================
-void CVehicle::VehiclePartsRotCondition(CModel *pModel, PARTS_ROT_TYPE type,D3DXVECTOR3 move, D3DXVECTOR3 rot)
+void CVehicle::VehiclePartsRotCondition(CModel *pModel, PARTS_ROT_TYPE type,D3DXVECTOR3 move, D3DXVECTOR3 rot,DIRECTION direction)
 {
 	switch (type)
 	{
@@ -97,7 +85,7 @@ void CVehicle::VehiclePartsRotCondition(CModel *pModel, PARTS_ROT_TYPE type,D3DX
 		// 常に回転する
 	case MODEL_ROT_TYPE_ALWAYS:
 		// 条件ごと回転させる
-		this->VehiclePartsRot(pModel, 0.1f);
+		this->VehiclePartsRot(pModel, D3DXVECTOR3(0.0f, 0.5f, 0.0f));
 		break;
 
 		// 移動している時のみ
@@ -109,7 +97,7 @@ void CVehicle::VehiclePartsRotCondition(CModel *pModel, PARTS_ROT_TYPE type,D3DX
 		// 操作している時のみ
 	case MODEL_ROT_TYPE_OPERATION:
 		// 銃の回転処理
-		GunRot(pModel, rot);
+		GunRot(pModel, rot, direction);
 		break;
 
 	default:
@@ -120,12 +108,12 @@ void CVehicle::VehiclePartsRotCondition(CModel *pModel, PARTS_ROT_TYPE type,D3DX
 //====================================================================
 // パーツの回転条件別処理
 //====================================================================
-void CVehicle::VehiclePartsRot(CModel *pModel, float fRot)
+void CVehicle::VehiclePartsRot(CModel *pModel, D3DXVECTOR3 rot)
 {
 	//3.14の超過分の初期化（回転）
-	CHossoLibrary::CalcRotation(fRot);
+	CHossoLibrary::CalcRotation_XYZ(rot);
 	// モデルの回転
-	pModel->GetRot().x += fRot;
+	pModel->GetRot() += rot;
 	// モデルの回転の更新設定
 	pModel->SetRot(pModel->GetRot());
 }
@@ -165,118 +153,46 @@ void CVehicle::WheelRot(CModel *pModel , D3DXVECTOR3 move)
 	if (move.x <= -2)
 	{
 		// 条件ごと回転させる
-		this->VehiclePartsRot(pModel, 0.1f);
+		this->VehiclePartsRot(pModel, D3DXVECTOR3(0.1f, 0.0f, 0.0f));
 	}
 	// 右回転
 	else if (move.x >= 2)
 	{
 		// 条件ごと回転させる
-		this->VehiclePartsRot(pModel, -0.1f);
+		this->VehiclePartsRot(pModel, D3DXVECTOR3(-0.1f, 0.0f, 0.0f));
 	}
-	// 無回転
-	else if (move.x <= 1.0f && move.x >= -1.0f)
-	{
-		// 条件ごと回転させる
-		this->VehiclePartsRot(pModel, 0.0f);
-	}
+
 }
 
 //====================================================================
 // 銃の回転車輪
 //====================================================================
-void CVehicle::GunRot(CModel * pModel,D3DXVECTOR3 shotrot)
+void CVehicle::GunRot(CModel *pModel, D3DXVECTOR3 shotrot, DIRECTION direction)
 {
 	// 戦車の総数分
 	for (int nCntVehicle = 0; nCntVehicle < CManager::GetBaseMode()->GetMap()->GetMaxPlayerTank(); nCntVehicle++)
 	{
-		// 乗り物のポインタ取得
-		CPlayertank *pPlayertank = CManager::GetBaseMode()->GetMap()->GetPlayertank(nCntVehicle);
-		// 戦車が存在した時
-		if (pPlayertank != nullptr)
+
+		if (direction == DIRECTION::LEFT)
 		{
-			if (pPlayertank->GetCharacterDirection() == DIRECTION::LEFT)
-			{
-				// 条件ごと回転させる
-				this->VehiclePartsRotLimit(pModel, shotrot.z);
-			}
-			else if (pPlayertank->GetCharacterDirection() == DIRECTION::RIGHT)
-			{
-				// 条件ごと回転させる
-				this->VehiclePartsRotLimit(pModel, shotrot.z);
-			}
-			else if (pPlayertank->GetCharacterDirection() == DIRECTION::UP)
-			{
-				// 条件ごと回転させる
-				this->VehiclePartsRotLimit(pModel, shotrot.z);
-			}
-			else if (pPlayertank->GetCharacterDirection() == DIRECTION::DOWN)
-			{
-				// 条件ごと回転させる
-				this->VehiclePartsRotLimit(pModel, shotrot.z);
-			}
+			// 条件ごと回転させる
+			this->VehiclePartsRotLimit(pModel, shotrot.z);
+		}
+		else if (direction == DIRECTION::RIGHT)
+		{
+			// 条件ごと回転させる
+			this->VehiclePartsRotLimit(pModel, shotrot.z);
+		}
+		else if (direction == DIRECTION::UP)
+		{
+			// 条件ごと回転させる
+			this->VehiclePartsRotLimit(pModel, shotrot.z);
+		}
+		else if (direction == DIRECTION::DOWN)
+		{
+			// 条件ごと回転させる
+			this->VehiclePartsRotLimit(pModel, shotrot.z);
 		}
 	}
-
-	//// 戦闘機の総数分
-	//for (int nCntVehicle = 0; nCntVehicle < CManager::GetBaseMode()->GetMap()->GetMaxBattlePlane(); nCntVehicle++)
-	//{
-	//	// 乗り物のポインタ取得
-	//	CBattlePlane *pBattlePlane = CManager::GetBaseMode()->GetMap()->GetBattlePlane(nCntVehicle);
-	//	// 戦車が存在した時
-	//	if (pBattlePlane != nullptr)
-	//	{
-	//		if (pBattlePlane->GetVehicleDirection() == DIRECTION::LEFT)
-	//		{
-	//			// 条件ごと回転させる
-	//			this->VehiclePartsRotLimit(pModel, D3DX_PI * 0.5f);
-	//		}
-	//		else if (pBattlePlane->GetVehicleDirection() == DIRECTION::RIGHT)
-	//		{
-	//			// 条件ごと回転させる
-	//			this->VehiclePartsRotLimit(pModel, -D3DX_PI * 0.5f);
-	//		}
-	//		else if (pBattlePlane->GetVehicleDirection() == DIRECTION::UP)
-	//		{
-	//			// 条件ごと回転させる
-	//			this->VehiclePartsRotLimit(pModel, D3DX_PI * 0.0f);
-	//		}
-	//		else if (pBattlePlane->GetVehicleDirection() == DIRECTION::DOWN)
-	//		{
-	//			// 条件ごと回転させる
-	//			this->VehiclePartsRotLimit(pModel, D3DX_PI * 1.0f);
-	//		}
-	//	}
-	//}
-
-	//// ヘリコプターの総数分
-	//for (int nCntVehicle = 0; nCntVehicle < CManager::GetBaseMode()->GetMap()->GetMaxHelicopter(); nCntVehicle++)
-	//{
-	//	// 乗り物のポインタ取得
-	//	CHelicopter *pHelicopter = CManager::GetBaseMode()->GetMap()->GetHelicopter(nCntVehicle);
-	//	// 戦車が存在した時
-	//	if (pHelicopter != nullptr)
-	//	{
-	//		if (pHelicopter->GetVehicleDirection() == DIRECTION::LEFT)
-	//		{
-	//			// 条件ごと回転させる
-	//			this->VehiclePartsRotLimit(pModel, D3DX_PI * 0.5f);
-	//		}
-	//		else if (pHelicopter->GetVehicleDirection() == DIRECTION::RIGHT)
-	//		{
-	//			// 条件ごと回転させる
-	//			this->VehiclePartsRotLimit(pModel, -D3DX_PI * 0.5f);
-	//		}
-	//		else if (pHelicopter->GetVehicleDirection() == DIRECTION::UP)
-	//		{
-	//			// 条件ごと回転させる
-	//			this->VehiclePartsRotLimit(pModel, D3DX_PI * 0.0f);
-	//		}
-	//		else if (pHelicopter->GetVehicleDirection() == DIRECTION::DOWN)
-	//		{
-	//			// 条件ごと回転させる
-	//			this->VehiclePartsRotLimit(pModel, D3DX_PI * 1.0f);
-	//		}
-	//	}
-	//}
 }
 

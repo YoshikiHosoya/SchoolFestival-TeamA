@@ -389,7 +389,7 @@ void CMap::MapModelCreate(int ModelType, int nType, D3DXVECTOR3 pos,int nItemTyp
 	/* --- “G --- */
 	case CMap::ARRANGEMENT_MODEL_ENEMY:
 		// ƒIƒuƒWƒFƒNƒg‚Ì¶¬
-		m_pEnemy.emplace_back(CWeakEnemy::Create((CWeakEnemy::WEAKENEMY_TYPE)nType));
+		m_pEnemy.emplace_back(CWeakEnemy::Create((CWeakEnemy::ENEMY_TYPE)nType));
 		// ˆÊ’u‚ÌÝ’è
 		m_pEnemy[m_pEnemy.size() - 1]->SetPosition(pos);
 		break;
@@ -1272,7 +1272,7 @@ void CMap::ModelCreat()
 	{
 	case CMap::ARRANGEMENT_MODEL_ENEMY:
 		// “G
-		m_pEnemy.emplace_back(CWeakEnemy::Create(CWeakEnemy::WEAKENEMY_TYPE::ENEMY_NORMAL));
+		m_pEnemy.emplace_back(CWeakEnemy::Create(CWeakEnemy::ENEMY_TYPE::ENEMY_NORMAL));
 		break;
 
 	case CMap::ARRANGEMENT_MODEL_PRISONER:
@@ -1381,7 +1381,7 @@ void CMap::WaveCreate(int nModelType, D3DXVECTOR3 eventpos, WAVE_PARAM * pWavePa
 	if (nModelType == ARRANGEMENT_MODEL_ENEMY)
 	{
 		// “G
-		m_pEnemy.emplace_back(CWeakEnemy::Create(CWeakEnemy::WEAKENEMY_TYPE::ENEMY_NORMAL));
+		m_pEnemy.emplace_back(CWeakEnemy::Create(CWeakEnemy::ENEMY_TYPE::ENEMY_NORMAL));
 		m_pEnemy[m_pEnemy.size() - 1]->SetPosition(pWaveParam->pos + eventpos);
 		m_pEnemy[m_pEnemy.size() - 1]->SetEventFlag(pWaveParam->bEvent);
 	}
@@ -1870,7 +1870,7 @@ void CMap::ObstacleTypeComboBox(int &nSelectType, int nNowSelect)
 	std::vector<std::string > aFileName = {};
 
 	//for
-	for (int nCnt = 0; nCnt < (CModel::OBSTACLE_TYPE_MAX-900); nCnt++)
+	for (int nCnt = 0; nCnt < (CModel::OBSTACLE_TYPE_MAX - CModel::OBSTACLE_TYPE_BOX); nCnt++)
 	{
 		//”z—ñ‚É’Ç‰Á
 		aFileName.emplace_back(CModel::GetModelFileName(CModel::MODEL_TYPE::OBSTACLE_MODEL, nCnt));
@@ -1916,13 +1916,13 @@ void CMap::EnemyTypeComboBox(int &nSelectType, int nNowSelect)
 		if (m_pEnemy[nNowSelect])
 		{
 			// “G‚ÌŽí—Þ‚ÌŽæ“¾
-			CWeakEnemy::WEAKENEMY_TYPE EnemyType = m_pEnemy[nNowSelect]->GetEnemyType();
+			CWeakEnemy::ENEMY_TYPE EnemyType = m_pEnemy[nNowSelect]->GetEnemyType();
 
 			// ‘O‰ñ‚Æˆá‚¤‚Æ‚«
 			if ((int)EnemyType != nSelectType)
 			{
 				// Ží—Þ‘ã“ü
-				EnemyType = (CWeakEnemy::WEAKENEMY_TYPE)nSelectType;
+				EnemyType = (CWeakEnemy::ENEMY_TYPE)nSelectType;
 				// “G‚ÌŽí—Þ‚ÌÝ’è
 				m_pEnemy[nNowSelect]->SetEnemyType(EnemyType);
 			}
