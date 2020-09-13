@@ -53,7 +53,7 @@ HRESULT CShield::Init()
 	SetPosition(SHIELD_OFFSET);
 	// 当たり判定生成
 	GetCollision()->SetPos(&GetPosition());
-	GetCollision()->SetSize2D(SHIELD_SIZE);
+	GetCollision()->SetSize(SHIELD_SIZE);
 	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_NORMAL);
 
 	//ダメージ受けた時の点滅色

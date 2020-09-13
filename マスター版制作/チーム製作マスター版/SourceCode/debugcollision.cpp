@@ -12,7 +12,7 @@
 // ----------------------------------------
 /* 描画 */
 #include "debugcollision.h"
-#include "3Dline.h"
+#include "meshbox.h"
 
 // ----------------------------------------
 //
@@ -28,15 +28,7 @@ CDebugcollision::CDebugcollision(OBJ_TYPE type) :CScene(type)
 	m_pos = nullptr;										// 座標ポインタの初期化
 	m_size = nullptr;										// サイズポインタの初期化
 	m_type = COLLISIONTYPE_BOX;							// タイプの初期化
-	for (int nCnt = 0; nCnt < MAX_VERTEX3D; nCnt++)		// lineクラスのポインタ初期化
-	{
-		m_p3DLine[nCnt] = nullptr;
-	}
-
-	for (int nCnt = 0; nCnt < MAX_VERTEX2D; nCnt++)		// lineクラスのポインタ初期化
-	{
-		m_p2DLine[nCnt] = nullptr;
-	}
+	m_pMeshBox = nullptr;
 }
 
 // ----------------------------------------
@@ -57,12 +49,8 @@ HRESULT CDebugcollision::Init(void)
 		BoxCollision();
 		break;
 
-	case COLLISIONTYPE_BOARD:
-		BoardCollision();
-		break;
-
-	case COLLISIONTYPE_BOARDCHARA:
-		BoardCharaCollision();
+	case COLLISIONTYPE_BOX_CHARA:
+		Box_CharaCollision();
 		break;
 
 	default:
@@ -77,187 +65,14 @@ HRESULT CDebugcollision::Init(void)
 // ----------------------------------------
 void CDebugcollision::BoxCollision(void)
 {
-	// 1本目
-	m_p3DLine[0] = C3DLine::Create(
-		*m_pos,
-		D3DXVECTOR3(0.0f, 0.0f, 0.0f),
-		D3DXVECTOR3(-m_size->x * 0.5f, m_size->y * 0.5f, -m_size->z * 0.5f),
-		D3DXVECTOR3(m_size->x * 0.5f, m_size->y * 0.5f, -m_size->z * 0.5f),
-		D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f)
-	);
-	// 2本目
-	m_p3DLine[1] = C3DLine::Create(
-		*m_pos,
-		D3DXVECTOR3(0.0f, 0.0f, 0.0f),
-		D3DXVECTOR3(m_size->x * 0.5f, m_size->y * 0.5f, -m_size->z * 0.5f),
-		D3DXVECTOR3(m_size->x * 0.5f, -m_size->y * 0.5f, -m_size->z * 0.5f),
-		D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f)
-	);
-	// 3本目
-	m_p3DLine[2] = C3DLine::Create(
-		*m_pos,
-		D3DXVECTOR3(0.0f, 0.0f, 0.0f),
-		D3DXVECTOR3(m_size->x * 0.5f, -m_size->y * 0.5f, -m_size->z * 0.5f),
-		D3DXVECTOR3(-m_size->x * 0.5f, -m_size->y * 0.5f, -m_size->z * 0.5f),
-		D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f)
-	);
-	// 4本目
-	m_p3DLine[3] = C3DLine::Create(
-		*m_pos,
-		D3DXVECTOR3(0.0f, 0.0f, 0.0f),
-		D3DXVECTOR3(-m_size->x * 0.5f, -m_size->y * 0.5f, -m_size->z * 0.5f),
-		D3DXVECTOR3(-m_size->x * 0.5f, m_size->y * 0.5f, -m_size->z * 0.5f),
-		D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f)
-	);
-	// 5本目
-	m_p3DLine[4] = C3DLine::Create(
-		*m_pos,
-		D3DXVECTOR3(0.0f, 0.0f, 0.0f),
-		D3DXVECTOR3(-m_size->x * 0.5f, m_size->y * 0.5f, -m_size->z * 0.5f),
-		D3DXVECTOR3(-m_size->x * 0.5f, m_size->y * 0.5f, m_size->z * 0.5f),
-		D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f)
-	);
-	// 6本目
-	m_p3DLine[5] = C3DLine::Create(
-		*m_pos,
-		D3DXVECTOR3(0.0f, 0.0f, 0.0f),
-		D3DXVECTOR3(m_size->x * 0.5f, m_size->y * 0.5f, -m_size->z * 0.5f),
-		D3DXVECTOR3(m_size->x * 0.5f, m_size->y * 0.5f, m_size->z * 0.5f),
-		D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f)
-	);
-	// 7本目
-	m_p3DLine[6] = C3DLine::Create(
-		*m_pos,
-		D3DXVECTOR3(0.0f, 0.0f, 0.0f),
-		D3DXVECTOR3(m_size->x * 0.5f, -m_size->y * 0.5f, -m_size->z * 0.5f),
-		D3DXVECTOR3(m_size->x * 0.5f, -m_size->y * 0.5f, m_size->z * 0.5f),
-		D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f)
-
-	);
-	// 8本目
-	m_p3DLine[7] = C3DLine::Create(
-		*m_pos,
-		D3DXVECTOR3(0.0f, 0.0f, 0.0f),
-		D3DXVECTOR3(-m_size->x * 0.5f, -m_size->y * 0.5f, -m_size->z * 0.5f),
-		D3DXVECTOR3(-m_size->x * 0.5f, -m_size->y * 0.5f, m_size->z * 0.5f),
-		D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f)
-
-	);
-	// 9本目
-	m_p3DLine[8] = C3DLine::Create(
-		*m_pos,
-		D3DXVECTOR3(0.0f, 0.0f, 0.0f),
-		D3DXVECTOR3(-m_size->x * 0.5f, m_size->y * 0.5f, m_size->z * 0.5f),
-		D3DXVECTOR3(m_size->x * 0.5f, m_size->y * 0.5f, m_size->z * 0.5f),
-		D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f)
-
-	);
-	// 10本目
-	m_p3DLine[9] = C3DLine::Create(
-		*m_pos,
-		D3DXVECTOR3(0.0f, 0.0f, 0.0f),
-		D3DXVECTOR3(m_size->x * 0.5f, m_size->y * 0.5f, m_size->z * 0.5f),
-		D3DXVECTOR3(m_size->x * 0.5f, -m_size->y * 0.5f, m_size->z * 0.5f),
-		D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f)
-
-	);
-	// 11本目
-	m_p3DLine[10] = C3DLine::Create(
-		*m_pos,
-		D3DXVECTOR3(0.0f, 0.0f, 0.0f),
-		D3DXVECTOR3(m_size->x * 0.5f, -m_size->y * 0.5f, m_size->z * 0.5f),
-		D3DXVECTOR3(-m_size->x * 0.5f, -m_size->y * 0.5f, m_size->z * 0.5f),
-		D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f)
-
-	);
-	// 12本目
-	m_p3DLine[11] = C3DLine::Create(
-		*m_pos,
-		D3DXVECTOR3(0.0f, 0.0f, 0.0f),
-		D3DXVECTOR3(-m_size->x * 0.5f, -m_size->y * 0.5f, m_size->z * 0.5f),
-		D3DXVECTOR3(-m_size->x * 0.5f, m_size->y * 0.5f, m_size->z * 0.5f),
-		D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f)
-
-	);
-
+	m_pMeshBox = CMeshBox::Create(*m_pos,*m_size, CMeshBox::TYPE_CENTER);
 }
-
 // ----------------------------------------
-// 板の当たり判定処理
+// 箱の当たり判定処理
 // ----------------------------------------
-void CDebugcollision::BoardCollision(void)
+void CDebugcollision::Box_CharaCollision(void)
 {
-	// 1本目 上辺
-	m_p2DLine[0] = C3DLine::Create(
-		*m_pos,
-		D3DXVECTOR3(0.0f, 0.0f, 0.0f),
-		D3DXVECTOR3(-m_size->x * 0.5f, m_size->y * 0.5f, -m_size->z * 0.5f),
-		D3DXVECTOR3(m_size->x * 0.5f, m_size->y * 0.5f, m_size->z * 0.5f),
-		D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f)
-	);
-	// 2本目 右辺
-	m_p2DLine[1] = C3DLine::Create(
-		*m_pos,
-		D3DXVECTOR3(0.0f, 0.0f, 0.0f),
-		D3DXVECTOR3(m_size->x * 0.5f, m_size->y * 0.5f, m_size->z * 0.5f),
-		D3DXVECTOR3(m_size->x * 0.5f, -m_size->y * 0.5f, m_size->z * 0.5f),
-		D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f)
-	);
-	// 3本目下辺
-	m_p2DLine[2] = C3DLine::Create(
-		*m_pos,
-		D3DXVECTOR3(0.0f, 0.0f, 0.0f),
-		D3DXVECTOR3(m_size->x * 0.5f, -m_size->y * 0.5f, m_size->z * 0.5f),
-		D3DXVECTOR3(-m_size->x * 0.5f, -m_size->y * 0.5f, -m_size->z * 0.5f),
-		D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f)
-	);
-	// 4本目左辺
-	m_p2DLine[3] = C3DLine::Create(
-		*m_pos,
-		D3DXVECTOR3(0.0f, 0.0f, 0.0f),
-		D3DXVECTOR3(-m_size->x * 0.5f, -m_size->y * 0.5f, -m_size->z * 0.5f),
-		D3DXVECTOR3(-m_size->x * 0.5f, m_size->y * 0.5f, -m_size->z * 0.5f),
-		D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f)
-	);
-}
-
-// ----------------------------------------
-// キャラクタ用 板の当たり判定処理
-// ----------------------------------------
-void CDebugcollision::BoardCharaCollision(void)
-{
-	// 1本目 上辺
-	m_p2DLine[0] = C3DLine::Create(
-		*m_pos,
-		D3DXVECTOR3(0.0f, 0.0f, 0.0f),
-		D3DXVECTOR3(-m_size->x * 0.5f, m_size->y, -m_size->z * 0.5f),
-		D3DXVECTOR3(m_size->x * 0.5f, m_size->y, m_size->z * 0.5f),
-		D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f)
-	);
-	// 2本目 右辺
-	m_p2DLine[1] = C3DLine::Create(
-		*m_pos,
-		D3DXVECTOR3(0.0f, 0.0f, 0.0f),
-		D3DXVECTOR3(m_size->x * 0.5f, m_size->y, m_size->z * 0.5f),
-		D3DXVECTOR3(m_size->x * 0.5f, -m_size->y * 0.0f, m_size->z * 0.5f),
-		D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f)
-	);
-	// 3本目下辺
-	m_p2DLine[2] = C3DLine::Create(
-		*m_pos,
-		D3DXVECTOR3(0.0f, 0.0f, 0.0f),
-		D3DXVECTOR3(m_size->x * 0.5f, -m_size->y * 0.0f, m_size->z * 0.5f),
-		D3DXVECTOR3(-m_size->x * 0.5f, -m_size->y * 0.0f, -m_size->z * 0.5f),
-		D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f)
-	);
-	// 4本目左辺
-	m_p2DLine[3] = C3DLine::Create(
-		*m_pos,
-		D3DXVECTOR3(0.0f, 0.0f, 0.0f),
-		D3DXVECTOR3(-m_size->x * 0.5f, m_size->y, -m_size->z * 0.5f),
-		D3DXVECTOR3(-m_size->x * 0.5f, -m_size->y * 0.0f, -m_size->z * 0.5f),
-		D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f)
-	);
+	m_pMeshBox = CMeshBox::Create(*m_pos, *m_size, CMeshBox::TYPE_GROUND);
 }
 
 // ----------------------------------------
@@ -267,10 +82,6 @@ void CDebugcollision::Uninit(void)
 {
 	m_pos = nullptr;										// 座標ポインタの初期化
 	m_size = nullptr;										// サイズポインタの初期化
-	for (int nCnt = 0; nCnt < MAX_VERTEX3D; nCnt++)		// lineクラスのポインタ初期化
-	{
-		m_p3DLine[nCnt] = nullptr;
-	}
 }
 
 // ----------------------------------------
@@ -281,39 +92,18 @@ void CDebugcollision::Update(void)
 	// 判定の種類が箱型だったら通す
 	if (m_type == COLLISIONTYPE_BOX)
 	{
-		// 座標のポインタをlineの座標に設定
-		for (int nCnt = 0; nCnt < MAX_VERTEX3D; nCnt++)
+		if (m_pMeshBox)
 		{
-			if (m_p3DLine[nCnt] != nullptr)
-			{
-				m_p3DLine[nCnt]->SetPosColi(*m_pos);
-			}
+			m_pMeshBox->SetPos(*m_pos);
 		}
 	}
 
 	// 判定の種類が板型だったら通す
-	else if (m_type == COLLISIONTYPE_BOARD)
+	else if (m_type == COLLISIONTYPE_BOX_CHARA)
 	{
-		// 座標のポインタをlineの座標に設定
-		for (int nCnt = 0; nCnt < MAX_VERTEX2D; nCnt++)
+		if (m_pMeshBox)
 		{
-			if (m_p2DLine[nCnt] != nullptr)
-			{
-				m_p2DLine[nCnt]->SetPosColi(*m_pos);
-			}
-		}
-	}
-
-	// 判定の種類が板型だったら通す
-	else if (m_type == COLLISIONTYPE_BOARDCHARA)
-	{
-		// 座標のポインタをlineの座標に設定
-		for (int nCnt = 0; nCnt < MAX_VERTEX2D; nCnt++)
-		{
-			if (m_p2DLine[nCnt] != nullptr)
-			{
-				m_p2DLine[nCnt]->SetPosColi(*m_pos);
-			}
+			m_pMeshBox->SetPos(*m_pos);
 		}
 	}
 
@@ -371,42 +161,20 @@ void CDebugcollision::SetPos(D3DXVECTOR3 * pos)
 		// 判定の種類が箱型だったら通す
 		if (m_type == COLLISIONTYPE_BOX)
 		{
-			// 座標のポインタをlineの座標に設定
-			for (int nCnt = 0; nCnt < MAX_VERTEX3D; nCnt++)
+			if (m_pMeshBox)
 			{
-				if (m_p3DLine[nCnt] != nullptr)
-				{
-					m_p3DLine[nCnt]->SetPosColi(*pos);
-				}
+				m_pMeshBox->SetPos(*m_pos);
 			}
 		}
 
 		// 判定の種類が板型だったら通す
-		else if (m_type == COLLISIONTYPE_BOARD)
+		else if (m_type == COLLISIONTYPE_BOX_CHARA)
 		{
-			// 座標のポインタをlineの座標に設定
-			for (int nCnt = 0; nCnt < MAX_VERTEX2D; nCnt++)
+			if (m_pMeshBox)
 			{
-				if (m_p2DLine[nCnt] != nullptr)
-				{
-					m_p2DLine[nCnt]->SetPosColi(*pos);
-				}
+				m_pMeshBox->SetPos(*m_pos);
 			}
 		}
-
-		// 判定の種類が板型だったら通す
-		else if (m_type == COLLISIONTYPE_BOARDCHARA)
-		{
-			// 座標のポインタをlineの座標に設定
-			for (int nCnt = 0; nCnt < MAX_VERTEX2D; nCnt++)
-			{
-				if (m_p2DLine[nCnt] != nullptr)
-				{
-					m_p2DLine[nCnt]->SetPosColi(*pos);
-				}
-			}
-		}
-
 	}
 }
 
@@ -416,6 +184,7 @@ void CDebugcollision::SetPos(D3DXVECTOR3 * pos)
 void CDebugcollision::SetSize(D3DXVECTOR3 * size)
 {
 	m_size = size;
+	m_pMeshBox->SetSize(*m_size);
 }
 
 // ----------------------------------------
@@ -425,16 +194,10 @@ void CDebugcollision::DeleteDeCollision()
 {
 	if (this != nullptr)
 	{
-		// 座標のポインタをlineの座標に設定
-		for (int nCnt = 0; nCnt < MAX_VERTEX2D; nCnt++)
+		if (m_pMeshBox)
 		{
-
-			if (this->m_p2DLine[nCnt] != nullptr)
-			{
-
-				this->m_p2DLine[nCnt]->Rerease();
-				this->m_p2DLine[nCnt] = nullptr;
-			}
+			this->m_pMeshBox->Rerease();
+			this->m_pMeshBox = nullptr;
 		}
 	}
 }

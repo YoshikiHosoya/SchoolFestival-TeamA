@@ -68,7 +68,7 @@ HRESULT CBoss::Init(void)
 	GetGunPtr()->SetDisp(false);
 
 	// “–‚½‚è”»’è¶¬
-	GetCollision()->SetSize2D(BOSS_SIZE);
+	GetCollision()->SetSize(BOSS_SIZE);
 	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_NORMAL);
 	return S_OK;
 }

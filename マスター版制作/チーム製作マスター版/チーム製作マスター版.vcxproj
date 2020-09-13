@@ -205,6 +205,7 @@
     <ClCompile Include="SourceCode\manager.cpp" />
     <ClCompile Include="SourceCode\map.cpp" />
     <ClCompile Include="SourceCode\mesh.cpp" />
+    <ClCompile Include="SourceCode\meshbox.cpp" />
     <ClCompile Include="SourceCode\meshcircle.cpp" />
     <ClCompile Include="SourceCode\meshcylinder.cpp" />
     <ClCompile Include="SourceCode\meshfield.cpp" />
@@ -314,6 +315,7 @@
     <ClInclude Include="SourceCode\manager.h" />
     <ClInclude Include="SourceCode\map.h" />
     <ClInclude Include="SourceCode\mesh.h" />
+    <ClInclude Include="SourceCode\meshbox.h" />
     <ClInclude Include="SourceCode\meshcircle.h" />
     <ClInclude Include="SourceCode\meshcylinder.h" />
     <ClInclude Include="SourceCode\meshfield.h" />

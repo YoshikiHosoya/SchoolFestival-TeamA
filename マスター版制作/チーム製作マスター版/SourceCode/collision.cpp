@@ -152,17 +152,17 @@ void CCollision::DeCollisionCreate(COLLISIONTYPE collisiontype)
 	switch (collisiontype)
 	{
 	case COLLISIONTYPE_NORMAL:{
-		m_Debugcollision = CDebugcollision::Create(
+		/*m_Debugcollision = CDebugcollision::Create(
 			m_ppos,
 			&m_size,
-			CDebugcollision::COLLISIONTYPE_BOARD);
+			CDebugcollision::COLLISIONTYPE_BOX);*/
 	}break;
 
 	case COLLISIONTYPE_CHARACTER: {
-		m_Debugcollision = CDebugcollision::Create(
+		/*m_Debugcollision = CDebugcollision::Create(
 			m_ppos,
 			&m_size,
-			CDebugcollision::COLLISIONTYPE_BOARDCHARA);
+			CDebugcollision::COLLISIONTYPE_BOX_CHARA);*/
 	}break;
 
 	default:
@@ -1137,22 +1137,6 @@ void CCollision::SetPosOld(D3DXVECTOR3 * posold)
 void CCollision::SetSize(D3DXVECTOR3 size)
 {
 	m_size = size;
-#ifdef _DEBUG
-	if (m_Debugcollision != nullptr)
-	{
-		m_Debugcollision->SetSize(&m_size);
-	}
-#endif // _DEBUG
-
-}
-
-//======================================================================================================================
-// 2dÉTÉCÉYê›íËèàóù
-//======================================================================================================================
-void CCollision::SetSize2D(D3DXVECTOR3 size)
-{
-	m_size = size;
-
 #ifdef _DEBUG
 	if (m_Debugcollision != nullptr)
 	{

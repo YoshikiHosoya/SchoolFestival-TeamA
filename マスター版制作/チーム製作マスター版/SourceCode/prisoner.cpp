@@ -16,7 +16,7 @@
 //====================================================================
 //マクロ定義
 //====================================================================
-#define PRISONER_COLLISION_SIZE			(D3DXVECTOR3(50.0f,65.0f,0.0f))			 //捕虜のサイズ
+#define PRISONER_COLLISION_SIZE			(D3DXVECTOR3(50.0f,65.0f,50.0f))			 //捕虜のサイズ
 #define PRISONER_DIETIME				(150)									 //捕虜が消滅するまでの時間
 
 // =====================================================================================================================================================================
@@ -80,9 +80,9 @@ HRESULT CPrisoner::Init(void)
 	Move(0.0f, -1.57f);
 	// 当たり判定生成
 	GetCollision()->SetPos(&GetPosition());
-	GetCollision()->SetSize2D(PRISONER_COLLISION_SIZE);
+	GetCollision()->SetSize(PRISONER_COLLISION_SIZE);
 	GetCollision()->SetMove(&GetMove());
-	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_CHARACTER);
+	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_NORMAL);
 	GetCollision()->SetGameObject(this);
 
 	return S_OK;
@@ -107,7 +107,6 @@ void CPrisoner::Update(void)
 		{
 			// 座標の更新 pos
 			GetCollision()->SetPos(&GetPosition());
-			//縛られてる状態以外のとき
 			if (m_PrisonerState != PRISONER_STATE_STAY)
 			{
 				//消去

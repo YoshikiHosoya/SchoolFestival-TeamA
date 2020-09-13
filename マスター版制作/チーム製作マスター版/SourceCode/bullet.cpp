@@ -351,7 +351,7 @@ void CBullet::SetBulletParam(CGun::GUN_TYPE type)
 
 	// “–‚½‚è”»’è¶¬
 	GetCollision()->SetPos(&GetPosition());
-	GetCollision()->SetSize2D(m_BulletParam[type].CollisionSize);
+	GetCollision()->SetSize(m_BulletParam[type].CollisionSize);
 	GetCollision()->SetMove(&m_move);
 	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_NORMAL);
 }

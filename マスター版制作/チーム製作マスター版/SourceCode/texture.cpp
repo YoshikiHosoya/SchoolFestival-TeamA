@@ -95,6 +95,7 @@ FILENAME_LIST CTexture::m_aTexFileName =
 	{ "data/TEXTURE/UI/Pause_UI/GamePause.png" },			//ポーズ(文字)
 	{ "data/TEXTURE/UI/Pause_UI/arrow.png" },				//矢印
 
+	{ "data/TEXTURE/Collision/Frame.png" },					//当たり判定のフレーム
 };
 
 //テクスチャ名の設定

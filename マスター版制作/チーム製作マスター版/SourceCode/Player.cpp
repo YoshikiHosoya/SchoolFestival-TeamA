@@ -55,8 +55,8 @@ char *CPlayer::m_PlayerFileName =
 //====================================================================
 //マクロ定義
 //====================================================================
-#define PLAYER_SIZE			(D3DXVECTOR3(40.0f,70.0f,0.0f)) //プレイヤーのサイズ
-#define PLAYER_SIZE_CRUCH	(D3DXVECTOR3(40.0f,30.0f,0.0f)) //しゃがんだ時のサイズ
+#define PLAYER_SIZE			(D3DXVECTOR3(40.0f,70.0f,40.0f)) //プレイヤーのサイズ
+#define PLAYER_SIZE_CRUCH	(D3DXVECTOR3(40.0f,30.0f,4.0f)) //しゃがんだ時のサイズ
 // 貫通させるかのフラグ
 #define ATTACK_PENETRATION		(true)			// プレイヤーの判定が貫通するかどうか
 #define SHOT_BULLET_POS_Y		(-15.0f)		// 弾の発射位置Y
@@ -157,9 +157,9 @@ HRESULT CPlayer::Init(void)
 	SetCharacterDirection(DIRECTION::RIGHT);
 	// 当たり判定生成
 	GetCollision()->SetPos(&GetPosition());
-	GetCollision()->SetSize2D(PLAYER_SIZE);
+	GetCollision()->SetSize(PLAYER_SIZE);
 	GetCollision()->SetMove(&GetMove());
-	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_CHARACTER);
+	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_NORMAL);
 	// ゲームオブジェクト( タグ )の設定
 	GetCollision()->SetGameObject(this);
 
@@ -486,8 +486,8 @@ void CPlayer::MoveUpdate(void)
 
 	//しゃがんでいるかどうかで当たり判定の大きさ設定
 	m_bCruch ?
-		GetCollision()->SetSize2D(PLAYER_SIZE_CRUCH):	//しゃがみ時の当たり判定サイズ
-		GetCollision()->SetSize2D(PLAYER_SIZE);			//通常時の当たり判定サイズ
+		GetCollision()->SetSize(PLAYER_SIZE_CRUCH):	//しゃがみ時の当たり判定サイズ
+		GetCollision()->SetSize(PLAYER_SIZE);			//通常時の当たり判定サイズ
 
 	PadMoveUpdate();//パッドの更新
 

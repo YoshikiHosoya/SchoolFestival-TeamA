@@ -128,7 +128,7 @@ HRESULT CWeakEnemy::Init(void)
 
 
 	// “–‚½‚è”»’è¶¬
-	GetCollision()->SetSize2D(ENEMY_SIZE);
+	GetCollision()->SetSize(ENEMY_SIZE);
 	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_CHARACTER);
 
 	CCharacter::SetLife(1);

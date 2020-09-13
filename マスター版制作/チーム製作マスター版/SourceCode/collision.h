@@ -69,7 +69,6 @@ public:
 	void SetPos(D3DXVECTOR3 *pos);													// 座標の設定
 	void SetPosOld(D3DXVECTOR3 *posold);											// 1フレーム前の座標の設定
 	void SetSize(D3DXVECTOR3 size);													// サイズの設定
-	void SetSize2D(D3DXVECTOR3 size);												// 2D用サイズの設定
 	void SetMove(D3DXVECTOR3 *move) { m_pmove = move; };							// 移動量の設定
 	void SetHeight(float height) { m_fHeight = height; };													// Rayの高さ設定
 	void SetCanCollision(bool bCollision) { m_bCanCollision = bCollision; };		//当たり判定可能かどうか設定

@@ -26,7 +26,7 @@
 //====================================================================
 //マクロ定義
 //====================================================================
-#define PLAYERTANK_SIZE			(D3DXVECTOR3(90.0f,65.0f,0.0f)) // プレイヤーの判定のサイズ
+#define PLAYERTANK_SIZE			(D3DXVECTOR3(90.0f,65.0f,90.0f)) // プレイヤーの判定のサイズ
 #define PLAYERTANK_JUMP			(60.0f)				// 戦車が飛ぶ移動量
 #define SHOT_BULLET_POS_X		(0.0f)			// 弾の発射位置X
 #define SHOT_BULLET_POS_Y		(40.0f)				// 弾の発射位置Y
@@ -93,9 +93,9 @@ HRESULT CPlayertank::Init(void)
 	// 当たり判定生成
 	GetCollision()->SetPos(&GetPosition());
 	GetCollision()->SetPosOld(&GetPositionOld());
-	GetCollision()->SetSize2D(PLAYERTANK_SIZE);
+	GetCollision()->SetSize(PLAYERTANK_SIZE);
 	GetCollision()->SetMove(&GetMove());
-	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_CHARACTER);
+	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_NORMAL);
 
 	return S_OK;
 }
