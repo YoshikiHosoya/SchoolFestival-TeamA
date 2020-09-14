@@ -25,6 +25,8 @@
 #include "shield.h"
 #include "title.h"
 #include "ModelSet.h"
+#include "meshbox.h"
+
 // =====================================================================================================================================================================
 // マクロ定義
 // =====================================================================================================================================================================
@@ -260,7 +262,7 @@ void CGame::DebugCollision(CKeyboard *key)
 	CDebugProc::Print_Right("[Ctrl] + テンキー [5] : 当たり判定のラインの表示非表示\n");
 
 
-	if (C3DLine::GetDrawFlag())
+	if (CMeshBox::GetDisp())
 	{
 		CDebugProc::Print_Right("デバッグ用当たり判定ラインを描画しています\n");
 	}
@@ -284,13 +286,13 @@ void CGame::DebugCollision(CKeyboard *key)
 	{// Ctrl + 5
 		if (key->GetKeyboardTrigger(DIK_NUMPAD5))
 		{
-			if (C3DLine::GetDrawFlag())
+			if (CMeshBox::GetDisp())
 			{// 表示中なら非表示
-				C3DLine::SetDrawFlag(false);
+				CMeshBox::SetDisp(false);
 			}
 			else
 			{// 非表示なら表示
-				C3DLine::SetDrawFlag(true);
+				CMeshBox::SetDisp(true);
 			}
 		}
 

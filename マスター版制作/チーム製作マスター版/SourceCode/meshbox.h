@@ -45,7 +45,9 @@ public:
 	void SetPos(D3DXVECTOR3 const& pos);										//座標設定
 	void SetCol(D3DXCOLOR const& col);											//色設定
 	void SetSize(D3DXVECTOR3 size);												//サイズ設定
+	static void SetDisp(bool disp) { m_bDisp = disp; };
 
+	static bool		GetDisp() { return m_bDisp; };
 	D3DXVECTOR3 &GetPos() { return m_pos; };									//座標取得処理
 	D3DXVECTOR3 &GetRot() { return m_rot; };									//回転量取得
 	D3DXCOLOR	&GetCol() { return m_col; };									//色取得
@@ -58,6 +60,7 @@ public:
 protected:
 
 private:
+	static bool				m_bDisp;
 	D3DXMATRIX				m_mtxWorld;			// ワールドマトリックス
 	LPDIRECT3DVERTEXBUFFER9	m_pVtxBuff;			// 頂点バッファへのポインタ
 	LPDIRECT3DINDEXBUFFER9	m_pIdxBuff;			// インデックスバッファへのポインタ

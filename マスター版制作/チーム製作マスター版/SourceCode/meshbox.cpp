@@ -29,7 +29,7 @@
 //------------------------------------------------------------------------------
 //静的メンバ変数の初期化
 //------------------------------------------------------------------------------
-
+bool CMeshBox::m_bDisp = true;
 //------------------------------------------------------------------------------
 //コンストラクタ
 //------------------------------------------------------------------------------
@@ -125,49 +125,51 @@ void CMeshBox::Update()
 //------------------------------------------------------------------------------
 void CMeshBox::Draw()
 {
-	//マトリックス計算
-	CHossoLibrary::CalcMatrix(GetMtx(), GetPos(), GetRot());
+	if (m_bDisp)
+	{
+		//マトリックス計算
+		CHossoLibrary::CalcMatrix(GetMtx(), GetPos(), GetRot());
 
-	//デバイス取得
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
+		//デバイス取得
+		LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
 
-	// ワールドマトリックスの設定
-	pDevice->SetTransform(D3DTS_WORLD, &m_mtxWorld);
+		// ワールドマトリックスの設定
+		pDevice->SetTransform(D3DTS_WORLD, &m_mtxWorld);
 
-	//頂点バッファをデバイスのデータストリームにバインド
-	pDevice->SetStreamSource(0, m_pVtxBuff, 0, sizeof(VERTEX_3D));
+		//頂点バッファをデバイスのデータストリームにバインド
+		pDevice->SetStreamSource(0, m_pVtxBuff, 0, sizeof(VERTEX_3D));
 
-	//インデックスバッファをデバイスのデータストリームにバインド
-	pDevice->SetIndices(m_pIdxBuff);
+		//インデックスバッファをデバイスのデータストリームにバインド
+		pDevice->SetIndices(m_pIdxBuff);
 
-	//頂点フォーマットの設定
-	pDevice->SetFVF(FVF_VERTEX_3D);
+		//頂点フォーマットの設定
+		pDevice->SetFVF(FVF_VERTEX_3D);
 
-	//テクスチャの設定
-	pDevice->SetTexture(0, CTexture::GetTexture(CTexture::TEX_TYPE::TEX_NONE));
+		//テクスチャの設定
+		pDevice->SetTexture(0, CTexture::GetTexture(CTexture::TEX_TYPE::TEX_NONE));
 
-	CManager::GetRenderer()->SetRendererCommand(CRenderer::RENDERER_CULLING_CW);
+		CManager::GetRenderer()->SetRendererCommand(CRenderer::RENDERER_CULLING_CW);
 
-	// ポリゴンの描画
-	pDevice->DrawIndexedPrimitive(D3DPT_TRIANGLESTRIP,		//プリミティブの種類
-		0,
-		0,
-		8,		//使用する頂点数 三角ポリゴンの頂点
-		0,		//頂点の読み取りを開始する位置
-		16);	//ポリゴンの枚数
+		// ポリゴンの描画
+		pDevice->DrawIndexedPrimitive(D3DPT_TRIANGLESTRIP,		//プリミティブの種類
+			0,
+			0,
+			8,		//使用する頂点数 三角ポリゴンの頂点
+			0,		//頂点の読み取りを開始する位置
+			16);	//ポリゴンの枚数
 
-	// カリングしない
-	CManager::GetRenderer()->SetRendererCommand(CRenderer::RENDERER_CULLING_NONE);
+					// カリングしない
+		CManager::GetRenderer()->SetRendererCommand(CRenderer::RENDERER_CULLING_NONE);
 
-	//Zテスト通常
-	CManager::GetRenderer()->SetRendererCommand(CRenderer::RENDERER_ZTEST_DEFAULT);
+		//Zテスト通常
+		CManager::GetRenderer()->SetRendererCommand(CRenderer::RENDERER_ZTEST_DEFAULT);
 
-	//通常合成
-	CManager::GetRenderer()->SetRendererCommand(CRenderer::REDNERER_ALPHABLEND_DEFAULT);
+		//通常合成
+		CManager::GetRenderer()->SetRendererCommand(CRenderer::REDNERER_ALPHABLEND_DEFAULT);
 
-	//ライティングON
-	CManager::GetRenderer()->SetRendererCommand(CRenderer::RENDERER_LIGHTING_ON);
-
+		//ライティングON
+		CManager::GetRenderer()->SetRendererCommand(CRenderer::RENDERER_LIGHTING_ON);
+	}
 }
 //------------------------------------------------------------------------------
 //デバッグ情報表記
