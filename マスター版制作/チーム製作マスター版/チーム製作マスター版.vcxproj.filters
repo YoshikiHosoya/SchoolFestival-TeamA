@@ -1,26 +1,23 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="SourceCode\shield.cpp">
-      <Filter>Model</Filter>
+    <ClCompile Include="SourceCode\BaseAI.cpp">
+      <Filter>AI</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\BossAI.cpp">
+      <Filter>AI</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\EnemyAI.cpp">
+      <Filter>AI</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\ShieldEnemyAI.cpp">
+      <Filter>AI</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\3Dline.cpp">
+      <Filter>Collision</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\collision.cpp">
       <Filter>Collision</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\ImGui\imgui.cpp">
-      <Filter>ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\ImGui\imgui_draw.cpp">
-      <Filter>ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\ImGui\imgui_impl_dx9.cpp">
-      <Filter>ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\ImGui\imgui_impl_win32.cpp">
-      <Filter>ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\ImGui\imgui_widgets.cpp">
-      <Filter>ImGui</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\hosso\Debug_EffectViewer.cpp">
       <Filter>Debug</Filter>
@@ -43,25 +40,139 @@
     <ClCompile Include="SourceCode\debugproc.cpp">
       <Filter>Debug</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\item.cpp">
-      <Filter>Scene2D.3D</Filter>
+    <ClCompile Include="SourceCode\orbit.cpp">
+      <Filter>Effect</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\BossAI.cpp">
-      <Filter>AI</Filter>
+    <ClCompile Include="SourceCode\particle.cpp">
+      <Filter>Effect</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\EnemyAI.cpp">
-      <Filter>AI</Filter>
+    <ClCompile Include="SourceCode\ParticleManager.cpp">
+      <Filter>Effect</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\inputKeyboard.cpp">
-      <Filter>Option</Filter>
+    <ClCompile Include="SourceCode\ParticleParamater.cpp">
+      <Filter>Effect</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\light.cpp">
-      <Filter>Option</Filter>
+    <ClCompile Include="SourceCode\ImGui\imgui.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\ImGui\imgui_draw.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\ImGui\imgui_impl_dx9.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\ImGui\imgui_impl_win32.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\ImGui\imgui_widgets.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\mesh.cpp">
+      <Filter>Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\meshbox.cpp">
+      <Filter>Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\meshcircle.cpp">
+      <Filter>Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\meshcylinder.cpp">
+      <Filter>Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\meshfield.cpp">
+      <Filter>Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\meshsphere.cpp">
+      <Filter>Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\GameManager.cpp">
+      <Filter>Mode\Mode\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\RankingManager.cpp">
+      <Filter>Mode\Mode\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\ResultManager.cpp">
+      <Filter>Mode\Mode\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\TutorialManager.cpp">
+      <Filter>Mode\Mode\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\BaseMode.cpp">
+      <Filter>Mode\Mode</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\game.cpp">
+      <Filter>Mode\Mode</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\pause.cpp">
+      <Filter>Mode\Mode</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\ranking.cpp">
+      <Filter>Mode\Mode</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\title.cpp">
+      <Filter>Mode\Mode</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\tutorial.cpp">
+      <Filter>Mode\Mode</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Boss.cpp">
+      <Filter>Model\Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Boss_One.cpp">
+      <Filter>Model\Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Character.cpp">
+      <Filter>Model\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Enemy.cpp">
+      <Filter>Model\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\ModelSet.cpp">
+      <Filter>Model\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Player.cpp">
+      <Filter>Model\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\prisoner.cpp">
+      <Filter>Model\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\WeakEnemy.cpp">
+      <Filter>Model\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\map.cpp">
+      <Filter>Model\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Model.cpp">
+      <Filter>Model\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Obstacle.cpp">
+      <Filter>Model\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\BattlePlane.cpp">
+      <Filter>Model\Vehicle</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\helicopter.cpp">
+      <Filter>Model\Vehicle</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\playertank.cpp">
+      <Filter>Model\Vehicle</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\vehicle.cpp">
+      <Filter>Model\Vehicle</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\shield.cpp">
+      <Filter>Model</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\camera.cpp">
       <Filter>Option</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\fade.cpp">
+      <Filter>Option</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\inputKeyboard.cpp">
+      <Filter>Option</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\light.cpp">
       <Filter>Option</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\mouse.cpp">
@@ -73,38 +184,86 @@
     <ClCompile Include="SourceCode\XInputPad.cpp">
       <Filter>Option</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\particle.cpp">
-      <Filter>Effect</Filter>
+    <ClCompile Include="SourceCode\hosso\HossoLibrary.cpp">
+      <Filter>ProjectBase</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\ParticleManager.cpp">
-      <Filter>Effect</Filter>
+    <ClCompile Include="SourceCode\main.cpp">
+      <Filter>ProjectBase</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\ParticleParamater.cpp">
-      <Filter>Effect</Filter>
+    <ClCompile Include="SourceCode\manager.cpp">
+      <Filter>ProjectBase</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\orbit.cpp">
-      <Filter>Effect</Filter>
+    <ClCompile Include="SourceCode\renderer.cpp">
+      <Filter>ProjectBase</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\mesh.cpp">
-      <Filter>mesh</Filter>
+    <ClCompile Include="SourceCode\Scene.cpp">
+      <Filter>ProjectBase</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\meshcircle.cpp">
-      <Filter>mesh</Filter>
+    <ClCompile Include="SourceCode\item.cpp">
+      <Filter>Scene2D_3D</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\meshcylinder.cpp">
-      <Filter>mesh</Filter>
+    <ClCompile Include="SourceCode\Scene2D.cpp">
+      <Filter>Scene2D_3D\Base</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\meshfield.cpp">
-      <Filter>mesh</Filter>
+    <ClCompile Include="SourceCode\Scene3D.cpp">
+      <Filter>Scene2D_3D\Base</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\meshsphere.cpp">
-      <Filter>mesh</Filter>
+    <ClCompile Include="SourceCode\SceneBase.cpp">
+      <Filter>Scene2D_3D\Base</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\BaseAI.cpp">
-      <Filter>AI</Filter>
+    <ClCompile Include="SourceCode\SceneX.cpp">
+      <Filter>Scene2D_3D\Base</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\ShieldEnemyAI.cpp">
-      <Filter>AI</Filter>
+    <ClCompile Include="SourceCode\3Dmultinumber.cpp">
+      <Filter>Scene2D_3D\Number</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\3Dnumber.cpp">
+      <Filter>Scene2D_3D\Number</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\multinumber.cpp">
+      <Filter>Scene2D_3D\Number</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\number.cpp">
+      <Filter>Scene2D_3D\Number</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\ScoreManager.cpp">
+      <Filter>Scene2D_3D\Number</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\TexAnimation2D.cpp">
+      <Filter>Scene2D_3D\UI\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\TexAnimationBase.cpp">
+      <Filter>Scene2D_3D\UI\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\texture.cpp">
+      <Filter>Scene2D_3D\UI\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\pauseUI.cpp">
+      <Filter>Scene2D_3D\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\PlayerGetScoreUI_.cpp">
+      <Filter>Scene2D_3D\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\playerUI.cpp">
+      <Filter>Scene2D_3D\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\rankingUI.cpp">
+      <Filter>Scene2D_3D\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\resultUI.cpp">
+      <Filter>Scene2D_3D\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\titleUI.cpp">
+      <Filter>Scene2D_3D\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\tutorialUI.cpp">
+      <Filter>Scene2D_3D\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\UI.cpp">
+      <Filter>Scene2D_3D\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\UIManager.cpp">
+      <Filter>Scene2D_3D\UI</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\Knife.cpp">
       <Filter>Wepon\Knife</Filter>
@@ -127,6 +286,9 @@
     <ClCompile Include="SourceCode\helicoptergun.cpp">
       <Filter>Wepon\Gun</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\incendiary.cpp">
+      <Filter>Wepon\Gun</Filter>
+    </ClCompile>
     <ClCompile Include="SourceCode\planegun.cpp">
       <Filter>Wepon\Gun</Filter>
     </ClCompile>
@@ -140,198 +302,78 @@
       <Filter>Wepon\Gun</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\bullet.cpp">
-      <Filter>Wepon\bullet</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\flameshot.cpp">
-      <Filter>Wepon\bullet</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\flamethrower.cpp">
-      <Filter>Wepon\bullet</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\grenade.cpp">
-      <Filter>Wepon\bullet</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\grenadefire.cpp">
-      <Filter>Wepon\bullet</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\PlayerGetScoreUI_.cpp">
-      <Filter>Scene2D.3D\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\playerUI.cpp">
-      <Filter>Scene2D.3D\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\rankingUI.cpp">
-      <Filter>Scene2D.3D\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\resultUI.cpp">
-      <Filter>Scene2D.3D\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\tutorialUI.cpp">
-      <Filter>Scene2D.3D\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\UI.cpp">
-      <Filter>Scene2D.3D\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\UIManager.cpp">
-      <Filter>Scene2D.3D\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\titleUI.cpp">
-      <Filter>Scene2D.3D\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\Scene2D.cpp">
-      <Filter>Scene2D.3D\base</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\Scene3D.cpp">
-      <Filter>Scene2D.3D\base</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\SceneBase.cpp">
-      <Filter>Scene2D.3D\base</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\SceneX.cpp">
-      <Filter>Scene2D.3D\base</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\TexAnimation2D.cpp">
-      <Filter>Scene2D.3D\texture</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\TexAnimationBase.cpp">
-      <Filter>Scene2D.3D\texture</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\texture.cpp">
-      <Filter>Scene2D.3D\texture</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\Enemy.cpp">
-      <Filter>Model\character</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\prisoner.cpp">
-      <Filter>Model\character</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\Player.cpp">
-      <Filter>Model\character</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\WeakEnemy.cpp">
-      <Filter>Model\character</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\BattlePlane.cpp">
-      <Filter>Model\vehicle</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\helicopter.cpp">
-      <Filter>Model\vehicle</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\playertank.cpp">
-      <Filter>Model\vehicle</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\vehicle.cpp">
-      <Filter>Model\vehicle</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\GameManager.cpp">
-      <Filter>Mode\manager</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\RankingManager.cpp">
-      <Filter>Mode\manager</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\ResultManager.cpp">
-      <Filter>Mode\manager</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\TutorialManager.cpp">
-      <Filter>Mode\manager</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\map.cpp">
-      <Filter>Model\map</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\Model.cpp">
-      <Filter>Model\map</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\Obstacle.cpp">
-      <Filter>Model\map</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\3Dmultinumber.cpp">
-      <Filter>Scene2D.3D\number</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\3Dnumber.cpp">
-      <Filter>Scene2D.3D\number</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\multinumber.cpp">
-      <Filter>Scene2D.3D\number</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\number.cpp">
-      <Filter>Scene2D.3D\number</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\ScoreManager.cpp">
-      <Filter>Scene2D.3D\number</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\BaseMode.cpp">
-      <Filter>Mode\mode</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\game.cpp">
-      <Filter>Mode\mode</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\pause.cpp">
-      <Filter>Mode\mode</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\ranking.cpp">
-      <Filter>Mode\mode</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\title.cpp">
-      <Filter>Mode\mode</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\tutorial.cpp">
-      <Filter>Mode\mode</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\Boss.cpp">
-      <Filter>Model\boss</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\Boss_One.cpp">
-      <Filter>Model\boss</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\hosso\HossoLibrary.cpp">
-      <Filter>projectBase</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\main.cpp">
-      <Filter>projectBase</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\renderer.cpp">
-      <Filter>projectBase</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\Scene.cpp">
-      <Filter>projectBase</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\manager.cpp">
-      <Filter>projectBase</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\Character.cpp">
-      <Filter>Model\character</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\3Dline.cpp">
-      <Filter>Collision</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\pauseUI.cpp">
-      <Filter>Scene2D.3D\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\ModelSet.cpp">
-      <Filter>Model\character</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\incendiary.cpp">
-      <Filter>Wepon\Gun</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\meshbox.cpp">
-      <Filter>mesh</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceCode\missile.cpp">
-      <Filter>Wepon\bullet</Filter>
+      <Filter>Wepon\Bullet</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\flamebullet.cpp">
-      <Filter>Wepon\bullet</Filter>
+      <Filter>Wepon\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\flameshot.cpp">
+      <Filter>Wepon\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\flamethrower.cpp">
+      <Filter>Wepon\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\grenade.cpp">
+      <Filter>Wepon\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\grenadefire.cpp">
+      <Filter>Wepon\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\missile.cpp">
+      <Filter>Wepon\Bullet</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="SourceCode\shield.h">
-      <Filter>Model</Filter>
+    <ClInclude Include="SourceCode\BaseAI.h">
+      <Filter>AI</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\BossAI.h">
+      <Filter>AI</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\EnemyAI.h">
+      <Filter>AI</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\ShieldEnemyAI.h">
+      <Filter>AI</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\3Dline.h">
       <Filter>Collision</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\collision.h">
       <Filter>Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\hosso\Debug_EffectViewer.h">
+      <Filter>Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Debug_MapEditor.h">
+      <Filter>Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\hosso\Debug_ModelViewer.h">
+      <Filter>Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\hosso\Debug_ViewerCharacter.h">
+      <Filter>Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\hosso\Debug_WorldLine.h">
+      <Filter>Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\debugcollision.h">
+      <Filter>Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\debugproc.h">
+      <Filter>Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\orbit.h">
+      <Filter>Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\particle.h">
+      <Filter>Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\ParticleManager.h">
+      <Filter>Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\ParticleParamater.h">
+      <Filter>Effect</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\ImGui\imconfig.h">
       <Filter>ImGui</Filter>
@@ -357,46 +399,112 @@
     <ClInclude Include="SourceCode\ImGui\imstb_truetype.h">
       <Filter>ImGui</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\hosso\Debug_EffectViewer.h">
-      <Filter>Debug</Filter>
+    <ClInclude Include="SourceCode\mesh.h">
+      <Filter>Mesh</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\Debug_MapEditor.h">
-      <Filter>Debug</Filter>
+    <ClInclude Include="SourceCode\meshbox.h">
+      <Filter>Mesh</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\hosso\Debug_ModelViewer.h">
-      <Filter>Debug</Filter>
+    <ClInclude Include="SourceCode\meshcircle.h">
+      <Filter>Mesh</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\hosso\Debug_ViewerCharacter.h">
-      <Filter>Debug</Filter>
+    <ClInclude Include="SourceCode\meshcylinder.h">
+      <Filter>Mesh</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\hosso\Debug_WorldLine.h">
-      <Filter>Debug</Filter>
+    <ClInclude Include="SourceCode\meshfield.h">
+      <Filter>Mesh</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\debugcollision.h">
-      <Filter>Debug</Filter>
+    <ClInclude Include="SourceCode\meshsphere.h">
+      <Filter>Mesh</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\debugproc.h">
-      <Filter>Debug</Filter>
+    <ClInclude Include="SourceCode\GameManager.h">
+      <Filter>Mode\Mode\Manager</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\item.h">
-      <Filter>Scene2D.3D</Filter>
+    <ClInclude Include="SourceCode\RankingManager.h">
+      <Filter>Mode\Mode\Manager</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\BossAI.h">
-      <Filter>AI</Filter>
+    <ClInclude Include="SourceCode\ResultManager.h">
+      <Filter>Mode\Mode\Manager</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\EnemyAI.h">
-      <Filter>AI</Filter>
+    <ClInclude Include="SourceCode\TutorialManager.h">
+      <Filter>Mode\Mode\Manager</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\light.h">
-      <Filter>Option</Filter>
+    <ClInclude Include="SourceCode\BaseMode.h">
+      <Filter>Mode\Mode</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\inputKeyboard.h">
-      <Filter>Option</Filter>
+    <ClInclude Include="SourceCode\game.h">
+      <Filter>Mode\Mode</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\pause.h">
+      <Filter>Mode\Mode</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\ranking.h">
+      <Filter>Mode\Mode</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\title.h">
+      <Filter>Mode\Mode</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\tutorial.h">
+      <Filter>Mode\Mode</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Boss.h">
+      <Filter>Model\Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Boss_One.h">
+      <Filter>Model\Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Character.h">
+      <Filter>Model\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Enemy.h">
+      <Filter>Model\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\ModelSet.h">
+      <Filter>Model\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Player.h">
+      <Filter>Model\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\prisoner.h">
+      <Filter>Model\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\WeakEnemy.h">
+      <Filter>Model\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\map.h">
+      <Filter>Model\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\model.h">
+      <Filter>Model\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Obstacle.h">
+      <Filter>Model\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\BattlePlane.h">
+      <Filter>Model\Vehicle</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\helicopter.h">
+      <Filter>Model\Vehicle</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\playertank.h">
+      <Filter>Model\Vehicle</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\vehicle.h">
+      <Filter>Model\Vehicle</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\shield.h">
+      <Filter>Model</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\camera.h">
       <Filter>Option</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\fade.h">
+      <Filter>Option</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\inputKeyboard.h">
+      <Filter>Option</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\light.h">
       <Filter>Option</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\mouse.h">
@@ -408,38 +516,89 @@
     <ClInclude Include="SourceCode\XInputPad.h">
       <Filter>Option</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\particle.h">
-      <Filter>Effect</Filter>
+    <ClInclude Include="SourceCode\hosso\HossoLibrary.h">
+      <Filter>ProjectBase</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\ParticleManager.h">
-      <Filter>Effect</Filter>
+    <ClInclude Include="SourceCode\main.h">
+      <Filter>ProjectBase</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\ParticleParamater.h">
-      <Filter>Effect</Filter>
+    <ClInclude Include="SourceCode\manager.h">
+      <Filter>ProjectBase</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\orbit.h">
-      <Filter>Effect</Filter>
+    <ClInclude Include="SourceCode\renderer.h">
+      <Filter>ProjectBase</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\mesh.h">
-      <Filter>mesh</Filter>
+    <ClInclude Include="SourceCode\Scene.h">
+      <Filter>ProjectBase</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\meshcircle.h">
-      <Filter>mesh</Filter>
+    <ClInclude Include="SourceCode\Resource\resource.h">
+      <Filter>Resource</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\meshcylinder.h">
-      <Filter>mesh</Filter>
+    <ClInclude Include="SourceCode\item.h">
+      <Filter>Scene2D_3D</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\meshfield.h">
-      <Filter>mesh</Filter>
+    <ClInclude Include="SourceCode\scene2D.h">
+      <Filter>Scene2D_3D\Base</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\meshsphere.h">
-      <Filter>mesh</Filter>
+    <ClInclude Include="SourceCode\Scene3D.h">
+      <Filter>Scene2D_3D\Base</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\BaseAI.h">
-      <Filter>AI</Filter>
+    <ClInclude Include="SourceCode\SceneBase.h">
+      <Filter>Scene2D_3D\Base</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\ShieldEnemyAI.h">
-      <Filter>AI</Filter>
+    <ClInclude Include="SourceCode\SceneX.h">
+      <Filter>Scene2D_3D\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\3Dmultinumber.h">
+      <Filter>Scene2D_3D\Number</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\3Dnumber.h">
+      <Filter>Scene2D_3D\Number</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\multinumber.h">
+      <Filter>Scene2D_3D\Number</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\number.h">
+      <Filter>Scene2D_3D\Number</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\ScoreManager.h">
+      <Filter>Scene2D_3D\Number</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\TexAnimation2D.h">
+      <Filter>Scene2D_3D\UI\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\TexAnimationBase.h">
+      <Filter>Scene2D_3D\UI\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\texture.h">
+      <Filter>Scene2D_3D\UI\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\pauseUI.h">
+      <Filter>Scene2D_3D\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\PlayerGetScoreUI.h">
+      <Filter>Scene2D_3D\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\playerUI.h">
+      <Filter>Scene2D_3D\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\rankingUI.h">
+      <Filter>Scene2D_3D\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\resultUI.h">
+      <Filter>Scene2D_3D\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\titleUI.h">
+      <Filter>Scene2D_3D\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\tutorialUI.h">
+      <Filter>Scene2D_3D\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\UI.h">
+      <Filter>Scene2D_3D\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\UIManager.h">
+      <Filter>Scene2D_3D\UI</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\Knife.h">
       <Filter>Wepon\Knife</Filter>
@@ -462,6 +621,12 @@
     <ClInclude Include="SourceCode\helicoptergun.h">
       <Filter>Wepon\Gun</Filter>
     </ClInclude>
+    <ClInclude Include="SourceCode\incendiary.h">
+      <Filter>Wepon\Gun</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\planegun.h">
+      <Filter>Wepon\Gun</Filter>
+    </ClInclude>
     <ClInclude Include="SourceCode\rocketlauncher.h">
       <Filter>Wepon\Gun</Filter>
     </ClInclude>
@@ -471,272 +636,106 @@
     <ClInclude Include="SourceCode\TrackingGun.h">
       <Filter>Wepon\Gun</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\planegun.h">
-      <Filter>Wepon\Gun</Filter>
-    </ClInclude>
     <ClInclude Include="SourceCode\bullet.h">
-      <Filter>Wepon\bullet</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\flameshot.h">
-      <Filter>Wepon\bullet</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\flamethrower.h">
-      <Filter>Wepon\bullet</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\grenade.h">
-      <Filter>Wepon\bullet</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\grenadefire.h">
-      <Filter>Wepon\bullet</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\PlayerGetScoreUI.h">
-      <Filter>Scene2D.3D\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\playerUI.h">
-      <Filter>Scene2D.3D\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\rankingUI.h">
-      <Filter>Scene2D.3D\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\resultUI.h">
-      <Filter>Scene2D.3D\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\tutorialUI.h">
-      <Filter>Scene2D.3D\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\UI.h">
-      <Filter>Scene2D.3D\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\UIManager.h">
-      <Filter>Scene2D.3D\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\titleUI.h">
-      <Filter>Scene2D.3D\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\scene2D.h">
-      <Filter>Scene2D.3D\base</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\Scene3D.h">
-      <Filter>Scene2D.3D\base</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\SceneBase.h">
-      <Filter>Scene2D.3D\base</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\SceneX.h">
-      <Filter>Scene2D.3D\base</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\TexAnimation2D.h">
-      <Filter>Scene2D.3D\texture</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\TexAnimationBase.h">
-      <Filter>Scene2D.3D\texture</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\texture.h">
-      <Filter>Scene2D.3D\texture</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\Character.h">
-      <Filter>Model\character</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\Enemy.h">
-      <Filter>Model\character</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\prisoner.h">
-      <Filter>Model\character</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\Player.h">
-      <Filter>Model\character</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\WeakEnemy.h">
-      <Filter>Model\character</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\BattlePlane.h">
-      <Filter>Model\vehicle</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\helicopter.h">
-      <Filter>Model\vehicle</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\playertank.h">
-      <Filter>Model\vehicle</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\vehicle.h">
-      <Filter>Model\vehicle</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\GameManager.h">
-      <Filter>Mode\manager</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\RankingManager.h">
-      <Filter>Mode\manager</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\ResultManager.h">
-      <Filter>Mode\manager</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\TutorialManager.h">
-      <Filter>Mode\manager</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\map.h">
-      <Filter>Model\map</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\model.h">
-      <Filter>Model\map</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\Obstacle.h">
-      <Filter>Model\map</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\3Dmultinumber.h">
-      <Filter>Scene2D.3D\number</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\3Dnumber.h">
-      <Filter>Scene2D.3D\number</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\number.h">
-      <Filter>Scene2D.3D\number</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\ScoreManager.h">
-      <Filter>Scene2D.3D\number</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\multinumber.h">
-      <Filter>Scene2D.3D\number</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\BaseMode.h">
-      <Filter>Mode\mode</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\game.h">
-      <Filter>Mode\mode</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\pause.h">
-      <Filter>Mode\mode</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\ranking.h">
-      <Filter>Mode\mode</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\title.h">
-      <Filter>Mode\mode</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\tutorial.h">
-      <Filter>Mode\mode</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\Boss.h">
-      <Filter>Model\boss</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\Boss_One.h">
-      <Filter>Model\boss</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\Scene.h">
-      <Filter>projectBase</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\hosso\HossoLibrary.h">
-      <Filter>projectBase</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\main.h">
-      <Filter>projectBase</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\renderer.h">
-      <Filter>projectBase</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\manager.h">
-      <Filter>projectBase</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\Resource\resource.h">
-      <Filter>Resource</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\pauseUI.h">
-      <Filter>Scene2D.3D\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\ModelSet.h">
-      <Filter>Model\character</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\incendiary.h">
-      <Filter>Wepon\Gun</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\meshbox.h">
-      <Filter>mesh</Filter>
-    </ClInclude>
-  </ItemGroup>
-    <ClInclude Include="SourceCode\missile.h">
-      <Filter>Wepon\bullet</Filter>
+      <Filter>Wepon\Bullet</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\flamebullet.h">
-      <Filter>Wepon\bullet</Filter>
+      <Filter>Wepon\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\flameshot.h">
+      <Filter>Wepon\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\flamethrower.h">
+      <Filter>Wepon\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\grenade.h">
+      <Filter>Wepon\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\grenadefire.h">
+      <Filter>Wepon\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\missile.h">
+      <Filter>Wepon\Bullet</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="Model">
-      <UniqueIdentifier>{532c105e-0a4e-415e-b18c-973c78b56423}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Wepon">
-      <UniqueIdentifier>{aafc39da-76df-46b1-8b26-bc565f1bf78d}</UniqueIdentifier>
+    <Filter Include="AI">
+      <UniqueIdentifier>{19f2a73c-47b8-4b3e-b365-9371c3d24dba}</UniqueIdentifier>
     </Filter>
     <Filter Include="Collision">
-      <UniqueIdentifier>{b51503b3-257a-4f95-ac7f-d062897d0e83}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ImGui">
-      <UniqueIdentifier>{7b56e485-6142-4233-8d7e-84d7986bea0c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Mode">
-      <UniqueIdentifier>{5499a26b-5d06-48b7-a0fe-2fbd7958ebf4}</UniqueIdentifier>
+      <UniqueIdentifier>{171163ea-cdcb-44e6-82b5-fe9b8376b057}</UniqueIdentifier>
     </Filter>
     <Filter Include="Debug">
-      <UniqueIdentifier>{7e5c3245-1999-467c-9e12-ddd3f0ee635e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Scene2D.3D">
-      <UniqueIdentifier>{36b0d615-78bb-44ea-adee-8de7276d8605}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="AI">
-      <UniqueIdentifier>{e2b367f9-6d26-4ef5-8eca-a1f0a8aa5f5b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Option">
-      <UniqueIdentifier>{a41da219-39a4-4b6d-8a8f-e6dc92520a68}</UniqueIdentifier>
+      <UniqueIdentifier>{d8e80a19-b7b6-4b05-93e3-a084973dd2b4}</UniqueIdentifier>
     </Filter>
     <Filter Include="Effect">
-      <UniqueIdentifier>{1f83aa29-daa0-40a6-b139-fbb6a450c130}</UniqueIdentifier>
+      <UniqueIdentifier>{1ad6eb99-6d0c-4080-880d-ff189b7e2b18}</UniqueIdentifier>
     </Filter>
-    <Filter Include="mesh">
-      <UniqueIdentifier>{60e3d0d8-d049-4822-a91f-c9508ae97a8b}</UniqueIdentifier>
+    <Filter Include="ImGui">
+      <UniqueIdentifier>{1b428693-6dae-4ae1-bd04-abc13ad6741f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Wepon\bullet">
-      <UniqueIdentifier>{4f8571bc-d9fa-4919-9189-f9528576efc3}</UniqueIdentifier>
+    <Filter Include="Mesh">
+      <UniqueIdentifier>{17b8bd79-4ec5-47b2-b079-94c8357bd1c2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Wepon\Gun">
-      <UniqueIdentifier>{35bfd11f-3cab-467c-85d1-977699de0516}</UniqueIdentifier>
+    <Filter Include="Mode">
+      <UniqueIdentifier>{cec80db6-3ac1-440a-946d-6cdd6429cccb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Wepon\Knife">
-      <UniqueIdentifier>{efe2ae03-5fc3-449a-842b-c8b641bcdf8b}</UniqueIdentifier>
+    <Filter Include="Model">
+      <UniqueIdentifier>{747057fb-788b-451d-8f79-6d701e7edfdd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Scene2D.3D\UI">
-      <UniqueIdentifier>{e74d8452-4ae2-4286-a48a-b8cef676f36b}</UniqueIdentifier>
+    <Filter Include="Wepon">
+      <UniqueIdentifier>{dfebf2df-1de9-4588-b32a-b2e20734bdc5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Scene2D.3D\base">
-      <UniqueIdentifier>{556e970e-3120-41c5-a15a-f58ac2da881e}</UniqueIdentifier>
+    <Filter Include="Mode\Mode">
+      <UniqueIdentifier>{cd15a41b-ed67-4dd8-a38f-b64d4cfde8d6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Scene2D.3D\texture">
-      <UniqueIdentifier>{60934e4a-95f6-443e-b59f-1783f77436bd}</UniqueIdentifier>
+    <Filter Include="Mode\Mode\Manager">
+      <UniqueIdentifier>{8e60e391-e262-422b-88b0-59dae2aab9e2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Model\character">
-      <UniqueIdentifier>{028ee78f-f952-4465-be49-c15ca5d364e4}</UniqueIdentifier>
+    <Filter Include="Model\Character">
+      <UniqueIdentifier>{cc0e2fc1-aec3-4aa8-97df-bbbe887009c8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Model\vehicle">
-      <UniqueIdentifier>{d9413d78-45cd-4f20-af0b-eb3322be7502}</UniqueIdentifier>
+    <Filter Include="Model\Map">
+      <UniqueIdentifier>{871ee541-e694-4b48-a5db-6e1e1abd84a0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Mode\manager">
-      <UniqueIdentifier>{62430e45-fa8c-4033-b966-011a2c09d959}</UniqueIdentifier>
+    <Filter Include="Model\Vehicle">
+      <UniqueIdentifier>{4602d6c6-109a-482e-a8ca-e5325bbaee62}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Model\map">
-      <UniqueIdentifier>{2df37478-e48b-42be-9791-38b6125f0b84}</UniqueIdentifier>
+    <Filter Include="Model\Boss">
+      <UniqueIdentifier>{b12105ec-cff3-4bd0-8927-2b14fdcd3487}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Scene2D.3D\number">
-      <UniqueIdentifier>{47d4ed56-7b16-439d-8944-a4f789f6067f}</UniqueIdentifier>
+    <Filter Include="Option">
+      <UniqueIdentifier>{cdd75d91-63e4-43e4-8ddb-943f2a303fcb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Mode\mode">
-      <UniqueIdentifier>{35532b8b-607c-4d33-9c35-95ca2c74e57c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Model\boss">
-      <UniqueIdentifier>{bd6e69f8-14b8-4fb1-884f-4e28de1e7b5e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="projectBase">
-      <UniqueIdentifier>{9ec38c66-6a5c-4934-869e-bf20bc062660}</UniqueIdentifier>
+    <Filter Include="ProjectBase">
+      <UniqueIdentifier>{90342c03-08ef-43f5-b5a7-12b6370aae7d}</UniqueIdentifier>
     </Filter>
     <Filter Include="Resource">
-      <UniqueIdentifier>{8e813104-f29a-494a-97d7-3f034869eb70}</UniqueIdentifier>
+      <UniqueIdentifier>{1e5e877e-2e33-46e6-a510-bbe50c29759b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene2D_3D">
+      <UniqueIdentifier>{5bd6e88f-b18f-4eb1-bbf2-759a05c7c5d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene2D_3D\Base">
+      <UniqueIdentifier>{331e0e85-bf94-4790-ac5b-bf2bdeb38ff5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene2D_3D\UI">
+      <UniqueIdentifier>{9b78c49e-77a5-4c75-b545-c3dd84bdd4bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene2D_3D\Number">
+      <UniqueIdentifier>{e7418f02-c360-4a72-bae0-19547570667a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene2D_3D\UI\Texture">
+      <UniqueIdentifier>{0861c859-946f-43d3-9841-806d4054df74}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Wepon\Bullet">
+      <UniqueIdentifier>{6a0b6482-7e5b-4402-9d7b-921d29e6363f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Wepon\Gun">
+      <UniqueIdentifier>{48c8cb4a-1a1b-46d4-84e1-15af81a9becc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Wepon\Knife">
+      <UniqueIdentifier>{c512de14-db22-4acf-b4d3-4e24562a7698}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
