@@ -313,6 +313,9 @@
     <ClCompile Include="SourceCode\incendiary.cpp">
       <Filter>Wepon\Gun</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\meshbox.cpp">
+      <Filter>mesh</Filter>
+    </ClCompile>
     <ClCompile Include="SourceCode\missile.cpp">
       <Filter>Wepon\bullet</Filter>
     </ClCompile>
@@ -645,6 +648,10 @@
     <ClInclude Include="SourceCode\incendiary.h">
       <Filter>Wepon\Gun</Filter>
     </ClInclude>
+    <ClInclude Include="SourceCode\meshbox.h">
+      <Filter>mesh</Filter>
+    </ClInclude>
+  </ItemGroup>
     <ClInclude Include="SourceCode\missile.h">
       <Filter>Wepon\bullet</Filter>
     </ClInclude>
