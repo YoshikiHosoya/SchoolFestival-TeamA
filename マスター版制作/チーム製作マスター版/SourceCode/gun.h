@@ -37,10 +37,14 @@ public:
 		GUNTYPE_INCENDIARY,							// 焼夷弾
 		GUNTYPE_HANDGRENADE,						// 手投げグレネード
 		GUNTYPE_TANKGRENADE,						// 戦車のグレネード
+
 		GUNTYPE_TRACKINGGUN,						// 追従銃
 		GUNTYPE_DIFFUSIONGUN,						// 拡散銃
 		GUNTYPE_BOSSLASERGUN,						// ボス用のレーザーガン
-		GUNTYPE_HANDGUN_ENEMY,						// ハンドガン
+		GUNTYPE_HANDGUN_ENEMY,						// 敵のハンドガン
+		GUNTYPE_MISSILE,							// ミサイル
+		GUNTYPE_FLAMEBULLET,						// フレイムバレット
+		GUNTYPE_DROPBOMB,							// ドロップボム
 
 		GUNTYPE_MAX									// 銃の種類の最大数
 	};

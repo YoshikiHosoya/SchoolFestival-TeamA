@@ -313,6 +313,12 @@
     <ClCompile Include="SourceCode\incendiary.cpp">
       <Filter>Wepon\Gun</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\missile.cpp">
+      <Filter>Wepon\bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\flamebullet.cpp">
+      <Filter>Wepon\bullet</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SourceCode\shield.h">
@@ -638,6 +644,12 @@
     </ClInclude>
     <ClInclude Include="SourceCode\incendiary.h">
       <Filter>Wepon\Gun</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\missile.h">
+      <Filter>Wepon\bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\flamebullet.h">
+      <Filter>Wepon\bullet</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

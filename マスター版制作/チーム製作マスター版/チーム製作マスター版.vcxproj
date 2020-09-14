@@ -175,6 +175,7 @@
     <ClCompile Include="SourceCode\Enemy.cpp" />
     <ClCompile Include="SourceCode\EnemyAI.cpp" />
     <ClCompile Include="SourceCode\fade.cpp" />
+    <ClCompile Include="SourceCode\flamebullet.cpp" />
     <ClCompile Include="SourceCode\flameshot.cpp" />
     <ClCompile Include="SourceCode\flamethrower.cpp" />
     <ClCompile Include="SourceCode\game.cpp" />
@@ -209,6 +210,7 @@
     <ClCompile Include="SourceCode\meshcylinder.cpp" />
     <ClCompile Include="SourceCode\meshfield.cpp" />
     <ClCompile Include="SourceCode\meshsphere.cpp" />
+    <ClCompile Include="SourceCode\missile.cpp" />
     <ClCompile Include="SourceCode\Model.cpp" />
     <ClCompile Include="SourceCode\ModelSet.cpp" />
     <ClCompile Include="SourceCode\mouse.cpp" />
@@ -281,6 +283,7 @@
     <ClInclude Include="SourceCode\Enemy.h" />
     <ClInclude Include="SourceCode\EnemyAI.h" />
     <ClInclude Include="SourceCode\fade.h" />
+    <ClInclude Include="SourceCode\flamebullet.h" />
     <ClInclude Include="SourceCode\flameshot.h" />
     <ClInclude Include="SourceCode\flamethrower.h" />
     <ClInclude Include="SourceCode\game.h" />
@@ -318,6 +321,7 @@
     <ClInclude Include="SourceCode\meshcylinder.h" />
     <ClInclude Include="SourceCode\meshfield.h" />
     <ClInclude Include="SourceCode\meshsphere.h" />
+    <ClInclude Include="SourceCode\missile.h" />
     <ClInclude Include="SourceCode\model.h" />
     <ClInclude Include="SourceCode\ModelSet.h" />
     <ClInclude Include="SourceCode\mouse.h" />

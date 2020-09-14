@@ -546,6 +546,8 @@ void CMap::MapUpdate()
 		{
 			// マップのコンボボックス
 			MapComboBox(nNowMapSelect, nNowMapSelect);
+			// マップモデルのタブ
+			MapModelTab();
 			ImGui::Separator();
 			ImGui::EndTabItem();
 		}
@@ -560,9 +562,6 @@ void CMap::MapUpdate()
 		//TabEnd
 		ImGui::EndTabBar();
 	}
-
-	// マップモデルのタブ
-	MapModelTab();
 
 	ImGui::End();
 #endif
@@ -1905,7 +1904,7 @@ void CMap::ObstacleTypeComboBox(int &nSelectType, int nNowSelect)
 void CMap::EnemyTypeComboBox(int &nSelectType, int nNowSelect)
 {
 #ifdef _DEBUG
-	std::vector<std::string > aEnemyType = {"NORMAL", "SHIELD"};
+	std::vector<std::string > aEnemyType = {"NORMAL", "SHIELD", "HELICOPTER", "MELTYHONEY", "ZYCOCCA"};
 
 	// 現在のタイプを反映
 	nSelectType = (int)m_pEnemy[nNowSelect]->GetEnemyType();

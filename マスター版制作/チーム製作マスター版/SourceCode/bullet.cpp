@@ -47,6 +47,9 @@ char *CBullet::m_BulletFileName[CGun::GUNTYPE_MAX] =
 	{ "data/Load/Gun/DiffusionGun.txt" },			// 拡散銃
 	{ "data/Load/Gun/BossLazerGun.txt" },			// ボスのレーザー
 	{ "data/Load/Gun/HandGun_Enemy.txt" },			// 敵のハンドガン
+	{ "data/Load/Gun/Missile.txt" },				// ミサイル
+	{ "data/Load/Gun/FlameBullet.txt" },			// フレイムバレット
+	{ "data/Load/Gun/DropBomb.txt" },				// ドロップボム
 };
 
 // =====================================================================================================================================================================

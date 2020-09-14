@@ -1,19 +1,16 @@
 // =====================================================================================================================================================================
 //
-// グレネード発射の処理 [grenadefire.cpp]
+// フレイムバレットの処理 [flamebullet.cpp]
 // Author : Sato Yoshiki
 //
 // =====================================================================================================================================================================
-#include "grenadefire.h"			// インクルードファイル
+#include "flamebullet.h"			// インクルードファイル
 #include "manager.h"
 #include "renderer.h"
 #include "game.h"
 #include "debugproc.h"
 #include "texture.h"
-#include "Player.h"
-#include "bullet.h"
-#include "grenade.h"
-#include "sound.h"
+#include "particle.h"
 
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
@@ -22,19 +19,18 @@
 // =====================================================================================================================================================================
 // マクロ定義
 // =====================================================================================================================================================================
-#define GRENADE_ADD_AMMO			(10)			// グレネードの増える弾数量
-#define MAX_GRENADE_AMMO			(99)			// グレネードの残数の最大値
+#define MOVE_RANGE_HEIGHT		(3.0f)		// 縦の移動量の範囲
+#define MOVE_RESTRAIN_HEIGHT	(0.8f)		// 縦の移動量を抑制する
+#define MOVE_RISE_HEIGHT		(3.5f)		// 上昇する移動量
 
 // =====================================================================================================================================================================
 //
 // コンストラクタ
 //
 // =====================================================================================================================================================================
-CGrenadeFire::CGrenadeFire(OBJ_TYPE type) :CScene(type)
+CFlameBullet::CFlameBullet(OBJ_TYPE type) :CBullet(type)
 {
-	m_nAmmo			= 0;				// 残弾数
-	m_nInterval		= 0;				// インターバル
-	m_type			= HAND_GRENADE;		// グレネードの種類
+	SetObjType(OBJTYPE_BULLET);
 }
 
 // =====================================================================================================================================================================
@@ -42,7 +38,7 @@ CGrenadeFire::CGrenadeFire(OBJ_TYPE type) :CScene(type)
 // デストラクタ
 //
 // =====================================================================================================================================================================
-CGrenadeFire::~CGrenadeFire()
+CFlameBullet::~CFlameBullet()
 {
 }
 
@@ -51,9 +47,10 @@ CGrenadeFire::~CGrenadeFire()
 // 初期化処理
 //
 // =====================================================================================================================================================================
-HRESULT CGrenadeFire::Init()
+HRESULT CFlameBullet::Init()
 {
-	SetGrenadeAmmoDefault();
+	// 初期化
+	CBullet::Init();
 
 	return S_OK;
 }
@@ -63,8 +60,10 @@ HRESULT CGrenadeFire::Init()
 // 終了処理
 //
 // =====================================================================================================================================================================
-void CGrenadeFire::Uninit(void)
+void CFlameBullet::Uninit(void)
 {
+	// 終了
+	CBullet::Uninit();
 }
 
 // =====================================================================================================================================================================
@@ -72,15 +71,17 @@ void CGrenadeFire::Uninit(void)
 // 更新処理
 //
 // =====================================================================================================================================================================
-void CGrenadeFire::Update(void)
+void CFlameBullet::Update(void)
 {
-	// インターバルカウントアップ
-	m_nInterval++;
+	// 更新
+	CBullet::Update();
 
-	// 残弾数の最大値
-	if (m_nAmmo >= MAX_GRENADE_AMMO)
+	CDebugProc::Print_Left("\n\n BulletMove (%f, %f, %f)\n\n", GetMove().x, GetMove().y, GetMove().z);
+
+	if (CBullet::GetLife() % 3 == 0)
 	{
-		m_nAmmo = MAX_GRENADE_AMMO;
+		CParticle::CreateFromText(GetPosition() + CHossoLibrary::RandomVector3(10), ZeroVector3,
+			CParticleParam::EFFECT_FIRE, GetTag(), GetBulletParam(CGun::GUNTYPE_FLAMESHOT)->nPower);
 	}
 }
 
@@ -89,8 +90,20 @@ void CGrenadeFire::Update(void)
 // 描画処理
 //
 // =====================================================================================================================================================================
-void CGrenadeFire::Draw(void)
+void CFlameBullet::Draw(void)
 {
+	// 描画
+	CBullet::Draw();
+}
+
+// =====================================================================================================================================================================
+//
+// 弾を消す処理
+//
+// =====================================================================================================================================================================
+void CFlameBullet::DeleteBullet()
+{
+
 }
 
 // =====================================================================================================================================================================
@@ -98,126 +111,37 @@ void CGrenadeFire::Draw(void)
 // デバッグ
 //
 // =====================================================================================================================================================================
-void CGrenadeFire::DebugInfo(void)
+void CFlameBullet::DebugInfo()
 {
 }
 
 // =====================================================================================================================================================================
 //
-// グレネード放つ位置の生成
+// フレイムバレットの生成
 //
 // =====================================================================================================================================================================
-CGrenadeFire * CGrenadeFire::Create(D3DXMATRIX * mtx, GRENADE_TYPE type)
+CFlameBullet * CFlameBullet::Create(D3DXVECTOR3 rot)
 {
 	// 変数
-	CGrenadeFire *pGrenadeFire;
+	CFlameBullet *pFlameBullet;
 
 	// メモリの確保
-	pGrenadeFire = new CGrenadeFire(OBJTYPE_MODEL);
+	pFlameBullet = new CFlameBullet(OBJTYPE_BULLET);
 
-	pGrenadeFire->m_type = type;
+	// フレイムバレットのパラメーター取得
+	BULLET_PARAM *pBulletParam = pFlameBullet->GetBulletParam(CGun::GUNTYPE_FLAMEBULLET);
 
 	// 初期化
-	pGrenadeFire->Init();
+	pFlameBullet->Init();
 
-	// マトリックス代入
-	pGrenadeFire->m_mtx = mtx;
+	// 弾の移動量計算
+	pFlameBullet->CalcBulletMove(rot, CGun::GUNTYPE_FLAMEBULLET);
 
-	return pGrenadeFire;
-}
+	// モデルタイプの設定
+	pFlameBullet->SetType(BULLET_MODEL);
 
-// =====================================================================================================================================================================
-//
-// グレネード放つ
-//
-// =====================================================================================================================================================================
-void CGrenadeFire::Fire(D3DXVECTOR3 rot)
-{
-	CGrenade				*pGrenade		= nullptr;
-	CBullet::BULLET_PARAM	*pBulletParam	= nullptr;
+	// モデルカウントの設定
+	pFlameBullet->SetModelID(MODEL_BULLET_SPHERE);
 
-	// グレネードの生成
-	pGrenade = CGrenade::Create(rot, m_type);
-
-	// パラメーター取得
-	switch (m_type)
-	{
-	case CGrenadeFire::HAND_GRENADE:
-		pBulletParam = CBullet::GetBulletParam(CGun::GUNTYPE_HANDGRENADE);
-		break;
-	case CGrenadeFire::TANK_GRENADE:
-		pBulletParam = CBullet::GetBulletParam(CGun::GUNTYPE_TANKGRENADE);
-		break;
-	case CGrenadeFire::DROP_BOMB:
-		pBulletParam = CBullet::GetBulletParam(CGun::GUNTYPE_DROPBOMB);
-		break;
-	}
-
-	// インターバルが経過したとき
-	if (m_nInterval >= pBulletParam->nInterval)
-	{
-		// 残弾数を減らす
-		m_nAmmo--;
-
-		m_nInterval = 0;
-
-		if (pGrenade)
-		{
-			D3DXVECTOR3 pos = ZeroVector3;
-			D3DXVec3TransformCoord(&pos, &ZeroVector3, m_mtx);
-
-			// 位置の設定
-			pGrenade->SetPosition(pos);
-
-			// タグの設定
-			pGrenade->SetTag(GetTag());
-
-			// 弾のパラメーターの設定
-			switch (m_type)
-			{
-			case CGrenadeFire::HAND_GRENADE:
-				pGrenade->SetBulletParam(CGun::GUNTYPE_HANDGRENADE);
-				break;
-			case CGrenadeFire::TANK_GRENADE:
-				pGrenade->SetBulletParam(CGun::GUNTYPE_TANKGRENADE);
-				CManager::GetSound()->Play(CSound::LABEL_SE_EXPLOSION_00);
-				break;
-			case CGrenadeFire::DROP_BOMB:
-				pGrenade->SetBulletParam(CGun::GUNTYPE_DROPBOMB);
-				break;
-			}
-		}
-	}
-}
-
-// =====================================================================================================================================================================
-//
-// グレネードの弾数初期設定
-//
-// =====================================================================================================================================================================
-void CGrenadeFire::SetGrenadeAmmoDefault()
-{
-	// 残弾数
-	switch (m_type)
-	{
-	case CGrenadeFire::HAND_GRENADE:
-		m_nAmmo = CBullet::GetBulletParam(CGun::GUNTYPE_HANDGRENADE)->nAmmo;
-		break;
-	case CGrenadeFire::TANK_GRENADE:
-		m_nAmmo = CBullet::GetBulletParam(CGun::GUNTYPE_TANKGRENADE)->nAmmo;
-		break;
-	case CGrenadeFire::DROP_BOMB:
-		m_nAmmo = CBullet::GetBulletParam(CGun::GUNTYPE_DROPBOMB)->nAmmo;
-		break;
-	}
-}
-
-// =====================================================================================================================================================================
-//
-// グレネードの弾数追加
-//
-// =====================================================================================================================================================================
-void CGrenadeFire::GrenadeAddAmmo()
-{
-	m_nAmmo += GRENADE_ADD_AMMO;
+	return pFlameBullet;
 }

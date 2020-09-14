@@ -1,19 +1,13 @@
 // =====================================================================================================================================================================
 //
-// グレネード発射の処理 [grenadefire.cpp]
+// ミサイルの処理 [missile.cpp]
 // Author : Sato Yoshiki
 //
 // =====================================================================================================================================================================
-#include "grenadefire.h"			// インクルードファイル
+#include "missile.h"			// インクルードファイル
 #include "manager.h"
 #include "renderer.h"
-#include "game.h"
-#include "debugproc.h"
-#include "texture.h"
-#include "Player.h"
-#include "bullet.h"
-#include "grenade.h"
-#include "sound.h"
+#include "particle.h"
 
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
@@ -22,19 +16,24 @@
 // =====================================================================================================================================================================
 // マクロ定義
 // =====================================================================================================================================================================
-#define GRENADE_ADD_AMMO			(10)			// グレネードの増える弾数量
-#define MAX_GRENADE_AMMO			(99)			// グレネードの残数の最大値
+#define GRAVITY					(0.3f)		// 重力
+#define MOVE_STRAIGHT_CNT		(55)		// 直進するまでのカウント
+#define MOVE_STRAIGHT			(0.4f)		// 直進する移動量
+#define MOVE_FALL_CNT			(20)		// 下降するまでのカウント
+#define MISSILE_UP_ROT			(0.06f)		// ミサイルが上昇するときの回転量
 
 // =====================================================================================================================================================================
 //
 // コンストラクタ
 //
 // =====================================================================================================================================================================
-CGrenadeFire::CGrenadeFire(OBJ_TYPE type) :CScene(type)
+CMissile::CMissile(OBJ_TYPE type) :CBullet(type)
 {
-	m_nAmmo			= 0;				// 残弾数
-	m_nInterval		= 0;				// インターバル
-	m_type			= HAND_GRENADE;		// グレネードの種類
+	// 初期化
+	m_nCntFrame = 0;								// フレームカウント
+	m_move		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 移動量
+
+	SetObjType(OBJTYPE_BULLET);
 }
 
 // =====================================================================================================================================================================
@@ -42,7 +41,7 @@ CGrenadeFire::CGrenadeFire(OBJ_TYPE type) :CScene(type)
 // デストラクタ
 //
 // =====================================================================================================================================================================
-CGrenadeFire::~CGrenadeFire()
+CMissile::~CMissile()
 {
 }
 
@@ -51,10 +50,10 @@ CGrenadeFire::~CGrenadeFire()
 // 初期化処理
 //
 // =====================================================================================================================================================================
-HRESULT CGrenadeFire::Init()
+HRESULT CMissile::Init()
 {
-	SetGrenadeAmmoDefault();
-
+	// 初期化
+	CBullet::Init();
 	return S_OK;
 }
 
@@ -63,8 +62,10 @@ HRESULT CGrenadeFire::Init()
 // 終了処理
 //
 // =====================================================================================================================================================================
-void CGrenadeFire::Uninit(void)
+void CMissile::Uninit(void)
 {
+	// 終了
+	CBullet::Uninit();
 }
 
 // =====================================================================================================================================================================
@@ -72,16 +73,30 @@ void CGrenadeFire::Uninit(void)
 // 更新処理
 //
 // =====================================================================================================================================================================
-void CGrenadeFire::Update(void)
+void CMissile::Update(void)
 {
-	// インターバルカウントアップ
-	m_nInterval++;
+	// フレームカウントアップ
+	m_nCntFrame++;
+	// 重力
+	m_move.y -= GRAVITY;
 
-	// 残弾数の最大値
-	if (m_nAmmo >= MAX_GRENADE_AMMO)
-	{
-		m_nAmmo = MAX_GRENADE_AMMO;
-	}
+	// ミサイルの回転処理
+	MissileRotation();
+
+	// ミサイルの移動処理
+	MissileMove();
+
+	// 移動量の設定
+	SetMove(m_move);
+
+	// 回転の計算
+	CHossoLibrary::CalcRotation(GetRot().z);
+
+	// 更新
+	CBullet::Update();
+
+	//パーティクル発生 軌跡みたいな
+	CParticle::CreateFromText(GetPosition(), D3DXVECTOR3(0.0f, 0.0f, CHossoLibrary::Random_PI()), CParticleParam::EFFECT_SMOKE,CBullet::GetTag());
 }
 
 // =====================================================================================================================================================================
@@ -89,7 +104,31 @@ void CGrenadeFire::Update(void)
 // 描画処理
 //
 // =====================================================================================================================================================================
-void CGrenadeFire::Draw(void)
+void CMissile::Draw(void)
+{
+	// 描画
+	CBullet::Draw();
+}
+
+// =====================================================================================================================================================================
+//
+// 弾を消す処理
+//
+// =====================================================================================================================================================================
+void CMissile::DeleteBullet()
+{
+	CBullet::DeleteBullet();
+
+	CParticle::CreateFromText(GetPosition(), ZeroVector3, CParticleParam::EFFECT_EXPLOSION_ROCKETLANCHAR, GetTag(), GetBulletParam(CGun::GUNTYPE_ROCKETLAUNCHER)->nPower);
+
+}
+
+// =====================================================================================================================================================================
+//
+// 弾の反応
+//
+// =====================================================================================================================================================================
+void CMissile::BulletReaction(D3DXVECTOR3 rot)
 {
 }
 
@@ -98,126 +137,110 @@ void CGrenadeFire::Draw(void)
 // デバッグ
 //
 // =====================================================================================================================================================================
-void CGrenadeFire::DebugInfo(void)
+void CMissile::DebugInfo()
 {
 }
 
 // =====================================================================================================================================================================
 //
-// グレネード放つ位置の生成
+// ミサイルの生成
 //
 // =====================================================================================================================================================================
-CGrenadeFire * CGrenadeFire::Create(D3DXMATRIX * mtx, GRENADE_TYPE type)
+CMissile * CMissile::Create(D3DXVECTOR3 rot)
 {
 	// 変数
-	CGrenadeFire *pGrenadeFire;
+	CMissile *pMissile;
 
 	// メモリの確保
-	pGrenadeFire = new CGrenadeFire(OBJTYPE_MODEL);
+	pMissile = new CMissile(OBJTYPE_BULLET);
 
-	pGrenadeFire->m_type = type;
+	// ミサイルのパラメーター取得
+	BULLET_PARAM *pBulletParam = pMissile->GetBulletParam(CGun::GUNTYPE_ROCKETLAUNCHER);
 
 	// 初期化
-	pGrenadeFire->Init();
+	pMissile->Init();
 
-	// マトリックス代入
-	pGrenadeFire->m_mtx = mtx;
+	//回転量設定
+	pMissile->SetRot(D3DXVECTOR3(0.0f,0.0f, rot.z - D3DX_PI));
 
-	return pGrenadeFire;
+	// 弾の移動量計算
+	pMissile->CalcBulletMove(rot, CGun::GUNTYPE_ROCKETLAUNCHER);
+
+	// モデルタイプの設定
+	pMissile->SetType(BULLET_MODEL);
+
+	// モデルカウントの設定
+	pMissile->SetModelID(MODEL_BULLET_ROCKETLAUNCHER);
+
+	if (rot.z < 0)
+	{
+		pMissile->m_move = D3DXVECTOR3(1.0f, 8.0f, 0.0f);	// 移動量
+	}
+	else if(rot.z > 0)
+	{
+		pMissile->m_move = D3DXVECTOR3(-1.0f, 8.0f, 0.0f);	// 移動量
+	}
+
+	return pMissile;
 }
 
 // =====================================================================================================================================================================
 //
-// グレネード放つ
+// ミサイルの回転処理
 //
 // =====================================================================================================================================================================
-void CGrenadeFire::Fire(D3DXVECTOR3 rot)
+void CMissile::MissileRotation()
 {
-	CGrenade				*pGrenade		= nullptr;
-	CBullet::BULLET_PARAM	*pBulletParam	= nullptr;
-
-	// グレネードの生成
-	pGrenade = CGrenade::Create(rot, m_type);
-
-	// パラメーター取得
-	switch (m_type)
+	if (m_move.x > 0)
 	{
-	case CGrenadeFire::HAND_GRENADE:
-		pBulletParam = CBullet::GetBulletParam(CGun::GUNTYPE_HANDGRENADE);
-		break;
-	case CGrenadeFire::TANK_GRENADE:
-		pBulletParam = CBullet::GetBulletParam(CGun::GUNTYPE_TANKGRENADE);
-		break;
-	case CGrenadeFire::DROP_BOMB:
-		pBulletParam = CBullet::GetBulletParam(CGun::GUNTYPE_DROPBOMB);
-		break;
-	}
-
-	// インターバルが経過したとき
-	if (m_nInterval >= pBulletParam->nInterval)
-	{
-		// 残弾数を減らす
-		m_nAmmo--;
-
-		m_nInterval = 0;
-
-		if (pGrenade)
+		if (m_nCntFrame < MOVE_FALL_CNT)
 		{
-			D3DXVECTOR3 pos = ZeroVector3;
-			D3DXVec3TransformCoord(&pos, &ZeroVector3, m_mtx);
-
-			// 位置の設定
-			pGrenade->SetPosition(pos);
-
-			// タグの設定
-			pGrenade->SetTag(GetTag());
-
-			// 弾のパラメーターの設定
-			switch (m_type)
-			{
-			case CGrenadeFire::HAND_GRENADE:
-				pGrenade->SetBulletParam(CGun::GUNTYPE_HANDGRENADE);
-				break;
-			case CGrenadeFire::TANK_GRENADE:
-				pGrenade->SetBulletParam(CGun::GUNTYPE_TANKGRENADE);
-				CManager::GetSound()->Play(CSound::LABEL_SE_EXPLOSION_00);
-				break;
-			case CGrenadeFire::DROP_BOMB:
-				pGrenade->SetBulletParam(CGun::GUNTYPE_DROPBOMB);
-				break;
-			}
+			GetRot().z = D3DX_PI * 0.9f;
+		}
+		else if (m_nCntFrame > MOVE_FALL_CNT)
+		{
+			GetRot().z -= MISSILE_UP_ROT;
 		}
 	}
-}
-
-// =====================================================================================================================================================================
-//
-// グレネードの弾数初期設定
-//
-// =====================================================================================================================================================================
-void CGrenadeFire::SetGrenadeAmmoDefault()
-{
-	// 残弾数
-	switch (m_type)
+	else if (m_move.x < 0)
 	{
-	case CGrenadeFire::HAND_GRENADE:
-		m_nAmmo = CBullet::GetBulletParam(CGun::GUNTYPE_HANDGRENADE)->nAmmo;
-		break;
-	case CGrenadeFire::TANK_GRENADE:
-		m_nAmmo = CBullet::GetBulletParam(CGun::GUNTYPE_TANKGRENADE)->nAmmo;
-		break;
-	case CGrenadeFire::DROP_BOMB:
-		m_nAmmo = CBullet::GetBulletParam(CGun::GUNTYPE_DROPBOMB)->nAmmo;
-		break;
+		if (m_nCntFrame < MOVE_FALL_CNT)
+		{
+			GetRot().z = -D3DX_PI * 0.9f;
+		}
+		else if (m_nCntFrame > MOVE_FALL_CNT)
+		{
+			GetRot().z += MISSILE_UP_ROT;
+		}
+
 	}
 }
 
 // =====================================================================================================================================================================
 //
-// グレネードの弾数追加
+// ミサイルの移動処理
 //
 // =====================================================================================================================================================================
-void CGrenadeFire::GrenadeAddAmmo()
+void CMissile::MissileMove()
 {
-	m_nAmmo += GRENADE_ADD_AMMO;
+	// 一定時間経過したら直進する
+	if (m_nCntFrame > MOVE_STRAIGHT_CNT)
+	{
+		if (GetRot().z > 0)
+		{
+			GetRot().z = D3DX_PI / 2;
+
+			// 横移動
+			m_move.x += MOVE_STRAIGHT;
+		}
+		else if (GetRot().z < 0)
+		{
+			GetRot().z = -D3DX_PI / 2;
+
+			// 横移動
+			m_move.x -= MOVE_STRAIGHT;
+		}
+		// 落下を止める
+		m_move.y = 0.0f;
+	}
 }

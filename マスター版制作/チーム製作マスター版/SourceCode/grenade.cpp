@@ -23,7 +23,8 @@ CGrenade::GRENADE_PARAM	CGrenade::m_GrenadeParam[CGrenadeFire::GRENADE_TYPE_MAX]
 char *CGrenade::m_GrenadeFileName[CGrenadeFire::GRENADE_TYPE_MAX] =
 {
 	{ "data/Load/Grenade/HandGrenade.txt" },				// グレネード
-	{ "data/Load/Grenade/TankGrenade.txt" },				// グレネード
+	{ "data/Load/Grenade/TankGrenade.txt" },				// 戦車のグレネード
+	{ "data/Load/Grenade/DropBomb.txt" },					// ドロップボム
 };
 
 // =====================================================================================================================================================================
@@ -164,6 +165,10 @@ CGrenade * CGrenade::Create(D3DXVECTOR3 rot, CGrenadeFire::GRENADE_TYPE type)
 	case CGrenadeFire::TANK_GRENADE:
 		// 放つ方向に合わせる
 		pGrenade->GetMove() = D3DXVECTOR3(1.0f * pGrenade->m_move.x, pGrenade->m_move.y, 0.0f);
+		pGrenade->SetModelID(MODEL_BULLET_TANKGRENADE);
+		break;
+	case CGrenadeFire::DROP_BOMB:
+		// モデルカウントの設定
 		pGrenade->SetModelID(MODEL_BULLET_TANKGRENADE);
 		break;
 	}

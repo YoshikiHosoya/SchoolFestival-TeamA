@@ -23,6 +23,9 @@
 #include "balkan.h"
 #include "incendiary.h"
 #include "flamethrower.h"
+#include "missile.h"
+#include "flamebullet.h"
+
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
 // =====================================================================================================================================================================
@@ -32,6 +35,7 @@
 // =====================================================================================================================================================================
 #define HEAVYMACHINEGUN_SHOT_FRAME				(5)			// ヘビーマシンガンの弾の間隔
 #define LAZERGUN_SHOT_FRAME						(4)			// レーザーガン弾の間隔
+#define FLAMEBULLET_SHOT_FRAME					(20)		// フレイムバレットの間隔
 #define MAX_AMMO								(999)		// 残弾数の最大値
 
 // =====================================================================================================================================================================
@@ -59,7 +63,7 @@ CGun::~CGun()
 HRESULT CGun::Init()
 {
 	m_bMultiple		= false;										// フラグをオフ
-	m_GunType		= GUN_TYPE::GUNTYPE_HANDGUN;					// ハンドガンに設定
+	m_GunType		= GUN_TYPE::GUNTYPE_FLAMEBULLET;				// ハンドガンに設定
 	m_GunTypeOld	= GUN_TYPE::GUNTYPE_HANDGUN;					// 前回の銃の種類
 	m_nCntFrame		= 0;											// フレームカウント
 	m_nCntBullet	= 0;											// 弾のカウント
@@ -269,7 +273,6 @@ void CGun::Shot()
 
 	CBullet *pBullet = nullptr;
 
-
 	// インターバルが経過したとき
 	if (m_nInterval <= 0)
 	{
@@ -287,28 +290,21 @@ void CGun::Shot()
 		{
 		case CGun::GUNTYPE_HANDGUN:
 		case CGun::GUNTYPE_HANDGUN_ENEMY:
-
 			// ハンドガンの生成
 			pBullet = CHandgun::Create(m_ShotRot,GetTag());
-
 			//音再生
 			CManager::GetSound()->Play(CSound::LABEL_SE_SHOT_HANDGUN);
-
 			//ノズルフラッシュ
 			CParticle::CreateFromText(m_ShotPos, ZeroVector3, CParticleParam::EFFECT_SHOTFLASH, GetTag());
-
 			break;
 
 		case CGun::GUNTYPE_HEAVYMACHINEGUN:
 			// ヘビーマシンガンの生成
 			pBullet = CHeavyMachinegun::Create(m_ShotRot);
-
 			//音再生
 			CManager::GetSound()->Play(CSound::LABEL_SE_SHOT_MACHINEGUN);
-
 			//ノズルフラッシュ
 			CParticle::CreateFromText(m_ShotPos, ZeroVector3, CParticleParam::EFFECT_SHOTFLASH, GetTag());
-
 			m_bMultiple = true;		// フラグをオン
 			break;
 
@@ -316,95 +312,96 @@ void CGun::Shot()
 			// ショットガンの生成
 			CParticle::CreateFromText(m_ShotPos, m_ShotRot, CParticleParam::EFFECT_SHOTGUN, GetTag(), CBullet::GetBulletParam(CGun::GUNTYPE_SHOTGUN)->nPower);
 			CParticle::CreateFromText(m_ShotPos, m_ShotRot, CParticleParam::EFFECT_SHOTGUN_ADDEFFECT, GetTag(), CBullet::GetBulletParam(CGun::GUNTYPE_SHOTGUN)->nPower);
-
-
 			//音再生
 			CManager::GetSound()->Play(CSound::LABEL_SE_SHOT_SHOTGUN);
-
 			//ノズルフラッシュ
 			CParticle::CreateFromText(m_ShotPos, ZeroVector3, CParticleParam::EFFECT_SHOTFLASH, GetTag());
-
 			break;
 
 		case CGun::GUNTYPE_LASERGUN:
 			// レーザーガンの生成
 			CParticle::CreateFromText(m_ShotPos, m_ShotRot, CParticleParam::EFFECT_LAZER, GetTag(), CBullet::GetBulletParam((int)CGun::GUNTYPE_LASERGUN)->nPower, D3DXCOLOR(0.0f, 0.0f, 0.0f, -1.0f), GetShotPosPtr());
-
 			//音再生
 			CManager::GetSound()->Play(CSound::LABEL_SE_SHOT_LASER);
-
 			// フラグをオン
 			m_bMultiple = true;
-
 			break;
 
 		case CGun::GUNTYPE_ROCKETLAUNCHER:
 			// ロケットランチャーの生成
 			pBullet = CRocketlauncher::Create(m_ShotRot);
-
 			//音再生
 			CManager::GetSound()->Play(CSound::LABEL_SE_SHOT_LAUNCHER);
-
 			break;
 
 		case CGun::GUNTYPE_FLAMESHOT:
 			// フレイムショットの生成
 			pBullet = CFlameshot::Create(m_ShotRot);
-
 			//音再生
 			CManager::GetSound()->Play(CSound::LABEL_SE_SHOT_FIRE);
-
 			break;
 
 		case CGun::GUNTYPE_TANKGUN:
 			// 戦車の銃の生成
 			pBullet = CTankGun::Create(m_ShotRot);
-
 			//音再生
 			CManager::GetSound()->Play(CSound::LABEL_SE_SHOT_MACHINEGUN);
-
 			//ノズルフラッシュ
 			CParticle::CreateFromText(m_ShotPos, ZeroVector3, CParticleParam::EFFECT_SHOTFLASH, GetTag(),-1,BlueColor);		// 仮止め)プレイヤータグを変えれるようにする
-
 			m_bMultiple = true;		// 複数発撃つフラグをオン
 			break;
 
 		case CGun::GUNTYPE_PLANEGUN:
 			// 戦車の銃の生成
 			pBullet = CPlaneGun::Create(m_ShotRot);
-
 			//音再生
 			CManager::GetSound()->Play(CSound::LABEL_SE_SHOT_MACHINEGUN);
-
 			//ノズルフラッシュ
 			CParticle::CreateFromText(m_ShotPos, ZeroVector3, CParticleParam::EFFECT_SHOTFLASH, GetTag(), -1, BlueColor);	// 仮止め)プレイヤータグを変えれるようにする
-
 			m_bMultiple = true;		// 複数発撃つフラグをオン
-			break;
-		case CGun::GUNTYPE_TRACKINGGUN:
-			// 追従弾
-			pBullet = CTracking::Create(m_ShotRot);
-			break;
-		case CGun::GUNTYPE_DIFFUSIONGUN:
-			// 拡散弾
-			pBullet = CDiffusion::Create(m_ShotRot);
-			break;
-		case CGun::GUNTYPE_BOSSLASERGUN:
-			// 拡散弾
-			CParticle::CreateFromText(m_ShotPos, m_ShotRot, CParticleParam::EFFECT_BOSSLAZER, GetTag(), CBullet::GetBulletParam((int)CGun::GUNTYPE_BOSSLASERGUN)->nPower, D3DXCOLOR(0.0f, 0.0f, 0.0f, -1.0f), GetShotPosPtr());
 			break;
 
 		case CGun::GUNTYPE_BALKAN:
 			//
 			pBullet = CBalkan::Create(m_ShotRot);
 			break;
+
 		case CGun::GUNTYPE_FLAMETHROWER:
 			//
 			pBullet = CFlamethrower::Create(m_ShotRot);
 			break;
+
 		case CGun::GUNTYPE_INCENDIARY:
 			//
 			pBullet = CIncendiary::Create(m_ShotRot);
+			break;
+
+		case CGun::GUNTYPE_TRACKINGGUN:
+			// 追従弾
+			pBullet = CTracking::Create(m_ShotRot);
+			break;
+
+		case CGun::GUNTYPE_DIFFUSIONGUN:
+			// 拡散弾
+			pBullet = CDiffusion::Create(m_ShotRot);
+			break;
+
+		case CGun::GUNTYPE_BOSSLASERGUN:
+			// 拡散弾
+			CParticle::CreateFromText(m_ShotPos, m_ShotRot, CParticleParam::EFFECT_BOSSLAZER, GetTag(), CBullet::GetBulletParam((int)CGun::GUNTYPE_BOSSLASERGUN)->nPower, D3DXCOLOR(0.0f, 0.0f, 0.0f, -1.0f), GetShotPosPtr());
+			break;
+
+		case CGun::GUNTYPE_MISSILE:
+			// ミサイルの生成
+			pBullet = CMissile::Create(m_ShotRot);
+			//音再生
+			CManager::GetSound()->Play(CSound::LABEL_SE_SHOT_LAUNCHER);
+			break;
+
+		case CGun::GUNTYPE_FLAMEBULLET:
+			// フレイムバレットの生成
+			pBullet = CFlameBullet::Create(m_ShotRot);
+			m_bMultiple = true;		// 複数発撃つフラグをオン
 			break;
 
 		}
@@ -494,6 +491,24 @@ void CGun::MultipleShot()
 
 				// 残弾数を減らす
 				m_nAmmo--;
+			}
+			break;
+
+			//フレイムバレット
+		case CGun::GUNTYPE_FLAMEBULLET:
+			if (m_nCntFrame >= FLAMEBULLET_SHOT_FRAME)
+			{
+				// フレームカウント初期化
+				m_nCntFrame = 0;
+
+				// 弾のカウントアップ
+				m_nCntBullet++;
+
+				// 残弾数を減らす
+				m_nAmmo--;
+
+				// フレイムバレットの生成
+				pBullet = CFlameBullet::Create(m_ShotRot);
 			}
 			break;
 
