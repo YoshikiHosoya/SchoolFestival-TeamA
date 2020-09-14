@@ -50,7 +50,7 @@ HRESULT CEnemy::Init(void)
 	// “–‚½‚è”»’è¶¬
 	GetCollision()->SetPos(GetPositionPtr());
 	GetCollision()->SetPosOld(&GetPositionOld());
-	GetCollision()->SetSize2D(ENEMY_SIZE);
+	GetCollision()->SetSize(ENEMY_SIZE);
 	GetCollision()->SetMove(&GetMove());
 	GetCollision()->SetGameObject(this);
 

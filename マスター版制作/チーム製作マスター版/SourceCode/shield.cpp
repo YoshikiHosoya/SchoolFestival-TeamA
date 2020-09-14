@@ -16,8 +16,8 @@
 // マクロ定義
 // ===================================================================
 #define SHIELD_LIFE				(12)			// shieldの体力
-#define SHIELD_SIZE				(D3DXVECTOR3(30.0f,100.0f,0.0f))
-#define SHIELD_OFFSET			(D3DXVECTOR3(0.0f,-30.0f,0.0f))
+#define SHIELD_SIZE				(D3DXVECTOR3(40.0f,100.0f,0.0f))
+#define SHIELD_OFFSET			(D3DXVECTOR3(0.0f,-20.0f,0.0f))
 #define SHIELD_DELETE_COUNT		(60)
 #define DAMAGE_FLASH_COUNT		(5)
 #define BREAK_SHIELD_DEFAULT	(D3DXVECTOR3(CHossoLibrary::Random(20.0f), 15.0f, 0.0f))
@@ -53,8 +53,8 @@ HRESULT CShield::Init()
 	SetPosition(SHIELD_OFFSET);
 	// 当たり判定生成
 	GetCollision()->SetPos(&GetPosition());
-	GetCollision()->SetSize2D(SHIELD_SIZE);
-	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_NORMAL);
+	GetCollision()->SetSize(SHIELD_SIZE);
+	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_CHARACTER);
 
 	//ダメージ受けた時の点滅色
 	SetAddColor(D3DXCOLOR(1.0f, 0.4f, 0.0f, 0.0f));

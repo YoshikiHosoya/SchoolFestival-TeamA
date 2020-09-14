@@ -41,6 +41,12 @@ CCharacter::~CCharacter()
 		delete m_pCollision;
 		m_pCollision = nullptr;
 	}
+	// 当たり判定の削除
+	if (m_pModelSet != nullptr)
+	{
+		delete m_pModelSet;
+		m_pModelSet = nullptr;
+	}
 }
 //====================================================================
 //初期化
@@ -66,6 +72,8 @@ HRESULT CCharacter::Init(void)
 	m_bRotArm			= false;
 	// 当たり判定生成
 	m_pCollision = CCollision::Create();
+	m_pCollision->SetPos(&m_pos);
+	m_pCollision->SetPosOld(&m_posold);
 	m_pModelSet = CModelSet::CreateModelSet();
 	//マトリックス初期化
 	D3DXMatrixIdentity(&m_mtxWorld);
@@ -176,7 +184,7 @@ void CCharacter::Draw(void)
 				m_pModelSet->GetCharacterModelList()[nCnt]->GetRot().x += diffArmRot.x * ADD_ROTATION_SPEED;
 			}
 		}
-		
+
 		//描画処理
 		m_pModelSet->GetCharacterModelList()[nCnt]->Draw(m_mtxWorld);
 	}
@@ -369,20 +377,23 @@ void CCharacter::SetRot(D3DXVECTOR3 rot)
 //====================================================================
 void CCharacter::AddDamage(int Damage)
 {
-	//ライフを減らす
-	GetLife() -= Damage;
+	if (m_state == CHARACTER_STATE::CHARACTER_STATE_NORMAL)
+	{
+		//ライフを減らす
+		GetLife() -= Damage;
 
-	//HPが0になった時
-	if (GetLife() <= 0)
-	{
-		//死亡状態にする
-		SetState(CHARACTER_STATE_DEATH);
-	}
-	else
-	{
-		//ダメージを受けた時のリアクション
-		//オーバーライド
-		DamageReaction();
+		//HPが0になった時
+		if (GetLife() <= 0)
+		{
+			//死亡状態にする
+			SetState(CHARACTER_STATE_DEATH);
+		}
+		else
+		{
+			//ダメージを受けた時のリアクション
+			//オーバーライド
+			DamageReaction();
+		}
 	}
 }
 //====================================================================
@@ -723,6 +734,8 @@ void CCharacter::Collision()
 	if (pMap && m_pCollision &&m_pModelSet)
 	{
 		m_pCollision->SetPos(&m_pos);
+		m_pCollision->SetPosOld(&m_posold);
+
 		m_pCollision->SetHeight(m_pModelSet->GetCharacterModelList()[0]->GetPosition().y);
 
 		// 障害物との判定

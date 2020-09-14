@@ -109,6 +109,8 @@ public:
 		TEX_UI_PAUSE_TEXT,						//ƒ|[ƒY(•¶Žš)
 		TEX_UI_PAUSE_ARROW,						//–îˆó
 
+		TEX_COLLISION_FRAME,					//“–‚½‚è”»’è
+
 		TEX_MAX									//MAX
 	};
 

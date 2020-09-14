@@ -26,7 +26,8 @@
 // 前方宣言
 //
 // ------------------------------------------
-class C3DLine;
+class CMeshBox;
+
 // ------------------------------------------
 //
 // クラス
@@ -39,8 +40,7 @@ public:
 	typedef enum
 	{
 		COLLISIONTYPE_BOX = 0,			//箱型
-		COLLISIONTYPE_BOARD,			//板型
-		COLLISIONTYPE_BOARDCHARA,		//キャラクター用板型
+		COLLISIONTYPE_BOX_CHARA,		//箱型
 		COLLISIONTYPE_MAX
 	} COLLISIONTYPE;
 
@@ -69,15 +69,14 @@ protected:
 private:
 	/* メンバ関数 */
 	void BoxCollision(void);				// 箱型の判定
-	void BoardCollision(void);				// 板型の判定
-	void BoardCharaCollision(void);			// キャラクター板型の判定
+	void Box_CharaCollision(void);			// キャラクター板型の判定
+
 
 	/* メンバ変数 */
 	D3DXVECTOR3 * m_pos;					// 座標
 	D3DXVECTOR3 * m_size;					// サイズ
 	COLLISIONTYPE m_type;					// タイプ
-	C3DLine *m_p3DLine[MAX_VERTEX3D];		// ラインのポインタ
-	C3DLine *m_p2DLine[MAX_VERTEX2D];		// ラインのポインタ
+	CMeshBox *m_pMeshBox;					// メッシュボックスのポインタ
 };
 
 #endif

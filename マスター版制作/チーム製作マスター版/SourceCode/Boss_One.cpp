@@ -119,6 +119,8 @@ HRESULT CBoss_One::Init(void)
 	GetModelSet()->LoadOffset(CModelSet::CHARACTER_TYPE_BOSS_ONE);
 	// キャラクタータイプの設定
 	GetModelSet()->SetCharacterType(CModelSet::CHARACTER_TYPE_BOSS_ONE);
+	//タイプ設定
+	CEnemy::SetEnemyType(ENEMY_TYPE::ENEMY_BOSS_DRAGON_NOSUKE);
 	//重力無し
 	SetGravity(false);
 	// ボスの角度の設定_左向き
@@ -1299,13 +1301,13 @@ void CBoss_One::SetCollision()
 	// 武器用の当たり判定の生成
 	m_pCollision = CCollision::Create();
 	m_pCollision->SetPos(&m_Gun_Pos[WEAPONTYPE_FLAMETHROWER]);
-	m_pCollision->SetSize2D(D3DXVECTOR3(100.0f, 100.0f, 0.0f));
+	m_pCollision->SetSize(D3DXVECTOR3(100.0f, 100.0f, 0.0f));
 	m_pCollision->DeCollisionCreate(CCollision::COLLISIONTYPE_NORMAL);
 
 	// 当たり判定設定
 	CCharacter::GetCollision()->SetPos(&GetPosition());
 	CCharacter::GetCollision()->SetPosOld(&GetPositionOld());
-	CCharacter::GetCollision()->SetSize2D(m_BossOneData.CollisionSize[1]);
+	CCharacter::GetCollision()->SetSize(m_BossOneData.CollisionSize[1]);
 	CCharacter::GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_CHARACTER);
 }
 

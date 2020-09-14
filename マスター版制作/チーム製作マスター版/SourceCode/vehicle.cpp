@@ -85,7 +85,7 @@ void CVehicle::VehiclePartsRotCondition(CModel *pModel, PARTS_ROT_TYPE type,D3DX
 		// í‚É‰ñ“]‚·‚é
 	case MODEL_ROT_TYPE_ALWAYS:
 		// ğŒ‚²‚Æ‰ñ“]‚³‚¹‚é
-		this->VehiclePartsRot(pModel, 0.1f);
+		this->VehiclePartsRot(pModel, D3DXVECTOR3(0.0f, 0.5f, 0.0f));
 		break;
 
 		// ˆÚ“®‚µ‚Ä‚¢‚é‚Ì‚İ
@@ -108,12 +108,12 @@ void CVehicle::VehiclePartsRotCondition(CModel *pModel, PARTS_ROT_TYPE type,D3DX
 //====================================================================
 // ƒp[ƒc‚Ì‰ñ“]ğŒ•Êˆ—
 //====================================================================
-void CVehicle::VehiclePartsRot(CModel *pModel, float fRot)
+void CVehicle::VehiclePartsRot(CModel *pModel, D3DXVECTOR3 rot)
 {
 	//3.14‚Ì’´‰ß•ª‚Ì‰Šú‰»i‰ñ“]j
-	CHossoLibrary::CalcRotation(fRot);
+	CHossoLibrary::CalcRotation_XYZ(rot);
 	// ƒ‚ƒfƒ‹‚Ì‰ñ“]
-	pModel->GetRot().x += fRot;
+	pModel->GetRot() += rot;
 	// ƒ‚ƒfƒ‹‚Ì‰ñ“]‚ÌXVİ’è
 	pModel->SetRot(pModel->GetRot());
 }
@@ -153,20 +153,15 @@ void CVehicle::WheelRot(CModel *pModel , D3DXVECTOR3 move)
 	if (move.x <= -2)
 	{
 		// ğŒ‚²‚Æ‰ñ“]‚³‚¹‚é
-		this->VehiclePartsRot(pModel, 0.1f);
+		this->VehiclePartsRot(pModel, D3DXVECTOR3(0.1f, 0.0f, 0.0f));
 	}
 	// ‰E‰ñ“]
 	else if (move.x >= 2)
 	{
 		// ğŒ‚²‚Æ‰ñ“]‚³‚¹‚é
-		this->VehiclePartsRot(pModel, -0.1f);
+		this->VehiclePartsRot(pModel, D3DXVECTOR3(-0.1f, 0.0f, 0.0f));
 	}
-	// –³‰ñ“]
-	else if (move.x <= 1.0f && move.x >= -1.0f)
-	{
-		// ğŒ‚²‚Æ‰ñ“]‚³‚¹‚é
-		this->VehiclePartsRot(pModel, 0.0f);
-	}
+
 }
 
 //====================================================================
@@ -177,94 +172,27 @@ void CVehicle::GunRot(CModel *pModel, D3DXVECTOR3 shotrot, DIRECTION direction)
 	// íÔ‚Ì‘”•ª
 	for (int nCntVehicle = 0; nCntVehicle < CManager::GetBaseMode()->GetMap()->GetMaxPlayerTank(); nCntVehicle++)
 	{
-		// æ‚è•¨‚Ìƒ|ƒCƒ“ƒ^æ“¾
-		CPlayertank *pPlayertank = CManager::GetBaseMode()->GetMap()->GetPlayertank(nCntVehicle);
-		// íÔ‚ª‘¶İ‚µ‚½
-		if (pPlayertank != nullptr)
+
+		if (direction == DIRECTION::LEFT)
 		{
-			if (pPlayertank->GetCharacterDirection() == DIRECTION::LEFT)
-			{
-				// ğŒ‚²‚Æ‰ñ“]‚³‚¹‚é
-				this->VehiclePartsRotLimit(pModel, shotrot.z);
-			}
-			else if (pPlayertank->GetCharacterDirection() == DIRECTION::RIGHT)
-			{
-				// ğŒ‚²‚Æ‰ñ“]‚³‚¹‚é
-				this->VehiclePartsRotLimit(pModel, shotrot.z);
-			}
-			else if (pPlayertank->GetCharacterDirection() == DIRECTION::UP)
-			{
-				// ğŒ‚²‚Æ‰ñ“]‚³‚¹‚é
-				this->VehiclePartsRotLimit(pModel, shotrot.z);
-			}
-			else if (pPlayertank->GetCharacterDirection() == DIRECTION::DOWN)
-			{
-				// ğŒ‚²‚Æ‰ñ“]‚³‚¹‚é
-				this->VehiclePartsRotLimit(pModel, shotrot.z);
-			}
+			// ğŒ‚²‚Æ‰ñ“]‚³‚¹‚é
+			this->VehiclePartsRotLimit(pModel, shotrot.z);
+		}
+		else if (direction == DIRECTION::RIGHT)
+		{
+			// ğŒ‚²‚Æ‰ñ“]‚³‚¹‚é
+			this->VehiclePartsRotLimit(pModel, shotrot.z);
+		}
+		else if (direction == DIRECTION::UP)
+		{
+			// ğŒ‚²‚Æ‰ñ“]‚³‚¹‚é
+			this->VehiclePartsRotLimit(pModel, shotrot.z);
+		}
+		else if (direction == DIRECTION::DOWN)
+		{
+			// ğŒ‚²‚Æ‰ñ“]‚³‚¹‚é
+			this->VehiclePartsRotLimit(pModel, shotrot.z);
 		}
 	}
-
-	//// í“¬‹@‚Ì‘”•ª
-	//for (int nCntVehicle = 0; nCntVehicle < CManager::GetBaseMode()->GetMap()->GetMaxBattlePlane(); nCntVehicle++)
-	//{
-	//	// æ‚è•¨‚Ìƒ|ƒCƒ“ƒ^æ“¾
-	//	CBattlePlane *pBattlePlane = CManager::GetBaseMode()->GetMap()->GetBattlePlane(nCntVehicle);
-	//	// íÔ‚ª‘¶İ‚µ‚½
-	//	if (pBattlePlane != nullptr)
-	//	{
-	//		if (pBattlePlane->GetVehicleDirection() == DIRECTION::LEFT)
-	//		{
-	//			// ğŒ‚²‚Æ‰ñ“]‚³‚¹‚é
-	//			this->VehiclePartsRotLimit(pModel, D3DX_PI * 0.5f);
-	//		}
-	//		else if (pBattlePlane->GetVehicleDirection() == DIRECTION::RIGHT)
-	//		{
-	//			// ğŒ‚²‚Æ‰ñ“]‚³‚¹‚é
-	//			this->VehiclePartsRotLimit(pModel, -D3DX_PI * 0.5f);
-	//		}
-	//		else if (pBattlePlane->GetVehicleDirection() == DIRECTION::UP)
-	//		{
-	//			// ğŒ‚²‚Æ‰ñ“]‚³‚¹‚é
-	//			this->VehiclePartsRotLimit(pModel, D3DX_PI * 0.0f);
-	//		}
-	//		else if (pBattlePlane->GetVehicleDirection() == DIRECTION::DOWN)
-	//		{
-	//			// ğŒ‚²‚Æ‰ñ“]‚³‚¹‚é
-	//			this->VehiclePartsRotLimit(pModel, D3DX_PI * 1.0f);
-	//		}
-	//	}
-	//}
-
-	//// ƒwƒŠƒRƒvƒ^[‚Ì‘”•ª
-	//for (int nCntVehicle = 0; nCntVehicle < CManager::GetBaseMode()->GetMap()->GetMaxHelicopter(); nCntVehicle++)
-	//{
-	//	// æ‚è•¨‚Ìƒ|ƒCƒ“ƒ^æ“¾
-	//	CHelicopter *pHelicopter = CManager::GetBaseMode()->GetMap()->GetHelicopter(nCntVehicle);
-	//	// íÔ‚ª‘¶İ‚µ‚½
-	//	if (pHelicopter != nullptr)
-	//	{
-	//		if (pHelicopter->GetVehicleDirection() == DIRECTION::LEFT)
-	//		{
-	//			// ğŒ‚²‚Æ‰ñ“]‚³‚¹‚é
-	//			this->VehiclePartsRotLimit(pModel, D3DX_PI * 0.5f);
-	//		}
-	//		else if (pHelicopter->GetVehicleDirection() == DIRECTION::RIGHT)
-	//		{
-	//			// ğŒ‚²‚Æ‰ñ“]‚³‚¹‚é
-	//			this->VehiclePartsRotLimit(pModel, -D3DX_PI * 0.5f);
-	//		}
-	//		else if (pHelicopter->GetVehicleDirection() == DIRECTION::UP)
-	//		{
-	//			// ğŒ‚²‚Æ‰ñ“]‚³‚¹‚é
-	//			this->VehiclePartsRotLimit(pModel, D3DX_PI * 0.0f);
-	//		}
-	//		else if (pHelicopter->GetVehicleDirection() == DIRECTION::DOWN)
-	//		{
-	//			// ğŒ‚²‚Æ‰ñ“]‚³‚¹‚é
-	//			this->VehiclePartsRotLimit(pModel, D3DX_PI * 1.0f);
-	//		}
-	//	}
-	//}
 }
 

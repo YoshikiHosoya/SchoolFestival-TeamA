@@ -13,6 +13,7 @@
 #include "gun.h"
 #include "ModelSet.h"
 #define MAX_RECASTTIME (120)
+#define MAX_DISTANCE (400)
 CEnemyAI::CEnemyAI()
 {
 }
@@ -31,6 +32,8 @@ HRESULT CEnemyAI::Init(void)
 	m_bShot = false;
 	m_random = 0;
 	m_AItype = AI_NONE;
+	m_Distance = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_fDistance = 0.0f;
 
 	return S_OK;
 }
@@ -56,6 +59,10 @@ void CEnemyAI::Update(void)
 
 	if (pEnemyPass != nullptr)
 	{
+		//攻撃できる距離の計算
+		m_Distance = pEnemyPass->GetPosition() - pPlayer->GetPosition();
+		m_fDistance = D3DXVec2Length(&D3DXVECTOR2(m_Distance.x, m_Distance.y));
+
 		m_castcount++;
 
 		if (m_castcount == m_recast && m_bReStartFlag == false)
@@ -117,6 +124,17 @@ void CEnemyAI::Update(void)
 		{
 			pEnemyPass->GetModelSet()->SetMotion(CModelSet::ENEMY_MOTION_SQUAT);
 		}
+		//プレイヤーが範囲外の右にいるとき
+		if (pEnemyPass->GetPosition().x - pPlayer->GetPosition().x > MAX_DISTANCE)
+		{
+			m_AItype = AI_WALK_LEFT;
+		}
+		//プレイヤーが範囲外の左にいるとき
+		else if (pEnemyPass->GetPosition().x - pPlayer->GetPosition().x < -MAX_DISTANCE)
+		{
+			m_AItype = AI_WALK_RIGHT;
+		}
+
 		if (pPlayer != nullptr)
 		{
 			switch (m_AItype)

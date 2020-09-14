@@ -50,6 +50,9 @@ HRESULT CBoss::Init(void)
 	CCharacter::SetLife(BOSS_LIFE);
 	GetModelSet()->SetCharacterType(CModelSet::CHARACTER_TYPE_BOSS);
 
+	//ƒ^ƒCƒvÝ’è
+	CEnemy::SetEnemyType(ENEMY_TYPE::ENEMY_BOSS_SOL_DE_ROCA);
+
 	m_Attack = false;
 	m_AttackCastCnt = 0;
 	m_AttackCnt = 0;
@@ -68,7 +71,7 @@ HRESULT CBoss::Init(void)
 	GetGunPtr()->SetDisp(false);
 
 	// “–‚½‚è”»’è¶¬
-	GetCollision()->SetSize2D(BOSS_SIZE);
+	GetCollision()->SetSize(BOSS_SIZE);
 	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_NORMAL);
 	return S_OK;
 }

@@ -66,6 +66,7 @@ void CShieldEnemyAI::Update(void)
 		{
 			if (pPlayer != nullptr)
 			{
+				//UŒ‚‚Å‚«‚é‹——£‚ÌŒvŽZ
 				m_Distance = pEnemyPass->GetPosition() - pPlayer->GetPosition();
 				m_fDistance = D3DXVec2Length(&D3DXVECTOR2(m_Distance.x, m_Distance.y));
 				if (m_fDistance < MAX_ATTACKDISTANCE)

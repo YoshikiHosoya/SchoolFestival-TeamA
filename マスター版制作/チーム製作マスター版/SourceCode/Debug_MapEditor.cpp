@@ -17,6 +17,7 @@
 #include "UIManager.h"
 #include "Scene.h"
 #include "3Dline.h"
+#include "meshbox.h"
 
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
@@ -146,13 +147,13 @@ void CDebugMapEditor::ShowDebugInfo(void)
 	{// Ctrl + 5
 		if (key->GetKeyboardTrigger(DIK_NUMPAD5))
 		{
-			if (C3DLine::GetDrawFlag())
+			if (CMeshBox::GetDisp())
 			{// 表示中なら非表示
-				C3DLine::SetDrawFlag(false);
+				CMeshBox::SetDisp(false);
 			}
 			else
 			{// 非表示なら表示
-				C3DLine::SetDrawFlag(true);
+				CMeshBox::SetDisp(true);
 			}
 		}
 	}
