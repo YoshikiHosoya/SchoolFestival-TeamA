@@ -74,7 +74,7 @@ HRESULT CObstacle::Init()
 	// “–‚½‚è”»’è¶¬
 	GetCollision()->SetPos(&GetPosition());
 	GetCollision()->SetSize(GetSize());
-	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_NORMAL);
+	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_CHARACTER);
 	GetCollision()->SetGameObject(this);
 
 	return S_OK;
@@ -302,6 +302,6 @@ void CObstacle::SetCollisionSize(CObstacle::OBSTACLE_TYPE type)
 {
 	// “–‚½‚è”»’è‚Ì‘å‚«‚³‚ðÝ’è
 	GetCollision()->SetSize(m_ObstacleParam[type].CollisionSize);
-	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_NORMAL);
+	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_CHARACTER);
 };
 

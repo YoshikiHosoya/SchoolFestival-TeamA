@@ -21,10 +21,10 @@
 //====================================================================
 //マクロ定義
 //====================================================================
-#define ENEMY_HUMAN_COLLISIONSIZE				(D3DXVECTOR3(50.0f,75.0f,0.0f))			//敵の当たり判定サイズ
-#define ENEMY_HELICOPTER_COLLISIONSIZE			(D3DXVECTOR3(350.0f,150.0f,0.0f))		//敵の当たり判定サイズ
-#define ENEMY_MELTYHONEY_COLLISIONSIZE			(D3DXVECTOR3(250.0f,200.0f,0.0f))		//敵の当たり判定サイズ
-#define ENEMY_ZYCOCCA_COLLISIONSIZE				(D3DXVECTOR3(110.0f,95.0f,0.0f))		//敵の当たり判定サイズ
+#define ENEMY_HUMAN_COLLISIONSIZE				(D3DXVECTOR3(50.0f,75.0f,50.0f))			//敵の当たり判定サイズ
+#define ENEMY_HELICOPTER_COLLISIONSIZE			(D3DXVECTOR3(350.0f,150.0f,350.0f))		//敵の当たり判定サイズ
+#define ENEMY_MELTYHONEY_COLLISIONSIZE			(D3DXVECTOR3(250.0f,200.0f,250.0f))		//敵の当たり判定サイズ
+#define ENEMY_ZYCOCCA_COLLISIONSIZE				(D3DXVECTOR3(110.0f,95.0f,110.0f))		//敵の当たり判定サイズ
 
 #define ENEMY_HUMAN_LIFE						(1)										//ライフ
 #define ENEMY_HELICOPTER_LIFE					(20)									//ライフ
@@ -174,7 +174,7 @@ HRESULT CWeakEnemy::Init(void)
 		break;
 	}
 
-	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_CHARACTER);
+	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_NORMAL);
 
 	return S_OK;
 }

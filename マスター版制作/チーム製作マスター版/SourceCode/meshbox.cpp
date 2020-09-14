@@ -86,6 +86,39 @@ void CMeshBox::Uninit()
 //------------------------------------------------------------------------------
 void CMeshBox::Update()
 {
+	//頂点情報へのポインタ
+	VERTEX_3D *pVtx;
+	//頂点データの範囲をロックし、頂点バッファへのポインタを取得
+	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+
+	if (m_Type == TYPE_CENTER)
+	{
+		// 頂点の合計 = 8
+		pVtx[0].pos = D3DXVECTOR3(- m_size.x * 0.5f, + m_size.y, - m_size.z * 0.5f);
+		pVtx[1].pos = D3DXVECTOR3(+ m_size.x * 0.5f, + m_size.y, - m_size.z * 0.5f);
+		pVtx[2].pos = D3DXVECTOR3(+ m_size.x * 0.5f, 0.0f, - m_size.z * 0.5f);
+		pVtx[3].pos = D3DXVECTOR3(- m_size.x * 0.5f, 0.0f, - m_size.z * 0.5f);
+		pVtx[4].pos = D3DXVECTOR3(+ m_size.x * 0.5f, + m_size.y, + m_size.z * 0.5f);
+		pVtx[5].pos = D3DXVECTOR3(+ m_size.x * 0.5f, 0.0f, + m_size.z * 0.5f);
+		pVtx[6].pos = D3DXVECTOR3(- m_size.x * 0.5f, + m_size.y, + m_size.z * 0.5f);
+		pVtx[7].pos = D3DXVECTOR3(- m_size.x * 0.5f, 0.0f, + m_size.z * 0.5f);
+	}
+
+	else
+	{
+		// 頂点の合計 = 8
+		pVtx[0].pos = D3DXVECTOR3(-m_size.x * 0.5f, +m_size.y * 0.5f, -m_size.z * 0.5f);
+		pVtx[1].pos = D3DXVECTOR3(+m_size.x * 0.5f, +m_size.y * 0.5f, -m_size.z * 0.5f);
+		pVtx[2].pos = D3DXVECTOR3(+m_size.x * 0.5f, -m_size.y * 0.5f, -m_size.z * 0.5f);
+		pVtx[3].pos = D3DXVECTOR3(-m_size.x * 0.5f, -m_size.y * 0.5f, -m_size.z * 0.5f);
+		pVtx[4].pos = D3DXVECTOR3(+m_size.x * 0.5f, +m_size.y * 0.5f, +m_size.z * 0.5f);
+		pVtx[5].pos = D3DXVECTOR3(+m_size.x * 0.5f, -m_size.y * 0.5f, +m_size.z * 0.5f);
+		pVtx[6].pos = D3DXVECTOR3(-m_size.x * 0.5f, +m_size.y * 0.5f, +m_size.z * 0.5f);
+		pVtx[7].pos = D3DXVECTOR3(-m_size.x * 0.5f, -m_size.y * 0.5f, +m_size.z * 0.5f);
+	}
+
+	//頂点データをアンロック
+	m_pVtxBuff->Unlock();
 }
 //------------------------------------------------------------------------------
 //描画処理
@@ -143,7 +176,7 @@ void CMeshBox::DebugInfo()
 {
 #ifdef _DEBUG
 
-	CDebugProc::Print_Left("座標　%f,%f,%f\n",GetPos().x, GetPos().y, GetPos().z);
+	//CDebugProc::Print_Left("座標　%f,%f,%f\n",GetPos().x, GetPos().y, GetPos().z);
 
 #endif //DEBUG
 }
@@ -189,26 +222,26 @@ void CMeshBox::SetCol(D3DXCOLOR const & col)
 void CMeshBox::SetSize(D3DXVECTOR3 size)
 {
 	m_size = size;
-	//頂点情報へのポインタ
-	VERTEX_3D *pVtx;
-	//頂点データの範囲をロックし、頂点バッファへのポインタを取得
-	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+	////頂点情報へのポインタ
+	//VERTEX_3D *pVtx;
+	////頂点データの範囲をロックし、頂点バッファへのポインタを取得
+	//m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
 
-	if (m_Type == TYPE_CENTER)
-	{
-		// 頂点の合計 = 8
-		pVtx[0].pos = D3DXVECTOR3(m_pos.x - m_size.x * 0.5f, m_pos.y + m_size.y * 0.5f, m_pos.z - m_size.z * 0.5f);
-		pVtx[1].pos = D3DXVECTOR3(m_pos.x + m_size.x * 0.5f, m_pos.y + m_size.y * 0.5f, m_pos.z - m_size.z * 0.5f);
-		pVtx[2].pos = D3DXVECTOR3(m_pos.x + m_size.x * 0.5f, m_pos.y - m_size.y * 0.5f, m_pos.z - m_size.z * 0.5f);
-		pVtx[3].pos = D3DXVECTOR3(m_pos.x - m_size.x * 0.5f, m_pos.y - m_size.y * 0.5f, m_pos.z - m_size.z * 0.5f);
-		pVtx[4].pos = D3DXVECTOR3(m_pos.x + m_size.x * 0.5f, m_pos.y + m_size.y * 0.5f, m_pos.z + m_size.z * 0.5f);
-		pVtx[5].pos = D3DXVECTOR3(m_pos.x + m_size.x * 0.5f, m_pos.y - m_size.y * 0.5f, m_pos.z + m_size.z * 0.5f);
-		pVtx[6].pos = D3DXVECTOR3(m_pos.x - m_size.x * 0.5f, m_pos.y + m_size.y * 0.5f, m_pos.z + m_size.z * 0.5f);
-		pVtx[7].pos = D3DXVECTOR3(m_pos.x - m_size.x * 0.5f, m_pos.y - m_size.y * 0.5f, m_pos.z + m_size.z * 0.5f);
-	}
+	//if (m_Type == TYPE_CENTER)
+	//{
+	//	// 頂点の合計 = 8
+	//	pVtx[0].pos = D3DXVECTOR3(m_pos.x - m_size.x * 0.5f, m_pos.y + m_size.y * 0.5f, m_pos.z - m_size.z * 0.5f);
+	//	pVtx[1].pos = D3DXVECTOR3(m_pos.x + m_size.x * 0.5f, m_pos.y + m_size.y * 0.5f, m_pos.z - m_size.z * 0.5f);
+	//	pVtx[2].pos = D3DXVECTOR3(m_pos.x + m_size.x * 0.5f, m_pos.y - m_size.y * 0.5f, m_pos.z - m_size.z * 0.5f);
+	//	pVtx[3].pos = D3DXVECTOR3(m_pos.x - m_size.x * 0.5f, m_pos.y - m_size.y * 0.5f, m_pos.z - m_size.z * 0.5f);
+	//	pVtx[4].pos = D3DXVECTOR3(m_pos.x + m_size.x * 0.5f, m_pos.y + m_size.y * 0.5f, m_pos.z + m_size.z * 0.5f);
+	//	pVtx[5].pos = D3DXVECTOR3(m_pos.x + m_size.x * 0.5f, m_pos.y - m_size.y * 0.5f, m_pos.z + m_size.z * 0.5f);
+	//	pVtx[6].pos = D3DXVECTOR3(m_pos.x - m_size.x * 0.5f, m_pos.y + m_size.y * 0.5f, m_pos.z + m_size.z * 0.5f);
+	//	pVtx[7].pos = D3DXVECTOR3(m_pos.x - m_size.x * 0.5f, m_pos.y - m_size.y * 0.5f, m_pos.z + m_size.z * 0.5f);
+	//}
 
-	//頂点データをアンロック
-	m_pVtxBuff->Unlock();
+	////頂点データをアンロック
+	//m_pVtxBuff->Unlock();
 }
 
 //------------------------------------------------------------------------------
@@ -224,39 +257,39 @@ void CMeshBox::SetTexPos()
 void CMeshBox::SetPos(D3DXVECTOR3 const & pos)
 {
 	m_pos = pos;
-	//頂点情報へのポインタ
-	VERTEX_3D *pVtx;
-	//頂点データの範囲をロックし、頂点バッファへのポインタを取得
-	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+	////頂点情報へのポインタ
+	//VERTEX_3D *pVtx;
+	////頂点データの範囲をロックし、頂点バッファへのポインタを取得
+	//m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
 
-	if (m_Type == TYPE_CENTER)
-	{
-		// 頂点の合計 = 8
-		pVtx[0].pos = D3DXVECTOR3(m_pos.x - m_size.x * 0.5f, m_pos.y + m_size.y * 0.5f, m_pos.z - m_size.z * 0.5f);
-		pVtx[1].pos = D3DXVECTOR3(m_pos.x + m_size.x * 0.5f, m_pos.y + m_size.y * 0.5f, m_pos.z - m_size.z * 0.5f);
-		pVtx[2].pos = D3DXVECTOR3(m_pos.x + m_size.x * 0.5f, m_pos.y - m_size.y * 0.5f, m_pos.z - m_size.z * 0.5f);
-		pVtx[3].pos = D3DXVECTOR3(m_pos.x - m_size.x * 0.5f, m_pos.y - m_size.y * 0.5f, m_pos.z - m_size.z * 0.5f);
-		pVtx[4].pos = D3DXVECTOR3(m_pos.x + m_size.x * 0.5f, m_pos.y + m_size.y * 0.5f, m_pos.z + m_size.z * 0.5f);
-		pVtx[5].pos = D3DXVECTOR3(m_pos.x + m_size.x * 0.5f, m_pos.y - m_size.y * 0.5f, m_pos.z + m_size.z * 0.5f);
-		pVtx[6].pos = D3DXVECTOR3(m_pos.x - m_size.x * 0.5f, m_pos.y + m_size.y * 0.5f, m_pos.z + m_size.z * 0.5f);
-		pVtx[7].pos = D3DXVECTOR3(m_pos.x - m_size.x * 0.5f, m_pos.y - m_size.y * 0.5f, m_pos.z + m_size.z * 0.5f);
-	}
+	//if (m_Type == TYPE_CENTER)
+	//{
+	//	// 頂点の合計 = 8
+	//	pVtx[0].pos = D3DXVECTOR3(m_pos.x - m_size.x * 0.5f, m_pos.y + m_size.y * 0.5f, m_pos.z - m_size.z * 0.5f);
+	//	pVtx[1].pos = D3DXVECTOR3(m_pos.x + m_size.x * 0.5f, m_pos.y + m_size.y * 0.5f, m_pos.z - m_size.z * 0.5f);
+	//	pVtx[2].pos = D3DXVECTOR3(m_pos.x + m_size.x * 0.5f, m_pos.y - m_size.y * 0.5f, m_pos.z - m_size.z * 0.5f);
+	//	pVtx[3].pos = D3DXVECTOR3(m_pos.x - m_size.x * 0.5f, m_pos.y - m_size.y * 0.5f, m_pos.z - m_size.z * 0.5f);
+	//	pVtx[4].pos = D3DXVECTOR3(m_pos.x + m_size.x * 0.5f, m_pos.y + m_size.y * 0.5f, m_pos.z + m_size.z * 0.5f);
+	//	pVtx[5].pos = D3DXVECTOR3(m_pos.x + m_size.x * 0.5f, m_pos.y - m_size.y * 0.5f, m_pos.z + m_size.z * 0.5f);
+	//	pVtx[6].pos = D3DXVECTOR3(m_pos.x - m_size.x * 0.5f, m_pos.y + m_size.y * 0.5f, m_pos.z + m_size.z * 0.5f);
+	//	pVtx[7].pos = D3DXVECTOR3(m_pos.x - m_size.x * 0.5f, m_pos.y - m_size.y * 0.5f, m_pos.z + m_size.z * 0.5f);
+	//}
 
-	else
-	{
-		// 頂点の合計 = 8
-		pVtx[0].pos = D3DXVECTOR3(m_pos.x - m_size.x * 0.5f, m_pos.y + m_size.y, m_pos.z - m_size.z * 0.5f);
-		pVtx[1].pos = D3DXVECTOR3(m_pos.x + m_size.x * 0.5f, m_pos.y + m_size.y, m_pos.z - m_size.z * 0.5f);
-		pVtx[2].pos = D3DXVECTOR3(m_pos.x + m_size.x * 0.5f, m_pos.y, m_pos.z - m_size.z * 0.5f);
-		pVtx[3].pos = D3DXVECTOR3(m_pos.x - m_size.x * 0.5f, m_pos.y, m_pos.z - m_size.z * 0.5f);
-		pVtx[4].pos = D3DXVECTOR3(m_pos.x + m_size.x * 0.5f, m_pos.y + m_size.y, m_pos.z + m_size.z * 0.5f);
-		pVtx[5].pos = D3DXVECTOR3(m_pos.x + m_size.x * 0.5f, m_pos.y, m_pos.z + m_size.z * 0.5f);
-		pVtx[6].pos = D3DXVECTOR3(m_pos.x - m_size.x * 0.5f, m_pos.y + m_size.y, m_pos.z + m_size.z * 0.5f);
-		pVtx[7].pos = D3DXVECTOR3(m_pos.x - m_size.x * 0.5f, m_pos.y, m_pos.z + m_size.z * 0.5f);
-	}
+	//else
+	//{
+	//	//// 頂点の合計 = 8
+	//	//pVtx[0].pos = D3DXVECTOR3(m_pos.x - m_size.x * 0.5f, m_pos.y + m_size.y, m_pos.z - m_size.z * 0.5f);
+	//	//pVtx[1].pos = D3DXVECTOR3(m_pos.x + m_size.x * 0.5f, m_pos.y + m_size.y, m_pos.z - m_size.z * 0.5f);
+	//	//pVtx[2].pos = D3DXVECTOR3(m_pos.x + m_size.x * 0.5f, m_pos.y, m_pos.z - m_size.z * 0.5f);
+	//	//pVtx[3].pos = D3DXVECTOR3(m_pos.x - m_size.x * 0.5f, m_pos.y, m_pos.z - m_size.z * 0.5f);
+	//	//pVtx[4].pos = D3DXVECTOR3(m_pos.x + m_size.x * 0.5f, m_pos.y + m_size.y, m_pos.z + m_size.z * 0.5f);
+	//	//pVtx[5].pos = D3DXVECTOR3(m_pos.x + m_size.x * 0.5f, m_pos.y, m_pos.z + m_size.z * 0.5f);
+	//	//pVtx[6].pos = D3DXVECTOR3(m_pos.x - m_size.x * 0.5f, m_pos.y + m_size.y, m_pos.z + m_size.z * 0.5f);
+	//	//pVtx[7].pos = D3DXVECTOR3(m_pos.x - m_size.x * 0.5f, m_pos.y, m_pos.z + m_size.z * 0.5f);
+	//}
 
-	//頂点データをアンロック
-	m_pVtxBuff->Unlock();
+	////頂点データをアンロック
+	//m_pVtxBuff->Unlock();
 }
 
 //------------------------------------------------------------------------------

@@ -111,7 +111,7 @@ HRESULT CItem::Init()
 	m_pCollision = CCollision::Create();
 	m_pCollision->SetPos(&GetPosition());
 	m_pCollision->SetSize(m_CollisionSize);
-	m_pCollision->DeCollisionCreate(CCollision::COLLISIONTYPE_NORMAL);
+	m_pCollision->DeCollisionCreate(CCollision::COLLISIONTYPE_CHARACTER);
 
 	return S_OK;
 }

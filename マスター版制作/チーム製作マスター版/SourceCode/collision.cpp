@@ -152,17 +152,17 @@ void CCollision::DeCollisionCreate(COLLISIONTYPE collisiontype)
 	switch (collisiontype)
 	{
 	case COLLISIONTYPE_NORMAL:{
-		/*m_Debugcollision = CDebugcollision::Create(
+		m_Debugcollision = CDebugcollision::Create(
 			m_ppos,
 			&m_size,
-			CDebugcollision::COLLISIONTYPE_BOX);*/
+			CDebugcollision::COLLISIONTYPE_BOX);
 	}break;
 
 	case COLLISIONTYPE_CHARACTER: {
-		/*m_Debugcollision = CDebugcollision::Create(
+		m_Debugcollision = CDebugcollision::Create(
 			m_ppos,
 			&m_size,
-			CDebugcollision::COLLISIONTYPE_BOX_CHARA);*/
+			CDebugcollision::COLLISIONTYPE_BOX_CHARA);
 	}break;
 
 	default:

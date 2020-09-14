@@ -54,7 +54,7 @@ HRESULT CShield::Init()
 	// 当たり判定生成
 	GetCollision()->SetPos(&GetPosition());
 	GetCollision()->SetSize(SHIELD_SIZE);
-	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_NORMAL);
+	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_CHARACTER);
 
 	//ダメージ受けた時の点滅色
 	SetAddColor(D3DXCOLOR(1.0f, 0.4f, 0.0f, 0.0f));
