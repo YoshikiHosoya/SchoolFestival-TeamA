@@ -235,7 +235,8 @@ bool CHossoLibrary::PressDeterminationButton(void)
 	{
 		InpudPad[nCnt] = CManager::GetPad((TAG)nCnt);
 
-		if (Keyboard->GetKeyboardTrigger(DIK_RETURN) || InpudPad[nCnt]->GetTrigger(CXInputPad::JOYPADKEY_A, 1))
+		if (Keyboard->GetKeyboardTrigger(DIK_RETURN) || InpudPad[nCnt]->GetTrigger(CXInputPad::JOYPADKEY_A, 1) || 
+			InpudPad[nCnt]->GetTrigger(CXInputPad::JOYPADKEY_B, 1))
 		{
 			return true;
 		}

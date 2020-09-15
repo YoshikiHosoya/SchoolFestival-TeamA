@@ -25,11 +25,10 @@ public:
 	{
 		D3DXVECTOR3			Move;			// 移動量
 		float				fGravity;		// 重力
-		bool				bRot;			// 回転するかのフラグ
 	}GRENADE_PARAM;
 
-	CGrenade(OBJ_TYPE type);								// コンストラクタ
-	~CGrenade();											// デストラクタ
+	CGrenade(OBJ_TYPE type);				// コンストラクタ
+	~CGrenade();							// デストラクタ
 
 	/* メンバ関数 */
 	HRESULT						Init();						// 初期化
@@ -43,6 +42,9 @@ public:
 	static	void				GrenadePramLoad();												// グレネードのパラメーターのロード
 
 private:
+	/* メンバ関数 */
+	void						GrenadeRotation();			// グレネードの回転
+
 	/* メンバ変数 */
 	D3DXVECTOR3					m_move;						// 移動値
 	D3DXVECTOR3					m_rot;						// 回転

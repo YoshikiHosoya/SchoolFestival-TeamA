@@ -848,9 +848,6 @@ void CPlayer::Ride()
 		CPlayertank *pPlayertank = nullptr;
 		pPlayertank = this->GetCollision()->ForPlayer_TankCollision();
 
-		CBattlePlane *pBattlePlane = nullptr;
-		pBattlePlane = this->GetCollision()->ForPlayer_PlaneCollision();
-
 		// 戦車に乗っている時
 		if (pPlayertank != nullptr)
 		{
@@ -866,22 +863,6 @@ void CPlayer::Ride()
 				m_pPlayerUI->SetBulletAmmo(pPlayertank->GetGun()->GetGunAmmo(), pPlayertank->GetGun()->GetGunType());
 				// グレネードの残数表示
 				m_pPlayerUI->SetGrenadeAmmo(pPlayertank->GetGrenadeFire()->GetGrenadeAmmo());
-			}
-		}
-
-		// 戦闘機に乗っている時
-		else if (pBattlePlane != nullptr)
-		{
-			//スクリーンの範囲内から出ないように制限
-			CManager::GetRenderer()->ScreenLimitRange(pBattlePlane->GetPosition());
-
-			// プレイヤーの座標を戦闘機の座標に合わせる
-			this->SetPosition(pBattlePlane->GetPosition());
-
-			if (m_pPlayerUI)
-			{
-				// 弾の残数表示
-				m_pPlayerUI->SetBulletAmmo(pBattlePlane->GetGun()->GetGunAmmo(), pBattlePlane->GetGun()->GetGunType());
 			}
 		}
 

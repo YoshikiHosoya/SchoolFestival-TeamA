@@ -29,7 +29,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hInstancePrev, LPSTR IpCmdLine
 	_CrtSetReportMode(_CRT_ERROR, _CRTDBG_MODE_DEBUG);
 
 	//メモリ番号でブレークポイント設定
-	//_CrtSetBreakAlloc(1145);
+	//_CrtSetBreakAlloc(733);
 
 
 	//変数宣言

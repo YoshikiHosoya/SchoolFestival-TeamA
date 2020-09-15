@@ -25,10 +25,6 @@ class CEnemy;
 class CPrisoner;
 class CObstacle;
 class CPlayertank;
-class CBattlePlane;
-class CHelicopter;
-class CVehicle;
-class CShield;
 class CModelSet;
 // =====================================================================================================================================================================
 // マップクラス
@@ -70,8 +66,6 @@ public:
 		ARRANGEMENT_MODEL_PRISONER,				// 捕虜
 		ARRANGEMENT_MODEL_OBSTACLE,				// 障害物
 		ARRANGEMENT_MODEL_TANK,					// 戦車
-		ARRANGEMENT_MODEL_BATTLEPLANE,			// 戦闘機
-		ARRANGEMENT_MODEL_HELICOPTER,			// ヘリコプター
 		ARRANGEMENT_MODEL_BOSS,					// ボス
 		ARRANGEMENT_MODEL_BOSS_ONE,				// ボス1
 		ARRANGEMENT_MODEL_MAX
@@ -129,7 +123,6 @@ public:
 	int				GetMaxPlayerTank();												// 戦車の最大数取得
 	int				GetMaxBattlePlane();											// 戦闘機の最大数取得
 	int				GetMaxHelicopter();												// ヘリの最大数取得
-	int				GetMaxShield();													// 盾の最大数取得
 
 	LPD3DXMESH		GetMesh(int nCnt);												// メッシュの取得
 	MAP				GetMapNum() { return m_MapNum; };								// マップ番号取得
@@ -138,12 +131,9 @@ public:
 	CPrisoner		*GetPrisoner(int nCnt) { return m_pPrisoner[nCnt]; };			// 捕虜の取得
 	CObstacle		*GetObstacle(int nCnt) { return m_pObstacle[nCnt]; };			// 障害物の取得
 	CPlayertank		*GetPlayertank(int nCnt) { return m_pPlayerTank[nCnt]; };		// 戦車の取得
-	CBattlePlane	*GetBattlePlane(int nCnt) { return m_pBattlePlane[nCnt]; };		// 戦闘機の取得
-	CHelicopter		*GetHelicopter(int nCnt) { return m_pHelicopter[nCnt]; };		// ヘリコプターの取得
 	WAVE_INFO		*GetWaveInfo(int nWaveNum) { return &m_aWaveInfo[nWaveNum]; };	// ウェーブ情報の取得
 	D3DXVECTOR3		GetTransitionPos() { return m_TransitionPos; };					// 遷移するための位置の取得
 	int				GetTransitionMapID() { return m_TransitionMapID; }				// 次に遷移するためのマップ番号の取得
-	CShield			*GetShield(int nCnt) { return m_pShield[nCnt]; };				// shieldの取得
 
 private:
 	/* メンバ関数 */
@@ -187,10 +177,6 @@ private:
 	std::vector<CPrisoner*>		m_pPrisoner;								// 可変長配列 設置した捕虜
 	std::vector<CObstacle*>		m_pObstacle;								// 可変長配列 設置した障害物
 	std::vector<CPlayertank*>	m_pPlayerTank;								// 可変長配列 設置した戦車
-	std::vector<CBattlePlane*>	m_pBattlePlane;								// 可変長配列 設置した戦闘機
-	std::vector<CHelicopter*>	m_pHelicopter;								// 可変長配列 設置したヘリ
-	std::vector<CVehicle*>		m_pVehicle;									// 可変長配列 設置した乗り物
-	std::vector<CShield*>		m_pShield;									// 可変長配列 盾
 
 	int							m_nOldSelect;								// 前回選択していたモノの番号
 	D3DXVECTOR3					m_WavePos;									// ウェーブの位置
