@@ -93,7 +93,7 @@ void CGrenade::Update(void)
 	GetMove().y -= m_GrenadeParam[m_type].fGravity;
 
 	// c‰ñ“]
-	if (m_GrenadeParam[m_type].bRot)
+	if (m_type == CGrenadeFire::GRENADE_TYPE::HAND_GRENADE)
 	{
 		m_rot.z += (D3DX_PI / ROT_DIVISION_Z);
 	}
@@ -169,7 +169,7 @@ CGrenade * CGrenade::Create(D3DXVECTOR3 rot, CGrenadeFire::GRENADE_TYPE type)
 		break;
 	case CGrenadeFire::DROP_BOMB:
 		// ƒ‚ƒfƒ‹ƒJƒEƒ“ƒg‚ÌÝ’è
-		pGrenade->SetModelID(MODEL_BULLET_TANKGRENADE);
+		pGrenade->SetModelID(MODEL_BULLET_MISSILE);
 		break;
 	}
 

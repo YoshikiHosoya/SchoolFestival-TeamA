@@ -28,8 +28,8 @@ public:
 		bool				bRot;			// 回転するかのフラグ
 	}GRENADE_PARAM;
 
-	CGrenade(OBJ_TYPE type);								// コンストラクタ
-	~CGrenade();											// デストラクタ
+	CGrenade(OBJ_TYPE type);				// コンストラクタ
+	~CGrenade();							// デストラクタ
 
 	/* メンバ関数 */
 	HRESULT						Init();						// 初期化

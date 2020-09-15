@@ -594,40 +594,6 @@ CPlayertank * CCollision::ForPlayer_TankCollision()
 }
 
 //======================================================================================================================
-// プレイヤーと戦闘機で行う判定 プレイヤーの接触判定 ポインタを返す
-//======================================================================================================================
-CBattlePlane * CCollision::ForPlayer_PlaneCollision()
-{
-	CBattlePlane *pBattlePlane = nullptr;
-
-	// 戦車の総数分
-	for (int nCntPlane = 0; nCntPlane < CManager::GetBaseMode()->GetMap()->GetMaxBattlePlane(); nCntPlane++)
-	{
-		// 戦車のポインタを取得
-		pBattlePlane = CManager::GetBaseMode()->GetMap()->GetBattlePlane(nCntPlane);
-
-		if (pBattlePlane != nullptr)
-		{
-			if (this->ForPlayer_VehicleCollision(pBattlePlane->GetCollision()))
-			{
-				// 処理を行った戦車のポインタを返す
-				return pBattlePlane;
-			}
-		}
-
-		// nullだったらnullを返す
-		else if (pBattlePlane == nullptr)
-		{
-			return nullptr;
-		}
-	}
-
-	// ポインタを返す
-	return pBattlePlane;
-}
-
-
-//======================================================================================================================
 // プレイヤーと障害物で行う判定 プレイヤーの接触判定
 //======================================================================================================================
 bool CCollision::ForPlayer_ObstacleCollision()
@@ -755,24 +721,6 @@ CVehicle *CCollision::ForPlayer_VehicleCollision()
 			}
 		}
 	}
-
-	CBattlePlane *pBattlePlane = nullptr;
-
-	// 戦車の総数分
-	for (int nCntPlane = 0; nCntPlane < CManager::GetBaseMode()->GetMap()->GetMaxBattlePlane(); nCntPlane++)
-	{
-		// 戦車のポインタを取得
-		pBattlePlane = CManager::GetBaseMode()->GetMap()->GetBattlePlane(nCntPlane);
-
-		if (pBattlePlane != nullptr)
-		{
-			if (this->VehicleCollision(pBattlePlane->GetCollision()))
-			{
-				return pBattlePlane;
-			}
-		}
-	}
-
 	return nullptr;
 }
 

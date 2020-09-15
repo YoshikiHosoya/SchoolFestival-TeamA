@@ -13,8 +13,6 @@
 #include "Obstacle.h"
 #include "prisoner.h"
 #include "playertank.h"
-#include "battleplane.h"
-#include "helicopter.h"
 #include "Player.h"
 #include "BaseMode.h"
 #include "item.h"
@@ -92,9 +90,6 @@ CMap::CMap()
 	m_pPrisoner.clear();											// 捕虜
 	m_pObstacle.clear();											// 障害物
 	m_pPlayerTank.clear();											// 戦車
-	m_pBattlePlane.clear();											// 戦闘機
-	m_pHelicopter.clear();											// ヘリコプター
-	m_pVehicle.clear();												// (乗り物)
 
 	m_nOldSelect			= 0;									// 前回選択していたもの
 	m_WavePos				= ZeroVector3;							// ウェーブの位置
@@ -219,16 +214,6 @@ void CMap::MapModelLoad()
 				{
 					sprintf(cEndSetText, "%s", "END_TANKSET");
 					nModelType = ARRANGEMENT_MODEL_TANK;
-				}
-				else if (strcmp(cHeadText, "BATTLEPLANESET") == 0)
-				{
-					sprintf(cEndSetText, "%s", "END_BATTLEPLANESET");
-					nModelType = ARRANGEMENT_MODEL_BATTLEPLANE;
-				}
-				else if (strcmp(cHeadText, "HELICOPTERSET") == 0)
-				{
-					sprintf(cEndSetText, "%s", "END_HELICOPTERSET");
-					nModelType = ARRANGEMENT_MODEL_HELICOPTER;
 				}
 				else if (strcmp(cHeadText, "BOSSSET") == 0)
 				{
@@ -427,24 +412,6 @@ void CMap::MapModelCreate(int ModelType, int nType, D3DXVECTOR3 pos,int nItemTyp
 		m_pPlayerTank[m_pPlayerTank.size() - 1]->SetPosition(pos);
 		break;
 
-	/* --- 戦闘機 --- */
-	case CMap::ARRANGEMENT_MODEL_BATTLEPLANE:
-		//// オブジェクトの生成
-		//m_pBattlePlane.emplace_back(CBattlePlane::Create());
-		//// 位置の設定
-		//m_pBattlePlane[m_pBattlePlane.size() - 1]->SetPosition(pos);
-		break;
-
-	/* --- ヘリコプター --- */
-	case CMap::ARRANGEMENT_MODEL_HELICOPTER:
-		//// オブジェクトの生成
-		//m_pHelicopter.emplace_back(CHelicopter::Create());
-		//// 位置の設定
-		//m_pHelicopter[m_pHelicopter.size() - 1]->SetPosition(pos);
-		//// 種類の設定
-		//m_pHelicopter[m_pHelicopter.size() - 1]->SetVehicleType((CVehicle::VEHICLE_TYPE)nType);
-		break;
-
 		/* --- ボス --- */
 	case CMap::ARRANGEMENT_MODEL_BOSS:
 		// オブジェクトの生成
@@ -495,16 +462,6 @@ void CMap::LoadSuccessMessage(int ModelType)
 		/* --- 戦車 --- */
 	case CMap::ARRANGEMENT_MODEL_TANK:
 		MessageBox(NULL, "戦車の配置データをセーブしました", "結果", MB_OK | MB_ICONINFORMATION);
-		break;
-
-		/* --- 戦闘機 --- */
-	case CMap::ARRANGEMENT_MODEL_BATTLEPLANE:
-		MessageBox(NULL, "戦闘機の配置データをセーブしました", "結果", MB_OK | MB_ICONINFORMATION);
-		break;
-
-		/* --- ヘリコプター --- */
-	case CMap::ARRANGEMENT_MODEL_HELICOPTER:
-		MessageBox(NULL, "ヘリコプターの配置データをセーブしました", "結果", MB_OK | MB_ICONINFORMATION);
 		break;
 	}
 }
@@ -846,47 +803,6 @@ int CMap::GetMaxPlayerTank()
 
 // =====================================================================================================================================================================
 //
-// 戦闘機の最大数取得
-//
-// =====================================================================================================================================================================
-int CMap::GetMaxBattlePlane()
-{
-	if (!m_pBattlePlane.empty())
-	{
-		return m_pBattlePlane.size();
-	}
-	return 0;
-}
-
-// =====================================================================================================================================================================
-//
-// ヘリの最大数取得
-//
-// =====================================================================================================================================================================
-int CMap::GetMaxHelicopter()
-{
-	if (!m_pHelicopter.empty())
-	{
-		return m_pHelicopter.size();
-	}
-	return 0;
-}
-// =====================================================================================================================================================================
-//
-// 盾の最大数取得
-//
-// =====================================================================================================================================================================
-int CMap::GetMaxShield()
-{
-	if (!m_pShield.empty())
-	{
-		return m_pShield.size();
-	}
-	return 0;
-}
-
-// =====================================================================================================================================================================
-//
 // メッシュの取得
 //
 // =====================================================================================================================================================================
@@ -999,22 +915,6 @@ void CMap::SaveModelHeader(FILE * pFile, int ModelType)
 		fprintf(pFile, COMMENT02);
 		fprintf(pFile, NEWLINE);
 		break;
-
-		/* --- 戦闘機 --- */
-	case CMap::ARRANGEMENT_MODEL_BATTLEPLANE:
-		fprintf(pFile, COMMENT02);
-		fprintf(pFile, "// 戦闘機の配置情報\n");
-		fprintf(pFile, COMMENT02);
-		fprintf(pFile, NEWLINE);
-		break;
-
-		/* --- ヘリコプター --- */
-	case CMap::ARRANGEMENT_MODEL_HELICOPTER:
-		fprintf(pFile, COMMENT02);
-		fprintf(pFile, "// ヘリコプターの配置情報\n");
-		fprintf(pFile, COMMENT02);
-		fprintf(pFile, NEWLINE);
-		break;
 	}
 }
 
@@ -1065,20 +965,6 @@ void CMap::SaveModelContents(FILE *pFile, int ModelType, int nCnt, int nNum)
 		fprintf(pFile, "TANKSET										# %d\n", nNum);
 		fprintf(pFile, "	POS			= %.0f %.0f %.0f\n", m_pPlayerTank[nCnt]->GetPosition().x, m_pPlayerTank[nCnt]->GetPosition().y, m_pPlayerTank[nCnt]->GetPosition().z);
 		fprintf(pFile, "END_TANKSET\n\n");
-		break;
-
-		/* --- 戦闘機 --- */
-	case CMap::ARRANGEMENT_MODEL_BATTLEPLANE:
-		fprintf(pFile, "BATTLEPLANESET								# %d\n", nNum);
-		fprintf(pFile, "	POS			= %.0f %.0f %.0f\n", m_pBattlePlane[nCnt]->GetPosition().x, m_pBattlePlane[nCnt]->GetPosition().y, m_pBattlePlane[nCnt]->GetPosition().z);
-		fprintf(pFile, "END_BATTLEPLANESET\n\n");
-		break;
-
-		/* --- ヘリコプター --- */
-	case CMap::ARRANGEMENT_MODEL_HELICOPTER:
-		fprintf(pFile, "HELICOPTERSET								# %d\n", nNum);
-		fprintf(pFile, "	POS			= %.0f %.0f %.0f\n", m_pHelicopter[nCnt]->GetPosition().x, m_pHelicopter[nCnt]->GetPosition().y, m_pHelicopter[nCnt]->GetPosition().z);
-		fprintf(pFile, "END_HELICOPTERSET\n\n");
 		break;
 	}
 }
@@ -1138,16 +1024,6 @@ size_t CMap::GetMaxMapModel(int ModelType)
 	case CMap::ARRANGEMENT_MODEL_TANK:
 		return m_pPlayerTank.size();
 		break;
-
-		/* --- 戦闘機 --- */
-	case CMap::ARRANGEMENT_MODEL_BATTLEPLANE:
-		return m_pBattlePlane.size();
-		break;
-
-		/* --- ヘリコプター --- */
-	case CMap::ARRANGEMENT_MODEL_HELICOPTER:
-		return m_pHelicopter.size();
-		break;
 	}
 	return 0;
 }
@@ -1184,16 +1060,6 @@ void * CMap::GetMapModel(int ModelType, int nCnt)
 		/* --- 戦車 --- */
 	case CMap::ARRANGEMENT_MODEL_TANK:
 		return m_pPlayerTank[nCnt];
-		break;
-
-		/* --- 戦闘機 --- */
-	case CMap::ARRANGEMENT_MODEL_BATTLEPLANE:
-		return m_pBattlePlane[nCnt];
-		break;
-
-		/* --- ヘリコプター --- */
-	case CMap::ARRANGEMENT_MODEL_HELICOPTER:
-		return m_pHelicopter[nCnt];
 		break;
 	}
 	return nullptr;
@@ -1242,20 +1108,6 @@ void CMap::ModelDelete(int nNowSelect)
 		m_pPlayerTank[nNowSelect] = nullptr;
 		m_pPlayerTank.erase(m_pPlayerTank.begin() + nNowSelect);
 		break;
-
-	case CMap::ARRANGEMENT_MODEL_BATTLEPLANE:
-		// 戦闘機
-		m_pBattlePlane[nNowSelect]->Rerease();
-		m_pBattlePlane[nNowSelect] = nullptr;
-		m_pBattlePlane.erase(m_pBattlePlane.begin() + nNowSelect);
-		break;
-
-	case CMap::ARRANGEMENT_MODEL_HELICOPTER:
-		// ヘリコプター
-		m_pHelicopter[nNowSelect]->Rerease();
-		m_pHelicopter[nNowSelect] = nullptr;
-		m_pHelicopter.erase(m_pHelicopter.begin() + nNowSelect);
-		break;
 	}
 }
 
@@ -1287,16 +1139,6 @@ void CMap::ModelCreat()
 	case CMap::ARRANGEMENT_MODEL_TANK:
 		// 戦車
 		m_pPlayerTank.emplace_back(CPlayertank::Create());
-		break;
-
-	case CMap::ARRANGEMENT_MODEL_BATTLEPLANE:
-		// 戦闘機
-		m_pBattlePlane.emplace_back(CBattlePlane::Create());
-		break;
-
-	case CMap::ARRANGEMENT_MODEL_HELICOPTER:
-		// ヘリコプター
-		//m_pHelicopter.emplace_back(CHelicopter::Create());
 		break;
 	}
 }
@@ -1342,18 +1184,6 @@ void CMap::AllDelete()
 		m_pPlayerTank[nCnt]->Rerease();
 		m_pPlayerTank[nCnt] = nullptr;
 	}
-	// 戦闘機
-	for (size_t nCnt = 0; nCnt < m_pBattlePlane.size(); nCnt++)
-	{
-		m_pBattlePlane[nCnt]->Rerease();
-		m_pBattlePlane[nCnt] = nullptr;
-	}
-	// ヘリコプター
-	for (size_t nCnt = 0; nCnt < m_pHelicopter.size(); nCnt++)
-	{
-		m_pHelicopter[nCnt]->Rerease();
-		m_pHelicopter[nCnt] = nullptr;
-	}
 	// 全ての要素の削除
 	if (!m_bMapExclusion)
 	{
@@ -1363,8 +1193,6 @@ void CMap::AllDelete()
 	m_pEnemy.clear();
 	m_pPrisoner.clear();
 	m_pPlayerTank.clear();
-	m_pBattlePlane.clear();
-	m_pHelicopter.clear();
 
 	m_bMapExclusion = false;
 }
@@ -1442,16 +1270,6 @@ D3DXVECTOR3 CMap::GetMapModelPos(int nNowSelect)
 		// 戦車
 		pos = m_pPlayerTank[nNowSelect]->GetPosition();
 		break;
-
-	case CMap::ARRANGEMENT_MODEL_BATTLEPLANE:
-		// 戦闘機
-		pos = m_pBattlePlane[nNowSelect]->GetPosition();
-		break;
-
-	case CMap::ARRANGEMENT_MODEL_HELICOPTER:
-		// ヘリコプター
-		pos = m_pHelicopter[nNowSelect]->GetPosition();
-		break;
 	}
 
 	return pos;
@@ -1484,16 +1302,6 @@ void CMap::SetMapModelPos(D3DXVECTOR3 pos, int nNowSelect)
 	case CMap::ARRANGEMENT_MODEL_TANK:
 		// 戦車
 		m_pPlayerTank[nNowSelect]->SetPosition(pos);
-		break;
-
-	case CMap::ARRANGEMENT_MODEL_BATTLEPLANE:
-		// 戦闘機
-		m_pBattlePlane[nNowSelect]->SetPosition(pos);
-		break;
-
-	case CMap::ARRANGEMENT_MODEL_HELICOPTER:
-		// ヘリコプター
-		m_pHelicopter[nNowSelect]->SetPosition(pos);
 		break;
 	}
 }
@@ -1529,14 +1337,6 @@ void CMap::SetMapModelColorChangeFlag(bool bFlag, int nNowSelect)
 		case CMap::ARRANGEMENT_MODEL_TANK:
 			// 戦車
 			break;
-
-		case CMap::ARRANGEMENT_MODEL_BATTLEPLANE:
-			// 戦闘機
-			break;
-
-		case CMap::ARRANGEMENT_MODEL_HELICOPTER:
-			// ヘリコプター
-			break;
 		}
 	}
 	// 色変更無し
@@ -1561,14 +1361,6 @@ void CMap::SetMapModelColorChangeFlag(bool bFlag, int nNowSelect)
 
 		case CMap::ARRANGEMENT_MODEL_TANK:
 			// 戦車
-			break;
-
-		case CMap::ARRANGEMENT_MODEL_BATTLEPLANE:
-			// 戦闘機
-			break;
-
-		case CMap::ARRANGEMENT_MODEL_HELICOPTER:
-			// ヘリコプター
 			break;
 		}
 	}
@@ -1609,20 +1401,6 @@ void CMap::MapModelTab()
 		if (ImGui::BeginTabItem("Tank"))
 		{
 			m_ArrangmentModel = ARRANGEMENT_MODEL_TANK;
-			MapModelSet();
-			ImGui::EndTabItem();
-		}
-		// 戦闘機の設置
-		if (ImGui::BeginTabItem("BattlePlane"))
-		{
-			m_ArrangmentModel = ARRANGEMENT_MODEL_BATTLEPLANE;
-			MapModelSet();
-			ImGui::EndTabItem();
-		}
-		// ヘリの設置
-		if (ImGui::BeginTabItem("Helicopter"))
-		{
-			m_ArrangmentModel = ARRANGEMENT_MODEL_HELICOPTER;
 			MapModelSet();
 			ImGui::EndTabItem();
 		}
@@ -2098,28 +1876,6 @@ void CMap::UpdateDieFlag()
 			m_pPlayerTank[nCnt]->Rerease();
 			m_pPlayerTank[nCnt] = nullptr;
 			m_pPlayerTank.erase(m_pPlayerTank.begin() + nCnt);
-		}
-	}
-
-	// 戦闘機の削除
-	for (size_t nCnt = 0; nCnt < m_pBattlePlane.size(); nCnt++)
-	{
-		if (m_pBattlePlane[nCnt]->GetDieFlag())
-		{
-			m_pBattlePlane[nCnt]->Rerease();
-			m_pBattlePlane[nCnt] = nullptr;
-			m_pBattlePlane.erase(m_pBattlePlane.begin() + nCnt);
-		}
-	}
-
-	// ヘリの削除
-	for (size_t nCnt = 0; nCnt < m_pHelicopter.size(); nCnt++)
-	{
-		if (m_pHelicopter[nCnt]->GetDieFlag())
-		{
-			m_pHelicopter[nCnt]->Rerease();
-			m_pHelicopter[nCnt] = nullptr;
-			m_pHelicopter.erase(m_pHelicopter.begin() + nCnt);
 		}
 	}
 }
