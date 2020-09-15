@@ -136,7 +136,6 @@ HRESULT CPlayer::Init(void)
 			m_pPlayerUI->SetGrenadeAmmo(m_pGrenadeFire->GetGrenadeAmmo());
 			// Žc‹@‚ÌÝ’è
 			m_pPlayerUI->SetStockUI(DEFAULT_STOCK);
-
 		}
 	}
 
@@ -334,7 +333,6 @@ void CPlayer::DebugInfo(void)
 		ImGui::Text("m_bRespawn [%d]", m_bRespawn); ImGui::SameLine();
 		ImGui::Text("m_bCruch [%d]", m_bCruch);
 		ImGui::Text("m_bRideVehicle [%d]", m_bRideVehicle);
-
 
 		ImGui::Text("---DebugCommand---");
 		ImGui::Text("[G] >> PlayerDamage");

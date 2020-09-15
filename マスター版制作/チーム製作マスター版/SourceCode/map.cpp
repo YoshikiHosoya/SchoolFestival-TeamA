@@ -854,6 +854,9 @@ void CMap::SaveModelHeader(FILE * pFile, int ModelType)
 		fprintf(pFile, COMMENT01);
 		fprintf(pFile, "//	[ 0 ]	通常兵士\n");
 		fprintf(pFile, "//	[ 1 ]	盾持ち兵士\n");
+		fprintf(pFile, "//	[ 2 ]	ヘリコプター\n");
+		fprintf(pFile, "//	[ 3 ]	メルティハニー\n");
+		fprintf(pFile, "//	[ 4 ]	ジィ・コッカ\n");
 		fprintf(pFile, COMMENT01);
 		fprintf(pFile, COMMENT02);
 		fprintf(pFile, NEWLINE);
