@@ -26,14 +26,6 @@
 // 静的メンバ変数の初期化
 // =====================================================================================================================================================================
 ITEM_DATA	CItem::m_ItemData		 = {};
-int			CItem::m_nDropRate		 = 0;
-int			CItem::m_nDeleteTime	 = 0;
-int			CItem::m_nFlashTime		 = 0;
-int			CItem::m_nBearScore		 = 0;
-int			CItem::m_nCoinScore		 = 0;
-int			CItem::m_nJewelryScore	 = 0;
-int			CItem::m_nMedalScore	 = 0;
-D3DXVECTOR3 CItem::m_CollisionSize	 = D3DXVECTOR3(0,0,0);
 int			CItem::m_nAddCoin		 = 1;
 
 // =====================================================================================================================================================================
@@ -59,7 +51,7 @@ CItem::CItem(OBJ_TYPE type) :CScene3D(type)
 	m_pCollision = nullptr;
 
 	// アイテムがマップに残る時間
-	m_nRemainTime = m_nDeleteTime;
+	m_nRemainTime = m_ItemData.nDeleteTime;
 
 	// αカラーカウント
 	m_nColCnt = 0;
@@ -110,7 +102,7 @@ HRESULT CItem::Init()
 	// 当たり判定生成
 	m_pCollision = CCollision::Create();
 	m_pCollision->SetPos(&GetPosition());
-	m_pCollision->SetSize(m_CollisionSize);
+	m_pCollision->SetSize(m_ItemData.CollisionSize);
 	m_pCollision->DeCollisionCreate(CCollision::COLLISIONTYPE_CHARACTER);
 
 	return S_OK;
@@ -390,38 +382,13 @@ void CItem::Flashing()
 	}
 
 	// 3秒以上経過したらアイテムを削除する
-	if (m_nColCnt >= m_nFlashTime)
+	if (m_nColCnt >= m_ItemData.nFlashTime)
 	{
 		// 変数の初期化
 		m_nColCnt = 0;
 		// 削除
 		Rerease();
 	}
-}
-
-// =====================================================================================================================================================================
-//
-// アイテムの情報の設定
-//
-// =====================================================================================================================================================================
-void CItem::SetItemData()
-{
-	// ドロップ率の設定
-	m_nDropRate		 = m_ItemData.nDropRate;
-	// アイテムが点滅するまでの時間
-	m_nDeleteTime	 = m_ItemData.nDeleteTime;
-	// アイテムが点滅する時間
-	m_nFlashTime	 = m_ItemData.nFlashTime;
-	// 熊のアイテムのスコア
-	m_nBearScore	 = m_ItemData.nBearScore;
-	// コインのアイテムのスコア
-	m_nCoinScore	 = m_ItemData.nCoinScore;
-	// 宝石のアイテムのスコア
-	m_nJewelryScore	 = m_ItemData.nJewelryScore;
-	// メダルのアイテムのスコア
-	m_nMedalScore	 = m_ItemData.nMedalScore;
-	// 当たり判定の大きさ
-	m_CollisionSize	 = m_ItemData.CollisionSize;
 }
 
 // =====================================================================================================================================================================
@@ -629,9 +596,9 @@ CItem * CItem::DebugCreate(ITEMTYPE type)
 
 	// サイズの設定
 	pItem->SetSize(D3DXVECTOR3(
-		m_CollisionSize.x / 2,
-		m_CollisionSize.y / 2,
-		m_CollisionSize.z / 2));
+		m_ItemData.CollisionSize.x / 2,
+		m_ItemData.CollisionSize.y / 2,
+		m_ItemData.CollisionSize.z / 2));
 
 
 	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer(TAG::PLAYER_1);
@@ -737,26 +704,6 @@ void CItem::ItemLoad()
 						{
 							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_ItemData.nFlashTime);	// 比較用テキストにFLASHを代入
 						}
-						// BEARが来たら
-						else if (strcmp(cHeadText, "BEAR") == 0)
-						{
-							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_ItemData.nBearScore);	// 比較用テキストにBEARを代入
-						}
-						// BEARが来たら
-						else if (strcmp(cHeadText, "COIN") == 0)
-						{
-							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_ItemData.nCoinScore);	// 比較用テキストにCOINを代入
-						}
-						// BEARが来たら
-						else if (strcmp(cHeadText, "JEWELRY") == 0)
-						{
-							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_ItemData.nJewelryScore);	// 比較用テキストにJEWELRYを代入
-						}
-						// BEARが来たら
-						else if (strcmp(cHeadText, "MEDAL") == 0)
-						{
-							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_ItemData.nMedalScore);	// 比較用テキストにMEDALを代入
-						}
 						// COLLISIONSIZEが来たら
 						else if (strcmp(cHeadText, "COLLISIONSIZE") == 0)
 						{
@@ -780,8 +727,6 @@ void CItem::ItemLoad()
 		MessageBox(NULL, "アイテムのデータ読み込み失敗", "警告", MB_ICONWARNING);
 	}
 
-	// 読み込んだ情報の代入
-	SetItemData();
 }
 
 // =====================================================================================================================================================================
@@ -802,9 +747,9 @@ CItem * CItem::DropCreate(D3DXVECTOR3 pos, ITEMDROP drop , ITEMDROP_PATTERN patt
 
 	// サイズの設定
 	pItem->SetSize(D3DXVECTOR3(
-		m_CollisionSize.x /2,
-		m_CollisionSize.y /2,
-		m_CollisionSize.z /2));
+		m_ItemData.CollisionSize.x /2,
+		m_ItemData.CollisionSize.y /2,
+		m_ItemData.CollisionSize.z /2));
 
 	// アイテムが生成される位置の調整
 	pItem->SetDropPos(pos);
@@ -965,7 +910,7 @@ bool CItem::DropRate()
 	int nDrop = 0;
 
 	// ドロップ率を表す変数
-	int nRate = m_nDropRate;
+	int nRate = m_ItemData.nDropRate;
 
 	// ランダムにドロップするかを求める
 	nDrop = ItemRand(nRate);

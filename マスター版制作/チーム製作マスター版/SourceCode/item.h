@@ -24,10 +24,6 @@ typedef struct
 	int					nDropRate;		// アイテムのドロップ率
 	int					nDeleteTime;	// 点滅するまでの時間
 	int					nFlashTime;		// 点滅する時間
-	int					nBearScore;		// 熊のアイテムを取った時のスコアの値
-	int					nCoinScore;		// コインのアイテムを取った時のスコアの値
-	int					nJewelryScore;	// 宝石のアイテムを取った時のスコアの値
-	int					nMedalScore;	// メダルのアイテムを取った時のスコアの値
 	D3DXVECTOR3			CollisionSize;	// 当たり判定のサイズ
 }ITEM_DATA;
 
@@ -97,9 +93,9 @@ public:
 	void						Uninit();										// 終了
 	void						Update();										// 更新
 	void						Draw();											// 描画
-	void						ItemType(ITEMTYPE type, TAG Tag);	// アイテム取得時の種類別処理
+	void						ItemType(ITEMTYPE type, TAG Tag);				// アイテム取得時の種類別処理
 	void						DebugInfo();									// デバッグ
-	void						HitItem(ITEMTYPE type, TAG Tag);	// アイテム取得時の種類別処理
+	void						HitItem(ITEMTYPE type, TAG Tag);				// アイテム取得時の種類別処理
 	ITEMTYPE					GetItemType() { return m_Type; };				// アイテムタイプの取得
 	CCollision					*GetCollision() { return m_pCollision; };		// 当たり判定
 	void						SetDropPos(D3DXVECTOR3 &characterpos);			// アイテムを生成位置を設定
@@ -116,7 +112,6 @@ public:
 	static	bool				DropRate();										// アイテムをドロップする確率
 	static	int					ItemRand(int max);								// ランダムに値を返す
 	static	void				ItemLoad();										// アイテムのロード
-	static	void				SetItemData();									// アイテムのデータ設定
 	static  void				DebugItemCommand(CKeyboard *key);				// デバッグ用アイテムコマンド
 	static	void				InitVariable();									// 静的変数の初期化
 
@@ -137,19 +132,10 @@ private:
 	static ITEM_DATA			m_ItemData;										// アイテムのデータ
 	static int					m_nAddCoin;										// コインの加算用
 
-	// ロードする変数 //
-	static int					m_nDropRate;									// ドロップ率
-	static int					m_nDeleteTime;									// アイテムが点滅するまでの時間
-	static int					m_nFlashTime;									// アイテムが点滅する時間
-	static int					m_nBearScore;									// 熊のアイテムのスコア
-	static int					m_nCoinScore;									// コインのアイテムのスコア
-	static int					m_nJewelryScore;								// 宝石のアイテムのスコア
-	static int					m_nMedalScore;									// メダルのアイテムのスコア
-	static D3DXVECTOR3			m_CollisionSize;								// 当たり判定の大きさ
-
 	/* メンバ関数 */
-	uint64_t	get_rand_range(uint64_t min_val, uint64_t max_val);				// ランダム関数 範囲
-	int			AddCoinScore(int nScore);										// コインのスコアの加算した結果を返す
+	uint64_t					get_rand_range(uint64_t min_val, uint64_t max_val);	// ランダム関数 範囲
+	int							AddCoinScore(int nScore);							// コインのスコアの加算した結果を返す
+	void						DropItem();
 
 	/* メンバ変数 */
 	ITEMTYPE					m_Type;											// アイテムタイプ
