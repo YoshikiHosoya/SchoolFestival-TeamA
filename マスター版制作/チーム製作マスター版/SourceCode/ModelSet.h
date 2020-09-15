@@ -97,6 +97,7 @@ public:
 		PLAYER_MOTION_SHOOT,				//撃つ
 		PLAYER_MOTION_SQUAT,				//しゃがむ
 		PLAYER_MOTION_SQUATSTOP,			//しゃがんでる状態
+		PLAYER_MOTION_SQUATWALK,			//しゃがみ歩き
 		PLAYER_MOTION_DEAD,					//死んだ
 
 		// 敵のモーション
@@ -119,6 +120,7 @@ public:
 		PRISONER_MOTION_SALUTE,				//敬礼
 		PRISONER_MOTION_FALL,				//落下
 		PRISONER_MOTION_SKIP,				//スキップをしながら走る
+		PRISONER_MOTION_DROP,				//アイテムを落とす
 		CHARACTER_MOTION_MAX				//最大数
 	}CHARACTER_MOTION_STATE;
 
