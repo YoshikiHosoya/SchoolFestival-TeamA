@@ -60,7 +60,10 @@ void CEnemyAI::Update(void)
 	if (pEnemyPass != nullptr)
 	{
 		//攻撃できる距離の計算
-		m_Distance = pEnemyPass->GetPosition() - pPlayer->GetPosition();
+		if (pPlayer)
+		{
+			m_Distance = pEnemyPass->GetPosition() - pPlayer->GetPosition();
+		}
 		m_fDistance = D3DXVec2Length(&D3DXVECTOR2(m_Distance.x, m_Distance.y));
 
 		m_castcount++;
@@ -124,15 +127,18 @@ void CEnemyAI::Update(void)
 		{
 			pEnemyPass->GetModelSet()->SetMotion(CModelSet::ENEMY_MOTION_SQUAT);
 		}
-		//プレイヤーが範囲外の右にいるとき
-		if (pEnemyPass->GetPosition().x - pPlayer->GetPosition().x > MAX_DISTANCE)
+		if (pPlayer)
 		{
-			m_AItype = AI_WALK_LEFT;
-		}
-		//プレイヤーが範囲外の左にいるとき
-		else if (pEnemyPass->GetPosition().x - pPlayer->GetPosition().x < -MAX_DISTANCE)
-		{
-			m_AItype = AI_WALK_RIGHT;
+			//プレイヤーが範囲外の右にいるとき
+			if (pEnemyPass->GetPosition().x - pPlayer->GetPosition().x > MAX_DISTANCE)
+			{
+				m_AItype = AI_WALK_LEFT;
+			}
+			//プレイヤーが範囲外の左にいるとき
+			else if (pEnemyPass->GetPosition().x - pPlayer->GetPosition().x < -MAX_DISTANCE)
+			{
+				m_AItype = AI_WALK_RIGHT;
+			}
 		}
 
 		if (pPlayer != nullptr)
