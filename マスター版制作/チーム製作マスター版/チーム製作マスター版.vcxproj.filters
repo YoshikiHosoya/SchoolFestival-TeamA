@@ -322,6 +322,9 @@
     <ClCompile Include="SourceCode\missile.cpp">
       <Filter>Wepon\Bullet</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\MeltyHoneyAI.cpp">
+      <Filter>AI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SourceCode\BaseAI.h">
@@ -656,6 +659,9 @@
     </ClInclude>
     <ClInclude Include="SourceCode\missile.h">
       <Filter>Wepon\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\MeltyHoneyAI.h">
+      <Filter>AI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

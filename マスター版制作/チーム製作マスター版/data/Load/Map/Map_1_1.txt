@@ -51,7 +51,7 @@ END_ENEMYSET
 
 ENEMYSET									# 2
 	TYPE		= 3
-	POS			= 800 100 0
+	POS			= 1800 100 0
 END_ENEMYSET
 
 ENEMYSET									# 3

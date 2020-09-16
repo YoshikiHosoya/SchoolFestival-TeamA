@@ -35,6 +35,7 @@
 // =====================================================================================================================================================================
 #define HEAVYMACHINEGUN_SHOT_FRAME				(5)			// ヘビーマシンガンの弾の間隔
 #define LAZERGUN_SHOT_FRAME						(4)			// レーザーガン弾の間隔
+#define MISSILE_SHOT_FRAME						(15)		// ミサイルの間隔
 #define FLAMEBULLET_SHOT_FRAME					(20)		// フレイムバレットの間隔
 #define MAX_AMMO								(999)		// 残弾数の最大値
 
@@ -63,7 +64,7 @@ CGun::~CGun()
 HRESULT CGun::Init()
 {
 	m_bMultiple		= false;										// フラグをオフ
-	m_GunType		= GUN_TYPE::GUNTYPE_HANDGUN;					// ハンドガンに設定
+	m_GunType		= GUN_TYPE::GUNTYPE_MISSILE;					// ハンドガンに設定
 	m_GunTypeOld	= GUN_TYPE::GUNTYPE_HANDGUN;					// 前回の銃の種類
 	m_nCntFrame		= 0;											// フレームカウント
 	m_nCntBullet	= 0;											// 弾のカウント
@@ -396,6 +397,7 @@ void CGun::Shot()
 			pBullet = CMissile::Create(m_ShotRot);
 			//音再生
 			CManager::GetSound()->Play(CSound::LABEL_SE_SHOT_LAUNCHER);
+			m_bMultiple = true;		// フラグをオン
 			break;
 
 		case CGun::GUNTYPE_FLAMEBULLET:
@@ -491,6 +493,24 @@ void CGun::MultipleShot()
 
 				// 残弾数を減らす
 				m_nAmmo--;
+			}
+			break;
+
+			//ミサイル
+		case CGun::GUNTYPE_MISSILE:
+			if (m_nCntFrame >= MISSILE_SHOT_FRAME)
+			{
+				// フレームカウント初期化
+				m_nCntFrame = 0;
+
+				// 弾のカウントアップ
+				m_nCntBullet++;
+
+				// 残弾数を減らす
+				m_nAmmo--;
+
+				// フレイムバレットの生成
+				pBullet = CMissile::Create(m_ShotRot);
 			}
 			break;
 
