@@ -184,8 +184,8 @@ void CTitle::TitleMode()
 		{
 			InpudPad[nCnt] = CManager::GetPad((TAG)nCnt);
 
-			if (Keyboard->GetKeyboardTrigger(DIK_UP) || InpudPad[nCnt]->GetTrigger(CXInputPad::JOYPADKEY_UP, 1) ||
-				Keyboard->GetKeyboardTrigger(DIK_DOWN) || InpudPad[nCnt]->GetTrigger(CXInputPad::JOYPADKEY_DOWN, 1))
+			if (CHossoLibrary::CheckPadStick() == DIRECTION::UP ||
+				CHossoLibrary::CheckPadStick() == DIRECTION::DOWN)
 			{
 				if (m_PlayerNum == PLAYER_NUM_ONE)
 				{

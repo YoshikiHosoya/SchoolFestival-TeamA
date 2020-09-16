@@ -192,12 +192,9 @@ void CDebugcollision::SetSize(D3DXVECTOR3 * size)
 // ----------------------------------------
 void CDebugcollision::DeleteDeCollision()
 {
-	if (this != nullptr)
+	if (m_pMeshBox)
 	{
-		if (m_pMeshBox)
-		{
-			this->m_pMeshBox->Rerease();
-			this->m_pMeshBox = nullptr;
-		}
+		this->m_pMeshBox->Rerease();
+		this->m_pMeshBox = nullptr;
 	}
 }

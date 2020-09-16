@@ -38,6 +38,9 @@ END_MAPSET
 //
 //	[ 0 ]	通常兵士
 //	[ 1 ]	盾持ち兵士
+//	[ 2 ]	ヘリコプター
+//	[ 3 ]	メルティハニー
+//	[ 4 ]	ジィ・コッカ
 //
 //------------------------------------------------------------
 
@@ -138,12 +141,12 @@ END_ENEMYSET
 
 ENEMYSET									# 20
 	TYPE		= 0
-	POS			= 3621 301 0
+	POS			= 3526 301 0
 END_ENEMYSET
 
 ENEMYSET									# 21
 	TYPE		= 0
-	POS			= 3800 306 0
+	POS			= 3753 306 0
 END_ENEMYSET
 
 ENEMYSET									# 22
@@ -163,17 +166,17 @@ END_ENEMYSET
 
 ENEMYSET									# 25
 	TYPE		= 0
-	POS			= 5000 62 0
+	POS			= 5086 62 0
 END_ENEMYSET
 
 ENEMYSET									# 26
 	TYPE		= 0
-	POS			= 5177 63 0
+	POS			= 5310 63 0
 END_ENEMYSET
 
 ENEMYSET									# 27
 	TYPE		= 0
-	POS			= 5325 65 0
+	POS			= 5453 65 0
 END_ENEMYSET
 
 ENEMYSET									# 28
@@ -183,17 +186,17 @@ END_ENEMYSET
 
 ENEMYSET									# 29
 	TYPE		= 0
-	POS			= 5000 303 0
+	POS			= 5090 303 0
 END_ENEMYSET
 
 ENEMYSET									# 30
 	TYPE		= 0
-	POS			= 5170 304 0
+	POS			= 5322 304 0
 END_ENEMYSET
 
 ENEMYSET									# 31
 	TYPE		= 0
-	POS			= 5335 300 0
+	POS			= 5534 300 0
 END_ENEMYSET
 
 ENEMYSET									# 32
@@ -313,7 +316,7 @@ END_PRISONERSET
 PRISONERSET									# 48
 	TYPE		= 0
 	ITEMTYPE	= 1
-	POS			= 5787 191 0
+	POS			= 5906 191 0
 END_PRISONERSET
 
 //------------------------------------------------------------
@@ -356,29 +359,21 @@ END_OBSTACLESET
 
 OBSTACLESET									# 54
 	TYPE		= 4
-	POS			= 5486 86 0
+	POS			= 5635 86 0
 END_OBSTACLESET
 
 OBSTACLESET									# 55
 	TYPE		= 1
-	POS			= 4420 210 0
+	POS			= 4420 218 0
 END_OBSTACLESET
 
 OBSTACLESET									# 56
 	TYPE		= 1
-	POS			= 4570 213 0
+	POS			= 4570 216 0
 END_OBSTACLESET
 
 //------------------------------------------------------------
 // 戦車の配置情報
-//------------------------------------------------------------
-
-//------------------------------------------------------------
-// 戦闘機の配置情報
-//------------------------------------------------------------
-
-//------------------------------------------------------------
-// ヘリコプターの配置情報
 //------------------------------------------------------------
 
 //------------------------------------------------------------
