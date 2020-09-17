@@ -109,7 +109,10 @@ HRESULT CPlayer::Init(void)
 	m_pGun->SetHandMtx(GetModelSet()->GetCharacterModelList()[8]->GetMatrix());
 
 	// グレネード放つ位置の生成
-	m_pGrenadeFire = CGrenadeFire::Create(GetModelSet()->GetCharacterModelList()[7]->GetMatrix(), CGrenadeFire::HAND_GRENADE);
+	m_pGrenadeFire = CGrenadeFire::Create();
+	m_pGrenadeFire->SetGrenadeType(CGrenadeFire::HAND_GRENADE);
+	m_pGrenadeFire->SetMtx(GetModelSet()->GetCharacterModelList()[7]->GetMatrix());
+
 	// 銃の弾の種類
 	m_pGun->SetTag(GetTag());
 	// 発射位置のオフセットの設定
@@ -136,7 +139,6 @@ HRESULT CPlayer::Init(void)
 			m_pPlayerUI->SetGrenadeAmmo(m_pGrenadeFire->GetGrenadeAmmo());
 			// 残機の設定
 			m_pPlayerUI->SetStockUI(DEFAULT_STOCK);
-
 		}
 	}
 
@@ -334,7 +336,6 @@ void CPlayer::DebugInfo(void)
 		ImGui::Text("m_bRespawn [%d]", m_bRespawn); ImGui::SameLine();
 		ImGui::Text("m_bCruch [%d]", m_bCruch);
 		ImGui::Text("m_bRideVehicle [%d]", m_bRideVehicle);
-
 
 		ImGui::Text("---DebugCommand---");
 		ImGui::Text("[G] >> PlayerDamage");
@@ -848,9 +849,6 @@ void CPlayer::Ride()
 		CPlayertank *pPlayertank = nullptr;
 		pPlayertank = this->GetCollision()->ForPlayer_TankCollision();
 
-		CBattlePlane *pBattlePlane = nullptr;
-		pBattlePlane = this->GetCollision()->ForPlayer_PlaneCollision();
-
 		// 戦車に乗っている時
 		if (pPlayertank != nullptr)
 		{
@@ -866,22 +864,6 @@ void CPlayer::Ride()
 				m_pPlayerUI->SetBulletAmmo(pPlayertank->GetGun()->GetGunAmmo(), pPlayertank->GetGun()->GetGunType());
 				// グレネードの残数表示
 				m_pPlayerUI->SetGrenadeAmmo(pPlayertank->GetGrenadeFire()->GetGrenadeAmmo());
-			}
-		}
-
-		// 戦闘機に乗っている時
-		else if (pBattlePlane != nullptr)
-		{
-			//スクリーンの範囲内から出ないように制限
-			CManager::GetRenderer()->ScreenLimitRange(pBattlePlane->GetPosition());
-
-			// プレイヤーの座標を戦闘機の座標に合わせる
-			this->SetPosition(pBattlePlane->GetPosition());
-
-			if (m_pPlayerUI)
-			{
-				// 弾の残数表示
-				m_pPlayerUI->SetBulletAmmo(pBattlePlane->GetGun()->GetGunAmmo(), pBattlePlane->GetGun()->GetGunType());
 			}
 		}
 

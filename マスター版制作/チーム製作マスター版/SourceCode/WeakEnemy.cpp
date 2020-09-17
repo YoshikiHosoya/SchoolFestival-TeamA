@@ -18,6 +18,7 @@
 #include "item.h"
 #include "ModelSet.h"
 #include "hosso/Debug_ModelViewer.h"
+#include "MeltyHoneyAI.h"
 //====================================================================
 //マクロ定義
 //====================================================================
@@ -139,7 +140,13 @@ HRESULT CWeakEnemy::Init(void)
 		//オフセット設定
 		GetModelSet()->SetCharacterType(CModelSet::CHARACTER_TYPE_ENEMY_MELTYHONEY);
 		GetModelSet()->LoadOffset(CModelSet::CHARACTER_TYPE_ENEMY_MELTYHONEY);
-
+		//AIの追加
+		SetAIPtr(CMeltyhoney::CreateAI(this));
+		// 銃の生成
+		GetGunPtr()->SetHandMtx(GetModelSet()->GetCharacterModelList()[0]->GetMatrix());
+		// 銃の弾の種類
+		GetGunPtr()->SetDisp(true);
+		GetGunPtr()->SetGunTypeOnly(CGun::GUNTYPE_MISSILE);
 		//モーションoff
 		CCharacter::GetModelSet()->SetUseMotion(false);
 		CCharacter::GetModelSet()->SetMotion(CModelSet::CHARACTER_MOTION_STATE_NONE);

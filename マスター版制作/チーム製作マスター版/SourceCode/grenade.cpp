@@ -63,10 +63,9 @@ CGrenade::~CGrenade()
 // =====================================================================================================================================================================
 HRESULT CGrenade::Init()
 {
-	m_move		= m_GrenadeParam[m_type].Move;		// 移動値
-
 	// 初期化
 	CBullet::Init();
+	m_move		= m_GrenadeParam[m_type].Move;		// 移動値
 
 	return S_OK;
 }
@@ -92,15 +91,8 @@ void CGrenade::Update(void)
 	// 重力
 	GetMove().y -= m_GrenadeParam[m_type].fGravity;
 
-	// 縦回転
-	if (m_GrenadeParam[m_type].bRot)
-	{
-		m_rot.z += (D3DX_PI / ROT_DIVISION_Z);
-	}
-	else
-	{
-		m_rot.z = D3DX_PI / 2;
-	}
+	// グレネードの回転
+	GrenadeRotation();
 
 	// 回転の設定
 	SetRot(m_rot);
@@ -156,20 +148,21 @@ CGrenade * CGrenade::Create(D3DXVECTOR3 rot, CGrenadeFire::GRENADE_TYPE type)
 	// モデルタイプの設定
 	pGrenade->SetType(BULLET_MODEL);
 
+	// モデルの変更
 	switch (type)
 	{
 	case CGrenadeFire::HAND_GRENADE:
-		// モデルカウントの設定
 		pGrenade->SetModelID(MODEL_BULLET_GRENADE);
 		break;
+
 	case CGrenadeFire::TANK_GRENADE:
+		pGrenade->SetModelID(MODEL_BULLET_TANKGRENADE);
 		// 放つ方向に合わせる
 		pGrenade->GetMove() = D3DXVECTOR3(1.0f * pGrenade->m_move.x, pGrenade->m_move.y, 0.0f);
-		pGrenade->SetModelID(MODEL_BULLET_TANKGRENADE);
 		break;
+
 	case CGrenadeFire::DROP_BOMB:
-		// モデルカウントの設定
-		pGrenade->SetModelID(MODEL_BULLET_TANKGRENADE);
+		pGrenade->SetModelID(MODEL_BULLET_MISSILE);
 		break;
 	}
 
@@ -191,7 +184,6 @@ void CGrenade::GrenadePramLoad()
 	char cDie[128];								// 不要な文字
 	D3DXVECTOR3		move		= ZeroVector3;	// 移動量
 	float			fGravity	= 0.0f;			// 重力
-	int				nRotFlag	= 0;			// 回転フラグ
 
 	for (int nCnt = 0; nCnt < CGrenadeFire::GRENADE_TYPE_MAX; nCnt++)
 	{
@@ -204,8 +196,8 @@ void CGrenade::GrenadePramLoad()
 			// SCRIPTが来るまでループ
 			while (strcmp(cHeadText, "SCRIPT") != 0)
 			{
-				fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
-				sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
+				fgets(cReadText, sizeof(cReadText), pFile);
+				sscanf(cReadText, "%s", &cHeadText);
 			}
 
 			// SCRIPTが来たら
@@ -214,8 +206,8 @@ void CGrenade::GrenadePramLoad()
 				// END_SCRIPTが来るまでループ
 				while (strcmp(cHeadText, "END_SCRIPT") != 0)
 				{
-					fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
-					sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
+					fgets(cReadText, sizeof(cReadText), pFile);
+					sscanf(cReadText, "%s", &cHeadText);
 
 					// GRENADESETが来たら
 					if (strcmp(cHeadText, "GRENADESET") == 0)
@@ -223,8 +215,8 @@ void CGrenade::GrenadePramLoad()
 						// END_GRENADESETが来るまでループ
 						while (strcmp(cHeadText, "END_GRENADESET") != 0)
 						{
-							fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
-							sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
+							fgets(cReadText, sizeof(cReadText), pFile);
+							sscanf(cReadText, "%s", &cHeadText);
 
 							// MOVEが来たら
 							if (strcmp(cHeadText, "MOVE") == 0)
@@ -236,16 +228,10 @@ void CGrenade::GrenadePramLoad()
 							{
 								sscanf(cReadText, "%s %s %f", &cDie, &cDie, &fGravity);
 							}
-							// ROT_FLAGが来たら
-							else if (strcmp(cHeadText, "ROT_FLAG") == 0)
-							{
-								sscanf(cReadText, "%s %s %d", &cDie, &cDie, &nRotFlag);
-							}
 							else if (strcmp(cHeadText, "END_GRENADESET") == 0)
 							{
 								m_GrenadeParam[nCnt].Move		= move;
 								m_GrenadeParam[nCnt].fGravity	= fGravity;
-								m_GrenadeParam[nCnt].bRot		= nRotFlag ? true : false;
 							}
 						}
 					}
@@ -258,5 +244,24 @@ void CGrenade::GrenadePramLoad()
 		{
 			MessageBox(NULL, "グレネードののパラメーター読み込み失敗", "警告", MB_ICONWARNING);
 		}
+	}
+}
+
+// =====================================================================================================================================================================
+//
+// グレネードの回転
+//
+// =====================================================================================================================================================================
+void CGrenade::GrenadeRotation()
+{
+	// 手榴弾
+	if (m_type == CGrenadeFire::GRENADE_TYPE::HAND_GRENADE)
+	{
+		m_rot.z += (D3DX_PI / ROT_DIVISION_Z);
+	}
+	// 戦車のグレネード
+	else if (m_type == CGrenadeFire::GRENADE_TYPE::TANK_GRENADE)
+	{
+		m_rot.z = D3DX_PI / 2;
 	}
 }

@@ -86,6 +86,7 @@ std::vector<CModel::MODEL_FILE_NAME> CModel::m_vModelFileName =
 	{ "data/MODEL/Bullet/Rockets.x" ,						MODEL_BULLET_ROCKETLAUNCHER, },			// ロケットランチャー
 	{ "data/MODEL/Bullet/Grenade.x" ,						MODEL_BULLET_GRENADE, },				// グレネード
 	{ "data/MODEL/Bullet/Tankmissile.x" ,					MODEL_BULLET_TANKGRENADE, },			// 戦車のグレネード
+	{ "data/MODEL/Bullet/Missile.x" ,						MODEL_BULLET_MISSILE, },				// ミサイル
 
 	//オブジェクト
 	{ "data/MODEL/Object/Obstacle_Box.x" ,					OBSTACLE_TYPE_BOX },					// 箱

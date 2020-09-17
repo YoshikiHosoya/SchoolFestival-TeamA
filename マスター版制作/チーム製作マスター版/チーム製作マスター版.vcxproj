@@ -205,6 +205,7 @@
     <ClCompile Include="SourceCode\main.cpp" />
     <ClCompile Include="SourceCode\manager.cpp" />
     <ClCompile Include="SourceCode\map.cpp" />
+    <ClCompile Include="SourceCode\MeltyHoneyAI.cpp" />
     <ClCompile Include="SourceCode\mesh.cpp" />
     <ClCompile Include="SourceCode\meshbox.cpp" />
     <ClCompile Include="SourceCode\meshcircle.cpp" />
@@ -317,6 +318,7 @@
     <ClInclude Include="SourceCode\main.h" />
     <ClInclude Include="SourceCode\manager.h" />
     <ClInclude Include="SourceCode\map.h" />
+    <ClInclude Include="SourceCode\MeltyHoneyAI.h" />
     <ClInclude Include="SourceCode\mesh.h" />
     <ClInclude Include="SourceCode\meshbox.h" />
     <ClInclude Include="SourceCode\meshcircle.h" />

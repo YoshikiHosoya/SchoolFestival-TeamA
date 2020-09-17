@@ -118,7 +118,7 @@ CKnife * CKnife::Create(D3DXMATRIX * mtx, D3DXVECTOR3 knifesize, TAG tag)
 	CKnife *pKnife;
 
 	// ƒƒ‚ƒŠ‚ÌŠm•Û
-	pKnife = new CKnife(OBJTYPE_MODEL);
+	pKnife = new CKnife(OBJTYPE_KNIFE);
 
 	// ‰Šú‰»
 	pKnife->Init();

@@ -99,6 +99,7 @@ public:
 		MODEL_BULLET_ROCKETLAUNCHER,	// ロケットランチャー
 		MODEL_BULLET_GRENADE,			// グレネード
 		MODEL_BULLET_TANKGRENADE,		// 戦車のグレネード
+		MODEL_BULLET_MISSILE,			// ミサイル
 		//===障害物のモデル===
 		OBSTACLE_TYPE_BOX=500,			// ハコ
 		OBSTACLE_TYPE_BARREL,			// 樽

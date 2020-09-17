@@ -45,6 +45,7 @@ char *CModelSet::m_LoadMotionFileName[CHARACTER_MOTION_MAX] =
 	{ "data/Load/Player/Motion/Shoot.txt" },
 	{ "data/Load/Player/Motion/Squat.txt" },
 	{ "data/Load/Player/Motion/SquatStop.txt" },
+	{ "data/Load/Player/Motion/SquatWalk.txt" },
 	{ "data/Load/Player/Motion/Dead.txt" },
 	{ "data/Load/Enemy/Motion/EnemyNeutral.txt" },
 	{ "data/Load/Enemy/Motion/EnemyWalk.txt" },
@@ -61,6 +62,8 @@ char *CModelSet::m_LoadMotionFileName[CHARACTER_MOTION_MAX] =
 	{ "data/Load/Prisoner/Motion/PrisonerSalute.txt" },
 	{ "data/Load/Prisoner/Motion/PrisonerFall.txt" },
 	{ "data/Load/Prisoner/Motion/PrisonerSkip.txt" },
+	{ "data/Load/Prisoner/Motion/PrisonerDrop.txt" },
+
 };
 
 //=============================================================================
