@@ -451,14 +451,8 @@ void CGun::MultipleShot()
 		case CGun::GUNTYPE_HELIGUN:
 			if (m_nCntFrame >= HEAVYMACHINEGUN_SHOT_FRAME)
 			{
-				// フレームカウント初期化
-				m_nCntFrame = 0;
-
-				// 弾のカウントアップ
-				m_nCntBullet++;
-
-				// 残弾数を減らす
-				m_nAmmo--;
+				// 複数撃った弾を減らす処理
+				ProcessReduceMultipleBullet();
 
 				//音再生
 				CManager::GetSound()->Play(CSound::LABEL_SE_SHOT_MACHINEGUN);
@@ -485,14 +479,8 @@ void CGun::MultipleShot()
 				// 弾の生成
 				CParticle::CreateFromText(m_ShotPos, m_ShotRot, CParticleParam::EFFECT_LAZER, GetTag(), CBullet::GetBulletParam((int)CGun::GUNTYPE_LASERGUN)->nPower, D3DXCOLOR(0.0f, 0.0f, 0.0f, -1.0f), GetShotPosPtr());
 
-				// フレームカウント初期化
-				m_nCntFrame = 0;
-
-				// 弾のカウントアップ
-				m_nCntBullet++;
-
-				// 残弾数を減らす
-				m_nAmmo--;
+				// 複数撃った弾を減らす処理
+				ProcessReduceMultipleBullet();
 			}
 			break;
 
@@ -500,14 +488,8 @@ void CGun::MultipleShot()
 		case CGun::GUNTYPE_MISSILE:
 			if (m_nCntFrame >= MISSILE_SHOT_FRAME)
 			{
-				// フレームカウント初期化
-				m_nCntFrame = 0;
-
-				// 弾のカウントアップ
-				m_nCntBullet++;
-
-				// 残弾数を減らす
-				m_nAmmo--;
+				// 複数撃った弾を減らす処理
+				ProcessReduceMultipleBullet();
 
 				// フレイムバレットの生成
 				pBullet = CMissile::Create(m_ShotRot);
@@ -518,14 +500,8 @@ void CGun::MultipleShot()
 		case CGun::GUNTYPE_FLAMEBULLET:
 			if (m_nCntFrame >= FLAMEBULLET_SHOT_FRAME)
 			{
-				// フレームカウント初期化
-				m_nCntFrame = 0;
-
-				// 弾のカウントアップ
-				m_nCntBullet++;
-
-				// 残弾数を減らす
-				m_nAmmo--;
+				// 複数撃った弾を減らす処理
+				ProcessReduceMultipleBullet();
 
 				// フレイムバレットの生成
 				pBullet = CFlameBullet::Create(m_ShotRot);
@@ -554,10 +530,27 @@ void CGun::MultipleShot()
 	}
 	else
 	{
-		// フレームカウント初期化
+		// 弾のカウント初期化
 		m_nCntBullet = 0;
 
 		// 複数撃つフラグをオフ
 		m_bMultiple = false;
 	}
+}
+
+// =====================================================================================================================================================================
+//
+// 複数撃った弾を減らす処理
+//
+// =====================================================================================================================================================================
+void CGun::ProcessReduceMultipleBullet()
+{
+	// フレームカウント初期化
+	m_nCntFrame = 0;
+
+	// 弾のカウントアップ
+	m_nCntBullet++;
+
+	// 残弾数を減らす
+	m_nAmmo--;
 }
