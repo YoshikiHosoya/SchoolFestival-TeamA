@@ -46,7 +46,7 @@ END_MAPSET
 
 ENEMYSET									# 1
 	TYPE		= 2
-	POS			= 400 100 0
+	POS			= 400 400 0
 END_ENEMYSET
 
 ENEMYSET									# 2
