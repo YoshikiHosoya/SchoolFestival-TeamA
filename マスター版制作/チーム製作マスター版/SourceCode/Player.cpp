@@ -109,7 +109,10 @@ HRESULT CPlayer::Init(void)
 	m_pGun->SetHandMtx(GetModelSet()->GetCharacterModelList()[8]->GetMatrix());
 
 	// グレネード放つ位置の生成
-	m_pGrenadeFire = CGrenadeFire::Create(GetModelSet()->GetCharacterModelList()[7]->GetMatrix(), CGrenadeFire::HAND_GRENADE);
+	m_pGrenadeFire = CGrenadeFire::Create();
+	m_pGrenadeFire->SetGrenadeType(CGrenadeFire::HAND_GRENADE);
+	m_pGrenadeFire->SetMtx(GetModelSet()->GetCharacterModelList()[7]->GetMatrix());
+
 	// 銃の弾の種類
 	m_pGun->SetTag(GetTag());
 	// 発射位置のオフセットの設定

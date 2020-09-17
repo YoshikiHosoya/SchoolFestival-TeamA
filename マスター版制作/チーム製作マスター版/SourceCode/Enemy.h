@@ -22,6 +22,7 @@
 //------------------------------------------------------------------------------
 class CModel;
 class CGun;
+class CGrenadeFire;
 class CEnemyAI;
 //レンダリングクラス
 class CEnemy :public CCharacter, public CGameObject
@@ -57,20 +58,22 @@ public:
 	void DeleteAI();
 
 	//Set関数
-	void SetGunPtr(CGun *pGun)				{ m_pGun = pGun; };
-	void SetAIPtr(CBaseAI *pAI)				{ m_pAI = pAI; };
-	void SetEventFlag(bool bFlag)			{ m_bEventFlag = bFlag; };
-	void SetEnemyType(ENEMY_TYPE type)	{ m_type = type; };				// 雑魚敵の種類の設定
+	void SetGunPtr(CGun *pGun)					{ m_pGun = pGun; };
+	void SetAIPtr(CBaseAI *pAI)					{ m_pAI = pAI; };
+	void SetEventFlag(bool bFlag)				{ m_bEventFlag = bFlag; };
+	void SetEnemyType(ENEMY_TYPE type)			{ m_type = type; };				// 雑魚敵の種類の設定
 
 	//Get関数
-	CGun				*GetGunPtr()		{ return m_pGun; };
-	CBaseAI				*GetAIPtr()			{ return m_pAI; };
-	bool				GetEventFlag()		{ return m_bEventFlag; };
-	ENEMY_TYPE			GetEnemyType()		{ return m_type; };				// 雑魚敵の種類の取得
+	CGun				*GetGunPtr()			{ return m_pGun; };
+	CGrenadeFire		*GetGrenadeFirePtr()	{ return m_pGrenadeFire; };		// グレネード発射クラスのポインタ取得
+	CBaseAI				*GetAIPtr()				{ return m_pAI; };
+	bool				GetEventFlag()			{ return m_bEventFlag; };
+	ENEMY_TYPE			GetEnemyType()			{ return m_type; };				// 雑魚敵の種類の取得
 
 
  private:
 	CGun			*m_pGun;								// ガンクラスのポインタ
+	CGrenadeFire	*m_pGrenadeFire;						// グレネード発射クラスのポインタ
 	CBaseAI			*m_pAI;									// AIのポインタ
 	ENEMY_TYPE		m_type;							//敵のタイプ
 	bool m_bEventFlag;								// イベントフラグ

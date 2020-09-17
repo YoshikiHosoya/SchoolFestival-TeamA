@@ -70,8 +70,10 @@ HRESULT CPlayertank::Init(void)
 	// 銃の生成
 	m_pGun = CGun::Create();
 	// グレネード放つ位置の生成
-	//m_pGrenadeFire = CGrenadeFire::Create(GetVehicleModelPartsList(CModel::MODEL_TANK_TANKBODY)->GetMatrix(), CGrenadeFire::TANK_GRENADE);
-	m_pGrenadeFire = CGrenadeFire::Create(GetModelSet()->GetCharacterModelList()[0] ->GetMatrix(), CGrenadeFire::TANK_GRENADE);
+	m_pGrenadeFire = CGrenadeFire::Create();
+	m_pGrenadeFire->SetGrenadeType(CGrenadeFire::TANK_GRENADE);
+	m_pGrenadeFire->SetMtx(GetModelSet()->GetCharacterModelList()[0]->GetMatrix());
+
 	// マトリックス設定
 	//m_pGun->SetHandMtx(GetVehicleModelPartsList(CModel::MODEL_TANK_TANKGUN)->GetMatrix());
 	m_pGun->SetHandMtx(GetModelSet()->GetCharacterModelList()[3]->GetMatrix());
