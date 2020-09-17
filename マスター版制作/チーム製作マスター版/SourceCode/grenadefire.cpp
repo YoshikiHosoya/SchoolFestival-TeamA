@@ -119,10 +119,10 @@ void CGrenadeFire::DebugInfo(void)
 
 // =====================================================================================================================================================================
 //
-// グレネード放つ位置の生成
+// グレネードを放つ位置の生成
 //
 // =====================================================================================================================================================================
-CGrenadeFire * CGrenadeFire::Create(D3DXMATRIX * mtx, GRENADE_TYPE type)
+CGrenadeFire * CGrenadeFire::Create()
 {
 	// 変数
 	CGrenadeFire *pGrenadeFire;
@@ -130,14 +130,8 @@ CGrenadeFire * CGrenadeFire::Create(D3DXMATRIX * mtx, GRENADE_TYPE type)
 	// メモリの確保
 	pGrenadeFire = new CGrenadeFire(OBJTYPE_MODEL);
 
-	// 種類
-	pGrenadeFire->m_type = type;
-
 	// 初期化
 	pGrenadeFire->Init();
-
-	// マトリックス代入
-	pGrenadeFire->m_mtx = mtx;
 
 	return pGrenadeFire;
 }

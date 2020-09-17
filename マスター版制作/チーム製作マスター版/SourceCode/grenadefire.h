@@ -40,13 +40,15 @@ public:
 	void						DebugInfo(void);			// デバッグ
 
 	/* 静的メンバ関数 */
-	static	CGrenadeFire		*Create(D3DXMATRIX *mtx, GRENADE_TYPE type);	// グレネード放つ位置の生成
+	static	CGrenadeFire		*Create();					// グレネードを放つ位置の生成
 
 	/* メンバ関数 */
-	void						Fire(D3DXVECTOR3 rot);					// グレネードを放つ
-	int							GetGrenadeAmmo() { return m_nAmmo; };	// グレネードの残弾数取得
-	void						SetGrenadeAmmoDefault();				// グレネードの弾数初期化
-	void						GrenadeAddAmmo();						// グレネードの弾数追加
+	void						Fire(D3DXVECTOR3 rot);										// グレネードを放つ
+	int							GetGrenadeAmmo()					{ return m_nAmmo; };	// グレネードの残弾数取得
+	void						SetGrenadeAmmoDefault();									// グレネードの弾数初期化
+	void						GrenadeAddAmmo();											// グレネードの弾数追加
+	void						SetGrenadeType(GRENADE_TYPE type)	{ m_type = type; };		// グレネードの種類の設定
+	void						SetMtx(D3DXMATRIX *pMtx)			{ m_mtx = pMtx; };		// マトリックス設定
 
 private:
 	/* メンバ関数 */
@@ -63,5 +65,6 @@ private:
 	int							m_nCntGrenade;				// グレネードのカウント
 	CBullet::BULLET_PARAM		*m_pBulletParam;			// 弾(グレネード)のパラメーター
 	D3DXVECTOR3					m_rot;						// 回転
+
 };
 #endif
