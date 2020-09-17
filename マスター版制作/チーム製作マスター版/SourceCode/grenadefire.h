@@ -12,6 +12,7 @@
 // =====================================================================================================================================================================
 #include "main.h"
 #include "scene.h"
+#include "bullet.h"
 
 // =====================================================================================================================================================================
 // グレネード発射クラス
@@ -48,11 +49,19 @@ public:
 	void						GrenadeAddAmmo();						// グレネードの弾数追加
 
 private:
+	/* メンバ関数 */
+	void						MultipleFire();						// 複数発放つ処理
+	void						ProcessReduceMultipleGrenade();		// 複数放ったグレネードを減らす処理
+
 	/* メンバ変数 */
 	int							m_nAmmo;					// 残弾数
 	int							m_nInterval;				// インターバル
 	D3DXMATRIX					*m_mtx;						// マトリックス
 	GRENADE_TYPE				m_type;						// グレネードの種類
-	/* 静的メンバ変数 */
+	bool						m_bMultiple;				// 複数放つフラグ
+	int							m_nCntFrame;				// フレームカウント
+	int							m_nCntGrenade;				// グレネードのカウント
+	CBullet::BULLET_PARAM		*m_pBulletParam;			// 弾(グレネード)のパラメーター
+	D3DXVECTOR3					m_rot;						// 回転
 };
 #endif
