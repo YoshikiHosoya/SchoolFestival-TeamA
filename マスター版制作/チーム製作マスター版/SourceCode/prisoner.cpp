@@ -13,19 +13,15 @@
 #include "item.h"
 #include "scoremanager.h"
 #include "ModelSet.h"
-//====================================================================
+
+// =====================================================================================================================================================================
 //マクロ定義
-//====================================================================
-#define PRISONER_COLLISION_SIZE			(D3DXVECTOR3(50.0f,65.0f,50.0f))			 //捕虜のサイズ
-#define PRISONER_DIETIME				(150)									 //捕虜が消滅するまでの時間
+// =====================================================================================================================================================================
 
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
 // =====================================================================================================================================================================
 PRISONER_DATA		CPrisoner::m_PrisonerData	= {};
-int					CPrisoner::m_nDeleteTime	= 0;
-float				CPrisoner::m_fMoveSpeed		= 0.0f;
-D3DXVECTOR3			CPrisoner::m_CollisionSize	= D3DXVECTOR3(0, 0, 0);
 
 // =====================================================================================================================================================================
 // テキストファイル名
@@ -46,8 +42,6 @@ CPrisoner::CPrisoner(OBJ_TYPE type) :CCharacter(type)
 	m_PrisonerState		= PRISONER_STATE_STAY;
 	// 捕虜が消滅するまでのカウントを初期化
 	m_nDieCount			= 0;
-	// ポインタを検索する際使えるかどうか
-	m_bUse				= false;
 	// ステートが切り替わるまでの時間
 	m_StateTime			= 60;
 }
@@ -80,7 +74,7 @@ HRESULT CPrisoner::Init(void)
 	Move(0.0f, -1.57f);
 	// 当たり判定生成
 	GetCollision()->SetPos(&GetPosition());
-	GetCollision()->SetSize(PRISONER_COLLISION_SIZE);
+	GetCollision()->SetSize(m_PrisonerData.CollisionSize);
 	GetCollision()->SetMove(&GetMove());
 	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_NORMAL);
 	GetCollision()->SetGameObject(this);
@@ -134,8 +128,6 @@ void CPrisoner::Draw(void)
 //====================================================================
 void CPrisoner::DebugInfo(void)
 {
-	//CDebugProc::Print_Left("");
-	//CCharacter::DebugInfo();
 }
 //====================================================================
 //モデルのクリエイト
@@ -227,22 +219,6 @@ void CPrisoner::PrisonerLoad()
 	{
 		MessageBox(NULL, "捕虜のデータ読み込み失敗", "警告", MB_ICONWARNING);
 	}
-
-	// 読み込んだ情報の代入
-	SetPrisonerData();
-}
-
-//====================================================================
-//捕虜の読み込んだ情報の設定
-//====================================================================
-void CPrisoner::SetPrisonerData()
-{
-	// 捕虜が消滅するまでの時間
-	m_nDeleteTime = m_PrisonerData.nDeleteTime;
-	// 捕虜の移動速度
-	m_fMoveSpeed = m_PrisonerData.fMoveSpeed;
-	// 当たり判定の大きさ
-	m_CollisionSize = m_PrisonerData.CollisionSize;
 }
 
 //====================================================================
@@ -283,7 +259,6 @@ void CPrisoner::Collision()
 		}
 		if (GetFallFlag() == true)
 		{
-		CDebugProc::Print_Left("トルゥーやで\n");
 		}
 	}
 
@@ -344,7 +319,7 @@ void CPrisoner::PrisonerState()
 			// 消滅までのカウントを加算
 			m_nDieCount++;
 			// カウントが一致値を超えたら
-			if (m_nDieCount >= PRISONER_DIETIME)
+			if (m_nDieCount >= m_PrisonerData.nDeleteTime)
 			{
 				SetDieFlag(true);
 			}
@@ -363,12 +338,12 @@ void CPrisoner::PrisonerState()
 //====================================================================
 void CPrisoner::PrisonerDropType()
 {
-	switch (this->GetPrisonerDropType())
+	switch (m_PrisonerDropType)
 	{
 		// アイテムを1種類指定して確定でドロップさせる
 	case CPrisoner::PRISONER_ITEM_DROPTYPE_DESIGNATE_ONE:
 		// アイテムの生成
-		CItem::DropCreate(
+		CItem::DropItem(
 			GetPosition(),
 			CItem::ITEMDROP_NONE,
 			CItem::ITEMDROP_PATTERN_DESIGNATE,
@@ -377,7 +352,7 @@ void CPrisoner::PrisonerDropType()
 
 		// ドロップするアイテムを範囲で指定してドロップさせる
 	case CPrisoner::PRISONER_ITEM_DROPTYPE_DESIGNATE_RANGE:
-		CItem::DropCreate(
+		CItem::DropItem(
 			GetPosition(),
 			CItem::ITEMDROP_WEAPON,
 			CItem::ITEMDROP_PATTERN_RANDOM,
@@ -386,13 +361,11 @@ void CPrisoner::PrisonerDropType()
 
 		// 全てのアイテムの中からランダムでアイテムをドロップさせる
 	case CPrisoner::PRISONER_ITEM_DROPTYPE_ALL:
-		CItem::DropCreate(
+		CItem::DropItem(
 			GetPosition(),
 			CItem::ITEMDROP_ALL,
 			CItem::ITEMDROP_PATTERN_RANDOM,
 			CItem::ITEMTYPE_NONE);
-		break;
-	default:
 		break;
 	}
 }

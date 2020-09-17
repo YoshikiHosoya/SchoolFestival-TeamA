@@ -18,12 +18,12 @@
 // =====================================================================================================================================================================
 // 捕虜のデータ
 // =====================================================================================================================================================================
-typedef struct
+struct PRISONER_DATA
 {
 	int					nDeleteTime;	// 消滅するまでの時間
 	float				fMoveSpeed;		// 移動速度
 	D3DXVECTOR3			CollisionSize;	// 当たり判定のサイズ
-}PRISONER_DATA;
+};
 
 // =====================================================================================================================================================================
 // 前方宣言
@@ -68,7 +68,6 @@ public:
 	/* 静的メンバ関数 */
 	static CPrisoner	*Create();								// 生成
 	static	void		PrisonerLoad();							// 捕虜情報のロード
-	static	void		SetPrisonerData();						// 捕虜のデータ設定
 
 	/* メンバ関数 */
 	void				DebugInfo(void);						// デバッグ
@@ -96,9 +95,6 @@ private:
 	/* 静的メンバ変数 */
 	static char				*m_PrisonerFileName;				// 捕虜のファイル名
 	static PRISONER_DATA	m_PrisonerData;						// 捕虜のデータ
-	static int				m_nDeleteTime;						// 捕虜が消滅するまでの時間
-	static float			m_fMoveSpeed;						// 移動速度
-	static D3DXVECTOR3		m_CollisionSize;					// 当たり判定の大きさ
 
 	/* メンバ関数 */
 	void					PrisonerState();					// 捕虜の状態別処理
@@ -112,7 +108,6 @@ private:
 
 	void					Move(float move, float fdest);		// 捕虜の移動
 	int						m_nDieCount;						// 捕虜が消滅するまでのカウント
-	bool					m_bUse;								// ポインタを使用できるかどうか
 	int						m_StateTime;						// ステートが切り替わるまでの時間
 	CItem::ITEMTYPE			m_DropItem;							// 確定ドロップの種類
 };

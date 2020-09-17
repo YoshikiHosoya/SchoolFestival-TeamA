@@ -355,7 +355,7 @@ void CWeakEnemy::DeathReaction()
 		if (CItem::DropRate())
 		{
 			//アイテムを生成
-			CItem::DropCreate(GetPosition(),
+			CItem::DropItem(GetPosition(),
 				CItem::ITEMDROP_CHARGE,
 				CItem::ITEMDROP_PATTERN_DESIGNATE,
 				CItem::ITEMTYPE_NONE);
@@ -363,7 +363,6 @@ void CWeakEnemy::DeathReaction()
 	}
 
 	CEnemy::DeathReaction();
-
 }
 //====================================================================
 //ステートが変更した瞬間の処理
