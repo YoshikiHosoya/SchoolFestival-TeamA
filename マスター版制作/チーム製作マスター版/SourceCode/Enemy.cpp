@@ -82,6 +82,12 @@ void CEnemy::Uninit(void)
 		delete m_pGun;
 		m_pGun = nullptr;
 	}
+	// グレネード発射位置のポインタ
+	if (m_pGrenadeFire)
+	{
+		m_pGrenadeFire->Rerease();
+		m_pGrenadeFire = nullptr;
+	}
 
 	CCharacter::Uninit();
 }
