@@ -38,6 +38,9 @@ END_MAPSET
 //
 //	[ 0 ]	通常兵士
 //	[ 1 ]	盾持ち兵士
+//	[ 2 ]	ヘリコプター
+//	[ 3 ]	メルティハニー
+//	[ 4 ]	ジィ・コッカ
 //
 //------------------------------------------------------------
 
@@ -58,107 +61,162 @@ END_ENEMYSET
 
 ENEMYSET									# 4
 	TYPE		= 0
-	POS			= 1275 64 0
+	POS			= 1275 189 0
 END_ENEMYSET
 
 ENEMYSET									# 5
 	TYPE		= 1
-	POS			= 1363 64 0
+	POS			= 1363 190 0
 END_ENEMYSET
 
 ENEMYSET									# 6
 	TYPE		= 0
-	POS			= 1442 64 0
+	POS			= 1442 195 0
 END_ENEMYSET
 
 ENEMYSET									# 7
 	TYPE		= 0
-	POS			= 1517 64 0
+	POS			= 1517 193 0
 END_ENEMYSET
 
 ENEMYSET									# 8
 	TYPE		= 0
-	POS			= 1594 64 0
+	POS			= 1594 199 0
 END_ENEMYSET
 
 ENEMYSET									# 9
 	TYPE		= 1
-	POS			= 1674 64 0
+	POS			= 1674 192 0
 END_ENEMYSET
 
 ENEMYSET									# 10
 	TYPE		= 0
-	POS			= 1766 64 0
+	POS			= 1282 64 0
 END_ENEMYSET
 
 ENEMYSET									# 11
 	TYPE		= 1
-	POS			= 2115 64 0
+	POS			= 1394 64 0
 END_ENEMYSET
 
 ENEMYSET									# 12
 	TYPE		= 0
-	POS			= 2207 64 0
+	POS			= 1456 64 0
 END_ENEMYSET
 
 ENEMYSET									# 13
 	TYPE		= 0
-	POS			= 2307 64 0
+	POS			= 1521 64 0
 END_ENEMYSET
 
 ENEMYSET									# 14
 	TYPE		= 0
-	POS			= 2414 64 0
+	POS			= 1589 64 0
 END_ENEMYSET
 
 ENEMYSET									# 15
 	TYPE		= 1
-	POS			= 2516 64 0
+	POS			= 1670 64 0
 END_ENEMYSET
 
 ENEMYSET									# 16
-	TYPE		= 0
-	POS			= 2607 64 0
+	TYPE		= 1
+	POS			= 2016 64 0
 END_ENEMYSET
 
 ENEMYSET									# 17
 	TYPE		= 0
-	POS			= 2701 64 0
+	POS			= 2110 64 0
 END_ENEMYSET
 
 ENEMYSET									# 18
 	TYPE		= 0
-	POS			= 2789 64 0
+	POS			= 2189 64 0
 END_ENEMYSET
 
 ENEMYSET									# 19
-	TYPE		= 1
-	POS			= 5440 55 0
+	TYPE		= 0
+	POS			= 2264 64 0
 END_ENEMYSET
 
 ENEMYSET									# 20
-	TYPE		= 1
-	POS			= 5867 55 0
+	TYPE		= 0
+	POS			= 2347 64 0
 END_ENEMYSET
 
 ENEMYSET									# 21
 	TYPE		= 0
-	POS			= 5492 55 0
+	POS			= 2455 64 0
 END_ENEMYSET
 
 ENEMYSET									# 22
 	TYPE		= 0
-	POS			= 5547 55 0
+	POS			= 2554 64 0
 END_ENEMYSET
 
 ENEMYSET									# 23
 	TYPE		= 0
-	POS			= 5747 55 0
+	POS			= 2665 64 0
 END_ENEMYSET
 
 ENEMYSET									# 24
+	TYPE		= 1
+	POS			= 6156 52 0
+END_ENEMYSET
+
+ENEMYSET									# 25
 	TYPE		= 0
-	POS			= 5806 55 0
+	POS			= 6253 52 0
+END_ENEMYSET
+
+ENEMYSET									# 26
+	TYPE		= 1
+	POS			= 6340 52 0
+END_ENEMYSET
+
+ENEMYSET									# 27
+	TYPE		= 0
+	POS			= 6427 52 0
+END_ENEMYSET
+
+ENEMYSET									# 28
+	TYPE		= 1
+	POS			= 6540 52 0
+END_ENEMYSET
+
+ENEMYSET									# 29
+	TYPE		= 1
+	POS			= 6759 52 0
+END_ENEMYSET
+
+ENEMYSET									# 30
+	TYPE		= 0
+	POS			= 6864 52 0
+END_ENEMYSET
+
+ENEMYSET									# 31
+	TYPE		= 0
+	POS			= 6964 52 0
+END_ENEMYSET
+
+ENEMYSET									# 32
+	TYPE		= 0
+	POS			= 7084 52 0
+END_ENEMYSET
+
+ENEMYSET									# 33
+	TYPE		= 0
+	POS			= 7189 52 0
+END_ENEMYSET
+
+ENEMYSET									# 34
+	TYPE		= 0
+	POS			= 7368 52 0
+END_ENEMYSET
+
+ENEMYSET									# 35
+	TYPE		= 0
+	POS			= 7479 52 0
 END_ENEMYSET
 
 //------------------------------------------------------------
@@ -189,16 +247,40 @@ END_ENEMYSET
 //
 //------------------------------------------------------------
 
-PRISONERSET									# 25
+PRISONERSET									# 36
 	TYPE		= 0
 	ITEMTYPE	= 0
 	POS			= 3950 60 0
 END_PRISONERSET
 
-PRISONERSET									# 26
+PRISONERSET									# 37
 	TYPE		= 0
 	ITEMTYPE	= 0
-	POS			= 5659 56 0
+	POS			= 5138 56 0
+END_PRISONERSET
+
+PRISONERSET									# 38
+	TYPE		= 0
+	ITEMTYPE	= 0
+	POS			= 1780 61 0
+END_PRISONERSET
+
+PRISONERSET									# 39
+	TYPE		= 0
+	ITEMTYPE	= 0
+	POS			= 2220 270 0
+END_PRISONERSET
+
+PRISONERSET									# 40
+	TYPE		= 0
+	ITEMTYPE	= 0
+	POS			= 6337 210 0
+END_PRISONERSET
+
+PRISONERSET									# 41
+	TYPE		= 0
+	ITEMTYPE	= 0
+	POS			= 7399 171 0
 END_PRISONERSET
 
 //------------------------------------------------------------
@@ -214,44 +296,44 @@ END_PRISONERSET
 //
 //------------------------------------------------------------
 
-OBSTACLESET									# 27
+OBSTACLESET									# 42
 	TYPE		= 4
 	POS			= 900 96 0
 END_OBSTACLESET
 
-OBSTACLESET									# 28
+OBSTACLESET									# 43
 	TYPE		= 4
 	POS			= 1938 96 0
 END_OBSTACLESET
 
-OBSTACLESET									# 29
+OBSTACLESET									# 44
 	TYPE		= 4
 	POS			= 2860 91 0
 END_OBSTACLESET
 
-OBSTACLESET									# 30
+OBSTACLESET									# 45
 	TYPE		= 4
 	POS			= 6672 83 0
 END_OBSTACLESET
 
-OBSTACLESET									# 31
-	TYPE		= 4
-	POS			= 6672 140 0
-END_OBSTACLESET
-
-OBSTACLESET									# 32
+OBSTACLESET									# 46
 	TYPE		= 4
 	POS			= 7290 85 0
 END_OBSTACLESET
 
-OBSTACLESET									# 33
+OBSTACLESET									# 47
 	TYPE		= 4
 	POS			= 8001 85 0
 END_OBSTACLESET
 
-OBSTACLESET									# 34
-	TYPE		= 4
-	POS			= 8001 140 0
+OBSTACLESET									# 48
+	TYPE		= 0
+	POS			= 1334 85 0
+END_OBSTACLESET
+
+OBSTACLESET									# 49
+	TYPE		= 0
+	POS			= 1334 130 0
 END_OBSTACLESET
 
 //------------------------------------------------------------
@@ -259,22 +341,16 @@ END_OBSTACLESET
 //------------------------------------------------------------
 
 //------------------------------------------------------------
-// 戦闘機の配置情報
-//------------------------------------------------------------
-
-//------------------------------------------------------------
-// ヘリコプターの配置情報
-//------------------------------------------------------------
-
-//------------------------------------------------------------
 // 背景のテクスチャ情報
 //------------------------------------------------------------
 //
-//	[ 49 ]	空の背景
+//	[ 59 ]	空の背景 ( 晴れ )
+//	[ 60 ]	空の背景 ( 曇り )
+//	[ 61 ]	空の背景 ( 暗雲 )
 //
 //------------------------------------------------------------
 BGSET
-	BG_TEX_ID			= 49
+	BG_TEX_ID			= 59
 END_BGSET
 
 END_SCRIPT
