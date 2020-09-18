@@ -287,10 +287,10 @@ void CRenderer::Draw(void)
 			ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
 		}
 
-		//•¶š—ñ‰Šú‰»
-		m_pDebug->ResetStr();
-
 #endif // _DEBUG
+
+		//•¶š—ñ‰Šú‰»
+		CDebugProc::ResetStr();
 
 	}
 	//Direct3D‚É‚æ‚é•`‰æI—¹
