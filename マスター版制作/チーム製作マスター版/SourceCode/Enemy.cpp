@@ -16,6 +16,7 @@
 #include "sound.h"
 #include "GameManager.h"
 #include "ModelSet.h"
+#include "grenadefire.h"
 //====================================================================
 //マクロ定義
 //====================================================================
@@ -43,6 +44,10 @@ HRESULT CEnemy::Init(void)
 	m_pGun = CGun::Create();
 	m_pGun->SetTag(TAG::ENEMY);
 	m_pGun->SetDisp(false);
+
+	// グレネード放つ位置の生成
+	m_pGrenadeFire = CGrenadeFire::Create();
+	m_pGrenadeFire->SetTag(TAG::ENEMY);
 
 	//イベントのフラグ
 	m_bEventFlag = false;
@@ -76,6 +81,12 @@ void CEnemy::Uninit(void)
 		// 銃の削除
 		delete m_pGun;
 		m_pGun = nullptr;
+	}
+	// グレネード発射位置のポインタ
+	if (m_pGrenadeFire)
+	{
+		m_pGrenadeFire->Rerease();
+		m_pGrenadeFire = nullptr;
 	}
 
 	CCharacter::Uninit();

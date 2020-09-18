@@ -73,7 +73,6 @@ public:
 	D3DXVECTOR3			*GetShotPosPtr()			{ return &m_ShotPos; };				// 撃つときの座標のポインタ取得
 
 	void				SetGunType(GUN_TYPE type);															// 銃の種類の設定
-
 	void				GunAddAmmo(GUN_TYPE type);															// 弾数の加算
 	void				SetGunTypeOnly(GUN_TYPE type)				{ m_GunType = type; };					// 銃の種類だけ変更
 	void				SetHandMtx(D3DXMATRIX *pMtx)				{ m_HasHandMtx = pMtx; };				// 手のマトリックス設定
@@ -86,7 +85,9 @@ public:
 
 private:
 	/* メンバ関数 */
-	void				MultipleShot();			// 複数発撃つ処理
+	void				MultipleShot();						// 複数発撃つ処理
+	void				ProcessReduceMultipleBullet();		// 複数撃った弾を減らす処理
+
 	/* メンバ変数 */
 	GUN_TYPE			m_GunType;				// ガンの種類
 	GUN_TYPE			m_GunTypeOld;			// 前回のガンの種類
