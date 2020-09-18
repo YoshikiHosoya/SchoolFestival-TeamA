@@ -21,32 +21,32 @@
 #include "scoremanager.h"
 #include "particle.h"
 #include "grenadefire.h"
+#include <algorithm>
 
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
 // =====================================================================================================================================================================
-ITEM_DATA	CItem::m_ItemData		 = {};
-int			CItem::m_nDropRate		 = 0;
-int			CItem::m_nDeleteTime	 = 0;
-int			CItem::m_nFlashTime		 = 0;
-int			CItem::m_nBearScore		 = 0;
-int			CItem::m_nCoinScore		 = 0;
-int			CItem::m_nJewelryScore	 = 0;
-int			CItem::m_nMedalScore	 = 0;
-D3DXVECTOR3 CItem::m_CollisionSize	 = D3DXVECTOR3(0,0,0);
-int			CItem::m_nAddCoin		 = 1;
+ITEM_DATA	CItem::m_ItemData				 = {};
+int			CItem::m_nAddCoin				 = 1;
+ITEM_GACHA CItem::m_ItemGachaData			 = {};
+
+std::vector<unsigned int>					CItem::m_nSaveHitItem				 = {};
+std::vector<CItem::ITEM_RARITY>				CItem::m_nBoxRandRarityDataList		 = {};
+std::vector<CItem::ITEM_RARITY>				CItem::m_nDefaultRarityList			 = {};
+std::vector<std::vector<CItem::ITEMTYPE>>	CItem::m_nBoxRandDefaultRarityData	 = {};
 
 // =====================================================================================================================================================================
 // テキストファイル名
 // =====================================================================================================================================================================
 char *CItem::m_ItemFileName =
 {
-	"data/Load/Item/ItemData.txt" 			// アイテムの情報
+	"data/Load/Item/ItemData.txt" ,			// アイテムの情報
 };
 
 // =====================================================================================================================================================================
 // マクロ定義
 // =====================================================================================================================================================================
+#define FULLRAND_HITPROBABILITY (5)
 
 // =====================================================================================================================================================================
 //
@@ -55,26 +55,18 @@ char *CItem::m_ItemFileName =
 // =====================================================================================================================================================================
 CItem::CItem(OBJ_TYPE type) :CScene3D(type)
 {
+	// プレイヤーのポインタ
+	m_pPlayer[MAX_CONTROLLER] = {};
 	// 当たり判定のポインタ
 	m_pCollision = nullptr;
-
 	// アイテムがマップに残る時間
-	m_nRemainTime = m_nDeleteTime;
-
+	m_nRemainTime = m_ItemData.nDeleteTime;
 	// αカラーカウント
 	m_nColCnt = 0;
-
 	// アイテムの種類
 	m_Type = ITEMTYPE_NONE;
-
 	// アイテムをドロップさせる種類
 	m_Drop = ITEMDROP_WEAPON;
-
-	// プレイヤーのポインタ
-	for (int nCntPlayer = 0; nCntPlayer < MAX_CONTROLLER; nCntPlayer++)
-	{
-		m_pPlayer[nCntPlayer] = nullptr;
-	}
 }
 
 // =====================================================================================================================================================================
@@ -110,7 +102,7 @@ HRESULT CItem::Init()
 	// 当たり判定生成
 	m_pCollision = CCollision::Create();
 	m_pCollision->SetPos(&GetPosition());
-	m_pCollision->SetSize(m_CollisionSize);
+	m_pCollision->SetSize(m_ItemData.CollisionSize);
 	m_pCollision->DeCollisionCreate(CCollision::COLLISIONTYPE_CHARACTER);
 
 	return S_OK;
@@ -166,7 +158,6 @@ void CItem::Draw(void)
 	pDevice->SetRenderState(D3DRS_LIGHTING, false);				// ライティングoff
 	pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
 
-	// ビルボード
 	// ビューマトリックスの代入用
 	D3DXMATRIX mtxView;
 	// 現在のビューマトリックスを取得
@@ -189,7 +180,7 @@ void CItem::Draw(void)
 // アイテム取得時の種類別処理
 //
 // =====================================================================================================================================================================
-void CItem::ItemType(ITEMTYPE type, TAG Tag)
+void CItem::ItemAcquisition(ITEMTYPE type, TAG Tag)
 {
 	// アイテムの種類ごとの処理
 	switch (type)
@@ -293,9 +284,6 @@ void CItem::ItemType(ITEMTYPE type, TAG Tag)
 		CManager::GetSound()->Play(CSound::LABEL_SE_GET_WEAPON);
 		m_pPlayer[(int)Tag]->GetGun()->GunAddAmmo(m_pPlayer[(int)Tag]->GetGun()->GetGunType());
 	}break;
-
-	default:
-		break;
 	}
 
 	m_pPlayer[(int)Tag]->SetState(CCharacter::CHARACTER_STATE_ITEMGET_FLASH);
@@ -320,7 +308,7 @@ void CItem::DebugInfo()
 void CItem::HitItem(ITEMTYPE type, TAG Tag)
 {
 	// 種類ごとの処理
-	ItemType(type, Tag);
+	ItemAcquisition(type, Tag);
 	// 削除
 	Rerease();
 }
@@ -390,7 +378,7 @@ void CItem::Flashing()
 	}
 
 	// 3秒以上経過したらアイテムを削除する
-	if (m_nColCnt >= m_nFlashTime)
+	if (m_nColCnt >= m_ItemData.nFlashTime)
 	{
 		// 変数の初期化
 		m_nColCnt = 0;
@@ -401,35 +389,10 @@ void CItem::Flashing()
 
 // =====================================================================================================================================================================
 //
-// アイテムの情報の設定
-//
-// =====================================================================================================================================================================
-void CItem::SetItemData()
-{
-	// ドロップ率の設定
-	m_nDropRate		 = m_ItemData.nDropRate;
-	// アイテムが点滅するまでの時間
-	m_nDeleteTime	 = m_ItemData.nDeleteTime;
-	// アイテムが点滅する時間
-	m_nFlashTime	 = m_ItemData.nFlashTime;
-	// 熊のアイテムのスコア
-	m_nBearScore	 = m_ItemData.nBearScore;
-	// コインのアイテムのスコア
-	m_nCoinScore	 = m_ItemData.nCoinScore;
-	// 宝石のアイテムのスコア
-	m_nJewelryScore	 = m_ItemData.nJewelryScore;
-	// メダルのアイテムのスコア
-	m_nMedalScore	 = m_ItemData.nMedalScore;
-	// 当たり判定の大きさ
-	m_CollisionSize	 = m_ItemData.CollisionSize;
-}
-
-// =====================================================================================================================================================================
-//
 // ランダム生成
 //
 // =====================================================================================================================================================================
-uint64_t CItem::get_rand_range(uint64_t min_val, uint64_t max_val)
+uint64_t CItem::GetRandRange(uint64_t min_val, uint64_t max_val)
 {
 	// メルセンヌ・ツイスター法による擬似乱数生成器を、
 	// ハードウェア乱数をシードにして初期化
@@ -444,8 +407,6 @@ uint64_t CItem::get_rand_range(uint64_t min_val, uint64_t max_val)
 
 	// 乱数を生成
 	return get_rand_uni_int(mt64);
-	// 乱数を生成
-	//return get_rand_uni_int(engine);
 }
 
 // =====================================================================================================================================================================
@@ -467,17 +428,107 @@ int CItem::AddCoinScore(int nScore)
 
 // =====================================================================================================================================================================
 //
-// ランダム　範囲指定
+// 完全乱数
 //
 // =====================================================================================================================================================================
-CItem::ITEMTYPE CItem::RandomRange(ITEMTYPE min, ITEMTYPE max)
+CItem::ITEMTYPE CItem::FullRand()
+{
+	//FULLRAND_HITPROBABILITY
+	// 完全乱数で出たアイテムの結果を保存
+	//nSaveHitItem
+	// n回連続で★3が出ていなかった時強制的に★3のアイテムをドロップする
+	//if
+	return ITEMTYPE();
+}
+
+// =====================================================================================================================================================================
+//
+// ボックス乱数
+//
+// =====================================================================================================================================================================
+CItem::ITEMTYPE CItem::BoxRand()
+{
+	// ピックされた末尾の要素を削除する
+	if (!m_nDefaultRarityList.empty())
+	{
+		// レアリティリストの末尾からピックする(リストは既にランダム化されている)
+		const ITEM_RARITY Rarity = m_nDefaultRarityList.back();
+		// ピックされた末尾の要素を削除する
+		m_nDefaultRarityList.pop_back();
+		// レアリティリストからピックされたレアリティのリストの中からランダムにアイテムを選出する
+		//v.list[Rarity].最初　.最後 何行目の何番目か (0番目から最大数分)
+		//const ITEMTYPE type = ItemRandomRange(m_nBoxRandDefaultRarityData.at(Rarity).at(0), m_nBoxRandDefaultRarityData.at(Rarity).at(m_nBoxRandDefaultRarityData.at(Rarity).size() - 1));
+		const ITEMTYPE type = ItemWhichOnePick(m_nBoxRandDefaultRarityData, Rarity);
+
+		// 配列が空だった時
+		if (m_nDefaultRarityList.empty())
+		{
+			// ボックスランドのリスト再設定
+			SetBoxRandDataList();
+		}
+
+		return type;
+	}
+
+	// エラー防止
+	return ITEMTYPE_HEAVYMACHINEGUN;
+}
+
+// =====================================================================================================================================================================
+//
+// ボックス乱数の母数が0以下になった時結果をリセットする 現在のマップの状況によって結果を変える
+//
+// =====================================================================================================================================================================
+void CItem::SetBoxRandDataList()
+{
+	// ボックスランドのリストにデータを設定
+	AddBoxRandList();
+}
+
+// =====================================================================================================================================================================
+//
+// アイテムのレアリティと母数を元にランダムなリストを生成する
+//
+// =====================================================================================================================================================================
+void CItem::AddBoxRandList()
+{
+	// デフォルトのボックス乱数のデータ
+	// レアリティ*各レアリティの数
+	for (int nNum = 0; nNum < ITEM_RARITY_TOTAL; nNum++)
+	{
+		for (unsigned int nCnt = 0; nCnt < m_ItemGachaData.BoxRandDefault_RarityNum[nNum]; nCnt++)
+		{
+			// リストに各レアリティの数を数分追加
+			m_nDefaultRarityList.emplace_back((ITEM_RARITY)nNum);
+		}
+	}
+
+	// 要素をシャッフルし設定する
+	random_shuffle(m_nDefaultRarityList.begin(), m_nDefaultRarityList.end());
+
+	m_nDefaultRarityList = m_nDefaultRarityList;
+}
+
+
+// =====================================================================================================================================================================
+//
+// ランダム　アイテムの種類の範囲
+//
+// =====================================================================================================================================================================
+CItem::ITEMTYPE CItem::ItemRandomRange(ITEMTYPE min, ITEMTYPE max)
 {
 	// 範囲でランダムに値を求め値を返す
-	//return (ITEMTYPE)(min + (int)(rand()*(max - min + 1.0) / (1.0 + RAND_MAX)));
+	return (ITEMTYPE)GetRandRange(min, max);
+}
 
-	//return (ITEMTYPE)(min + (int)(rand()*(max - min) / (RAND_MAX)));
-
-	return (ITEMTYPE)get_rand_range(min, max);
+// =====================================================================================================================================================================
+//
+// ランダム アイテムのレアリティの範囲
+//
+// =====================================================================================================================================================================
+CItem::ITEM_RARITY CItem::RarityRandomRange(ITEM_RARITY min, ITEM_RARITY max)
+{
+	return (ITEM_RARITY)GetRandRange(min, max);
 }
 
 // =====================================================================================================================================================================
@@ -485,29 +536,18 @@ CItem::ITEMTYPE CItem::RandomRange(ITEMTYPE min, ITEMTYPE max)
 // アイテムをドロップする時のパターン
 //
 // =====================================================================================================================================================================
-void CItem::DropPattern(ITEMDROP_PATTERN pattern , ITEMDROP drop, ITEMTYPE type)
+void CItem::DropPattern(bool fixed, ITEMTYPE type)
 {
-	// NONEのエラーを避けるため
-	if (pattern == ITEMDROP_PATTERN_DESIGNATE && type == ITEMTYPE_NONE)
+	// 確定しているならそのタイプを設定する
+	if (fixed)
 	{
-		drop = ITEMDROP_ALL;
-		pattern = ITEMDROP_PATTERN_RANDOM;
-	}
-	// 条件ごとにドロップさせる条件を変える
-	switch (pattern)
-	{
-		// ドロップするアイテムを指定する
-	case CItem::ITEMDROP_PATTERN_DESIGNATE:
 		m_Type = type;
-		break;
-
-		// ドロップするアイテムをランダムにする
-	case CItem::ITEMDROP_PATTERN_RANDOM:
-		// アイテムのタイプをランダムに設定
-		m_Type = RandDropItem(drop);
-		break;
-	default:
-		break;
+	}
+	// 確定していないなら武器以外のタイプを設定する
+	else
+	{
+		// タイプをランダムに設定
+		m_Type = RandDropItem(ITEMDROP_SCO_CHA);
 	}
 }
 
@@ -533,6 +573,7 @@ void CItem::DebugItemCommand(CKeyboard *key)
 	CDebugProc::Print_Right("[LShift] + テンキー [9] : BomUp\n");
 	CDebugProc::Print_Right("[LShift] + テンキー [-] : ガソリン\n");
 	CDebugProc::Print_Right("[LShift] + テンキー [+] : BulletUp\n");
+	CDebugProc::Print_Right("[LShift] + テンキー [ENTER] : BoxRand\n");
 
 	//LShift押しながら
 	if (key->GetKeyboardPress(DIK_LSHIFT))
@@ -597,6 +638,11 @@ void CItem::DebugItemCommand(CKeyboard *key)
 		{
 			CItem::DebugCreate(ITEMTYPE_BULLETUP);
 		}
+		// boxramdテスト用
+		else if (key->GetKeyboardTrigger(DIK_NUMPADENTER))
+		{
+			CItem::DropCreate_TEST();
+		}
 	}
 }
 
@@ -609,6 +655,28 @@ void CItem::InitVariable()
 {
 	// コインのカウント加算用変数の初期化
 	m_nAddCoin = 1;
+	// 配列の全要素を削除
+	m_nSaveHitItem.clear();
+	m_nBoxRandRarityDataList.clear();
+}
+
+// =====================================================================================================================================================================
+//
+// // ドロップ率を元にアイテムがドロップするかを決めて結果を返す
+//
+// =====================================================================================================================================================================
+bool CItem::DecideIfItemDrop(int nRate)
+{
+	// アイテムをドロップするかのフラグ
+	bool bDrop = false;
+
+	// 一旦
+	if (GetRandRange(0, nRate) == 0)
+	{
+		bDrop = true;
+	}
+
+	return bDrop;
 }
 
 // =====================================================================================================================================================================
@@ -629,10 +697,9 @@ CItem * CItem::DebugCreate(ITEMTYPE type)
 
 	// サイズの設定
 	pItem->SetSize(D3DXVECTOR3(
-		m_CollisionSize.x / 2,
-		m_CollisionSize.y / 2,
-		m_CollisionSize.z / 2));
-
+		m_ItemData.CollisionSize.x / 2,
+		m_ItemData.CollisionSize.y / 2,
+		m_ItemData.CollisionSize.z / 2));
 
 	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer(TAG::PLAYER_1);
 
@@ -656,25 +723,53 @@ CItem * CItem::DebugCreate(ITEMTYPE type)
 
 // =====================================================================================================================================================================
 //
-// ランダム関数
+// レアリティの生成
 //
 // =====================================================================================================================================================================
-int CItem::ItemRand(int max)
+void CItem::SetRarityList()
 {
-	// 基準を求める
-	int nAdjusted_max = (RAND_MAX + 1) - (RAND_MAX + 1) % max;
+	// 各レアリティに該当するアイテムの設定
+	CItem::m_nBoxRandDefaultRarityData = {
+		{ ITEMTYPE_HEAVYMACHINEGUN, ITEMTYPE_ROCKETLAUNCHER },
+		{ ITEMTYPE_LASERGUN },
+		{ ITEMTYPE_SHOTGUN, ITEMTYPE_FLAMESHOT },
+	};
 
-	// ランダムに求めた値を格納する比較用変数
-	int nRandom = 0;
+	// 各レアリティの要素数を設定
+	for (unsigned int Line = 0; Line < m_nBoxRandDefaultRarityData.size(); Line++)
+	{
+		m_ItemGachaData.BoxRandDefault_RarityNum[Line] = m_nBoxRandDefaultRarityData.at(Line).size();
+	}
 
-	// RAND_MAX + 1 が max で割り切れない場合、乱数がその端数分の範囲になったら捨ててやり直す
-	do {
-		// ランダムに値を求める
-		nRandom = rand();
-	} while (nRandom >= nAdjusted_max);
+	// リストに情報を追加
+	AddBoxRandList();
+}
 
-	// 値を返す
-	return (int)(((float)nRandom / nAdjusted_max) * max);
+// =====================================================================================================================================================================
+//
+// 乱数リストの中から1つを選び結果を返す
+//
+// =====================================================================================================================================================================
+CItem::ITEMTYPE CItem::ItemWhichOnePick(std::vector<std::vector<CItem::ITEMTYPE>> list ,int line)
+{
+	// リストのアイテムの一覧を保存する変数
+	std::vector<ITEMTYPE> Pick;
+	// 最終的にピックするアイテムの種類
+	ITEMTYPE type;
+
+	for (unsigned int Column = 0; Column < list.at(line).size(); Column++)
+	{
+		// リストからアイテム情報の一覧を取得
+		Pick.emplace_back(list.at(line).at(Column));
+	}
+
+	std::random_device get_rand_dev;
+	std::mt19937 get_rand_mt(get_rand_dev()); // seedに乱数を指定
+	std::shuffle(Pick.begin(), Pick.end(), get_rand_mt);
+
+	type = Pick.back();
+
+	return type;
 }
 
 // =====================================================================================================================================================================
@@ -713,7 +808,7 @@ void CItem::ItemLoad()
 				fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
 				sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
 
-															// ITEMSETが来たら
+				// 1つ目のファイルだった時
 				if (strcmp(cHeadText, "ITEMSET") == 0)
 				{
 					// END_ITEMSETが来るまでループ
@@ -737,26 +832,6 @@ void CItem::ItemLoad()
 						{
 							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_ItemData.nFlashTime);	// 比較用テキストにFLASHを代入
 						}
-						// BEARが来たら
-						else if (strcmp(cHeadText, "BEAR") == 0)
-						{
-							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_ItemData.nBearScore);	// 比較用テキストにBEARを代入
-						}
-						// BEARが来たら
-						else if (strcmp(cHeadText, "COIN") == 0)
-						{
-							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_ItemData.nCoinScore);	// 比較用テキストにCOINを代入
-						}
-						// BEARが来たら
-						else if (strcmp(cHeadText, "JEWELRY") == 0)
-						{
-							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_ItemData.nJewelryScore);	// 比較用テキストにJEWELRYを代入
-						}
-						// BEARが来たら
-						else if (strcmp(cHeadText, "MEDAL") == 0)
-						{
-							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_ItemData.nMedalScore);	// 比較用テキストにMEDALを代入
-						}
 						// COLLISIONSIZEが来たら
 						else if (strcmp(cHeadText, "COLLISIONSIZE") == 0)
 						{
@@ -772,6 +847,10 @@ void CItem::ItemLoad()
 				}
 			}
 		}
+
+		// レアリティリストの設定
+		SetRarityList();
+
 		// ファイルを閉じる
 		fclose(pFile);
 	}
@@ -779,18 +858,54 @@ void CItem::ItemLoad()
 	{
 		MessageBox(NULL, "アイテムのデータ読み込み失敗", "警告", MB_ICONWARNING);
 	}
-
-	// 読み込んだ情報の代入
-	SetItemData();
 }
 
 // =====================================================================================================================================================================
 //
-// キャラクターがアイテムを落とすときの生成処理
+// キャラクターがアイテムを落とすときの生成処理 確定しないならtypeにNONEを入れる
 //
 // =====================================================================================================================================================================
-CItem * CItem::DropCreate(D3DXVECTOR3 pos, ITEMDROP drop , ITEMDROP_PATTERN pattern ,ITEMTYPE type)
+CItem * CItem::DropItem(D3DXVECTOR3 droppos, bool fixed,ITEMTYPE type)
 {
+	// メモリの確保
+	CItem *pItem = new CItem(OBJTYPE_ITEM);
+
+	// 初期化
+	pItem->Init();
+
+	// サイズの設定
+	pItem->SetSize(D3DXVECTOR3(
+		m_ItemData.CollisionSize.x /2,
+		m_ItemData.CollisionSize.y /2,
+		m_ItemData.CollisionSize.z /2));
+
+	// アイテムが生成される位置の調整
+	//pItem->SetDropPos(droppos);
+
+	droppos.y += 30.0f;
+
+	// アイテムの位置の設定
+	pItem->SetPosition(droppos);
+
+	// アイテムのドロップをパターンごとに変える
+	pItem->DropPattern(fixed, type);
+
+	// 種類別にテクスチャを設定
+	pItem->SwitchTexture(pItem->m_Type, pItem);
+
+	return pItem;
+}
+
+// =====================================================================================================================================================================
+//
+// デバッグ用アイテム生成
+//
+// =====================================================================================================================================================================
+CItem * CItem::DropCreate_TEST()
+{
+	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer((TAG)(0));
+	D3DXVECTOR3 pos = pPlayer->GetPosition();
+
 	// 変数
 	CItem *pItem;
 
@@ -802,19 +917,16 @@ CItem * CItem::DropCreate(D3DXVECTOR3 pos, ITEMDROP drop , ITEMDROP_PATTERN patt
 
 	// サイズの設定
 	pItem->SetSize(D3DXVECTOR3(
-		m_CollisionSize.x /2,
-		m_CollisionSize.y /2,
-		m_CollisionSize.z /2));
+		m_ItemData.CollisionSize.x / 2,
+		m_ItemData.CollisionSize.y / 2,
+		m_ItemData.CollisionSize.z / 2));
 
 	// アイテムが生成される位置の調整
 	pItem->SetDropPos(pos);
-
 	// アイテムの位置の設定
 	pItem->SetPosition(pos);
-
-	// アイテムのドロップをパターンごとに変える
-	pItem->DropPattern(pattern, drop, type);
-
+	// ボックスランドでアイテムを選出する
+	pItem->m_Type = pItem->BoxRand();
 	// 種類別にテクスチャを設定
 	pItem->SwitchTexture(pItem->m_Type, pItem);
 
@@ -897,9 +1009,6 @@ void CItem::SwitchTexture(ITEMTYPE type, CItem *pItem)
 		// テクスチャの割り当て
 		pItem->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_BULLETUP));
 	}break;
-
-	default:
-		break;
 	}
 }
 
@@ -910,45 +1019,47 @@ void CItem::SwitchTexture(ITEMTYPE type, CItem *pItem)
 // =====================================================================================================================================================================
 CItem::ITEMTYPE CItem::RandDropItem(ITEMDROP drop)
 {
-	// 値を返すための変数
-	ITEMTYPE type;
-
 	// 条件によってドロップさせるアイテムの種類に制限をかける
 	switch (drop)
 	{
 		// 武器のみの場合
 	case CItem::ITEMDROP_WEAPON:
 		// ランダムの範囲を武器のみに選択
-		type = RandomRange(ITEMTYPE_HEAVYMACHINEGUN, ITEMTYPE_FLAMESHOT);
+		return ItemRandomRange(ITEMTYPE_HEAVYMACHINEGUN, ITEMTYPE_FLAMESHOT);
 		break;
 
 		// スコアアップのみの場合
 	case CItem::ITEMDROP_SCORE:
 		// ランダムの範囲をスコアアイテムのみに選択
-		type = RandomRange(ITEMTYPE_BEAR, ITEMTYPE_MEDAL);
+		return ItemRandomRange(ITEMTYPE_BEAR, ITEMTYPE_MEDAL);
 		break;
 
 		// 弾薬などのみの場合
 	case CItem::ITEMDROP_CHARGE:
 		// ランダムの範囲をスコアアイテムのみに選択
-		type = RandomRange(ITEMTYPE_BOMBUP, ITEMTYPE_BULLETUP);
+		return ItemRandomRange(ITEMTYPE_BOMBUP, ITEMTYPE_BULLETUP);
 		break;
 
 		// 武器強化とスコアアップの場合
 	case CItem::ITEMDROP_WEA_SCO:
 		// ランダムの範囲を武器強化とスコアアイテムのみに選択
-		type = RandomRange(ITEMTYPE_HEAVYMACHINEGUN, ITEMTYPE_MEDAL);
+		return ItemRandomRange(ITEMTYPE_HEAVYMACHINEGUN, ITEMTYPE_MEDAL);
+		break;
+
+
+		// スコアアップと弾薬の場合
+	case CItem::ITEMDROP_SCO_CHA:
+		// ランダムの範囲をスコアアイテムと弾薬のみに選択
+		return ItemRandomRange(ITEMTYPE_BEAR, ITEMTYPE_BULLETUP);
 		break;
 
 		// 全てのアイテム
 	case CItem::ITEMDROP_ALL:
-		type = (ITEMTYPE)ItemRand(ITEMTYPE_MAX);
-		break;
-	default:
+		return ItemRandomRange(ITEMTYPE_HEAVYMACHINEGUN,ITEMTYPE_BULLETUP);
 		break;
 	}
 
-	return type;
+	return ITEMTYPE_NONE;
 }
 
 // =====================================================================================================================================================================
@@ -958,30 +1069,6 @@ CItem::ITEMTYPE CItem::RandDropItem(ITEMDROP drop)
 // =====================================================================================================================================================================
 bool CItem::DropRate()
 {
-	// アイテムをドロップするかのフラグ
-	bool bDrop = false;
-
-	// 求めたドロップ率を格納する変数
-	int nDrop = 0;
-
-	// ドロップ率を表す変数
-	int nRate = m_nDropRate;
-
 	// ランダムにドロップするかを求める
-	nDrop = ItemRand(nRate);
-
-	// 結果が0ならアイテムをドロップする許可を出す
-	if (nDrop == 0)
-	{
-		bDrop = true;
-	}
-
-	// 結果がそれ以外ならアイテムをドロップする許可を出さない
-	else
-	{
-		bDrop = false;
-	}
-
-	// 結果を返す
-	return bDrop;
+	return DecideIfItemDrop(m_ItemData.nDropRate);
 }

@@ -174,6 +174,7 @@
     <ClCompile Include="SourceCode\diffusiongun.cpp" />
     <ClCompile Include="SourceCode\Enemy.cpp" />
     <ClCompile Include="SourceCode\EnemyAI.cpp" />
+    <ClCompile Include="SourceCode\EnemyHelicopterAI.cpp" />
     <ClCompile Include="SourceCode\fade.cpp" />
     <ClCompile Include="SourceCode\flamebullet.cpp" />
     <ClCompile Include="SourceCode\flameshot.cpp" />
@@ -205,7 +206,7 @@
     <ClCompile Include="SourceCode\main.cpp" />
     <ClCompile Include="SourceCode\manager.cpp" />
     <ClCompile Include="SourceCode\map.cpp" />
-    <ClCompile Include="SourceCode\MeltyHoneyAI.cpp" />
+    <ClCompile Include="SourceCode\meltyhoneyAI.cpp" />
     <ClCompile Include="SourceCode\mesh.cpp" />
     <ClCompile Include="SourceCode\meshbox.cpp" />
     <ClCompile Include="SourceCode\meshcircle.cpp" />
@@ -262,6 +263,7 @@
     <ClCompile Include="SourceCode\vehicle.cpp" />
     <ClCompile Include="SourceCode\WeakEnemy.cpp" />
     <ClCompile Include="SourceCode\XInputPad.cpp" />
+    <ClCompile Include="SourceCode\zycoccaAI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SourceCode\3Dline.h" />
@@ -284,6 +286,7 @@
     <ClInclude Include="SourceCode\diffusiongun.h" />
     <ClInclude Include="SourceCode\Enemy.h" />
     <ClInclude Include="SourceCode\EnemyAI.h" />
+    <ClInclude Include="SourceCode\EnemyHelicopterAI.h" />
     <ClInclude Include="SourceCode\fade.h" />
     <ClInclude Include="SourceCode\flamebullet.h" />
     <ClInclude Include="SourceCode\flameshot.h" />
@@ -318,7 +321,7 @@
     <ClInclude Include="SourceCode\main.h" />
     <ClInclude Include="SourceCode\manager.h" />
     <ClInclude Include="SourceCode\map.h" />
-    <ClInclude Include="SourceCode\MeltyHoneyAI.h" />
+    <ClInclude Include="SourceCode\meltyhoneyAI.h" />
     <ClInclude Include="SourceCode\mesh.h" />
     <ClInclude Include="SourceCode\meshbox.h" />
     <ClInclude Include="SourceCode\meshcircle.h" />
@@ -376,6 +379,7 @@
     <ClInclude Include="SourceCode\vehicle.h" />
     <ClInclude Include="SourceCode\WeakEnemy.h" />
     <ClInclude Include="SourceCode\XInputPad.h" />
+    <ClInclude Include="SourceCode\zycoccaAI.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="SourceCode\Resource\icon.rc" />

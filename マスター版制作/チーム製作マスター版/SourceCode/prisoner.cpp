@@ -13,22 +13,26 @@
 #include "item.h"
 #include "scoremanager.h"
 #include "ModelSet.h"
-//====================================================================
-//マクロ定義
-//====================================================================
-#define PRISONER_COLLISION_SIZE			(D3DXVECTOR3(50.0f,65.0f,50.0f))			 //捕虜のサイズ
-#define PRISONER_DIETIME				(150)									 //捕虜が消滅するまでの時間
+#include "player.h"
 
 // =====================================================================================================================================================================
+//
+//マクロ定義
+//
+// =====================================================================================================================================================================
+#define PLAYER_PRISONER_MINDISTANCE (150) // 捕虜のステート[PRISONER_STATE_SKIP]の時のプレイヤーと捕虜の距離の最大値
+
+// =====================================================================================================================================================================
+//
 // 静的メンバ変数の初期化
+//
 // =====================================================================================================================================================================
 PRISONER_DATA		CPrisoner::m_PrisonerData	= {};
-int					CPrisoner::m_nDeleteTime	= 0;
-float				CPrisoner::m_fMoveSpeed		= 0.0f;
-D3DXVECTOR3			CPrisoner::m_CollisionSize	= D3DXVECTOR3(0, 0, 0);
 
 // =====================================================================================================================================================================
+//
 // テキストファイル名
+//
 // =====================================================================================================================================================================
 char *CPrisoner::m_PrisonerFileName =
 {
@@ -46,10 +50,10 @@ CPrisoner::CPrisoner(OBJ_TYPE type) :CCharacter(type)
 	m_PrisonerState		= PRISONER_STATE_STAY;
 	// 捕虜が消滅するまでのカウントを初期化
 	m_nDieCount			= 0;
-	// ポインタを検索する際使えるかどうか
-	m_bUse				= false;
 	// ステートが切り替わるまでの時間
 	m_StateTime			= 60;
+	//
+	m_bDrop = false;
 }
 // =====================================================================================================================================================================
 //
@@ -73,30 +77,38 @@ HRESULT CPrisoner::Init(void)
 	GetModelSet()->LoadOffset(CModelSet::CHARACTER_TYPE_PRISONER);
 	// キャラクタータイプの設定
 	GetModelSet()->SetCharacterType(CModelSet::CHARACTER_TYPE_PRISONER);
-
+	// デフォルトモーションの設定
 	GetModelSet()->SetMotion(CModelSet::PRISONER_MOTION_STAY);
+	// ステートの設定
 	CCharacter::SetState(CCharacter::CHARACTER_STATE_NONE);
 
+	//CCharacter::SetGravity(true);
+
+	// 向き
 	Move(0.0f, -1.57f);
 	// 当たり判定生成
 	GetCollision()->SetPos(&GetPosition());
-	GetCollision()->SetSize(PRISONER_COLLISION_SIZE);
+	GetCollision()->SetSize(m_PrisonerData.CollisionSize);
 	GetCollision()->SetMove(&GetMove());
 	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_NORMAL);
 	GetCollision()->SetGameObject(this);
 
 	return S_OK;
 }
-//====================================================================
-//終了
-//====================================================================
+// =====================================================================================================================================================================
+//
+// 終了
+//
+// =====================================================================================================================================================================
 void CPrisoner::Uninit(void)
 {
 	CCharacter::Uninit();
 }
-//====================================================================
-//更新
-//====================================================================
+// =====================================================================================================================================================================
+//
+// 更新
+//
+// =====================================================================================================================================================================
 void CPrisoner::Update(void)
 {
 	//描画の範囲内かチェック
@@ -122,24 +134,28 @@ void CPrisoner::Update(void)
 	// キャラクターの更新
 	CCharacter::Update();
 }
-//====================================================================
-//描画
-//====================================================================
+// =====================================================================================================================================================================
+//
+// 描画
+//
+// =====================================================================================================================================================================
 void CPrisoner::Draw(void)
 {
 	CCharacter::Draw();
 }
-//====================================================================
-//デバッグ
-//====================================================================
+// =====================================================================================================================================================================
+//
+// デバッグ
+//
+// =====================================================================================================================================================================
 void CPrisoner::DebugInfo(void)
 {
-	//CDebugProc::Print_Left("");
-	//CCharacter::DebugInfo();
 }
-//====================================================================
-//モデルのクリエイト
-//====================================================================
+// =====================================================================================================================================================================
+//
+// モデルのクリエイト
+//
+// =====================================================================================================================================================================
 CPrisoner *CPrisoner::Create()
 {
 	// メモリを確保
@@ -227,35 +243,23 @@ void CPrisoner::PrisonerLoad()
 	{
 		MessageBox(NULL, "捕虜のデータ読み込み失敗", "警告", MB_ICONWARNING);
 	}
-
-	// 読み込んだ情報の代入
-	SetPrisonerData();
 }
 
-//====================================================================
-//捕虜の読み込んだ情報の設定
-//====================================================================
-void CPrisoner::SetPrisonerData()
-{
-	// 捕虜が消滅するまでの時間
-	m_nDeleteTime = m_PrisonerData.nDeleteTime;
-	// 捕虜の移動速度
-	m_fMoveSpeed = m_PrisonerData.fMoveSpeed;
-	// 当たり判定の大きさ
-	m_CollisionSize = m_PrisonerData.CollisionSize;
-}
-
-//====================================================================
+// =====================================================================================================================================================================
+//
 // 捕虜のデフォルトモーション
-//====================================================================
+//
+// =====================================================================================================================================================================
 bool CPrisoner::DefaultMotion(void)
 {
 	GetModelSet()->SetMotion(CModelSet::PRISONER_MOTION_STAY);
 	return false;
 }
-//====================================================================
+// =====================================================================================================================================================================
+//
 // 捕虜の当たり判定
-//====================================================================
+//
+// =====================================================================================================================================================================
 void CPrisoner::Collision()
 {
 	CMap *pMap;
@@ -283,73 +287,153 @@ void CPrisoner::Collision()
 		}
 		if (GetFallFlag() == true)
 		{
-		CDebugProc::Print_Left("トルゥーやで\n");
 		}
 	}
 
 }
 
-//====================================================================
+// =====================================================================================================================================================================
+//
 // 捕虜の状態別処理
-//====================================================================
+//
+// =====================================================================================================================================================================
 void CPrisoner::PrisonerState()
 {
+	// 捕虜の状態によって行動を変える
 	switch (m_PrisonerState)
 	{
-		// アイテムをドロップするステート
-	case CPrisoner::PRISONER_STATE_DROPITEM:
-	{
-		// アイテムを落とすモーション
-		GetModelSet()->SetMotion(CModelSet::PRISONER_MOTION_RELEASE);
+		// 初期状態
+	case CPrisoner::PRISONER_STATE_STAY:
+		// 特に何もしない
+		break;
 
-		m_StateTime--;
-		if (m_StateTime <= 0)
+		// プレイヤーとの距離によって次の行動を考える
+	case CPrisoner::PRISONER_STATE_THINKING:
+
+		// プレイヤーと捕虜の距離がn以下だった時捕虜のステートを[PRISONER_STATE_DROPITEM]に移行する
+		if (GetDistance_Player_This() <= PLAYER_PRISONER_MINDISTANCE)
 		{
-			SetStateTime(40);
+			this->SetPrisonerState(PRISONER_STATE_DROPITEM);
+		}
+
+		// 距離がn以上離れていたら距離がn以下になるまで捕虜のステートを[PRISONER_STATE_SKIP]にする
+		else
+		{
+			this->SetPrisonerState(PRISONER_STATE_SKIP);
+		}
+
+		break;
+
+		// プレイヤーの方を向いてスキップする
+	case CPrisoner::PRISONER_STATE_SKIP:
+
+		if (GetFallFlag())
+		{
+			SetMove(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+			SetStateTime(120);	GetModelSet()->SetMotion(CModelSet::PRISONER_MOTION_FALL);
+		}
+		else
+		{
+			// スキップのモーションをする
+			GetModelSet()->SetMotion(CModelSet::PRISONER_MOTION_SKIP);
+
+			// 捕虜がプレイヤーより右にいたら左に動く
+			if (this->PrisonerPosX_Than_Large())
+			{
+				Move(0.0f,-1.57f);
+				SetMove(D3DXVECTOR3(-3.0f, 0.0f, 0.0f));
+			}
+			// 左なら左へ
+			else
+			{
+				// 向き
+				Move(0.0f, 1.57f);
+				SetMove(D3DXVECTOR3(3.0f, 0.0f, 0.0f));
+			}
+		}
+
+		// 捕虜とプレイヤーの距離が規定値より下回ったら捕虜のステートを[PRISONER_STATE_DROPITEM]に移行する
+		if (GetRotDest().y <= D3DX_PI / 2)
+		{
+			if (GetDistance_Player_This() <= PLAYER_PRISONER_MINDISTANCE)
+			{
+				// 20フレーム*4
+				SetStateTime(20 * 4 + 60);
+				this->SetPrisonerState(PRISONER_STATE_DROPITEM);
+			}
+		}
+		else if(GetRotDest().y >= -D3DX_PI / 2)
+		{
+			if (GetDistance_Player_This() <= PLAYER_PRISONER_MINDISTANCE)
+			{
+				// 20フレーム*4
+				SetStateTime(20 * 4 + 60);
+				this->SetPrisonerState(PRISONER_STATE_DROPITEM);
+			}
+		}
+
+		break;
+
+		// アイテムをドロップする
+	case CPrisoner::PRISONER_STATE_DROPITEM:
+		// アイテムを落とすモーションをする
+		GetModelSet()->SetMotion(CModelSet::PRISONER_MOTION_DROP);
+
+		// モーションが終わったら捕虜のステート[PRISONER_STATE_RAMPAGE]に移行させる
+		m_StateTime--;
+		if (m_StateTime <= 40)
+		{
 			// 捕虜の状態の変更
 			// 捕虜のタイプ別ドロップ処理
 			PrisonerDropType();
-			this->SetPrisonerState(PRISONER_STATE_SALUTE);
+
+			if (m_StateTime <= 0)
+			{
+				SetStateTime(60);
+				this->SetPrisonerState(PRISONER_STATE_RAMPAGE);
+			}
 		}
-	}
 		break;
 
-		// 暴れるする
-	case CPrisoner::PRISONER_STATE_SALUTE:
-
+		// 暴れる
+	case CPrisoner::PRISONER_STATE_RAMPAGE:
+		// 暴れるモーションをさせる
 		GetModelSet()->SetMotion(CModelSet::PRISONER_MOTION_SALUTE);
 
+		// 一定時間経過したらステートを[PRISONER_STATE_RUN]に移行する
+		// この時捕虜は移動しない
 		m_StateTime--;
+
 		if (m_StateTime <= 0)
 		{
-			SetStateTime(120);
-			// 捕虜の状態の変更
 			this->SetPrisonerState(PRISONER_STATE_RUN);
 		}
 		break;
 
-		// 走る
 	case CPrisoner::PRISONER_STATE_RUN:
-
-		if (GetFallFlag())
+		if (m_StateTime <= 0)
 		{
-			GetModelSet()->SetMotion(CModelSet::PRISONER_MOTION_FALL);
-		}
-		else
-		{
-			// 横に走る
-			GetModelSet()->SetMotion(CModelSet::PRISONER_MOTION_RUN);
-			SetMove(D3DXVECTOR3(-15.0f, 0.0f, 1.0f));
+			if (GetFallFlag())
+			{
+				SetMove(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+				GetModelSet()->SetMotion(CModelSet::PRISONER_MOTION_FALL);
+			}
+			else
+			{
+				// 左向きにに走る
+				GetModelSet()->SetMotion(CModelSet::PRISONER_MOTION_RUN);
+				Move(0.0f, -1.57f);
+				SetMove(D3DXVECTOR3(-15.0f, 0.0f, 0.0f));
+			}
 
 			// 消滅までのカウントを加算
 			m_nDieCount++;
 			// カウントが一致値を超えたら
-			if (m_nDieCount >= PRISONER_DIETIME)
+			if (m_nDieCount >= m_PrisonerData.nDeleteTime)
 			{
 				SetDieFlag(true);
 			}
 		}
-
 		break;
 	}
 
@@ -358,48 +442,92 @@ void CPrisoner::PrisonerState()
 	GetCollision()->SetCanCollision(m_PrisonerState == PRISONER_STATE_STAY);
 }
 
-//====================================================================
+// =====================================================================================================================================================================
+//
 // 捕虜のタイプ別処理
-//====================================================================
+//
+// =====================================================================================================================================================================
 void CPrisoner::PrisonerDropType()
 {
-	switch (this->GetPrisonerDropType())
+	if (!m_bDrop)
 	{
-		// アイテムを1種類指定して確定でドロップさせる
-	case CPrisoner::PRISONER_ITEM_DROPTYPE_DESIGNATE_ONE:
-		// アイテムの生成
-		CItem::DropCreate(
-			GetPosition(),
-			CItem::ITEMDROP_NONE,
-			CItem::ITEMDROP_PATTERN_DESIGNATE,
-			GetPrisonerDropItem());
-		break;
+		D3DXVECTOR3 DropPos = GetPosition();
+		if (GetRotDest().y <= D3DX_PI / 2)
+		{
+			DropPos.x -= 50.0f;
+		}
+		else if(GetRotDest().y >= -D3DX_PI / 2)
+		{
+			DropPos.x += 50.0f;
+		}
 
-		// ドロップするアイテムを範囲で指定してドロップさせる
-	case CPrisoner::PRISONER_ITEM_DROPTYPE_DESIGNATE_RANGE:
-		CItem::DropCreate(
-			GetPosition(),
-			CItem::ITEMDROP_WEAPON,
-			CItem::ITEMDROP_PATTERN_RANDOM,
-			CItem::ITEMTYPE_NONE);
-		break;
+		switch (m_PrisonerDropType)
+		{
+			// アイテムを1種類指定して確定でドロップさせる
+		case CPrisoner::PRISONER_ITEM_DROPTYPE_PICK_ONE:
+			// アイテムの生成[捕虜の座標 ドロップするアイテムを確定させるかどうか 確定させるアイテムのタイプの指定]
+			CItem::DropItem(
+				DropPos,
+				true,
+				GetPrisonerDropItem());
+			break;
 
-		// 全てのアイテムの中からランダムでアイテムをドロップさせる
-	case CPrisoner::PRISONER_ITEM_DROPTYPE_ALL:
-		CItem::DropCreate(
-			GetPosition(),
-			CItem::ITEMDROP_ALL,
-			CItem::ITEMDROP_PATTERN_RANDOM,
-			CItem::ITEMTYPE_NONE);
-		break;
-	default:
-		break;
+			// ドロップするアイテムを範囲で指定してドロップさせる
+		case CPrisoner::PRISONER_ITEM_DROPTYPE_RANGE:
+			CItem::DropItem(
+				DropPos,
+				false,
+				CItem::ITEMTYPE_NONE);
+			break;
+		}
+
+		m_bDrop = true;
 	}
 }
 
-//====================================================================
+// =====================================================================================================================================================================
+//
+// プレイヤーと選択された捕虜の距離の長さを求める 結果は必ず自然数
+//
+// =====================================================================================================================================================================
+unsigned int CPrisoner::GetDistance_Player_This()
+{
+	// 今は1pのポインタを取得し1pの距離で参照している
+	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer(TAG::PLAYER_1);
+
+	// プレイヤーと捕虜の距離を自然数で求める
+	return (unsigned int)fabs(this->GetPosition().x - pPlayer->GetPosition().x);
+}
+
+// =====================================================================================================================================================================
+//
+// 捕虜のx座標から見て左にいるか右にいるかの結果を返す
+//
+// =====================================================================================================================================================================
+bool CPrisoner::PrisonerPosX_Than_Large()
+{
+	// 今は1pのポインタを取得し1pの距離で参照している
+	CPlayer *pPlayer =  CManager::GetBaseMode()->GetPlayer(TAG::PLAYER_1);
+
+	 // 比べる対象(今はプレイヤーのみ)が捕虜の座標より左にいるか右にいるかを求める
+	 // 左(捕虜より値が小さかったらfalse)右(値が大きかったらtrue)
+	 if (this->GetPosition().x >= pPlayer->GetPosition().x)
+	 {
+		 return true;
+	 }
+	 else
+	 {
+		 return false;
+	 }
+
+	return false;
+}
+
+// =====================================================================================================================================================================
+//
 // 移動
-//====================================================================
+//
+// =====================================================================================================================================================================
 void CPrisoner::Move(float move, float fdest)
 {
 	GetMove().x += sinf(move * -D3DX_PI) * 3.0f;

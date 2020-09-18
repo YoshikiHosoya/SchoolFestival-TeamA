@@ -88,7 +88,6 @@ void CEnemy::Uninit(void)
 		m_pGrenadeFire->Rerease();
 		m_pGrenadeFire = nullptr;
 	}
-
 	CCharacter::Uninit();
 }
 //====================================================================

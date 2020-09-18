@@ -1,76 +1,67 @@
-#pragma once
-#pragma once
-//=============================================================================
-// AI処理 [BossAI.h]
-//=============================================================================
-#ifndef _MELTYHONEYMK2AIAI_H_
-#define _MELTYHONEYMK2AIAI_H_
-//=============================================================================
+// =====================================================================================================================================================================
+//
+// メルティハニーのAIの処理 [meltyhoneyAI.h]
+// Author : Sato Yoshiki
+//
+// =====================================================================================================================================================================
+#ifndef _MELTYHONEYAI_H_
+#define _MELTYHONEYAI_H_
+
+// =====================================================================================================================================================================
 // インクルードファイル
-//=============================================================================
+// =====================================================================================================================================================================
 #include "main.h"
 #include "scene.h"
 #include "BaseAI.h"
-class CGun;
+
+// =====================================================================================================================================================================
+// 前方宣言
+// =====================================================================================================================================================================
 class CWeakEnemy;
+class CGun;
 class CCollision;
-//=============================================================================
-// プロトタイプ宣言
-//=============================================================================
-class CMeltyhoney :public CBaseAI
+
+// =====================================================================================================================================================================
+// AIクラス
+// =====================================================================================================================================================================
+class CMeltyHoneyAI : public CBaseAI
 {
 public:
-	typedef enum
+	// メルティハニーのAIの状態
+	enum class MeltyHoneyAI_STATE
 	{
-		AI_NONE = 0,		//攻撃しない
-		AI_SHOT,			//追尾弾発射
-		AI_LEFT,
-		AI_RIGHT,
-		AI_STOP,
+		NONE = 0,			//何もしない
+		STOP,				//止まる
+		WALK_LEFT,			//左移動
+		WALK_RIGHT,			//右移動
+		ATTACK,				//攻撃
 		AI_MAX				//行動の最大数
-	}AI_STATE;
-	CMeltyhoney();
-	~CMeltyhoney();
-	HRESULT Init(void);
-	void Uninit(void);
-	void Update(void);
-	void UpdateMoveAI(void);
-	void UpdateAttackAI(void);
-	void Draw(void);
-	void DebugInfo(void);
-	static CMeltyhoney* CreateAI(CWeakEnemy *pEnemy);
+	};
 
-	void SetShot(bool shot)					{ m_bShot = shot; };
-	void SetRestartFlag(bool flag)			{ m_bReStartFlag = flag; };
-	void SetAI(AI_STATE attack)				{ m_AItype = attack; };
+	CMeltyHoneyAI();										// コンストラクタ
+	~CMeltyHoneyAI();										// デストラクタ
 
-	bool GetShot(void)						{ return m_bShot; };
-	AI_STATE GetMeltyHoneyAIType(void)		{ return m_AItype; };
-	CCollision *GetCollision()				{ return m_pCollision; };	// 当たり判定のポインタ取得
+	/* メンバ関数 */
+	HRESULT					Init(void);						// 初期化
+	void					Uninit(void);					// 終了
+	void					Update(void);					// 更新
+	void					Draw(void);						// 描画
+	void					DebugInfo(void);				// デバッグ情報表記
+
+	/* 静的メンバ関数 */
+	static CMeltyHoneyAI	*CreateAI(CWeakEnemy *pEnemy);	// AIの生成
+
+	/* メンバ関数 */
+	MeltyHoneyAI_STATE		GetAIType(void);				// AIの状態取得
+
 private:
-	CWeakEnemy *pEnemy;					//敵の情報の格納用
-	AI_STATE m_AItype;			//攻撃の種類
-	AI_STATE m_AItypeOld;		//前の攻撃の格納
+	/* メンバ関数 */
+	void					MeltyHoneyAIState();			// メルティハニーのAIの状態
 
-	int m_recast;						//現在行動から次回行動までの時間
-	int m_castcount;					//行動時間
-	int m_AttackCnt;					//攻撃をしている時間
-	int m_AttackCastCnt;				//攻撃に入るまでの時間
-	int m_MoveCnt;						//移動している時間
-	int m_LaserRandom;					//レーザーの右左の乱数代入
-	int m_Attacks;						//何回攻撃するか
-	bool m_bShot;						//攻撃可能状態
-	bool m_bReStartFlag;				//前回とは異なる行動をするフラグ
-	bool m_Attack;						//攻撃状態
-
-	CCollision	*m_pCollision;			//当たり判定のポインタ
-	D3DXVECTOR3 m_pos;
-	D3DXVECTOR3 m_ShotVec;
-	CWeakEnemy *pEnemyPass;				//敵の情報の格納用
-	D3DXVECTOR3 m_Distance;
-	float m_fDistance;
-
+	/* メンバ変数 */
+	CWeakEnemy				*m_pEnemyPass;					// 敵の情報の格納用
+	MeltyHoneyAI_STATE		m_StateAI;						// 行動の種類
+	int						m_nCntShotFrame;				// 撃つまでのカウント
+	int						m_nCntMoveStopFrame;			// 止まるまでのカウント
 };
-
 #endif
-#pragma once

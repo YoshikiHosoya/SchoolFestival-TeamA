@@ -366,7 +366,7 @@ bool CCollision::ForPlayerBulletCollision(int nEnemyDamage, int nObstacleDamage,
 					}
 
 					// 捕虜の状態変化
-					pPrisoner->SetPrisonerState(CPrisoner::PRISONER_STATE_DROPITEM);
+					pPrisoner->SetPrisonerState(CPrisoner::PRISONER_STATE_THINKING);
 					// ポインタをnullにする
 					pPrisoner = nullptr;
 					// 当たり範囲フラグをtrueにする

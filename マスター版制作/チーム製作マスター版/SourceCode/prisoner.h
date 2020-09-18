@@ -18,12 +18,12 @@
 // =====================================================================================================================================================================
 // 捕虜のデータ
 // =====================================================================================================================================================================
-typedef struct
+struct PRISONER_DATA
 {
 	int					nDeleteTime;	// 消滅するまでの時間
 	float				fMoveSpeed;		// 移動速度
 	D3DXVECTOR3			CollisionSize;	// 当たり判定のサイズ
-}PRISONER_DATA;
+};
 
 // =====================================================================================================================================================================
 // 前方宣言
@@ -41,8 +41,10 @@ public:
 	enum PRISONER_STATE
 	{
 		PRISONER_STATE_STAY,									// 縛られている初期状態
+		PRISONER_STATE_THINKING,								// 次の行動を考える
+		PRISONER_STATE_SKIP,									// プレイヤーとの距離が離れていたらスキップする
 		PRISONER_STATE_DROPITEM,								// アイテムを落とす
-		PRISONER_STATE_SALUTE,									// 敬礼
+		PRISONER_STATE_RAMPAGE,									// 暴れる
 		PRISONER_STATE_RUN,										// 走って消える
 		PRISONER_STATE_MAX										// 最大数
 	};
@@ -50,9 +52,8 @@ public:
 	// 捕虜の種類
 	enum PRISONER_ITEM_DROPTYPE
 	{
-		PRISONER_ITEM_DROPTYPE_DESIGNATE_ONE,					// ドロップするアイテムを１種類指定する
-		PRISONER_ITEM_DROPTYPE_DESIGNATE_RANGE,					// ドロップするアイテムの種類を指定する - 武器系かスコア系か
-		PRISONER_ITEM_DROPTYPE_ALL,								// 全てのアイテムからランダムでドロップさせる
+		PRISONER_ITEM_DROPTYPE_PICK_ONE,						// ドロップするアイテムを１種類指定する
+		PRISONER_ITEM_DROPTYPE_RANGE,							// ドロップするアイテムの種類を指定する - 弾薬系かスコア系か
 		PRISONER_ITEM_DROPTYPE_MAX								// 最大数
 	};
 
@@ -68,7 +69,6 @@ public:
 	/* 静的メンバ関数 */
 	static CPrisoner	*Create();								// 生成
 	static	void		PrisonerLoad();							// 捕虜情報のロード
-	static	void		SetPrisonerData();						// 捕虜のデータ設定
 
 	/* メンバ関数 */
 	void				DebugInfo(void);						// デバッグ
@@ -96,9 +96,6 @@ private:
 	/* 静的メンバ変数 */
 	static char				*m_PrisonerFileName;				// 捕虜のファイル名
 	static PRISONER_DATA	m_PrisonerData;						// 捕虜のデータ
-	static int				m_nDeleteTime;						// 捕虜が消滅するまでの時間
-	static float			m_fMoveSpeed;						// 移動速度
-	static D3DXVECTOR3		m_CollisionSize;					// 当たり判定の大きさ
 
 	/* メンバ関数 */
 	void					PrisonerState();					// 捕虜の状態別処理
@@ -106,14 +103,17 @@ private:
 	void					SetStateTime(int time)
 							{m_StateTime = time;};				// ステートが切り替わるまでの時間の設定
 
+	unsigned int			GetDistance_Player_This();			// プレイヤーと選択された捕虜の距離の長さを求めて結果を返す
+	bool					PrisonerPosX_Than_Large();			// 捕虜のx座標から見て左にいるか右にいるかの結果を返す
+
 	/* メンバ変数 */
 	PRISONER_STATE			m_PrisonerState;					// デバッグのステータス
 	PRISONER_ITEM_DROPTYPE	m_PrisonerDropType;					// 捕虜の種類
 
 	void					Move(float move, float fdest);		// 捕虜の移動
 	int						m_nDieCount;						// 捕虜が消滅するまでのカウント
-	bool					m_bUse;								// ポインタを使用できるかどうか
 	int						m_StateTime;						// ステートが切り替わるまでの時間
 	CItem::ITEMTYPE			m_DropItem;							// 確定ドロップの種類
+	bool					m_bDrop;
 };
 #endif

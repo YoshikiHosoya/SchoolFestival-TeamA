@@ -18,12 +18,16 @@
 #include "item.h"
 #include "ModelSet.h"
 #include "hosso/Debug_ModelViewer.h"
-#include "MeltyHoneyAI.h"
+#include "meltyhoneyAI.h"
+#include "zycoccaAI.h"
+#include "grenadefire.h"
+#include "EnemyHelicopterAI.h"
+
 //====================================================================
 //マクロ定義
 //====================================================================
-#define ENEMY_HUMAN_COLLISIONSIZE				(D3DXVECTOR3(50.0f,75.0f,50.0f))			//敵の当たり判定サイズ
-#define ENEMY_HELICOPTER_COLLISIONSIZE			(D3DXVECTOR3(350.0f,150.0f,350.0f))		//敵の当たり判定サイズ
+#define ENEMY_HUMAN_COLLISIONSIZE				(D3DXVECTOR3(50.0f,75.0f,50.0f))		//敵の当たり判定サイズ
+#define ENEMY_HELICOPTER_COLLISIONSIZE			(D3DXVECTOR3(250.0f,150.0f,250.0f))		//敵の当たり判定サイズ
 #define ENEMY_MELTYHONEY_COLLISIONSIZE			(D3DXVECTOR3(250.0f,200.0f,250.0f))		//敵の当たり判定サイズ
 #define ENEMY_ZYCOCCA_COLLISIONSIZE				(D3DXVECTOR3(110.0f,95.0f,110.0f))		//敵の当たり判定サイズ
 
@@ -121,6 +125,14 @@ HRESULT CWeakEnemy::Init(void)
 		GetModelSet()->SetCharacterType(CModelSet::CHARACTER_TYPE_ENEMY_HELICOPTER);
 		GetModelSet()->LoadOffset(CModelSet::CHARACTER_TYPE_ENEMY_HELICOPTER);
 
+		//AIの追加
+		SetAIPtr(CEnemyHelicopterAI::CreateAI(this));
+
+		// グレネードを放つ位置のマトリックスの設定
+		GetGrenadeFirePtr()->SetMtx(GetModelSet()->GetCharacterModelList()[0]->GetMatrix());
+		// グレネードをドロップボムに設定
+		GetGrenadeFirePtr()->SetGrenadeType(CGrenadeFire::DROP_BOMB);
+
 		//モーションoff
 		CCharacter::GetModelSet()->SetUseMotion(false);
 		CCharacter::GetModelSet()->SetMotion(CModelSet::CHARACTER_MOTION_STATE_NONE);
@@ -140,13 +152,21 @@ HRESULT CWeakEnemy::Init(void)
 		//オフセット設定
 		GetModelSet()->SetCharacterType(CModelSet::CHARACTER_TYPE_ENEMY_MELTYHONEY);
 		GetModelSet()->LoadOffset(CModelSet::CHARACTER_TYPE_ENEMY_MELTYHONEY);
+
 		//AIの追加
-		SetAIPtr(CMeltyhoney::CreateAI(this));
+		SetAIPtr(CMeltyHoneyAI::CreateAI(this));
+
 		// 銃の生成
 		GetGunPtr()->SetHandMtx(GetModelSet()->GetCharacterModelList()[0]->GetMatrix());
+		// 発射する位置の設定
+		GetGunPtr()->SetShotOffsetPos(D3DXVECTOR3(GetGunPtr()->GetShotOffsetPos().x, 
+													GetGunPtr()->GetShotOffsetPos().y + 70.0f, 
+													GetGunPtr()->GetShotOffsetPos().z - 100.0f));
 		// 銃の弾の種類
 		GetGunPtr()->SetDisp(true);
+		// 弾をミサイルに設定
 		GetGunPtr()->SetGunTypeOnly(CGun::GUNTYPE_MISSILE);
+
 		//モーションoff
 		CCharacter::GetModelSet()->SetUseMotion(false);
 		CCharacter::GetModelSet()->SetMotion(CModelSet::CHARACTER_MOTION_STATE_NONE);
@@ -163,6 +183,20 @@ HRESULT CWeakEnemy::Init(void)
 		//オフセット設定
 		GetModelSet()->SetCharacterType(CModelSet::CHARACTER_TYPE_ENEMY_ZYCOCCA);
 		GetModelSet()->LoadOffset(CModelSet::CHARACTER_TYPE_ENEMY_ZYCOCCA);
+
+		//AIの追加
+		SetAIPtr(CZycoccaAI::CreateAI(this));
+
+		// 銃の生成
+		GetGunPtr()->SetHandMtx(GetModelSet()->GetCharacterModelList()[0]->GetMatrix());
+		// 発射する位置の設定
+		GetGunPtr()->SetShotOffsetPos(D3DXVECTOR3(GetGunPtr()->GetShotOffsetPos().x,
+													GetGunPtr()->GetShotOffsetPos().y + 70.0f,
+													GetGunPtr()->GetShotOffsetPos().z - 100.0f));
+		// 銃の弾の種類
+		GetGunPtr()->SetDisp(true);
+		// 弾をフレイムバレットに設定
+		GetGunPtr()->SetGunTypeOnly(CGun::GUNTYPE_FLAMEBULLET);
 
 		//モーションoff
 		CCharacter::GetModelSet()->SetUseMotion(false);
@@ -361,16 +395,27 @@ void CWeakEnemy::DeathReaction()
 		// ランダムな確率でアイテムをドロップする
 		if (CItem::DropRate())
 		{
-			//アイテムを生成
-			CItem::DropCreate(GetPosition(),
-				CItem::ITEMDROP_CHARGE,
-				CItem::ITEMDROP_PATTERN_DESIGNATE,
-				CItem::ITEMTYPE_NONE);
+			// 雑魚的の場合
+			if (GetEnemyType() == CEnemy::ENEMY_TYPE::ENEMY_NORMAL &&
+				GetEnemyType() == CEnemy::ENEMY_TYPE::ENEMY_SHIELD)
+			{
+				//アイテムを生成
+				CItem::DropItem(GetPosition(),
+					false,
+					CItem::ITEMTYPE_NONE);
+			}
+			// その他
+			else
+			{
+				//アイテムを生成
+				CItem::DropItem(GetPosition(),
+					true,
+					CItem::ITEMTYPE_HEAVYMACHINEGUN);
+			}
 		}
 	}
 
 	CEnemy::DeathReaction();
-
 }
 //====================================================================
 //ステートが変更した瞬間の処理

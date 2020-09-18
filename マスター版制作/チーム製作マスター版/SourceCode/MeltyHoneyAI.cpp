@@ -1,173 +1,233 @@
-//=============================================================================
-// AI処理 [BossAI.cpp] Hanzawa
-//=============================================================================
-#include "MeltyHoneyAI.h"
+// =====================================================================================================================================================================
+//
+// メルティハニーのAIの処理 [meltyhoneyAI.cpp]
+// Author : Sato Yoshiki
+//
+// =====================================================================================================================================================================
+#include "meltyhoneyAI.h"		// インクルードファイル
 #include "renderer.h"
-#include "inputKeyboard.h"
-#include "Boss.h"
+#include "WeakEnemy.h"
 #include "Player.h"
 #include "manager.h"
 #include "BaseMode.h"
-#include "collision.h"
+#include "map.h"
 #include "gun.h"
-#include "particle.h"
-#include "sound.h"
-#include "WeakEnemy.h"
 #include "ModelSet.h"
-#define MOVE_SPEED		(0.5f)
-#define MAX_RECASTTIME (60)
-CMeltyhoney::CMeltyhoney()
+#include "EnemyAI.h"
+
+// =====================================================================================================================================================================
+// 静的メンバ変数の初期化
+// =====================================================================================================================================================================
+
+// =====================================================================================================================================================================
+// マクロ定義
+// =====================================================================================================================================================================
+#define SHOT_COOLTIME				(300)					// 撃つまでの時間
+#define MOVE_STOP_TIME				(120)					// 止まるまでの時間
+#define MOVE_SPEED					(3.0f)					// 移動スピード
+
+// =====================================================================================================================================================================
+//
+// コンストラクタ
+//
+// =====================================================================================================================================================================
+CMeltyHoneyAI::CMeltyHoneyAI()
 {
+	m_pEnemyPass = nullptr;
 }
 
-CMeltyhoney::~CMeltyhoney()
+// =====================================================================================================================================================================
+//
+// デストラクタ
+//
+// =====================================================================================================================================================================
+CMeltyHoneyAI::~CMeltyHoneyAI()
 {
+	m_pEnemyPass = nullptr;
 }
 
-//=============================================================================
+// =====================================================================================================================================================================
+//
 // 初期化処理
-//=============================================================================
-HRESULT CMeltyhoney::Init(void)
+// 
+// =====================================================================================================================================================================
+HRESULT CMeltyHoneyAI::Init(void)
 {
-	m_recast = 60;
-	m_castcount = 0;
-	m_LaserRandom = 0;
-	m_bShot = false;
-	m_AItype = AI_NONE;
-	m_ShotVec = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	m_Attack = false;
-	m_AttackCastCnt = 0;
-	m_AttackCnt = 0;
-	m_MoveCnt = 0;
-	m_Attacks = 0;
+	m_nCntShotFrame			= 0;							// 撃つまでのカウント
+	m_nCntMoveStopFrame		= 0;							// 止まるまでのカウント
+	m_StateAI				= MeltyHoneyAI_STATE::NONE;		// AIの状態
 	return S_OK;
 }
 
-//=============================================================================
+// =====================================================================================================================================================================
+//
 // 終了処理
-//=============================================================================
-void CMeltyhoney::Uninit(void)
+// 
+// =====================================================================================================================================================================
+void CMeltyHoneyAI::Uninit(void)
 {
 }
 
-//=============================================================================
+// =====================================================================================================================================================================
+//
 // 更新処理
-//=============================================================================
-void CMeltyhoney::Update(void)
+// 
+// =====================================================================================================================================================================
+void CMeltyHoneyAI::Update(void)
 {
+	// メルティハニーのAIの状態
+	MeltyHoneyAIState();
+}
+
+// =====================================================================================================================================================================
+//
+// 描画処理
+// 
+// =====================================================================================================================================================================
+void CMeltyHoneyAI::Draw(void)
+{
+}
+
+// =====================================================================================================================================================================
+//
+// デバッグ情報表記
+// 
+// =====================================================================================================================================================================
+void CMeltyHoneyAI::DebugInfo(void)
+{
+}
+
+// =====================================================================================================================================================================
+//
+// AIの生成
+// 
+// =====================================================================================================================================================================
+CMeltyHoneyAI * CMeltyHoneyAI::CreateAI(CWeakEnemy *pEnemy)
+{
+	// 変数
+	CMeltyHoneyAI	*pMeltyHoneyAI;
+
+	// メモリの確保
+	pMeltyHoneyAI = new CMeltyHoneyAI();
+
+	// 初期化
+	pMeltyHoneyAI->Init();
+
+	// エネミーの情報
+	pMeltyHoneyAI->m_pEnemyPass = pEnemy;
+
+	return pMeltyHoneyAI;
+}
+
+// =====================================================================================================================================================================
+//
+// AIの状態取得
+// 
+// =====================================================================================================================================================================
+CMeltyHoneyAI::MeltyHoneyAI_STATE CMeltyHoneyAI::GetAIType(void)
+{
+	return m_StateAI;
+}
+
+// =====================================================================================================================================================================
+//
+// メルティハニーのAIの状態
+// 
+// =====================================================================================================================================================================
+void CMeltyHoneyAI::MeltyHoneyAIState()
+{
+	// プレイヤーのポインタ取得
 	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer(TAG::PLAYER_1);
 	// マップのポインタ取得
-	CMap *pMap;
-	pMap = CManager::GetBaseMode()->GetMap();
-	CKeyboard *key;
-	key = CManager::GetInputKeyboard();
-	m_castcount++;
-	if (pEnemyPass != nullptr)
+	CMap *pMap = CManager::GetBaseMode()->GetMap();
+
+	// エネミーの情報が入っているとき
+	if (m_pEnemyPass)
 	{
 		// マップモデルが存在した時
-		if (pMap != nullptr)
+		if (pMap)
 		{
-			if (pPlayer != nullptr)
+			// プレイヤーが存在しているとき
+			if (pPlayer)
 			{
-				pEnemyPass->SetCharacterDirection(DIRECTION::RIGHT);
-				//攻撃できる距離の計算
-				m_Distance = pEnemyPass->GetPosition() - pPlayer->GetPosition();
-				m_fDistance = D3DXVec2Length(&D3DXVECTOR2(m_Distance.x, m_Distance.y));
-				//この距離まで移動
-				if (m_fDistance > 200)
+				switch (m_StateAI)
 				{
-					m_AItype = AI_RIGHT;
-				}
-				else
-				{
-					m_AItype = AI_LEFT;
-				}
-				//射程内なら射撃
-				if (m_fDistance < 200)
-				{
-					m_AItype = AI_SHOT;
-				}
-				switch (m_AItype)
-				{
-				case AI_NONE:
-					pEnemyPass->GetModelSet()->SetMotion(CModelSet::ENEMY_MOTION_NORMAL);
-					break;
-				case AI_STOP:
-					pEnemyPass->GetModelSet()->SetMotion(CModelSet::ENEMY_MOTION_NORMAL);
-					break;
-				case AI_LEFT:
-					pEnemyPass->GetMove().x -= MOVE_SPEED;
-					pEnemyPass->SetCharacterDirection(DIRECTION::LEFT);
-					pEnemyPass->GetRotDest().y = D3DX_PI * 0.5f;
-					pEnemyPass->GetModelSet()->SetMotion(CModelSet::ENEMY_MOTION_WALK);
-					break;
-				case AI_RIGHT:
-					pEnemyPass->GetMove().x += MOVE_SPEED;
-					pEnemyPass->SetCharacterDirection(DIRECTION::RIGHT);
-					pEnemyPass->GetRotDest().y = D3DX_PI * -0.5f;
-					pEnemyPass->GetModelSet()->SetMotion(CModelSet::ENEMY_MOTION_WALK);
-					break;
-				case AI_SHOT:
-					pEnemyPass->GetModelSet()->SetMotion(CModelSet::ENEMY_MOTION_NORMAL);
-					m_AttackCnt++;
-					//120フレームより小さいとき射撃
-					if (m_AttackCnt < 60 && m_Attacks < 3 && m_AttackCnt % 10 == 0)
+				case CMeltyHoneyAI::MeltyHoneyAI_STATE::NONE:
+					//プレイヤーが左にいるとき
+					if (m_pEnemyPass->GetPosition().x > pPlayer->GetPosition().x)
 					{
-						pEnemyPass->GetGunPtr()->Shot();
+						m_StateAI = MeltyHoneyAI_STATE::WALK_LEFT;
 					}
-					else if (m_AttackCnt == 120)
+
+					//プレイヤーが右にいるとき
+					if (m_pEnemyPass->GetPosition().x < pPlayer->GetPosition().x)
 					{
-						m_AttackCnt = 0;
-						m_Attacks++;
+						m_StateAI = MeltyHoneyAI_STATE::WALK_RIGHT;
 					}
-					//60フレームかつ攻撃回数に達したら初期化
-					if (m_AttackCnt > 60 && m_Attacks >= 3)
+					break;
+
+				case CMeltyHoneyAI::MeltyHoneyAI_STATE::STOP:
+					// 動きを止めて攻撃開始
+					m_pEnemyPass->SetMove(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+					m_StateAI = MeltyHoneyAI_STATE::ATTACK;
+					break;
+
+				case CMeltyHoneyAI::MeltyHoneyAI_STATE::WALK_LEFT:
+
+					// カウントアップ
+					m_nCntMoveStopFrame++;
+
+					//プレイヤーが左にいるとき
+					if (m_pEnemyPass->GetPosition().x > pPlayer->GetPosition().x)
 					{
-						m_AttackCnt = 0;
-						m_Attacks = 0;
+						m_pEnemyPass->GetRotDest().y = D3DX_PI * 0.5f;
+						m_pEnemyPass->SetCharacterDirection(DIRECTION::LEFT);
+						
+						// 移動
+						m_pEnemyPass->GetMove().x = -MOVE_SPEED;
+					}
+					// 一定時間たったら止まる
+					if (m_nCntMoveStopFrame > MOVE_STOP_TIME)
+					{
+						m_StateAI = MeltyHoneyAI_STATE::STOP;
+					}
+					break;
+
+				case CMeltyHoneyAI::MeltyHoneyAI_STATE::WALK_RIGHT:
+
+					// カウントアップ
+					m_nCntMoveStopFrame++;
+
+					//プレイヤーが右にいるとき
+					if (m_pEnemyPass->GetPosition().x < pPlayer->GetPosition().x)
+					{
+						m_pEnemyPass->GetRotDest().y = D3DX_PI * -0.5f;
+						m_pEnemyPass->SetCharacterDirection(DIRECTION::RIGHT);
+
+						// 移動
+						m_pEnemyPass->GetMove().x = MOVE_SPEED;
+					}
+					// 一定時間たったら止まる
+					if (m_nCntMoveStopFrame > MOVE_STOP_TIME)
+					{
+						m_StateAI = MeltyHoneyAI_STATE::STOP;
+					}
+					break;
+
+				case CMeltyHoneyAI::MeltyHoneyAI_STATE::ATTACK:
+
+					// カウントアップ
+					m_nCntShotFrame++;
+
+					if (m_nCntShotFrame > SHOT_COOLTIME)
+					{
+						// 発射
+						m_pEnemyPass->GetGunPtr()->Shot();
+						m_nCntShotFrame = 0;
 					}
 					break;
 				}
 			}
 		}
 	}
-	UpdateMoveAI();
-	UpdateAttackAI();
-}
-//=============================================================================
-// 移動AI更新処理
-//=============================================================================
-void CMeltyhoney::UpdateMoveAI(void)
-{
-}
-//=============================================================================
-// 攻撃AI更新処理
-//=============================================================================
-void CMeltyhoney::UpdateAttackAI(void)
-{
-}
-//=============================================================================
-// 描画
-//=============================================================================
-void CMeltyhoney::Draw(void)
-{
-}
-//=============================================================================
-// デバッグ
-//=============================================================================
-void CMeltyhoney::DebugInfo(void)
-{
-}
-
-//=============================================================================
-// AIのクリエイト
-//=============================================================================
-CMeltyhoney * CMeltyhoney::CreateAI(CWeakEnemy *pEnemy)
-{
-	CMeltyhoney*pMeltyhoneyAI;
-	pMeltyhoneyAI = new CMeltyhoney();
-	pMeltyhoneyAI->Init();
-	pMeltyhoneyAI->pEnemyPass = pEnemy;
-
-	return pMeltyhoneyAI;
 }

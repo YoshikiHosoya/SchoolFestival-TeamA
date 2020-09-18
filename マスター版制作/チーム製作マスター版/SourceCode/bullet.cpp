@@ -87,7 +87,6 @@ HRESULT CBullet::Init()
 
 	// èâä˙âª
 	CModel::Init();
-
 	return S_OK;
 }
 
@@ -108,7 +107,6 @@ void CBullet::Uninit(void)
 // =====================================================================================================================================================================
 void CBullet::Update(void)
 {
-
 	// ëÃóÕÇ™0Ç…Ç»Ç¡ÇΩÇÁ
 	if (m_nLife-- <= 0)
 	{
@@ -352,10 +350,12 @@ void CBullet::SetBulletParam(CGun::GUN_TYPE type)
 {
 	m_nLife = m_BulletParam[type].nLife;	// ëÃóÕ
 
+	m_GunType = type;
+
 	// ìñÇΩÇËîªíËê∂ê¨
 	GetCollision()->SetPos(&GetPosition());
-	GetCollision()->SetSize(m_BulletParam[type].CollisionSize);
 	GetCollision()->SetMove(&m_move);
+	GetCollision()->SetSize(m_BulletParam[type].CollisionSize);
 	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_NORMAL);
 }
 
