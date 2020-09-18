@@ -322,7 +322,13 @@
     <ClCompile Include="SourceCode\missile.cpp">
       <Filter>Wepon\Bullet</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\MeltyHoneyAI.cpp">
+    <ClCompile Include="SourceCode\EnemyHelicopterAI.cpp">
+      <Filter>AI</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\zycoccaAI.cpp">
+      <Filter>AI</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\meltyhoneyAI.cpp">
       <Filter>AI</Filter>
     </ClCompile>
   </ItemGroup>
@@ -660,7 +666,13 @@
     <ClInclude Include="SourceCode\missile.h">
       <Filter>Wepon\Bullet</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\MeltyHoneyAI.h">
+    <ClInclude Include="SourceCode\EnemyHelicopterAI.h">
+      <Filter>AI</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\zycoccaAI.h">
+      <Filter>AI</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\meltyhoneyAI.h">
       <Filter>AI</Filter>
     </ClInclude>
   </ItemGroup>
