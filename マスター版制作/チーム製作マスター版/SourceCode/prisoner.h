@@ -41,8 +41,10 @@ public:
 	enum PRISONER_STATE
 	{
 		PRISONER_STATE_STAY,									// 縛られている初期状態
+		PRISONER_STATE_THINKING,								// 次の行動を考える
+		PRISONER_STATE_SKIP,									// プレイヤーとの距離が離れていたらスキップする
 		PRISONER_STATE_DROPITEM,								// アイテムを落とす
-		PRISONER_STATE_SALUTE,									// 敬礼
+		PRISONER_STATE_RAMPAGE,									// 暴れる
 		PRISONER_STATE_RUN,										// 走って消える
 		PRISONER_STATE_MAX										// 最大数
 	};
@@ -50,9 +52,8 @@ public:
 	// 捕虜の種類
 	enum PRISONER_ITEM_DROPTYPE
 	{
-		PRISONER_ITEM_DROPTYPE_DESIGNATE_ONE,					// ドロップするアイテムを１種類指定する
-		PRISONER_ITEM_DROPTYPE_DESIGNATE_RANGE,					// ドロップするアイテムの種類を指定する - 武器系かスコア系か
-		PRISONER_ITEM_DROPTYPE_ALL,								// 全てのアイテムからランダムでドロップさせる
+		PRISONER_ITEM_DROPTYPE_PICK_ONE,						// ドロップするアイテムを１種類指定する
+		PRISONER_ITEM_DROPTYPE_RANGE,							// ドロップするアイテムの種類を指定する - 弾薬系かスコア系か
 		PRISONER_ITEM_DROPTYPE_MAX								// 最大数
 	};
 
@@ -102,6 +103,9 @@ private:
 	void					SetStateTime(int time)
 							{m_StateTime = time;};				// ステートが切り替わるまでの時間の設定
 
+	unsigned int			GetDistance_Player_This();			// プレイヤーと選択された捕虜の距離の長さを求めて結果を返す
+	bool					PrisonerPosX_Than_Large();			// 捕虜のx座標から見て左にいるか右にいるかの結果を返す
+
 	/* メンバ変数 */
 	PRISONER_STATE			m_PrisonerState;					// デバッグのステータス
 	PRISONER_ITEM_DROPTYPE	m_PrisonerDropType;					// 捕虜の種類
@@ -110,5 +114,6 @@ private:
 	int						m_nDieCount;						// 捕虜が消滅するまでのカウント
 	int						m_StateTime;						// ステートが切り替わるまでの時間
 	CItem::ITEMTYPE			m_DropItem;							// 確定ドロップの種類
+	bool					m_bDrop;
 };
 #endif

@@ -158,7 +158,6 @@ void CItem::Draw(void)
 	pDevice->SetRenderState(D3DRS_LIGHTING, false);				// ライティングoff
 	pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
 
-	// ビルボード
 	// ビューマトリックスの代入用
 	D3DXMATRIX mtxView;
 	// 現在のビューマトリックスを取得
@@ -537,29 +536,18 @@ CItem::ITEM_RARITY CItem::RarityRandomRange(ITEM_RARITY min, ITEM_RARITY max)
 // アイテムをドロップする時のパターン
 //
 // =====================================================================================================================================================================
-void CItem::DropPattern(ITEMDROP_PATTERN pattern , ITEMDROP drop, ITEMTYPE type)
+void CItem::DropPattern(bool fixed, ITEMTYPE type)
 {
-	// NONEのエラーを避けるため
-	if (pattern == ITEMDROP_PATTERN_DESIGNATE && type == ITEMTYPE_NONE)
+	// 確定しているならそのタイプを設定する
+	if (fixed)
 	{
-		drop = ITEMDROP_ALL;
-		pattern = ITEMDROP_PATTERN_RANDOM;
-	}
-	// 条件ごとにドロップさせる条件を変える
-	switch (pattern)
-	{
-		// ドロップするアイテムを指定する
-	case CItem::ITEMDROP_PATTERN_DESIGNATE:
 		m_Type = type;
-		break;
-
-		// ドロップするアイテムをランダムにする
-	case CItem::ITEMDROP_PATTERN_RANDOM:
-		// アイテムのタイプをランダムに設定
-		m_Type = RandDropItem(drop);
-		break;
-	default:
-		break;
+	}
+	// 確定していないなら武器以外のタイプを設定する
+	else
+	{
+		// タイプをランダムに設定
+		m_Type = RandDropItem(ITEMDROP_SCO_CHA);
 	}
 }
 
@@ -874,16 +862,13 @@ void CItem::ItemLoad()
 
 // =====================================================================================================================================================================
 //
-// キャラクターがアイテムを落とすときの生成処理
+// キャラクターがアイテムを落とすときの生成処理 確定しないならtypeにNONEを入れる
 //
 // =====================================================================================================================================================================
-CItem * CItem::DropItem(D3DXVECTOR3 pos, ITEMDROP drop , ITEMDROP_PATTERN pattern ,ITEMTYPE type)
+CItem * CItem::DropItem(D3DXVECTOR3 droppos, bool fixed,ITEMTYPE type)
 {
-	// 変数
-	CItem *pItem;
-
 	// メモリの確保
-	pItem = new CItem(OBJTYPE_ITEM);
+	CItem *pItem = new CItem(OBJTYPE_ITEM);
 
 	// 初期化
 	pItem->Init();
@@ -895,13 +880,15 @@ CItem * CItem::DropItem(D3DXVECTOR3 pos, ITEMDROP drop , ITEMDROP_PATTERN patter
 		m_ItemData.CollisionSize.z /2));
 
 	// アイテムが生成される位置の調整
-	pItem->SetDropPos(pos);
+	//pItem->SetDropPos(droppos);
+
+	droppos.y += 30.0f;
 
 	// アイテムの位置の設定
-	pItem->SetPosition(pos);
+	pItem->SetPosition(droppos);
 
 	// アイテムのドロップをパターンごとに変える
-	pItem->DropPattern(pattern, drop, type);
+	pItem->DropPattern(fixed, type);
 
 	// 種類別にテクスチャを設定
 	pItem->SwitchTexture(pItem->m_Type, pItem);
@@ -1057,6 +1044,13 @@ CItem::ITEMTYPE CItem::RandDropItem(ITEMDROP drop)
 	case CItem::ITEMDROP_WEA_SCO:
 		// ランダムの範囲を武器強化とスコアアイテムのみに選択
 		return ItemRandomRange(ITEMTYPE_HEAVYMACHINEGUN, ITEMTYPE_MEDAL);
+		break;
+
+
+		// スコアアップと弾薬の場合
+	case CItem::ITEMDROP_SCO_CHA:
+		// ランダムの範囲をスコアアイテムと弾薬のみに選択
+		return ItemRandomRange(ITEMTYPE_BEAR, ITEMTYPE_BULLETUP);
 		break;
 
 		// 全てのアイテム

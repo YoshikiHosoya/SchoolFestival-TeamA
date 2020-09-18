@@ -25,7 +25,6 @@ struct ITEM_DATA
 	int					nDeleteTime;	// 点滅するまでの時間
 	int					nFlashTime;		// 点滅する時間
 	D3DXVECTOR3			CollisionSize;	// 当たり判定のサイズ
-	unsigned int		Rarity[12];		// 全アイテムのレアリティ[★1から★3まで]
 };
 // =====================================================================================================================================================================
 // アイテムガチャのデータ
@@ -81,6 +80,7 @@ public:
 		ITEMDROP_SCORE,				// スコアアップ
 		ITEMDROP_CHARGE,			// 弾薬など
 		ITEMDROP_WEA_SCO,			// 武器強化とスコアアップ
+		ITEMDROP_SCO_CHA,			// 弾薬とスコアアップ
 		ITEMDROP_ALL,				// 全て
 	};
 
@@ -122,11 +122,7 @@ public:
 	void						SetDropPos(D3DXVECTOR3 &characterpos);			// アイテムを生成位置を設定
 
 	/* 静的メンバ関数 */
-	static	CItem				*DropItem(
-		D3DXVECTOR3 pos,
-		ITEMDROP drop,
-		ITEMDROP_PATTERN pattern,
-		ITEMTYPE type);															// キャラクターがアイテムを落とす時の生成
+	static	CItem				*DropItem(D3DXVECTOR3 droppos, bool fixed, ITEMTYPE type);	// キャラクターがアイテムを落とす時の生成
 
 
 	static	CItem				*DropCreate_TEST();								// テスト用クリエイト処理
@@ -146,10 +142,7 @@ public:
 	ITEMTYPE					ItemRandomRange(ITEMTYPE min, ITEMTYPE max);		// ランダムの範囲選択
 	ITEM_RARITY					RarityRandomRange(ITEM_RARITY min, ITEM_RARITY max);// ランダムの範囲選択
 
-	void						DropPattern(
-		ITEMDROP_PATTERN pattern,
-		ITEMDROP drop,
-		ITEMTYPE type);															// アイテムのドロップパターン
+	void						DropPattern(bool fixed, ITEMTYPE type);				// アイテムのドロップパターン
 
 protected:
 private:

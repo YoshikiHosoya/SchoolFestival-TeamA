@@ -361,11 +361,23 @@ void CWeakEnemy::DeathReaction()
 		// ランダムな確率でアイテムをドロップする
 		if (CItem::DropRate())
 		{
-			//アイテムを生成
-			CItem::DropItem(GetPosition(),
-				CItem::ITEMDROP_CHARGE,
-				CItem::ITEMDROP_PATTERN_DESIGNATE,
-				CItem::ITEMTYPE_NONE);
+			// 雑魚的の場合
+			if (GetEnemyType() == CEnemy::ENEMY_TYPE::ENEMY_NORMAL &&
+				GetEnemyType() == CEnemy::ENEMY_TYPE::ENEMY_SHIELD)
+			{
+				//アイテムを生成
+				CItem::DropItem(GetPosition(),
+					false,
+					CItem::ITEMTYPE_NONE);
+			}
+			// その他
+			else
+			{
+				//アイテムを生成
+				CItem::DropItem(GetPosition(),
+					true,
+					CItem::ITEMTYPE_HEAVYMACHINEGUN);
+			}
 		}
 	}
 
