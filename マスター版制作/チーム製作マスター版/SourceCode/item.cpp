@@ -143,10 +143,11 @@ void CItem::Update(void)
 			{
 				// アイテムの滞在時間管理
 				RemainTimer();
+				m_Move = ZeroVector3;
 			}
 			else
 			{
-				GetPosition() + m_Move;
+				SetPosition(GetPosition() + m_Move);
 			}
 		}
 	}
@@ -642,12 +643,15 @@ void CItem::BounceItem()
 // 原点から指定された指定範囲のX座標を返す
 //
 // =====================================================================================================================================================================
-D3DXVECTOR3 CItem::RandomDropPosX(const D3DXVECTOR3 & originpos, int radius)
+D3DXVECTOR3 CItem::RandomDropPosX(const D3DXVECTOR3 originpos, int radius)
 {
 	// アイテムをドロップさせる座標
 	D3DXVECTOR3 DropPos = originpos;
 	// 原点から半径を引いた座標と半径を足した座標の範囲内の座標をランダムに返す
-	DropPos.x = (float)GetRandRange((int)originpos.x - radius, (int)originpos.x + radius);
+	//DropPos.x = (float)GetRandRange((int)originpos.x - radius, (int)originpos.x + radius);
+
+	DropPos.x = CHossoLibrary::Random((float)radius);
+	DropPos.z = 0.0f;
 
 	return DropPos;
 }
@@ -740,7 +744,7 @@ void CItem::DropPattern_Multiple(ITEM_LIST_DROPMULTIPLE list, ITEM_BEHAVIOR beha
 	case CItem::BEHAVIOR_FREEFALL:
 
 		// 下に落とす 重力付いたらいらない処理
-		SetMove(D3DXVECTOR3(0.0f, -5.0f, 0.0f));
+		SetMove(D3DXVECTOR3(0.0f, -4.0f, 0.0f));
 		break;
 
 		// 弾け飛ぶ
@@ -1075,7 +1079,7 @@ CItem * CItem::DropItem(D3DXVECTOR3 droppos, bool fixed,ITEMTYPE type)
 // アイテムを複数一気にドロップさせる時
 //
 // =====================================================================================================================================================================
-void CItem::DropItem_Multiple(const D3DXVECTOR3 &originpos, ITEM_LIST_DROPMULTIPLE type, ITEM_BEHAVIOR behavior)
+void CItem::DropItem_Multiple(const D3DXVECTOR3 originpos, ITEM_LIST_DROPMULTIPLE type, ITEM_BEHAVIOR behavior)
 {
 	// 生成する数分
 	for (int nNum = 0; nNum < MULTIPLE_ITEM_NUM; nNum++)
@@ -1095,7 +1099,8 @@ void CItem::DropItem_Multiple(const D3DXVECTOR3 &originpos, ITEM_LIST_DROPMULTIP
 		// 木から落ちるアイテムだけ
 		if (behavior == BEHAVIOR_FREEFALL)
 		{
-			pItem->SetPosition(pItem->RandomDropPosX(originpos, 150));
+			pItem->SetPosition(pItem->RandomDropPosX(originpos, 100));
+			//pItem->SetPosition(originpos);
 		}
 		// その他は原点座標を基準にする
 		else

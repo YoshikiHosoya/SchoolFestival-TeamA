@@ -159,7 +159,7 @@ public:
 	/* 静的メンバ関数 */
 	static	CItem				*DropItem(D3DXVECTOR3 droppos, bool fixed, ITEMTYPE type);	// キャラクターがアイテムを落とす時の生成
 	static	void				DropItem_Multiple(
-		const D3DXVECTOR3 &originpos,
+		const D3DXVECTOR3 originpos,
 		ITEM_LIST_DROPMULTIPLE type,
 		ITEM_BEHAVIOR behavior);												// アイテムを複数一気にドロップさせる時
 
@@ -220,7 +220,7 @@ private:
 	void						BurstsItem();									// 複数個一気にアイテムが生成される時のアイテムの挙動制御
 	void						BounceItem();									// 空中にあったアイテムが床に着いた時跳ね返る処理
 
-	D3DXVECTOR3					RandomDropPosX(const D3DXVECTOR3 &originpos,int radius);//原点から指定された指定範囲のX座標を返す
+	D3DXVECTOR3					RandomDropPosX(const D3DXVECTOR3 originpos,int radius);//原点から指定された指定範囲のX座標を返す
 	void						SetMultiType(ITEM_LIST_DROPMULTIPLE list);		// 複数体のタイプ設定
 
 	/* メンバ変数 */

@@ -270,7 +270,7 @@ void CObstacle::DropItem()
 
 		break;
 	case CObstacle::TYPE_TREE:
-		CItem::DropItem_Multiple(GetCollision()->GetPos(), CItem::LIST_FOOD, CItem::BEHAVIOR_FREEFALL);
+		CItem::DropItem_Multiple(GetPosition(), CItem::LIST_FOOD, CItem::BEHAVIOR_FREEFALL);
 		break;
 	case CObstacle::TYPE_CHEST:
 		CItem::DropItem_Multiple(GetPosition(), CItem::LIST_FOOD, CItem::BEHAVIOR_NONE);
