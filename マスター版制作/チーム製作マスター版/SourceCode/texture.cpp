@@ -18,18 +18,34 @@ FILENAME_LIST CTexture::m_aTexFileName =
 	{ "data/TEXTURE/TexNone.png" },							//白紙
 	{ "data/TEXTURE/Effect/particle.jpg" },					//パーティクル用の丸いの
 	{ "data/TEXTURE/Bullet/bullet00.png" },					//ハンドガンの弾
-	{ "data/TEXTURE/Item/Heavymachinegun.png" },			//ヘビーマシンガンの弾
-	{ "data/TEXTURE/Item/Shotgun.png" },					//ショットガンの弾
-	{ "data/TEXTURE/Item/Lasergun.png" },					//レーザーガンの弾
-	{ "data/TEXTURE/Item/Rocketlauncher.png" },				//ロケットランチャーの弾
-	{ "data/TEXTURE/Item/Flameshot.png" },					//フレイムショットの弾
-	{ "data/TEXTURE/Item/Bear.png" },						//熊
-	{ "data/TEXTURE/Item/Coin.png" },						//コイン
-	{ "data/TEXTURE/Item/Jewelry.png" },					//宝石
-	{ "data/TEXTURE/Item/Medal.png" },						//メダル
-	{ "data/TEXTURE/Item/Bombup.png" },						//ボムアップ
-	{ "data/TEXTURE/Item/Energyup.png" },					//乗り物の耐久値アップ
-	{ "data/TEXTURE/Item/Bulletup.png" },					//残段数アップ
+
+	{ "data/TEXTURE/Item/Weapon/Heavymachinegun.png" },		//ヘビーマシンガンの弾
+	{ "data/TEXTURE/Item/Weapon/Shotgun.png" },				//ショットガンの弾
+	{ "data/TEXTURE/Item/Weapon/Lasergun.png" },			//レーザーガンの弾
+	{ "data/TEXTURE/Item/Weapon/Rocketlauncher.png" },		//ロケットランチャーの弾
+	{ "data/TEXTURE/Item/Weapon/Flameshot.png" },			//フレイムショットの弾
+
+	{ "data/TEXTURE/Item/Score/GoldCoin.png" },				//金貨
+	{ "data/TEXTURE/Item/Score/SilverCoin.png" },			//銀貨
+	{ "data/TEXTURE/Item/Score/BronzeCoin.png" },			//銅貨
+	{ "data/TEXTURE/Item/Score/Diamond.png" },				//ダイアモンド
+	{ "data/TEXTURE/Item/Score/Bear.png" },					//熊
+	{ "data/TEXTURE/Item/Score/Letter.png" },				//手紙
+	{ "data/TEXTURE/Item/Score/Apple.png" },				//リンゴ
+	{ "data/TEXTURE/Item/Score/Melon.png" },				//メロン
+	{ "data/TEXTURE/Item/Score/Banana.png" },				//バナナ
+	{ "data/TEXTURE/Item/Score/Meat.png" },					//肉
+	{ "data/TEXTURE/Item/Score/RiceBall.png" },				//おにぎり
+	{ "data/TEXTURE/Item/Score/Candy.png" },				//飴
+	{ "data/TEXTURE/Item/Score/Donut.png" },				//ドーナツ
+	{ "data/TEXTURE/Item/Score/Lolipop.png" },				//ロリポップ
+	{ "data/TEXTURE/Item/Score/Bread.png" },				//パン
+	{ "data/TEXTURE/Item/Score/Chocolate.png" },			//チョコレート
+	{ "data/TEXTURE/Item/Score/Ice.png" },					//アイス
+
+	{ "data/TEXTURE/Item/Ammo/Bombup.png" },				//ボムアップ
+	{ "data/TEXTURE/Item/Ammo/Bulletup.png" },				//残段数アップ
+
 	{ "data/TEXTURE/Mesh/Grass.jpg" },						//草
 	{ "data/TEXTURE/Mesh/Block.jpg" },						//ブロック
 	{ "data/TEXTURE/Mesh/Water.jpg" },						//水

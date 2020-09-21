@@ -91,9 +91,11 @@ std::vector<CModel::MODEL_FILE_NAME> CModel::m_vModelFileName =
 	//ÉIÉuÉWÉFÉNÉg
 	{ "data/MODEL/Object/Obstacle_Box.x" ,					OBSTACLE_TYPE_BOX },					// î†
 	{ "data/MODEL/Object/Obstacle_Barrel.x" ,				OBSTACLE_TYPE_BARREL },					// íM
+	{ "data/MODEL/Object/Obstacle_BarrelBomb.x" ,			OBSTACLE_TYPE_BARRELBOMB },				// íMîöíe
 	{ "data/MODEL/Object/Obstacle_Tree.x" ,					OBSTACLE_TYPE_TREE },					// ñÿ
 	{ "data/MODEL/Object/Obstacle_Chest.x" ,				OBSTACLE_TYPE_CHEST },					// ã‡å…
 	{ "data/MODEL/Object/Obstacle_Sandbags.x" ,				OBSTACLE_TYPE_SANDBAGS },				// ìyîX
+	{ "data/MODEL/Object/Obstacle_Car.x" ,					OBSTACLE_TYPE_CAR },					// é‘
 
 	//ïﬂó∏
 	{ "data/MODEL/Prisoner/Waist.x",						MODEL_PRISONER_WAIST			},		// ïﬂó∏ÇÃçò

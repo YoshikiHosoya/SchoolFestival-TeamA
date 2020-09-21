@@ -29,17 +29,34 @@ public:
 
 		TEX_EFFECT_PARTICLE,					//パーティクル
 		TEX_BULLET_HANDGUN,						//ハンドガンの弾
+
 		TEX_ITEM_HEAVYMACHINEGUN,				//ヘビーマシンガン
 		TEX_ITEM_SHOTGUN,						//ショットガン
 		TEX_ITEM_LASERGUN,						//レーザーガン
 		TEX_ITEM_ROCKETLAUNCHER,				//ロケットランチャー
 		TEX_ITEM_FLAMESHOT,						//フレイムショット
+
+		TEX_ITEM_GOLDCOIN,						//コイン-スコアアップ
+		TEX_ITEM_SILVERCOIN,					//コイン-スコアアップ
+		TEX_ITEM_BRONZESCOIN,					//コイン-スコアアップ
+
+		TEX_ITEM_DIAMOND,						//宝石-スコアアップ
 		TEX_ITEM_BEAR,							//熊-スコアアップ
-		TEX_ITEM_COIN,							//コイン-スコアアップ
-		TEX_ITEM_JEWELRY,						//宝石-スコアアップ
-		TEX_ITEM_MEDAL,							//メダル-スコアアップ
+		TEX_ITEM_LETTER,						//手紙-スコアアップ
+
+		TEX_ITEM_APPLE,							//リンゴ-スコアアップ
+		TEX_ITEM_MELON,							//メロン-スコアアップ
+		TEX_ITEM_BANANA,						//バナナ-スコアアップ
+		TEX_ITEM_MEAT,							//肉-スコアアップ
+		TEX_ITEM_RICEBALL,						//おにぎり-スコアアップ
+		TEX_ITEM_CANDY,							//キャンディ-スコアアップ
+		TEX_ITEM_DONUT,							//ドーナツ-スコアアップ
+		TEX_ITEM_LOLIPOP,						//ロリポップ-スコアアップ
+		TEX_ITEM_BREAD,							//パン-スコアアップ
+		TEX_ITEM_CHOCOLATE,						//チョコレート-スコアアップ
+		TEX_ITEM_ICE,							//アイス-スコアアップ
+
 		TEX_ITEM_BOMBUP,						//爆弾の数加算
-		TEX_ITEM_ENERGYUP,						//ガソリン
 		TEX_ITEM_BULLETUP,						//残段数加算
 
 		TEX_MESH_GRASS,							//草

@@ -3,19 +3,19 @@
 #------------------------------------------------------------------------------
 
 SCRIPT
-
 SCORESET
-	
-	BEAR		= 1500	
-	COIN		= 10	
-	JEWELRY		= 800	
-	MEDAL		= 1000	
+	FRUIT		= 1000
+	FOOD		= 100
+	GCOIN		= 10000
+	SCOIN		= 1000
+	BCOIN		= 100
+	BEAR		= 1500
+	LETTER		= 500
+	DIAMOND		= 100000
 	BULLET		= 100	
 	ATTACK		= 500	
 	PRISONER	= 500	
 	BONUS		= 10000
 	BOSS		= 100000
-	
 END_SCORESET
-
 END_SCRIPT

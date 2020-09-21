@@ -79,15 +79,19 @@ void CScoreManager::Update(void)
 // =====================================================================================================================================================================
 void CScoreManager::SetScoreData()
 {
-	m_nScore [SCORE_ITEM_BEAR]			 = m_ScoreData.nBear;
-	m_nScore [SCORE_ITEM_COIN]			 = m_ScoreData.nCoin;
-	m_nScore [SCORE_ITEM_JEWELRY]		 = m_ScoreData.nJewelry;
-	m_nScore [SCORE_ITEM_MEDAL]			 = m_ScoreData.nMedal;
-	m_nScore [SCORE_DAMAGE_BULLET]		 = m_ScoreData.nBullet;
-	m_nScore [SCORE_DAMAGE_ATTACK]		 = m_ScoreData.nAttack;
-	m_nScore [SCORE_RESCUE_PRISONER]	 = m_ScoreData.nPrisoner;
-	m_nScore [SCORE_BONUS]				 = m_ScoreData.nBonus;
-	m_nScore [SCORE_KILLED_BOSS]		 = m_ScoreData.nBoss;
+	m_nScore[SCORE_ITEM_FRUIT]			 = m_ScoreData.nFruit;
+	m_nScore[SCORE_ITEM_FOOD]			 = m_ScoreData.nFood;
+	m_nScore[SCORE_ITEM_GCOIN]			 = m_ScoreData.nGoldCoin;
+	m_nScore[SCORE_ITEM_SCOIN]			 = m_ScoreData.nSilverCoin;
+	m_nScore[SCORE_ITEM_BCOIN]			 = m_ScoreData.nBronzeCoin;
+	m_nScore[SCORE_ITEM_BEAR]			 = m_ScoreData.nBear;
+	m_nScore[SCORE_ITEM_LETTER]			 = m_ScoreData.nLetter;
+	m_nScore[SCORE_ITEM_DIAMOND]		 = m_ScoreData.nDiamond;
+	m_nScore[SCORE_DAMAGE_BULLET]		 = m_ScoreData.nBullet;
+	m_nScore[SCORE_DAMAGE_ATTACK]		 = m_ScoreData.nAttack;
+	m_nScore[SCORE_RESCUE_PRISONER]		 = m_ScoreData.nPrisoner;
+	m_nScore[SCORE_BONUS]				 = m_ScoreData.nBonus;
+	m_nScore[SCORE_KILLED_BOSS]			 = m_ScoreData.nBoss;
 }
 
 // =====================================================================================================================================================================
@@ -136,24 +140,37 @@ void CScoreManager::ScoreLoad()
 						sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
 
 																	// SPEEDが来たら
+						if (strcmp(cHeadText, "FRUIT") == 0)
+						{
+							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_ScoreData.nFruit);	// 比較用テキストにBEARを代入
+						}
+						if (strcmp(cHeadText, "FOOD") == 0)
+						{
+							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_ScoreData.nFood);	// 比較用テキストにBEARを代入
+						}
+						if (strcmp(cHeadText, "GCOIN") == 0)
+						{
+							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_ScoreData.nGoldCoin);	// 比較用テキストにBEARを代入
+						}
+						if (strcmp(cHeadText, "SCOIN") == 0)
+						{
+							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_ScoreData.nSilverCoin);	// 比較用テキストにBEARを代入
+						}
+						if (strcmp(cHeadText, "BCOIN") == 0)
+						{
+							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_ScoreData.nBronzeCoin);	// 比較用テキストにBEARを代入
+						}
 						if (strcmp(cHeadText, "BEAR") == 0)
 						{
 							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_ScoreData.nBear);	// 比較用テキストにBEARを代入
 						}
-						// LIFEが来たら
-						else if (strcmp(cHeadText, "COIN") == 0)
+						if (strcmp(cHeadText, "LETTER") == 0)
 						{
-							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_ScoreData.nCoin);	// 比較用テキストにCOINを代入
+							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_ScoreData.nLetter);	// 比較用テキストにBEARを代入
 						}
-						// FLASHが来たら
-						else if (strcmp(cHeadText, "JEWELRY") == 0)
+						if (strcmp(cHeadText, "DIAMOND") == 0)
 						{
-							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_ScoreData.nJewelry);	// 比較用テキストにJEWELRYを代入
-						}
-						// BEARが来たら
-						else if (strcmp(cHeadText, "MEDAL") == 0)
-						{
-							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_ScoreData.nMedal);	// 比較用テキストにMEDALを代入
+							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_ScoreData.nDiamond);	// 比較用テキストにBEARを代入
 						}
 						// BEARが来たら
 						else if (strcmp(cHeadText, "BULLET") == 0)

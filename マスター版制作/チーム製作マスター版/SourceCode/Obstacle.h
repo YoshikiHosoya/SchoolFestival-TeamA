@@ -35,11 +35,14 @@ public:
 	// 障害物の種類
 	enum OBSTACLE_TYPE
 	{
-		TYPE_BOX = 0,								// 木箱
+		TYPE_NONE = -1,								// 何もない
+		TYPE_BOX,									// 木箱
 		TYPE_BARREL,								// 樽
+		TYPE_BARRELBOMB,							// 樽爆弾
 		TYPE_TREE,									// 木
 		TYPE_CHEST,									// 金庫
 		TYPE_SANDBAGS,								// 土嚢
+		TYPE_CAR,									// 車
 		TYPE_MAX,									// 最大数
 	};
 
@@ -69,6 +72,7 @@ public:
 	void					SetCollisionSize(CObstacle::OBSTACLE_TYPE type);						// 大きさの設定
 
 	void					Hit(OBSTACLE_TYPE type, int nDamage);									// 障害物が壊されるときの処理
+	void					DropItem();																// 種類ごとのドロップ											
 
 private:
 	/* メンバ関数*/
@@ -79,7 +83,6 @@ private:
 	static char				*m_ObstacleFileName[CObstacle::TYPE_MAX];								// 障害物のファイル名
 	/* メンバ変数 */
 	OBSTACLE_TYPE			m_ObstacleType;															// 障害物の種類
-	D3DXVECTOR3				m_pos;																	// 座標
 	int						m_nLife;																// 体力
 };
 #endif

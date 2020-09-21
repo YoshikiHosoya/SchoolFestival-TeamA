@@ -1,17 +1,11 @@
 #------------------------------------------------------------------------------
-# アイテムのデータ
+# 障害物のパラメーター
 #------------------------------------------------------------------------------
 SCRIPT
 
-ITEMSET
-	RATE			= 10
-	DELETE			= 240
-	FLASH			= 180
-	BEAR			= 1500
-	COIN			= 10
-	JEWELRY			= 800
-	MEDAL			= 1000
-	COLLISIONSIZE	= 40 40 0
-END_ITEMSET
+OBSTACLESET									# 0
+	LIFE			= 5
+	COLLISIONSIZE	= 150 50 100
+END_OBSTACLESET
 
 END_SCRIPT

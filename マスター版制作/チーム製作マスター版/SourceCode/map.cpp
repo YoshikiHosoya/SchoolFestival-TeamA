@@ -402,6 +402,8 @@ void CMap::MapModelCreate(int ModelType, int nType, D3DXVECTOR3 pos,int nItemTyp
 		m_pObstacle[m_pObstacle.size() - 1]->SetPosition(pos);
 		// “–‚½‚è”»’è‚Ì‘å‚«‚³‚Ìİ’è
 		m_pObstacle[m_pObstacle.size() - 1]->SetCollisionSize((CObstacle::OBSTACLE_TYPE)nType);
+		// í—Ş‚Ìİ’è
+		m_pObstacle[m_pObstacle.size() - 1]->SetObstacleType((CObstacle::OBSTACLE_TYPE)nType);
 		break;
 
 	/* --- íÔ --- */

@@ -28,10 +28,7 @@
 class CDebugcollision;
 class CMap;
 class CPrisoner;
-class CEnemy;
 class CPlayertank;
-class CBattlePlane;
-class CPlayer;
 class CVehicle;
 //=============================================================================
 //
@@ -114,7 +111,6 @@ public:
 	bool ForPlayer_ItemCollision(TAG Tag);				// プレイヤーと捕虜が行う判定 ダメージ量 貫通するかどうか
 
 	CPrisoner		*ForPlayer_PrisonerCollision();						// プレイヤーと捕虜の接触判定 捕虜の状態変更
-	CEnemy			*ForPlayer_EnemyCollision();						// プレイヤーとエネミーの接触判定
 	CPlayertank		*ForPlayer_TankCollision();							// プレイヤーと戦車の接触判定
 
 	bool ForPlayer_VehicleCollision(CCollision * pCollision);	// プレイヤーと乗り物が行う判定

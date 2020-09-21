@@ -14,6 +14,8 @@
 #include "ModelSet.h"
 #include "Character.h"
 #include "model.h"
+#include "item.h"
+
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
 // =====================================================================================================================================================================
@@ -26,9 +28,11 @@ char *CObstacle::m_ObstacleFileName[CObstacle::TYPE_MAX] =
 {
 	{ "data/Load/Obstacle/Box.txt" },				// 木箱
 	{ "data/Load/Obstacle/Barrel.txt" },			// 樽
+	{ "data/Load/Obstacle/BarrelBomb.txt" },		// 爆弾樽
 	{ "data/Load/Obstacle/Tree.txt" },				// 木
 	{ "data/Load/Obstacle/Chest.txt" },				// 金庫
 	{ "data/Load/Obstacle/Sandbags.txt" },			// 土嚢
+	{ "data/Load/Obstacle/Car.txt" },				// 車
 };
 
 // =====================================================================================================================================================================
@@ -42,13 +46,10 @@ char *CObstacle::m_ObstacleFileName[CObstacle::TYPE_MAX] =
 // =====================================================================================================================================================================
 CObstacle::CObstacle(OBJ_TYPE type) :CModel(type)
 {
-	// 変数初期化
-	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);				// 移動値
-	m_nLife = 0;										// 体力
-	m_ObstacleType = TYPE_BOX;							// タイプの初期化
-	//タグ設定
+	// 変数の初期化
+	m_nLife = 0;
+	// タグ設定
 	CGameObject::SetTag(TAG::OBSTACLE);
-
 }
 // =====================================================================================================================================================================
 //
@@ -73,8 +74,8 @@ HRESULT CObstacle::Init()
 
 	// 当たり判定生成
 	GetCollision()->SetPos(&GetPosition());
-	GetCollision()->SetSize(GetSize());
-	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_CHARACTER);
+	//GetCollision()->SetSize(GetSize());
+	//GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_CHARACTER);
 	GetCollision()->SetGameObject(this);
 
 	return S_OK;
@@ -233,38 +234,52 @@ void CObstacle::Hit(OBSTACLE_TYPE type,int nDamage)
 	switch (type)
 	{
 	case CObstacle::TYPE_BOX:
-		// 体力を減算する
-		this->AddDamage(nDamage);
-		// 削除する
-		this->CheckDie();
-		break;
-
 	case CObstacle::TYPE_BARREL:
-		// 体力を減算する
-		this->AddDamage(nDamage);
-		// 削除する
-		this->CheckDie();
-		break;
-
+	case CObstacle::TYPE_BARRELBOMB:
 	case CObstacle::TYPE_TREE:
-		// 体力を減算する
-		this->AddDamage(nDamage);
-		// 削除する
-		this->CheckDie();
-		break;
-
 	case CObstacle::TYPE_CHEST:
-		// 体力を減算する
-		this->AddDamage(nDamage);
-		// 削除する
-		this->CheckDie();
-		break;
-
 	case CObstacle::TYPE_SANDBAGS:
+	case CObstacle::TYPE_CAR:
+
 		// 体力を減算する
 		this->AddDamage(nDamage);
 		// 削除する
 		this->CheckDie();
+
+		break;
+	default:
+		break;
+	}
+}
+
+// =====================================================================================================================================================================
+// 種類ごとのドロップ
+// =====================================================================================================================================================================
+void CObstacle::DropItem()
+{
+	switch (m_ObstacleType)
+	{
+	case CObstacle::TYPE_BOX:
+		CItem::DropItem_Multiple(GetPosition(), CItem::LIST_FOOD, CItem::BEHAVIOR_BURSTS);
+		break;
+	case CObstacle::TYPE_BARREL:
+		CItem::DropItem_Multiple(GetPosition(), CItem::LIST_FOOD, CItem::BEHAVIOR_BURSTS);
+		break;
+	case CObstacle::TYPE_BARRELBOMB:
+		// 爆発する
+
+		break;
+	case CObstacle::TYPE_TREE:
+		CItem::DropItem_Multiple(GetCollision()->GetPos(), CItem::LIST_FOOD, CItem::BEHAVIOR_FREEFALL);
+		break;
+	case CObstacle::TYPE_CHEST:
+		CItem::DropItem_Multiple(GetPosition(), CItem::LIST_FOOD, CItem::BEHAVIOR_NONE);
+		break;
+	case CObstacle::TYPE_SANDBAGS:
+		CItem::DropItem_Multiple(GetPosition(), CItem::LIST_FOOD, CItem::BEHAVIOR_BURSTS);
+		break;
+	case CObstacle::TYPE_CAR:
+		CItem::DropItem_Multiple(GetPosition(), CItem::LIST_FOOD, CItem::BEHAVIOR_BURSTS);
 		break;
 
 	default:
@@ -279,9 +294,13 @@ void CObstacle::CheckDie()
 {
 	if (this->m_nLife <= 0)
 	{
+		if (!this->GetDieFlag())
+		{
+			// アイテムをドロップする
+			DropItem();
+		}
 		// 体力が0以下なら削除する
 		this->SetDieFlag(true);
-
 		//爆発発生
 		CParticle::CreateFromText(GetPosition(), ZeroVector3, CParticleParam::EFFECT_EXPLOSION_OBJECTBREAK);
 	}
