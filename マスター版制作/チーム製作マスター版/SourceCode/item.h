@@ -223,6 +223,15 @@ private:
 	D3DXVECTOR3					RandomDropPosX(const D3DXVECTOR3 originpos,int radius);//原点から指定された指定範囲のX座標を返す
 	void						SetMultiType(ITEM_LIST_DROPMULTIPLE list);		// 複数体のタイプ設定
 
+	void						ItemCollision();								// 当たり判定系
+	void						ReflectionItem();								// 反射処理
+
+
+	D3DXVECTOR3					*ReflectingVectorCalculation(
+		D3DXVECTOR3 *outV,
+		const D3DXVECTOR3 &ProgressV,
+		const D3DXVECTOR3 &Normal);												// 反射ベクトルを求める
+
 	/* メンバ変数 */
 	CCollision					*m_pCollision;									// 当たり判定
 	CPlayer						*m_pPlayer[MAX_CONTROLLER];						// プレイヤーのポインタ
@@ -235,5 +244,8 @@ private:
 	int							m_nRemainTime;									// アイテムがマップに残る時間
 	int							m_nColCnt;										// αカラーカウント
 	D3DXVECTOR3					m_Move;											// 移動量
+	D3DXVECTOR3					m_PosOld;										// 1フレーム前の座標
+	float						m_fGravity;										// 重力
+	int							m_nHitRayCount;									// レイの判定に触れた回数
 };
 #endif

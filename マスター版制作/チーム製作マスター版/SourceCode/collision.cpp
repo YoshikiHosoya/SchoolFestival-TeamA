@@ -602,7 +602,7 @@ bool CCollision::ForPlayer_ObstacleCollision()
 	for (int nCntObst = 0; nCntObst < CManager::GetBaseMode()->GetMap()->GetMaxObstacle(); nCntObst++)
 	{
 		CObstacle *pObstacle = CManager::GetBaseMode()->GetMap()->GetObstacle(nCntObst);
-		if (pObstacle != nullptr)
+		if (pObstacle != nullptr && pObstacle->GetObstacleType() != CObstacle::TYPE_TREE)
 		{
 			if (this->BlockNotUpsideCollision2D(pObstacle->GetCollision()))
 			{
@@ -1733,7 +1733,7 @@ bool CCollision::RayCollision(CMap *pMap)
 		}
 		if (fData < MAX_RAY_LENGTH)//Ray‚Ì’·‚³‚ÌŽw’èðŒ
 		{
-			//this->m_ppos->y = this->m_ppos->y - fData + MAX_RAY_LENGTH;
+			this->m_ppos->y = this->m_ppos->y - fData + MAX_RAY_LENGTH;
 			bJudg = true;
 		}
 		//Ray‚Ì”»’èŒ—“à‚¶‚á‚È‚©‚Á‚½‚çƒWƒƒƒ“ƒv‚Å‚«‚È‚¢

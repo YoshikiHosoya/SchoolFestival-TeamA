@@ -74,8 +74,6 @@ HRESULT CObstacle::Init()
 
 	// “–‚½‚è”»’è¶¬
 	GetCollision()->SetPos(&GetPosition());
-	//GetCollision()->SetSize(GetSize());
-	//GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_CHARACTER);
 	GetCollision()->SetGameObject(this);
 
 	return S_OK;
@@ -267,19 +265,17 @@ void CObstacle::DropItem()
 		break;
 	case CObstacle::TYPE_BARRELBOMB:
 		// ”š”­‚·‚é
-
 		break;
 	case CObstacle::TYPE_TREE:
 		CItem::DropItem_Multiple(GetPosition(), CItem::LIST_FOOD, CItem::BEHAVIOR_FREEFALL);
 		break;
 	case CObstacle::TYPE_CHEST:
-		CItem::DropItem_Multiple(GetPosition(), CItem::LIST_FOOD, CItem::BEHAVIOR_NONE);
+		CItem::DropItem(GetPosition(), true, CItem::ITEMTYPE_GOLDCOIN);
 		break;
 	case CObstacle::TYPE_SANDBAGS:
-		CItem::DropItem_Multiple(GetPosition(), CItem::LIST_FOOD, CItem::BEHAVIOR_BURSTS);
 		break;
 	case CObstacle::TYPE_CAR:
-		CItem::DropItem_Multiple(GetPosition(), CItem::LIST_FOOD, CItem::BEHAVIOR_BURSTS);
+		CItem::DropItem_Multiple(GetPosition(), CItem::LIST_COIN, CItem::BEHAVIOR_BURSTS);
 		break;
 
 	default:

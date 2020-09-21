@@ -69,7 +69,13 @@ CItem::CItem(OBJ_TYPE type) :CScene3D(type)
 	// アイテムをドロップさせる種類
 	m_Drop = ITEMDROP_WEAPON;
 	// 移動量
-	m_Move = ZeroVector3;
+	m_Move = D3DXVECTOR3(0.0f,-1.0f, 0.0f);
+	// 重力の初期値
+	m_fGravity = 0.0f;
+	// 判定回数の初期化
+	m_nHitRayCount = 0;
+	// 1フレーム前の座標
+	m_PosOld = ZeroVector3;
 }
 
 // =====================================================================================================================================================================
@@ -102,6 +108,9 @@ HRESULT CItem::Init()
 	// 初期化
 	CScene3D::Init();
 
+	// 重力の初期値
+	m_fGravity = 1.0f;
+
 	// 当たり判定生成
 	m_pCollision = CCollision::Create();
 	m_pCollision->SetPos(&GetPosition());
@@ -129,28 +138,25 @@ void CItem::Uninit(void)
 // =====================================================================================================================================================================
 void CItem::Update(void)
 {
-	// 当たり判定
-	if (m_pCollision != nullptr)
-	{
-		// 座標の更新 pos
-		m_pCollision->SetPos(&GetPosition());
-		// マップのポインタ取得
-		CMap *pMap = CManager::GetBaseMode()->GetMap();
+	// 当たり判定系
+	ItemCollision();
 
-		if (pMap)
-		{
-			if (m_pCollision->RayCollision(pMap))
-			{
-				// アイテムの滞在時間管理
-				RemainTimer();
-				m_Move = ZeroVector3;
-			}
-			else
-			{
-				SetPosition(GetPosition() + m_Move);
-			}
-		}
+	// レイの判定に一回でも触れていた時
+	if (m_nHitRayCount >= 1)
+	{
+		// アイテムの滞在時間管理
+		RemainTimer();
 	}
+
+	if (m_Behavior == BEHAVIOR_BURSTS)
+	{
+		GetPosition() += m_Move * 4.0f;
+	}
+	else
+	{
+		GetPosition() += m_Move * 1.5f;
+	}
+	SetPosition(GetPosition());
 
 	// 更新
 	CScene3D::Update();
@@ -689,6 +695,99 @@ void CItem::SetMultiType(ITEM_LIST_DROPMULTIPLE list)
 
 // =====================================================================================================================================================================
 //
+// 判定系
+//
+// =====================================================================================================================================================================
+void CItem::ItemCollision()
+{
+	// 当たり判定
+	if (m_pCollision != nullptr)
+	{
+		// 座標の更新 pos
+		m_pCollision->SetPos(&GetPosition());
+		// マップのポインタ取得
+		CMap *pMap = CManager::GetBaseMode()->GetMap();
+		// 1フレーム前の座標を求める
+		m_PosOld = GetPosition();
+
+		if (pMap)
+		{
+			if (m_pCollision->RayCollision(pMap))
+			{
+				if (m_Behavior != BEHAVIOR_NONE)
+				{
+					// まだレイの判定に一度も触れていなかった時
+					if (m_nHitRayCount <= 0)
+					{
+						// アイテムの反射処理
+						ReflectionItem();
+						// 重力の初期化
+						m_fGravity = 0.0f;
+					}
+					else
+					{
+						m_Move = ZeroVector3;
+					}
+				}
+
+				m_nHitRayCount++;
+			}
+			else
+			{
+				if (m_nHitRayCount < 2)
+				{
+					// 正規化
+					D3DXVec3Normalize(&m_Move, &m_Move);
+
+					if (m_Behavior == BEHAVIOR_BURSTS)
+					{
+						m_fGravity += 0.1f;
+					}
+					else
+					{
+						// 重力を加速
+						m_fGravity += 0.05f;
+					}
+					// 重力を反映
+					GetPosition().y -= m_fGravity;
+				}
+			}
+		}
+	}
+}
+
+// =====================================================================================================================================================================
+//
+// 反射処理
+//
+// =====================================================================================================================================================================
+void CItem::ReflectionItem()
+{
+	// 法線ベクトル
+	const D3DXVECTOR3 NormalV = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
+	// 進行ベクトル
+	D3DXVECTOR3 ProgressV = m_PosOld - GetPosition();
+	// レイの判定にに触れたとき進行ベクトルを法線ベクトルの方向に変換する
+	ReflectingVectorCalculation(&m_Move, ProgressV, NormalV);
+}
+
+// =====================================================================================================================================================================
+//
+// テスト用
+//
+// =====================================================================================================================================================================
+D3DXVECTOR3 * CItem::ReflectingVectorCalculation(D3DXVECTOR3 *outV, const D3DXVECTOR3 &ProgressV, const D3DXVECTOR3 &Normal)
+{
+	// 法線ベクトル変換用
+	D3DXVECTOR3 NormalVector;
+	// 法線ベクトルを正規化
+	D3DXVec3Normalize(&NormalVector, &Normal);
+	// 反射ベクトルを求める
+	return D3DXVec3Normalize(outV, &(ProgressV - 2.0f * D3DXVec3Dot(&ProgressV, &NormalVector) * NormalVector));
+}
+
+// =====================================================================================================================================================================
+//
 // ランダム　アイテムの種類の範囲
 //
 // =====================================================================================================================================================================
@@ -742,16 +841,33 @@ void CItem::DropPattern_Multiple(ITEM_LIST_DROPMULTIPLE list, ITEM_BEHAVIOR beha
 
 		// 自由落下
 	case CItem::BEHAVIOR_FREEFALL:
-
-		// 下に落とす 重力付いたらいらない処理
-		SetMove(D3DXVECTOR3(0.0f, -4.0f, 0.0f));
 		break;
 
 		// 弾け飛ぶ
 	case CItem::BEHAVIOR_BURSTS:
 
-		// 左側から順に斜めに飛ばすnNum
-		//SetMove(D3DXVECTOR3(0.0f, -5.0f, 0.0f));
+		// 左側から順に斜めに飛ばすnNum5回
+
+		if (nNum == 0)
+		{
+			SetMove(D3DXVECTOR3(-2.5f, 5.0f, 0.0f));
+		}
+		if (nNum == 1)
+		{
+			SetMove(D3DXVECTOR3(-7.5f, 5.0f, 0.0f));
+		}
+		if (nNum == 2)
+		{
+			SetMove(D3DXVECTOR3(0.0f, 5.0f, 0.0f));
+		}
+		if (nNum == 3)
+		{
+			SetMove(D3DXVECTOR3(7.5f, 5.0f, 0.0f));
+		}
+		if (nNum == 4)
+		{
+			SetMove(D3DXVECTOR3(2.5f, 5.0f, 0.0f));
+		}
 		break;
 	}
 }
@@ -891,6 +1007,8 @@ CItem * CItem::DebugCreate(ITEMTYPE type)
 		pItem->SetPosition(pos);
 
 		pItem->m_Type = type;
+
+		pItem->m_Behavior = BEHAVIOR_NONE;
 	}
 
 	// 種類別にテクスチャを設定
@@ -1065,6 +1183,8 @@ CItem * CItem::DropItem(D3DXVECTOR3 droppos, bool fixed,ITEMTYPE type)
 	// アイテムの位置の設定
 	pItem->SetPosition(droppos);
 
+	pItem->m_Behavior = BEHAVIOR_NONE;
+
 	// アイテムのドロップをパターンごとに変える
 	pItem->DropPattern(fixed, type);
 
@@ -1105,7 +1225,16 @@ void CItem::DropItem_Multiple(const D3DXVECTOR3 originpos, ITEM_LIST_DROPMULTIPL
 		// その他は原点座標を基準にする
 		else
 		{
-			pItem->SetPosition(originpos);
+			if (behavior == BEHAVIOR_BURSTS)
+			{
+				D3DXVECTOR3 pos = originpos;
+				pItem->SetPosition(D3DXVECTOR3(pos.x, pos.y + 50, pos.z));
+
+			}
+			else
+			{
+				pItem->SetPosition(originpos);
+			}
 		}
 
 		// 挙動の設定

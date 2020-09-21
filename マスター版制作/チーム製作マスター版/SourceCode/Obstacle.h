@@ -72,7 +72,7 @@ public:
 	void					SetCollisionSize(CObstacle::OBSTACLE_TYPE type);						// 大きさの設定
 
 	void					Hit(OBSTACLE_TYPE type, int nDamage);									// 障害物が壊されるときの処理
-	void					DropItem();																// 種類ごとのドロップ											
+	void					DropItem();																// 種類ごとのドロップ
 
 private:
 	/* メンバ関数*/
