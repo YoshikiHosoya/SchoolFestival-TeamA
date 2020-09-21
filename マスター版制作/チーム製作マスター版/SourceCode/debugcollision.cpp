@@ -36,6 +36,11 @@ CDebugcollision::CDebugcollision(OBJ_TYPE type) :CScene(type)
 // ----------------------------------------
 CDebugcollision::~CDebugcollision()
 {
+	if (m_pMeshBox)
+	{
+		this->m_pMeshBox->Rerease();
+		this->m_pMeshBox = nullptr;
+	}
 }
 
 // ----------------------------------------

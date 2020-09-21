@@ -4,7 +4,7 @@
 SCRIPT
 
 ITEMSET
-	RATE			= 4
+	RATE			= 10
 	DELETE			= 240
 	FLASH			= 180
 	BEAR			= 1500

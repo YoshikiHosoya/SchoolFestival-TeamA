@@ -103,10 +103,13 @@ public:
 		//===障害物のモデル===
 		OBSTACLE_TYPE_BOX=500,			// ハコ
 		OBSTACLE_TYPE_BARREL,			// 樽
+		OBSTACLE_TYPE_BARRELBOMB,		// 樽爆弾
 		OBSTACLE_TYPE_TREE,				// 木
 		OBSTACLE_TYPE_CHEST,			// 金庫
 		OBSTACLE_TYPE_SANDBAGS,			// 土嚢
-		OBSTACLE_TYPE_MAX,
+		OBSTACLE_TYPE_CAR,				// 車
+		OBSTACLE_TYPE_MAX,				// 最大数(計算用)
+
 		//===捕虜のモデル===
 		MODEL_PRISONER_WAIST=600,		// 捕虜の腰
 		MODEL_PRISONER_BODY,			// 捕虜の体

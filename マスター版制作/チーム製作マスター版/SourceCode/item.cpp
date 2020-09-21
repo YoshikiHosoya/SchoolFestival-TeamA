@@ -47,6 +47,7 @@ char *CItem::m_ItemFileName =
 // マクロ定義
 // =====================================================================================================================================================================
 #define FULLRAND_HITPROBABILITY (5)
+#define MULTIPLE_ITEM_NUM (5)// まとめて生成する際の数
 
 // =====================================================================================================================================================================
 //
@@ -67,6 +68,8 @@ CItem::CItem(OBJ_TYPE type) :CScene3D(type)
 	m_Type = ITEMTYPE_NONE;
 	// アイテムをドロップさせる種類
 	m_Drop = ITEMDROP_WEAPON;
+	// 移動量
+	m_Move = ZeroVector3;
 }
 
 // =====================================================================================================================================================================
@@ -131,10 +134,23 @@ void CItem::Update(void)
 	{
 		// 座標の更新 pos
 		m_pCollision->SetPos(&GetPosition());
-	}
+		// マップのポインタ取得
+		CMap *pMap = CManager::GetBaseMode()->GetMap();
 
-	// アイテムの滞在時間管理
-	RemainTimer();
+		if (pMap)
+		{
+			if (m_pCollision->RayCollision(pMap))
+			{
+				// アイテムの滞在時間管理
+				RemainTimer();
+				m_Move = ZeroVector3;
+			}
+			else
+			{
+				SetPosition(GetPosition() + m_Move);
+			}
+		}
+	}
 
 	// 更新
 	CScene3D::Update();
@@ -230,52 +246,139 @@ void CItem::ItemAcquisition(ITEMTYPE type, TAG Tag)
 		m_pPlayer[(int)Tag]->GetGun()->SetGunType(CGun::GUNTYPE_FLAMESHOT);
 	}break;
 
+		// 金貨
+	case (ITEMTYPE_GOLDCOIN): {
+		// SEを鳴らす
+		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
+		// スコアアップ
+		m_pPlayer[(int)Tag]->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_GCOIN));
+	}break;
+
+		// 銀貨
+	case (ITEMTYPE_SILVERCOIN): {
+		// SEを鳴らす
+		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
+		// スコアアップ
+		m_pPlayer[(int)Tag]->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_SCOIN));
+	}break;
+
+		// 銅貨
+	case (ITEMTYPE_BRONZESCOIN): {
+		// SEを鳴らす
+		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
+		// スコアアップ
+		m_pPlayer[(int)Tag]->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_BCOIN));
+	}break;
+
+		// ダイアモンド
+	case (ITEMTYPE_DIAMOND): {
+		// SEを鳴らす
+		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
+		// スコアアップ
+		m_pPlayer[(int)Tag]->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_DIAMOND));
+	}break;
 		// 熊
 	case (ITEMTYPE_BEAR): {
 		// SEを鳴らす
 		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
-
 		// スコアアップ
 		m_pPlayer[(int)Tag]->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_BEAR));
 	}break;
 
-		// コイン
-	case (ITEMTYPE_COIN): {
+		// 手紙
+	case (ITEMTYPE_LETTER): {
 		// SEを鳴らす
 		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
 
 		// コインを取るたびにコインのスコアアップ
-		m_pPlayer[(int)Tag]->GetPlayerUI()->SetItemScore(AddCoinScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_COIN)));
+		m_pPlayer[(int)Tag]->GetPlayerUI()->SetItemScore(AddCoinScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_LETTER)));
 	}break;
-		// 宝石
-	case (ITEMTYPE_JEWELRY): {
+
+		// リンゴ
+	case ITEMTYPE_APPLE:
 		// SEを鳴らす
 		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
-
 		// スコアアップ
-		m_pPlayer[(int)Tag]->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_JEWELRY));
-	}break;
-		// メダル
-	case (ITEMTYPE_MEDAL): {
+		m_pPlayer[(int)Tag]->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_FRUIT));
+		break;
+		// メロン
+	case ITEMTYPE_MELON:
 		// SEを鳴らす
 		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
-
 		// スコアアップ
-		m_pPlayer[(int)Tag]->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_MEDAL));
-	}break;
+		m_pPlayer[(int)Tag]->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_FRUIT));
+		break;
+		// バナナ
+	case ITEMTYPE_BANANA:
+		// SEを鳴らす
+		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
+		// スコアアップ
+		m_pPlayer[(int)Tag]->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_FRUIT));
+	break;
+
+
+		// 肉
+	case ITEMTYPE_MEAT:
+		// SEを鳴らす
+		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
+		// スコアアップ
+		m_pPlayer[(int)Tag]->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_FOOD));
+		break;
+		// おにぎり
+	case (ITEMTYPE_RICEBALL):
+		// SEを鳴らす
+		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
+		// スコアアップ
+		m_pPlayer[(int)Tag]->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_FOOD));
+		break;
+		// 飴
+	case (ITEMTYPE_CANDY):
+		// SEを鳴らす
+		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
+		// スコアアップ
+		m_pPlayer[(int)Tag]->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_FOOD));
+		break;
+		// ドーナツ
+	case (ITEMTYPE_DONUT):
+		// SEを鳴らす
+		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
+		// スコアアップ
+		m_pPlayer[(int)Tag]->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_FOOD));
+		break;
+		// ロリポップ
+	case (ITEMTYPE_LOLIPOP):
+		// SEを鳴らす
+		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
+		// スコアアップ
+		m_pPlayer[(int)Tag]->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_FOOD));
+		break;
+		// 熊
+	case (ITEMTYPE_BREAD):
+		// SEを鳴らす
+		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
+		// スコアアップ
+		m_pPlayer[(int)Tag]->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_FOOD));
+		break;
+		// チョコレート
+	case (ITEMTYPE_CHOCOLATE):
+		// SEを鳴らす
+		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
+		// スコアアップ
+		m_pPlayer[(int)Tag]->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_FOOD));
+		break;
+		// アイス
+	case (ITEMTYPE_ICE):
+		// SEを鳴らす
+		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
+		// スコアアップ
+		m_pPlayer[(int)Tag]->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_FOOD));
+	break;
 
 		// 爆弾の数を増やす
 	case (ITEMTYPE_BOMBUP): {
 		// SEを鳴らす
 		CManager::GetSound()->Play(CSound::LABEL_SE_GET_WEAPON);
 		m_pPlayer[(int)Tag]->GetGrenadeFire()->GrenadeAddAmmo();
-	}break;
-
-		// 乗り物の耐久値を回復する
-	case (ITEMTYPE_ENERGYUP): {
-		// SEを鳴らす
-		CManager::GetSound()->Play(CSound::LABEL_SE_GET_WEAPON);
-
 	}break;
 
 		// ハンドガン以外の弾の残弾数を増やす
@@ -337,6 +440,16 @@ void CItem::SetDropPos(D3DXVECTOR3 &characterpos)
 
 		characterpos.y += 50;
 	}
+}
+
+// =====================================================================================================================================================================
+//
+// 移動量の設定
+//
+// =====================================================================================================================================================================
+void CItem::SetMove(D3DXVECTOR3 move)
+{
+	m_Move = move;
 }
 
 // =====================================================================================================================================================================
@@ -505,10 +618,74 @@ void CItem::AddBoxRandList()
 
 	// 要素をシャッフルし設定する
 	random_shuffle(m_nDefaultRarityList.begin(), m_nDefaultRarityList.end());
-
-	m_nDefaultRarityList = m_nDefaultRarityList;
 }
 
+// =====================================================================================================================================================================
+//
+// 複数個一気にアイテムが生成される時のアイテムの挙動制御
+//
+// =====================================================================================================================================================================
+void CItem::BurstsItem()
+{
+}
+
+// =====================================================================================================================================================================
+//
+// 空中にあったアイテムが床に着いた時跳ね返る処理
+//
+// =====================================================================================================================================================================
+void CItem::BounceItem()
+{
+}
+
+// =====================================================================================================================================================================
+//
+// 原点から指定された指定範囲のX座標を返す
+//
+// =====================================================================================================================================================================
+D3DXVECTOR3 CItem::RandomDropPosX(const D3DXVECTOR3 originpos, int radius)
+{
+	// アイテムをドロップさせる座標
+	D3DXVECTOR3 DropPos = originpos;
+	// 原点から半径を引いた座標と半径を足した座標の範囲内の座標をランダムに返す
+	//DropPos.x = (float)GetRandRange((int)originpos.x - radius, (int)originpos.x + radius);
+
+	DropPos.x = CHossoLibrary::Random((float)radius);
+	DropPos.z = 0.0f;
+
+	return DropPos;
+}
+
+// =====================================================================================================================================================================
+//
+// 複数体のタイプ設定
+//
+// =====================================================================================================================================================================
+void CItem::SetMultiType(ITEM_LIST_DROPMULTIPLE list)
+{
+	switch (list)
+	{
+	case CItem::LIST_FRUIT:
+		// フルーツのみ
+		SwitchTexture(this->RandDropItem(ITEMDROP_FRUIT), this);
+		break;
+
+	case CItem::LIST_FOOD:
+		// 食べ物のみ
+		SwitchTexture(this->RandDropItem(ITEMDROP_FOOD), this);
+		break;
+
+	case CItem::LIST_COIN:
+		// コインのみ
+		SwitchTexture(this->RandDropItem(ITEMDROP_COIN), this);
+		break;
+
+	case CItem::LIST_RARE:
+		// レアなアイテムのみ
+		SwitchTexture(this->RandDropItem(ITEMDROP_RARE), this);
+		break;
+	}
+}
 
 // =====================================================================================================================================================================
 //
@@ -553,6 +730,34 @@ void CItem::DropPattern(bool fixed, ITEMTYPE type)
 
 // =====================================================================================================================================================================
 //
+// アイテムを複数一気にドロップさせる時 移動量,方向の設定
+//
+// =====================================================================================================================================================================
+void CItem::DropPattern_Multiple(ITEM_LIST_DROPMULTIPLE list, ITEM_BEHAVIOR behavior,int nNum)
+{
+	switch (behavior)
+	{
+	case CItem::BEHAVIOR_NONE:
+		break;
+
+		// 自由落下
+	case CItem::BEHAVIOR_FREEFALL:
+
+		// 下に落とす 重力付いたらいらない処理
+		SetMove(D3DXVECTOR3(0.0f, -4.0f, 0.0f));
+		break;
+
+		// 弾け飛ぶ
+	case CItem::BEHAVIOR_BURSTS:
+
+		// 左側から順に斜めに飛ばすnNum
+		//SetMove(D3DXVECTOR3(0.0f, -5.0f, 0.0f));
+		break;
+	}
+}
+
+// =====================================================================================================================================================================
+//
 // デバッグ用アイテムコマンド
 //
 // =====================================================================================================================================================================
@@ -566,13 +771,9 @@ void CItem::DebugItemCommand(CKeyboard *key)
 	CDebugProc::Print_Right("[LShift] + テンキー [2] : レーザーガン\n");
 	CDebugProc::Print_Right("[LShift] + テンキー [3] : ロケットランチャー\n");
 	CDebugProc::Print_Right("[LShift] + テンキー [4] : フレイムショット\n");
-	CDebugProc::Print_Right("[LShift] + テンキー [5] : 熊\n");
-	CDebugProc::Print_Right("[LShift] + テンキー [6] : コイン\n");
-	CDebugProc::Print_Right("[LShift] + テンキー [7] : 宝石\n");
-	CDebugProc::Print_Right("[LShift] + テンキー [8] : メダル\n");
-	CDebugProc::Print_Right("[LShift] + テンキー [9] : BomUp\n");
-	CDebugProc::Print_Right("[LShift] + テンキー [-] : ガソリン\n");
-	CDebugProc::Print_Right("[LShift] + テンキー [+] : BulletUp\n");
+	CDebugProc::Print_Right("[LShift] + テンキー [5] : コイン\n");
+	CDebugProc::Print_Right("[LShift] + テンキー [6] : BomUp\n");
+	CDebugProc::Print_Right("[LShift] + テンキー [7] : BulletUp\n");
 	CDebugProc::Print_Right("[LShift] + テンキー [ENTER] : BoxRand\n");
 
 	//LShift押しながら
@@ -603,35 +804,15 @@ void CItem::DebugItemCommand(CKeyboard *key)
 		{
 			CItem::DebugCreate(ITEMTYPE_FLAMESHOT);
 		}
-		// 熊の生成
-		else 	if (key->GetKeyboardTrigger(DIK_NUMPAD5))
-		{
-			CItem::DebugCreate(ITEMTYPE_BEAR);
-		}
 		// コインの生成
 		else 	if (key->GetKeyboardTrigger(DIK_NUMPAD6))
 		{
-			CItem::DebugCreate(ITEMTYPE_COIN);
-		}
-		// 宝石の生成
-		else 	if (key->GetKeyboardTrigger(DIK_NUMPAD7))
-		{
-			CItem::DebugCreate(ITEMTYPE_JEWELRY);
-		}
-		// メダルの生成
-		else 	if (key->GetKeyboardTrigger(DIK_NUMPAD8))
-		{
-			CItem::DebugCreate(ITEMTYPE_MEDAL);
+			CItem::DebugCreate(ITEMTYPE_GOLDCOIN);
 		}
 		// BomUp生成
 		else if (key->GetKeyboardTrigger(DIK_NUMPAD9))
 		{
 			CItem::DebugCreate(ITEMTYPE_BOMBUP);
-		}
-		// ガソリン生成
-		else if (key->GetKeyboardTrigger(DIK_NUMPADMINUS))
-		{
-			CItem::DebugCreate(ITEMTYPE_ENERGYUP);
 		}
 		// BulletUp生成
 		else if (key->GetKeyboardTrigger(DIK_NUMPADPLUS))
@@ -686,11 +867,8 @@ bool CItem::DecideIfItemDrop(int nRate)
 // =====================================================================================================================================================================
 CItem * CItem::DebugCreate(ITEMTYPE type)
 {
-	// 変数
-	CItem *pItem;
-
 	// メモリの確保
-	pItem = new CItem(OBJTYPE_ITEM);
+	CItem * pItem = new CItem(OBJTYPE_ITEM);
 
 	// 初期化
 	pItem->Init();
@@ -898,6 +1076,49 @@ CItem * CItem::DropItem(D3DXVECTOR3 droppos, bool fixed,ITEMTYPE type)
 
 // =====================================================================================================================================================================
 //
+// アイテムを複数一気にドロップさせる時
+//
+// =====================================================================================================================================================================
+void CItem::DropItem_Multiple(const D3DXVECTOR3 originpos, ITEM_LIST_DROPMULTIPLE type, ITEM_BEHAVIOR behavior)
+{
+	// 生成する数分
+	for (int nNum = 0; nNum < MULTIPLE_ITEM_NUM; nNum++)
+	{
+		// メモリの確保
+		CItem *pItem = new CItem(OBJTYPE_ITEM);
+
+		// 初期化
+		pItem->Init();
+
+		// サイズの設定
+		pItem->SetSize(D3DXVECTOR3(
+			m_ItemData.CollisionSize.x / 2,
+			m_ItemData.CollisionSize.y / 2,
+			m_ItemData.CollisionSize.z / 2));
+
+		// 木から落ちるアイテムだけ
+		if (behavior == BEHAVIOR_FREEFALL)
+		{
+			pItem->SetPosition(pItem->RandomDropPosX(originpos, 100));
+			//pItem->SetPosition(originpos);
+		}
+		// その他は原点座標を基準にする
+		else
+		{
+			pItem->SetPosition(originpos);
+		}
+
+		// 挙動の設定
+		pItem->m_Behavior = behavior;
+		// 複数体のタイプ設定
+		pItem->SetMultiType(type);
+		// アイテムの挙動と種類の設定
+		pItem->DropPattern_Multiple(type, behavior, nNum);
+	}
+}
+
+// =====================================================================================================================================================================
+//
 // デバッグ用アイテム生成
 //
 // =====================================================================================================================================================================
@@ -942,73 +1163,78 @@ void CItem::SwitchTexture(ITEMTYPE type, CItem *pItem)
 {
 	switch (type)
 	{
-		//ヘビーマシンガン
-	case (ITEMTYPE_HEAVYMACHINEGUN):{
-		// テクスチャの割り当て
+	case CItem::ITEMTYPE_HEAVYMACHINEGUN:
 		pItem->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_HEAVYMACHINEGUN));
-	}break;
-
-		//ショットガン
-	case (ITEMTYPE_SHOTGUN): {
-		// テクスチャの割り当て
+		break;
+	case CItem::ITEMTYPE_SHOTGUN:
 		pItem->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_SHOTGUN));
-	}break;
-
-		//レーザーガン
-	case (ITEMTYPE_LASERGUN): {
-		// テクスチャの割り当て
+		break;
+	case CItem::ITEMTYPE_LASERGUN:
 		pItem->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_LASERGUN));
-	}break;
-
-		//ロケットランチャー
-	case (ITEMTYPE_ROCKETLAUNCHER): {
-		// テクスチャの割り当て
+		break;
+	case CItem::ITEMTYPE_ROCKETLAUNCHER:
 		pItem->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_ROCKETLAUNCHER));
-	}break;
-
-		//フレイムショット
-	case (ITEMTYPE_FLAMESHOT): {
-		// テクスチャの割り当て
+		break;
+	case CItem::ITEMTYPE_FLAMESHOT:
 		pItem->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_FLAMESHOT));
-	}break;
-
-		//熊
-	case (ITEMTYPE_BEAR): {
-		// テクスチャの割り当て
+		break;
+	case CItem::ITEMTYPE_GOLDCOIN:
+		pItem->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_GOLDCOIN));
+		break;
+	case CItem::ITEMTYPE_SILVERCOIN:
+		pItem->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_SILVERCOIN));
+		break;
+	case CItem::ITEMTYPE_BRONZESCOIN:
+		pItem->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_BRONZESCOIN));
+		break;
+	case CItem::ITEMTYPE_DIAMOND:
+		pItem->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_DIAMOND));
+		break;
+	case CItem::ITEMTYPE_BEAR:
 		pItem->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_BEAR));
-	}break;
-		//コイン
-	case (ITEMTYPE_COIN): {
-		// テクスチャの割り当て
-		pItem->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_COIN));
-	}break;
-		//宝石
-	case (ITEMTYPE_JEWELRY): {
-		// テクスチャの割り当て
-		pItem->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_JEWELRY));
-	}break;
-		//メダル
-	case (ITEMTYPE_MEDAL): {
-		// テクスチャの割り当て
-		pItem->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_MEDAL));
-	}break;
-		// 爆弾の数を増やす
-	case (ITEMTYPE_BOMBUP): {
-		// テクスチャの割り当て
+		break;
+	case CItem::ITEMTYPE_LETTER:
+		pItem->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_LETTER));
+		break;
+	case CItem::ITEMTYPE_APPLE:
+		pItem->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_APPLE));
+		break;
+	case CItem::ITEMTYPE_MELON:
+		pItem->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_MELON));
+		break;
+	case CItem::ITEMTYPE_BANANA:
+		pItem->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_BANANA));
+		break;
+	case CItem::ITEMTYPE_MEAT:
+		pItem->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_MEAT));
+		break;
+	case CItem::ITEMTYPE_RICEBALL:
+		pItem->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_RICEBALL));
+		break;
+	case CItem::ITEMTYPE_CANDY:
+		pItem->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_CANDY));
+		break;
+	case CItem::ITEMTYPE_DONUT:
+		pItem->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_DONUT));
+		break;
+	case CItem::ITEMTYPE_LOLIPOP:
+		pItem->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_LOLIPOP));
+		break;
+	case CItem::ITEMTYPE_BREAD:
+		pItem->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_BREAD));
+		break;
+	case CItem::ITEMTYPE_CHOCOLATE:
+		pItem->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_CHOCOLATE));
+		break;
+	case CItem::ITEMTYPE_ICE:
+		pItem->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_ICE));
+		break;
+	case CItem::ITEMTYPE_BOMBUP:
 		pItem->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_BOMBUP));
-	}break;
-
-		// 乗り物の耐久値を回復する
-	case (ITEMTYPE_ENERGYUP): {
-		// テクスチャの割り当て
-		pItem->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_ENERGYUP));
-	}break;
-
-		// ハンドガン以外の弾の残弾数を増やす
-	case (ITEMTYPE_BULLETUP): {
-		// テクスチャの割り当て
+		break;
+	case CItem::ITEMTYPE_BULLETUP:
 		pItem->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_BULLETUP));
-	}break;
+		break;
 	}
 }
 
@@ -1019,43 +1245,34 @@ void CItem::SwitchTexture(ITEMTYPE type, CItem *pItem)
 // =====================================================================================================================================================================
 CItem::ITEMTYPE CItem::RandDropItem(ITEMDROP drop)
 {
-	// 条件によってドロップさせるアイテムの種類に制限をかける
 	switch (drop)
 	{
-		// 武器のみの場合
 	case CItem::ITEMDROP_WEAPON:
-		// ランダムの範囲を武器のみに選択
-		return ItemRandomRange(ITEMTYPE_HEAVYMACHINEGUN, ITEMTYPE_FLAMESHOT);
+		return m_Type = ItemRandomRange(ITEMTYPE_HEAVYMACHINEGUN, ITEMTYPE_FLAMESHOT);
 		break;
-
-		// スコアアップのみの場合
 	case CItem::ITEMDROP_SCORE:
-		// ランダムの範囲をスコアアイテムのみに選択
-		return ItemRandomRange(ITEMTYPE_BEAR, ITEMTYPE_MEDAL);
+		return m_Type = ItemRandomRange(ITEMTYPE_BEAR, ITEMTYPE_ICE);
 		break;
-
-		// 弾薬などのみの場合
 	case CItem::ITEMDROP_CHARGE:
-		// ランダムの範囲をスコアアイテムのみに選択
-		return ItemRandomRange(ITEMTYPE_BOMBUP, ITEMTYPE_BULLETUP);
+		return m_Type = ItemRandomRange(ITEMTYPE_BOMBUP, ITEMTYPE_BULLETUP);
 		break;
-
-		// 武器強化とスコアアップの場合
-	case CItem::ITEMDROP_WEA_SCO:
-		// ランダムの範囲を武器強化とスコアアイテムのみに選択
-		return ItemRandomRange(ITEMTYPE_HEAVYMACHINEGUN, ITEMTYPE_MEDAL);
-		break;
-
-
-		// スコアアップと弾薬の場合
 	case CItem::ITEMDROP_SCO_CHA:
-		// ランダムの範囲をスコアアイテムと弾薬のみに選択
-		return ItemRandomRange(ITEMTYPE_BEAR, ITEMTYPE_BULLETUP);
+		return m_Type = ItemRandomRange(ITEMTYPE_BEAR, ITEMTYPE_BULLETUP);
 		break;
-
-		// 全てのアイテム
+	case CItem::ITEMDROP_FRUIT:
+		return m_Type = ItemRandomRange(ITEMTYPE_APPLE, ITEMTYPE_BANANA);
+		break;
+	case CItem::ITEMDROP_COIN:
+		return m_Type = ItemRandomRange(ITEMTYPE_GOLDCOIN, ITEMTYPE_BRONZESCOIN);
+		break;
+	case CItem::ITEMDROP_RARE:
+		return m_Type = ItemRandomRange(ITEMTYPE_GOLDCOIN, ITEMTYPE_LETTER);
+		break;
+	case CItem::ITEMDROP_FOOD:
+		return m_Type = ItemRandomRange(ITEMTYPE_MEAT, ITEMTYPE_ICE);
+		break;
 	case CItem::ITEMDROP_ALL:
-		return ItemRandomRange(ITEMTYPE_HEAVYMACHINEGUN,ITEMTYPE_BULLETUP);
+		return m_Type = ItemRandomRange(ITEMTYPE_HEAVYMACHINEGUN, ITEMTYPE_BULLETUP);
 		break;
 	}
 

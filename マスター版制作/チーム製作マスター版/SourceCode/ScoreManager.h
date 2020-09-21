@@ -19,19 +19,24 @@
 // =====================================================================================================================================================================
 // アイテムのデータ
 // =====================================================================================================================================================================
-typedef struct
+struct SCORE_DATA
 {
-	int					nBear;		// 熊のアイテム
-	int					nCoin;		// コインのアイテム
-	int					nJewelry;	// 宝石のアイテム
-	int					nMedal;		// メダルのアイテム
-	int					nBullet;	// 敵に弾を当てた時
-	int					nAttack;	// 敵に近接攻撃を当てたとき
-	int					nPrisoner;	// 捕虜を助けた時
-	int					nBonus;		// リザルトでのボーナス 自分の残機
-	int					nBoss;		// リザルトでのボーナス ボスを倒した時
+	int					nFruit;			// 果物系のアイテム
+	int					nFood;			// 食べ物のアイテム
+	int					nGoldCoin;		// 金貨のアイテム
+	int					nSilverCoin;	// 銀貨のアイテム
+	int					nBronzeCoin;	// 銅貨のアイテム
+	int					nBear;			// 熊のアイテム
+	int					nLetter;		// 手紙のアイテム
+	int					nDiamond;		// ダイアモンドのアイテム
 
-}SCORE_DATA;
+	int					nBullet;		// 敵に弾を当てた時
+	int					nAttack;		// 敵に近接攻撃を当てたとき
+	int					nPrisoner;		// 捕虜を助けた時
+	int					nBonus;			// リザルトでのボーナス 自分の残機
+	int					nBoss;			// リザルトでのボーナス ボスを倒した時
+
+};
 
 // =====================================================================================================================================================================
 // 前方宣言
@@ -44,10 +49,14 @@ class CScoreManager
 public:
 	enum SCORE_TYPE
 	{
-		SCORE_ITEM_BEAR,		// 1500		// 熊のアイテム
-		SCORE_ITEM_COIN,		// 10		// コインのアイテム
-		SCORE_ITEM_JEWELRY,		// 800		// 宝石のアイテム
-		SCORE_ITEM_MEDAL,		// 1000		// メダルのアイテム
+		SCORE_ITEM_FRUIT,		// 1000		// 熊のアイテム
+		SCORE_ITEM_FOOD,		// 100		// コインのアイテム
+		SCORE_ITEM_GCOIN,		// 10000	// 金貨
+		SCORE_ITEM_SCOIN,		// 1000		// 銀貨
+		SCORE_ITEM_BCOIN,		// 100		// 銅貨
+		SCORE_ITEM_BEAR,		// 1500		// 熊
+		SCORE_ITEM_LETTER,		// 500		// 手紙
+		SCORE_ITEM_DIAMOND,		// 100000	// ダイヤモンド
 		SCORE_DAMAGE_BULLET,	// 100		// 敵に弾を当てた時
 		SCORE_DAMAGE_ATTACK,	// 500		// 敵に近接攻撃を当てたとき
 		SCORE_RESCUE_PRISONER,	// 500		// 捕虜を助けた時
@@ -59,7 +68,7 @@ public:
 	CScoreManager();						// コンストラクタ
 	~CScoreManager();						// デストラクタ
 
-											/* メンバ関数 */
+	/* メンバ関数 */
 	HRESULT					Init(void);		// 初期化
 	void					Uninit(void);	// 終了
 	void					Update(void);	// 更新

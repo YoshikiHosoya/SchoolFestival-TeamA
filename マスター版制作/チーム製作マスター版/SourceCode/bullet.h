@@ -59,12 +59,15 @@ public:
 	void						SetBulletParam(CGun::GUN_TYPE type);								// 弾のパラメーター設定
 
 	int							GetLife()						{ return m_nLife; };
+	void						SetBulletPoint(CBullet *pBullet) { m_pBullet = pBullet; };
+	CBullet						*GetBullePoint()				{ return m_pBullet; };
 
 private:
 	/* メンバ変数 */
 	D3DXVECTOR3					m_move;					// 移動値
 	CGun::GUN_TYPE				m_GunType;				// ガンのタイプ
 	int							m_nLife;				// 体力
+	CBullet						*m_pBullet;				// 弾の種類
 	/* 静的メンバ変数 */
 	static char					*m_BulletFileName[CGun::GUNTYPE_MAX];	// 弾のファイル名
 	static	BULLET_PARAM		m_BulletParam[CGun::GUNTYPE_MAX];		// 弾のパラメーター

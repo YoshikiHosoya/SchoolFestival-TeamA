@@ -418,6 +418,9 @@ void CGun::Shot()
 			// ’e‚Ìƒpƒ‰ƒ[ƒ^[‚ÌÝ’è
 			pBullet->SetBulletParam(m_GunType);
 
+			// ’e‚ÌŽí—Þ‚ÌÝ’è
+			pBullet->SetBulletPoint(pBullet);
+
 			// ’e‚ÌˆÚ“®—Ê‚ð0‚É‚·‚é
 			if (m_bMoveZero)
 			{

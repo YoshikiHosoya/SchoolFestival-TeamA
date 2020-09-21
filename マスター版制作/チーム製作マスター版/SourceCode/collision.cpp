@@ -36,6 +36,8 @@
 #include "shield.h"
 #include "boss_One.h"
 #include "ModelSet.h"
+#include "bullet.h"
+
 //======================================================================================================================
 //
 // マクロ定義
@@ -178,13 +180,43 @@ bool CCollision::ForPlayerBulletCollision(int nEnemyDamage, int nObstacleDamage,
 {
 	// 弾を消すときに使うフラグ
 	bool bHitFlag = false;
-	std::vector<CScene*> pSceneList;
+	std::vector<CScene*> pSceneList, pSceneList_Bullet;
+
 	// プレイヤーのポインタ取得
 	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer(m_pGameObject->GetTag());
 
 	CScene::GetSceneList(CScene::OBJTYPE_SHIELD, pSceneList);
+	CScene::GetSceneList(CScene::OBJTYPE_BULLET, pSceneList_Bullet);
 
 	//当たり判定処理
+
+	// プレイヤーの弾と敵の特定のグレネードの判定
+	//if (!pSceneList_Bullet.empty())
+	//{
+	//	for (size_t nCnt = 0; nCnt < pSceneList_Bullet.size(); nCnt++)
+	//	{
+	//		CBullet *pBullet = (CBullet*)pSceneList_Bullet[nCnt];
+
+	//		// バレットが敵の特定のグレネードだった時
+	//		if (pBullet->GetBullePoint() == )
+	//		{
+	//			if (this->Collision2D(pBullet->GetCollision()))
+	//			{
+	//				// 敵のグレネードにダメージを与える
+	//				pBullet->AddDamage(nEnemyDamage);
+
+	//				// 当たり範囲フラグをtrueにする
+	//				bHitFlag = true;
+
+	//				if (!Penetration)
+	//				{
+	//					return bHitFlag;
+	//				}
+	//			}
+	//		}
+	//	}
+	//}
+
 	//盾相手の場合
 	if (!pSceneList.empty())
 	{
@@ -524,41 +556,6 @@ bool CCollision::ForPlayer_EnemyCollision(bool Penetration)
 
 	return bHitFlag;
 }
-//======================================================================================================================
-// プレイヤーとエネミーで行う判定 プレイヤーの接触判定 ポインタを返す
-//======================================================================================================================
-CEnemy * CCollision::ForPlayer_EnemyCollision()
-{
-	CEnemy *pEnemy = nullptr;
-	// 捕虜の総数分
-	for (int nCntEnemy = 0; nCntEnemy < CManager::GetBaseMode()->GetMap()->GetMaxEnemy(); nCntEnemy++)
-	{
-		pEnemy = CManager::GetBaseMode()->GetMap()->GetEnemy(nCntEnemy);
-
-		if (pEnemy != nullptr)
-		{
-			if (pEnemy->GetCollision())
-			{
-				//判定が取れるとき
-				if (pEnemy->GetCollision()->GetCanCollison())
-				{
-
-					if (this->CharCollision2D(pEnemy->GetCollision()))
-					{
-						// 処理を行った捕虜のポインタを返す
-						return pEnemy;
-					}
-				}
-			}
-		}
-		else if (pEnemy == nullptr)
-		{
-			return nullptr;
-		}
-	}
-
-	return pEnemy;
-}
 
 //======================================================================================================================
 // プレイヤーと戦車で行う判定 プレイヤーの接触判定 ポインタを返す
@@ -745,11 +742,11 @@ bool CCollision::ForVehicleCollision()
 		CItem *pItem = (CItem*)SceneList[nCnt];
 		if (pItem != nullptr)
 		{
-			if (pItem->GetItemType() == CItem::ITEMTYPE_BEAR ||
-				pItem->GetItemType() == CItem::ITEMTYPE_ENERGYUP||
-				pItem->GetItemType() == CItem::ITEMTYPE_BOMBUP||
-				pItem->GetItemType() == CItem::ITEMTYPE_BULLETUP)
-			{
+			//if (pItem->GetItemType() == CItem::ITEMTYPE_BEAR ||
+				//pItem->GetItemType() == CItem::ITEMTYPE_ENERGYUP||
+				//pItem->GetItemType() == CItem::ITEMTYPE_BOMBUP||
+				//pItem->GetItemType() == CItem::ITEMTYPE_BULLETUP)
+		//	{
 				if (pItem->GetCollision()->OtherCollision2D(this))
 				{
 					bHitFlag = true;
@@ -757,7 +754,7 @@ bool CCollision::ForVehicleCollision()
 					pItem->HitItem(pItem->GetItemType(), TAG::PLAYER_1);
 					pItem = nullptr;
 				}
-			}
+			//}
 		}
 	}
 
@@ -1150,7 +1147,6 @@ bool CCollision::ForPlayer_ItemCollision(TAG Tag)
 				bHitFlag = true;
 				// アイテムごとの処理を通す
 				pItem->HitItem(pItem->GetItemType(), Tag);
-				pItem = nullptr;
 			}
 		}
 	}

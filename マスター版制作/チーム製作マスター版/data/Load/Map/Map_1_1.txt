@@ -43,22 +43,6 @@ END_MAPSET
 //	[ 4 ]	ジィ・コッカ
 //
 //------------------------------------------------------------
-
-ENEMYSET									# 1
-	TYPE		= 2
-	POS			= 400 400 0
-END_ENEMYSET
-
-ENEMYSET									# 2
-	TYPE		= 3
-	POS			= 1800 100 0
-END_ENEMYSET
-
-ENEMYSET									# 3
-	TYPE		= 4
-	POS			= 1200 100 0
-END_ENEMYSET
-
 ENEMYSET									# 4
 	TYPE		= 0
 	POS			= 1704 191 0
@@ -331,6 +315,36 @@ END_PRISONERSET
 //	[ 4 ]	土嚢
 //
 //------------------------------------------------------------
+OBSTACLESET									# 49
+	TYPE		= 0
+	POS			= 000 87 0
+END_OBSTACLESET
+OBSTACLESET									# 49
+	TYPE		= 1
+	POS			= 200 87 0
+END_OBSTACLESET
+
+OBSTACLESET									# 49
+	TYPE		= 2
+	POS			= 400 87 0
+END_OBSTACLESET
+OBSTACLESET									# 49
+	TYPE		= 3
+	POS			= 100 260 150
+END_OBSTACLESET
+OBSTACLESET									# 49
+	TYPE		= 4
+	POS			= 800 87 0
+END_OBSTACLESET
+OBSTACLESET									# 49
+	TYPE		= 5
+	POS			= 1000 87 0
+END_OBSTACLESET
+OBSTACLESET									# 49
+	TYPE		= 6
+	POS			= 1200 87 0
+END_OBSTACLESET
+
 
 OBSTACLESET									# 49
 	TYPE		= 4
