@@ -848,13 +848,6 @@ void CMap::SaveModelHeader(FILE * pFile, int ModelType)
 		fprintf(pFile, "//	[ 2 ]	レーザーガン\n");
 		fprintf(pFile, "//	[ 3 ]	ロケットランチャー\n");
 		fprintf(pFile, "//	[ 4 ]	フレイムショット\n");
-		fprintf(pFile, "//	[ 5 ]	クマ\n");
-		fprintf(pFile, "//	[ 6 ]	コイン\n");
-		fprintf(pFile, "//	[ 7 ]	宝石\n");
-		fprintf(pFile, "//	[ 8 ]	メダル\n");
-		fprintf(pFile, "//	[ 9 ]	ボム増加\n");
-		fprintf(pFile, "//	[ 10 ]	エネルギー増加\n");
-		fprintf(pFile, "//	[ 11 ]	弾薬数増加\n");
 		fprintf(pFile, COMMENT01);
 		fprintf(pFile, COMMENT02);
 		fprintf(pFile, NEWLINE);
