@@ -139,7 +139,6 @@ private:
 	void			MapModelLoad();																// 配置するモデルのロード
 	void			MapModelSave();																// 配置するモデルのセーブ
 	void			MapModelCreate(int ModelType, int nType, D3DXVECTOR3 pos, int nItemType);	// 配置するモデルの生成
-	void			LoadSuccessMessage(int ModelType);											// 読み込み成功時の結果表示
 	void			SaveModelHeader(FILE *pFile, int ModelType);								// セーブするモデルのヘッダー
 	void			SaveModelContents(FILE *pFile, int ModelType, int nCnt, int nNum);			// セーブするモデルの情報
 	void			SaveBGContents(FILE *pFile);												// セーブする背景の情報

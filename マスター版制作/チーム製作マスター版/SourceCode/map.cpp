@@ -434,42 +434,6 @@ void CMap::MapModelCreate(int ModelType, int nType, D3DXVECTOR3 pos,int nItemTyp
 
 // =====================================================================================================================================================================
 //
-// 読み込み成功時の結果表示
-//
-// =====================================================================================================================================================================
-void CMap::LoadSuccessMessage(int ModelType)
-{
-	switch (ModelType)
-	{
-		/* --- マップ --- */
-	case CMap::ARRANGEMENT_MODEL_MAP:
-		MessageBox(NULL, "マップモデルの配置データをセーブしました", "結果", MB_OK | MB_ICONINFORMATION);
-		break;
-
-		/* --- 敵 --- */
-	case CMap::ARRANGEMENT_MODEL_ENEMY:
-		MessageBox(NULL, "敵の配置データをセーブしました", "結果", MB_OK | MB_ICONINFORMATION);
-		break;
-
-		/* --- 捕虜 --- */
-	case CMap::ARRANGEMENT_MODEL_PRISONER:
-		MessageBox(NULL, "捕虜の配置データをセーブしました", "結果", MB_OK | MB_ICONINFORMATION);
-		break;
-
-		/* --- 障害物 --- */
-	case CMap::ARRANGEMENT_MODEL_OBSTACLE:
-		MessageBox(NULL, "障害物の配置データをセーブしました", "結果", MB_OK | MB_ICONINFORMATION);
-		break;
-
-		/* --- 戦車 --- */
-	case CMap::ARRANGEMENT_MODEL_TANK:
-		MessageBox(NULL, "戦車の配置データをセーブしました", "結果", MB_OK | MB_ICONINFORMATION);
-		break;
-	}
-}
-
-// =====================================================================================================================================================================
-//
 // マップの生成
 //
 // =====================================================================================================================================================================
@@ -903,11 +867,13 @@ void CMap::SaveModelHeader(FILE * pFile, int ModelType)
 		fprintf(pFile, COMMENT02);
 		fprintf(pFile, "// 障害物の種類 ( TYPE )\n");
 		fprintf(pFile, COMMENT01);
-		fprintf(pFile, "//	[ 0 ]	箱\n");
+		fprintf(pFile, "//	[ 0 ]	木箱\n");
 		fprintf(pFile, "//	[ 1 ]	樽\n");
-		fprintf(pFile, "//	[ 2 ]	木\n");
-		fprintf(pFile, "//	[ 3 ]	金庫\n");
-		fprintf(pFile, "//	[ 4 ]	土嚢\n");
+		fprintf(pFile, "//	[ 2 ]	樽爆弾\n");
+		fprintf(pFile, "//	[ 3 ]	木\n");
+		fprintf(pFile, "//	[ 4 ]	金庫\n");
+		fprintf(pFile, "//	[ 5 ]	土嚢\n");
+		fprintf(pFile, "//	[ 6 ]	車\n");
 		fprintf(pFile, COMMENT01);
 		fprintf(pFile, COMMENT02);
 		fprintf(pFile, NEWLINE);
