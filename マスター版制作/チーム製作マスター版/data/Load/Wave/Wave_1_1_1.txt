@@ -25,7 +25,7 @@ EVENTPOS	= 3275
 
 ENEMYSET									# 0
 	TYPE			= 3
-	POS 			= 0 80 0
+	POS 			= 600 80 0
 	FRAME 			= 1
 	EVENT			= 0
 END_ENEMYSET

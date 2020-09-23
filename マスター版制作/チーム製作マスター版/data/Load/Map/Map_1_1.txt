@@ -309,17 +309,19 @@ END_PRISONERSET
 //------------------------------------------------------------
 // è·äQï®ÇÃéÌóﬁ ( TYPE )
 //
-//	[ 0 ]	î†
+//	[ 0 ]	ñÿî†
 //	[ 1 ]	íM
-//	[ 2 ]	ñÿ
-//	[ 3 ]	ã‡å…
-//	[ 4 ]	ìyîX
+//	[ 2 ]	íMîöíe
+//	[ 3 ]	ñÿ
+//	[ 4 ]	ã‡å…
+//	[ 5 ]	ìyîX
+//	[ 6 ]	é‘
 //
 //------------------------------------------------------------
 
 OBSTACLESET									# 46
 	TYPE		= 0
-	POS			= 0 87 0
+	POS			= 14 87 0
 END_OBSTACLESET
 
 OBSTACLESET									# 47
@@ -329,7 +331,7 @@ END_OBSTACLESET
 
 OBSTACLESET									# 48
 	TYPE		= 2
-	POS			= 400 87 0
+	POS			= 431 83 0
 END_OBSTACLESET
 
 OBSTACLESET									# 49
@@ -339,7 +341,7 @@ END_OBSTACLESET
 
 OBSTACLESET									# 50
 	TYPE		= 4
-	POS			= 800 87 0
+	POS			= 675 76 0
 END_OBSTACLESET
 
 OBSTACLESET									# 51
@@ -349,7 +351,7 @@ END_OBSTACLESET
 
 OBSTACLESET									# 52
 	TYPE		= 6
-	POS			= 1458 104 0
+	POS			= 1391 93 0
 END_OBSTACLESET
 
 OBSTACLESET									# 53
@@ -389,7 +391,11 @@ END_OBSTACLESET
 
 OBSTACLESET									# 60
 	TYPE		= 1
+<<<<<<< .mine
+	POS			= 4568 226 0
+=======
 	POS			= 6146 95 0
+>>>>>>> .theirs
 END_OBSTACLESET
 
 OBSTACLESET									# 61

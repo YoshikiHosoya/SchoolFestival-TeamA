@@ -88,7 +88,7 @@ public:
 
 
 	bool RayBlockCollision(CMap *pMap, D3DXMATRIX *pMat);				// Rayの判定 キャラクター
-	bool RayCollision(CMap *pMap);
+	bool RayCollision(CMap *pMap,D3DXVECTOR3 posOrigin,D3DXVECTOR3 posEndPoint);		//Rayの判定　アイテムとバレット
 	bool RayCollisionGetLength(D3DXVECTOR3 posOrigin, D3DXVECTOR3 posEndPoint,float & fLength);		//Rayの判定　長さを取得
 	// Rayの判定 弾など
 	bool RayFloorCollision(CMap *pMap, D3DXMATRIX *pMat,D3DXVECTOR3 pdirection,D3DXVECTOR3 ppos);// Rayの判定 前方の床

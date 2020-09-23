@@ -257,11 +257,13 @@ END_PRISONERSET
 //------------------------------------------------------------
 // è·äQï®ÇÃéÌóﬁ ( TYPE )
 //
-//	[ 0 ]	î†
+//	[ 0 ]	ñÿî†
 //	[ 1 ]	íM
-//	[ 2 ]	ñÿ
-//	[ 3 ]	ã‡å…
-//	[ 4 ]	ìyîX
+//	[ 2 ]	íMîöíe
+//	[ 3 ]	ñÿ
+//	[ 4 ]	ã‡å…
+//	[ 5 ]	ìyîX
+//	[ 6 ]	é‘
 //
 //------------------------------------------------------------
 
@@ -290,11 +292,46 @@ OBSTACLESET									# 40
 	POS			= 3399 98 0
 END_OBSTACLESET
 
+OBSTACLESET									# 41
+	TYPE		= 0
+	POS			= 5503 95 0
+END_OBSTACLESET
+
+OBSTACLESET									# 42
+	TYPE		= 0
+	POS			= 5577 95 0
+END_OBSTACLESET
+
+OBSTACLESET									# 43
+	TYPE		= 0
+	POS			= 5503 168 0
+END_OBSTACLESET
+
+OBSTACLESET									# 44
+	TYPE		= 0
+	POS			= 5577 168 0
+END_OBSTACLESET
+
+OBSTACLESET									# 45
+	TYPE		= 5
+	POS			= 6508 97 0
+END_OBSTACLESET
+
+OBSTACLESET									# 46
+	TYPE		= 4
+	POS			= 3176 217 0
+END_OBSTACLESET
+
+OBSTACLESET									# 47
+	TYPE		= 4
+	POS			= 3300 217 0
+END_OBSTACLESET
+
 //------------------------------------------------------------
 // êÌé‘ÇÃîzíuèÓïÒ
 //------------------------------------------------------------
 
-TANKSET										# 41
+TANKSET										# 48
 	POS			= 838 241 0
 END_TANKSET
 

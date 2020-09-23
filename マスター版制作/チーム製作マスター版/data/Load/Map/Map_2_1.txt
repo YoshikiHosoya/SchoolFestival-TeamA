@@ -45,231 +45,201 @@ END_MAPSET
 //------------------------------------------------------------
 
 ENEMYSET									# 1
-	TYPE		= 1
-	POS			= 798 102 0
-END_ENEMYSET
-
-ENEMYSET									# 2
-	TYPE		= 0
-	POS			= 890 102 0
-END_ENEMYSET
-
-ENEMYSET									# 3
 	TYPE		= 0
 	POS			= 991 102 0
 END_ENEMYSET
 
-ENEMYSET									# 4
+ENEMYSET									# 2
 	TYPE		= 0
 	POS			= 1109 102 0
 END_ENEMYSET
 
-ENEMYSET									# 5
+ENEMYSET									# 3
 	TYPE		= 0
 	POS			= 1204 102 0
 END_ENEMYSET
 
-ENEMYSET									# 6
+ENEMYSET									# 4
 	TYPE		= 1
 	POS			= 1310 99 0
 END_ENEMYSET
 
-ENEMYSET									# 7
+ENEMYSET									# 5
 	TYPE		= 1
 	POS			= 839 214 0
 END_ENEMYSET
 
-ENEMYSET									# 8
+ENEMYSET									# 6
 	TYPE		= 1
 	POS			= 1280 214 0
 END_ENEMYSET
 
-ENEMYSET									# 9
-	TYPE		= 0
-	POS			= 1487 98 0
-END_ENEMYSET
-
-ENEMYSET									# 10
+ENEMYSET									# 7
 	TYPE		= 0
 	POS			= 2829 98 0
 END_ENEMYSET
 
-ENEMYSET									# 11
+ENEMYSET									# 8
 	TYPE		= 0
 	POS			= 2902 98 0
 END_ENEMYSET
 
-ENEMYSET									# 12
+ENEMYSET									# 9
 	TYPE		= 0
 	POS			= 2995 95 0
 END_ENEMYSET
 
-ENEMYSET									# 13
+ENEMYSET									# 10
 	TYPE		= 0
 	POS			= 3105 91 0
 END_ENEMYSET
 
-ENEMYSET									# 14
+ENEMYSET									# 11
 	TYPE		= 0
 	POS			= 2832 210 0
 END_ENEMYSET
 
-ENEMYSET									# 15
+ENEMYSET									# 12
 	TYPE		= 0
 	POS			= 2904 210 0
 END_ENEMYSET
 
-ENEMYSET									# 16
+ENEMYSET									# 13
 	TYPE		= 0
 	POS			= 2992 210 0
 END_ENEMYSET
 
-ENEMYSET									# 17
+ENEMYSET									# 14
 	TYPE		= 0
 	POS			= 3101 210 0
 END_ENEMYSET
 
-ENEMYSET									# 18
+ENEMYSET									# 15
 	TYPE		= 1
 	POS			= 3788 94 0
 END_ENEMYSET
 
-ENEMYSET									# 19
+ENEMYSET									# 16
 	TYPE		= 1
 	POS			= 3918 93 0
 END_ENEMYSET
 
-ENEMYSET									# 20
-	TYPE		= 0
-	POS			= 4031 93 0
-END_ENEMYSET
-
-ENEMYSET									# 21
-	TYPE		= 0
-	POS			= 4214 94 0
-END_ENEMYSET
-
-ENEMYSET									# 22
+ENEMYSET									# 17
 	TYPE		= 1
 	POS			= 4338 94 0
 END_ENEMYSET
 
-ENEMYSET									# 23
+ENEMYSET									# 18
 	TYPE		= 1
 	POS			= 4443 94 0
 END_ENEMYSET
 
-ENEMYSET									# 24
+ENEMYSET									# 19
 	TYPE		= 1
 	POS			= 3794 222 0
 END_ENEMYSET
 
-ENEMYSET									# 25
+ENEMYSET									# 20
 	TYPE		= 1
 	POS			= 3921 222 0
 END_ENEMYSET
 
-ENEMYSET									# 26
+ENEMYSET									# 21
 	TYPE		= 0
 	POS			= 4032 222 0
 END_ENEMYSET
 
-ENEMYSET									# 27
+ENEMYSET									# 22
 	TYPE		= 0
 	POS			= 4212 222 0
 END_ENEMYSET
 
-ENEMYSET									# 28
+ENEMYSET									# 23
 	TYPE		= 1
 	POS			= 4439 222 0
 END_ENEMYSET
 
-ENEMYSET									# 29
+ENEMYSET									# 24
 	TYPE		= 0
 	POS			= 4335 222 0
 END_ENEMYSET
 
-ENEMYSET									# 30
-	TYPE		= 1
-	POS			= 4958 86 0
-END_ENEMYSET
-
-ENEMYSET									# 31
+ENEMYSET									# 25
 	TYPE		= 0
 	POS			= 5083 86 0
 END_ENEMYSET
 
-ENEMYSET									# 32
+ENEMYSET									# 26
 	TYPE		= 0
 	POS			= 5214 86 0
 END_ENEMYSET
 
-ENEMYSET									# 33
+ENEMYSET									# 27
 	TYPE		= 1
 	POS			= 5330 86 0
 END_ENEMYSET
 
-ENEMYSET									# 34
+ENEMYSET									# 28
 	TYPE		= 0
 	POS			= 5447 86 0
 END_ENEMYSET
 
-ENEMYSET									# 35
+ENEMYSET									# 29
 	TYPE		= 0
 	POS			= 5564 86 0
 END_ENEMYSET
 
-ENEMYSET									# 36
+ENEMYSET									# 30
 	TYPE		= 1
 	POS			= 5200 210 0
 END_ENEMYSET
 
-ENEMYSET									# 37
+ENEMYSET									# 31
 	TYPE		= 0
 	POS			= 5281 210 0
 END_ENEMYSET
 
-ENEMYSET									# 38
+ENEMYSET									# 32
 	TYPE		= 0
 	POS			= 5447 210 0
 END_ENEMYSET
 
-ENEMYSET									# 39
+ENEMYSET									# 33
 	TYPE		= 0
 	POS			= 5528 210 0
 END_ENEMYSET
 
-ENEMYSET									# 40
+ENEMYSET									# 34
 	TYPE		= 1
 	POS			= 6576 52 0
 END_ENEMYSET
 
-ENEMYSET									# 41
+ENEMYSET									# 35
 	TYPE		= 1
 	POS			= 6635 52 0
 END_ENEMYSET
 
-ENEMYSET									# 42
+ENEMYSET									# 36
 	TYPE		= 0
 	POS			= 6682 52 0
 END_ENEMYSET
 
-ENEMYSET									# 43
+ENEMYSET									# 37
 	TYPE		= 0
 	POS			= 6724 52 0
 END_ENEMYSET
 
-ENEMYSET									# 44
+ENEMYSET									# 38
 	TYPE		= 0
 	POS			= 6779 52 0
 END_ENEMYSET
 
-ENEMYSET									# 45
+ENEMYSET									# 39
 	TYPE		= 0
 	POS			= 6834 52 0
 END_ENEMYSET
 
-ENEMYSET									# 46
+ENEMYSET									# 40
 	TYPE		= 0
 	POS			= 6877 52 0
 END_ENEMYSET
@@ -302,37 +272,37 @@ END_ENEMYSET
 //
 //------------------------------------------------------------
 
-PRISONERSET									# 47
+PRISONERSET									# 41
 	TYPE		= 0
 	ITEMTYPE	= 0
 	POS			= 988 220 0
 END_PRISONERSET
 
-PRISONERSET									# 48
+PRISONERSET									# 42
 	TYPE		= 0
 	ITEMTYPE	= 0
 	POS			= 1099 220 0
 END_PRISONERSET
 
-PRISONERSET									# 49
+PRISONERSET									# 43
 	TYPE		= 0
 	ITEMTYPE	= 0
 	POS			= 2100 60 0
 END_PRISONERSET
 
-PRISONERSET									# 50
+PRISONERSET									# 44
 	TYPE		= 0
 	ITEMTYPE	= 0
 	POS			= 4115 223 0
 END_PRISONERSET
 
-PRISONERSET									# 51
+PRISONERSET									# 45
 	TYPE		= 0
 	ITEMTYPE	= 0
 	POS			= 4115 96 0
 END_PRISONERSET
 
-PRISONERSET									# 52
+PRISONERSET									# 46
 	TYPE		= 0
 	ITEMTYPE	= 0
 	POS			= 6660 243 0
@@ -351,37 +321,37 @@ END_PRISONERSET
 //
 //------------------------------------------------------------
 
-OBSTACLESET									# 53
+OBSTACLESET									# 47
 	TYPE		= 5
 	POS			= 1416 125 0
 END_OBSTACLESET
 
-OBSTACLESET									# 54
+OBSTACLESET									# 48
 	TYPE		= 5
 	POS			= 2626 125 0
 END_OBSTACLESET
 
-OBSTACLESET									# 55
+OBSTACLESET									# 49
 	TYPE		= 5
 	POS			= 3209 123 0
 END_OBSTACLESET
 
-OBSTACLESET									# 56
+OBSTACLESET									# 50
 	TYPE		= 5
 	POS			= 5137 227 0
 END_OBSTACLESET
 
-OBSTACLESET									# 57
+OBSTACLESET									# 51
 	TYPE		= 5
 	POS			= 6500 79 0
 END_OBSTACLESET
 
-OBSTACLESET									# 58
+OBSTACLESET									# 52
 	TYPE		= 1
 	POS			= 6430 280 0
 END_OBSTACLESET
 
-OBSTACLESET									# 59
+OBSTACLESET									# 53
 	TYPE		= 1
 	POS			= 6504 279 0
 END_OBSTACLESET

@@ -50,6 +50,7 @@ public:
 		EFFECT_BOSSLAZER,						//ボスのレーザー
 		EFFECT_SMOKE,							//煙
 		EFFECT_FIRE,							//炎
+		EFFECT_FIRE_BULLET,						//燃えてる弾
 		EFFECT_GETWEAPON,						//武器取得
 		EFFECT_CHARGE_CIRCLE,					//チャージ　円
 		EFFECT_CHARGE_PARTICLE,					//チャージ　粒子
