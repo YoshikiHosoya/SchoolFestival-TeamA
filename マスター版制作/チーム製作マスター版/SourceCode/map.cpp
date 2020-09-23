@@ -849,13 +849,6 @@ void CMap::SaveModelHeader(FILE * pFile, int ModelType)
 		fprintf(pFile, "//	[ 2 ]	レーザーガン\n");
 		fprintf(pFile, "//	[ 3 ]	ロケットランチャー\n");
 		fprintf(pFile, "//	[ 4 ]	フレイムショット\n");
-		fprintf(pFile, "//	[ 5 ]	クマ\n");
-		fprintf(pFile, "//	[ 6 ]	コイン\n");
-		fprintf(pFile, "//	[ 7 ]	宝石\n");
-		fprintf(pFile, "//	[ 8 ]	メダル\n");
-		fprintf(pFile, "//	[ 9 ]	ボム増加\n");
-		fprintf(pFile, "//	[ 10 ]	エネルギー増加\n");
-		fprintf(pFile, "//	[ 11 ]	弾薬数増加\n");
 		fprintf(pFile, COMMENT01);
 		fprintf(pFile, COMMENT02);
 		fprintf(pFile, NEWLINE);
@@ -1688,7 +1681,7 @@ void CMap::EnemyTypeComboBox(int &nSelectType, int nNowSelect)
 void CMap::PrisonerDropTypeComboBox(int &nSelectType, int nNowSelect)
 {
 #ifdef _DEBUG
-	std::vector<std::string > aPrisonerType = { "DESIGNATE_ONE", "DESIGNATE_RANGE", "ALL" };
+	std::vector<std::string > aPrisonerType = { "DROPTYPE_PICK_ONE", "DROPTYPE_RANGE"};
 
 	// 現在のドロップタイプを反映
 	nSelectType = (int)m_pPrisoner[nNowSelect]->GetPrisonerDropType();
@@ -1723,7 +1716,7 @@ void CMap::PrisonerDropTypeComboBox(int &nSelectType, int nNowSelect)
 void CMap::PrisonerItemTypeComboBox(int &nSelectType, int nNowSelect)
 {
 #ifdef _DEBUG
-	std::vector<std::string > aPrisonerItem = { "NONE","HMG","SG","LG","RL","FS","BEAR","COIN","JEWELRY","MEDAL","BOMBUP","ENERGYUP","BULLETUP" };
+	std::vector<std::string > aPrisonerItem = { "NONE","HMG","SG","LG","RL","FS"};
 
 	// 現在のアイテムタイプを反映	( NONEがあるため +1 )
 	nSelectType = (int)m_pPrisoner[nNowSelect]->GetPrisonerDropItem() + 1;
