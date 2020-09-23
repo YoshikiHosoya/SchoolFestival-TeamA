@@ -350,6 +350,15 @@ void CCharacter::Move(float move, float fdest,float fSpeed)
 void CCharacter::SetPosition(D3DXVECTOR3 pos)
 {
 	m_pos = pos;
+	m_posold = pos;
+	if (m_pCollision)
+	{
+		m_pCollision->SetPos(&m_pos);
+		m_pCollision->SetPosOld(&m_posold);
+
+	}
+
+	CHossoLibrary::CalcMatrix(&m_mtxWorld, pos, m_rot);
 }
 //====================================================================
 //前のポジションの設定

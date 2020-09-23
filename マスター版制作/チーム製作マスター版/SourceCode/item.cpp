@@ -712,7 +712,7 @@ void CItem::ItemCollision()
 
 		if (pMap)
 		{
-			if (m_pCollision->RayCollision(pMap))
+			if (m_pCollision->RayCollision(pMap,GetPosition() - D3DXVECTOR3(0.0f,30.0f,0.0f),GetPosition()))
 			{
 				if (m_Behavior != BEHAVIOR_NONE)
 				{

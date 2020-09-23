@@ -145,6 +145,13 @@ FILENAME_LIST CTexture::m_aSeparateTexFileNameList =
 	{ "data/TEXTURE/Effect/Fireworks3.png" },					//花火2
 	{ "data/TEXTURE/Effect/Fireworks5.png" },					//花火3
 
+	{ "data/TEXTURE/Effect/Explosion04.png" },					//爆発
+	{ "data/TEXTURE/Effect/Explosion05.png" },					//爆発
+	{ "data/TEXTURE/Effect/Explosion06.png" },					//爆発
+	{ "data/TEXTURE/Effect/Explosion07.png" },					//爆発
+	{ "data/TEXTURE/Effect/Explosion08.png" },					//爆発
+
+
 	{ "data/TEXTURE/UI/num.png" },								//ナンバー
 	{ "data/TEXTURE/UI/Player_UI/life.png" },					//体力のUI
 };
@@ -183,6 +190,13 @@ std::vector<CTexture::SEPARATE_TEX_INFO> CTexture::m_apSeparateTexInfoList =
 	{ nullptr, CTexture::SEPARATE_TEX_EFFECT_FIREWORKS1,	D3DXVECTOR2(14,1),	ZeroVector2 },		//花火1
 	{ nullptr, CTexture::SEPARATE_TEX_EFFECT_FIREWORKS2,	D3DXVECTOR2(14,1),	ZeroVector2 },		//花火2
 	{ nullptr, CTexture::SEPARATE_TEX_EFFECT_FIREWORKS3,	D3DXVECTOR2(14,1),	ZeroVector2 },		//花火3
+
+	{ nullptr, CTexture::SEPARATE_TEX_EFFECT_EXPLOSION04,	D3DXVECTOR2(4,4),	ZeroVector2 },		//爆発
+	{ nullptr, CTexture::SEPARATE_TEX_EFFECT_EXPLOSION05,	D3DXVECTOR2(5,3),	ZeroVector2 },		//爆発
+	{ nullptr, CTexture::SEPARATE_TEX_EFFECT_EXPLOSION06,	D3DXVECTOR2(5,3),	ZeroVector2 },		//爆発
+	{ nullptr, CTexture::SEPARATE_TEX_EFFECT_EXPLOSION07,	D3DXVECTOR2(5,3),	ZeroVector2 },		//爆発
+	{ nullptr, CTexture::SEPARATE_TEX_EFFECT_EXPLOSION08,	D3DXVECTOR2(8,2),	ZeroVector2 },		//爆発
+
 
 	{ nullptr, CTexture::SEPARATE_TEX_NUM,					D3DXVECTOR2(10,1),	ZeroVector2 },		//ナンバー
 	{ nullptr, CTexture::SEPARATE_TEX_UI_LIFE,				D3DXVECTOR2(5,1),	ZeroVector2 },		//体力のUI
