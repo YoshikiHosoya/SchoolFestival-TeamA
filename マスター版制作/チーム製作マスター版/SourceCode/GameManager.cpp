@@ -354,7 +354,7 @@ void CGameManager::UpdateWave()
 		if (pWaveInfo->EnemyWaveInfo[m_nWaveEnemyNum]->nFrame <= m_nWaveEnemyCnt)
 		{
 			//“G¶¬
-			CManager::GetGame()->GetMap()->WaveCreate(CMap::ARRANGEMENT_MODEL_ENEMY, pWaveInfo->EventPos, pWaveInfo->EnemyWaveInfo[m_nWaveEnemyNum]);
+			CManager::GetGame()->GetMap()->WaveCreate(CMap::ARRANGEMENT_MODEL_ENEMY, pWaveInfo->EventPos, pWaveInfo->EnemyWaveInfo[m_nWaveEnemyNum], (CWeakEnemy::ENEMY_TYPE)pWaveInfo->EnemyWaveInfo[m_nWaveEnemyNum]->nType);
 			m_nWaveEnemyNum++;
 			m_nWaveEnemyCnt = 0;
 		}
@@ -369,7 +369,7 @@ void CGameManager::UpdateWave()
 		if (pWaveInfo->PrisonerWaveInfo[m_nWavePrisonerNum]->nFrame <= m_nWavePrisonerCnt)
 		{
 			//“G¶¬
-			CManager::GetGame()->GetMap()->WaveCreate(CMap::ARRANGEMENT_MODEL_PRISONER, pWaveInfo->EventPos, pWaveInfo->PrisonerWaveInfo[m_nWavePrisonerNum]);
+			CManager::GetGame()->GetMap()->WaveCreate(CMap::ARRANGEMENT_MODEL_PRISONER, pWaveInfo->EventPos, pWaveInfo->PrisonerWaveInfo[m_nWavePrisonerNum], (CWeakEnemy::ENEMY_TYPE)-1);
 			m_nWavePrisonerNum++;
 			m_nWavePrisonerCnt = 0;
 		}
