@@ -352,38 +352,38 @@ END_PRISONERSET
 //------------------------------------------------------------
 
 OBSTACLESET									# 53
-	TYPE		= 4
+	TYPE		= 5
 	POS			= 1416 125 0
 END_OBSTACLESET
 
 OBSTACLESET									# 54
-	TYPE		= 4
+	TYPE		= 5
 	POS			= 2626 125 0
 END_OBSTACLESET
 
 OBSTACLESET									# 55
-	TYPE		= 4
+	TYPE		= 5
 	POS			= 3209 123 0
 END_OBSTACLESET
 
 OBSTACLESET									# 56
-	TYPE		= 4
-	POS			= 5137 229 0
+	TYPE		= 5
+	POS			= 5137 227 0
 END_OBSTACLESET
 
 OBSTACLESET									# 57
-	TYPE		= 4
+	TYPE		= 5
 	POS			= 6500 79 0
 END_OBSTACLESET
 
 OBSTACLESET									# 58
-	TYPE		= 0
-	POS			= 6430 265 0
+	TYPE		= 1
+	POS			= 6430 280 0
 END_OBSTACLESET
 
 OBSTACLESET									# 59
-	TYPE		= 0
-	POS			= 6477 265 0
+	TYPE		= 1
+	POS			= 6504 279 0
 END_OBSTACLESET
 
 //------------------------------------------------------------
@@ -394,13 +394,13 @@ END_OBSTACLESET
 // îwåiÇÃÉeÉNÉXÉ`ÉÉèÓïÒ
 //------------------------------------------------------------
 //
-//	[ 59 ]	ãÛÇÃîwåi ( ê∞ÇÍ )
-//	[ 60 ]	ãÛÇÃîwåi ( ì‹ÇË )
-//	[ 61 ]	ãÛÇÃîwåi ( à√â_ )
+//	[ 71 ]	ãÛÇÃîwåi ( ê∞ÇÍ )
+//	[ 72 ]	ãÛÇÃîwåi ( ì‹ÇË )
+//	[ 73 ]	ãÛÇÃîwåi ( à√â_ )
 //
 //------------------------------------------------------------
 BGSET
-	BG_TEX_ID			= 59
+	BG_TEX_ID			= 71
 END_BGSET
 
 END_SCRIPT

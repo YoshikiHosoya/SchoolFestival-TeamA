@@ -16,6 +16,7 @@
 #include "model.h"
 #include "Scene.h"
 #include "inputKeyboard.h"
+#include "WeakEnemy.h"
 
 // =====================================================================================================================================================================
 // 前方宣言
@@ -113,7 +114,7 @@ public:
 	void			MapLoad(MAP MapNum);											// マップのロード
 	void			UpdateDieFlag();												// 死亡フラグ確認関数
 	void			AllDelete();													// 配置しているモデルを全て破棄
-	void			WaveCreate(int nModelType, D3DXVECTOR3 eventpos, WAVE_PARAM *pWaveParam);				// Waveの生成
+	void			WaveCreate(int nModelType, D3DXVECTOR3 eventpos, WAVE_PARAM *pWaveParam, CWeakEnemy::ENEMY_TYPE EnemyType);	// Waveの生成
 	void			ShowDebugInfo();												// デバッグ情報表記
 
 	int				GetMaxModel();													// モデルの最大数取得
@@ -121,8 +122,6 @@ public:
 	int				GetMaxPrisoner();												// 捕虜の最大数取得
 	int				GetMaxObstacle();												// 障害物の最大数取得
 	int				GetMaxPlayerTank();												// 戦車の最大数取得
-	int				GetMaxBattlePlane();											// 戦闘機の最大数取得
-	int				GetMaxHelicopter();												// ヘリの最大数取得
 
 	LPD3DXMESH		GetMesh(int nCnt);												// メッシュの取得
 	MAP				GetMapNum() { return m_MapNum; };								// マップ番号取得
@@ -140,7 +139,6 @@ private:
 	void			MapModelLoad();																// 配置するモデルのロード
 	void			MapModelSave();																// 配置するモデルのセーブ
 	void			MapModelCreate(int ModelType, int nType, D3DXVECTOR3 pos, int nItemType);	// 配置するモデルの生成
-	void			LoadSuccessMessage(int ModelType);											// 読み込み成功時の結果表示
 	void			SaveModelHeader(FILE *pFile, int ModelType);								// セーブするモデルのヘッダー
 	void			SaveModelContents(FILE *pFile, int ModelType, int nCnt, int nNum);			// セーブするモデルの情報
 	void			SaveBGContents(FILE *pFile);												// セーブする背景の情報

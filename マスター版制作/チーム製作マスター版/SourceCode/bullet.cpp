@@ -144,7 +144,7 @@ void CBullet::Update(void)
 		if (pMap != nullptr)
 		{
 			// ƒŒƒC‚Ì”»’è
-			if (GetCollision()->RayCollision(pMap))
+			if (GetCollision()->RayCollision(pMap, rPos - m_move, rPos))
 			{
 				DeleteBullet();
 				return;
