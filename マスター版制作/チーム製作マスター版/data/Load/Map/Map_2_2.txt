@@ -156,17 +156,17 @@ END_ENEMYSET
 
 ENEMYSET									# 23
 	TYPE		= 0
-	POS			= 6273 52 0
+	POS			= 6121 52 0
 END_ENEMYSET
 
 ENEMYSET									# 24
 	TYPE		= 0
-	POS			= 6372 52 0
+	POS			= 6253 52 0
 END_ENEMYSET
 
 ENEMYSET									# 25
 	TYPE		= 0
-	POS			= 6470 52 0
+	POS			= 6374 52 0
 END_ENEMYSET
 
 ENEMYSET									# 26
@@ -275,78 +275,58 @@ END_PRISONERSET
 //------------------------------------------------------------
 
 OBSTACLESET									# 38
-	TYPE		= 4
+	TYPE		= 5
 	POS			= 838 88 0
 END_OBSTACLESET
 
 OBSTACLESET									# 39
-	TYPE		= 4
+	TYPE		= 5
 	POS			= 1359 88 0
 END_OBSTACLESET
 
 OBSTACLESET									# 40
-	TYPE		= 4
+	TYPE		= 5
 	POS			= 1517 91 0
 END_OBSTACLESET
 
 OBSTACLESET									# 41
-	TYPE		= 1
-	POS			= 2090 212 0
+	TYPE		= 5
+	POS			= 5535 204 0
 END_OBSTACLESET
 
 OBSTACLESET									# 42
 	TYPE		= 1
-	POS			= 2131 212 0
+	POS			= 5622 92 0
 END_OBSTACLESET
 
 OBSTACLESET									# 43
 	TYPE		= 1
-	POS			= 2169 212 0
+	POS			= 6549 92 0
 END_OBSTACLESET
 
 OBSTACLESET									# 44
-	TYPE		= 1
-	POS			= 2205 211 0
+	TYPE		= 3
+	POS			= 4103 268 100
 END_OBSTACLESET
 
 OBSTACLESET									# 45
-	TYPE		= 1
-	POS			= 2091 256 0
+	TYPE		= 3
+	POS			= 4273 268 100
 END_OBSTACLESET
 
 OBSTACLESET									# 46
-	TYPE		= 1
-	POS			= 2130 257 0
+	TYPE		= 3
+	POS			= 5173 268 100
 END_OBSTACLESET
 
 OBSTACLESET									# 47
-	TYPE		= 1
-	POS			= 2168 257 0
+	TYPE		= 3
+	POS			= 5335 268 100
 END_OBSTACLESET
 
 OBSTACLESET									# 48
-	TYPE		= 1
-	POS			= 2206 256 0
-END_OBSTACLESET
-
-OBSTACLESET									# 49
-	TYPE		= 4
-	POS			= 5508 205 0
-END_OBSTACLESET
-
-OBSTACLESET									# 50
-	TYPE		= 4
-	POS			= 5584 204 0
-END_OBSTACLESET
-
-OBSTACLESET									# 51
-	TYPE		= 4
-	POS			= 6099 86 0
-END_OBSTACLESET
-
-OBSTACLESET									# 52
-	TYPE		= 4
-	POS			= 6543 86 0
+	TYPE		= 6
+	POS			= 2999 147 0
 END_OBSTACLESET
 
 //------------------------------------------------------------
@@ -357,13 +337,13 @@ END_OBSTACLESET
 // îwåiÇÃÉeÉNÉXÉ`ÉÉèÓïÒ
 //------------------------------------------------------------
 //
-//	[ 59 ]	ãÛÇÃîwåi ( ê∞ÇÍ )
-//	[ 60 ]	ãÛÇÃîwåi ( ì‹ÇË )
-//	[ 61 ]	ãÛÇÃîwåi ( à√â_ )
+//	[ 71 ]	ãÛÇÃîwåi ( ê∞ÇÍ )
+//	[ 72 ]	ãÛÇÃîwåi ( ì‹ÇË )
+//	[ 73 ]	ãÛÇÃîwåi ( à√â_ )
 //
 //------------------------------------------------------------
 BGSET
-	BG_TEX_ID			= 59
+	BG_TEX_ID			= 71
 END_BGSET
 
 END_SCRIPT

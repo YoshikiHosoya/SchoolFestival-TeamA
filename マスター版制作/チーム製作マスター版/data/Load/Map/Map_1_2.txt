@@ -314,7 +314,7 @@ END_ENEMYSET
 
 PRISONERSET									# 49
 	TYPE		= 0
-	ITEMTYPE	= 0
+	ITEMTYPE	= 2
 	POS			= 1127 151 0
 END_PRISONERSET
 
@@ -326,19 +326,19 @@ END_PRISONERSET
 
 PRISONERSET									# 51
 	TYPE		= 0
-	ITEMTYPE	= 0
+	ITEMTYPE	= 3
 	POS			= 5317 193 4
 END_PRISONERSET
 
 PRISONERSET									# 52
 	TYPE		= 0
-	ITEMTYPE	= 0
+	ITEMTYPE	= 8
 	POS			= 4656 278 4
 END_PRISONERSET
 
 PRISONERSET									# 53
 	TYPE		= 0
-	ITEMTYPE	= 0
+	ITEMTYPE	= 1
 	POS			= 6960 64 0
 END_PRISONERSET
 
@@ -356,78 +356,88 @@ END_PRISONERSET
 //------------------------------------------------------------
 
 OBSTACLESET									# 54
-	TYPE		= 4
+	TYPE		= 5
 	POS			= 493 89 4
 END_OBSTACLESET
 
 OBSTACLESET									# 55
-	TYPE		= 4
+	TYPE		= 5
 	POS			= 1043 173 0
 END_OBSTACLESET
 
 OBSTACLESET									# 56
-	TYPE		= 4
+	TYPE		= 5
 	POS			= 1217 164 0
 END_OBSTACLESET
 
 OBSTACLESET									# 57
-	TYPE		= 4
+	TYPE		= 5
 	POS			= 2171 162 0
 END_OBSTACLESET
 
 OBSTACLESET									# 58
-	TYPE		= 4
+	TYPE		= 5
 	POS			= 2334 164 0
 END_OBSTACLESET
 
 OBSTACLESET									# 59
-	TYPE		= 4
+	TYPE		= 5
 	POS			= 2636 89 0
 END_OBSTACLESET
 
 OBSTACLESET									# 60
-	TYPE		= 4
+	TYPE		= 5
 	POS			= 3041 93 0
 END_OBSTACLESET
 
 OBSTACLESET									# 61
-	TYPE		= 4
+	TYPE		= 5
 	POS			= 4181 90 0
 END_OBSTACLESET
 
 OBSTACLESET									# 62
-	TYPE		= 4
+	TYPE		= 1
 	POS			= 4646 88 0
 END_OBSTACLESET
 
 OBSTACLESET									# 63
-	TYPE		= 4
+	TYPE		= 5
 	POS			= 5060 85 0
 END_OBSTACLESET
 
 OBSTACLESET									# 64
-	TYPE		= 4
+	TYPE		= 5
 	POS			= 5568 86 0
 END_OBSTACLESET
 
 OBSTACLESET									# 65
-	TYPE		= 4
+	TYPE		= 1
 	POS			= 6033 85 0
 END_OBSTACLESET
 
 OBSTACLESET									# 66
-	TYPE		= 4
+	TYPE		= 5
 	POS			= 6453 89 0
 END_OBSTACLESET
 
 OBSTACLESET									# 67
-	TYPE		= 4
-	POS			= 4646 145 0
+	TYPE		= 1
+	POS			= 5594 297 0
 END_OBSTACLESET
 
 OBSTACLESET									# 68
-	TYPE		= 4
-	POS			= 6033 140 0
+	TYPE		= 1
+	POS			= 5054 297 0
+END_OBSTACLESET
+
+OBSTACLESET									# 69
+	TYPE		= 3
+	POS			= 1659 265 100
+END_OBSTACLESET
+
+OBSTACLESET									# 70
+	TYPE		= 3
+	POS			= 2818 265 100
 END_OBSTACLESET
 
 //------------------------------------------------------------
@@ -438,13 +448,13 @@ END_OBSTACLESET
 // îwåiÇÃÉeÉNÉXÉ`ÉÉèÓïÒ
 //------------------------------------------------------------
 //
-//	[ 59 ]	ãÛÇÃîwåi ( ê∞ÇÍ )
-//	[ 60 ]	ãÛÇÃîwåi ( ì‹ÇË )
-//	[ 61 ]	ãÛÇÃîwåi ( à√â_ )
+//	[ 71 ]	ãÛÇÃîwåi ( ê∞ÇÍ )
+//	[ 72 ]	ãÛÇÃîwåi ( ì‹ÇË )
+//	[ 73 ]	ãÛÇÃîwåi ( à√â_ )
 //
 //------------------------------------------------------------
 BGSET
-	BG_TEX_ID			= 59
+	BG_TEX_ID			= 71
 END_BGSET
 
 END_SCRIPT
