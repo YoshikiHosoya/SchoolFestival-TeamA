@@ -1208,12 +1208,12 @@ void CMap::AllDelete()
 // Wave‚Ì¶¬
 //
 // =====================================================================================================================================================================
-void CMap::WaveCreate(int nModelType, D3DXVECTOR3 eventpos, WAVE_PARAM * pWaveParam)
+void CMap::WaveCreate(int nModelType, D3DXVECTOR3 eventpos, WAVE_PARAM * pWaveParam, CWeakEnemy::ENEMY_TYPE EnemyType)
 {
 	if (nModelType == ARRANGEMENT_MODEL_ENEMY)
 	{
 		// “G
-		m_pEnemy.emplace_back(CWeakEnemy::Create(CWeakEnemy::ENEMY_TYPE::ENEMY_NORMAL));
+		m_pEnemy.emplace_back(CWeakEnemy::Create(EnemyType));
 		m_pEnemy[m_pEnemy.size() - 1]->SetPosition(pWaveParam->pos + eventpos);
 		m_pEnemy[m_pEnemy.size() - 1]->SetEventFlag(pWaveParam->bEvent);
 	}
