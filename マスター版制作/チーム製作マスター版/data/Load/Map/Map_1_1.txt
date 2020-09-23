@@ -239,9 +239,8 @@ END_ENEMYSET
 //------------------------------------------------------------
 // 捕虜の種類 ( TYPE )
 //
-//	[ 0 ]	確定ドロップする捕虜
-//	[ 1 ]	範囲ドロップする捕虜
-//	[ 2 ]	ランダムドロップする捕虜
+//	[ 0 ]	確定武器ドロップする捕虜
+//	[ 1 ]	それ以外
 //
 //------------------------------------------------------------
 // 捕虜の種類 ( ITEMTYPE )
@@ -252,13 +251,6 @@ END_ENEMYSET
 //	[ 2 ]	レーザーガン
 //	[ 3 ]	ロケットランチャー
 //	[ 4 ]	フレイムショット
-//	[ 5 ]	クマ
-//	[ 6 ]	コイン
-//	[ 7 ]	宝石
-//	[ 8 ]	メダル
-//	[ 9 ]	ボム増加
-//	[ 10 ]	エネルギー増加
-//	[ 11 ]	弾薬数増加
 //
 //------------------------------------------------------------
 
@@ -309,90 +301,57 @@ END_PRISONERSET
 //------------------------------------------------------------
 // 障害物の種類 ( TYPE )
 //
-//	[ 0 ]	箱
+//	[ 0 ]	木箱
 //	[ 1 ]	樽
-//	[ 2 ]	木
-//	[ 3 ]	金庫
-//	[ 4 ]	土嚢
+//	[ 2 ]	樽爆弾
+//	[ 3 ]	木
+//	[ 4 ]	金庫
+//	[ 5 ]	土嚢
+//	[ 6 ]	車
 //
 //------------------------------------------------------------
 
 OBSTACLESET									# 46
-	TYPE		= 0
-	POS			= 0 87 0
-END_OBSTACLESET
-
-OBSTACLESET									# 47
-	TYPE		= 1
-	POS			= 200 87 0
-END_OBSTACLESET
-
-OBSTACLESET									# 48
-	TYPE		= 2
-	POS			= 400 87 0
-END_OBSTACLESET
-
-OBSTACLESET									# 49
-	TYPE		= 3
-	POS			= 100 260 100
-END_OBSTACLESET
-
-OBSTACLESET									# 50
-	TYPE		= 4
-	POS			= 800 87 0
-END_OBSTACLESET
-
-OBSTACLESET									# 51
-	TYPE		= 5
-	POS			= 1000 87 0
-END_OBSTACLESET
-
-OBSTACLESET									# 52
-	TYPE		= 6
-	POS			= 1458 104 0
-END_OBSTACLESET
-
-OBSTACLESET									# 53
 	TYPE		= 5
 	POS			= 2000 87 0
 END_OBSTACLESET
 
-OBSTACLESET									# 54
+OBSTACLESET									# 47
 	TYPE		= 5
 	POS			= 2888 86 0
 END_OBSTACLESET
 
-OBSTACLESET									# 55
+OBSTACLESET									# 48
 	TYPE		= 5
 	POS			= 3396 87 0
 END_OBSTACLESET
 
-OBSTACLESET									# 56
+OBSTACLESET									# 49
 	TYPE		= 5
 	POS			= 4243 89 0
 END_OBSTACLESET
 
-OBSTACLESET									# 57
+OBSTACLESET									# 50
 	TYPE		= 5
 	POS			= 4769 87 0
 END_OBSTACLESET
 
-OBSTACLESET									# 58
+OBSTACLESET									# 51
 	TYPE		= 5
 	POS			= 5653 86 0
 END_OBSTACLESET
 
-OBSTACLESET									# 59
+OBSTACLESET									# 52
 	TYPE		= 1
 	POS			= 6071 95 0
 END_OBSTACLESET
 
-OBSTACLESET									# 60
+OBSTACLESET									# 53
 	TYPE		= 1
 	POS			= 6146 95 0
 END_OBSTACLESET
 
-OBSTACLESET									# 61
+OBSTACLESET									# 54
 	TYPE		= 1
 	POS			= 6220 94 0
 END_OBSTACLESET
