@@ -48,6 +48,7 @@ char *CMap::m_MapModelFileName[MAP_MAX] =
 	{ "data/Load/Map/Map_2_BOSS.txt" },
 };
 
+
 /* ----- ウェーブ ----- */
 char *CMap::m_WaveFileName[WAVE_MAX] =
 {
