@@ -319,7 +319,7 @@ END_PRISONERSET
 
 OBSTACLESET									# 46
 	TYPE		= 0
-	POS			= 14 87 0
+	POS			= 90 94 0
 END_OBSTACLESET
 
 OBSTACLESET									# 47
@@ -329,7 +329,7 @@ END_OBSTACLESET
 
 OBSTACLESET									# 48
 	TYPE		= 2
-	POS			= 400 87 0
+	POS			= 431 83 0
 END_OBSTACLESET
 
 OBSTACLESET									# 49
@@ -339,7 +339,7 @@ END_OBSTACLESET
 
 OBSTACLESET									# 50
 	TYPE		= 4
-	POS			= 800 87 0
+	POS			= 675 76 0
 END_OBSTACLESET
 
 OBSTACLESET									# 51
@@ -349,7 +349,7 @@ END_OBSTACLESET
 
 OBSTACLESET									# 52
 	TYPE		= 6
-	POS			= 1458 104 0
+	POS			= 1391 93 0
 END_OBSTACLESET
 
 OBSTACLESET									# 53
@@ -389,7 +389,7 @@ END_OBSTACLESET
 
 OBSTACLESET									# 60
 	TYPE		= 1
-	POS			= 4570 216 0
+	POS			= 4568 226 0
 END_OBSTACLESET
 
 //------------------------------------------------------------
