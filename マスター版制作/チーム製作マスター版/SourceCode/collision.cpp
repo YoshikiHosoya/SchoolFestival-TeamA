@@ -491,7 +491,43 @@ bool CCollision::ForEnemyCollision(int nPlayerDamage, int nPlayerTankDamage, boo
 	}
 	return bHitFlag;
 }
+//======================================================================================================================
+// 敵の車両との判定
+// 敵の車両と被らないようにする
+//======================================================================================================================
+void CCollision::EnemyVehicleCollision()
+{
+	//相手がエネミーだったら
+	// 敵の総数分
+	for (int nCnt = 0; nCnt < CManager::GetBaseMode()->GetMap()->GetMaxEnemy(); nCnt++)
+	{
+		CEnemy *pEnemy = CManager::GetBaseMode()->GetMap()->GetEnemy(nCnt);
 
+		//nullcheck
+		if (pEnemy != nullptr)
+		{
+			//nullcheck
+			if (pEnemy->GetCollision())
+			{
+				//自分だった場合は判定しない
+				if (this == pEnemy->GetCollision())
+				{
+					continue;
+				}
+				//敵の乗り物の場合
+				if (pEnemy->GetEnemyType() == CEnemy::ENEMY_TYPE::ENEMY_HELICOPTER ||
+					pEnemy->GetEnemyType() == CEnemy::ENEMY_TYPE::ENEMY_MELTYHONEY ||
+					pEnemy->GetEnemyType() == CEnemy::ENEMY_TYPE::ENEMY_ZYCOCCA)
+				{
+					//衝突判定
+					if (this->BoxCollision2D_Vehicle(pEnemy->GetCollision()))
+					{
+					}
+				}
+			}
+		}
+	}
+}
 //======================================================================================================================
 // プレイヤーとエネミーで行う判定 プレイヤーの接触判定 フラグを返す
 //======================================================================================================================
@@ -604,13 +640,9 @@ bool CCollision::ForPlayer_ObstacleCollision()
 		CObstacle *pObstacle = CManager::GetBaseMode()->GetMap()->GetObstacle(nCntObst);
 		if (pObstacle != nullptr && pObstacle->GetObstacleType() != CObstacle::TYPE_TREE)
 		{
-			if (this->BlockNotUpsideCollision2D(pObstacle->GetCollision()))
+			if (this->BlockCollision2D(pObstacle->GetCollision()))
 			{
 				bHitFlag = true;
-			}
-			else
-			{
-				bHitFlag = false;
 			}
 		}
 	}
@@ -1302,8 +1334,6 @@ bool CCollision::BlockCollision2D(CCollision * pCollision)
 				this->m_ppos->x = pCollision->m_ppos->x - pCollision->m_size.x * 0.5f - this->m_size.x * 0.5f;
 				// 移動量の初期化
 				this->m_pmove->x = 0.0f;
-				// オブジェクトに当たったフラグ
-				bHitFlag = true;
 			}
 
 			// 当たり判定(右)
@@ -1314,8 +1344,6 @@ bool CCollision::BlockCollision2D(CCollision * pCollision)
 				this->m_ppos->x = pCollision->m_ppos->x + pCollision->m_size.x * 0.5f + this->m_size.x * 0.5f;
 				// 移動量の初期化
 				this->m_pmove->x = 0.0f;
-				// オブジェクトに当たったフラグ
-				bHitFlag = true;
 			}
 		}
 
@@ -1331,8 +1359,6 @@ bool CCollision::BlockCollision2D(CCollision * pCollision)
 				this->m_ppos->y = this->m_posOld->y;
 				// 移動量の初期化
 				this->m_pmove->y = 0.0f;
-				// オブジェクトに当たったフラグ
-				bHitFlag = true;
 			}
 
 			// 当たり判定(上)

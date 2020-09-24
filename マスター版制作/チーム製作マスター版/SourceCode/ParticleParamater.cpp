@@ -73,6 +73,7 @@ CParticleParam::CParticleParam()
 	m_bZtest = false;														//Zテスト
 	m_bZWrite = true;														//Zライティング
 	m_bBillboard = false;													//ビルボード
+	m_bFollowing = false;													//追従するか
 	m_nLife = 50;															//ライフ
 	m_nNumber = 10;															//個数
 	m_fSpeed = 10.0f;														//速度
@@ -200,6 +201,11 @@ HRESULT CParticleParam::LoadParticleDefaultParam()
 							{
 								sscanf(cReadText, "%s %s %d", &cDie, &cDie, &n_BoolValue);
 								pParam->m_bBillboard = n_BoolValue ? true : false;
+							}
+							if (strcmp(cHeadText, "FOLLOWING") == 0)
+							{
+								sscanf(cReadText, "%s %s %d", &cDie, &cDie, &n_BoolValue);
+								pParam->m_bFollowing = n_BoolValue ? true : false;
 							}
 							if (strcmp(cHeadText, "ANIMATION") == 0)
 							{
@@ -406,6 +412,10 @@ HRESULT CParticleParam::SaveParticleDefaultParam(CParticleParam *pSaveParam,std:
 		fputs(NEWLINE, pFile);
 
 		sprintf(cWriteText, "		%s %s %d							%s", "BILLBOARD", &EQUAL, pSaveParam->m_bBillboard, "//ビルボードするか");
+		fputs(cWriteText, pFile);
+		fputs(NEWLINE, pFile);
+
+		sprintf(cWriteText, "		%s %s %d							%s", "FOLLOWING", &EQUAL, pSaveParam->m_bFollowing, "//追従するか");
 		fputs(cWriteText, pFile);
 		fputs(NEWLINE, pFile);
 
@@ -625,6 +635,7 @@ void * CParticleParam::operator=(const CParticleParam * pParam)
 	m_bZtest					= pParam->m_bZtest;
 	m_bZWrite					= pParam->m_bZWrite;
 	m_bBillboard				= pParam->m_bBillboard;
+	m_bFollowing				= pParam->m_bFollowing;
 	m_bAnimation				= pParam->m_bAnimation;
 	m_bAnimationLoop			= pParam->m_bAnimationLoop;
 	m_nAnimationCntSwitch		= pParam->m_nAnimationCntSwitch;

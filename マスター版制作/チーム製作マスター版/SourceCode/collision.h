@@ -102,6 +102,8 @@ public:
 		int nPlayerTankDamage,
 		bool Penetration);												// エネミーの弾が行う判定 ダメージ量 貫通するかどうか
 
+	void EnemyVehicleCollision();										// 敵の車両との判定
+
 	bool ForPlayer_EnemyCollision(bool Penetration);					// プレイヤーとエネミーが行う判定 ダメージ量 貫通するかどうか
 
 	bool ForPlayer_ObstacleCollision();									// プレイヤーと障害物が行う判定 ダメージ量 貫通するかどうか
