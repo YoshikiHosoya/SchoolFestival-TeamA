@@ -1680,7 +1680,7 @@ void CMap::EnemyTypeComboBox(int &nSelectType, int nNowSelect)
 void CMap::PrisonerDropTypeComboBox(int &nSelectType, int nNowSelect)
 {
 #ifdef _DEBUG
-	std::vector<std::string > aPrisonerType = { "DROPTYPE_PICK_ONE", "DROPTYPE_RANGE"};
+	std::vector<std::string > aPrisonerType = { "DROPTYPE_PICK_ONE", "DROPTYPE_RANDOM_SCORE"};
 
 	// 現在のドロップタイプを反映
 	nSelectType = (int)m_pPrisoner[nNowSelect]->GetPrisonerDropType();
