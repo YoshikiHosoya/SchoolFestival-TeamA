@@ -262,7 +262,7 @@ bool CCollision::ForPlayerBulletCollision(int nEnemyDamage, int nObstacleDamage,
 
 				}
 			}
-		
+
 			if (pEnemy->GetCollision())
 			{
 				//”»’è‚ªŽæ‚ê‚é‚Æ‚«
