@@ -53,11 +53,11 @@ private:
 	void				Collision();						// 当たり判定をまとめてする処理
 	void				PadInput(TAG Tag);	// ゲームパッドでの入力処理
 	void				TankSE();							// タンクから出る音設定
-
+	void				State();							// ステート処理
 	/* メンバ変数 */
 	CGun				*m_pGun;							// ガンクラスのポインタ
 	CGrenadeFire		*m_pGrenadeFire;					// グレネード発射クラスのポインタ
 	bool				m_bLand;							// 地面についているかどうか
-	int					m_nCntEngineSE;						// カウント　SE用
+	int					m_nCnt;								// カウント　SE用
 };
 #endif

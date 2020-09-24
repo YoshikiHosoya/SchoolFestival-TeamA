@@ -31,7 +31,7 @@
 #define SHOT_BULLET_POS_X		(0.0f)			// 弾の発射位置X
 #define SHOT_BULLET_POS_Y		(40.0f)				// 弾の発射位置Y
 #define SHOT_BULLET_POS_Z		(0.0f)			// 弾の発射位置Z
-#define PLAYERTANK_LIFE			(15)			// タンクのＨＰ
+#define PLAYERTANK_LIFE			(3)			// タンクのＨＰ
 // =====================================================================================================================================================================
 //
 // コンストラクタ
@@ -142,11 +142,21 @@ void CPlayertank::Update(void)
 	// 乗り物クラスの更新
 	CCharacter::Update();
 
+	//カウントアップ
+	m_nCnt++;
+
+
+
 	if (CVehicle::GetRideerTag() != TAG::NONE)
 	{
-		 //乗り物に乗っている時
-		//if (CVehicle::GetPlayer()->GetRideFlag())
+		if (GetCharacterState() != CCharacter::CHARACTER_STATE_DEATH)
 		{
+			//自傷
+			if (key->GetKeyboardTrigger(DIK_G))
+			{
+				AddDamage(1);
+			}
+
 			// 戦車が弾を撃つ処理
 			Shot(key, GetRideerTag());
 
@@ -165,14 +175,23 @@ void CPlayertank::Update(void)
 			GetCollision()->ForVehicleCollision();
 			// 戦車の判定
 			GetCollision()->ForTankCollision();
+
+			//乗り物のSE
+			TankSE();
 		}
-		//else
+		else
 		{
-			//CVehicle::SetPlayerTank(nullptr);
+			if (m_nCnt % 4 < 2 )
+			{
+
+				CCharacter::GetModelSet()->ChangeColor(true, D3DXCOLOR(1.0f, 1.0f, 0.0f, 1.0f));
+			}
+			else
+			{
+				CCharacter::GetModelSet()->ChangeColor(true, D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f));
+			}
 		}
 	}
-	//乗り物のSE
-	TankSE();
 
 	m_pGun->Update();
 
@@ -270,32 +289,34 @@ void CPlayertank::PadInput(TAG Tag)
 //====================================================================
 void CPlayertank::TankSE()
 {
-	//nullcheck
-	//if (CVehicle::GetPlayer())
-	//{
-	//	if (CVehicle::GetPlayer()->GetRideFlag())
-	//	{
-	//		m_nCntEngineSE++;
+	//一定周期
+	if (m_nCnt % 10 == 1)
+	{
+		//エンジン音再生
+		CManager::GetSound()->Play(CSound::LABEL_SE_TANK_ENGINE);
 
-			//一定周期
-			//if (m_nCntEngineSE % 10 == 1)
-			//{
-				//エンジン音再生
-				//CManager::GetSound()->Play(CSound::LABEL_SE_TANK_ENGINE);
+		//横移動しててジャンプしてない時
+		if (fabsf(GetMove().x) >= 1.0f && !GetJump())
+		{
+			//音再生
+			CManager::GetSound()->Play(CSound::LABEL_SE_TANK_CATERPILLAR);
+		}
+	}
+}
+//====================================================================
+// ステートに応じた処理
+//====================================================================
+void CPlayertank::State()
+{
+	CCharacter::State();
 
-				//横移動しててジャンプしてない時
-				//if (fabsf(GetMove().x) >= 1.0f && !GetJump())
-				//{
-					//音再生
-					//CManager::GetSound()->Play(CSound::LABEL_SE_TANK_CATERPILLAR);
-				//}
-			//}
-		//}
-		//else
-		//{
-			//m_nCntEngineSE = 0;
-		//}
-	//}
+	//ステータスの処理
+	switch (GetCharacterState())
+	{
+	case CHARACTER_STATE_DEATH:
+		SetStateCount(240);
+		break;
+	}
 }
 
 //====================================================================
