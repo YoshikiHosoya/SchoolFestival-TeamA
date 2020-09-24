@@ -232,7 +232,7 @@ public:
 
 	CModel() {};
 	CModel(OBJ_TYPE type);				// コンストラクタ
-	virtual~CModel();							// デストラクタ
+	virtual~CModel();					// デストラクタ
 
 	/* メンバ関数 */
 	HRESULT Init(void);					// 初期化処理

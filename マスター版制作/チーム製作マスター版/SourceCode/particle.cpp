@@ -196,8 +196,10 @@ void CParticle::ShowDebugInfo()
 void CParticle::UpdateVertex()
 {
 	//nullcheck
+	//原点のポインタのnullcheck
 	if (m_pPosOriginPtr)
 	{
+		//コリジョンのサイズに調整する時
 		if (m_pParticleParam->GetCollisionSizeCalc())
 		{
 			//マトリックス計算
@@ -207,7 +209,8 @@ void CParticle::UpdateVertex()
 			D3DXVec3TransformCoord(&m_posOrigin, &ZeroVector3, &m_WorldMtx);
 
 		}
-		else
+		//追従する時
+		else if(m_pParticleParam->GetFollowing())
 		{
 			m_posOrigin = *m_pPosOriginPtr;
 		}

@@ -267,6 +267,9 @@ void CDebug_EffectViewer::ParticleParamaterViewer()
 		//ビルボードするか
 		ImGui::Checkbox("bBillboard", &m_pParticleParam->GetBillboard());
 
+		//追従するか
+		ImGui::Checkbox("bFollowing", &m_pParticleParam->GetFollowing());
+
 		//ツリー終了
 		ImGui::TreePop();
 	}

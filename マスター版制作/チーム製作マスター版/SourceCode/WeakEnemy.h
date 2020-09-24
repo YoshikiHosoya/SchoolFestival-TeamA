@@ -32,6 +32,7 @@ public:
 	virtual void Uninit(void);
 	virtual void Update(void);
 	virtual void Draw(void);
+	virtual void Collision();
 	void DebugInfo(void);
 	void UpdateVehicle();
 	static CWeakEnemy *Create(ENEMY_TYPE type);

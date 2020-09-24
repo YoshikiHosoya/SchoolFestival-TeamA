@@ -213,7 +213,7 @@ void CBossAI::UpdateAttackAI(void)
 					m_Attacks++;
 				}
 				//60フレームかつ攻撃回数に達したら初期化
-				if (m_AttackCnt > 60 && m_Attacks >= 3)
+				if (m_AttackCnt > 180 && m_Attacks >= 3)
 				{
 					SetRestartFlag(true);
 				}
@@ -252,12 +252,12 @@ void CBossAI::UpdateAttackAI(void)
 			{
 				m_AttackCnt++;
 				//200フレームより小さいとき射撃
-				if (m_AttackCnt < 200 && m_AttackCnt % 9 == 0)
+				if (m_AttackCnt < 200 && m_AttackCnt % 11 == 0)
 				{
 					pBossPass->GetGunPtr()->Shot();
 				}
 				//300フレームになったら初期化
-				else if (m_AttackCnt > 300)
+				else if (m_AttackCnt > 360)
 				{
 					SetRestartFlag(true);
 				}
