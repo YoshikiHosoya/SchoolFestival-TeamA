@@ -73,12 +73,12 @@ void CFlameBullet::Update(void)
 	// 更新
 	CBullet::Update();
 
-	CDebugProc::Print_Left("\n\n BulletMove (%f, %f, %f)\n\n", GetMove().x, GetMove().y, GetMove().z);
-
-	if (CBullet::GetLife() % 3 == 0)
+	//定期的に
+	if (CBullet::GetLife() % 18 == 0)
 	{
-		CParticle::CreateFromText(GetPosition() + CHossoLibrary::RandomVector3(10), ZeroVector3,
-			CParticleParam::EFFECT_FIRE, GetTag(), GetBulletParam(CGun::GUNTYPE_FLAMESHOT)->nPower);
+		//爆発エフェクト
+		//弾に追従
+		CParticle::CreateFromText(GetPosition(), ZeroVector3, CParticleParam::EFFECT_FIRE_BULLET, GetTag(), 0, WhiteColor,GetPositionPtr());
 	}
 }
 
@@ -110,6 +110,11 @@ void CFlameBullet::DeleteBullet()
 // =====================================================================================================================================================================
 void CFlameBullet::DebugInfo()
 {
+}
+
+void CFlameBullet::BulletReaction(D3DXVECTOR3 rot)
+{
+	CParticle::CreateFromText(GetPosition(), ZeroVector3, CParticleParam::EFFECT_FIRE_BULLET, GetTag(), 0, WhiteColor, GetPositionPtr());
 }
 
 // =====================================================================================================================================================================

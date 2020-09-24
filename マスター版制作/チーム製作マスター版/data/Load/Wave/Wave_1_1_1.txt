@@ -18,18 +18,66 @@ SCRIPT
 //	[ 8 ]	ステージ2_BOSS
 //
 //------------------------------------------------------------
+//------------------------------------------------------------
+// 敵の配置情報
+//------------------------------------------------------------
+// 敵の種類 ( TYPE )
+//
+//	[ 0 ]	通常兵士
+//	[ 1 ]	盾持ち兵士
+//	[ 2 ]	ヘリコプター
+//	[ 3 ]	メルティハニー
+//	[ 4 ]	ジィ・コッカ
+//
+//------------------------------------------------------------
 
 EVENT_BEGIN_MAP = 1			//イベントが発生するマップ番号
 
 EVENTPOS	= 3275
 
+
 ENEMYSET									# 0
-	TYPE			= 3
+	TYPE			= 4
 	POS 			= 600 80 0
 	FRAME 			= 1
+	EVENT			= 1
+END_ENEMYSET
+
+
+ENEMYSET									# 0
+	TYPE			= 1
+	POS 			= -600 80 0
+	FRAME 			= 10
 	EVENT			= 0
 END_ENEMYSET
 
+ENEMYSET									# 0
+	TYPE			= 0
+	POS 			= -600 80 0
+	FRAME 			= 20
+	EVENT			= 0
+END_ENEMYSET
+
+ENEMYSET									# 0
+	TYPE			= 0
+	POS 			= -600 80 0
+	FRAME 			= 30
+	EVENT			= 0
+END_ENEMYSET
+
+ENEMYSET									# 0
+	TYPE			= 0
+	POS 			= -600 80 0
+	FRAME 			= 40
+	EVENT			= 0
+END_ENEMYSET
+
+ENEMYSET									# 0
+	TYPE			= 0
+	POS 			= -600 80 0
+	FRAME 			= 50
+	EVENT			= 0
+END_ENEMYSET
 
 
 END_SCRIPT

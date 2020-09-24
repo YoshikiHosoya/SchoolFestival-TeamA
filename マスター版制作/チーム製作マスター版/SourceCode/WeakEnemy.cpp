@@ -34,9 +34,11 @@
 #define ENEMY_WALLDRONE_COLLISIONSIZE			(D3DXVECTOR3(170.0f,100.0f,170.0f))		//敵の当たり判定サイズ
 
 #define ENEMY_HUMAN_LIFE						(1)										//ライフ
-#define ENEMY_HELICOPTER_LIFE					(20)									//ライフ
-#define ENEMY_MELTYHONEY_LIFE					(50)									//ライフ
-#define ENEMY_ZYCOCCA_LIFE						(20)									//ライフ
+
+#define ENEMY_HELICOPTER_LIFE					(40)									//ライフ
+#define ENEMY_MELTYHONEY_LIFE					(60)									//ライフ
+#define ENEMY_ZYCOCCA_LIFE						(40)									//ライフ
+
 #define ENEMY_DRONE_LIFE						(3)										//ライフ
 
 
@@ -214,6 +216,7 @@ HRESULT CWeakEnemy::Init(void)
 
 		break;
 
+
 	case CWeakEnemy::ENEMY_TYPE::ENEMY_SKYDRONE:
 		//オフセット設定
 		GetModelSet()->SetCharacterType(CModelSet::CHARACTER_TYPE_ENEMY_DRONE);
@@ -224,6 +227,7 @@ HRESULT CWeakEnemy::Init(void)
 		// 発射する位置の設定
 		GetGunPtr()->SetShotOffsetPos(GetGunPtr()->GetShotOffsetPos());
 		// 銃の弾の種類
+
 		GetGunPtr()->SetDisp(false);
 		// 弾をフレイムバレットに設定
 		GetGunPtr()->SetGunTypeOnly(CGun::GUNTYPE_BALKAN);
@@ -231,6 +235,7 @@ HRESULT CWeakEnemy::Init(void)
 		CCharacter::GetModelSet()->SetUseMotion(false);
 		CCharacter::GetModelSet()->SetMotion(CModelSet::CHARACTER_MOTION_STATE_NONE);
 		// 当たり判定生成
+
 		GetCollision()->SetSize(ENEMY_SKYDRONE_COLLISIONSIZE);
 		//HP設定
 		CCharacter::SetLife(ENEMY_DRONE_LIFE);
@@ -336,6 +341,18 @@ void CWeakEnemy::Draw(void)
 {
 	CEnemy::Draw();
 
+}
+//====================================================================
+//コリジョン
+//====================================================================
+void CWeakEnemy::Collision()
+{
+	CEnemy::Collision();
+
+	if (GetCollision())
+	{
+		GetCollision()->EnemyVehicleCollision();
+	}
 }
 //====================================================================
 //デバッグ

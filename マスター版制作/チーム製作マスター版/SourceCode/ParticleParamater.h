@@ -83,6 +83,8 @@ public:
 
 	bool&GetSpeedRandom()								{ return m_bSpeedRandom; };					//パーティクルの速度がランダムかどうか
 	bool &GetGravity()									{ return m_bGravity; };						//重力
+	bool &GetFollowing()								{ return m_bFollowing; };					//追従するか
+
 	bool &GetAlphaBlend_Add()							{ return m_bAlphaBlend_Add;};				//加算合成するか
 	bool &GetAlphaBlend_Sub()							{ return m_bAlphaBlend_Sub;};				//減算合成するか
 	bool &GetZTest()									{ return m_bZtest;};						//Zテストするか
@@ -131,6 +133,7 @@ private:
 
 	bool m_bSpeedRandom;							//速度がランダムかどうか
 	bool m_bGravity;								//重力をかけるか
+	bool m_bFollowing;								//追従するか
 	bool m_bAlphaBlend_Sub;							//加算合成するか
 	bool m_bAlphaBlend_Add;							//減算合成するか
 	bool m_bZtest;									//Zテストするか

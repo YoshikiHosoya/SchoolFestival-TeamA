@@ -55,6 +55,7 @@ public:
 	virtual void DamageReaction();
 	virtual void DeathReaction();
 	virtual void StateChangeReaction();
+	virtual void Collision();
 
 	void DeleteAI();
 

@@ -27,7 +27,7 @@
 //マクロ定義
 //====================================================================
 #define PLAYERTANK_SIZE			(D3DXVECTOR3(90.0f,65.0f,90.0f)) // プレイヤーの判定のサイズ
-#define PLAYERTANK_JUMP			(60.0f)				// 戦車が飛ぶ移動量
+#define PLAYERTANK_JUMP			(35.0f)				// 戦車が飛ぶ移動量
 #define SHOT_BULLET_POS_X		(0.0f)			// 弾の発射位置X
 #define SHOT_BULLET_POS_Y		(40.0f)				// 弾の発射位置Y
 #define SHOT_BULLET_POS_Z		(0.0f)			// 弾の発射位置Z
@@ -170,9 +170,6 @@ void CPlayertank::Update(void)
 	}
 	//乗り物のSE
 	TankSE();
-
-	// 判定をまとめて行う
-	//Collision();
 
 	m_pGun->Update();
 
@@ -407,12 +404,12 @@ void CPlayertank::Collision()
 		GetCollision()->SetPos(&GetPosition());
 		GetCollision()->SetPosOld(&GetPositionOld());
 
-		// 障害物との判定
-		//if (GetCollision()->ForPlayer_ObstacleCollision())
-		//{
-		//	// ジャンプフラグを可能にする
-		//	CVehicle::SetJump(true);
-		//}
+		 //障害物との判定
+		if (GetCollision()->ForPlayer_ObstacleCollision())
+		{
+			// ジャンプフラグを可能にする
+			CCharacter::SetJump(true);
+		}
 	}
 
 	// マップのポインタ取得
