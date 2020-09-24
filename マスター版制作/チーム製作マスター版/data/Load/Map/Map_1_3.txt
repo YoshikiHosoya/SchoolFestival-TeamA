@@ -212,13 +212,6 @@ END_ENEMYSET
 //	[ 2 ]	レーザーガン
 //	[ 3 ]	ロケットランチャー
 //	[ 4 ]	フレイムショット
-//	[ 5 ]	クマ
-//	[ 6 ]	コイン
-//	[ 7 ]	宝石
-//	[ 8 ]	メダル
-//	[ 9 ]	ボム増加
-//	[ 10 ]	エネルギー増加
-//	[ 11 ]	弾薬数増加
 //
 //------------------------------------------------------------
 
@@ -242,7 +235,7 @@ END_PRISONERSET
 
 PRISONERSET									# 34
 	TYPE		= 0
-	ITEMTYPE	= 7
+	ITEMTYPE	= -1
 	POS			= 6365 304 4
 END_PRISONERSET
 
@@ -303,26 +296,16 @@ OBSTACLESET									# 42
 END_OBSTACLESET
 
 OBSTACLESET									# 43
-	TYPE		= 0
-	POS			= 5503 168 0
-END_OBSTACLESET
-
-OBSTACLESET									# 44
-	TYPE		= 0
-	POS			= 5577 168 0
-END_OBSTACLESET
-
-OBSTACLESET									# 45
 	TYPE		= 5
 	POS			= 6508 97 0
 END_OBSTACLESET
 
-OBSTACLESET									# 46
+OBSTACLESET									# 44
 	TYPE		= 4
 	POS			= 3176 217 0
 END_OBSTACLESET
 
-OBSTACLESET									# 47
+OBSTACLESET									# 45
 	TYPE		= 4
 	POS			= 3300 217 0
 END_OBSTACLESET
@@ -331,7 +314,7 @@ END_OBSTACLESET
 // 戦車の配置情報
 //------------------------------------------------------------
 
-TANKSET										# 48
+TANKSET										# 46
 	POS			= 838 241 0
 END_TANKSET
 

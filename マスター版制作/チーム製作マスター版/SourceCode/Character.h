@@ -45,7 +45,7 @@ public:
 	virtual void State();							//ステートに応じた処理
 	virtual void StateChangeReaction();				//ステート変更処理
 
-	void Move(float move, float fdest, float fSpeed = 3.0f);
+	void Move(float move, float fdest, float fSpeed = 4.0f);
 	void AddDamage(int Damage);
 	void ForcedUpdate();						//強制的にモーションチェンジ
 	void ResetCharacterDirection();				//回転量を基に向きを設定しなおす

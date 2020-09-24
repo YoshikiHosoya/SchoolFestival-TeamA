@@ -252,13 +252,6 @@ END_ENEMYSET
 //	[ 2 ]	レーザーガン
 //	[ 3 ]	ロケットランチャー
 //	[ 4 ]	フレイムショット
-//	[ 5 ]	クマ
-//	[ 6 ]	コイン
-//	[ 7 ]	宝石
-//	[ 8 ]	メダル
-//	[ 9 ]	ボム増加
-//	[ 10 ]	エネルギー増加
-//	[ 11 ]	弾薬数増加
 //
 //------------------------------------------------------------
 
@@ -270,19 +263,19 @@ END_PRISONERSET
 
 PRISONERSET									# 40
 	TYPE		= 0
-	ITEMTYPE	= 5
+	ITEMTYPE	= 4
 	POS			= 672 200 2
 END_PRISONERSET
 
 PRISONERSET									# 41
-	TYPE		= 0
-	ITEMTYPE	= 8
+	TYPE		= 1
+	ITEMTYPE	= -1
 	POS			= 1057 195 0
 END_PRISONERSET
 
 PRISONERSET									# 42
-	TYPE		= 0
-	ITEMTYPE	= 9
+	TYPE		= 1
+	ITEMTYPE	= -1
 	POS			= 1226 195 0
 END_PRISONERSET
 
@@ -294,13 +287,13 @@ END_PRISONERSET
 
 PRISONERSET									# 44
 	TYPE		= 0
-	ITEMTYPE	= 6
+	ITEMTYPE	= -1
 	POS			= 4498 190 0
 END_PRISONERSET
 
 PRISONERSET									# 45
 	TYPE		= 0
-	ITEMTYPE	= 1
+	ITEMTYPE	= -1
 	POS			= 5906 191 0
 END_PRISONERSET
 

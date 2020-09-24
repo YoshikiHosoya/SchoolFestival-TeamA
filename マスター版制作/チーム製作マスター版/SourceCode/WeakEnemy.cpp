@@ -32,9 +32,9 @@
 #define ENEMY_ZYCOCCA_COLLISIONSIZE				(D3DXVECTOR3(110.0f,95.0f,110.0f))		//敵の当たり判定サイズ
 
 #define ENEMY_HUMAN_LIFE						(1)										//ライフ
-#define ENEMY_HELICOPTER_LIFE					(20)									//ライフ
-#define ENEMY_MELTYHONEY_LIFE					(50)									//ライフ
-#define ENEMY_ZYCOCCA_LIFE						(20)									//ライフ
+#define ENEMY_HELICOPTER_LIFE					(40)									//ライフ
+#define ENEMY_MELTYHONEY_LIFE					(60)									//ライフ
+#define ENEMY_ZYCOCCA_LIFE						(40)									//ライフ
 
 
 #define KNIFE_COLLISOIN_SIZE	(D3DXVECTOR3(40.0f,60.0f,0.0f))
