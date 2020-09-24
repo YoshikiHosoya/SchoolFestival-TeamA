@@ -37,53 +37,53 @@ EVENTPOS	= 7300
 
 
 ENEMYSET									# 0
+	TYPE			= 1
+	POS 			= 600 80 0
+	FRAME 			= 20
+	EVENT			= 0
+END_ENEMYSET
+
+ENEMYSET									# 0
+	TYPE			= 0
+	POS 			= 600 80 0
+	FRAME 			= 20
+	EVENT			= 0
+END_ENEMYSET
+
+ENEMYSET									# 0
+	TYPE			= 0
+	POS 			= 600 80 0
+	FRAME 			= 20
+	EVENT			= 0
+END_ENEMYSET
+
+ENEMYSET									# 0
+	TYPE			= 1
+	POS 			= 600 80 0
+	FRAME 			= 20
+	EVENT			= 0
+END_ENEMYSET
+
+ENEMYSET									# 0
+	TYPE			= 0
+	POS 			= 600 80 0
+	FRAME 			= 20
+	EVENT			= 0
+END_ENEMYSET
+
+ENEMYSET									# 0
+	TYPE			= 0
+	POS 			= 600 80 0
+	FRAME 			= 20
+	EVENT			= 0
+END_ENEMYSET
+
+
+ENEMYSET									# 0
 	TYPE			= 3
 	POS 			= 600 80 0
 	FRAME 			= 100
 	EVENT			= 1
-END_ENEMYSET
-
-
-ENEMYSET									# 0
-	TYPE			= 1
-	POS 			= 600 80 0
-	FRAME 			= 20
-	EVENT			= 0
-END_ENEMYSET
-
-ENEMYSET									# 0
-	TYPE			= 0
-	POS 			= 600 80 0
-	FRAME 			= 20
-	EVENT			= 0
-END_ENEMYSET
-
-ENEMYSET									# 0
-	TYPE			= 0
-	POS 			= 600 80 0
-	FRAME 			= 20
-	EVENT			= 0
-END_ENEMYSET
-
-ENEMYSET									# 0
-	TYPE			= 1
-	POS 			= 600 80 0
-	FRAME 			= 20
-	EVENT			= 0
-END_ENEMYSET
-
-ENEMYSET									# 0
-	TYPE			= 0
-	POS 			= 600 80 0
-	FRAME 			= 20
-	EVENT			= 0
-END_ENEMYSET
-
-ENEMYSET									# 0
-	TYPE			= 0
-	POS 			= 600 80 0
-	FRAME 			= 20
-	EVENT			= 0
 END_ENEMYSET
 
 //------------------------------------------------------------

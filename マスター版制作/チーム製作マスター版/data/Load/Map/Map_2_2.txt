@@ -196,13 +196,13 @@ END_ENEMYSET
 
 PRISONERSET									# 27
 	TYPE		= 0
-	ITEMTYPE	= 0
+	ITEMTYPE	= 4
 	POS			= 3011 95 0
 END_PRISONERSET
 
 PRISONERSET									# 28
-	TYPE		= 0
-	ITEMTYPE	= 0
+	TYPE		= 1
+	ITEMTYPE	= -1
 	POS			= 3913 61 0
 END_PRISONERSET
 
@@ -286,6 +286,11 @@ END_OBSTACLESET
 OBSTACLESET									# 41
 	TYPE		= 6
 	POS			= 2999 147 0
+END_OBSTACLESET
+
+OBSTACLESET									# 42
+	TYPE		= 2
+	POS			= 2893 137 0
 END_OBSTACLESET
 
 //------------------------------------------------------------

@@ -61,7 +61,7 @@ END_ENEMYSET
 
 ENEMYSET									# 4
 	TYPE		= 1
-	POS			= 1310 99 0
+	POS			= 1310 102 0
 END_ENEMYSET
 
 ENEMYSET									# 5
@@ -96,22 +96,22 @@ END_ENEMYSET
 
 ENEMYSET									# 11
 	TYPE		= 0
-	POS			= 2832 210 0
+	POS			= 2832 218 0
 END_ENEMYSET
 
 ENEMYSET									# 12
 	TYPE		= 0
-	POS			= 2904 210 0
+	POS			= 2904 222 0
 END_ENEMYSET
 
 ENEMYSET									# 13
 	TYPE		= 0
-	POS			= 2992 210 0
+	POS			= 2992 219 0
 END_ENEMYSET
 
 ENEMYSET									# 14
 	TYPE		= 0
-	POS			= 3101 210 0
+	POS			= 3101 220 0
 END_ENEMYSET
 
 ENEMYSET									# 15
@@ -136,32 +136,32 @@ END_ENEMYSET
 
 ENEMYSET									# 19
 	TYPE		= 1
-	POS			= 3794 222 0
+	POS			= 3810 254 0
 END_ENEMYSET
 
 ENEMYSET									# 20
 	TYPE		= 1
-	POS			= 3921 222 0
+	POS			= 3921 253 0
 END_ENEMYSET
 
 ENEMYSET									# 21
 	TYPE		= 0
-	POS			= 4032 222 0
+	POS			= 4032 262 0
 END_ENEMYSET
 
 ENEMYSET									# 22
 	TYPE		= 0
-	POS			= 4212 222 0
+	POS			= 4212 263 0
 END_ENEMYSET
 
 ENEMYSET									# 23
 	TYPE		= 1
-	POS			= 4439 222 0
+	POS			= 4426 255 0
 END_ENEMYSET
 
 ENEMYSET									# 24
 	TYPE		= 0
-	POS			= 4335 222 0
+	POS			= 4335 259 0
 END_ENEMYSET
 
 ENEMYSET									# 25
@@ -226,22 +226,22 @@ END_ENEMYSET
 
 ENEMYSET									# 37
 	TYPE		= 0
-	POS			= 6724 52 0
+	POS			= 6824 52 0
 END_ENEMYSET
 
 ENEMYSET									# 38
 	TYPE		= 0
-	POS			= 6779 52 0
+	POS			= 6861 52 0
 END_ENEMYSET
 
 ENEMYSET									# 39
 	TYPE		= 0
-	POS			= 6834 52 0
+	POS			= 6904 52 0
 END_ENEMYSET
 
 ENEMYSET									# 40
 	TYPE		= 0
-	POS			= 6877 52 0
+	POS			= 6957 52 0
 END_ENEMYSET
 
 //------------------------------------------------------------
@@ -249,9 +249,8 @@ END_ENEMYSET
 //------------------------------------------------------------
 // 捕虜の種類 ( TYPE )
 //
-//	[ 0 ]	確定ドロップする捕虜
-//	[ 1 ]	範囲ドロップする捕虜
-//	[ 2 ]	ランダムドロップする捕虜
+//	[ 0 ]	確定武器ドロップする捕虜
+//	[ 1 ]	それ以外
 //
 //------------------------------------------------------------
 // 捕虜の種類 ( ITEMTYPE )
@@ -262,49 +261,42 @@ END_ENEMYSET
 //	[ 2 ]	レーザーガン
 //	[ 3 ]	ロケットランチャー
 //	[ 4 ]	フレイムショット
-//	[ 5 ]	クマ
-//	[ 6 ]	コイン
-//	[ 7 ]	宝石
-//	[ 8 ]	メダル
-//	[ 9 ]	ボム増加
-//	[ 10 ]	エネルギー増加
-//	[ 11 ]	弾薬数増加
 //
 //------------------------------------------------------------
 
 PRISONERSET									# 41
 	TYPE		= 0
-	ITEMTYPE	= 0
+	ITEMTYPE	= 3
 	POS			= 988 220 0
 END_PRISONERSET
 
 PRISONERSET									# 42
-	TYPE		= 0
-	ITEMTYPE	= 0
+	TYPE		= 1
+	ITEMTYPE	= -1
 	POS			= 1099 220 0
 END_PRISONERSET
 
 PRISONERSET									# 43
-	TYPE		= 0
-	ITEMTYPE	= 0
+	TYPE		= 1
+	ITEMTYPE	= -1
 	POS			= 2100 60 0
 END_PRISONERSET
 
 PRISONERSET									# 44
 	TYPE		= 0
-	ITEMTYPE	= 0
-	POS			= 4115 223 0
+	ITEMTYPE	= 1
+	POS			= 4115 258 0
 END_PRISONERSET
 
 PRISONERSET									# 45
-	TYPE		= 0
-	ITEMTYPE	= 0
+	TYPE		= 1
+	ITEMTYPE	= -1
 	POS			= 4115 96 0
 END_PRISONERSET
 
 PRISONERSET									# 46
 	TYPE		= 0
-	ITEMTYPE	= 0
+	ITEMTYPE	= 4
 	POS			= 6660 243 0
 END_PRISONERSET
 
@@ -313,11 +305,13 @@ END_PRISONERSET
 //------------------------------------------------------------
 // 障害物の種類 ( TYPE )
 //
-//	[ 0 ]	箱
+//	[ 0 ]	木箱
 //	[ 1 ]	樽
-//	[ 2 ]	木
-//	[ 3 ]	金庫
-//	[ 4 ]	土嚢
+//	[ 2 ]	樽爆弾
+//	[ 3 ]	木
+//	[ 4 ]	金庫
+//	[ 5 ]	土嚢
+//	[ 6 ]	車
 //
 //------------------------------------------------------------
 
@@ -338,7 +332,7 @@ END_OBSTACLESET
 
 OBSTACLESET									# 50
 	TYPE		= 5
-	POS			= 5137 227 0
+	POS			= 5137 274 0
 END_OBSTACLESET
 
 OBSTACLESET									# 51
@@ -354,6 +348,11 @@ END_OBSTACLESET
 OBSTACLESET									# 53
 	TYPE		= 1
 	POS			= 6504 279 0
+END_OBSTACLESET
+
+OBSTACLESET									# 54
+	TYPE		= 2
+	POS			= 6754 98 0
 END_OBSTACLESET
 
 //------------------------------------------------------------
