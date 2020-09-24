@@ -109,6 +109,7 @@ private:
 	/* 静的メンバ関数 */
 
 	/* メンバ関数 */
+	bool					ConfirmExistsRankingFile();					// ランキングファイルが存在するか確認
 	void					RankingDataSave();							// ランキングのデータのセーブ
 	void					RankingDataLoad();							// ランキングのデータのロード
 	void					PlayerScoreLoad();							// プレイヤーのスコアをロード
@@ -172,5 +173,6 @@ private:
 	float					m_fCol;
 	int						m_nTimeToTransition;
 	bool					m_bEvaluation[3];
+	bool					m_bRankingFail;
 };
 #endif
