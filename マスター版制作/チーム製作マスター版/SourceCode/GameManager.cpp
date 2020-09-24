@@ -148,7 +148,10 @@ void CGameManager::Update()
 	}
 
 	//É|Å[ÉY
-	PauseSet();
+	if (m_state != CGameManager::GAMESTATE::RESULT)
+	{
+		PauseSet();
+	}
 }
 
 //------------------------------------------------------------------------------
