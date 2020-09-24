@@ -48,8 +48,6 @@ CObstacle::CObstacle(OBJ_TYPE type) :CModel(type)
 {
 	// 変数の初期化
 	m_nLife = 0;
-	// タグ設定
-	CGameObject::SetTag(TAG::OBSTACLE);
 }
 // =====================================================================================================================================================================
 //
@@ -136,6 +134,9 @@ CObstacle * CObstacle::Create()
 
 	// メモリの確保
 	pObstacle = new CObstacle(OBJTYPE_OBSTACLE);
+
+	// タグ設定
+	pObstacle->SetTag(TAG::OBSTACLE);
 
 	// 初期化
 	pObstacle->Init();
