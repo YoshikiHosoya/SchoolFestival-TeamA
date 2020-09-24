@@ -658,9 +658,7 @@ D3DXVECTOR3 CItem::RandomDropPosX(const D3DXVECTOR3 originpos, int radius)
 	// アイテムをドロップさせる座標
 	D3DXVECTOR3 DropPos = originpos;
 	// 原点から半径を引いた座標と半径を足した座標の範囲内の座標をランダムに返す
-	//DropPos.x = (float)GetRandRange((int)originpos.x - radius, (int)originpos.x + radius);
-
-	DropPos.x = CHossoLibrary::Random((float)radius);
+	DropPos.x = (float)GetRandRange((int)originpos.x - radius, (int)originpos.x + radius);
 	DropPos.z = 0.0f;
 
 	return DropPos;
@@ -711,7 +709,6 @@ void CItem::ItemCollision()
 		m_pCollision->SetPos(&GetPosition());
 		// マップのポインタ取得
 		CMap *pMap = CManager::GetBaseMode()->GetMap();
-
 
 		if (pMap)
 		{
@@ -1223,7 +1220,6 @@ void CItem::DropItem_Multiple(const D3DXVECTOR3 originpos, ITEM_LIST_DROPMULTIPL
 		if (behavior == BEHAVIOR_FREEFALL)
 		{
 			pItem->SetPosition(pItem->RandomDropPosX(originpos, 100));
-			//pItem->SetPosition(originpos);
 		}
 		// その他は原点座標を基準にする
 		else

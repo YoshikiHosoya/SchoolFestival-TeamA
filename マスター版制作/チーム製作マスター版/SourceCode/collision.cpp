@@ -328,7 +328,7 @@ bool CCollision::ForPlayerBulletCollision(int nEnemyDamage, int nObstacleDamage,
 			if (this->Collision2D(pObstacle->GetCollision()))
 			{
 				// 障害物のライフ減衰
-				pObstacle->Hit(CObstacle::TYPE_BOX, nObstacleDamage);
+				pObstacle->Hit(pObstacle->GetObstacleType(), nObstacleDamage);
 
 				// 敵のライフが0以下になった時
 				if (pObstacle->GetLife() <= 0)
@@ -344,31 +344,6 @@ bool CCollision::ForPlayerBulletCollision(int nEnemyDamage, int nObstacleDamage,
 				if (Penetration == false)
 				{
 					return bHitFlag;
-				}
-			}
-		}
-	}
-	// 障害物の総数分
-	for (int nCntObst = 0; nCntObst < CManager::GetBaseMode()->GetMap()->GetMaxObstacle(); nCntObst++)
-	{
-		CObstacle *pObstacle = CManager::GetBaseMode()->GetMap()->GetObstacle(nCntObst);
-		if (pObstacle != nullptr)
-		{
-			//判定が取れるとき
-			if (pObstacle->GetCollision()->GetCanCollison())
-			{
-				if (this->Collision2D(pObstacle->GetCollision()))
-				{
-					// 障害物のライフ減衰
-					pObstacle->Hit(CObstacle::TYPE_BOX, nObstacleDamage);
-
-					// 当たり範囲フラグをtrueにする
-					bHitFlag = true;
-
-					if (Penetration == false)
-					{
-						return bHitFlag;
-					}
 				}
 			}
 		}
