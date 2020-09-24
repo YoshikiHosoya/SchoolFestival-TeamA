@@ -424,16 +424,8 @@ bool CCollision::ForEnemyCollision(int nPlayerDamage, int nPlayerTankDamage, boo
 						// 判定関数
 						if (this->OtherCollision2D(pPlayertank->GetCollision()))
 						{
-							//// プレイヤーのライフ減衰
-							//pPlayertank->CVehicle::AddDamage(nPlayerTankDamage);
-
-							//// プレイヤーのライフが0以下になった時
-							//if (pPlayertank->CVehicle::GetLife() <= 0)
-							//{
-							//	pPlayertank->SetDieFlag(true);
-							//	// ポインタをnullにする
-							//	pPlayertank = nullptr;
-							//}
+							// プレイヤーのライフ減衰
+							pPlayertank->AddDamage(nPlayerTankDamage);
 
 							// 当たり範囲フラグをtrueにする
 							bHitFlag = true;
@@ -789,12 +781,33 @@ bool CCollision::ForTankCollision()
 	for (int nCnt = 0; nCnt < CManager::GetBaseMode()->GetMap()->GetMaxEnemy(); nCnt++)
 	{
 		CEnemy *pEnemy = CManager::GetBaseMode()->GetMap()->GetEnemy(nCnt);
-		if (pEnemy != nullptr)
+		if (pEnemy->GetCollision())
 		{
-			if (this->CharCollision2D(pEnemy->GetCollision()))
+			//判定が取れるとき
+			if (pEnemy->GetCollision()->GetCanCollison())
 			{
-				bHitFlag = true;
-				pEnemy->AddDamage(1);
+				//通常の雑魚的の時
+				if (pEnemy->GetEnemyType() == CEnemy::ENEMY_TYPE::ENEMY_NORMAL ||
+					pEnemy->GetEnemyType() == CEnemy::ENEMY_TYPE::ENEMY_SHIELD)
+				{
+					//轢く
+					if (this->CharCollision2D(pEnemy->GetCollision()))
+					{
+						bHitFlag = true;
+						pEnemy->AddDamage(1);
+					}
+				}
+				//敵の乗り物の場合
+				else if (pEnemy->GetEnemyType() == CEnemy::ENEMY_TYPE::ENEMY_HELICOPTER ||
+					pEnemy->GetEnemyType() == CEnemy::ENEMY_TYPE::ENEMY_MELTYHONEY ||
+					pEnemy->GetEnemyType() == CEnemy::ENEMY_TYPE::ENEMY_ZYCOCCA)
+				{
+					//衝突判定
+					//めりこまないように
+					if (this->BoxCollision2D_Vehicle(pEnemy->GetCollision()))
+					{
+					}
+				}
 			}
 		}
 	}

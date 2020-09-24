@@ -1712,7 +1712,7 @@ void CBoss_One::BubbleSort(std::vector<int*> &data)
 void CBoss_One::SetBossInfo()
 {
 	// ‘Ì—Í‚Ì‰Šú’l
-	CCharacter::SetLife(m_BossOneData.nLife);
+	CCharacter::SetMaxLife(m_BossOneData.nLife);
 	// e‚ÌŒX‚«
 	GetModelSet()->GetCharacterModelList()[22]->GetRot().x -= 1.0f;
 	GetModelSet()->GetCharacterModelList()[21]->GetRot().x -= 1.57f;

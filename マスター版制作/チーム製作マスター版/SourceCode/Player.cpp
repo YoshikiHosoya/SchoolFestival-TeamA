@@ -146,7 +146,7 @@ HRESULT CPlayer::Init(void)
 	if (CManager::GetMode() == CManager::MODE_TUTORIAL)
 	{
 		SetPosition(D3DXVECTOR3(50.0f, 100.0f, 0.0f));
-		SetLife(5);
+		SetMaxLife(5);
 	}
 	// ƒQ[ƒ€ƒ‚[ƒh‚¾‚Á‚½Žž
 	else if(CManager::GetMode() == CManager::MODE_GAME)
@@ -687,7 +687,7 @@ void CPlayer::ResetPlayer()
 {
 	D3DXVECTOR3 pos = D3DXVECTOR3(m_pos[0].x - 200.0f, m_pos[0].y, m_pos[0].z);
 	SetPosition(pos);
-	SetLife(m_nLife[0]);
+	SetMaxLife(m_nLife[0]);
 	SetState(CCharacter::CHARACTER_STATE_INVINCIBLE);
 	GetModelSet()->SetMotion(CModelSet::PLAYER_MOTION_NORMAL);
 	m_pGun->SetGunType(CGun::GUNTYPE_HANDGUN);
@@ -907,7 +907,7 @@ void CPlayer::ReSpawn(void)
 			m_pGun->SetGunType(CGun::GUNTYPE_HANDGUN);
 			GetModelSet()->SetMotion(CModelSet::PLAYER_MOTION_NORMAL);
 			SetState(CHARACTER_STATE_INVINCIBLE);
-			SetLife(m_nLife[0]);
+			SetMaxLife(m_nLife[0]);
 			m_pPlayerUI->SetStockUI(m_pPlayerUI->GetStock() - 1);
 			m_pGrenadeFire->SetGrenadeAmmoDefault();
 			m_pPlayerUI->SetGrenadeAmmo(m_pGrenadeFire->GetGrenadeAmmo());

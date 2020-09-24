@@ -449,7 +449,6 @@ void CParticle::CalcCollisionSize(D3DXVECTOR3 size)
 	//当たり判定の設定
 	m_pCollision->SetPos(&m_CollisionOrigin);
 	m_pCollision->SetSize(D3DXVECTOR3(fabsf(m_CollisionOrigin.x - Max.x), fabsf(m_CollisionOrigin.y - Max.y), 0.0f) * 2.0f);
-
 }
 //------------------------------------------------------------------------------
 //頂点バッファ確保
@@ -663,6 +662,10 @@ void CParticle::SetCollsionParam()
 	//nullcheck
 	if (m_pCollision)
 	{
+
+		// ゲームオブジェクト( タグ )の設定
+		m_pCollision->SetGameObject(this);
+
 		//中央が原点かどうか
 		if (!m_pParticleParam->GetCollisionSizeCalc())
 		{
@@ -732,10 +735,6 @@ void CParticle::Collision()
 				CParticle::CreateFromText(m_posEndPoint, ZeroVector3, CParticleParam::EFFECT_LAZERGRASE);
 			}
 		}
-
-
-		// ゲームオブジェクト( タグ )の設定
-		m_pCollision->SetGameObject(this);
 
 		//プレイヤーの攻撃だった場合
 		if (GetTag() == TAG::PLAYER_1 || GetTag() == TAG::PLAYER_2)

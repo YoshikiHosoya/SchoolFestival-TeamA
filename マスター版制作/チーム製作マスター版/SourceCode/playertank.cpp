@@ -31,7 +31,7 @@
 #define SHOT_BULLET_POS_X		(0.0f)			// 弾の発射位置X
 #define SHOT_BULLET_POS_Y		(40.0f)				// 弾の発射位置Y
 #define SHOT_BULLET_POS_Z		(0.0f)			// 弾の発射位置Z
-
+#define PLAYERTANK_LIFE			(15)			// タンクのＨＰ
 // =====================================================================================================================================================================
 //
 // コンストラクタ
@@ -62,6 +62,8 @@ HRESULT CPlayertank::Init(void)
 	// 乗り物の初期設定
 	CCharacter::Init();
 
+	//ライフ設定
+	CCharacter::SetMaxLife(PLAYERTANK_LIFE);
 	// オフセットの読み込み
 	GetModelSet()->LoadOffset(CModelSet::CHARACTER_TYPE_TANK);
 	// 乗り物のタイプの設定
@@ -136,6 +138,7 @@ void CPlayertank::Update(void)
 {
 	// キー情報の取得
 	CKeyboard *key = CManager::GetInputKeyboard();
+
 	// 乗り物クラスの更新
 	CCharacter::Update();
 
@@ -201,6 +204,10 @@ bool CPlayertank::DefaultMotion(void)
 void CPlayertank::DebugInfo(void)
 {
 	CCharacter::DebugInfo();
+
+	//debug
+	CDebugProc::Print_Left("PlayerTankLife >> %d", GetLife());
+
 }
 
 //====================================================================

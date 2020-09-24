@@ -60,7 +60,8 @@ HRESULT CCharacter::Init(void)
 	m_AddHeadRot		= ZeroVector3;										//
 	m_ShotRotDest		= D3DXVECTOR3(0.0f, 0.0f, 0.5f*  D3DX_PI);			// 撃つ向き
 	m_rotDest.y			= -0.5f*  D3DX_PI;									// 回転する差分
-	m_Life				= 50;												// 体力
+	m_nLife				= 100;												// 体力
+	m_nMaxLife			= 100;												// 最大ＨＰ
 	m_HeightBet			= 0.0f;												//
 	m_state				= CHARACTER_STATE_NORMAL;							// 状態
 	m_bCanJump			= false;											// ジャンプフラグ
@@ -112,6 +113,7 @@ void CCharacter::Update(void)
 
 	//ステートに応じた処理
 	State();
+
 
 	//下向きながら着地したとき
 	if (m_CharacterDirection == DIRECTION::DOWN && GetJump() == true)
@@ -220,6 +222,12 @@ void CCharacter::State()
 	{
 	case CHARACTER_STATE_NORMAL:
 
+		//ダメージを受けるとどんどん赤くなる
+		if (m_nLife < m_nMaxLife * 0.5f)
+		{
+			CCharacter::GetModelSet()->ChangeColor(true, D3DXCOLOR(1.0f - ((float)(m_nLife * 2.0f) / m_nMaxLife), 0.0f, 0.0f, 0.0f));
+		}
+
 		break;
 	case CHARACTER_STATE_DAMAGE_FLASHING:
 		//カウントが0になったら通常に戻る
@@ -237,6 +245,12 @@ void CCharacter::State()
 		else if (m_nStateCnt % 8 == 0)
 		{
 			GetModelSet()->SetAllModelDisp(true);
+		}
+
+		//ダメージを受けるとどんどん赤くなる
+		if (m_nLife < m_nMaxLife * 0.5f)
+		{
+			CCharacter::GetModelSet()->ChangeColor(true, D3DXCOLOR(1.0f - ((float)(m_nLife * 2.0f) / m_nMaxLife), 0.0f, 0.0f, 0.0f));
 		}
 		break;
 	case CHARACTER_STATE_DAMAGE_RED:
@@ -417,7 +431,15 @@ void CCharacter::SetRotDest(D3DXVECTOR3 rotDest)
 //====================================================================
 void CCharacter::SetLife(int Life)
 {
-	m_Life = Life;
+	m_nLife = Life;
+}
+//====================================================================
+//最大ＨＰ設定
+//====================================================================
+void CCharacter::SetMaxLife(int nMaxLife)
+{
+	m_nMaxLife = nMaxLife;
+	SetLife(nMaxLife);
 }
 //====================================================================
 //ジャンプフラグの設定
@@ -509,7 +531,7 @@ D3DXVECTOR3 &CCharacter::GetRot(void)
 //====================================================================
 int &CCharacter::GetLife(void)
 {
-	return m_Life;
+	return m_nLife;
 }
 
 //====================================================================
@@ -611,7 +633,7 @@ void CCharacter::DebugInfo(void)
 		ImGui::Text("m_rot [%.2f %.2f %.2f]", m_rot.x, m_rot.y, m_rot.z); ImGui::SameLine();
 		ImGui::Text("m_rotDest [%.2f %.2f %.2f]", m_rotDest.x, m_rotDest.y, m_rotDest.z);
 
-		ImGui::Text("m_Life [%d]", m_Life); ImGui::SameLine();
+		ImGui::Text("m_nLife [%d]", m_nLife); ImGui::SameLine();
 		ImGui::Text("m_state [%d]", m_state); ImGui::SameLine();
 		ImGui::Text("m_nStateCnt [%d]", m_nStateCnt);
 		//ImGui::Text("m_CharaType [%d]", m_CharaType); ImGui::SameLine();
