@@ -180,42 +180,12 @@ bool CCollision::ForPlayerBulletCollision(int nEnemyDamage, int nObstacleDamage,
 {
 	// 弾を消すときに使うフラグ
 	bool bHitFlag = false;
-	std::vector<CScene*> pSceneList, pSceneList_Bullet;
+	std::vector<CScene*> pSceneList;
 
 	// プレイヤーのポインタ取得
 	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer(m_pGameObject->GetTag());
 
 	CScene::GetSceneList(CScene::OBJTYPE_SHIELD, pSceneList);
-	CScene::GetSceneList(CScene::OBJTYPE_BULLET, pSceneList_Bullet);
-
-	//当たり判定処理
-
-	// プレイヤーの弾と敵の特定のグレネードの判定
-	//if (!pSceneList_Bullet.empty())
-	//{
-	//	for (size_t nCnt = 0; nCnt < pSceneList_Bullet.size(); nCnt++)
-	//	{
-	//		CBullet *pBullet = (CBullet*)pSceneList_Bullet[nCnt];
-
-	//		// バレットが敵の特定のグレネードだった時
-	//		if (pBullet->GetBullePoint() == )
-	//		{
-	//			if (this->Collision2D(pBullet->GetCollision()))
-	//			{
-	//				// 敵のグレネードにダメージを与える
-	//				pBullet->AddDamage(nEnemyDamage);
-
-	//				// 当たり範囲フラグをtrueにする
-	//				bHitFlag = true;
-
-	//				if (!Penetration)
-	//				{
-	//					return bHitFlag;
-	//				}
-	//			}
-	//		}
-	//	}
-	//}
 
 	//盾相手の場合
 	if (!pSceneList.empty())
@@ -242,7 +212,7 @@ bool CCollision::ForPlayerBulletCollision(int nEnemyDamage, int nObstacleDamage,
 	}
 
 
-	// 当たり判定 相手がエネミーだったら
+	// 当たり判定 相手がドラゴンノスケだったら火炎放射器
 	// 敵の総数分
 	for (int nCnt = 0; nCnt < CManager::GetBaseMode()->GetMap()->GetMaxEnemy(); nCnt++)
 	{
@@ -293,26 +263,55 @@ bool CCollision::ForPlayerBulletCollision(int nEnemyDamage, int nObstacleDamage,
 				//判定が取れるとき
 				if (pEnemy->GetCollision()->GetCanCollison())
 				{
-					// 判定関数
-					if (this->OtherCollision2D(pEnemy->GetCollision()))
+					// ドローン系の敵は別の判定
+					if (pEnemy->GetEnemyType() == CEnemy::ENEMY_TYPE::ENEMY_SKYDRONE ||
+						pEnemy->GetEnemyType() == CEnemy::ENEMY_TYPE::ENEMY_WALLDRONE)
 					{
-						if (pPlayer != nullptr)
+						if (this->CharCollision2D(pEnemy->GetCollision()))
 						{
-							if (pPlayer->GetPlayerUI())
+							if (pPlayer != nullptr)
 							{
-								pPlayer->GetPlayerUI()->SetScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_DAMAGE_BULLET));
+								if (pPlayer->GetPlayerUI())
+								{
+									pPlayer->GetPlayerUI()->SetScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_DAMAGE_BULLET));
+								}
+							}
+
+							// 敵のライフ減衰
+							pEnemy->CCharacter::AddDamage(nEnemyDamage);
+
+							// 当たり範囲フラグをtrueにする
+							bHitFlag = true;
+
+							if (Penetration == false)
+							{
+								return bHitFlag;
 							}
 						}
-
-						// 敵のライフ減衰
-						pEnemy->CCharacter::AddDamage(nEnemyDamage);
-
-						// 当たり範囲フラグをtrueにする
-						bHitFlag = true;
-
-						if (Penetration == false)
+					}
+					// それ以外
+					else
+					{
+						if (this->OtherCollision2D(pEnemy->GetCollision()))
 						{
-							return bHitFlag;
+							if (pPlayer != nullptr)
+							{
+								if (pPlayer->GetPlayerUI())
+								{
+									pPlayer->GetPlayerUI()->SetScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_DAMAGE_BULLET));
+								}
+							}
+
+							// 敵のライフ減衰
+							pEnemy->CCharacter::AddDamage(nEnemyDamage);
+
+							// 当たり範囲フラグをtrueにする
+							bHitFlag = true;
+
+							if (Penetration == false)
+							{
+								return bHitFlag;
+							}
 						}
 					}
 				}

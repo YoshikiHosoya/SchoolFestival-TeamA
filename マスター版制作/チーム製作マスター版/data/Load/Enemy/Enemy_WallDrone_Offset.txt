@@ -6,32 +6,94 @@
 //------------------------------------------------------------
 
 SET_START ---------[0]----------
-	MODEL_TYPE = 21
-	INDEX = 0
+	MODEL_TYPE = 1
+	INDEX = 25
 	PARENT = -1
 	POS = 0.0 0.0 0.0
 SET_END
 
 SET_START ---------[1]----------
-	MODEL_TYPE = 22
-	INDEX = 1
+	MODEL_TYPE = 1
+	INDEX = 26
 	PARENT = 0
-	POS = -20.0 0.0 0.0
+	POS = -60.0 -30.0 -30.0
 SET_END
 
 SET_START ---------[2]----------
-	MODEL_TYPE = 23
-	INDEX = 2
-	PARENT = 0
-	POS = 20.0 0.0 0.0
+	MODEL_TYPE = 1
+	INDEX = 27
+	PARENT = 1
+	POS = 0.0 0.0 0.0
 SET_END
 
 SET_START ---------[3]----------
-	MODEL_TYPE = 24
-	INDEX = 3
-	PARENT = 0
-	POS = 0.0 30.0 0.0
+	MODEL_TYPE = 1
+	INDEX = 28
+	PARENT = 2
+	POS = -20.0 -10.0 -25.0
 SET_END
 
+SET_START ---------[4]----------
+	MODEL_TYPE = 1
+	INDEX = 29
+	PARENT = 0
+	POS = -60.0 -30.0 30.0
+SET_END
+
+SET_START ---------[5]----------
+	MODEL_TYPE = 1
+	INDEX = 30
+	PARENT = 4
+	POS = 0.0 0.0 0.0
+SET_END
+
+SET_START ---------[6]----------
+	MODEL_TYPE = 1
+	INDEX = 31
+	PARENT = 5
+	POS = -20.0 -10.0 25.0
+SET_END
+
+SET_START ---------[7]----------
+	MODEL_TYPE = 1
+	INDEX = 32
+	PARENT = 0
+	POS = 60.0 -30.0 -30.0
+SET_END
+
+SET_START ---------[8]----------
+	MODEL_TYPE = 1
+	INDEX = 33
+	PARENT = 7
+	POS = 0.0 0.0 0.0
+SET_END
+
+SET_START ---------[9]----------
+	MODEL_TYPE = 1
+	INDEX = 34
+	PARENT = 8
+	POS = 20.0 -10.0 -25.0
+SET_END
+
+SET_START ---------[10]----------
+	MODEL_TYPE = 1
+	INDEX = 35
+	PARENT = 0
+	POS = 60.0 -30.0 30.0
+SET_END
+
+SET_START ---------[11]----------
+	MODEL_TYPE = 1
+	INDEX = 36
+	PARENT = 10
+	POS = 0.0 0.0 0.0
+SET_END
+
+SET_START ---------[12]----------
+	MODEL_TYPE = 1
+	INDEX = 37
+	PARENT = 11
+	POS = 20.0 -10.0 25.0
+SET_END
 
 MODEL_OFFSET_END

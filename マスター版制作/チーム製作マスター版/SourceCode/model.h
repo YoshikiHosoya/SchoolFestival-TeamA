@@ -84,7 +84,6 @@ public:
 		MODEL_DRONE_JOINT_B_R,				// 右後足関節
 		MODEL_DRONE_THIGH_B_R,				// 右後大腿
 		MODEL_DRONE_LEG_B_R,				// 右後足
-
 		MODEL_DRONE_JOINT_F_L,				// 左前足関節
 		MODEL_DRONE_THIGH_F_L,				// 左前大腿
 		MODEL_DRONE_LEG_F_L,				// 左前足

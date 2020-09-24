@@ -81,9 +81,6 @@ HRESULT CPrisoner::Init(void)
 	GetModelSet()->SetMotion(CModelSet::PRISONER_MOTION_STAY);
 	// ステートの設定
 	CCharacter::SetState(CCharacter::CHARACTER_STATE_NONE);
-
-	//CCharacter::SetGravity(true);
-
 	// 向き
 	Move(0.0f, -1.57f);
 	// 当たり判定生成
@@ -262,8 +259,7 @@ bool CPrisoner::DefaultMotion(void)
 // =====================================================================================================================================================================
 void CPrisoner::Collision()
 {
-	CMap *pMap;
-	pMap = CManager::GetBaseMode()->GetMap();
+	CMap *pMap = CManager::GetBaseMode()->GetMap();
 
 	// マップモデルが存在した時して当たり判定が存在する時
 	if (pMap && GetCollision())
@@ -329,7 +325,7 @@ void CPrisoner::PrisonerState()
 
 		if (GetFallFlag())
 		{
-			SetMove(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+			SetMove(D3DXVECTOR3(0.0f, -2.0f, 0.0f));
 			SetStateTime(120);	GetModelSet()->SetMotion(CModelSet::PRISONER_MOTION_FALL);
 		}
 		else
@@ -415,7 +411,7 @@ void CPrisoner::PrisonerState()
 		{
 			if (GetFallFlag())
 			{
-				SetMove(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+				SetMove(D3DXVECTOR3(0.0f, -3.0f, 0.0f));
 				GetModelSet()->SetMotion(CModelSet::PRISONER_MOTION_FALL);
 			}
 			else

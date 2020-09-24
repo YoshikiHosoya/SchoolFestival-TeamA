@@ -30,13 +30,14 @@
 #define ENEMY_HELICOPTER_COLLISIONSIZE			(D3DXVECTOR3(250.0f,150.0f,250.0f))		//敵の当たり判定サイズ
 #define ENEMY_MELTYHONEY_COLLISIONSIZE			(D3DXVECTOR3(250.0f,200.0f,250.0f))		//敵の当たり判定サイズ
 #define ENEMY_ZYCOCCA_COLLISIONSIZE				(D3DXVECTOR3(110.0f,95.0f,110.0f))		//敵の当たり判定サイズ
-#define ENEMY_DRONE_COLLISIONSIZE				(D3DXVECTOR3(50.0f,50.0f,50.0f))		//敵の当たり判定サイズ
+#define ENEMY_SKYDRONE_COLLISIONSIZE			(D3DXVECTOR3(40.0f,90.0f,40.0f))		//敵の当たり判定サイズ
+#define ENEMY_WALLDRONE_COLLISIONSIZE			(D3DXVECTOR3(170.0f,100.0f,170.0f))		//敵の当たり判定サイズ
 
 #define ENEMY_HUMAN_LIFE						(1)										//ライフ
 #define ENEMY_HELICOPTER_LIFE					(20)									//ライフ
 #define ENEMY_MELTYHONEY_LIFE					(50)									//ライフ
 #define ENEMY_ZYCOCCA_LIFE						(20)									//ライフ
-#define ENEMY_DRONE_LIFE						(10)									//ライフ
+#define ENEMY_DRONE_LIFE						(3)										//ライフ
 
 
 #define KNIFE_COLLISOIN_SIZE	(D3DXVECTOR3(40.0f,60.0f,0.0f))
@@ -213,25 +214,58 @@ HRESULT CWeakEnemy::Init(void)
 
 		break;
 
-	case CWeakEnemy::ENEMY_TYPE::ENEMY_DRONE:
+	case CWeakEnemy::ENEMY_TYPE::ENEMY_SKYDRONE:
 		//オフセット設定
 		GetModelSet()->SetCharacterType(CModelSet::CHARACTER_TYPE_ENEMY_DRONE);
+
 		GetModelSet()->LoadOffset(CModelSet::CHARACTER_TYPE_ENEMY_DRONE);
 		// 銃の生成
 		GetGunPtr()->SetHandMtx(GetModelSet()->GetCharacterModelList()[3]->GetMatrix());
 		// 発射する位置の設定
 		GetGunPtr()->SetShotOffsetPos(GetGunPtr()->GetShotOffsetPos());
 		// 銃の弾の種類
-		GetGunPtr()->SetDisp(true);
+		GetGunPtr()->SetDisp(false);
 		// 弾をフレイムバレットに設定
 		GetGunPtr()->SetGunTypeOnly(CGun::GUNTYPE_BALKAN);
 		//モーションoff
 		CCharacter::GetModelSet()->SetUseMotion(false);
 		CCharacter::GetModelSet()->SetMotion(CModelSet::CHARACTER_MOTION_STATE_NONE);
 		// 当たり判定生成
-		GetCollision()->SetSize(ENEMY_DRONE_COLLISIONSIZE);
+		GetCollision()->SetSize(ENEMY_SKYDRONE_COLLISIONSIZE);
 		//HP設定
 		CCharacter::SetLife(ENEMY_DRONE_LIFE);
+		// 重力をかけない
+		SetGravity(false);
+		// 正面を向かせる
+		SetRotDest(D3DXVECTOR3(0.0f,0.0f,0.0f));
+
+		break;
+
+	case CWeakEnemy::ENEMY_TYPE::ENEMY_WALLDRONE:
+		//オフセット設定
+		GetModelSet()->SetCharacterType(CModelSet::CHARACTER_TYPE_ENEMY_WALLDRONE);
+		GetModelSet()->LoadOffset(CModelSet::CHARACTER_TYPE_ENEMY_WALLDRONE);
+		// 銃の生成
+		GetGunPtr()->SetHandMtx(GetModelSet()->GetCharacterModelList()[0]->GetMatrix());
+		// 発射する位置の設定
+		GetGunPtr()->SetShotOffsetPos(D3DXVECTOR3(GetGunPtr()->GetShotOffsetPos().x,
+			GetGunPtr()->GetShotOffsetPos().y,
+			GetGunPtr()->GetShotOffsetPos().z + 50.0f));
+
+		// 銃の弾の種類
+		GetGunPtr()->SetDisp(false);
+		// 弾をフレイムバレットに設定
+		GetGunPtr()->SetGunTypeOnly(CGun::GUNTYPE_BALKAN);
+		//モーションoff
+		CCharacter::GetModelSet()->SetUseMotion(false);
+		CCharacter::GetModelSet()->SetMotion(CModelSet::CHARACTER_MOTION_STATE_NONE);
+		// 当たり判定生成
+		GetCollision()->SetSize(ENEMY_WALLDRONE_COLLISIONSIZE);
+		//HP設定
+		CCharacter::SetLife(ENEMY_DRONE_LIFE);
+		SetGravity(false);
+		// 正面を向かせる
+		SetRotDest(D3DXVECTOR3(0.0f, D3DX_PI*0.5f, 0.0f));
 
 		break;
 
@@ -239,7 +273,16 @@ HRESULT CWeakEnemy::Init(void)
 		break;
 	}
 
-	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_NORMAL);
+	switch (GetEnemyType())
+	{
+	case CWeakEnemy::ENEMY_TYPE::ENEMY_SKYDRONE:
+	case CWeakEnemy::ENEMY_TYPE::ENEMY_WALLDRONE:
+		GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_CHARACTER);
+		break;
+	default:
+		GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_NORMAL);
+			break;
+	}
 
 	return S_OK;
 }
@@ -482,6 +525,9 @@ void CWeakEnemy::StateChangeReaction()
 		case CEnemy::ENEMY_TYPE::ENEMY_MELTYHONEY:
 		case CEnemy::ENEMY_TYPE::ENEMY_ZYCOCCA:
 		case CEnemy::ENEMY_TYPE::ENEMY_HELICOPTER:
+		case CEnemy::ENEMY_TYPE::ENEMY_SKYDRONE:
+		case CEnemy::ENEMY_TYPE::ENEMY_WALLDRONE:
+
 			CParticle::CreateFromText(GetPosition(), ZeroVector3, CParticleParam::EFFECT_NO_COLLISION_EXPLOSION);
 			SetStateCount(1);
 
