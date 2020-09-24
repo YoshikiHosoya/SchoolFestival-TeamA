@@ -138,15 +138,8 @@ void CItem::Uninit(void)
 // =====================================================================================================================================================================
 void CItem::Update(void)
 {
-	// 当たり判定系
-	ItemCollision();
-
-	// レイの判定に一回でも触れていた時
-	if (m_nHitRayCount >= 1)
-	{
-		// アイテムの滞在時間管理
-		RemainTimer();
-	}
+	// 1フレーム前の座標を求める
+	m_PosOld = GetPosition();
 
 	if (m_Behavior == BEHAVIOR_BURSTS)
 	{
@@ -156,7 +149,18 @@ void CItem::Update(void)
 	{
 		GetPosition() += m_Move * 1.5f;
 	}
+
 	SetPosition(GetPosition());
+
+	// 当たり判定系
+	ItemCollision();
+
+	// レイの判定に一回でも触れていた時
+	if (m_nHitRayCount >= 1)
+	{
+		// アイテムの滞在時間管理
+		RemainTimer();
+	}
 
 	// 更新
 	CScene3D::Update();
@@ -707,12 +711,11 @@ void CItem::ItemCollision()
 		m_pCollision->SetPos(&GetPosition());
 		// マップのポインタ取得
 		CMap *pMap = CManager::GetBaseMode()->GetMap();
-		// 1フレーム前の座標を求める
-		m_PosOld = GetPosition();
+
 
 		if (pMap)
 		{
-			if (m_pCollision->RayCollision(pMap))
+			if (m_pCollision->RayCollision(pMap, m_PosOld,GetPosition()))
 			{
 				if (m_Behavior != BEHAVIOR_NONE)
 				{

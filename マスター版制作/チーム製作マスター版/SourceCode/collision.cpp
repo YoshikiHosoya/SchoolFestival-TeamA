@@ -1680,7 +1680,7 @@ bool CCollision::RayBlockCollision(CMap *pMap, D3DXMATRIX *pMat)
 //======================================================================================================================
 // レイの判定
 //======================================================================================================================
-bool CCollision::RayCollision(CMap *pMap)
+bool CCollision::RayCollision(CMap * pMap, D3DXVECTOR3 posOrigin, D3DXVECTOR3 posEndPoint)
 {
 	// 地形判定 変数宣言
 	BOOL				bHitFlag = false;			// 判定が出たかのフラグ
@@ -1690,11 +1690,10 @@ bool CCollision::RayCollision(CMap *pMap)
 	float				fHitU = 0;					// U
 	float				fHitV = 0;					// V
 	D3DXMATRIX			invmat;						// 逆行列を格納する変数
-	D3DXVECTOR3			m_posAfter;					// 逆行列で出した終点情報を格納する
-	D3DXVECTOR3			m_posBefore;				// 終点情報を格納する
 	D3DXVECTOR3			direction;					// 変換後の位置、方向を格納する変数：
 	std::vector<float>	vDistance;					// 長さの配列保存
 	float				fData = 0.0f;				// データ
+	float				fLength = D3DXVec3Length(&D3DXVECTOR3(posEndPoint - posOrigin));
 
 													// マップモデルの最大数分繰り返す
 	for (int nCnt = 0; nCnt < pMap->GetMaxModel(); nCnt++)
@@ -1702,13 +1701,13 @@ bool CCollision::RayCollision(CMap *pMap)
 		//	逆行列の取得
 		D3DXMatrixInverse(&invmat, NULL, pMap->GetModel(nCnt)->GetMatrix());
 		//	逆行列を使用し、レイ始点情報を変換　位置と向きで変換する関数が異なるので要注意
-		D3DXVec3TransformCoord(&m_posBefore, &D3DXVECTOR3(this->m_ppos->x, this->m_ppos->y + RAY_FIRST_POINT, this->m_ppos->z), &invmat);
+		D3DXVec3TransformCoord(&posOrigin, &posOrigin, &invmat);
 		//	レイ終点情報を変換
-		D3DXVec3TransformCoord(&m_posAfter, &D3DXVECTOR3(this->m_ppos->x, this->m_ppos->y, this->m_ppos->z), &invmat);
+		D3DXVec3TransformCoord(&posEndPoint, &posEndPoint, &invmat);
 		//	レイ方向情報を変換
-		D3DXVec3Normalize(&direction, &(m_posAfter - m_posBefore));
+		D3DXVec3Normalize(&direction, &(posEndPoint - posOrigin));
 		//Rayを飛ばす
-		D3DXIntersect(pMap->GetMesh(nCnt), &m_posBefore, &direction, &bHitFlag, &dwHitIndex, &fHitU, &fHitV, &fLandDistance, NULL, NULL);
+		D3DXIntersect(pMap->GetMesh(nCnt), &posOrigin, &direction, &bHitFlag, &dwHitIndex, &fHitU, &fHitV, &fLandDistance, NULL, NULL);
 		if (bHitFlag == TRUE)
 		{
 			//長さの保存追加
@@ -1723,6 +1722,7 @@ bool CCollision::RayCollision(CMap *pMap)
 	{
 		//最初の比較対象
 		fData = vDistance[0];
+
 		for (unsigned int nCnt = 0; vDistance.size() > nCnt; nCnt++)
 		{
 			if (vDistance[nCnt] < fData)
@@ -1731,9 +1731,18 @@ bool CCollision::RayCollision(CMap *pMap)
 				fData = vDistance[nCnt];
 			}
 		}
-		if (fData < MAX_RAY_LENGTH)//Rayの長さの指定条件
+		if (fData < fLength + (m_size.y * 0.5f))//Rayの長さの指定条件
 		{
-			this->m_ppos->y = this->m_ppos->y - fData + MAX_RAY_LENGTH;
+			if (direction.y <= 0)
+			{
+				//始点座標 - 判定地との距離 - オブジェクトの幅
+				this->m_ppos->y = posOrigin.y - fData + (m_size.y * 0.5f);
+			}
+			else
+			{
+				//始点座標 - 判定地との距離 + オブジェクトの幅
+				this->m_ppos->y = posOrigin.y + fData + (m_size.y * 0.5f);
+			}
 			bJudg = true;
 		}
 		//Rayの判定圏内じゃなかったらジャンプできない

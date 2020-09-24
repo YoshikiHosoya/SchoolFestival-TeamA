@@ -38,6 +38,9 @@ END_MAPSET
 //
 //	[ 0 ]	í èÌï∫ém
 //	[ 1 ]	èÇéùÇøï∫ém
+//	[ 2 ]	ÉwÉäÉRÉvÉ^Å[
+//	[ 3 ]	ÉÅÉãÉeÉBÉnÉjÅ[
+//	[ 4 ]	ÉWÉBÅEÉRÉbÉJ
 //
 //------------------------------------------------------------
 
@@ -77,133 +80,118 @@ ENEMYSET									# 7
 END_ENEMYSET
 
 ENEMYSET									# 8
-	TYPE		= 1
-	POS			= 2376 53 0
-END_ENEMYSET
-
-ENEMYSET									# 9
-	TYPE		= 0
-	POS			= 2425 53 0
-END_ENEMYSET
-
-ENEMYSET									# 10
-	TYPE		= 0
-	POS			= 2464 53 0
-END_ENEMYSET
-
-ENEMYSET									# 11
-	TYPE		= 0
-	POS			= 2505 53 0
-END_ENEMYSET
-
-ENEMYSET									# 12
 	TYPE		= 0
 	POS			= 2851 298 0
 END_ENEMYSET
 
-ENEMYSET									# 13
+ENEMYSET									# 9
 	TYPE		= 0
 	POS			= 2916 298 0
 END_ENEMYSET
 
-ENEMYSET									# 14
+ENEMYSET									# 10
 	TYPE		= 0
 	POS			= 3546 297 0
 END_ENEMYSET
 
-ENEMYSET									# 15
+ENEMYSET									# 11
 	TYPE		= 0
 	POS			= 3618 297 0
 END_ENEMYSET
 
+ENEMYSET									# 12
+	TYPE		= 1
+	POS			= 4657 296 0
+END_ENEMYSET
+
+ENEMYSET									# 13
+	TYPE		= 0
+	POS			= 4808 297 0
+END_ENEMYSET
+
+ENEMYSET									# 14
+	TYPE		= 0
+	POS			= 4932 298 0
+END_ENEMYSET
+
+ENEMYSET									# 15
+	TYPE		= 0
+	POS			= 4751 57 0
+END_ENEMYSET
+
 ENEMYSET									# 16
 	TYPE		= 1
-	POS			= 5280 192 0
+	POS			= 4925 58 0
 END_ENEMYSET
 
 ENEMYSET									# 17
-	TYPE		= 0
-	POS			= 5476 192 0
+	TYPE		= 1
+	POS			= 5058 294 0
 END_ENEMYSET
 
 ENEMYSET									# 18
 	TYPE		= 0
-	POS			= 5687 192 0
+	POS			= 5215 293 0
 END_ENEMYSET
 
 ENEMYSET									# 19
 	TYPE		= 0
-	POS			= 5903 192 0
+	POS			= 5666 304 0
 END_ENEMYSET
 
 ENEMYSET									# 20
-	TYPE		= 1
-	POS			= 6046 192 0
+	TYPE		= 0
+	POS			= 5785 304 0
 END_ENEMYSET
 
 ENEMYSET									# 21
 	TYPE		= 1
-	POS			= 6244 304 0
+	POS			= 5885 304 0
 END_ENEMYSET
 
 ENEMYSET									# 22
 	TYPE		= 0
-	POS			= 6423 304 0
+	POS			= 5994 304 0
 END_ENEMYSET
 
 ENEMYSET									# 23
 	TYPE		= 0
-	POS			= 6645 304 0
+	POS			= 6123 304 0
 END_ENEMYSET
 
 ENEMYSET									# 24
 	TYPE		= 0
-	POS			= 6847 304 0
+	POS			= 5657 54 0
 END_ENEMYSET
 
 ENEMYSET									# 25
-	TYPE		= 1
-	POS			= 7005 304 0
+	TYPE		= 0
+	POS			= 5797 53 0
 END_ENEMYSET
 
 ENEMYSET									# 26
 	TYPE		= 0
-	POS			= 7502 304 0
+	POS			= 6002 53 0
 END_ENEMYSET
 
 ENEMYSET									# 27
 	TYPE		= 0
-	POS			= 7373 304 0
+	POS			= 6163 53 0
 END_ENEMYSET
 
 ENEMYSET									# 28
-	TYPE		= 0
-	POS			= 6234 53 0
+	TYPE		= 1
+	POS			= 3150 57 0
 END_ENEMYSET
 
 ENEMYSET									# 29
 	TYPE		= 0
-	POS			= 6650 53 0
+	POS			= 3240 57 0
 END_ENEMYSET
 
 ENEMYSET									# 30
-	TYPE		= 0
-	POS			= 7019 53 0
-END_ENEMYSET
-
-ENEMYSET									# 31
-	TYPE		= 0
-	POS			= 7391 53 0
-END_ENEMYSET
-
-ENEMYSET									# 32
-	TYPE		= 0
-	POS			= 8088 53 0
-END_ENEMYSET
-
-ENEMYSET									# 33
-	TYPE		= 0
-	POS			= 7743 53 0
+	TYPE		= 1
+	POS			= 3325 57 0
 END_ENEMYSET
 
 //------------------------------------------------------------
@@ -234,40 +222,34 @@ END_ENEMYSET
 //
 //------------------------------------------------------------
 
-PRISONERSET									# 34
+PRISONERSET									# 31
 	TYPE		= 0
 	ITEMTYPE	= 0
 	POS			= 748 222 4
 END_PRISONERSET
 
-PRISONERSET									# 35
+PRISONERSET									# 32
 	TYPE		= 0
 	ITEMTYPE	= 0
 	POS			= 2775 298 6
 END_PRISONERSET
 
-PRISONERSET									# 36
-	TYPE		= 0
-	ITEMTYPE	= 0
-	POS			= 3238 164 8
-END_PRISONERSET
-
-PRISONERSET									# 37
+PRISONERSET									# 33
 	TYPE		= 0
 	ITEMTYPE	= 0
 	POS			= 3687 297 6
 END_PRISONERSET
 
-PRISONERSET									# 38
+PRISONERSET									# 34
 	TYPE		= 0
-	ITEMTYPE	= 0
-	POS			= 8107 304 4
+	ITEMTYPE	= 7
+	POS			= 6365 304 4
 END_PRISONERSET
 
-PRISONERSET									# 39
+PRISONERSET									# 35
 	TYPE		= 0
 	ITEMTYPE	= 0
-	POS			= 8176 304 4
+	POS			= 6428 304 4
 END_PRISONERSET
 
 //------------------------------------------------------------
@@ -275,39 +257,95 @@ END_PRISONERSET
 //------------------------------------------------------------
 // è·äQï®ÇÃéÌóﬁ ( TYPE )
 //
-//	[ 0 ]	î†
+//	[ 0 ]	ñÿî†
 //	[ 1 ]	íM
-//	[ 2 ]	ñÿ
-//	[ 3 ]	ã‡å…
-//	[ 4 ]	ìyîX
+//	[ 2 ]	íMîöíe
+//	[ 3 ]	ñÿ
+//	[ 4 ]	ã‡å…
+//	[ 5 ]	ìyîX
+//	[ 6 ]	é‘
 //
 //------------------------------------------------------------
+
+OBSTACLESET									# 36
+	TYPE		= 5
+	POS			= 1433 95 0
+END_OBSTACLESET
+
+OBSTACLESET									# 37
+	TYPE		= 1
+	POS			= 1845 95 0
+END_OBSTACLESET
+
+OBSTACLESET									# 38
+	TYPE		= 5
+	POS			= 2356 95 0
+END_OBSTACLESET
+
+OBSTACLESET									# 39
+	TYPE		= 2
+	POS			= 3055 98 0
+END_OBSTACLESET
+
+OBSTACLESET									# 40
+	TYPE		= 2
+	POS			= 3399 98 0
+END_OBSTACLESET
+
+OBSTACLESET									# 41
+	TYPE		= 0
+	POS			= 5503 95 0
+END_OBSTACLESET
+
+OBSTACLESET									# 42
+	TYPE		= 0
+	POS			= 5577 95 0
+END_OBSTACLESET
+
+OBSTACLESET									# 43
+	TYPE		= 0
+	POS			= 5503 168 0
+END_OBSTACLESET
+
+OBSTACLESET									# 44
+	TYPE		= 0
+	POS			= 5577 168 0
+END_OBSTACLESET
+
+OBSTACLESET									# 45
+	TYPE		= 5
+	POS			= 6508 97 0
+END_OBSTACLESET
+
+OBSTACLESET									# 46
+	TYPE		= 4
+	POS			= 3176 217 0
+END_OBSTACLESET
+
+OBSTACLESET									# 47
+	TYPE		= 4
+	POS			= 3300 217 0
+END_OBSTACLESET
 
 //------------------------------------------------------------
 // êÌé‘ÇÃîzíuèÓïÒ
 //------------------------------------------------------------
 
-TANKSET										# 40
+TANKSET										# 48
 	POS			= 838 241 0
 END_TANKSET
-
-//------------------------------------------------------------
-// êÌì¨ã@ÇÃîzíuèÓïÒ
-//------------------------------------------------------------
-
-//------------------------------------------------------------
-// ÉwÉäÉRÉvÉ^Å[ÇÃîzíuèÓïÒ
-//------------------------------------------------------------
 
 //------------------------------------------------------------
 // îwåiÇÃÉeÉNÉXÉ`ÉÉèÓïÒ
 //------------------------------------------------------------
 //
-//	[ 49 ]	ãÛÇÃîwåi
+//	[ 71 ]	ãÛÇÃîwåi ( ê∞ÇÍ )
+//	[ 72 ]	ãÛÇÃîwåi ( ì‹ÇË )
+//	[ 73 ]	ãÛÇÃîwåi ( à√â_ )
 //
 //------------------------------------------------------------
 BGSET
-	BG_TEX_ID			= 49
+	BG_TEX_ID			= 71
 END_BGSET
 
 END_SCRIPT
