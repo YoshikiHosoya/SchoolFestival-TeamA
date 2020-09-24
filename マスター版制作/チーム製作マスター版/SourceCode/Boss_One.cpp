@@ -155,7 +155,7 @@ void CBoss_One::Uninit(void)
 		}
 	}
 
-	// 当たり判定の削除
+	// 武器用当たり判定の削除
 	if (m_pCollision != nullptr)
 	{
 		delete m_pCollision;
@@ -1581,6 +1581,15 @@ void CBoss_One::Attack_Priority()
 		// ----- 優先度の設定 ----- //
 
 		// ----- 射程外 ----- //
+
+		if (nDistance <= 100)
+		{// 真下
+			m_AIPriorityData.AttackType[ATTACKTYPE_BALKAN] += PRIORITY_POINT_ONE;
+			m_AIPriorityData.AttackType[ATTACKTYPE_FLAMERADIATION] += PRIORITY_POINT_ONE;
+			m_AIPriorityData.AttackType[ATTACKTYPE_INCENDIARY] += PRIORITY_POINT_ONE;
+			m_AIPriorityData.AttackType[ATTACKTYPE_SHIFTPOSTURE] += PRIORITY_POINT_THREE;
+		}
+
 		if (nDistance <= MIN_PLAYER_DISTANCE)
 		{// 最短射程範囲より内側にいる時
 			m_AIPriorityData.AttackType[ATTACKTYPE_BALKAN]			+= PRIORITY_POINT_ONE;

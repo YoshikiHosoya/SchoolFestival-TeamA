@@ -65,8 +65,8 @@ public:
 	OBSTACLE_TYPE			&GetObstacleType()					{ return m_ObstacleType; };			// 障害物の種類の取得
 	void					SetObstacleType(OBSTACLE_TYPE type) { m_ObstacleType = type; };			// 障害物の種類の設定
 	OBSTACLE_PARAM			*GetObstacleParam(int nCnt)			{ return &m_ObstacleParam[nCnt]; };	// 弾のパラメーターの構造体の取得
-	void					SetObstacleParam(CObstacle::OBSTACLE_TYPE type)
-								{ m_nLife = m_ObstacleParam[type].nLife; };							// 障害物の情報設定
+	void					SetObstacleParam(CObstacle::OBSTACLE_TYPE type);
+																									// 障害物の情報設定
 	int						GetLife() { return m_nLife; };											// 体力の取得
 	void					SetLife(int nLife) { m_nLife = nLife; };								// 体力の設定
 	void					SetCollisionSize(CObstacle::OBSTACLE_TYPE type);						// 大きさの設定

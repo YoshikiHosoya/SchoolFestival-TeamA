@@ -67,9 +67,6 @@ HRESULT CObstacle::Init()
 	// 初期化
 	CModel::Init();
 
-	// 情報の設定
-	SetObstacleParam(TYPE_BOX);
-
 	// 当たり判定生成
 	GetCollision()->SetPos(&GetPosition());
 	GetCollision()->SetGameObject(this);
@@ -327,8 +324,15 @@ void CObstacle::CheckDie(TAG tag)
 //====================================================================
 void CObstacle::AddDamage(int nDamage)
 {
-	this->m_nLife -= nDamage;
-	this->SetLife(m_nLife);
+	this->SetLife(this->m_nLife -= nDamage);
+}
+
+//====================================================================
+// パラメーターの設定
+//====================================================================
+void CObstacle::SetObstacleParam(CObstacle::OBSTACLE_TYPE type)
+{
+	m_nLife = m_ObstacleParam[type].nLife;
 }
 
 //====================================================================
@@ -339,5 +343,7 @@ void CObstacle::SetCollisionSize(CObstacle::OBSTACLE_TYPE type)
 	// 当たり判定の大きさを設定
 	GetCollision()->SetSize(m_ObstacleParam[type].CollisionSize);
 	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_CHARACTER);
+	// 情報の設定
+	SetObstacleParam(type);
 };
 

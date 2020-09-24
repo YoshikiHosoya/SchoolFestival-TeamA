@@ -5,8 +5,8 @@ SCRIPT
 
 ITEMSET
 	RATE			= 10
-	DELETE			= 300
-	FLASH			= 180
+	DELETE			= 360
+	FLASH			= 240
 	BEAR			= 1500
 	COIN			= 10
 	JEWELRY			= 800
