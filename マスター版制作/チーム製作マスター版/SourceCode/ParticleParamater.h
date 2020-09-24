@@ -30,6 +30,9 @@ public:
 		EFFECT_EXPLOSION_GRENADE,				//グレネード用の爆発
 		EFFECT_EXPLOSION_SMOKE,					//煙っぽい爆発
 		EFFECT_EXPLOSION_OBJECTBREAK,			//オブジェクト破壊時の爆発
+		EFFECT_EXPLOSION_DANGERBOX,				//危険箱破壊時の爆発
+		EFFECT_EXPLOSION_TANK_GRENADE,			//タンクのグレネードの爆発
+
 		EFFECT_NO_COLLISION_EXPLOSION,			//当たり判定の無い爆発
 		EFFECT_NO_COLLISION_EXPLOSION_RANK,		//当たり判定の無い爆発ランキング用
 

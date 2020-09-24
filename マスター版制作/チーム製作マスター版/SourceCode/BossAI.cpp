@@ -207,13 +207,15 @@ void CBossAI::UpdateAttackAI(void)
 				{
 					pBossPass->GetGunPtr()->Shot();
 				}
-				else if (m_AttackCnt == 120)
+
+				else if (m_AttackCnt >= 120)
 				{
 					m_AttackCnt = 0;
 					m_Attacks++;
 				}
+
 				//60ƒtƒŒ[ƒ€‚©‚ÂUŒ‚‰ñ”‚É’B‚µ‚½‚ç‰Šú‰»
-				if (m_AttackCnt > 180 && m_Attacks >= 3)
+				if (m_AttackCnt > 90 && m_Attacks >= 3)
 				{
 					SetRestartFlag(true);
 				}

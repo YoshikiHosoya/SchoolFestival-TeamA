@@ -325,25 +325,29 @@ bool CCollision::ForPlayerBulletCollision(int nEnemyDamage, int nObstacleDamage,
 		CObstacle *pObstacle = CManager::GetBaseMode()->GetMap()->GetObstacle(nCntObst);
 		if (pObstacle != nullptr)
 		{
-			if (this->Collision2D(pObstacle->GetCollision()))
+			if (pObstacle->GetCollision()->GetCanCollison())
 			{
-				// 障害物のライフ減衰
-				pObstacle->Hit(pObstacle->GetObstacleType(), nObstacleDamage);
 
-				// 敵のライフが0以下になった時
-				if (pObstacle->GetLife() <= 0)
+				if (this->Collision2D(pObstacle->GetCollision()))
 				{
-					pObstacle->SetDieFlag(true);
-					// ポインタをnullにする
-					pObstacle = nullptr;
-				}
+					// 障害物のライフ減衰
+					pObstacle->Hit(m_pGameObject->GetTag(), nObstacleDamage);
 
-				// 当たり範囲フラグをtrueにする
-				bHitFlag = true;
+					// 敵のライフが0以下になった時
+					if (pObstacle->GetLife() <= 0)
+					{
+						pObstacle->SetDieFlag(true);
+						// ポインタをnullにする
+						pObstacle = nullptr;
+					}
 
-				if (Penetration == false)
-				{
-					return bHitFlag;
+					// 当たり範囲フラグをtrueにする
+					bHitFlag = true;
+
+					if (Penetration == false)
+					{
+						return bHitFlag;
+					}
 				}
 			}
 		}
@@ -1081,7 +1085,7 @@ bool CCollision::LazerCollisionGetLength(D3DXVECTOR3 ShotPos, float &fLength)
 				break;
 			case TAG::OBSTACLE:
 				pObstacle = (CObstacle*)pMostNearObject;
-				pObstacle->Hit(CObstacle::TYPE_BOX, 1);
+				pObstacle->Hit(m_pGameObject->GetTag(), 1);
 
 				break;
 			case TAG::ENEMY:

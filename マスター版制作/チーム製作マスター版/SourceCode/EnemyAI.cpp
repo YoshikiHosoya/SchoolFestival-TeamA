@@ -160,14 +160,14 @@ void CEnemyAI::Update(void)
 				break;
 			case AI_WALK_LEFT:
 				m_bCrouch = false;
-				pEnemyPass->GetMove().x -= 0.5f;
+				pEnemyPass->GetMove().x -= 1.0f;
 				pEnemyPass->GetRotDest().y = D3DX_PI * 0.5f;
 				pEnemyPass->SetCharacterDirection(DIRECTION::LEFT);
 				pEnemyPass->GetModelSet()->SetMotion(CModelSet::ENEMY_MOTION_WALK);
 				break;
 			case AI_WALK_RIGHT:
 				m_bCrouch = false;
-				pEnemyPass->GetMove().x += 0.5f;
+				pEnemyPass->GetMove().x += 1.0f;
 				pEnemyPass->GetRotDest().y = D3DX_PI * -0.5f;
 				pEnemyPass->SetCharacterDirection(DIRECTION::RIGHT);
 				pEnemyPass->GetModelSet()->SetMotion(CModelSet::ENEMY_MOTION_WALK);

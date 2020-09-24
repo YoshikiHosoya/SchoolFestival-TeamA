@@ -150,13 +150,13 @@ void CShieldEnemyAI::Update(void)
 				pEnemyPass->GetModelSet()->SetMotion(CModelSet::ENEMY_MOTION_NORMAL);
 				break;
 			case AI_WALK_LEFT://¶ˆÚ“®
-				pEnemyPass->GetMove().x -= 1.0f;
+				pEnemyPass->GetMove().x -= 1.5f;
 				pEnemyPass->GetRotDest().y = D3DX_PI * 0.5f;
 				pEnemyPass->SetCharacterDirection(DIRECTION::LEFT);
 				pEnemyPass->GetModelSet()->SetMotion(CModelSet::ENEMY_MOTION_WALK);
 				break;
 			case AI_WALK_RIGHT://‰EˆÚ“®
-				pEnemyPass->GetMove().x += 1.0f;
+				pEnemyPass->GetMove().x += 1.5f;
 				pEnemyPass->GetRotDest().y = D3DX_PI * -0.5f;
 				pEnemyPass->SetCharacterDirection(DIRECTION::RIGHT);
 				pEnemyPass->GetModelSet()->SetMotion(CModelSet::ENEMY_MOTION_WALK);

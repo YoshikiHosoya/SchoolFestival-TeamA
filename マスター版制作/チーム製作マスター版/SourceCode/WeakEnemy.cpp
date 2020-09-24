@@ -329,9 +329,6 @@ void CWeakEnemy::Update(void)
 	//çXêV
 	UpdateVehicle();
 
-	//debug
-	//CCharacter::GetMove().x += 1.0f;
-
 	CEnemy::Update();
 }
 //====================================================================

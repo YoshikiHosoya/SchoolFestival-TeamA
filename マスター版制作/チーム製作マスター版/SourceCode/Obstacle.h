@@ -71,12 +71,12 @@ public:
 	void					SetLife(int nLife) { m_nLife = nLife; };								// 体力の設定
 	void					SetCollisionSize(CObstacle::OBSTACLE_TYPE type);						// 大きさの設定
 
-	void					Hit(OBSTACLE_TYPE type, int nDamage);									// 障害物が壊されるときの処理
+	void					Hit(TAG tag, int nDamage);												// 障害物が壊されるときの処理
 	void					DropItem();																// 種類ごとのドロップ
 
 private:
 	/* メンバ関数*/
-	void					CheckDie();																// 体力があるか確認
+	void					CheckDie(TAG tag);														// 体力があるか確認
 	void					AddDamage(int Damage);													// ダメージを加算する
 	/* 静的メンバ変数 */
 	static OBSTACLE_PARAM	m_ObstacleParam[CObstacle::TYPE_MAX];									// 障害物のパラメーター

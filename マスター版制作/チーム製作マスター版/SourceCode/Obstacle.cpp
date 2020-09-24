@@ -227,9 +227,9 @@ void CObstacle::ObstacleLoad()
 // è·äQï®Ç™âÛÇ≥ÇÍÇÈÇ∆Ç´ÇÃèàóù
 //
 // =====================================================================================================================================================================
-void CObstacle::Hit(OBSTACLE_TYPE type,int nDamage)
+void CObstacle::Hit(TAG tag,int nDamage)
 {
-	switch (type)
+	switch (m_ObstacleType)
 	{
 	case CObstacle::TYPE_BOX:
 	case CObstacle::TYPE_BARREL:
@@ -242,7 +242,7 @@ void CObstacle::Hit(OBSTACLE_TYPE type,int nDamage)
 		// ëÃóÕÇå∏éZÇ∑ÇÈ
 		this->AddDamage(nDamage);
 		// çÌèúÇ∑ÇÈ
-		this->CheckDie();
+		this->CheckDie(tag);
 
 		break;
 	default:
@@ -286,7 +286,7 @@ void CObstacle::DropItem()
 // =====================================================================================================================================================================
 // è·äQï®ÇîjâÛÇ∑ÇÈÇ©åàÇﬂÇÈèàóù
 // =====================================================================================================================================================================
-void CObstacle::CheckDie()
+void CObstacle::CheckDie(TAG tag)
 {
 	if (this->m_nLife <= 0)
 	{
@@ -297,8 +297,28 @@ void CObstacle::CheckDie()
 		}
 		// ëÃóÕÇ™0à»â∫Ç»ÇÁçÌèúÇ∑ÇÈ
 		this->SetDieFlag(true);
-		//îöî≠î≠ê∂
-		CParticle::CreateFromText(GetPosition(), ZeroVector3, CParticleParam::EFFECT_EXPLOSION_OBJECTBREAK);
+
+		//îªíËïsâ¬Ç…Ç∑ÇÈ
+		GetCollision()->SetCanCollision(false);
+
+		switch (m_ObstacleType)
+		{
+		case CObstacle::TYPE_BOX:
+		case CObstacle::TYPE_BARREL:
+		case CObstacle::TYPE_TREE:
+		case CObstacle::TYPE_CHEST:
+		case CObstacle::TYPE_SANDBAGS:
+		case CObstacle::TYPE_CAR:
+			//îöî≠î≠ê∂
+			CParticle::CreateFromText(GetPosition(), ZeroVector3, CParticleParam::EFFECT_EXPLOSION_OBJECTBREAK);
+			break;
+
+			//îöî≠î†
+		case CObstacle::TYPE_BARRELBOMB:
+			CParticle::CreateFromText(GetPosition(), ZeroVector3, CParticleParam::EFFECT_EXPLOSION_DANGERBOX,tag);
+			break;
+
+		}
 	}
 }
 //====================================================================
