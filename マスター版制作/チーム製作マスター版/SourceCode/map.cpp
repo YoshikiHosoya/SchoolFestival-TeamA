@@ -836,9 +836,8 @@ void CMap::SaveModelHeader(FILE * pFile, int ModelType)
 		fprintf(pFile, COMMENT02);
 		fprintf(pFile, "// 捕虜の種類 ( TYPE )\n");
 		fprintf(pFile, COMMENT01);
-		fprintf(pFile, "//	[ 0 ]	確定ドロップする捕虜\n");
-		fprintf(pFile, "//	[ 1 ]	範囲ドロップする捕虜\n");
-		fprintf(pFile, "//	[ 2 ]	ランダムドロップする捕虜\n");
+		fprintf(pFile, "//	[ 0 ]	確定武器ドロップする捕虜\n");
+		fprintf(pFile, "//	[ 1 ]	それ以外\n");
 		fprintf(pFile, COMMENT01);
 		fprintf(pFile, COMMENT02);
 		fprintf(pFile, "// 捕虜の種類 ( ITEMTYPE )\n");

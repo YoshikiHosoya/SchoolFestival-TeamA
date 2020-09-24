@@ -70,6 +70,28 @@ public:
 		MODEL_ENEMY_ZYCOCCA_BODY,				// 胴体
 		MODEL_ENEMY_ZYCOCCA_WHEEL,				// ホイール
 
+		//===skyドローン ドラゴンノスケで使う===
+		MODEL_DRONE_BODY,						// ドローンの体
+		MODEL_DRONE_HAND_L,						// 左手
+		MODEL_DRONE_HAND_R,						// 右手
+		MODEL_DRONE_EYE,						// 目
+
+		//===wallドローン ドラゴンノスケで使う===
+		MODEL_DRONE_HEAD,					// ドローンの頭
+		MODEL_DRONE_JOINT_F_R,				// 右前足関節
+		MODEL_DRONE_THIGH_F_R,				// 右前大腿
+		MODEL_DRONE_LEG_F_R,				// 右前足
+		MODEL_DRONE_JOINT_B_R,				// 右後足関節
+		MODEL_DRONE_THIGH_B_R,				// 右後大腿
+		MODEL_DRONE_LEG_B_R,				// 右後足
+
+		MODEL_DRONE_JOINT_F_L,				// 左前足関節
+		MODEL_DRONE_THIGH_F_L,				// 左前大腿
+		MODEL_DRONE_LEG_F_L,				// 左前足
+		MODEL_DRONE_JOINT_B_L,				// 左後足関節
+		MODEL_DRONE_THIGH_B_L,				// 左後大腿
+		MODEL_DRONE_LEG_B_L,				// 左後足
+
 		//===マップのモデル===
 		MODEL_MAP_TUTORIAL=200,			// チュートリアルマップ
 		MODEL_MAP_STAGE1_1,				// ステージ1-1
@@ -166,8 +188,10 @@ public:
 		MODEL_BOSSONE_GUN_BALKAN,		// バルカン
 		MODEL_BOSSONE_GUN_FLAMETHROWER,	// 火炎放射器
 		MODEL_BOSSONE_GUN_INCENDIARY,	// 焼夷弾
+
 		//===盾モデル===
 		MODEL_WEPON_SHIELD=1200,		// 盾
+
 		MODEL_MAX
 	}CHARA_MODEL;
 	typedef enum

@@ -1722,6 +1722,7 @@ bool CCollision::RayCollision(CMap * pMap, D3DXVECTOR3 posOrigin, D3DXVECTOR3 po
 	{
 		//最初の比較対象
 		fData = vDistance[0];
+
 		for (unsigned int nCnt = 0; vDistance.size() > nCnt; nCnt++)
 		{
 			if (vDistance[nCnt] < fData)
@@ -1730,9 +1731,18 @@ bool CCollision::RayCollision(CMap * pMap, D3DXVECTOR3 posOrigin, D3DXVECTOR3 po
 				fData = vDistance[nCnt];
 			}
 		}
-		if (fData < MAX_RAY_LENGTH)//Rayの長さの指定条件
+		if (fData < fLength + (m_size.y * 0.5f))//Rayの長さの指定条件
 		{
-			this->m_ppos->y = this->m_ppos->y - fData + fLength;
+			if (direction.y <= 0)
+			{
+				//始点座標 - 判定地との距離 - オブジェクトの幅
+				this->m_ppos->y = posOrigin.y - fData + (m_size.y * 0.5f);
+			}
+			else
+			{
+				//始点座標 - 判定地との距離 + オブジェクトの幅
+				this->m_ppos->y = posOrigin.y + fData + (m_size.y * 0.5f);
+			}
 			bJudg = true;
 		}
 		//Rayの判定圏内じゃなかったらジャンプできない
