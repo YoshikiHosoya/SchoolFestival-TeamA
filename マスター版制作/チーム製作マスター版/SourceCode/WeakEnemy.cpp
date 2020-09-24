@@ -30,11 +30,13 @@
 #define ENEMY_HELICOPTER_COLLISIONSIZE			(D3DXVECTOR3(250.0f,150.0f,250.0f))		//敵の当たり判定サイズ
 #define ENEMY_MELTYHONEY_COLLISIONSIZE			(D3DXVECTOR3(250.0f,200.0f,250.0f))		//敵の当たり判定サイズ
 #define ENEMY_ZYCOCCA_COLLISIONSIZE				(D3DXVECTOR3(110.0f,95.0f,110.0f))		//敵の当たり判定サイズ
+#define ENEMY_DRONE_COLLISIONSIZE				(D3DXVECTOR3(50.0f,50.0f,50.0f))		//敵の当たり判定サイズ
 
 #define ENEMY_HUMAN_LIFE						(1)										//ライフ
 #define ENEMY_HELICOPTER_LIFE					(20)									//ライフ
 #define ENEMY_MELTYHONEY_LIFE					(50)									//ライフ
 #define ENEMY_ZYCOCCA_LIFE						(20)									//ライフ
+#define ENEMY_DRONE_LIFE						(10)									//ライフ
 
 
 #define KNIFE_COLLISOIN_SIZE	(D3DXVECTOR3(40.0f,60.0f,0.0f))
@@ -159,8 +161,8 @@ HRESULT CWeakEnemy::Init(void)
 		// 銃の生成
 		GetGunPtr()->SetHandMtx(GetModelSet()->GetCharacterModelList()[0]->GetMatrix());
 		// 発射する位置の設定
-		GetGunPtr()->SetShotOffsetPos(D3DXVECTOR3(GetGunPtr()->GetShotOffsetPos().x, 
-													GetGunPtr()->GetShotOffsetPos().y + 70.0f, 
+		GetGunPtr()->SetShotOffsetPos(D3DXVECTOR3(GetGunPtr()->GetShotOffsetPos().x,
+													GetGunPtr()->GetShotOffsetPos().y + 70.0f,
 													GetGunPtr()->GetShotOffsetPos().z - 100.0f));
 		// 銃の弾の種類
 		GetGunPtr()->SetDisp(true);
@@ -208,6 +210,28 @@ HRESULT CWeakEnemy::Init(void)
 		//HP設定
 		CCharacter::SetLife(ENEMY_ZYCOCCA_LIFE);
 
+
+		break;
+
+	case CWeakEnemy::ENEMY_TYPE::ENEMY_DRONE:
+		//オフセット設定
+		GetModelSet()->SetCharacterType(CModelSet::CHARACTER_TYPE_ENEMY_DRONE);
+		GetModelSet()->LoadOffset(CModelSet::CHARACTER_TYPE_ENEMY_DRONE);
+		// 銃の生成
+		GetGunPtr()->SetHandMtx(GetModelSet()->GetCharacterModelList()[3]->GetMatrix());
+		// 発射する位置の設定
+		GetGunPtr()->SetShotOffsetPos(GetGunPtr()->GetShotOffsetPos());
+		// 銃の弾の種類
+		GetGunPtr()->SetDisp(true);
+		// 弾をフレイムバレットに設定
+		GetGunPtr()->SetGunTypeOnly(CGun::GUNTYPE_BALKAN);
+		//モーションoff
+		CCharacter::GetModelSet()->SetUseMotion(false);
+		CCharacter::GetModelSet()->SetMotion(CModelSet::CHARACTER_MOTION_STATE_NONE);
+		// 当たり判定生成
+		GetCollision()->SetSize(ENEMY_DRONE_COLLISIONSIZE);
+		//HP設定
+		CCharacter::SetLife(ENEMY_DRONE_LIFE);
 
 		break;
 

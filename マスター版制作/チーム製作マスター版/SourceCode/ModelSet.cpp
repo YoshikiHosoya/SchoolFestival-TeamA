@@ -26,6 +26,8 @@ char *CModelSet::m_LoadOffsetFileName[CHARACTER_TYPE_MAX] =
 	{ "data/Load/Enemy/Enemy_Helicopter_Offset.txt" },
 	{ "data/Load/Enemy/Enemy_MeltyHoney_Offset.txt" },
 	{ "data/Load/Enemy/Enemy_Zycocca_Offset.txt" },
+	{ "data/Load/Enemy/Drone/Enemy_Drone_Offset.txt" },
+	{ "data/Load/Enemy/Drone/Enemy_WallDrone_Offset.txt" },
 	{ "data/Load/Prisoner/PrisonerOffset.txt" },
 	{ "data/Load/Boss/BossOffset.txt" },
 	{ "data/Load/DragonNosuke/Boss_OneOffset.txt" },

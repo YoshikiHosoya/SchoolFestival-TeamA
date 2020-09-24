@@ -55,6 +55,12 @@ std::vector<CModel::MODEL_FILE_NAME> CModel::m_vModelFileName =
 	{ "data/MODEL/Enemy/Zycocca/Body.x" ,					MODEL_ENEMY_ZYCOCCA_BODY },				// 右足
 	{ "data/MODEL/Enemy/Zycocca/wheel.x" ,					MODEL_ENEMY_ZYCOCCA_WHEEL },			// 右足
 
+	// ドローン
+	{ "data/MODEL/Enemy/Drone/Drone_Body.x" ,				MODEL_DRONE_BODY },						// 体
+	{ "data/MODEL/Enemy/Drone/Drone_Hand_L.x" ,				MODEL_DRONE_HAND_L },					// 左手
+	{ "data/MODEL/Enemy/Drone/Drone_Hand_R.x" ,				MODEL_DRONE_HAND_R },					// 右手
+	{ "data/MODEL/Enemy/Drone/Drone_Eye.x" ,				MODEL_DRONE_EYE },						// 目
+
 	//マップ
 	{ "data/MODEL/map/Map1_Boss stage.x" ,					MODEL_MAP_TUTORIAL },					// チュートリアルマップ
 	{ "data/MODEL/map/Stage1-1.x" ,							MODEL_MAP_STAGE1_1 },					// ステージ1-1

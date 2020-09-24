@@ -1,0 +1,37 @@
+//------------------------------------------------------------
+//
+//テキストにコピペしてください
+//Author:Yoshiki Hosoya
+//
+//------------------------------------------------------------
+
+SET_START ---------[0]----------
+	MODEL_TYPE = 21
+	INDEX = 0
+	PARENT = -1
+	POS = 0.0 0.0 0.0
+SET_END
+
+SET_START ---------[1]----------
+	MODEL_TYPE = 22
+	INDEX = 1
+	PARENT = 0
+	POS = -20.0 0.0 0.0
+SET_END
+
+SET_START ---------[2]----------
+	MODEL_TYPE = 23
+	INDEX = 2
+	PARENT = 0
+	POS = 20.0 0.0 0.0
+SET_END
+
+SET_START ---------[3]----------
+	MODEL_TYPE = 24
+	INDEX = 3
+	PARENT = 0
+	POS = 0.0 30.0 0.0
+SET_END
+
+
+MODEL_OFFSET_END
