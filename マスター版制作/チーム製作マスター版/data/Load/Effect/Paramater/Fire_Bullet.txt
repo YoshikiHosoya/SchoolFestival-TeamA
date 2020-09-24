@@ -16,9 +16,9 @@ SCRIPT
 		ZTEST = 0								//Zテストするか
 		ZWRITE = 1								//Zライティングするか
 		BILLBOARD = 1							//ビルボードするか
+		FOLLOWING = 1							//追従するか
 		ANIMATION = 1							//アニメーションするか
 		COLLISION = 0							//当たり判定があるかどうか
-		COLLISION_SIZE_CALC = 1					//コリジョンのサイズの計算
 		TEXTURE = 1							//テクスチャ
 		ANIMATION_LOOP = 1						//アニメーションループするか
 		ANIMATION_CNTSWITCH = 2					//切替のカウント

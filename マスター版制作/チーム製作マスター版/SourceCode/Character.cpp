@@ -745,14 +745,11 @@ void CCharacter::Collision()
 		m_pCollision->SetPos(&m_pos);
 		m_pCollision->SetPosOld(&m_posold);
 
+		//コリジョンの高さ設定
 		m_pCollision->SetHeight(m_pModelSet->GetCharacterModelList()[0]->GetPosition().y);
 
-		// 障害物との判定
-		if (m_pCollision->ForPlayer_ObstacleCollision())
-		{
-		}
-		// レイの判定
-		if (m_pCollision->RayBlockCollision(pMap, (m_pModelSet->GetCharacterModelList()[0]->GetMatrix() )))
+		// 障害物の判定とレイの判定
+		if (m_pCollision->ForPlayer_ObstacleCollision() || m_pCollision->RayBlockCollision(pMap, (m_pModelSet->GetCharacterModelList()[0]->GetMatrix() )))
 		{
 			// ジャンプすることを承認する
 			SetJump(true);

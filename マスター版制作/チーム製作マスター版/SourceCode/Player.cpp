@@ -254,6 +254,7 @@ void CPlayer::Update(void)
 
 	//“–‚½‚è”»’èˆ—
 	CollisionUpdate();
+
 	// ‘Ì—ÍUI‚Ìİ’è
 	if (m_pPlayerUI)
 	{

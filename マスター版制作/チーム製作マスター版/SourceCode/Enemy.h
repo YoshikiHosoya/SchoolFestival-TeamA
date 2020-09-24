@@ -36,7 +36,8 @@ public:
 		ENEMY_HELICOPTER,
 		ENEMY_MELTYHONEY,
 		ENEMY_ZYCOCCA,
-
+		ENEMY_SKYDRONE,
+		ENEMY_WALLDRONE,
 		ENEMY_BOSS_DRAGON_NOSUKE,
 		ENEMY_BOSS_SOL_DE_ROCA,
 
@@ -54,6 +55,7 @@ public:
 	virtual void DamageReaction();
 	virtual void DeathReaction();
 	virtual void StateChangeReaction();
+	virtual void Collision();
 
 	void DeleteAI();
 
