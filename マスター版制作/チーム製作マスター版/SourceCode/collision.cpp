@@ -1090,7 +1090,7 @@ bool CCollision::LazerCollisionGetLength(D3DXVECTOR3 ShotPos, float &fLength)
 				break;
 			case TAG::OBSTACLE:
 				pObstacle = (CObstacle*)pMostNearObject;
-				pObstacle->Hit(m_pGameObject->GetTag(), 1);
+				pObstacle->Hit(pMostNearObject->GetTag(), 1);
 
 				break;
 			case TAG::ENEMY:
