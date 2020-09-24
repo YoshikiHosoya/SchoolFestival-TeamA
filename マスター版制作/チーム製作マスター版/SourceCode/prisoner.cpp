@@ -309,6 +309,7 @@ void CPrisoner::PrisonerState()
 		// プレイヤーと捕虜の距離がn以下だった時捕虜のステートを[PRISONER_STATE_DROPITEM]に移行する
 		if (GetDistance_Player_This() <= PLAYER_PRISONER_MINDISTANCE)
 		{
+			SetStateTime(20 * 4 + 60);
 			this->SetPrisonerState(PRISONER_STATE_DROPITEM);
 		}
 

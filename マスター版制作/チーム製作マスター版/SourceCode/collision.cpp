@@ -219,45 +219,50 @@ bool CCollision::ForPlayerBulletCollision(int nEnemyDamage, int nObstacleDamage,
 		// エネミーのポインタ取得
 		CEnemy *pEnemy = CManager::GetBaseMode()->GetMap()->GetEnemy(nCnt);
 
-		if (pEnemy != nullptr)
+		//判定が取れるとき
+		if (pEnemy->GetCollision()->GetCanCollison())
 		{
-			if (pEnemy->GetModelSet()->GetCharacterType() == CModelSet::CHARACTER_TYPE_BOSS_ONE)
+			if (pEnemy != nullptr)
 			{
-				CBoss_One *pBoss_One = (CBoss_One*)pEnemy;
-
-				if (pBoss_One->GetCollision() &&
-					pBoss_One->GetPostureType() == CBoss_One::POSTURETYPE_STAND &&
-					pBoss_One->GetBossOneType() == CBoss_One::ATTACKTYPE_FLAMERADIATION)
+				if (pEnemy->GetModelSet()->GetCharacterType() == CModelSet::CHARACTER_TYPE_BOSS_ONE)
 				{
-					//判定が取れるとき
-					if (pBoss_One->GetCollision()->GetCanCollison())
+					CBoss_One *pBoss_One = (CBoss_One*)pEnemy;
+
+					if (pBoss_One->GetCollision() &&
+						pBoss_One->GetPostureType() == CBoss_One::POSTURETYPE_STAND &&
+						pBoss_One->GetBossOneType() == CBoss_One::ATTACKTYPE_FLAMERADIATION)
 					{
-						// 判定関数
-						if (this->OtherCollision2D(pBoss_One->GetCollision()))
+						//判定が取れるとき
+						if (pBoss_One->GetCollision()->GetCanCollison())
 						{
-							if (pPlayer != nullptr)
+							// 判定関数
+							if (this->OtherCollision2D(pBoss_One->GetCollision()))
 							{
-								if (pPlayer->GetPlayerUI())
+								if (pPlayer != nullptr)
 								{
-									pPlayer->GetPlayerUI()->SetScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_DAMAGE_BULLET));
+									if (pPlayer->GetPlayerUI())
+									{
+										pPlayer->GetPlayerUI()->SetScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_DAMAGE_BULLET));
+									}
 								}
-							}
 
-							// 敵のライフ減衰
-							pBoss_One->CCharacter::AddDamage(nEnemyDamage);
+								// 敵のライフ減衰
+								pBoss_One->CCharacter::AddDamage(nEnemyDamage);
 
-							// 当たり範囲フラグをtrueにする
-							bHitFlag = true;
+								// 当たり範囲フラグをtrueにする
+								bHitFlag = true;
 
-							if (Penetration == false)
-							{
-								return bHitFlag;
+								if (Penetration == false)
+								{
+									return bHitFlag;
+								}
 							}
 						}
 					}
-				}
 
+				}
 			}
+		
 			if (pEnemy->GetCollision())
 			{
 				//判定が取れるとき
@@ -328,7 +333,7 @@ bool CCollision::ForPlayerBulletCollision(int nEnemyDamage, int nObstacleDamage,
 			if (this->Collision2D(pObstacle->GetCollision()))
 			{
 				// 障害物のライフ減衰
-				pObstacle->Hit(CObstacle::TYPE_BOX, nObstacleDamage);
+				pObstacle->Hit(pObstacle->GetObstacleType(), nObstacleDamage);
 
 				// 敵のライフが0以下になった時
 				if (pObstacle->GetLife() <= 0)
@@ -344,31 +349,6 @@ bool CCollision::ForPlayerBulletCollision(int nEnemyDamage, int nObstacleDamage,
 				if (Penetration == false)
 				{
 					return bHitFlag;
-				}
-			}
-		}
-	}
-	// 障害物の総数分
-	for (int nCntObst = 0; nCntObst < CManager::GetBaseMode()->GetMap()->GetMaxObstacle(); nCntObst++)
-	{
-		CObstacle *pObstacle = CManager::GetBaseMode()->GetMap()->GetObstacle(nCntObst);
-		if (pObstacle != nullptr)
-		{
-			//判定が取れるとき
-			if (pObstacle->GetCollision()->GetCanCollison())
-			{
-				if (this->Collision2D(pObstacle->GetCollision()))
-				{
-					// 障害物のライフ減衰
-					pObstacle->Hit(CObstacle::TYPE_BOX, nObstacleDamage);
-
-					// 当たり範囲フラグをtrueにする
-					bHitFlag = true;
-
-					if (Penetration == false)
-					{
-						return bHitFlag;
-					}
 				}
 			}
 		}
