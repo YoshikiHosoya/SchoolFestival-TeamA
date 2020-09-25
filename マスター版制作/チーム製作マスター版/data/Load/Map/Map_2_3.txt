@@ -75,91 +75,81 @@ ENEMYSET									# 6
 END_ENEMYSET
 
 ENEMYSET									# 7
-	TYPE		= 1
-	POS			= 1176 64 0
-END_ENEMYSET
-
-ENEMYSET									# 8
 	TYPE		= 0
 	POS			= 1862 64 0
 END_ENEMYSET
 
-ENEMYSET									# 9
+ENEMYSET									# 8
 	TYPE		= 1
 	POS			= 1687 64 0
 END_ENEMYSET
 
-ENEMYSET									# 10
+ENEMYSET									# 9
 	TYPE		= 1
 	POS			= 2016 64 0
 END_ENEMYSET
 
-ENEMYSET									# 11
+ENEMYSET									# 10
 	TYPE		= 0
 	POS			= 2244 64 0
 END_ENEMYSET
 
-ENEMYSET									# 12
-	TYPE		= 0
-	POS			= 2431 64 0
-END_ENEMYSET
-
-ENEMYSET									# 13
+ENEMYSET									# 11
 	TYPE		= 0
 	POS			= 2554 64 0
 END_ENEMYSET
 
-ENEMYSET									# 14
+ENEMYSET									# 12
 	TYPE		= 0
 	POS			= 2720 64 0
 END_ENEMYSET
 
-ENEMYSET									# 15
+ENEMYSET									# 13
 	TYPE		= 1
 	POS			= 6156 52 0
 END_ENEMYSET
 
-ENEMYSET									# 16
+ENEMYSET									# 14
 	TYPE		= 0
 	POS			= 6253 52 0
 END_ENEMYSET
 
-ENEMYSET									# 17
+ENEMYSET									# 15
 	TYPE		= 0
 	POS			= 6427 52 0
 END_ENEMYSET
 
-ENEMYSET									# 18
+ENEMYSET									# 16
 	TYPE		= 1
 	POS			= 6540 52 0
 END_ENEMYSET
 
-ENEMYSET									# 19
+ENEMYSET									# 17
 	TYPE		= 1
 	POS			= 6759 52 0
 END_ENEMYSET
 
-ENEMYSET									# 20
+ENEMYSET									# 18
 	TYPE		= 0
 	POS			= 6864 52 0
 END_ENEMYSET
 
-ENEMYSET									# 21
+ENEMYSET									# 19
 	TYPE		= 0
 	POS			= 7084 52 0
 END_ENEMYSET
 
-ENEMYSET									# 22
+ENEMYSET									# 20
 	TYPE		= 0
 	POS			= 7189 52 0
 END_ENEMYSET
 
-ENEMYSET									# 23
+ENEMYSET									# 21
 	TYPE		= 0
 	POS			= 7368 52 0
 END_ENEMYSET
 
-ENEMYSET									# 24
+ENEMYSET									# 22
 	TYPE		= 0
 	POS			= 7479 52 0
 END_ENEMYSET
@@ -184,37 +174,37 @@ END_ENEMYSET
 //
 //------------------------------------------------------------
 
-PRISONERSET									# 25
+PRISONERSET									# 23
 	TYPE		= 0
 	ITEMTYPE	= 1
 	POS			= 3950 60 0
 END_PRISONERSET
 
-PRISONERSET									# 26
+PRISONERSET									# 24
 	TYPE		= 1
 	ITEMTYPE	= 2
 	POS			= 5138 56 0
 END_PRISONERSET
 
-PRISONERSET									# 27
+PRISONERSET									# 25
 	TYPE		= 0
 	ITEMTYPE	= 0
 	POS			= 1780 61 0
 END_PRISONERSET
 
-PRISONERSET									# 28
+PRISONERSET									# 26
 	TYPE		= 1
 	ITEMTYPE	= -1
 	POS			= 2220 270 0
 END_PRISONERSET
 
-PRISONERSET									# 29
+PRISONERSET									# 27
 	TYPE		= 0
 	ITEMTYPE	= 3
 	POS			= 6337 210 0
 END_PRISONERSET
 
-PRISONERSET									# 30
+PRISONERSET									# 28
 	TYPE		= 0
 	ITEMTYPE	= 0
 	POS			= 7399 171 0
@@ -235,59 +225,49 @@ END_PRISONERSET
 //
 //------------------------------------------------------------
 
-OBSTACLESET									# 31
+OBSTACLESET									# 29
 	TYPE		= 5
 	POS			= 900 96 0
 END_OBSTACLESET
 
-OBSTACLESET									# 32
+OBSTACLESET									# 30
 	TYPE		= 5
 	POS			= 1938 96 0
 END_OBSTACLESET
 
-OBSTACLESET									# 33
+OBSTACLESET									# 31
 	TYPE		= 5
 	POS			= 2860 91 0
 END_OBSTACLESET
 
-OBSTACLESET									# 34
+OBSTACLESET									# 32
 	TYPE		= 5
 	POS			= 6672 83 0
 END_OBSTACLESET
 
-OBSTACLESET									# 35
+OBSTACLESET									# 33
 	TYPE		= 5
 	POS			= 7290 85 0
 END_OBSTACLESET
 
-OBSTACLESET									# 36
+OBSTACLESET									# 34
 	TYPE		= 5
 	POS			= 8001 85 0
 END_OBSTACLESET
 
-OBSTACLESET									# 37
+OBSTACLESET									# 35
 	TYPE		= 6
 	POS			= 1474 102 0
 END_OBSTACLESET
 
-OBSTACLESET									# 38
+OBSTACLESET									# 36
 	TYPE		= 0
 	POS			= 2086 304 0
 END_OBSTACLESET
 
-OBSTACLESET									# 39
+OBSTACLESET									# 37
 	TYPE		= 0
 	POS			= 2162 304 0
-END_OBSTACLESET
-
-OBSTACLESET									# 40
-	TYPE		= 0
-	POS			= 3718 211 0
-END_OBSTACLESET
-
-OBSTACLESET									# 41
-	TYPE		= 0
-	POS			= 4204 211 0
 END_OBSTACLESET
 
 //------------------------------------------------------------
