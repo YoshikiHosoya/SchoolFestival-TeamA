@@ -47,6 +47,7 @@ public:
 	CGun				*GetGun() { return  m_pGun; };					// 銃のポインタ取得
 	CGrenadeFire		*GetGrenadeFire() { return  m_pGrenadeFire; };	// グレネード発射位置のポインタ取得
 	bool				GetLandFlag() { return m_bLand; };				// 地面についているかどうかのフラグの取得
+	void				VehicleSE_Details();							// タンクから出る音設定　詳しい音
 
 private:
 	/* メンバ関数 */
@@ -55,7 +56,6 @@ private:
 	void				Jump();										// ジャンプ処理
 	void				Collision();								// 当たり判定をまとめてする処理
 	void				PadInput(TAG Tag);							// ゲームパッドでの入力処理
-	void				TankSE();									// タンクから出る音設定
 	/* メンバ変数 */
 	CGun				*m_pGun;									// ガンクラスのポインタ
 	CGrenadeFire		*m_pGrenadeFire;							// グレネード発射クラスのポインタ

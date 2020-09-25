@@ -91,11 +91,13 @@ public:
 	/* パラメータ取得関数 */
 	VEHICLE_TYPE			GetVehicleType()						{ return m_VehicleType; };				// キャラクターの種類取得
 	char					*GetOffsetFileName(VEHICLE_TYPE type)	{ return m_LoadOffsetFileName[type]; }; // オフセットのファイル名取得
-
 	/* 静的メンバ関数 */
 
 	/* メンバ関数 */
 	void					DebugInfo(void);						// デバッグ用関数
+	virtual void			VehicleSE();									// タンクから出る音設定
+	virtual void			VehicleSE_Details() {};									// タンクから出る音設定
+
 
 protected:
 
@@ -108,7 +110,7 @@ private:
 											D3DXVECTOR3 rot);			// 種類や条件ごとのパーツの回転処理
 	void					VehiclePartsRotLimit(
 												CModel *pModel,
-												float fRot);		// 種類や条件ごとのパーツの回転処理 回転上限
+												float fRot);		// 種類や条件ごとのパーツの回転処理 回転上限z
 	/* 静的メンバ変数 */
 	static char *m_LoadOffsetFileName[VEHICLE_TYPE_MAX];			// 読み込むオフセットファイル名
 
@@ -118,8 +120,9 @@ private:
 	VEHICLE_TYPE			m_VehicleType;							// キャラクターのタイプ
 	PARTS_ROT_TYPE			m_RotType;								// パーツが回転する種類
 	int						m_nGravityCnt;							// 重力用カウント
-	CPlayer				*m_pPlayer;							// プレイヤーのポインタ
-	TAG	m_RideerTag;
+	CPlayer					*m_pPlayer;								// プレイヤーのポインタ
+	TAG						m_RideerTag;							// タグ
+	int						m_nCntVehicleSE;						// カウント SE用
 
 };
 #endif

@@ -171,7 +171,7 @@ void CPlayertank::Update(void)
 			GetCollision()->ForTankCollision();
 
 			//乗り物のSE
-			TankSE();
+			VehicleSE();
 		}
 	}
 
@@ -250,6 +250,18 @@ void CPlayertank::DebugInfo(void)
 	CDebugProc::Print_Left("PlayerTankLife >> %d", GetLife());
 
 }
+//====================================================================
+// 戦車モデルのSE 詳しく
+//====================================================================
+void CPlayertank::VehicleSE_Details()
+{
+	//横移動しててジャンプしてない時
+	if (fabsf(GetMove().x) >= 1.0f && !GetJump())
+	{
+		//音再生
+		CManager::GetSound()->Play(CSound::LABEL_SE_TANK_CATERPILLAR);
+	}
+}
 
 //====================================================================
 // 戦車モデルのクリエイト
@@ -306,25 +318,7 @@ void CPlayertank::PadInput(TAG Tag)
 	}
 
 }
-//====================================================================
-// 戦車の効果音
-//====================================================================
-void CPlayertank::TankSE()
-{
-	//一定周期
-	if (m_nCnt % 10 == 1)
-	{
-		//エンジン音再生
-		CManager::GetSound()->Play(CSound::LABEL_SE_TANK_ENGINE);
 
-		//横移動しててジャンプしてない時
-		if (fabsf(GetMove().x) >= 1.0f && !GetJump())
-		{
-			//音再生
-			CManager::GetSound()->Play(CSound::LABEL_SE_TANK_CATERPILLAR);
-		}
-	}
-}
 //====================================================================
 // ステートに応じた処理
 //====================================================================
