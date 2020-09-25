@@ -169,9 +169,8 @@ END_ENEMYSET
 //------------------------------------------------------------
 // 捕虜の種類 ( TYPE )
 //
-//	[ 0 ]	確定ドロップする捕虜
-//	[ 1 ]	範囲ドロップする捕虜
-//	[ 2 ]	ランダムドロップする捕虜
+//	[ 0 ]	確定武器ドロップする捕虜
+//	[ 1 ]	それ以外
 //
 //------------------------------------------------------------
 // 捕虜の種類 ( ITEMTYPE )
@@ -182,25 +181,18 @@ END_ENEMYSET
 //	[ 2 ]	レーザーガン
 //	[ 3 ]	ロケットランチャー
 //	[ 4 ]	フレイムショット
-//	[ 5 ]	クマ
-//	[ 6 ]	コイン
-//	[ 7 ]	宝石
-//	[ 8 ]	メダル
-//	[ 9 ]	ボム増加
-//	[ 10 ]	エネルギー増加
-//	[ 11 ]	弾薬数増加
 //
 //------------------------------------------------------------
 
 PRISONERSET									# 25
 	TYPE		= 0
-	ITEMTYPE	= 0
+	ITEMTYPE	= 1
 	POS			= 3950 60 0
 END_PRISONERSET
 
 PRISONERSET									# 26
-	TYPE		= 0
-	ITEMTYPE	= 0
+	TYPE		= 1
+	ITEMTYPE	= 2
 	POS			= 5138 56 0
 END_PRISONERSET
 
@@ -211,14 +203,14 @@ PRISONERSET									# 27
 END_PRISONERSET
 
 PRISONERSET									# 28
-	TYPE		= 0
-	ITEMTYPE	= 0
+	TYPE		= 1
+	ITEMTYPE	= -1
 	POS			= 2220 270 0
 END_PRISONERSET
 
 PRISONERSET									# 29
 	TYPE		= 0
-	ITEMTYPE	= 0
+	ITEMTYPE	= 3
 	POS			= 6337 210 0
 END_PRISONERSET
 
