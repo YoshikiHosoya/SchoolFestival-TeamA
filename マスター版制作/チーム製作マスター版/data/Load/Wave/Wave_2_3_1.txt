@@ -86,7 +86,7 @@ END_ENEMYSET
 ENEMYSET									# 0
 	TYPE			= 2
 	POS 			= 600 400 0
-	FRAME 			= 300
+	FRAME 			= 120
 	EVENT			= 1
 END_ENEMYSET
 

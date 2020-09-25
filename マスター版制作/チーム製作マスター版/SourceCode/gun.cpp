@@ -403,6 +403,10 @@ void CGun::Shot()
 		case CGun::GUNTYPE_FLAMEBULLET:
 			// フレイムバレットの生成
 			pBullet = CFlameBullet::Create(m_ShotRot);
+
+			//音再生
+			CManager::GetSound()->Play(CSound::LABEL_SE_SHOT_FLAMEBULLET);
+
 			m_bMultiple = true;		// 複数発撃つフラグをオン
 			break;
 
@@ -494,8 +498,13 @@ void CGun::MultipleShot()
 				// 複数撃った弾を減らす処理
 				ProcessReduceMultipleBullet();
 
-				// フレイムバレットの生成
+				// ミサイルの生成
 				pBullet = CMissile::Create(m_ShotRot);
+
+				//音再生
+				CManager::GetSound()->Play(CSound::LABEL_SE_SHOT_FLAMEBULLET);
+
+
 			}
 			break;
 
@@ -508,6 +517,10 @@ void CGun::MultipleShot()
 
 				// フレイムバレットの生成
 				pBullet = CFlameBullet::Create(m_ShotRot);
+
+				//音再生
+				CManager::GetSound()->Play(CSound::LABEL_SE_SHOT_FLAMEBULLET);
+
 			}
 			break;
 
