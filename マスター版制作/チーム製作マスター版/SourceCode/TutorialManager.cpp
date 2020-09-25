@@ -363,7 +363,7 @@ void CTutorialManager::JudgPushButton()
 			if (pPlayer->GetRideFlag())
 			{
 				if (PAD_B || KEY_SPACE)
-				{
+ 				{
 					m_bPushButton = true;
 				}
 			}
