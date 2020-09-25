@@ -363,13 +363,8 @@ void CGun::Shot()
 			break;
 
 		case CGun::GUNTYPE_BALKAN:
-			// バルカンの弾生成
+			//
 			pBullet = CBalkan::Create(m_ShotRot);
-			//音再生
-			CManager::GetSound()->Play(CSound::LABEL_SE_SHOT_MACHINEGUN);
-			//ノズルフラッシュ
-			CParticle::CreateFromText(m_ShotPos, ZeroVector3, CParticleParam::EFFECT_BIGSHOTFLASH, GetTag());
-
 			break;
 
 		case CGun::GUNTYPE_FLAMETHROWER:
@@ -406,9 +401,6 @@ void CGun::Shot()
 			break;
 
 		case CGun::GUNTYPE_FLAMEBULLET:
-			//音再生
-			CManager::GetSound()->Play(CSound::LABEL_SE_SHOT_FLAMEBULLET);
-
 			// フレイムバレットの生成
 			pBullet = CFlameBullet::Create(m_ShotRot);
 			m_bMultiple = true;		// 複数発撃つフラグをオン
@@ -499,9 +491,6 @@ void CGun::MultipleShot()
 		case CGun::GUNTYPE_MISSILE:
 			if (m_nCntFrame >= MISSILE_SHOT_FRAME)
 			{
-				//音再生
-				CManager::GetSound()->Play(CSound::LABEL_SE_SHOT_LAUNCHER);
-
 				// 複数撃った弾を減らす処理
 				ProcessReduceMultipleBullet();
 
@@ -514,9 +503,6 @@ void CGun::MultipleShot()
 		case CGun::GUNTYPE_FLAMEBULLET:
 			if (m_nCntFrame >= FLAMEBULLET_SHOT_FRAME)
 			{
-				//音再生
-				CManager::GetSound()->Play(CSound::LABEL_SE_SHOT_FLAMEBULLET);
-
 				// 複数撃った弾を減らす処理
 				ProcessReduceMultipleBullet();
 
@@ -569,8 +555,7 @@ void CGun::ProcessReduceMultipleBullet()
 	m_nCntBullet++;
 
 	// 弾数無限じゃないもののみ通過
-	if (m_GunType != CGun::GUNTYPE_HEAVYMACHINEGUN && 
-		m_GunType != CGun::GUNTYPE_TANKGUN &&
+	if (m_GunType != CGun::GUNTYPE_TANKGUN &&
 		m_GunType != CGun::GUNTYPE_PLANEGUN &&
 		m_GunType != CGun::GUNTYPE_HELIGUN)
 	{
