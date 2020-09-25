@@ -935,7 +935,6 @@ void CBoss_One::ShiftPosture()
 
 	if (m_PostureType == POSTURETYPE_STAND)
 	{
-
 		// 膝上
 		if (GetModelSet()->GetCharacterModelList()[4]->GetRot().z >= -1.25f &&
 			GetModelSet()->GetCharacterModelList()[5]->GetRot().z >= -1.25f)
@@ -1025,6 +1024,8 @@ void CBoss_One::ShiftPosture()
 	}
 	else
 	{
+		
+
 		if (GetModelSet()->GetCharacterModelList()[2]->GetRot().z >= 0.0f &&
 			GetModelSet()->GetCharacterModelList()[3]->GetRot().z >= 0.0f)
 		{
@@ -1081,11 +1082,6 @@ void CBoss_One::ShiftPosture()
 				GetModelSet()->GetCharacterModelList()[9]->GetRot().z = 0.0f;
 			}
 		}
-		for (int nCnt = 16; nCnt < 20; nCnt++)
-		{
-			// 青いモデルの描画
-			GetModelSet()->GetCharacterModelList()[nCnt]->SetDisp(false);
-		}
 
 		if (GetPosition().y <= POSTURE_HEIGHT_STAND)
 		{
@@ -1100,6 +1096,12 @@ void CBoss_One::ShiftPosture()
 				//
 				m_bShiftPosture = true;
 				m_PostureType = POSTURETYPE_STAND;
+
+				for (int nCnt = 16; nCnt < 20; nCnt++)
+				{
+					// 青いモデルの描画
+					GetModelSet()->GetCharacterModelList()[nCnt]->SetDisp(false);
+				}
 
 				m_AddMove = 0.0f;
 				// ボスの状態を変更

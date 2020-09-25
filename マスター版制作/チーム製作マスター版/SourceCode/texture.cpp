@@ -153,7 +153,6 @@ FILENAME_LIST CTexture::m_aSeparateTexFileNameList =
 
 	{ "data/TEXTURE/Effect/smokeRed.png" },						//赤い煙
 
-
 	{ "data/TEXTURE/UI/num.png" },								//ナンバー
 	{ "data/TEXTURE/UI/Player_UI/life.png" },					//体力のUI
 };
@@ -198,11 +197,11 @@ std::vector<CTexture::SEPARATE_TEX_INFO> CTexture::m_apSeparateTexInfoList =
 	{ nullptr, CTexture::SEPARATE_TEX_EFFECT_EXPLOSION06,	D3DXVECTOR2(5,3),	ZeroVector2 },		//爆発
 	{ nullptr, CTexture::SEPARATE_TEX_EFFECT_EXPLOSION07,	D3DXVECTOR2(5,3),	ZeroVector2 },		//爆発
 	{ nullptr, CTexture::SEPARATE_TEX_EFFECT_EXPLOSION08,	D3DXVECTOR2(8,2),	ZeroVector2 },		//爆発
+	{ nullptr, CTexture::SEPARATE_TEX_EFFECT_REDSMOKE,		D3DXVECTOR2(10,1),	ZeroVector2 },		//爆発
 
 
 	{ nullptr, CTexture::SEPARATE_TEX_NUM,					D3DXVECTOR2(10,1),	ZeroVector2 },		//ナンバー
 	{ nullptr, CTexture::SEPARATE_TEX_UI_LIFE,				D3DXVECTOR2(5,1),	ZeroVector2 },		//体力のUI
-
 };
 
 //-----------------------------------------------------------------------------
