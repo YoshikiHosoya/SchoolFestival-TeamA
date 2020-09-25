@@ -277,8 +277,8 @@ PRISONERSET									# 42
 END_PRISONERSET
 
 PRISONERSET									# 43
-	TYPE		= 1
-	ITEMTYPE	= -1
+	TYPE		= 0
+	ITEMTYPE	= 3
 	POS			= 2100 60 0
 END_PRISONERSET
 
@@ -353,6 +353,21 @@ END_OBSTACLESET
 OBSTACLESET									# 54
 	TYPE		= 2
 	POS			= 6754 98 0
+END_OBSTACLESET
+
+OBSTACLESET									# 55
+	TYPE		= 0
+	POS			= 2431 286 0
+END_OBSTACLESET
+
+OBSTACLESET									# 56
+	TYPE		= 0
+	POS			= 2511 286 0
+END_OBSTACLESET
+
+OBSTACLESET									# 57
+	TYPE		= 5
+	POS			= 4952 132 0
 END_OBSTACLESET
 
 //------------------------------------------------------------

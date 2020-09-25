@@ -51,6 +51,7 @@ public:
 
 private:
 	/* メンバ関数 */
+	void						InitSetting();							// 初期設定
 	void						UIConfig(int nCnt);						// UIの内容設定
 	/* 静的メンバ変数 */
 	static	int					m_nNum;									// アイコン移動のナンバー

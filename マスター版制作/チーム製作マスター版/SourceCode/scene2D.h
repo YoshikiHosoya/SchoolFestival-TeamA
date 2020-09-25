@@ -15,6 +15,7 @@ public:
 	void Update(void);
 	void Draw(void);
 	void DebugInfo(void);
+	void SetColor(D3DXCOLOR col);
 	static CScene2D *Create(D3DXVECTOR3 pos, D3DXVECTOR3 size);
 	static CScene2D *CreateSceneManagement(D3DXVECTOR3 pos, D3DXVECTOR3 size, CScene::OBJ_TYPE objtype);
 	//ƒZƒbƒg‚·‚é‚à‚Ì
