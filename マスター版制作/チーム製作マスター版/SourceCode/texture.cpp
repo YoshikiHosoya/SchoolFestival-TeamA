@@ -151,6 +151,8 @@ FILENAME_LIST CTexture::m_aSeparateTexFileNameList =
 	{ "data/TEXTURE/Effect/Explosion07.png" },					//”š”­
 	{ "data/TEXTURE/Effect/Explosion08.png" },					//”š”­
 
+	{ "data/TEXTURE/Effect/smokeRed.png" },						//Ô‚¢‰Œ
+
 
 	{ "data/TEXTURE/UI/num.png" },								//ƒiƒ“ƒo[
 	{ "data/TEXTURE/UI/Player_UI/life.png" },					//‘Ì—Í‚ÌUI

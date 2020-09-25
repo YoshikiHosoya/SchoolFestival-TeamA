@@ -202,7 +202,64 @@ void CBullet::Draw(void)
 // =====================================================================================================================================================================
 void CBullet::DeleteBullet()
 {
-	CParticle::CreateFromText(GetPosition(), ZeroVector3, CParticleParam::EFFECT_DELETEBULLET);
+	/*switch (m_GunType)
+	{
+	case CGun::GUNTYPE_HANDGUN:
+		break;
+	case CGun::GUNTYPE_HEAVYMACHINEGUN:
+		break;
+	case CGun::GUNTYPE_SHOTGUN:
+		break;
+	case CGun::GUNTYPE_LASERGUN:
+		break;
+	case CGun::GUNTYPE_ROCKETLAUNCHER:
+		break;
+	case CGun::GUNTYPE_FLAMESHOT:
+		break;
+	case CGun::GUNTYPE_TANKGUN:
+		break;
+	case CGun::GUNTYPE_PLANEGUN:
+		break;
+	case CGun::GUNTYPE_HELIGUN:
+		break;
+	case CGun::GUNTYPE_BALKAN:
+		break;
+	case CGun::GUNTYPE_FLAMETHROWER:
+		break;
+	case CGun::GUNTYPE_INCENDIARY:
+		break;
+	case CGun::GUNTYPE_HANDGRENADE:
+		break;
+	case CGun::GUNTYPE_TANKGRENADE:
+		break;
+	case CGun::GUNTYPE_TRACKINGGUN:
+		break;
+	case CGun::GUNTYPE_DIFFUSIONGUN:
+		break;
+	case CGun::GUNTYPE_BOSSLASERGUN:
+		break;
+	case CGun::GUNTYPE_HANDGUN_ENEMY:
+		break;
+	case CGun::GUNTYPE_MISSILE:
+		break;
+	case CGun::GUNTYPE_FLAMEBULLET:
+		break;
+	case CGun::GUNTYPE_DROPBOMB:
+		break;
+	}*/
+
+	// 今だけ↓
+
+	// 焼夷弾以外の弾が衝突し消えるときのエフェクト
+	if (m_GunType != CGun::GUNTYPE_INCENDIARY)
+	{
+		CParticle::CreateFromText(GetPosition(), ZeroVector3, CParticleParam::EFFECT_DELETEBULLET);
+	}
+	// 焼夷弾が着弾したときのエフェクト ドラゴンノスケの焼夷弾
+	else
+	{
+		CParticle::CreateFromText(GetPosition(), ZeroVector3, CParticleParam::EFFECT_NO_COLLISION_EXPLOSION_INCENDIARY);
+	}
 
 	// 弾の削除
 	Rerease();

@@ -1730,6 +1730,7 @@ void CMap::PrisonerItemTypeComboBox(int &nSelectType, int nNowSelect)
 
 
 
+
 			// ‘O‰ñ‚Æˆá‚¤‚Æ‚«
 
 			if (PrisonerItem != nSelectType)

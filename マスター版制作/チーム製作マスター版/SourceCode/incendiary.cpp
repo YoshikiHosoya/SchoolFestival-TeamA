@@ -43,12 +43,16 @@ CIncendiary::CIncendiary(OBJ_TYPE type) :CBullet(type)
 	SetObjType(OBJTYPE_BULLET);
 
 	m_TargetPos				= ZeroVector3;
+	m_PosOld = ZeroVector3;
 	m_fSpeed				= 0.0f;
 	m_fGravityRate			= 0.0f;
 	m_fRatio				= 0.0f;
 	m_fMoveAttenuationRate	= 0.0f;
 	m_fVelocityBase			= 0.0f;
-	m_fMoveResistance = 0.0f;
+	m_fMoveResistance		= 0.0f;
+	m_nEffectCreateCnt		= 0;
+	m_bEffectCreateFlag		= false;
+	m_nSavePosCount = 0;
 }
 
 // =====================================================================================================================================================================
@@ -91,14 +95,17 @@ void CIncendiary::Uninit(void)
 // =====================================================================================================================================================================
 void CIncendiary::Update(void)
 {
+	// 焼夷弾本体のエフェクト
+	CParticle::CreateFromText(GetPosition(), D3DXVECTOR3(0.0f, 0.0f, 0.0f), CParticleParam::EFFECT_INCENDIARY, CBullet::GetTag());
+
+	//パーティクル発生 軌跡みたいな
+	CParticle::CreateFromText(GetPosition(), D3DXVECTOR3(0.0f, 0.0f, 0.0f), CParticleParam::EFFECT_SMOKERED, CBullet::GetTag());
+
 	// 移動量の減衰
 	VelocityAttenuation();
 
 	// 更新
 	CBullet::Update();
-
-	//パーティクル発生 軌跡みたいな
-	CParticle::CreateFromText(GetPosition(), D3DXVECTOR3(0.0f, 0.0f, CHossoLibrary::Random_PI()), CParticleParam::EFFECT_SMOKE, CBullet::GetTag());
 }
 
 // =====================================================================================================================================================================

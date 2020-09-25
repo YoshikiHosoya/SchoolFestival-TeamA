@@ -18,6 +18,18 @@ SCRIPT
 //	[ 8 ]	ステージ2_BOSS
 //
 //------------------------------------------------------------
+//------------------------------------------------------------
+// 敵の配置情報
+//------------------------------------------------------------
+// 敵の種類 ( TYPE )
+//
+//	[ 0 ]	通常兵士
+//	[ 1 ]	盾持ち兵士
+//	[ 2 ]	ヘリコプター
+//	[ 3 ]	メルティハニー
+//	[ 4 ]	ジィ・コッカ
+//
+//------------------------------------------------------------
 
 EVENT_BEGIN_MAP = 6			//イベントが発生するマップ番号
 
@@ -25,10 +37,25 @@ EVENTPOS	= 4710
 
 ENEMYSET									# 0
 	TYPE			= 0
-	POS 			= -600 80 0
+	POS 			= 600 80 0
 	FRAME 			= 60
 	EVENT			= 0
 END_ENEMYSET
+
+ENEMYSET									# 0
+	TYPE			= 0
+	POS 			= 600 80 0
+	FRAME 			= 60
+	EVENT			= 0
+END_ENEMYSET
+
+ENEMYSET									# 0
+	TYPE			= 0
+	POS 			= 600 80 0
+	FRAME 			= 60
+	EVENT			= 0
+END_ENEMYSET
+
 
 ENEMYSET									# 0
 	TYPE			= 0
@@ -51,106 +78,57 @@ ENEMYSET									# 0
 	EVENT			= 0
 END_ENEMYSET
 
+
 ENEMYSET									# 0
-	TYPE			= 0
-	POS 			= -600 80 0
+	TYPE			= 3
+	POS 			= 600 80 0
 	FRAME 			= 60
 	EVENT			= 0
 END_ENEMYSET
 
-ENEMYSET									# 0
-	TYPE			= 0
-	POS 			= -600 80 0
-	FRAME 			= 60
-	EVENT			= 0
-END_ENEMYSET
+
 
 ENEMYSET									# 0
-	TYPE			= 0
-	POS 			= -600 80 0
-	FRAME 			= 60
-	EVENT			= 0
-END_ENEMYSET
-
-ENEMYSET									# 0
-	TYPE			= 0
-	POS 			= -600 80 0
-	FRAME 			= 60
+	TYPE			= 2
+	POS 			= 600 400 0
+	FRAME 			= 700
 	EVENT			= 1
 END_ENEMYSET
 
 
 
-ENEMYSET									# 0
-	TYPE			= 0
-	POS 			= 600 80 0
-	FRAME 			= 60
-	EVENT			= 0
-END_ENEMYSET
-
-ENEMYSET									# 0
-	TYPE			= 0
-	POS 			= 600 80 0
-	FRAME 			= 60
-	EVENT			= 0
-END_ENEMYSET
-
-ENEMYSET									# 0
-	TYPE			= 0
-	POS 			= 600 80 0
-	FRAME 			= 60
-	EVENT			= 0
-END_ENEMYSET
-
-ENEMYSET									# 0
-	TYPE			= 0
-	POS 			= 600 80 0
-	FRAME 			= 60
-	EVENT			= 0
-END_ENEMYSET
-
-ENEMYSET									# 0
-	TYPE			= 0
-	POS 			= 600 80 0
-	FRAME 			= 60
-	EVENT			= 0
-END_ENEMYSET
-
-ENEMYSET									# 0
-	TYPE			= 0
-	POS 			= 600 80 0
-	FRAME 			= 60
-	EVENT			= 0
-END_ENEMYSET
-
-ENEMYSET									# 0
-	TYPE			= 0
-	POS 			= 600 80 0
-	FRAME 			= 60
-	EVENT			= 0
-END_ENEMYSET
-
-ENEMYSET									# 0
-	TYPE			= 0
-	POS 			= 600 80 0
-	FRAME 			= 60
-	EVENT			= 1
-END_ENEMYSET
-
-
+//------------------------------------------------------------
+// 捕虜の配置情報
+//------------------------------------------------------------
+// 捕虜の種類 ( TYPE )
+//
+//	[ 0 ]	確定武器ドロップする捕虜
+//	[ 1 ]	それ以外
+//
+//------------------------------------------------------------
+// 捕虜の種類 ( ITEMTYPE )
+//
+//	[ -1 ]	NONE
+//	[ 0 ]	ヘビーマシンガン
+//	[ 1 ]	ショットガン
+//	[ 2 ]	レーザーガン
+//	[ 3 ]	ロケットランチャー
+//	[ 4 ]	フレイムショット
+//
+//------------------------------------------------------------
 
 PRISONERSET									# 1
 	TYPE			= 0
-	ITEMTYPE		= -1
+	ITEMTYPE		= 0
 	POS 			= 100 500 0
-	FRAME 			= 200
+	FRAME 			= 300
 END_PRISONERSET
 
 PRISONERSET									# 1
 	TYPE			= 0
-	ITEMTYPE		= -1
+	ITEMTYPE		= 0
 	POS 			= -100 500 0
-	FRAME 			= 200
+	FRAME 			= 900
 END_PRISONERSET
 
 

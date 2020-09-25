@@ -35,6 +35,7 @@ public:
 
 		EFFECT_NO_COLLISION_EXPLOSION,			//当たり判定の無い爆発
 		EFFECT_NO_COLLISION_EXPLOSION_RANK,		//当たり判定の無い爆発ランキング用
+		EFFECT_NO_COLLISION_EXPLOSION_INCENDIARY,//焼夷弾が着弾したときの爆発
 
 		EFFECT_NO_COLLISION_FIREWORKS1,			//当たり判定の無い花火ランキングで使う
 		EFFECT_NO_COLLISION_FIREWORKS2,			//当たり判定の無い花火ランキングで使う
@@ -54,6 +55,12 @@ public:
 		EFFECT_SMOKE,							//煙
 		EFFECT_FIRE,							//炎
 		EFFECT_FIRE_BULLET,						//燃えてる弾
+
+		EFFECT_BIGSHOTFLASH,					//ドラゴンノスケのバルカンのフラッシュ
+		EFFECT_BALKAN,							//ドラゴンノスケのバルカン
+		EFFECT_SMOKERED,						//ドラゴンノスケの焼夷弾の軌跡
+		EFFECT_INCENDIARY,						//ドラゴンノスケの焼夷弾
+
 		EFFECT_GETWEAPON,						//武器取得
 		EFFECT_CHARGE_CIRCLE,					//チャージ　円
 		EFFECT_CHARGE_PARTICLE,					//チャージ　粒子

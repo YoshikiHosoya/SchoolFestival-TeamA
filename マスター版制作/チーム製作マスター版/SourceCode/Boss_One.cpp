@@ -136,6 +136,12 @@ HRESULT CBoss_One::Init(void)
 	// 回転の差分
 	m_fBalkanRotDifferencial -= D3DX_PI / 120.0f;
 
+	for (int nCnt = 16; nCnt < 20; nCnt++)
+	{
+		// 青いモデルの描画
+		GetModelSet()->GetCharacterModelList()[nCnt]->SetDisp(false);
+	}
+
 	return S_OK;
 }
 // =====================================================================================================================================================================
@@ -460,7 +466,6 @@ void CBoss_One::State()
 		break;
 	}
 }
-
 
 // =====================================================================================================================================================================
 //
@@ -1005,6 +1010,13 @@ void CBoss_One::ShiftPosture()
 				m_bShiftPosture = true;
 				m_bIntermediateSquat = false;
 				m_PostureType = POSTURETYPE_SQUAT;
+
+				for (int nCnt = 16; nCnt < 20; nCnt++)
+				{
+					// 青いモデルの描画
+					GetModelSet()->GetCharacterModelList()[nCnt]->SetDisp(true);
+				}
+
 				m_AddMove = 0.0f;
 				// ボスの状態を変更
 				SetBossAction(ACTION_PATTERN_STAY);
@@ -1069,6 +1081,11 @@ void CBoss_One::ShiftPosture()
 				GetModelSet()->GetCharacterModelList()[9]->GetRot().z = 0.0f;
 			}
 		}
+		for (int nCnt = 16; nCnt < 20; nCnt++)
+		{
+			// 青いモデルの描画
+			GetModelSet()->GetCharacterModelList()[nCnt]->SetDisp(false);
+		}
 
 		if (GetPosition().y <= POSTURE_HEIGHT_STAND)
 		{
@@ -1083,6 +1100,7 @@ void CBoss_One::ShiftPosture()
 				//
 				m_bShiftPosture = true;
 				m_PostureType = POSTURETYPE_STAND;
+
 				m_AddMove = 0.0f;
 				// ボスの状態を変更
 				SetBossAction(ACTION_PATTERN_STAY);
@@ -1494,12 +1512,12 @@ void CBoss_One::Attack_AI()
 			// 優先度が一番高かった攻撃方法を求める
 			if (nFront == &m_AIPriorityData.AttackType[nCnt])
 			{
-				Attack_Priority[nCntPrio] = (BOSS_ONE_ATTACKTYPE)nCnt;
+				Attack_Priority[0] = (BOSS_ONE_ATTACKTYPE)nCnt;
 			}
 			// 優先度が二番目に高かった攻撃方法を求める
 			else if (nSecond == &m_AIPriorityData.AttackType[nCnt])
 			{
-				Attack_Priority[nCntPrio] = (BOSS_ONE_ATTACKTYPE)nCnt;
+				Attack_Priority[1] = (BOSS_ONE_ATTACKTYPE)nCnt;
 			}
 			// どちらかに当てはまっていたらカウントを加算する
 			if (nFront == &m_AIPriorityData.AttackType[nCnt] || nSecond == &m_AIPriorityData.AttackType[nCnt])
@@ -1582,12 +1600,9 @@ void CBoss_One::Attack_Priority()
 
 		// ----- 射程外 ----- //
 
-		if (nDistance <= 100)
+		if (nDistance <= 130)
 		{// 真下
-			m_AIPriorityData.AttackType[ATTACKTYPE_BALKAN] += PRIORITY_POINT_ONE;
-			m_AIPriorityData.AttackType[ATTACKTYPE_FLAMERADIATION] += PRIORITY_POINT_ONE;
-			m_AIPriorityData.AttackType[ATTACKTYPE_INCENDIARY] += PRIORITY_POINT_ONE;
-			m_AIPriorityData.AttackType[ATTACKTYPE_SHIFTPOSTURE] += PRIORITY_POINT_THREE;
+			m_AIPriorityData.AttackType[ATTACKTYPE_SHIFTPOSTURE] = PRIORITY_POINT_MAX;
 		}
 
 		if (nDistance <= MIN_PLAYER_DISTANCE)
