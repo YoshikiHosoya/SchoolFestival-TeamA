@@ -23,6 +23,7 @@
 #include "sound.h"
 #include "ModelSet.h"
 #include "Character.h"
+#include "particle.h"
 //====================================================================
 //マクロ定義
 //====================================================================
@@ -122,11 +123,6 @@ void CPlayertank::Uninit(void)
 		m_pGrenadeFire = nullptr;
 	}
 
-	//if (CVehicle::GetPlayer() != nullptr)
-	//{
-	//	CVehicle::GetPlayer()->SetRideFlag(false);
-	//}
-
 	CCharacter::Uninit();
 }
 //====================================================================
@@ -144,8 +140,6 @@ void CPlayertank::Update(void)
 
 	//カウントアップ
 	m_nCnt++;
-
-
 
 	if (CVehicle::GetRideerTag() != TAG::NONE)
 	{
@@ -179,18 +173,6 @@ void CPlayertank::Update(void)
 			//乗り物のSE
 			TankSE();
 		}
-		else
-		{
-			if (m_nCnt % 4 < 2 )
-			{
-
-				CCharacter::GetModelSet()->ChangeColor(true, D3DXCOLOR(1.0f, 1.0f, 0.0f, 1.0f));
-			}
-			else
-			{
-				CCharacter::GetModelSet()->ChangeColor(true, D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f));
-			}
-		}
 	}
 
 	m_pGun->Update();
@@ -215,6 +197,46 @@ void CPlayertank::Draw(void)
 bool CPlayertank::DefaultMotion(void)
 {
 	return false;
+}
+
+//====================================================================
+// デフォルトのモーション（使用なし）
+//====================================================================
+void CPlayertank::StateChangeReaction()
+{
+	CCharacter::StateChangeReaction();
+
+	//ステータスの処理
+	switch (GetCharacterState())
+	{
+	case CHARACTER_STATE_DEATH:
+		SetStateCount(240);
+
+		break;
+	}
+}
+
+//====================================================================
+// 死亡時のリアクション
+//====================================================================
+void CPlayertank::DeathReaction()
+{
+	//死亡フラグ
+	SetDieFlag(true);
+
+	//爆発発生
+	CParticle::CreateFromText(GetPosition(), ZeroVector3, CParticleParam::EFFECT_EXPLOSION_DANGERBOX);
+
+	//プレイヤーが乗っていた場合
+	if (GetRideerTag() == TAG::PLAYER_1 || GetRideerTag() == TAG::PLAYER_1)
+	{
+		//プレイヤーのポインタ取得
+		CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer(GetRideerTag());
+
+		pPlayer->SetRideFlag(false);
+
+		pPlayer->AddDamage(999);
+	}
 }
 
 //====================================================================
@@ -314,7 +336,18 @@ void CPlayertank::State()
 	switch (GetCharacterState())
 	{
 	case CHARACTER_STATE_DEATH:
-		SetStateCount(240);
+		if (m_nCnt % 4 < 2)
+		{
+			CCharacter::GetModelSet()->ChangeColor(true, D3DXCOLOR(1.0f, 1.0f, 0.0f, 1.0f));
+		}
+		else
+		{
+			CCharacter::GetModelSet()->ChangeColor(true, D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f));
+		}
+
+		//当たり判定けす
+		GetCollision()->SetCanCollision(false);
+		 
 		break;
 	}
 }

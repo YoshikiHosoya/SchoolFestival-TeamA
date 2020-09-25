@@ -408,6 +408,8 @@ void CCharacter::AddDamage(int Damage)
 		//HP‚ª0‚É‚È‚Á‚½Žž
 		if (GetLife() <= 0)
 		{
+			SetLife(0);
+
 			//Ž€–Só‘Ô‚É‚·‚é
 			SetState(CHARACTER_STATE_DEATH);
 		}

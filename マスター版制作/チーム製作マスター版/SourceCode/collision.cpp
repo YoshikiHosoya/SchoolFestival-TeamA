@@ -581,12 +581,18 @@ CPlayertank * CCollision::ForPlayer_TankCollision()
 		// 戦車のポインタを取得
 		pPlayertank = CManager::GetBaseMode()->GetMap()->GetPlayertank(nCntTank);
 
+		//nullcheck
 		if (pPlayertank != nullptr)
 		{
-			if (this->ForPlayer_VehicleCollision(pPlayertank->GetCollision()))
+			//判定かのうかどうか
+			if (pPlayertank->GetCollision()->GetCanCollison())
 			{
-				// 処理を行った戦車のポインタを返す
-				return pPlayertank;
+				//タンクに乗る処理
+				if (this->ForPlayer_VehicleCollision(pPlayertank->GetCollision()))
+				{
+					// 処理を行った戦車のポインタを返す
+					return pPlayertank;
+				}
 			}
 		}
 
@@ -716,11 +722,14 @@ CVehicle *CCollision::ForPlayer_VehicleCollision()
 
 		if (pPlayertank != nullptr)
 		{
-			if (pPlayertank->GetRideerTag() == TAG::NONE)
+			if (pPlayertank->GetCollision()->GetCanCollison())
 			{
-				if (this->VehicleCollision(pPlayertank->GetCollision()))
+				if (pPlayertank->GetRideerTag() == TAG::NONE)
 				{
-					return pPlayertank;
+					if (this->VehicleCollision(pPlayertank->GetCollision()))
+					{
+						return pPlayertank;
+					}
 				}
 			}
 		}

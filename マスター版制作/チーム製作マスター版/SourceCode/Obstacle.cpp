@@ -313,7 +313,8 @@ void CObstacle::CheckDie(TAG tag)
 
 			//îöî≠î†
 		case CObstacle::TYPE_BARRELBOMB:
-			CParticle::CreateFromText(GetPosition(), ZeroVector3, CParticleParam::EFFECT_EXPLOSION_DANGERBOX,tag);
+			//ÉfÉJÇ¢îöî≠î≠ê∂
+			CParticle::CreateFromText(GetPosition() - D3DXVECTOR3(0.0f,GetSize().y * 0.5f,0.0f), ZeroVector3, CParticleParam::EFFECT_EXPLOSION_DANGERBOX,tag);
 			break;
 
 		}
@@ -333,6 +334,7 @@ void CObstacle::AddDamage(int nDamage)
 void CObstacle::SetObstacleParam(CObstacle::OBSTACLE_TYPE type)
 {
 	m_nLife = m_ObstacleParam[type].nLife;
+	SetSize(m_ObstacleParam[type].CollisionSize);
 }
 
 //====================================================================
