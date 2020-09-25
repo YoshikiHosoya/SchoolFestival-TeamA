@@ -802,20 +802,20 @@ void CParticle::SetSound()
 {
 	switch (m_pParticleParam->GetType())
 	{
-	case CParticleParam::PARTICLE_TEXT::EFFECT_NO_COLLISION_EXPLOSION:
-		CManager::GetSound()->Play(CSound::LABEL_SE_EXPLOSION_03);
-		break;
 
-	case CParticleParam::PARTICLE_TEXT::EFFECT_EXPLOSION_ROCKETLANCHAR:
-		CManager::GetSound()->Play(CSound::LABEL_SE_EXPLOSION_03);
-		break;
-
-	case CParticleParam::PARTICLE_TEXT::EFFECT_EXPLOSION_GRENADE:
-		CManager::GetSound()->Play(CSound::LABEL_SE_EXPLOSION_03);
-
-		break;
 	case CParticleParam::PARTICLE_TEXT::EFFECT_EXPLOSION_OBJECTBREAK:
 		CManager::GetSound()->Play(CSound::LABEL_SE_EXPLOSION_02);
+		break;
+
+	case CParticleParam::PARTICLE_TEXT::EFFECT_NO_COLLISION_EXPLOSION:
+	case CParticleParam::PARTICLE_TEXT::EFFECT_EXPLOSION_ROCKETLANCHAR:
+	case CParticleParam::PARTICLE_TEXT::EFFECT_EXPLOSION_GRENADE:
+		CManager::GetSound()->Play(CSound::LABEL_SE_EXPLOSION_03);
+		break;
+
+	case CParticleParam::PARTICLE_TEXT::EFFECT_EXPLOSION_TANK_GRENADE:
+	case CParticleParam::PARTICLE_TEXT::EFFECT_EXPLOSION_DANGERBOX:
+		CManager::GetSound()->Play(CSound::LABEL_SE_EXPLOSION_04);
 
 		break;
 

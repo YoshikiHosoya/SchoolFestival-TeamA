@@ -14,6 +14,7 @@
 #include "scoremanager.h"
 #include "ModelSet.h"
 #include "player.h"
+#include "sound.h"
 
 // =====================================================================================================================================================================
 //
@@ -311,6 +312,10 @@ void CPrisoner::PrisonerState()
 		{
 			SetStateTime(20 * 4 + 60);
 			this->SetPrisonerState(PRISONER_STATE_DROPITEM);
+
+			//音再生
+			CManager::GetSound()->Play(CSound::LABEL_SE_VOICE_OK);
+
 		}
 
 		// 距離がn以上離れていたら距離がn以下になるまで捕虜のステートを[PRISONER_STATE_SKIP]にする
@@ -357,6 +362,10 @@ void CPrisoner::PrisonerState()
 				// 20フレーム*4
 				SetStateTime(20 * 4 + 60);
 				this->SetPrisonerState(PRISONER_STATE_DROPITEM);
+
+				//音再生
+				CManager::GetSound()->Play(CSound::LABEL_SE_VOICE_OK);
+
 			}
 		}
 		else if(GetRotDest().y >= -D3DX_PI / 2)
@@ -366,6 +375,10 @@ void CPrisoner::PrisonerState()
 				// 20フレーム*4
 				SetStateTime(20 * 4 + 60);
 				this->SetPrisonerState(PRISONER_STATE_DROPITEM);
+
+				//音再生
+				CManager::GetSound()->Play(CSound::LABEL_SE_VOICE_OK);
+
 			}
 		}
 

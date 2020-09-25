@@ -64,56 +64,9 @@ HRESULT CPauseUI::Init()
 	// 変数の初期化
 	m_nNum = 0;												// ナンバー
 
-	for (int nCnt = 0; nCnt < PAUSEUITYPE::P_UI_MAX; nCnt++)
-	{
-		if (!m_apScene2D[nCnt])
-		{
-			switch (nCnt)
-			{
-			case PAUSEUITYPE::P_UI_BG:
+	// 初期設定
+	InitSetting();
 
-				// シーン2Dの生成
-				m_apScene2D[nCnt] = CScene2D::Create(BG_SIZE, BG_SIZE);
-				// テクスチャの割り当て
-				m_apScene2D[nCnt]->BindTexture(CTexture::GetTexture(CTexture::TEX_UI_PAUSE_BG));
-				// 色の設定
-				m_apScene2D[nCnt]->SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.5f));
-				break;
-
-			case PAUSEUITYPE::P_UI_EXIT:
-
-				// シーン2Dの生成
-				m_apScene2D[nCnt] = CScene2D::Create(MENU_POS, MENU_SIZE);
-				// テクスチャの割り当て
-				m_apScene2D[nCnt]->BindTexture(CTexture::GetTexture(CTexture::TEX_UI_PAUSE_EXIT));
-				break;
-
-			case PAUSEUITYPE::P_UI_RESET:
-
-				// シーン2Dの生成
-				m_apScene2D[nCnt] = CScene2D::Create(MENU_POS, MENU_SIZE);
-				// テクスチャの割り当て
-				m_apScene2D[nCnt]->BindTexture(CTexture::GetTexture(CTexture::TEX_UI_PAUSE_RESET));
-				break;
-
-			case PAUSEUITYPE::P_UI_TEXT:
-
-				// シーン2Dの生成
-				m_apScene2D[nCnt] = CScene2D::Create(TEXT_POS, TEXT_SIZE);
-				// テクスチャの割り当て
-				m_apScene2D[nCnt]->BindTexture(CTexture::GetTexture(CTexture::TEX_UI_PAUSE_TEXT));
-				break;
-
-			case PAUSEUITYPE::P_UI_ARROW:
-
-				// シーン2Dの生成
-				m_apScene2D[nCnt] = CScene2D::Create(ARROW_POS, ARROW_SIZE);
-				// テクスチャの割り当て
-				m_apScene2D[nCnt]->BindTexture(CTexture::GetTexture(CTexture::TEX_UI_PAUSE_ARROW));
-				break;
-			}
-		}
-	}
 	return S_OK;
 }
 
@@ -194,6 +147,65 @@ CPauseUI * CPauseUI::Create()
 	CUIManager::AddUIList(std::move(pPauseUI));
 
 	return pPauseUI;
+}
+
+// =====================================================================================================================================================================
+//
+// 初期設定
+//
+// =====================================================================================================================================================================
+void CPauseUI::InitSetting()
+{
+	for (int nCnt = 0; nCnt < PAUSEUITYPE::P_UI_MAX; nCnt++)
+	{
+		if (!m_apScene2D[nCnt])
+		{
+			switch (nCnt)
+			{
+			case PAUSEUITYPE::P_UI_BG:
+
+				// シーン2Dの生成
+				m_apScene2D[nCnt] = CScene2D::Create(BG_SIZE, BG_SIZE);
+				// テクスチャの割り当て
+				m_apScene2D[nCnt]->BindTexture(CTexture::GetTexture(CTexture::TEX_UI_PAUSE_BG));
+				// 色の設定
+				m_apScene2D[nCnt]->SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.5f));
+				break;
+
+			case PAUSEUITYPE::P_UI_EXIT:
+
+				// シーン2Dの生成
+				m_apScene2D[nCnt] = CScene2D::Create(MENU_POS, MENU_SIZE);
+				// テクスチャの割り当て
+				m_apScene2D[nCnt]->BindTexture(CTexture::GetTexture(CTexture::TEX_UI_PAUSE_EXIT));
+				break;
+
+			case PAUSEUITYPE::P_UI_RESET:
+
+				// シーン2Dの生成
+				m_apScene2D[nCnt] = CScene2D::Create(MENU_POS, MENU_SIZE);
+				// テクスチャの割り当て
+				m_apScene2D[nCnt]->BindTexture(CTexture::GetTexture(CTexture::TEX_UI_PAUSE_RESET));
+				break;
+
+			case PAUSEUITYPE::P_UI_TEXT:
+
+				// シーン2Dの生成
+				m_apScene2D[nCnt] = CScene2D::Create(TEXT_POS, TEXT_SIZE);
+				// テクスチャの割り当て
+				m_apScene2D[nCnt]->BindTexture(CTexture::GetTexture(CTexture::TEX_UI_PAUSE_TEXT));
+				break;
+
+			case PAUSEUITYPE::P_UI_ARROW:
+
+				// シーン2Dの生成
+				m_apScene2D[nCnt] = CScene2D::Create(ARROW_POS, ARROW_SIZE);
+				// テクスチャの割り当て
+				m_apScene2D[nCnt]->BindTexture(CTexture::GetTexture(CTexture::TEX_UI_PAUSE_ARROW));
+				break;
+			}
+		}
+	}
 }
 
 // =====================================================================================================================================================================

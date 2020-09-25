@@ -399,11 +399,16 @@ void CWeakEnemy::UpdateVehicle()
 		VehiclePartsRotCondition(GetModelSet()->GetCharacterModelList()[3], MODEL_ROT_TYPE_MOVING, CCharacter::GetMove(), CCharacter::GetShotDirection(), CCharacter::GetCharacterDirection());
 		VehiclePartsRotCondition(GetModelSet()->GetCharacterModelList()[4], MODEL_ROT_TYPE_MOVING, CCharacter::GetMove(), CCharacter::GetShotDirection(), CCharacter::GetCharacterDirection());
 
+		VehicleSE();
+
+
 		break;
 
 	case CEnemy::ENEMY_TYPE::ENEMY_HELICOPTER:
 		//ƒvƒƒyƒ‰‚Ì‰ñ“]
 		VehiclePartsRotCondition(GetModelSet()->GetCharacterModelList()[1], MODEL_ROT_TYPE_ALWAYS, CCharacter::GetMove(), CCharacter::GetShotDirection(), CCharacter::GetCharacterDirection());
+
+		VehicleSE();
 
 		break;
 
@@ -411,6 +416,8 @@ void CWeakEnemy::UpdateVehicle()
 		//ŽÔ—Ö‚Ì‰ñ“]ˆ—
 		VehiclePartsRotCondition(GetModelSet()->GetCharacterModelList()[1], MODEL_ROT_TYPE_MOVING, CCharacter::GetMove(), CCharacter::GetShotDirection(), CCharacter::GetCharacterDirection());
 		VehiclePartsRotCondition(GetModelSet()->GetCharacterModelList()[2], MODEL_ROT_TYPE_MOVING, CCharacter::GetMove(), CCharacter::GetShotDirection(), CCharacter::GetCharacterDirection());
+
+		VehicleSE();
 
 		break;
 	default:

@@ -1728,7 +1728,11 @@ void CMap::PrisonerItemTypeComboBox(int &nSelectType, int nNowSelect)
 			// 捕虜が落とすアイテムの種類の取得
 			CItem::ITEMTYPE PrisonerItem = (CItem::ITEMTYPE)(m_pPrisoner[nNowSelect]->GetPrisonerDropItem() + 1);
 
+
+
+
 			// 前回と違うとき
+
 			if (PrisonerItem != nSelectType)
 			{
 				// 種類代入	( NONEがあるため -1 )
