@@ -554,6 +554,13 @@ void CGun::ProcessReduceMultipleBullet()
 	// 弾のカウントアップ
 	m_nCntBullet++;
 
-	// 残弾数を減らす
-	m_nAmmo--;
+	// 弾数無限じゃないもののみ通過
+	if (m_GunType != CGun::GUNTYPE_HEAVYMACHINEGUN && 
+		m_GunType != CGun::GUNTYPE_TANKGUN &&
+		m_GunType != CGun::GUNTYPE_PLANEGUN &&
+		m_GunType != CGun::GUNTYPE_HELIGUN)
+	{
+		// 残弾数を減らす
+		m_nAmmo--;
+	}
 }
