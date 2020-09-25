@@ -1061,6 +1061,7 @@ void CMap::ModelDelete(int nNowSelect)
 
 	case CMap::ARRANGEMENT_MODEL_OBSTACLE:
 		// áŠQ•¨
+
 		m_pObstacle[nNowSelect]->Rerease();
 		m_pObstacle[nNowSelect] = nullptr;
 		m_pObstacle.erase(m_pObstacle.begin() + nNowSelect);
