@@ -48,8 +48,6 @@ CObstacle::CObstacle(OBJ_TYPE type) :CModel(type)
 {
 	// 変数の初期化
 	m_nLife = 0;
-	// タグ設定
-	CGameObject::SetTag(TAG::OBSTACLE);
 }
 // =====================================================================================================================================================================
 //
@@ -68,9 +66,6 @@ HRESULT CObstacle::Init()
 {
 	// 初期化
 	CModel::Init();
-
-	// 情報の設定
-	SetObstacleParam(TYPE_BOX);
 
 	// 当たり判定生成
 	GetCollision()->SetPos(&GetPosition());
@@ -136,6 +131,9 @@ CObstacle * CObstacle::Create()
 
 	// メモリの確保
 	pObstacle = new CObstacle(OBJTYPE_OBSTACLE);
+
+	// タグ設定
+	pObstacle->SetTag(TAG::OBSTACLE);
 
 	// 初期化
 	pObstacle->Init();
@@ -315,7 +313,8 @@ void CObstacle::CheckDie(TAG tag)
 
 			//爆発箱
 		case CObstacle::TYPE_BARRELBOMB:
-			CParticle::CreateFromText(GetPosition(), ZeroVector3, CParticleParam::EFFECT_EXPLOSION_DANGERBOX,tag);
+			//デカい爆発発生
+			CParticle::CreateFromText(GetPosition() - D3DXVECTOR3(0.0f,GetSize().y * 0.5f,0.0f), ZeroVector3, CParticleParam::EFFECT_EXPLOSION_DANGERBOX,tag);
 			break;
 
 		}
@@ -326,8 +325,16 @@ void CObstacle::CheckDie(TAG tag)
 //====================================================================
 void CObstacle::AddDamage(int nDamage)
 {
-	this->m_nLife -= nDamage;
-	this->SetLife(m_nLife);
+	this->SetLife(this->m_nLife -= nDamage);
+}
+
+//====================================================================
+// パラメーターの設定
+//====================================================================
+void CObstacle::SetObstacleParam(CObstacle::OBSTACLE_TYPE type)
+{
+	m_nLife = m_ObstacleParam[type].nLife;
+	SetSize(m_ObstacleParam[type].CollisionSize);
 }
 
 //====================================================================
@@ -338,5 +345,7 @@ void CObstacle::SetCollisionSize(CObstacle::OBSTACLE_TYPE type)
 	// 当たり判定の大きさを設定
 	GetCollision()->SetSize(m_ObstacleParam[type].CollisionSize);
 	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_CHARACTER);
+	// 情報の設定
+	SetObstacleParam(type);
 };
 

@@ -142,17 +142,13 @@ HRESULT CPlayer::Init(void)
 		}
 	}
 
+	//プレイヤー設定
+	ResetPlayer();
+
 	// チュートリアルモードだった時
 	if (CManager::GetMode() == CManager::MODE_TUTORIAL)
 	{
 		SetPosition(D3DXVECTOR3(50.0f, 100.0f, 0.0f));
-		SetLife(5);
-	}
-	// ゲームモードだった時
-	else if(CManager::GetMode() == CManager::MODE_GAME)
-	{
-		//プレイヤー設定
-		ResetPlayer();
 	}
 
 	//初期の向き
@@ -382,8 +378,7 @@ void CPlayer::DebugInfo(void)
 //====================================================================
 void CPlayer::MoveUpdate(void)
 {
-	CKeyboard *key;
-	key = CManager::GetInputKeyboard();
+	CKeyboard *key = CManager::GetInputKeyboard();
 	float Pad_X, Pad_Y;
 
 	if (m_pPad)
@@ -394,12 +389,12 @@ void CPlayer::MoveUpdate(void)
 		Pad_X /= STICK_MAX_RANGE;//値の正規化
 		Pad_Y /= STICK_MAX_RANGE;//値の正規化
 	}
+
 	// Aの処理
 	if (key->GetKeyboardPress(DIK_A))
 	{
 		CPlayer::Move(m_fRunSpeed, 0.5f);
 		SetCharacterDirection(DIRECTION::LEFT);
-
 	}
 
 	// Dの処理
@@ -440,23 +435,44 @@ void CPlayer::MoveUpdate(void)
 		//攻撃してない時
 		if (GetModelSet()->GetMotionType() != CModelSet::PLAYER_MOTION_ATTACK01)
 		{
-			//移動したらウォークモーション
-			if (fabsf(GetMove().x) > 0.3f)
+			if (m_bCruch)
 			{
-				GetModelSet()->SetMotion(CModelSet::PLAYER_MOTION_WALK);
-				m_bCruch = false;
+				// しゃがみ歩きしていたら
+				if (fabsf(GetMove().x) > 0.3f && (key->GetKeyboardPress(DIK_S) || Pad_Y < -0.8f) && GetJump() == true)
+				{
+					GetModelSet()->SetMotion(CModelSet::PLAYER_MOTION_SQUATWALK);
+				}
+				// ただしゃがんでいたら
+				else if(fabsf(GetMove().x) <= 0.3f && (key->GetKeyboardPress(DIK_S) || Pad_Y < -0.8f) && GetJump() == true)
+				{
+					GetModelSet()->SetMotion(CModelSet::PLAYER_MOTION_SQUATSTOP);
+				}
+				// しゃがんでいなかったら
+				else
+				{
+					m_bCruch = false;
+				}
 			}
-			//Sを押したらしゃがみモーション
-			else if ((key->GetKeyboardPress(DIK_S) || Pad_Y < -0.8f) && GetJump() == true)
-			{
-				GetModelSet()->SetMotion(CModelSet::PLAYER_MOTION_SQUATSTOP);
-				m_bCruch = true;
-			}
-			//ジャンプ、しゃがみをしてなかったらニュートラル
 			else
 			{
-				GetModelSet()->SetMotion(CModelSet::PLAYER_MOTION_NORMAL);
-				m_bCruch = false;
+				//移動したらウォークモーション
+				if (fabsf(GetMove().x) > 0.3f)
+				{
+					GetModelSet()->SetMotion(CModelSet::PLAYER_MOTION_WALK);
+					m_bCruch = false;
+				}
+				//Sを押したらしゃがみモーション
+				else if ((key->GetKeyboardPress(DIK_S) || Pad_Y < -0.8f) && GetJump() == true)
+				{
+					GetModelSet()->SetMotion(CModelSet::PLAYER_MOTION_SQUATSTOP);
+					m_bCruch = true;
+				}
+				//ジャンプ、しゃがみをしてなかったらニュートラル
+				else
+				{
+					GetModelSet()->SetMotion(CModelSet::PLAYER_MOTION_NORMAL);
+					m_bCruch = false;
+				}
 			}
 		}
 	}
@@ -687,6 +703,7 @@ void CPlayer::ResetPlayer()
 {
 	D3DXVECTOR3 pos = D3DXVECTOR3(m_pos[0].x - 200.0f, m_pos[0].y, m_pos[0].z);
 	SetPosition(pos);
+	SetMaxLife(1);
 	SetLife(m_nLife[0]);
 	SetState(CCharacter::CHARACTER_STATE_INVINCIBLE);
 	GetModelSet()->SetMotion(CModelSet::PLAYER_MOTION_NORMAL);
@@ -845,6 +862,8 @@ void CPlayer::Ride()
 			m_pPlayerUI->SetGrenadeAmmo(m_pGrenadeFire->GetGrenadeAmmo());
 		}
 	}
+
+	//乗り物に乗っているとき
 	else
 	{
 		CPlayertank *pPlayertank = nullptr;

@@ -59,7 +59,7 @@ HRESULT CEnemy::Init(void)
 	GetCollision()->SetMove(&GetMove());
 	GetCollision()->SetGameObject(this);
 
-	CCharacter::SetLife(1);
+	CCharacter::SetMaxLife(1);
 
 	SetCharacterDirection(DIRECTION::LEFT);
 

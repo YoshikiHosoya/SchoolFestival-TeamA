@@ -93,7 +93,7 @@ HRESULT CWeakEnemy::Init(void)
 		GetCollision()->SetSize(ENEMY_HUMAN_COLLISIONSIZE);
 
 		//HPê›íË
-		CCharacter::SetLife(ENEMY_HUMAN_LIFE);
+		CCharacter::SetMaxLife(ENEMY_HUMAN_LIFE);
 
 		break;
 	case CWeakEnemy::ENEMY_TYPE::ENEMY_SHIELD:
@@ -119,7 +119,7 @@ HRESULT CWeakEnemy::Init(void)
 		SetRotArm(true);
 
 		//HPê›íË
-		CCharacter::SetLife(ENEMY_HUMAN_LIFE);
+		CCharacter::SetMaxLife(ENEMY_HUMAN_LIFE);
 
 		// ìñÇΩÇËîªíËê∂ê¨
 		GetCollision()->SetSize(ENEMY_HUMAN_COLLISIONSIZE);
@@ -149,7 +149,7 @@ HRESULT CWeakEnemy::Init(void)
 		GetCollision()->SetSize(ENEMY_HELICOPTER_COLLISIONSIZE);
 
 		//HPê›íË
-		CCharacter::SetLife(ENEMY_HELICOPTER_LIFE);
+		CCharacter::SetMaxLife(ENEMY_HELICOPTER_LIFE);
 
 		break;
 
@@ -180,7 +180,7 @@ HRESULT CWeakEnemy::Init(void)
 		GetCollision()->SetSize(ENEMY_MELTYHONEY_COLLISIONSIZE);
 
 		//HPê›íË
-		CCharacter::SetLife(ENEMY_MELTYHONEY_LIFE);
+		CCharacter::SetMaxLife(ENEMY_MELTYHONEY_LIFE);
 
 		break;
 
@@ -211,7 +211,7 @@ HRESULT CWeakEnemy::Init(void)
 		GetCollision()->SetSize(ENEMY_ZYCOCCA_COLLISIONSIZE);
 
 		//HPê›íË
-		CCharacter::SetLife(ENEMY_ZYCOCCA_LIFE);
+		CCharacter::SetMaxLife(ENEMY_ZYCOCCA_LIFE);
 
 
 		break;
@@ -238,7 +238,7 @@ HRESULT CWeakEnemy::Init(void)
 
 		GetCollision()->SetSize(ENEMY_SKYDRONE_COLLISIONSIZE);
 		//HPê›íË
-		CCharacter::SetLife(ENEMY_DRONE_LIFE);
+		CCharacter::SetMaxLife(ENEMY_DRONE_LIFE);
 		// èdóÕÇÇ©ÇØÇ»Ç¢
 		SetGravity(false);
 		// ê≥ñ Çå¸Ç©ÇπÇÈ
@@ -267,7 +267,7 @@ HRESULT CWeakEnemy::Init(void)
 		// ìñÇΩÇËîªíËê∂ê¨
 		GetCollision()->SetSize(ENEMY_WALLDRONE_COLLISIONSIZE);
 		//HPê›íË
-		CCharacter::SetLife(ENEMY_DRONE_LIFE);
+		CCharacter::SetMaxLife(ENEMY_DRONE_LIFE);
 		SetGravity(false);
 		// ê≥ñ Çå¸Ç©ÇπÇÈ
 		SetRotDest(D3DXVECTOR3(0.0f, D3DX_PI*0.5f, 0.0f));

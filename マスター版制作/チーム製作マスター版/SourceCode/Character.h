@@ -57,6 +57,7 @@ public:
 	void SetRot(D3DXVECTOR3 rot);
 	void SetRotDest(D3DXVECTOR3 rotDest);
 	void SetLife(int Life);
+	void SetMaxLife(int nMaxLife);
 	void SetJump(bool bJump);
 	void SetState(CHARACTER_STATE state);
 	void SetStateCount(int nCntState);
@@ -115,7 +116,8 @@ private:
 	D3DXMATRIX  m_mtxWorld;											//マトリックス
 	CHARACTER_STATE m_state;										//
 
-	int m_Life;														//ライフ
+	int m_nLife;														//ライフ
+	int m_nMaxLife;													//最大ＨＰ
 	int m_nStateCnt;												//ステータスのカウント
 	bool m_bGravity;												//重力がかかっているか
 	bool m_bCanJump;												//ジャンプしているかどうか

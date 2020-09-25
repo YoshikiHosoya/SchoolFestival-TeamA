@@ -424,16 +424,8 @@ bool CCollision::ForEnemyCollision(int nPlayerDamage, int nPlayerTankDamage, boo
 						// 判定関数
 						if (this->OtherCollision2D(pPlayertank->GetCollision()))
 						{
-							//// プレイヤーのライフ減衰
-							//pPlayertank->CVehicle::AddDamage(nPlayerTankDamage);
-
-							//// プレイヤーのライフが0以下になった時
-							//if (pPlayertank->CVehicle::GetLife() <= 0)
-							//{
-							//	pPlayertank->SetDieFlag(true);
-							//	// ポインタをnullにする
-							//	pPlayertank = nullptr;
-							//}
+							// プレイヤーのライフ減衰
+							pPlayertank->AddDamage(nPlayerTankDamage);
 
 							// 当たり範囲フラグをtrueにする
 							bHitFlag = true;
@@ -537,7 +529,7 @@ bool CCollision::ForPlayer_EnemyCollision(bool Penetration)
 					{
 						if (this->BoxCollision2D_Character(pBoss_One->GetCollision()))
 						{
-							bHitFlag = true;
+							return false;
 						}
 					}
 				}
@@ -552,7 +544,7 @@ bool CCollision::ForPlayer_EnemyCollision(bool Penetration)
 						{
 							if (this->CharCollision2D(pEnemy->GetCollision()))
 							{
-								bHitFlag = true;
+								return true;
 							}
 						}
 					}
@@ -589,12 +581,18 @@ CPlayertank * CCollision::ForPlayer_TankCollision()
 		// 戦車のポインタを取得
 		pPlayertank = CManager::GetBaseMode()->GetMap()->GetPlayertank(nCntTank);
 
+		//nullcheck
 		if (pPlayertank != nullptr)
 		{
-			if (this->ForPlayer_VehicleCollision(pPlayertank->GetCollision()))
+			//判定かのうかどうか
+			if (pPlayertank->GetCollision()->GetCanCollison())
 			{
-				// 処理を行った戦車のポインタを返す
-				return pPlayertank;
+				//タンクに乗る処理
+				if (this->ForPlayer_VehicleCollision(pPlayertank->GetCollision()))
+				{
+					// 処理を行った戦車のポインタを返す
+					return pPlayertank;
+				}
 			}
 		}
 
@@ -724,11 +722,14 @@ CVehicle *CCollision::ForPlayer_VehicleCollision()
 
 		if (pPlayertank != nullptr)
 		{
-			if (pPlayertank->GetRideerTag() == TAG::NONE)
+			if (pPlayertank->GetCollision()->GetCanCollison())
 			{
-				if (this->VehicleCollision(pPlayertank->GetCollision()))
+				if (pPlayertank->GetRideerTag() == TAG::NONE)
 				{
-					return pPlayertank;
+					if (this->VehicleCollision(pPlayertank->GetCollision()))
+					{
+						return pPlayertank;
+					}
 				}
 			}
 		}
@@ -789,12 +790,33 @@ bool CCollision::ForTankCollision()
 	for (int nCnt = 0; nCnt < CManager::GetBaseMode()->GetMap()->GetMaxEnemy(); nCnt++)
 	{
 		CEnemy *pEnemy = CManager::GetBaseMode()->GetMap()->GetEnemy(nCnt);
-		if (pEnemy != nullptr)
+		if (pEnemy->GetCollision())
 		{
-			if (this->CharCollision2D(pEnemy->GetCollision()))
+			//判定が取れるとき
+			if (pEnemy->GetCollision()->GetCanCollison())
 			{
-				bHitFlag = true;
-				pEnemy->AddDamage(1);
+				//通常の雑魚的の時
+				if (pEnemy->GetEnemyType() == CEnemy::ENEMY_TYPE::ENEMY_NORMAL ||
+					pEnemy->GetEnemyType() == CEnemy::ENEMY_TYPE::ENEMY_SHIELD)
+				{
+					//轢く
+					if (this->CharCollision2D(pEnemy->GetCollision()))
+					{
+						bHitFlag = true;
+						pEnemy->AddDamage(1);
+					}
+				}
+				//敵の乗り物の場合
+				else if (pEnemy->GetEnemyType() == CEnemy::ENEMY_TYPE::ENEMY_HELICOPTER ||
+					pEnemy->GetEnemyType() == CEnemy::ENEMY_TYPE::ENEMY_MELTYHONEY ||
+					pEnemy->GetEnemyType() == CEnemy::ENEMY_TYPE::ENEMY_ZYCOCCA)
+				{
+					//衝突判定
+					//めりこまないように
+					if (this->BoxCollision2D_Vehicle(pEnemy->GetCollision()))
+					{
+					}
+				}
 			}
 		}
 	}
@@ -1090,7 +1112,7 @@ bool CCollision::LazerCollisionGetLength(D3DXVECTOR3 ShotPos, float &fLength)
 				break;
 			case TAG::OBSTACLE:
 				pObstacle = (CObstacle*)pMostNearObject;
-				pObstacle->Hit(m_pGameObject->GetTag(), 1);
+				pObstacle->Hit(pMostNearObject->GetTag(), 1);
 
 				break;
 			case TAG::ENEMY:
@@ -1426,34 +1448,31 @@ bool CCollision::BlockCollision2D_Bottom(CCollision * pCollision)
 	// 弾を消すときに使うフラグ
 	bool bHitFlag = false;
 
-	//// 素材のY範囲
-	//if (this->m_ppos->y + this->m_size.y * 0.5f > pCollision->m_ppos->y &&
-	//	this->m_ppos->y < pCollision->m_ppos->y + pCollision->m_size.y)
-	//{
-	//	// 当たり判定(左)
-	//	if (this->m_ppos->x + this->m_size.x * 0.5f > pCollision->m_ppos->x - pCollision->m_size.x * 0.5f &&
-	//		this->m_posOld->x + this->m_size.x * 0.5f <= pCollision->m_ppos->x - pCollision->m_size.x * 0.5f)
-	//	{
-	//		// 素材状の左に
-	//		//this->m_ppos->x = pCollision->m_ppos->x - pCollision->m_size.x * 0.5f - this->m_size.x * 0.5f;
-	//		// 移動量の初期化
-	//		//this->m_pmove->x = 0.0f;
-	//		// オブジェクトに当たったフラグ
-	//		//bHitFlag = true;
-	//	}
+	// 素材のY範囲
+	if (this->m_ppos->y + this->m_size.y * 0.5f > pCollision->m_ppos->y &&
+		this->m_ppos->y < pCollision->m_ppos->y + pCollision->m_size.y)
+	{
+		// 当たり判定(左)
+		if (this->m_ppos->x + this->m_size.x * 0.5f > pCollision->m_ppos->x - pCollision->m_size.x * 0.5f &&
+			this->m_posOld->x + this->m_size.x * 0.5f <= pCollision->m_ppos->x - pCollision->m_size.x * 0.5f)
+		{
+			// 素材状の左に
+			pCollision->m_ppos->x = pCollision->m_ppos->x - pCollision->m_size.x * 0.5f - this->m_size.x * 0.5f;
+			// 移動量の初期化
+			// オブジェクトに当たったフラグ
+			bHitFlag = true;
+		}
 
-	//	// 当たり判定(右)
-	//	else if (this->m_ppos->x - this->m_size.x * 0.5f < pCollision->m_ppos->x + pCollision->m_size.x * 0.5f &&
-	//		this->m_posOld->x - this->m_size.x * 0.5f >= pCollision->m_ppos->x + pCollision->m_size.x * 0.5f)
-	//	{
-	//		// 素材状の右に
-	//		//this->m_ppos->x = pCollision->m_ppos->x + pCollision->m_size.x * 0.5f + this->m_size.x * 0.5f;
-	//		// 移動量の初期化
-	//		//this->m_pmove->x = 0.0f;
-	//		// オブジェクトに当たったフラグ
-	//		//bHitFlag = true;
-	//	}
-	//}
+		// 当たり判定(右)
+		else if (this->m_ppos->x - this->m_size.x * 0.5f < pCollision->m_ppos->x + pCollision->m_size.x * 0.5f &&
+			this->m_posOld->x - this->m_size.x * 0.5f >= pCollision->m_ppos->x + pCollision->m_size.x * 0.5f)
+		{
+			// 素材状の左に
+			pCollision->m_ppos->x = pCollision->m_ppos->x - pCollision->m_size.x * 0.5f - this->m_size.x * 0.5f;
+			// オブジェクトに当たったフラグ
+			//bHitFlag = true;
+		}
+	}
 
 	// 素材のX範囲
 	if (this->m_ppos->x + this->m_size.x * 0.5f > pCollision->m_ppos->x - pCollision->m_size.x * 0.5f &&
@@ -1466,23 +1485,19 @@ bool CCollision::BlockCollision2D_Bottom(CCollision * pCollision)
 			// 素材状の下に
 			//this->m_ppos->y = this->m_posOld->y;
 			pCollision->m_ppos->x = pCollision->m_ppos->x - pCollision->m_size.x * 0.5f - this->m_size.x * 0.5f;
-			// 移動量の初期化
-			//this->m_pmove->y = 0.0f;
 			// オブジェクトに当たったフラグ
 			bHitFlag = true;
 		}
 
-		//// 当たり判定(上)
-		//else if (this->m_ppos->y < pCollision->m_ppos->y + pCollision->m_size.y * 0.5f &&
-		//	this->m_posOld->y >= pCollision->m_ppos->y + pCollision->m_size.y * 0.5f)
-		//{
-		//	// 素材状の上に
-		//	this->m_ppos->y = this->m_posOld->y;
-		//	// 移動量の初期化
-		//	this->m_pmove->y = 0.0f;
-		//	// オブジェクトに当たったフラグ
-		//	bHitFlag = true;
-		//}
+		// 当たり判定(上)
+		else if (this->m_ppos->y < pCollision->m_ppos->y + pCollision->m_size.y * 0.5f &&
+			this->m_posOld->y >= pCollision->m_ppos->y + pCollision->m_size.y * 0.5f)
+		{
+			// 素材状の左に
+			pCollision->m_ppos->x = pCollision->m_ppos->x - pCollision->m_size.x * 0.5f - this->m_size.x * 0.5f;
+			// オブジェクトに当たったフラグ
+			bHitFlag = true;
+		}
 	}
 
 	// 当たっているかいないかを返す
