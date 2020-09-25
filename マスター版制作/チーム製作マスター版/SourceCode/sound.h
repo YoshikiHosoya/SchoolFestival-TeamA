@@ -50,7 +50,10 @@ public:
 		LABEL_SE_SHOT_SHOTGUN,						//ショットガン
 		LABEL_SE_SHOT_LASER,						//レーザー
 		LABEL_SE_SHOT_FIRE,							//ファイア
+		LABEL_SE_SHOT_FLAMEBULLET,					//燃える弾
 		LABEL_SE_SHOT_BOSSLASER,					//レーザー
+
+
 		LABEL_SE_SHOT_CHARGE,						//チャージ
 		LABEL_SE_SHOT_FLASHING,						//光るやつ
 		LABEL_SE_SHOT_TITLE_BULLET,					//タイトルの演出の銃の音
@@ -83,6 +86,8 @@ public:
 		LABEL_SE_VOICE_LAZERGUN,					//レーザーガン
 		LABEL_SE_VOICE_SHOTGUN,						//ショットガン
 		LABEL_SE_VOICE_FLAMESHOT,					//フレイムショット
+
+		LABEL_SE_VOICE_OK,							//OK
 
 		LABEL_SE_VOICE_ENEMY_DEATH,					//敵死亡時
 		LABEL_SE_VOICE_PLAYER_DAMAGE,				//プレイヤー被弾時
@@ -151,6 +156,7 @@ private:
 		{ "data/SE/Weapon/shotgun.wav", 0 },						//SE ショットガン
 		{ "data/SE/Weapon/laser.wav", 0 },							//SE レーザー
 		{ "data/SE/Weapon/Fire.wav", 0 },							//SE ファイア
+		{ "data/SE/Weapon/FlameBullet.wav", 0 },					//SE 燃える弾
 		{ "data/SE/Weapon/boss_laser.wav", 0 },						//SE ボスレーザー
 		{ "data/SE/Weapon/boss_charge.wav", 0 },					//SE チャージ
 		{ "data/SE/Weapon/boss_flashing.wav", 0 },					//SE 何か光るやつ
@@ -185,6 +191,7 @@ private:
 		{ "data/SE/Voice/LazerGun.wav", 0 },						//レーザーガン
 		{ "data/SE/Voice/ShotGun.wav", 0 },							//ショットガン
 		{ "data/SE/Voice/FlameShot.wav", 0 },						//フレイムショット
+		{ "data/SE/Voice/OK.wav", 0 },								//OK
 
 		//ボイス
 		{ "data/SE/Voice/EnemyDeath.wav", 0 },						//敵死亡時
