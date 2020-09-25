@@ -95,6 +95,26 @@ void CScene2D::Draw(void)
 void CScene2D::DebugInfo(void)
 {
 }
+
+//==========================================================
+// 色の設定
+//==========================================================
+void CScene2D::SetColor(D3DXCOLOR col)
+{
+	CSceneBase::SetColor(col);
+
+	VERTEX_2D *pVtx;
+	GetVtxBuff()->Lock(0, 0, (void**)&pVtx, 0);
+
+	// 頂点情報の設定
+	pVtx[0].col = GetColor();
+	pVtx[1].col = GetColor();
+	pVtx[2].col = GetColor();
+	pVtx[3].col = GetColor();
+
+	GetVtxBuff()->Unlock();
+
+}
 //==========================================================
 // クリエイト
 //==========================================================
