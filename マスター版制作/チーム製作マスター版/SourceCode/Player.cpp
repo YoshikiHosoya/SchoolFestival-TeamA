@@ -320,6 +320,8 @@ void CPlayer::DebugInfo(void)
 	static bool trigger2 = false;
 	CKeyboard *key;
 	key = CManager::GetInputKeyboard();
+	CXInputPad *pad;
+	pad = CManager::GetPad(TAG::PLAYER_1);
 
 	char aTreeName[MAX_TEXT] = {};
 	sprintf(aTreeName, "PlayerInfo [%d]", CScene::GetID());
@@ -353,6 +355,12 @@ void CPlayer::DebugInfo(void)
 	if (key->GetKeyboardTrigger(DIK_G))
 	{
 		AddDamage(1);
+	}
+
+	// ハンドガンにする
+	if (key->GetKeyboardTrigger(DIK_M) || pad->GetTrigger(CXInputPad::JOYPADKEY_R2, 1))
+	{
+		m_pGun->SetGunType(CGun::GUNTYPE_HANDGUN);
 	}
 
 	//デバッグモードの切り替え

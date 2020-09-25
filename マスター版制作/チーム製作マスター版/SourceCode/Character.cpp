@@ -234,17 +234,26 @@ void CCharacter::State()
 		if (m_nStateCnt <= 0)
 		{
 			SetState(CHARACTER_STATE_NORMAL);
-			GetModelSet()->SetAllModelDisp(true);
+			if (GetModelSet()->GetCharacterType() != CModelSet::CHARACTER_TYPE::CHARACTER_TYPE_BOSS_ONE)
+			{
+				GetModelSet()->SetAllModelDisp(true);
+			}
 		}
 
 		//点滅処理
 		else if (m_nStateCnt % 4 == 0 && m_nStateCnt % 8 != 0)
 		{
-			GetModelSet()->SetAllModelDisp(false);
+			if (GetModelSet()->GetCharacterType() != CModelSet::CHARACTER_TYPE::CHARACTER_TYPE_BOSS_ONE)
+			{
+				GetModelSet()->SetAllModelDisp(false);
+			}
 		}
 		else if (m_nStateCnt % 8 == 0)
 		{
-			GetModelSet()->SetAllModelDisp(true);
+			if (GetModelSet()->GetCharacterType() != CModelSet::CHARACTER_TYPE::CHARACTER_TYPE_BOSS_ONE)
+			{
+				GetModelSet()->SetAllModelDisp(true);
+			}
 		}
 
 		//ダメージを受けるとどんどん赤くなる
@@ -328,7 +337,10 @@ void CCharacter::StateChangeReaction()
 		{
 			m_pCollision->SetCanCollision(true);
 		}
-		GetModelSet()->SetAllModelDisp(true);
+		if (GetModelSet()->GetCharacterType() != CModelSet::CHARACTER_TYPE::CHARACTER_TYPE_BOSS_ONE)
+		{
+			GetModelSet()->SetAllModelDisp(true);
+		}
 		break;
 
 	case CHARACTER_STATE_DAMAGE_FLASHING:
