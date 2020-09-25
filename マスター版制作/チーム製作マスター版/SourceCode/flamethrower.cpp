@@ -74,7 +74,7 @@ void CFlamethrower::Update(void)
 {
 	// エフェクトの生成
 	//パーティクル発生 軌跡みたいな
-	CParticle::CreateFromText(GetPosition(), D3DXVECTOR3(0.0f, 0.0f, CHossoLibrary::Random_PI()), CParticleParam::EFFECT_SMOKE, CBullet::GetTag());
+	CParticle::CreateFromText(GetPosition(), D3DXVECTOR3(0.0f, 0.0f, CHossoLibrary::Random_PI()), CParticleParam::EFFECT_SMOKERED, CBullet::GetTag());
 
 	// 更新
 	CBullet::Update();

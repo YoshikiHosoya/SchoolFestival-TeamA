@@ -53,22 +53,22 @@ EVENTPOS	= 0
 //------------------------------------------------------------
 PRISONERSET									# 1
 	TYPE			= 0
-	ITEMTYPE		= 3
-	POS 			= 400 500 0
-	FRAME 			= 600
-END_PRISONERSET
-
-PRISONERSET									# 1
-	TYPE			= 0
-	ITEMTYPE		= 3
+	ITEMTYPE		= 0
 	POS 			= -400 500 0
 	FRAME 			= 600
 END_PRISONERSET
 
 PRISONERSET									# 1
 	TYPE			= 0
-	ITEMTYPE		= 1
-	POS 			= 300 500 0
+	ITEMTYPE		= 0
+	POS 			= -400 500 0
+	FRAME 			= 600
+END_PRISONERSET
+
+PRISONERSET									# 1
+	TYPE			= 0
+	ITEMTYPE		= 0
+	POS 			= -400 500 0
 	FRAME 			= 1000
 END_PRISONERSET
 END_SCRIPT

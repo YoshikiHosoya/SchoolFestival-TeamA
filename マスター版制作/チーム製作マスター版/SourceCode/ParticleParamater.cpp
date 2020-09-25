@@ -28,6 +28,7 @@ FILENAME_LIST CParticleParam::m_aFileNameList =
 
 	{ "data/Load/Effect/Paramater/NoCollisionExplosion.txt" },
 	{ "data/Load/Effect/Paramater/NoCollisionExplosion_Rank.txt" },
+	{ "data/Load/Effect/Paramater/NoCollisionExplosion_Incendiary.txt" },
 
 	{ "data/Load/Effect/Paramater/NoCollisionFireworks1.txt" },
 	{ "data/Load/Effect/Paramater/NoCollisionFireworks2.txt" },
@@ -47,6 +48,12 @@ FILENAME_LIST CParticleParam::m_aFileNameList =
 	{ "data/Load/Effect/Paramater/Smoke.txt" },
 	{ "data/Load/Effect/Paramater/Fire.txt" },
 	{ "data/Load/Effect/Paramater/Fire_Bullet.txt" },
+
+	{ "data/Load/Effect/Paramater/BigShotFlash.txt" },
+	{ "data/Load/Effect/Paramater/Balkan.txt" },
+	{ "data/Load/Effect/Paramater/smokeRed.txt" },
+	{ "data/Load/Effect/Paramater/Incendiary.txt" },
+
 
 	{ "data/Load/Effect/Paramater/GetWeapon.txt" },
 	{ "data/Load/Effect/Paramater/ChargeCircle.txt" },

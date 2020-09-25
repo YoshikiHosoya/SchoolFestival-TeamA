@@ -45,12 +45,16 @@ private:
 
 	/* メンバ変数 */
 	D3DXVECTOR3					m_TargetPos;						// 目的の座標
+	D3DXVECTOR3					m_PosOld;							// 数フレーム前の座標
+
 	float						m_fSpeed;							// 弾の初速
 	float						m_fGravityRate;						// 
 	float						m_fRatio;							// 割合
 	float						m_fMoveAttenuationRate;				// 移動量xの減衰の割合
 	float						m_fVelocityBase;					// 速度割合
 	float						m_fMoveResistance;					// 移動量の抵抗力
-
+	int							m_nEffectCreateCnt;					// エフェクトを生成するまでのカウント
+	bool						m_bEffectCreateFlag;				// エフェクトを生成したかどうか
+	int							m_nSavePosCount;					// 未定
 };
 #endif

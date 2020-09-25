@@ -363,8 +363,13 @@ void CGun::Shot()
 			break;
 
 		case CGun::GUNTYPE_BALKAN:
-			//
+			// バルカンの弾生成
 			pBullet = CBalkan::Create(m_ShotRot);
+			//音再生
+			CManager::GetSound()->Play(CSound::LABEL_SE_SHOT_MACHINEGUN);
+			//ノズルフラッシュ
+			CParticle::CreateFromText(m_ShotPos, ZeroVector3, CParticleParam::EFFECT_BIGSHOTFLASH, GetTag());
+
 			break;
 
 		case CGun::GUNTYPE_FLAMETHROWER:

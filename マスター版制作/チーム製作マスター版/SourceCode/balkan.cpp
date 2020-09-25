@@ -74,7 +74,10 @@ void CBalkan::Update(void)
 	CBullet::Update();
 
 	//パーティクル発生 軌跡みたいな
-	CParticle::CreateFromText(GetPosition(), GetRot(), CParticleParam::EFFECT_HEAVY_MACHINEGUN, CBullet::GetTag());
+	CParticle::CreateFromText(GetPosition(), GetRot(), CParticleParam::EFFECT_BALKAN, CBullet::GetTag());
+
+	//弾を回転させエフェクトも回転しているように見せる
+	this->GetRot().z += 0.05f;
 }
 
 // =====================================================================================================================================================================
