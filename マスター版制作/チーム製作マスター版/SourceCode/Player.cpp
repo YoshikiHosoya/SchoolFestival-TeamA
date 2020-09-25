@@ -679,18 +679,7 @@ void CPlayer::MapChangePlayerRespawn()
 {
 	SetState(CCharacter::CHARACTER_STATE_INVINCIBLE);
 
-	if (GetTwoPPlayFlag())
-	{
-		for (int nCnt = 0; nCnt < PLAYER_NUM_MAX; nCnt++)
-		{
-			// プレイヤー2の配置
-			SetPosition(GetPosition() + D3DXVECTOR3(100.0f, 0.0f, 0.0f));
-		}
-	}
-	else
-	{
-		SetPosition(m_pos[0]);
-	}
+	SetPosition(m_pos[(int)GetTag()]);
 
 	m_bRideVehicle = false;
 	GetModelSet()->SetMotion(CModelSet::PLAYER_MOTION_NORMAL);
@@ -701,7 +690,7 @@ void CPlayer::MapChangePlayerRespawn()
 //====================================================================
 void CPlayer::ResetPlayer()
 {
-	D3DXVECTOR3 pos = D3DXVECTOR3(m_pos[0].x - 200.0f, m_pos[0].y, m_pos[0].z);
+	D3DXVECTOR3 pos = D3DXVECTOR3(m_pos[(int)GetTag()].x - 200.0f, m_pos[(int)GetTag()].y, m_pos[(int)GetTag()].z);
 	SetPosition(pos);
 	SetMaxLife(1);
 	SetLife(m_nLife[0]);
@@ -1048,6 +1037,9 @@ void CPlayer::SetPlayerData()
 	m_nLife[0] = m_PlayerData.nLife;
 	// 初期座標の情報を取得
 	m_pos[0] = m_PlayerData.pos;
+	// 初期座標の情報を取得
+	m_pos[1] = m_PlayerData.pos - D3DXVECTOR3(100.0f,0.0f,0.0f);
+
 	// 移動速度の情報を取得
 	m_fRunSpeed = m_PlayerData.fRunSpeed;
 	// しゃがみ時の移動速度の情報を取得

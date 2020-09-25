@@ -101,7 +101,7 @@ public:
 	CPlayerUI		*GetPlayerUI()					{ return  m_pPlayerUI; };		// プレイヤーUIのポインタ取得
 	bool			GetRideFlag()					{ return m_bRideVehicle; };		// ライドフラグの取得
 	bool			GetRespawnFlag()				{ return m_bRespawn; };			// リスポーンフラグの設定
-	static			bool GetTwoPPlayFlag()				{ return m_bTwoPPlay; };		// 2人プレイしているかのフラグの取得
+	static			bool GetTwoPPlayFlag()			{ return m_bTwoPPlay; };		// 2人プレイしているかのフラグの取得
 
 	/* 静的メンバ関数 */
 

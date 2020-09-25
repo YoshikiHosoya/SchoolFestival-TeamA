@@ -32,7 +32,7 @@
 #define SHOT_BULLET_POS_X		(0.0f)			// ’e‚Ì”­ŽËˆÊ’uX
 #define SHOT_BULLET_POS_Y		(40.0f)				// ’e‚Ì”­ŽËˆÊ’uY
 #define SHOT_BULLET_POS_Z		(0.0f)			// ’e‚Ì”­ŽËˆÊ’uZ
-#define PLAYERTANK_LIFE			(3)			// ƒ^ƒ“ƒN‚Ì‚g‚o
+#define PLAYERTANK_LIFE			(10)			// ƒ^ƒ“ƒN‚Ì‚g‚o
 // =====================================================================================================================================================================
 //
 // ƒRƒ“ƒXƒgƒ‰ƒNƒ^
@@ -347,7 +347,7 @@ void CPlayertank::State()
 
 		//“–‚½‚è”»’è‚¯‚·
 		GetCollision()->SetCanCollision(false);
-		 
+
 		break;
 	}
 }
