@@ -136,6 +136,7 @@ private:
 	bool			m_bRespawn;							// リスポーンフラグ
 	bool			m_bCruch;							// クラッチ
 	bool			m_bRideVehicle;						// 乗り物に乗り込んでいるかどうかのフラグ
+
 	WORD			Oldstate;							// コントローラーの1frame前のステート
 	CGun			*m_pGun;							// ガンクラスのポインタ
 	CGrenadeFire	*m_pGrenadeFire;					// グレネード発射クラスのポインタ

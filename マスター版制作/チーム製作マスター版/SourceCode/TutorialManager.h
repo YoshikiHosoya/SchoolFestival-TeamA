@@ -65,5 +65,7 @@ private:
 	bool					m_bOneFlag;										// 1回だけ処理を通すフラグ
 	bool					m_bPushButton;									// ボタンを押したかどうか
 	TUTORIAL_STATE			m_OldState;										// 1つ前のステート
+	CKeyboard				*m_pKey;										// キーボード
+	CXInputPad				*m_pPad;										// パッド
 };
 #endif

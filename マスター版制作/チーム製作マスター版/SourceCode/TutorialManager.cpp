@@ -25,18 +25,18 @@
 // マクロ定義
 // =====================================================================================================================================================================
 // パッドボタン
-#define PAD_A (pad->GetTrigger(pad->JOYPADKEY_A, 1))			// ジャンプ
-#define PAD_B (pad->GetTrigger(pad->JOYPADKEY_B, 1))			// 乗り物から降りる
-#define PAD_X (pad->GetTrigger(pad->JOYPADKEY_X, 1))			// 弾
-#define PAD_Y (pad->GetTrigger(pad->JOYPADKEY_Y, 1))			// グレネード
-#define PAD_START (pad->GetTrigger(pad->JOYPADKEY_START, 1))	// チュートリアルをスキップする
+#define PAD_A (m_pPad->GetTrigger(m_pPad->JOYPADKEY_A, 1))			// ジャンプ
+#define PAD_B (m_pPad->GetTrigger(m_pPad->JOYPADKEY_B, 1))			// 乗り物から降りる
+#define PAD_X (m_pPad->GetTrigger(m_pPad->JOYPADKEY_X, 1))			// 弾
+#define PAD_Y (m_pPad->GetTrigger(m_pPad->JOYPADKEY_Y, 1))			// グレネード
+#define PAD_START (m_pPad->GetTrigger(m_pPad->JOYPADKEY_START, 1))	// チュートリアルをスキップする
 
 // キーボード
-#define KEY_A (key->GetKeyboardPress(DIK_A))					// 移動左
-#define KEY_D (key->GetKeyboardPress(DIK_D))					// 移動右
-#define KEY_O (key->GetKeyboardPress(DIK_O))					// グレネード
-#define KEY_U (key->GetKeyboardPress(DIK_U))					// 弾
-#define KEY_SPACE (key->GetKeyboardTrigger(DIK_SPACE))			// ジャンプ
+#define KEY_A (m_pKey->GetKeyboardPress(DIK_A))					// 移動左
+#define KEY_D (m_pKey->GetKeyboardPress(DIK_D))					// 移動右
+#define KEY_O (m_pKey->GetKeyboardPress(DIK_O))					// グレネード
+#define KEY_U (m_pKey->GetKeyboardPress(DIK_U))					// 弾
+#define KEY_SPACE (m_pKey->GetKeyboardTrigger(DIK_SPACE))			// ジャンプ
 
 #define WAITTIME (180)											// ステート間の待ち時間
 
@@ -53,6 +53,8 @@ CTutorialManager::CTutorialManager()
 	m_nWaitTime			= 0;
 	m_bOneFlag			= false;
 	m_bPushButton		= false;
+	m_pKey				= nullptr;
+	m_pPad				= nullptr;
 }
 
 // =====================================================================================================================================================================
@@ -77,6 +79,8 @@ HRESULT CTutorialManager::Init(void)
 	// カメラを固定する
 	CRenderer *pRenderer = CManager::GetRenderer();
 	pRenderer->GetCamera()->SetCameraStopMove(true);
+	m_pKey = CManager::GetInputKeyboard();
+	m_pPad = CManager::GetPad(TAG::PLAYER_1);
 	return S_OK;
 }
 
@@ -96,11 +100,6 @@ void CTutorialManager::Uninit(void)
 // =====================================================================================================================================================================
 void CTutorialManager::Update(void)
 {
-	//キーボード情報取得
-	CKeyboard *key = CManager::GetInputKeyboard();
-	// パッド取得
-	CXInputPad *pad = CManager::GetPad(TAG::PLAYER_1);
-
 	// エンターを押したとき
 	if (CHossoLibrary::PressStartButton() || PAD_START)
 	{
@@ -142,10 +141,6 @@ void CTutorialManager::Update(void)
 			}
 		}
 	}
-
-	CDebugProc::Print_Left("Tutorialのステート %d\n", m_TutorialState);
-	CDebugProc::Print_Left("Oldのステート %d\n", m_OldState);
-
 }
 
 // =====================================================================================================================================================================
@@ -287,17 +282,13 @@ void CTutorialManager::StateManager()
 // =====================================================================================================================================================================
 void CTutorialManager::JudgPushButton()
 {
-	// キーボード取得
-	CKeyboard *key = CManager::GetInputKeyboard();
-	// パッド取得
-	CXInputPad *pad = CManager::GetPad(TAG::PLAYER_1);
 	// スティックの値を初期化
 	D3DXVECTOR3 InputValue = ZeroVector3;
 	// 値の正規化
 	InputValue.x /= STICK_MAX_RANGE;
 	InputValue.y /= STICK_MAX_RANGE;
 	// 左スティックの入力値を取得
-	pad->GetStickLeft(&InputValue.x, &InputValue.y);
+	m_pPad->GetStickLeft(&InputValue.x, &InputValue.y);
 	// プレイヤーのポインタを取得
 	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer(TAG::PLAYER_1);
 
@@ -360,12 +351,9 @@ void CTutorialManager::JudgPushButton()
 		if (pPlayer != nullptr)
 		{
 			// 乗り物に乗っている時
-			if (pPlayer->GetRideFlag())
+			if (!pPlayer->GetRideFlag())
 			{
-				if (PAD_B || KEY_SPACE)
- 				{
-					m_bPushButton = true;
-				}
+				m_bPushButton = true;
 			}
 		}
 		break;
