@@ -108,6 +108,8 @@ D3DXVECTOR3				CResultUI::m_Size[RESULT_UI_MAX] = {
 int				CResultUI::m_nTotalScore[CPlayer::PLAYER_NUM_TWO] = {};
 int				CResultUI::m_nBonusScore[CPlayer::PLAYER_NUM_TWO] = {};
 int				CResultUI::m_PlayerScore[CPlayer::PLAYER_NUM_TWO] = {};
+int				CResultUI::m_nPrisonerNum[CPlayer::PLAYER_NUM_TWO] = {};
+bool			CResultUI::m_bPlayerScoreFlag = false;
 
 // =====================================================================================================================================================================
 //
@@ -536,7 +538,7 @@ void CResultUI::ScoreCal()
 						m_pBonusScore[nCnt]->SetDisp(true);
 					}
 
-					if (m_nBonusScore[nCnt] >= 100000)
+					if (pPlayer[nCnt]->GetLife() * CScoreManager::GetScorePoint(CScoreManager::SCORE_BONUS) >= 100000)
 					{
 						// 目標の値になるまで値を計算
 						TargetValue(pPlayer[nCnt]->GetLife() * CScoreManager::GetScorePoint(CScoreManager::SCORE_BONUS), m_nBonusScore[nCnt], 10000, m_pBonusScore[nCnt]);
@@ -545,6 +547,19 @@ void CResultUI::ScoreCal()
 					{
 						// 目標の値になるまで値を計算
 						TargetValue(pPlayer[nCnt]->GetLife() * CScoreManager::GetScorePoint(CScoreManager::SCORE_BONUS), m_nBonusScore[nCnt], 1000, m_pBonusScore[nCnt]);
+					}
+
+					if (nCnt == 1)
+					{
+						if (m_nBonusScore[0] == pPlayer[0]->GetLife() * CScoreManager::GetScorePoint(CScoreManager::SCORE_BONUS) &&
+							m_nBonusScore[1] == pPlayer[1]->GetLife() * CScoreManager::GetScorePoint(CScoreManager::SCORE_BONUS))
+						{
+							if (!m_bPlayerScoreFlag)
+							{
+								m_bPlayerScoreFlag = true;
+								PlayerScoreUpdate(CPlayer::GetTwoPPlayFlag());
+							}
+						}
 					}
 				}
 			}
@@ -589,7 +604,15 @@ void CResultUI::ScoreCal()
 				{
 					// 目標の値になるまで値を計算
 					TargetValue(pPlayer[0]->GetLife() * CScoreManager::GetScorePoint(CScoreManager::SCORE_BONUS), m_nBonusScore[0], 1000, m_pBonusScore[0]);
+				}
 
+				if (m_nBonusScore[0] == pPlayer[0]->GetLife() * CScoreManager::GetScorePoint(CScoreManager::SCORE_BONUS))
+				{
+					if (!m_bPlayerScoreFlag)
+					{
+						m_bPlayerScoreFlag = true;
+						PlayerScoreUpdate(CPlayer::GetTwoPPlayFlag());
+					}
 				}
 			}
 		}
@@ -694,12 +717,6 @@ void CResultUI::TargetValue(const int &Target, int &Value, int Add , CMultiNumbe
 // =====================================================================================================================================================================
 void CResultUI::WaitTime(int nTime ,bool &bFlag, bool &bUse)
 {
-	//static std::once_flag flag;
-	//std::call_once(flag, SetWaitTime(nTime));
-
-	// 1度だけ処理を通す
-	//CALL_ONCE(SetWaitTime(nTime));
-
 	// 待機時間を減少させる
 	m_nWaitTime--;
 
@@ -806,8 +823,75 @@ void CResultUI::TotalScoreCalculation()
 	for (int nCnt = 0; nCnt < CPlayer::PLAYER_NUM_MAX; nCnt++)
 	{
 		// ゲームスコアとボーナススコアの計算
-		m_nTotalScore[nCnt] = m_nBonusScore[nCnt] + m_PlayerScore[nCnt];
+		m_nTotalScore[nCnt] = m_PlayerScore[nCnt];
 	}
 	// スコアのセーブ
 	CRankingUI::PlayerScoreSave();
+}
+
+// =====================================================================================================================================================================
+//
+// ボーナススコアの初期化
+//
+// =====================================================================================================================================================================
+void CResultUI::ResetBonusScore()
+{
+	for (int nCnt = 0; nCnt < CPlayer::PLAYER_NUM_MAX; nCnt++)
+	{
+		m_nBonusScore[nCnt] = 0;
+	}
+}
+
+// =====================================================================================================================================================================
+//
+// 捕虜の数の初期化
+//
+// =====================================================================================================================================================================
+void CResultUI::ResetPrisonerNum()
+{
+	for (int nCnt = 0; nCnt < CPlayer::PLAYER_NUM_MAX; nCnt++)
+	{
+		m_nPrisonerNum[nCnt] = 0;
+	}
+}
+
+// =====================================================================================================================================================================
+//
+// ボーナススコアをプレイヤーのスコアに加算する 引数がtrueなら2人
+//
+// =====================================================================================================================================================================
+void CResultUI::PlayerScoreUpdate(bool playerNum_Two)
+{
+	CPlayer *pPlayer[CPlayer::PLAYER_NUM_TWO];
+
+	if (playerNum_Two)
+	{
+		// プレイヤーのポインタを取得
+		for (int nCnt = 0; nCnt < CPlayer::PLAYER_NUM_MAX; nCnt++)
+		{
+			pPlayer[nCnt] = CManager::GetBaseMode()->GetPlayer((TAG)nCnt);
+
+			if (pPlayer[nCnt] != nullptr)
+			{
+				// ゲームスコアとボーナススコアの計算
+				m_PlayerScore[nCnt] += m_nBonusScore[nCnt];
+				// プレイヤーのスコア更新
+				pPlayer[nCnt]->GetPlayerUI()->SetItemScore(m_nBonusScore[nCnt], nCnt);
+				//m_nBonusScore[nCnt] = 0;
+			}
+		}
+	}
+	else
+	{
+		pPlayer[0] = CManager::GetBaseMode()->GetPlayer((TAG)0);
+		if (pPlayer[0])
+		{
+			// ゲームスコアとボーナススコアの計算
+			m_PlayerScore[0] += m_nBonusScore[0];
+			// プレイヤーのスコア更新
+			pPlayer[0]->GetPlayerUI()->SetItemScore(m_nBonusScore[0],0);
+
+			//m_nBonusScore[0] = 0;
+		}
+	}
 }

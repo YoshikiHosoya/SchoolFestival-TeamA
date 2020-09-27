@@ -227,7 +227,7 @@ void CPlayerUI::SetScore(int nScore)
 // アイテムのスコアの設定
 //
 // =====================================================================================================================================================================
-void CPlayerUI::SetItemScore(int nScore)
+void CPlayerUI::SetItemScore(int nScore,int playernum)
 {
 	// スコア加算
 	m_nScore += nScore;
@@ -241,7 +241,7 @@ void CPlayerUI::SetItemScore(int nScore)
 	m_pScore->SetMultiNumber(m_nScore);
 
 	// 表示スコアの生成
-	m_pPGSUI = CPlayerGSUI::Create(nScore);
+	m_pPGSUI = CPlayerGSUI::Create(nScore, playernum);
 }
 
 // =====================================================================================================================================================================

@@ -38,7 +38,7 @@ public:
 	void				Draw(void);									// 描画
 
 	/* 静的メンバ関数 */
-	static				CPlayerGSUI	*Create(int nScore);			// 獲得したスコア表示UIの生成
+	static				CPlayerGSUI	*Create(int nScore,int NumPlayer);	// 獲得したスコア表示UIの生成
 	static				void		Set_Score_Value(int nValue);	// スコアの値の取得
 
 	/* メンバ関数 */
@@ -60,5 +60,6 @@ private:
 	int							m_nTime;									// 存在できる時間
 	int							m_nCalCnt;									// 点滅用時間
 	float						m_fmove;									// 移動量
+	int							m_nNumPlayer;								// uiを表示するプレイヤーが1pか2pか
 };
 #endif

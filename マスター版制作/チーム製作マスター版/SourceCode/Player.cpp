@@ -32,6 +32,8 @@
 #include "GameManager.h"
 #include "sound.h"
 #include "ModelSet.h"
+#include "resultui.h"
+
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
 // =====================================================================================================================================================================
@@ -701,7 +703,20 @@ void CPlayer::ResetPlayer()
 	D3DXVECTOR3 pos = D3DXVECTOR3(m_pos[(int)GetTag()].x - 200.0f, m_pos[(int)GetTag()].y, m_pos[(int)GetTag()].z);
 	SetPosition(pos);
 	SetMaxLife(1);
-	SetLife(m_nLife[0]);
+
+	//// 捕虜の数がプレイヤーの体力の基準値より同じくか低かったら体力を基準値に設定
+	if (CResultUI::GetPrisonerNum((int)GetTag()) <= 3)
+	{
+		SetLife(m_nLife[0]);
+	}
+	// 捕虜の数が基準値より大きかったら捕虜の数をプレイヤーの体力にする
+	else
+	{
+		SetLife(CResultUI::GetPrisonerNum((int)GetTag()));
+	}
+
+	CResultUI::ResetBonusScore();
+
 	SetState(CCharacter::CHARACTER_STATE_INVINCIBLE);
 	GetModelSet()->SetMotion(CModelSet::PLAYER_MOTION_NORMAL);
 	m_pGun->SetGunType(CGun::GUNTYPE_HANDGUN);

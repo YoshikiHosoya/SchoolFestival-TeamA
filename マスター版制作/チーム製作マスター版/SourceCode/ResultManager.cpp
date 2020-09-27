@@ -158,6 +158,8 @@ void CResultManager::NextMode()
 	// リザルトの状態が1だった時
 	else if (m_ResultState == RESULT_STATE::RESULT_STATE_1)
 	{
+		CResultUI::SetPlayerScoreFlag(false);
+
 		// マップ2に移行
 		if (CManager::GetGame()->GetMap()->GetMapNum() == CMap::MAP_1_BOSS)
 		{

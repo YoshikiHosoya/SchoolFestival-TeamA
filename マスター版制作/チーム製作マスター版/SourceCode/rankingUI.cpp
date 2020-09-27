@@ -644,7 +644,6 @@ bool CRankingUI::TargetValueAdd(const int &Target, int &Value, int Add, CMultiNu
 // =====================================================================================================================================================================
 bool CRankingUI::TargetValueSubtract(const int & Target, int & Value, int Subtract, CMultiNumber * pMultiNumber)
 {
-	bool bEnd = false;
 	// –Ú•W’l‚æ‚è’l‚ª‘å‚«‚¢Žž
 	if (Target < Value)
 	{
@@ -670,7 +669,7 @@ bool CRankingUI::TargetValueSubtract(const int & Target, int & Value, int Subtra
 		return true;
 	}
 
-	return bEnd;
+	return false;
 }
 
 // =====================================================================================================================================================================
@@ -891,32 +890,20 @@ void CRankingUI::RankingState_Score_Calculation()
 {
 	if (CPlayer::GetTwoPPlayFlag())
 	{
-		// 1P
-		if (m_nPlayerScore[PLAYER_SCORE_1P] >= MILLION)
+		for (int nCnt = 0; nCnt < 2; nCnt++)
 		{
-			TargetValueSubtract(0, m_nPlayerScore[PLAYER_SCORE_1P], HUNDRED_THOUSAND, m_pPlayerScore[PLAYER_SCORE_1P]);
-		}
-		else if (m_nPlayerScore[PLAYER_SCORE_1P] >= HUNDRED_THOUSAND)
-		{
-			TargetValueSubtract(0, m_nPlayerScore[PLAYER_SCORE_1P], TEN_THOUSAND, m_pPlayerScore[PLAYER_SCORE_1P]);
-		}
-		else
-		{
-			TargetValueSubtract(0, m_nPlayerScore[PLAYER_SCORE_1P], ONE_THOUSAND, m_pPlayerScore[PLAYER_SCORE_1P]);
-		}
-
-		// 2P
-		if (m_nPlayerScore[PLAYER_SCORE_2P] <= MILLION)
-		{
-			TargetValueSubtract(0, m_nPlayerScore[PLAYER_SCORE_2P], HUNDRED_THOUSAND, m_pPlayerScore[PLAYER_SCORE_2P]);
-		}
-		else if (m_nPlayerScore[PLAYER_SCORE_2P] <= HUNDRED_THOUSAND)
-		{
-			TargetValueSubtract(0, m_nPlayerScore[PLAYER_SCORE_2P], TEN_THOUSAND, m_pPlayerScore[PLAYER_SCORE_2P]);
-		}
-		else
-		{
-			TargetValueSubtract(0, m_nPlayerScore[PLAYER_SCORE_1P], ONE_THOUSAND, m_pPlayerScore[PLAYER_SCORE_1P]);
+			if (m_nPlayerScore[nCnt] >= MILLION)
+			{
+				TargetValueSubtract(0, m_nPlayerScore[PLAYER_SCORE_1P], HUNDRED_THOUSAND, m_pPlayerScore[nCnt]);
+			}
+			else if (m_nPlayerScore[nCnt] >= HUNDRED_THOUSAND)
+			{
+				TargetValueSubtract(0, m_nPlayerScore[nCnt], TEN_THOUSAND, m_pPlayerScore[nCnt]);
+			}
+			else
+			{
+				TargetValueSubtract(0, m_nPlayerScore[nCnt], ONE_THOUSAND, m_pPlayerScore[nCnt]);
+			}
 		}
 
 		int nAdd = ONE_THOUSAND;

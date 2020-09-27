@@ -73,6 +73,9 @@ HRESULT CGame::Init(void)
 	m_pMap		= CMap::MapCreate();		// マップの生成
 	m_pMap->MapLoad(CMap::MAP_1_1);			// マップのロード
 
+	// 捕虜の数を初期化
+	CResultUI::ResetPrisonerNum();
+
 	m_pPlayer[(int)TAG::PLAYER_1] = CPlayer::Create(TAG::PLAYER_1);
 
 	if (CPlayer::GetTwoPPlayFlag() && !m_pPlayer[(int)TAG::PLAYER_2])

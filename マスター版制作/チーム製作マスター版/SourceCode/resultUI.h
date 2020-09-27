@@ -57,7 +57,11 @@ public:
 	/* 静的メンバ関数 */
 	static  CResultUI		*Create();									// リザルトUIの生成
 	static	int				GetTotalScore(int num) { return m_nTotalScore[num]; };	// トータルスコアの取得
+	static	int				GetPrisonerNum(int num) { return m_nPrisonerNum[num]; };	// 取得した捕虜の数の取得
 	static	void			TotalScoreCalculation();					// ゲームスコアとボーナススコアの計算
+	static	void			SetPlayerScoreFlag(bool flag) { m_bPlayerScoreFlag = flag; };// ゲームスコアとボーナススコアの計算
+	static	void			ResetBonusScore();//
+	static	void			ResetPrisonerNum();//
 
 	/* メンバ関数 */
 
@@ -82,21 +86,23 @@ private:
 	void					WaitTime(int nTime, bool &bFlag,bool &bUse);		// 待ち時間の計算
 	void					ResultUiOrder(bool bUse0, bool bUse1, bool bUse2);	// Uiの出現順番
 	void					Flashing(CScene2D *m_apScene2D);					// 点滅処理
+	void					PlayerScoreUpdate(bool playerNum);					// ボーナススコアをプレイヤーのスコアに加算する
 
 	/* 静的メンバ変数 */
 	static LPDIRECT3DTEXTURE9	m_TexNum[RESULT_UI_MAX];						// バインドするテクスチャの情報
 	static D3DXVECTOR3			m_Pos[RESULT_UI_MAX];							// 座標情報
 	static D3DXVECTOR3			m_Size[RESULT_UI_MAX];							// サイズ情報
 	static int					m_nTotalScore[CPlayer::PLAYER_NUM_TWO];			// スコアとボーナスを加算したスコア
-	static int					m_nBonusScore[CPlayer::PLAYER_NUM_TWO];									// ボーナススコア
+	static int					m_nBonusScore[CPlayer::PLAYER_NUM_TWO];			// ボーナススコア
 	static int					m_PlayerScore[CPlayer::PLAYER_NUM_TWO];			// ゲームモードで稼いだスコア
+	static bool					m_bPlayerScoreFlag;								// ボーナススコアをプレイヤーのスコアに更新するフラグ
+	static int					m_nPrisonerNum[CPlayer::PLAYER_NUM_TWO];		// プレイヤーの残機の数
 
 	/* メンバ変数 */
 	CScene2D				*m_apScene2D[RESULT_UI_MAX];						// シーン2Dのポインタ
 	CMultiNumber			*m_pPrisonerNum[CPlayer::PLAYER_NUM_TWO];			// プレイヤーの残機の数のUI
 	CMultiNumber			*m_pBonusScore[CPlayer::PLAYER_NUM_TWO];			// ボーナススコアのUI
 
-	int						m_nPrisonerNum[CPlayer::PLAYER_NUM_TWO];			// プレイヤーの残機の数
 	bool					m_bPrisonerNum;										// 捕虜の数を表示更新していいかどうか
 	bool					m_bBonusScore;										// 追加得点を表示更新していいかどうか
 	bool					m_bEvaluation;										// 評価を表示していいかどうか

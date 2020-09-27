@@ -37,6 +37,7 @@ CPlayerGSUI::CPlayerGSUI()
 	m_nTime = 120;			// 存在できる時間
 	m_nCalCnt = NULL;		// 点滅用時間
 	m_fmove = 0.0f;
+	m_nNumPlayer = false;
 }
 
 // =====================================================================================================================================================================
@@ -120,12 +121,14 @@ void CPlayerGSUI::Draw(void)
 // プレイヤーUIの生成
 //
 // =====================================================================================================================================================================
-CPlayerGSUI * CPlayerGSUI::Create(int nScore)
+CPlayerGSUI * CPlayerGSUI::Create(int nScore, int NumPlayer)
 {
 	//メモリの確保
 	CPlayerGSUI *pPlayerGSUI = new CPlayerGSUI();
 	// スコア取得
 	Set_Get_Score(nScore);
+	// プレイヤーが1p2pどちらなのか
+	pPlayerGSUI->m_nNumPlayer = NumPlayer;
 	// 初期化
 	pPlayerGSUI->Init();
 	//オブジェタイプ設定してSceneに所有権を渡す
@@ -195,21 +198,46 @@ void CPlayerGSUI::ScoreDataInitialize()
 // =====================================================================================================================================================================
 void CPlayerGSUI::GetScoreUICreate()
 {
-	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer(TAG::PLAYER_1);
+	CPlayer *pPlayer[CPlayer::PLAYER_NUM_TWO];
+
+	// プレイヤーのポインタを取得
+	for (int nCnt = 0; nCnt < CPlayer::PLAYER_NUM_MAX; nCnt++)
+	{
+		pPlayer[nCnt] = CManager::GetBaseMode()->GetPlayer((TAG)nCnt);
+	}
+
 	if (pPlayer)
 	{
-		// 生成
-		m_pGetScore = C3DMultiNumber::Create(
-			D3DXVECTOR3(
-				pPlayer->GetPosition().x,
-				pPlayer->GetPosition().y + 200,
-				-100.0f),
-			D3DXVECTOR3(PGSUI_X, PGSUI_Y, 0.0f),
-			m_nGetScore,
-			m_nDigits,
-			CScene::OBJTYPE_UI);
+		if (m_nNumPlayer == 0)
+		{
+			// 生成
+			m_pGetScore = C3DMultiNumber::Create(
+				D3DXVECTOR3(
+					pPlayer[0]->GetPosition().x,
+					pPlayer[0]->GetPosition().y + 200,
+					-100.0f),
+				D3DXVECTOR3(PGSUI_X, PGSUI_Y, 0.0f),
+				m_nGetScore,
+				m_nDigits,
+				CScene::OBJTYPE_UI);
 
-		m_pGetScore->SetCol(D3DXCOLOR(1.0f, 1.0f, 0.0f, 1.0f));
+			m_pGetScore->SetCol(D3DXCOLOR(1.0f, 1.0f, 0.0f, 1.0f));
+		}
+		else
+		{
+			// 生成
+			m_pGetScore = C3DMultiNumber::Create(
+				D3DXVECTOR3(
+					pPlayer[1]->GetPosition().x,
+					pPlayer[1]->GetPosition().y + 200,
+					-100.0f),
+				D3DXVECTOR3(PGSUI_X, PGSUI_Y, 0.0f),
+				m_nGetScore,
+				m_nDigits,
+				CScene::OBJTYPE_UI);
+
+			m_pGetScore->SetCol(D3DXCOLOR(1.0f, 1.0f, 0.0f, 1.0f));
+		}
 	}
 }
 

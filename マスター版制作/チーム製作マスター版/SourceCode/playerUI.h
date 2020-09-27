@@ -56,7 +56,7 @@ public:
 
 	/* メンバ関数 */
 	void				SetScore(int nScore);				// スコアの設定
-	void				SetItemScore(int nScore);			// アイテムスコアの設定
+	void				SetItemScore(int nScore, int playernum);// アイテムスコアの設定
 
 	void				SetBulletAmmo(int nBulletAmmo, CGun::GUN_TYPE GunType);		// 残弾数の設定
 	void				SetGrenadeAmmo(int nGrenadeAmmo);	// グレネードの残数の設定

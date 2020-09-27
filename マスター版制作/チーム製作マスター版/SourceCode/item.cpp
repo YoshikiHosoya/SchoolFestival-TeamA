@@ -261,7 +261,7 @@ void CItem::ItemAcquisition(ITEMTYPE type, TAG Tag)
 		// SEを鳴らす
 		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
 		// スコアアップ
-		m_pPlayer[(int)Tag]->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_GCOIN));
+		m_pPlayer[(int)Tag]->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_GCOIN), (int)Tag);
 	}break;
 
 		// 銀貨
@@ -269,7 +269,7 @@ void CItem::ItemAcquisition(ITEMTYPE type, TAG Tag)
 		// SEを鳴らす
 		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
 		// スコアアップ
-		m_pPlayer[(int)Tag]->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_SCOIN));
+		m_pPlayer[(int)Tag]->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_SCOIN), (int)Tag);
 	}break;
 
 		// 銅貨
@@ -277,7 +277,7 @@ void CItem::ItemAcquisition(ITEMTYPE type, TAG Tag)
 		// SEを鳴らす
 		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
 		// スコアアップ
-		m_pPlayer[(int)Tag]->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_BCOIN));
+		m_pPlayer[(int)Tag]->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_BCOIN), (int)Tag);
 	}break;
 
 		// ダイアモンド
@@ -285,14 +285,14 @@ void CItem::ItemAcquisition(ITEMTYPE type, TAG Tag)
 		// SEを鳴らす
 		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
 		// スコアアップ
-		m_pPlayer[(int)Tag]->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_DIAMOND));
+		m_pPlayer[(int)Tag]->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_DIAMOND), (int)Tag);
 	}break;
 		// 熊
 	case (ITEMTYPE_BEAR): {
 		// SEを鳴らす
 		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
 		// スコアアップ
-		m_pPlayer[(int)Tag]->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_BEAR));
+		m_pPlayer[(int)Tag]->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_BEAR), (int)Tag);
 	}break;
 
 		// 手紙
@@ -301,7 +301,7 @@ void CItem::ItemAcquisition(ITEMTYPE type, TAG Tag)
 		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
 
 		// コインを取るたびにコインのスコアアップ
-		m_pPlayer[(int)Tag]->GetPlayerUI()->SetItemScore(AddCoinScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_LETTER)));
+		m_pPlayer[(int)Tag]->GetPlayerUI()->SetItemScore(AddCoinScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_LETTER)), (int)Tag);
 	}break;
 
 		// リンゴ
@@ -309,21 +309,21 @@ void CItem::ItemAcquisition(ITEMTYPE type, TAG Tag)
 		// SEを鳴らす
 		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
 		// スコアアップ
-		m_pPlayer[(int)Tag]->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_FRUIT));
+		m_pPlayer[(int)Tag]->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_FRUIT), (int)Tag);
 		break;
 		// メロン
 	case ITEMTYPE_MELON:
 		// SEを鳴らす
 		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
 		// スコアアップ
-		m_pPlayer[(int)Tag]->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_FRUIT));
+		m_pPlayer[(int)Tag]->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_FRUIT), (int)Tag);
 		break;
 		// バナナ
 	case ITEMTYPE_BANANA:
 		// SEを鳴らす
 		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
 		// スコアアップ
-		m_pPlayer[(int)Tag]->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_FRUIT));
+		m_pPlayer[(int)Tag]->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_FRUIT), (int)Tag);
 	break;
 
 
@@ -332,56 +332,56 @@ void CItem::ItemAcquisition(ITEMTYPE type, TAG Tag)
 		// SEを鳴らす
 		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
 		// スコアアップ
-		m_pPlayer[(int)Tag]->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_FOOD));
+		m_pPlayer[(int)Tag]->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_FOOD), (int)Tag);
 		break;
 		// おにぎり
 	case (ITEMTYPE_RICEBALL):
 		// SEを鳴らす
 		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
 		// スコアアップ
-		m_pPlayer[(int)Tag]->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_FOOD));
+		m_pPlayer[(int)Tag]->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_FOOD), (int)Tag);
 		break;
 		// 飴
 	case (ITEMTYPE_CANDY):
 		// SEを鳴らす
 		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
 		// スコアアップ
-		m_pPlayer[(int)Tag]->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_FOOD));
+		m_pPlayer[(int)Tag]->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_FOOD), (int)Tag);
 		break;
 		// ドーナツ
 	case (ITEMTYPE_DONUT):
 		// SEを鳴らす
 		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
 		// スコアアップ
-		m_pPlayer[(int)Tag]->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_FOOD));
+		m_pPlayer[(int)Tag]->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_FOOD), (int)Tag);
 		break;
 		// ロリポップ
 	case (ITEMTYPE_LOLIPOP):
 		// SEを鳴らす
 		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
 		// スコアアップ
-		m_pPlayer[(int)Tag]->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_FOOD));
+		m_pPlayer[(int)Tag]->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_FOOD), (int)Tag);
 		break;
 		// 熊
 	case (ITEMTYPE_BREAD):
 		// SEを鳴らす
 		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
 		// スコアアップ
-		m_pPlayer[(int)Tag]->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_FOOD));
+		m_pPlayer[(int)Tag]->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_FOOD), (int)Tag);
 		break;
 		// チョコレート
 	case (ITEMTYPE_CHOCOLATE):
 		// SEを鳴らす
 		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
 		// スコアアップ
-		m_pPlayer[(int)Tag]->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_FOOD));
+		m_pPlayer[(int)Tag]->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_FOOD), (int)Tag);
 		break;
 		// アイス
 	case (ITEMTYPE_ICE):
 		// SEを鳴らす
 		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
 		// スコアアップ
-		m_pPlayer[(int)Tag]->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_FOOD));
+		m_pPlayer[(int)Tag]->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_FOOD), (int)Tag);
 	break;
 
 		// 爆弾の数を増やす
