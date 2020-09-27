@@ -121,7 +121,7 @@ HRESULT CPlayer::Init(void)
 	m_pGun->SetShotOffsetPos(D3DXVECTOR3(0.0f, SHOT_BULLET_POS_Y, SHOT_BULLET_POS_Z));
 
 	// ナイフの生成
-	m_pKnife = CKnife::Create(GetModelSet()->GetCharacterModelList()[7]->GetMatrix(), KNIFE_COLLISOIN_SIZE, TAG::PLAYER_1);
+	m_pKnife = CKnife::Create(GetModelSet()->GetCharacterModelList()[7]->GetMatrix(), KNIFE_COLLISOIN_SIZE, GetTag());
 	// 乗り物に乗り込んでいるかどうかのフラグ
 	m_bRideVehicle = false;
 	//腕が回転するか

@@ -55,6 +55,7 @@ CPrisoner::CPrisoner(OBJ_TYPE type) :CCharacter(type)
 	m_StateTime			= 60;
 	//
 	m_bDrop = false;
+	m_pPlayer = nullptr;
 }
 // =====================================================================================================================================================================
 //
@@ -503,10 +504,10 @@ void CPrisoner::PrisonerDropType()
 unsigned int CPrisoner::GetDistance_Player_This()
 {
 	// 今は1pのポインタを取得し1pの距離で参照している
-	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer(TAG::PLAYER_1);
+	//CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer(TAG::PLAYER_1);
 
 	// プレイヤーと捕虜の距離を自然数で求める
-	return (unsigned int)fabs(this->GetPosition().x - pPlayer->GetPosition().x);
+	return (unsigned int)fabs(this->GetPosition().x - m_pPlayer->GetPosition().x);
 }
 
 // =====================================================================================================================================================================
@@ -517,11 +518,11 @@ unsigned int CPrisoner::GetDistance_Player_This()
 bool CPrisoner::PrisonerPosX_Than_Large()
 {
 	// 今は1pのポインタを取得し1pの距離で参照している
-	CPlayer *pPlayer =  CManager::GetBaseMode()->GetPlayer(TAG::PLAYER_1);
+	//CPlayer *pPlayer =  CManager::GetBaseMode()->GetPlayer(TAG::PLAYER_1);
 
 	 // 比べる対象(今はプレイヤーのみ)が捕虜の座標より左にいるか右にいるかを求める
 	 // 左(捕虜より値が小さかったらfalse)右(値が大きかったらtrue)
-	 if (this->GetPosition().x >= pPlayer->GetPosition().x)
+	 if (this->GetPosition().x >= m_pPlayer->GetPosition().x)
 	 {
 		 return true;
 	 }
@@ -531,6 +532,16 @@ bool CPrisoner::PrisonerPosX_Than_Large()
 	 }
 
 	return false;
+}
+
+// =====================================================================================================================================================================
+//
+// 助けたプレイヤーのポインタを取得
+//
+// =====================================================================================================================================================================
+void CPrisoner::SetPlayerPtr(CPlayer *pPlayer)
+{
+	m_pPlayer = pPlayer;
 }
 
 // =====================================================================================================================================================================

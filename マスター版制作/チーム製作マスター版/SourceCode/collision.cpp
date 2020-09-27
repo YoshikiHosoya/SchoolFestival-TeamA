@@ -380,6 +380,7 @@ bool CCollision::ForPlayerBulletCollision(int nEnemyDamage, int nObstacleDamage,
 						}
 					}
 
+					pPrisoner->SetPlayerPtr(pPlayer);
 					// •ß—¸‚Ìó‘Ô•Ï‰»
 					pPrisoner->SetPrisonerState(CPrisoner::PRISONER_STATE_THINKING);
 					// ƒ|ƒCƒ“ƒ^‚ðnull‚É‚·‚é

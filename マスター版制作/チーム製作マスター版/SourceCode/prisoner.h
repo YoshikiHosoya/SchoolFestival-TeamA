@@ -73,6 +73,7 @@ public:
 	/* メンバ関数 */
 	void				DebugInfo(void);						// デバッグ
 	bool				DefaultMotion(void);					// デフォルトモーション
+	void				SetPlayerPtr(CPlayer *pPlayer);		// 助けたプレイヤーのポインタを取得
 
 	PRISONER_STATE				GetPrisonerState()
 	{return m_PrisonerState;};									// 捕虜の状態の取得
@@ -115,5 +116,6 @@ private:
 	int						m_StateTime;						// ステートが切り替わるまでの時間
 	CItem::ITEMTYPE			m_DropItem;							// 確定ドロップの種類
 	bool					m_bDrop;
+	CPlayer					*m_pPlayer;							// 助けたプレイヤーのポインタ
 };
 #endif
