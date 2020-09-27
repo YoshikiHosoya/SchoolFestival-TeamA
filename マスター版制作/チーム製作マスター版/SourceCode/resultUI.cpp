@@ -70,20 +70,6 @@
 #define RESULT_UI_CONVERSION (1000)
 
 #define RESULT_UI_TEX_TYPE (9)
-
-// 一度だけ処理を通す
-#define CALL_ONCE(src)     \
-     do     \
-     {     \
-          static bool initialized = false;     \
-          if (!initialized)     \
-          {     \
-               src;     \
-               initialized = true;     \
-          }     \
-     }     \
-     while (0)
-
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
 // =====================================================================================================================================================================
@@ -559,7 +545,6 @@ void CResultUI::ScoreCal()
 					{
 						// 目標の値になるまで値を計算
 						TargetValue(pPlayer[nCnt]->GetLife() * CScoreManager::GetScorePoint(CScoreManager::SCORE_BONUS), m_nBonusScore[nCnt], 1000, m_pBonusScore[nCnt]);
-
 					}
 				}
 			}
