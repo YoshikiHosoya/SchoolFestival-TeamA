@@ -26,6 +26,7 @@ public:
 		MODE_GAME,
 		MODE_RANKING,
 		MODE_PAUSE,
+		MODE_DEMOPLAY,
 		MODE_DEBUG_MODELVIEWER,		//デバッグ用モデルビューワ
 		MODE_DEBUG_EFFECTVIEWER,	//デバッグ用エフェクトビューワ
 		MODE_DEBUG_MAPEDITOR,		//デバッグ用マップエディター

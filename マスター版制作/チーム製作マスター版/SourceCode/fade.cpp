@@ -328,6 +328,9 @@ void CFADE::FadeOut()
 		//タイマーリセット
 		CManager::GetGame()->GetPlayer(TAG::PLAYER_1)->GetPlayerUI()->ResetTime();
 
+		//シーン管理にあるマップ変更時に必要ないものを消去
+		CScene::MapChangeRelease();
+
 		//nullcheck
 		if (pMap)
 		{
@@ -337,8 +340,6 @@ void CFADE::FadeOut()
 			CManager::GetGame()->GetGameManager()->MapTransitionWaveSet((CMap::MAP)m_NextID);
 		}
 
-		//シーン管理にあるマップ変更時に必要ないものを消去
-		CScene::MapChangeRelease();
 
 		if (m_fadeType == CFADE::FADETYPE::FADETYPE_STAGE_CHANGE)
 		{
