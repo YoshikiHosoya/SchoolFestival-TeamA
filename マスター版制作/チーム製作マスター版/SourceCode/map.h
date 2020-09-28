@@ -17,6 +17,7 @@
 #include "Scene.h"
 #include "inputKeyboard.h"
 #include "WeakEnemy.h"
+#include "obstacle.h"
 
 // =====================================================================================================================================================================
 // 前方宣言
@@ -115,6 +116,7 @@ public:
 	void			UpdateDieFlag();												// 死亡フラグ確認関数
 	void			AllDelete();													// 配置しているモデルを全て破棄
 	void			WaveCreate(int nModelType, D3DXVECTOR3 eventpos, WAVE_PARAM *pWaveParam, CWeakEnemy::ENEMY_TYPE EnemyType);	// Waveの生成
+	CObstacle		*PresentCreate(D3DXVECTOR3 pos, CObstacle::OBSTACLE_TYPE Type);	// プレゼントボックスの生成
 	void			ShowDebugInfo();												// デバッグ情報表記
 
 	int				GetMaxModel();													// モデルの最大数取得

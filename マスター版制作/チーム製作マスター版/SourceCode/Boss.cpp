@@ -47,7 +47,7 @@ HRESULT CBoss::Init(void)
 	GetModelSet()->LoadOffset(CModelSet::CHARACTER_TYPE_BOSS);
 	GetModelSet()->SetMotion(CModelSet::BOSS_MOTION_NORMAL);
 
-	CCharacter::SetMaxLife(1);
+	CCharacter::SetMaxLife(BOSS_LIFE);
 	GetModelSet()->SetCharacterType(CModelSet::CHARACTER_TYPE_BOSS);
 
 	//É^ÉCÉvê›íË

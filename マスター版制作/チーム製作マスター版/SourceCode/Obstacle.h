@@ -16,11 +16,11 @@
 // =====================================================================================================================================================================
 // 障害物の情報
 // =====================================================================================================================================================================
-typedef struct
+struct OBSTACLE_PARAM
 {
 	int					nLife;			// 体力
 	D3DXVECTOR3			CollisionSize;	// 大きさ // 当たり判定に使うサイズ
-}OBSTACLE_PARAM;
+};
 
 // =====================================================================================================================================================================
 // 前方宣言
@@ -43,12 +43,15 @@ public:
 		TYPE_CHEST,									// 金庫
 		TYPE_SANDBAGS,								// 土嚢
 		TYPE_CAR,									// 車
+		TYPE_BALLOON,								// 風船
+		TYPE_PRESENTBOX,							// プレゼント
+		TYPE_PRESENTBOX_RARE,						// プレゼントレア
 		TYPE_MAX,									// 最大数
 	};
 
 	CObstacle() {};
 	CObstacle(OBJ_TYPE type);						// コンストラクタ
-	virtual ~CObstacle();									// デストラクタ
+	virtual ~CObstacle();							// デストラクタ
 
 	/* メンバ関数 */
 	virtual HRESULT			Init();					// 初期化
@@ -58,7 +61,10 @@ public:
 	virtual void			DebugInfo();			//デバッグ
 
 	/* 静的メンバ関数 */
-	static	CObstacle		*Create();				// 障害物の生成
+	static	CObstacle		*Create(OBSTACLE_TYPE Type);// 障害物の生成
+	static	CObstacle		*Create_Editor();// 障害物の生成
+	static	CObstacle		*Create_Present(D3DXVECTOR3 pos, CObstacle::OBSTACLE_TYPE Type);// 障害物の生成
+
 	static	void			ObstacleLoad();			// 障害物のロード
 
 	/* メンバ関数 */
@@ -84,5 +90,11 @@ private:
 	/* メンバ変数 */
 	OBSTACLE_TYPE			m_ObstacleType;															// 障害物の種類
 	int						m_nLife;																// 体力
+	CObstacle				*m_pBalloon;															// 風船のポインタ
+
+	D3DXVECTOR3				m_BalloonMove;															// 風船の移動
+	float					m_fGravity;																// プレゼントが落ちてくる時の重力
+	bool					m_bGravity;																// プレゼントが落ちてくる事を許可
+	bool					m_bBreakBalloon;
 };
 #endif
