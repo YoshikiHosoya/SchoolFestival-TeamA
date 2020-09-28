@@ -196,6 +196,11 @@ void CMap::MapModelLoad()
 					strcpy(cEndSetText, "END_MAPSET");
 					nModelType = ARRANGEMENT_MODEL_MAP;
 				}
+				else if (strcmp(cHeadText, "NO_COLLISION_MAPSET") == 0)
+				{
+					strcpy(cEndSetText, "END_NO_COLLISION_MAPSET");
+					nModelType = ARRANGEMENT_MODEL_MAP_NOCOLLISION;
+				}
 				else if (strcmp(cHeadText, "ENEMYSET") == 0)
 				{
 					sprintf(cEndSetText, "%s", "END_ENEMYSET");
@@ -362,15 +367,27 @@ void CMap::MapModelSave()
 // =====================================================================================================================================================================
 void CMap::MapModelCreate(int ModelType, int nType, D3DXVECTOR3 pos,int nItemType)
 {
+	//変数宣言
+	CModel *pModel = nullptr;
+
 	switch (ModelType)
 	{
 	/* --- マップ --- */
 	case CMap::ARRANGEMENT_MODEL_MAP:
 		// オブジェクトの生成
-		m_pMapModel.emplace_back(CModel::CreateSceneManagement(CModel::MODEL_TYPE::MAP_MODEL, m_MapNum));
+		m_pMapModel.emplace_back(CModel::CreateSceneManagement(CModel::MODEL_TYPE::MAP_MODEL, m_MapNum, CScene::OBJTYPE_MODEL));
 		// 位置の設定
 		m_pMapModel[m_pMapModel.size() - 1]->SetPosition(pos);
 		break;
+
+		/* --- 当たり判定なしのマップ --- */
+	case CMap::ARRANGEMENT_MODEL_MAP_NOCOLLISION:
+		// オブジェクトの生成
+		pModel = CModel::CreateSceneManagement(CModel::MODEL_TYPE::MAP_MODEL, nType,CScene::OBJTYPE_FIELD_NOCOLLIISION);
+		// 位置の設定
+		pModel->SetPosition(pos);
+		break;
+
 
 	/* --- 敵 --- */
 	case CMap::ARRANGEMENT_MODEL_ENEMY:
