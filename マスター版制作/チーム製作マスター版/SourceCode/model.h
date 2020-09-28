@@ -129,6 +129,9 @@ public:
 		OBSTACLE_TYPE_CHEST,			// 金庫
 		OBSTACLE_TYPE_SANDBAGS,			// 土嚢
 		OBSTACLE_TYPE_CAR,				// 車
+		OBSTACLE_TYPE_BALLOON,			// 風船
+		OBSTACLE_TYPE_PRESENTBOX,		// プレゼントボックス
+		OBSTACLE_TYPE_PRESENTBOX_RARE,	// プレゼントボックス レア
 		OBSTACLE_TYPE_MAX,				// 最大数(計算用)
 
 		//===捕虜のモデル===

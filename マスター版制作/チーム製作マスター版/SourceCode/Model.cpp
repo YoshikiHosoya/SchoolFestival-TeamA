@@ -117,6 +117,9 @@ std::vector<CModel::MODEL_FILE_NAME> CModel::m_vModelFileName =
 	{ "data/MODEL/Object/Obstacle_Chest.x" ,				OBSTACLE_TYPE_CHEST },					// 金庫
 	{ "data/MODEL/Object/Obstacle_Sandbags.x" ,				OBSTACLE_TYPE_SANDBAGS },				// 土嚢
 	{ "data/MODEL/Object/Obstacle_Car.x" ,					OBSTACLE_TYPE_CAR },					// 車
+	{ "data/MODEL/Object/Obstacle_Balloon.x" ,				OBSTACLE_TYPE_BALLOON },				// 風船
+	{ "data/MODEL/Object/Obstacle_PresentBox01.x" ,			OBSTACLE_TYPE_PRESENTBOX },				// プレゼント
+	{ "data/MODEL/Object/Obstacle_PresentBox00.x" ,			OBSTACLE_TYPE_PRESENTBOX_RARE },		// プレゼント レア
 
 	//捕虜
 	{ "data/MODEL/Prisoner/Waist.x",						MODEL_PRISONER_WAIST			},		// 捕虜の腰
@@ -279,7 +282,7 @@ void CModel::UnLoad(void)
 //====================================================================
 HRESULT CModel::Init(void)
 {
-	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// 位置
+	//m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// 位置
 	m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// 移動量
 	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// 回転
 	m_col = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);	// カラー

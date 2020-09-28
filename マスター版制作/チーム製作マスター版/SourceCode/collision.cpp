@@ -332,7 +332,6 @@ bool CCollision::ForPlayerBulletCollision(int nEnemyDamage, int nObstacleDamage,
 		{
 			if (pObstacle->GetCollision()->GetCanCollison())
 			{
-
 				if (this->Collision2D(pObstacle->GetCollision()))
 				{
 					// áŠQ•¨‚Ìƒ‰ƒCƒtŒ¸Š

@@ -15,6 +15,7 @@
 #include "Character.h"
 #include "model.h"
 #include "item.h"
+#include "map.h"
 
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
@@ -33,6 +34,9 @@ char *CObstacle::m_ObstacleFileName[CObstacle::TYPE_MAX] =
 	{ "data/Load/Obstacle/Chest.txt" },				// 金庫
 	{ "data/Load/Obstacle/Sandbags.txt" },			// 土嚢
 	{ "data/Load/Obstacle/Car.txt" },				// 車
+	{ "data/Load/Obstacle/Balloon.txt" },			// 風船
+	{ "data/Load/Obstacle/PresentBox01.txt" },		// プレゼント
+	{ "data/Load/Obstacle/PresentBox00.txt" },		// プレゼント レア
 };
 
 // =====================================================================================================================================================================
@@ -48,6 +52,10 @@ CObstacle::CObstacle(OBJ_TYPE type) :CModel(type)
 {
 	// 変数の初期化
 	m_nLife = 0;
+	m_pBalloon = nullptr;
+	m_BalloonMove = D3DXVECTOR3(-1.0f, 0.0f, 0.0f);
+	m_fGravity = -5.0f;
+	m_bGravity = false;
 }
 // =====================================================================================================================================================================
 //
@@ -66,6 +74,20 @@ HRESULT CObstacle::Init()
 {
 	// 初期化
 	CModel::Init();
+
+	CMap *pMap = CManager::GetBaseMode()->GetMap();
+
+	D3DXVECTOR3 ofsetpos = D3DXVECTOR3(GetPosition().x, GetPosition().y + 70.0f, GetPosition().z);
+	if (this->m_ObstacleType == TYPE_PRESENTBOX)
+	{
+		m_pBalloon = pMap->PresentCreate(ofsetpos, TYPE_BALLOON);
+		GetCollision()->SetCanCollision(false);
+	}
+	else if (this->m_ObstacleType == TYPE_PRESENTBOX_RARE)
+	{
+		m_pBalloon = pMap->PresentCreate(ofsetpos, TYPE_BALLOON);
+		GetCollision()->SetCanCollision(false);
+	}
 
 	// 当たり判定生成
 	GetCollision()->SetPos(&GetPosition());
@@ -91,11 +113,67 @@ void CObstacle::Uninit(void)
 // =====================================================================================================================================================================
 void CObstacle::Update(void)
 {
+	D3DXVECTOR3 posold = GetPosition();
+	if (m_pBalloon && m_pBalloon->GetObstacleType() == TYPE_BALLOON && m_pBalloon->m_nLife <= 0)
+	{
+		m_bBreakBalloon = true;
+	}
+
 	if (GetCollision() != nullptr)
 	{
 		//座標の更新
 		GetCollision()->SetPos(&GetPosition());
+
+		if (this->m_ObstacleType == TYPE_PRESENTBOX ||
+			this->m_ObstacleType == TYPE_PRESENTBOX_RARE)
+		{
+			if (m_bBreakBalloon)
+			{
+				// マップのポインタ取得
+				CMap *pMap = CManager::GetBaseMode()->GetMap();
+
+				// マップモデルが存在した時して当たり判定が存在する時
+				if (pMap && GetCollision())
+				{
+					//// 障害物の判定とレイの判定
+					if (GetCollision()->RayBlockCollision(pMap, (this->GetMatrix())))
+					{
+						GetPosition().y -= 15.0f;
+					}
+					else
+					{
+					}
+
+					// 障害物の判定とレイの判定
+					//if (GetCollision()->RayCollision(pMap, posold, GetPosition()))
+					//{
+					//	//GetPosition().y += m_fGravity;
+					//}
+					//else
+					//{
+					//	//GetPosition().y += m_fGravity;
+					//}
+				}
+			}
+		}
 	}
+
+	// 風船が割れたら風船の持ち主の当たり判定を可能にする
+	if (this->m_ObstacleType == TYPE_PRESENTBOX ||
+		this->m_ObstacleType == TYPE_PRESENTBOX_RARE)
+	{
+		if (m_pBalloon && m_pBalloon->GetDieFlag())
+		{
+			GetCollision()->SetCanCollision(true);
+			m_pBalloon = nullptr;
+		}
+		else if (m_pBalloon && !m_pBalloon->GetDieFlag())
+		{
+			m_pBalloon->GetPosition() += m_BalloonMove;
+			GetPosition().x = m_pBalloon->GetPosition().x;
+		}
+	}
+
 	// 更新
 	CModel::Update();
 }
@@ -121,10 +199,37 @@ void CObstacle::DebugInfo()
 
 // =====================================================================================================================================================================
 //
-// 銃の生成
+// 障害物の生成
 //
 // =====================================================================================================================================================================
-CObstacle * CObstacle::Create()
+CObstacle * CObstacle::Create(OBSTACLE_TYPE Type)
+{
+	// 変数
+	CObstacle *pObstacle;
+
+	// メモリの確保
+	pObstacle = new CObstacle(OBJTYPE_OBSTACLE);
+
+	// タグ設定
+	pObstacle->SetTag(TAG::OBSTACLE);
+
+	pObstacle->SetObstacleType(Type);
+
+	// 初期化
+	pObstacle->Init();
+
+	// モデルタイプの設定
+	pObstacle->SetType(OBSTACLE_MODEL);
+
+	return pObstacle;
+}
+
+// =====================================================================================================================================================================
+//
+// 障害物の生成
+//
+// =====================================================================================================================================================================
+CObstacle * CObstacle::Create_Editor()
 {
 	// 変数
 	CObstacle *pObstacle;
@@ -146,7 +251,36 @@ CObstacle * CObstacle::Create()
 
 // =====================================================================================================================================================================
 //
-// 障害物が壊されるときの処理
+// プレゼントの生成
+//
+// =====================================================================================================================================================================
+CObstacle * CObstacle::Create_Present(D3DXVECTOR3 pos, CObstacle::OBSTACLE_TYPE Type)
+{
+	// 変数
+	CObstacle *pObstacle;
+
+	// メモリの確保
+	pObstacle = new CObstacle(OBJTYPE_OBSTACLE);
+
+	// タグ設定
+	pObstacle->SetTag(TAG::OBSTACLE);
+
+	pObstacle->SetObstacleType(Type);
+
+	pObstacle->SetPosition(pos);
+
+	// 初期化
+	pObstacle->Init();
+
+	// モデルタイプの設定
+	pObstacle->SetType(OBSTACLE_MODEL);
+
+	return pObstacle;
+}
+
+// =====================================================================================================================================================================
+//
+// パラメーターの読み込み
 //
 // =====================================================================================================================================================================
 void CObstacle::ObstacleLoad()
@@ -236,6 +370,9 @@ void CObstacle::Hit(TAG tag,int nDamage)
 	case CObstacle::TYPE_CHEST:
 	case CObstacle::TYPE_SANDBAGS:
 	case CObstacle::TYPE_CAR:
+	case CObstacle::TYPE_BALLOON:
+	case CObstacle::TYPE_PRESENTBOX:
+	case CObstacle::TYPE_PRESENTBOX_RARE:
 
 		// 体力を減算する
 		this->AddDamage(nDamage);
@@ -276,6 +413,14 @@ void CObstacle::DropItem()
 		CItem::DropItem_Multiple(GetPosition(), CItem::LIST_COIN, CItem::BEHAVIOR_BURSTS);
 		break;
 
+	case CObstacle::TYPE_BALLOON:
+		break;
+	case CObstacle::TYPE_PRESENTBOX:
+		CItem::DropItem_Multiple(GetPosition(), CItem::LIST_COIN, CItem::BEHAVIOR_BURSTS);
+		break;
+	case CObstacle::TYPE_PRESENTBOX_RARE:
+		CItem::DropItem_Multiple(GetPosition(), CItem::LIST_RARE, CItem::BEHAVIOR_BURSTS);
+		break;
 	default:
 		break;
 	}
@@ -293,6 +438,7 @@ void CObstacle::CheckDie(TAG tag)
 			// アイテムをドロップする
 			DropItem();
 		}
+
 		// 体力が0以下なら削除する
 		this->SetDieFlag(true);
 
@@ -307,6 +453,10 @@ void CObstacle::CheckDie(TAG tag)
 		case CObstacle::TYPE_CHEST:
 		case CObstacle::TYPE_SANDBAGS:
 		case CObstacle::TYPE_CAR:
+		case CObstacle::TYPE_BALLOON:
+		case CObstacle::TYPE_PRESENTBOX:
+		case CObstacle::TYPE_PRESENTBOX_RARE:
+
 			//爆発発生
 			CParticle::CreateFromText(GetPosition(), ZeroVector3, CParticleParam::EFFECT_EXPLOSION_OBJECTBREAK);
 			break;
