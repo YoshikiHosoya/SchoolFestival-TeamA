@@ -86,6 +86,10 @@ std::vector<CModel::MODEL_FILE_NAME> CModel::m_vModelFileName =
 	{ "data/MODEL/map/Stage2-2.x" ,							MODEL_MAP_STAGE2_2 },					// ステージ2-2
 	{ "data/MODEL/map/Stage2-3.x" ,							MODEL_MAP_STAGE2_3 },					// ステージ2-3
 	{ "data/MODEL/map/Map1_Boss stage.x" ,					MODEL_MAP_STAGE2_BOSS },				// ボスステージ2
+	{ "data/MODEL/map/Stage2-1_Nocollision.x" ,				MODEL_MAP_NO_COLLISION_STAGE2_1 },					// ステージ2-1 当たり判定無し
+	{ "data/MODEL/map/Stage2-2_Nocollision.x" ,				MODEL_MAP_NO_COLLISION_STAGE2_2 },					// ステージ2-2 当たり判定無し
+	{ "data/MODEL/map/Stage2-3_Nocollision.x" ,				MODEL_MAP_NO_COLLISION_STAGE2_3 },					// ステージ2-3 当たり判定無し
+
 
 	//武器
 	{ "data/MODEL/Gun/Gun.x" ,								MODEL_GUN_HANDGUN },					// ハンドガン
@@ -430,10 +434,10 @@ CModel *CModel::Create(int type, int modelCount)
 //====================================================================
 //モデルのクリエイト(シーンで管理する)
 //====================================================================
-CModel * CModel::CreateSceneManagement(int type, int modelCount)
+CModel * CModel::CreateSceneManagement(int type, int modelCount, OBJ_TYPE objtype)
 {
 	CModel*pModel;
-	pModel = new CModel(OBJTYPE_MODEL);
+	pModel = new CModel(objtype);
 	pModel->Init();
 	pModel->m_type = type;
 	pModel->m_modelCount = modelCount;

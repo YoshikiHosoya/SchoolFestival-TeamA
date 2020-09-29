@@ -101,6 +101,10 @@ public:
 		MODEL_MAP_STAGE2_2,				// ステージ2-2
 		MODEL_MAP_STAGE2_3,				// ステージ2-3
 		MODEL_MAP_STAGE2_BOSS,			// ボスステージ2
+		MODEL_MAP_NO_COLLISION_STAGE2_1,			// ステージ2-1の当たり判定無い箇所
+		MODEL_MAP_NO_COLLISION_STAGE2_2,			// ステージ2-2の当たり判定無い箇所
+		MODEL_MAP_NO_COLLISION_STAGE2_3,			// ステージ2-3の当たり判定無い箇所
+
 		//===銃のモデル===
 		MODEL_GUN_HANDGUN=300,			// ハンドガン
 		MODEL_GUN_HEAVYMACHINEGUN,		// ヘビーマシンガン
@@ -193,7 +197,6 @@ public:
 
 		//===盾モデル===
 		MODEL_WEPON_SHIELD=1200,		// 盾
-
 		MODEL_MAX
 	}CHARA_MODEL;
 	typedef enum
@@ -245,11 +248,11 @@ public:
 	virtual void DebugInfo();			// デバッグ情報
 
 	/* 静的メンバ関数 */
-	static void LoadModel(void);									// モデルのロード
-	static void UnLoad(void);										// モデルの開放
-	static CModel *Create(int type, int modelCount);				// モデルのクリエイト
-	static CModel *CreateSceneManagement(int type, int modelCount);	// モデルのクリエイト(シーンで管理する)
-	static char* GetModelFileName(int nType, int nModelCount);		// モデルのファイル名取得
+	static void LoadModel(void);														// モデルのロード
+	static void UnLoad(void);															// モデルの開放
+	static CModel *Create(int type, int modelCount);									// モデルのクリエイト
+	static CModel *CreateSceneManagement(int type, int modelCount,OBJ_TYPE objtype);	// モデルのクリエイト(シーンで管理する)
+	static char* GetModelFileName(int nType, int nModelCount);							// モデルのファイル名取得
 
 	void NotDrawCalcMtxOnly(D3DXMATRIX *pParentMtx);				// 描画せずにマトリックスの計算だけする
 

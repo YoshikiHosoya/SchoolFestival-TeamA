@@ -66,14 +66,15 @@ public:
 	};
 
 	/* メンバ関数 */
+	CPlayer() {};
 	CPlayer(OBJ_TYPE type);
-	~CPlayer();
+	virtual ~CPlayer();
 
-	HRESULT Init(void) override;						//初期化
-	void Uninit(void) override;							//終了
-	void Update(void) override;							//更新
-	void Draw(void) override;							//描画
-	void DebugInfo(void) override;						//デバッグ情報表記
+	virtual HRESULT Init(void) override;				//初期化
+	virtual void Uninit(void) override;					//終了
+	virtual void Update(void) override;					//更新
+	virtual void Draw(void) override;					//描画
+	virtual void DebugInfo(void) override;				//デバッグ情報表記
 
 	void DrawWepon(void);								//武器の描画
 	void MoveUpdate(void);								//移動に関する更新

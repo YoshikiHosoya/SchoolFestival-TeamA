@@ -294,6 +294,8 @@ void CScene::MapChangeRelease()
 		case OBJTYPE_ORBIT:
 		case OBJTYPE_EXPROSION:
 		case OBJTYPE_ITEM:
+		case OBJTYPE_FIELD_NOCOLLIISION:
+
 			//”z—ñ‚ª‹ó‚©‚Ç‚¤‚©
 			if (!m_pSceneList[nCntObjtype].empty())
 			{
