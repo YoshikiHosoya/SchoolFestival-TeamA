@@ -135,7 +135,7 @@ void CObstacle::Update(void)
 				// マップモデルが存在した時して当たり判定が存在する時
 				if (pMap && GetCollision())
 				{
-					//// 障害物の判定とレイの判定
+					// 障害物の判定とレイの判定
 					if (GetCollision()->RayBlockCollision(pMap, (this->GetMatrix())))
 					{
 						GetPosition().y -= 15.0f;
@@ -416,7 +416,7 @@ void CObstacle::DropItem()
 	case CObstacle::TYPE_BALLOON:
 		break;
 	case CObstacle::TYPE_PRESENTBOX:
-		CItem::DropItem_Multiple(GetPosition(), CItem::LIST_COIN, CItem::BEHAVIOR_BURSTS);
+		CItem::DropItem_Multiple(GetPosition(), CItem::LIST_FOOD, CItem::BEHAVIOR_BURSTS);
 		break;
 	case CObstacle::TYPE_PRESENTBOX_RARE:
 		CItem::DropItem_Multiple(GetPosition(), CItem::LIST_RARE, CItem::BEHAVIOR_BURSTS);
