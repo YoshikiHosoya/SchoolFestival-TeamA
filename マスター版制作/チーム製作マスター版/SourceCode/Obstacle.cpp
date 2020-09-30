@@ -37,6 +37,7 @@ char *CObstacle::m_ObstacleFileName[CObstacle::TYPE_MAX] =
 	{ "data/Load/Obstacle/Balloon.txt" },			// 風船
 	{ "data/Load/Obstacle/PresentBox01.txt" },		// プレゼント
 	{ "data/Load/Obstacle/PresentBox00.txt" },		// プレゼント レア
+	{ "data/Load/Obstacle/Bridge.txt" },			// 橋
 };
 
 // =====================================================================================================================================================================
@@ -337,6 +338,13 @@ void CObstacle::ObstacleLoad()
 									, &m_ObstacleParam[nCnt].CollisionSize.y
 									, &m_ObstacleParam[nCnt].CollisionSize.z);		// 比較用テキストにCOLLISIONSIZEを代入
 							}
+							// breakが来たら
+							else if (strcmp(cHeadText, "BBREAK") == 0)
+							{
+								int nBreak;
+								sscanf(cReadText, "%s %s %d", &cDie, &cDie, &nBreak);
+								m_ObstacleParam[nCnt].bBreak = nBreak ? false : true;
+							}
 							else if (strcmp(cHeadText, "END_OBSTACLESET") == 0)
 							{
 							}
@@ -497,5 +505,10 @@ void CObstacle::SetCollisionSize(CObstacle::OBSTACLE_TYPE type)
 	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_CHARACTER);
 	// 情報の設定
 	SetObstacleParam(type);
+
+	if (type == OBSTACLE_TYPE_BRIDGE-500)
+	{
+		GetCollision()->SetCanCollision(false);
+	}
 };
 

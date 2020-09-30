@@ -20,6 +20,7 @@ struct OBSTACLE_PARAM
 {
 	int					nLife;			// 体力
 	D3DXVECTOR3			CollisionSize;	// 大きさ // 当たり判定に使うサイズ
+	bool				bBreak;			// 壊れるかどうか
 };
 
 // =====================================================================================================================================================================
@@ -46,6 +47,7 @@ public:
 		TYPE_BALLOON,								// 風船
 		TYPE_PRESENTBOX,							// プレゼント
 		TYPE_PRESENTBOX_RARE,						// プレゼントレア
+		TYPE_BOSSMAP_BRIDGE,						// ボスのマップで使う橋
 		TYPE_MAX,									// 最大数
 	};
 
@@ -70,7 +72,7 @@ public:
 	/* メンバ関数 */
 	OBSTACLE_TYPE			&GetObstacleType()					{ return m_ObstacleType; };			// 障害物の種類の取得
 	void					SetObstacleType(OBSTACLE_TYPE type) { m_ObstacleType = type; };			// 障害物の種類の設定
-	OBSTACLE_PARAM			*GetObstacleParam(int nCnt)			{ return &m_ObstacleParam[nCnt]; };	// 弾のパラメーターの構造体の取得
+	OBSTACLE_PARAM			*GetObstacleParam(int nCnt)			{ return  &m_ObstacleParam[nCnt]; };	// 弾のパラメーターの構造体の取得
 	void					SetObstacleParam(CObstacle::OBSTACLE_TYPE type);
 																									// 障害物の情報設定
 	int						GetLife() { return m_nLife; };											// 体力の取得
@@ -84,6 +86,7 @@ private:
 	/* メンバ関数*/
 	void					CheckDie(TAG tag);														// 体力があるか確認
 	void					AddDamage(int Damage);													// ダメージを加算する
+
 	/* 静的メンバ変数 */
 	static OBSTACLE_PARAM	m_ObstacleParam[CObstacle::TYPE_MAX];									// 障害物のパラメーター
 	static char				*m_ObstacleFileName[CObstacle::TYPE_MAX];								// 障害物のファイル名

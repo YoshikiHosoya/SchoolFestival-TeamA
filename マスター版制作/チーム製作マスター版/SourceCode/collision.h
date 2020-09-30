@@ -78,7 +78,9 @@ public:
 	bool Collision2D(CCollision *pCollision);										// 板型の当たり判定
 	bool CharCollision2D(CCollision *pCollision);									// キャラクター用板型の当たり判定
 	bool OtherCollision2D(CCollision *pCollision);									// 板型の当たり判定
+	bool OtherCollision3D(CCollision *pCollision);									// ボックスの当たり判定
 	bool BlockCollision2D(CCollision *pCollision);									// 板型ブロックの当たり判定
+	bool BoxCollision3D(CCollision *pCollision);									// ボックスの当たり判定
 	bool BlockNotUpsideCollision2D(CCollision *pCollision);							// 板型ブロックの当たり判定
 
 	// 代用

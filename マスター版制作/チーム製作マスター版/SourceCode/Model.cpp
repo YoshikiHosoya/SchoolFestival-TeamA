@@ -124,6 +124,7 @@ std::vector<CModel::MODEL_FILE_NAME> CModel::m_vModelFileName =
 	{ "data/MODEL/Object/Obstacle_Balloon.x" ,				OBSTACLE_TYPE_BALLOON },				// 風船
 	{ "data/MODEL/Object/Obstacle_PresentBox01.x" ,			OBSTACLE_TYPE_PRESENTBOX },				// プレゼント
 	{ "data/MODEL/Object/Obstacle_PresentBox00.x" ,			OBSTACLE_TYPE_PRESENTBOX_RARE },		// プレゼント レア
+	{ "data/MODEL/Object/Obstacle_Bridge.x" ,				OBSTACLE_TYPE_BRIDGE },					// 橋
 
 	//捕虜
 	{ "data/MODEL/Prisoner/Waist.x",						MODEL_PRISONER_WAIST			},		// 捕虜の腰

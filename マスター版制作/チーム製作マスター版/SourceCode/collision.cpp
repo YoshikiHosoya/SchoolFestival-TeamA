@@ -318,6 +318,27 @@ bool CCollision::ForPlayerBulletCollision(int nEnemyDamage, int nObstacleDamage,
 								return bHitFlag;
 							}
 						}
+						//else if (this->OtherCollision3D(pEnemy->GetCollision()))
+						//{
+						//	if (pPlayer != nullptr)
+						//	{
+						//		if (pPlayer->GetPlayerUI())
+						//		{
+						//			pPlayer->GetPlayerUI()->SetScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_DAMAGE_BULLET));
+						//		}
+						//	}
+
+						//	// 敵のライフ減衰
+						//	pEnemy->CCharacter::AddDamage(nEnemyDamage);
+
+						//	// 当たり範囲フラグをtrueにする
+						//	bHitFlag = true;
+
+						//	if (Penetration == false)
+						//	{
+						//		return bHitFlag;
+						//	}
+						//}
 					}
 				}
 			}
@@ -619,9 +640,17 @@ bool CCollision::ForPlayer_ObstacleCollision()
 	for (int nCntObst = 0; nCntObst < CManager::GetBaseMode()->GetMap()->GetMaxObstacle(); nCntObst++)
 	{
 		CObstacle *pObstacle = CManager::GetBaseMode()->GetMap()->GetObstacle(nCntObst);
-		if (pObstacle != nullptr && pObstacle->GetObstacleType() != CObstacle::TYPE_TREE)
+		if (pObstacle != nullptr && pObstacle->GetObstacleType() != CObstacle::TYPE_TREE && pObstacle->GetObstacleType() != CObstacle::TYPE_BOSSMAP_BRIDGE)
 		{
 			if (this->BlockCollision2D(pObstacle->GetCollision()))
+			{
+				bHitFlag = true;
+			}
+		}
+
+		if (pObstacle != nullptr && pObstacle->GetObstacleType() == CObstacle::TYPE_BOSSMAP_BRIDGE)
+		{
+			if (this->BoxCollision3D(pObstacle->GetCollision()))
 			{
 				bHitFlag = true;
 			}
@@ -1320,6 +1349,35 @@ bool CCollision::OtherCollision2D(CCollision * pCollision)
 }
 
 //======================================================================================================================
+// キャラクターとアイテム、弾の判定3D
+//======================================================================================================================
+bool CCollision::OtherCollision3D(CCollision * pCollision)
+{
+	if (pCollision != nullptr)
+	{
+		// X Y Zの範囲
+		if (this->m_ppos->y + this->m_size.y * 0.5f >= pCollision->m_ppos->y&&
+			this->m_ppos->y - this->m_size.y * 0.5f <= pCollision->m_ppos->y + pCollision->m_size.y&&
+			this->m_ppos->x + this->m_size.x * 0.5f > pCollision->m_ppos->x - pCollision->m_size.x * 0.5f&&
+			this->m_ppos->x - this->m_size.x * 0.5f < pCollision->m_ppos->x + pCollision->m_size.x * 0.5f&&
+			this->m_ppos->z + this->m_size.z * 0.5f > pCollision->m_ppos->z - pCollision->m_size.z * 0.5f&&
+			this->m_ppos->z - this->m_size.z * 0.5f < pCollision->m_ppos->z + pCollision->m_size.z * 0.5f
+			)
+		{
+			// オブジェクトに当たったフラグ
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	// 当たっているかいないかを返す
+	return false;
+}
+
+//======================================================================================================================
 // 板型のブロックの当たり判定処理
 //======================================================================================================================
 bool CCollision::BlockCollision2D(CCollision * pCollision)
@@ -1381,6 +1439,59 @@ bool CCollision::BlockCollision2D(CCollision * pCollision)
 
 	// 当たっているかいないかを返す
 	return bHitFlag;
+}
+//======================================================================================================================
+// ボックスコリジョン3d 橋と敵の判定
+//======================================================================================================================
+bool CCollision::BoxCollision3D(CCollision * pCollision)
+{
+	// 素材のY範囲
+	//if (this->m_ppos->y + this->m_size.y > pCollision->m_ppos->y - pCollision->m_size.y * 0.5f &&
+	//	this->m_ppos->y < pCollision->m_ppos->y + pCollision->m_size.y * 0.5f)
+	//{
+	//	// 当たり判定(左)
+	//	if (this->m_ppos->x + this->m_size.x * 0.5f > pCollision->m_ppos->x - pCollision->m_size.x * 0.5f &&
+	//		this->m_posOld->x + this->m_size.x * 0.5f <= pCollision->m_ppos->x - pCollision->m_size.x * 0.5f)
+	//	{
+	//		// 素材状の左に
+	//		this->m_ppos->x = pCollision->m_ppos->x - pCollision->m_size.x * 0.5f - this->m_size.x * 0.5f;
+	//		// 移動量の初期化
+	//		this->m_pmove->x = 0.0f;
+	//	}
+
+	//	// 当たり判定(右)
+	//	else if (this->m_ppos->x - this->m_size.x * 0.5f < pCollision->m_ppos->x + pCollision->m_size.x * 0.5f &&
+	//		this->m_posOld->x - this->m_size.x * 0.5f >= pCollision->m_ppos->x + pCollision->m_size.x * 0.5f)
+	//	{
+	//		// 素材状の左に
+	//		this->m_ppos->x = pCollision->m_ppos->x + pCollision->m_size.x * 0.5f + this->m_size.x * 0.5f;
+	//		// 移動量の初期化
+	//		this->m_pmove->x = 0.0f;
+	//	}
+	//}
+
+	// 素材のX範囲
+	if (this->m_ppos->x + this->m_size.x * 0.5f > pCollision->m_ppos->x - pCollision->m_size.x * 0.5f &&
+		this->m_ppos->x - this->m_size.x * 0.5f < pCollision->m_ppos->x + pCollision->m_size.x * 0.5f)
+	{
+		// 素材のZ範囲
+		if (this->m_ppos->z + this->m_size.z * 0.5f > pCollision->m_ppos->z - pCollision->m_size.z * 0.5f &&
+			this->m_ppos->z - this->m_size.z * 0.5f < pCollision->m_ppos->z + pCollision->m_size.z * 0.5f)
+		{
+			// 当たり判定(上)
+			if (this->m_ppos->y < pCollision->m_ppos->y + pCollision->m_size.y * 0.5f &&
+				this->m_posOld->y >= pCollision->m_ppos->y + pCollision->m_size.y * 0.5f)
+			{
+				// 素材状の上に
+				this->m_ppos->y = this->m_posOld->y;
+				// オブジェクトに当たったフラグ
+				return true;
+			}
+		}
+	}
+
+	// 当たっているかいないかを返す
+	return false;
 }
 //======================================================================================================================
 // 板型のブロックの当たり判定処理(上の判定なし)

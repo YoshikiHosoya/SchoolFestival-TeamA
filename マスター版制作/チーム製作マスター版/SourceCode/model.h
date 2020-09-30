@@ -136,6 +136,7 @@ public:
 		OBSTACLE_TYPE_BALLOON,			// 風船
 		OBSTACLE_TYPE_PRESENTBOX,		// プレゼントボックス
 		OBSTACLE_TYPE_PRESENTBOX_RARE,	// プレゼントボックス レア
+		OBSTACLE_TYPE_BRIDGE,			// 橋
 		OBSTACLE_TYPE_MAX,				// 最大数(計算用)
 
 		//===捕虜のモデル===
