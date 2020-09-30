@@ -155,6 +155,7 @@ FILENAME_LIST CTexture::m_aSeparateTexFileNameList =
 
 	{ "data/TEXTURE/UI/num.png" },								//ƒiƒ“ƒo[
 	{ "data/TEXTURE/UI/Player_UI/life.png" },					//‘Ì—Í‚ÌUI
+
 };
 
 

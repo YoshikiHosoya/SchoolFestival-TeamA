@@ -920,6 +920,11 @@ void CItem::DebugItemCommand(CKeyboard *key)
 		{
 			CItem::DebugCreate(ITEMTYPE_FLAMESHOT);
 		}
+		//
+		else if (key->GetKeyboardTrigger(DIK_NUMPAD5))
+		{
+			//CItem::DebugCreate(ITEMTYPE_BEAR_2);
+		}
 		// ƒRƒCƒ“‚Ì¶¬
 		else 	if (key->GetKeyboardTrigger(DIK_NUMPAD6))
 		{
