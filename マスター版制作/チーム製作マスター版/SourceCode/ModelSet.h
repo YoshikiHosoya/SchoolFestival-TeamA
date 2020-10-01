@@ -33,6 +33,7 @@ public:
 	typedef enum
 	{
 		CHARACTER_TYPE_PLAYER,					// プレイヤー
+		CHARACTER_TYPE_PLAYER_2P,					// プレイヤー
 		CHARACTER_TYPE_ENEMY_HUMAN,				// エネミー 人型
 		CHARACTER_TYPE_ENEMY_HELICOPTER,		// エネミー ヘリコプタ
 		CHARACTER_TYPE_ENEMY_MELTYHONEY,		// エネミー MeltyHoney

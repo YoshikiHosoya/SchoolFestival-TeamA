@@ -421,7 +421,7 @@ void CCamera::SetCameraPosfromDistance(D3DXVECTOR3 posR, D3DXVECTOR3 rot, float 
 	m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
 	// ÉJÉÅÉâÇÉvÉåÉCÇ‚í«è]Ç…Ç∑ÇÈ
-	m_CameraFollowingType = CAMERA_FOLLOWING_TYPE_PLAYER;
+	m_CameraFollowingType = CAMERA_FOLLOWING_TYPE_MOUSE;
 }
 
 //-----------------------------------------------------------------------------

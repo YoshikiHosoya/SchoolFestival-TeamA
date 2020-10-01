@@ -102,7 +102,15 @@ HRESULT CPlayer::Init(void)
 
 	//ƒLƒƒƒ‰‚Ì‰Šú‰»
 	CCharacter::Init();
-	GetModelSet()->LoadOffset(CModelSet::CHARACTER_TYPE_PLAYER);
+
+	if (GetTag() == TAG::PLAYER_1)
+	{
+		GetModelSet()->LoadOffset(CModelSet::CHARACTER_TYPE_PLAYER);
+	}
+	else if (GetTag() == TAG::PLAYER_2)
+	{
+		GetModelSet()->LoadOffset(CModelSet::CHARACTER_TYPE_PLAYER_2P);
+	}
 	GetModelSet()->SetCharacterType(CModelSet::CHARACTER_TYPE_PLAYER);
 
 	 // e‚Ì¶¬
