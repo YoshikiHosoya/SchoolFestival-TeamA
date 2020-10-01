@@ -65,6 +65,8 @@ public:
 		EFFECT_CHARGE_CIRCLE,					//チャージ　円
 		EFFECT_CHARGE_PARTICLE,					//チャージ　粒子
 
+		EFFECT_CHARGE,							//チャージ　アニメーション
+
 		PARTICLE_MAX,
 	};
 

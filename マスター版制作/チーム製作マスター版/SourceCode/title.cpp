@@ -16,6 +16,7 @@
 #include "UI.h"
 #include "sound.h"
 #include "player.h"
+#include "texanimation2d.h"
 
 // =====================================================================================================================================================================
 // マクロ定義
@@ -234,6 +235,11 @@ void CTitle::TitleStaging()
 	}
 	else
 	{
+		// 効果音
+		CManager::GetSound()->Play(CSound::LABEL_SE_FRACTURING);
+		// 画面が割れる演出
+		CTexAnimation2D::Create(SCREEN_CENTER_POS, D3DXVECTOR3(640.0f,360.0f,0.0f), ZeroVector3, CTexture::SEPARATE_TEX_TYPE::SEPARATE_TEX_EFFECT_FRACTURING, 3, CScene::OBJTYPE_UI);
+
 		m_bEndStaging = true;
 		m_TitleMode = MODE_CHARACTERSELECT;
 		m_nStagingInterval = INTERBALCOUNT;

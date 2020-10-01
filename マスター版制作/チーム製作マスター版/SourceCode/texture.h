@@ -171,6 +171,10 @@ public:
 		SEPARATE_TEX_EFFECT_EXPLOSION08,			//爆発
 		SEPARATE_TEX_EFFECT_REDSMOKE,				//赤煙
 
+		SEPARATE_TEX_EFFECT_FRACTURING,				//タイトルで使う演出
+		SEPARATE_TEX_EFFECT_CHARGE,					//攻撃を撃つ前の溜め
+
+
 		SEPARATE_TEX_NUM,							//ナンバー
 		SEPARATE_TEX_UI_LIFE,						//体力のUI
 

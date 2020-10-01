@@ -51,39 +51,5 @@ EVENTPOS	= 0
 //	[ 11 ]	íeñÚêîëùâ¡
 //
 //------------------------------------------------------------
-PRISONERSET									# 1
-	TYPE			= 0
-	ITEMTYPE		= 0
-	POS 			= -400 500 0
-	FRAME 			= 600
-END_PRISONERSET
-
-PRISONERSET									# 1
-	TYPE			= 0
-	ITEMTYPE		= 0
-	POS 			= -400 500 0
-	FRAME 			= 1200
-END_PRISONERSET
-
-PRISONERSET									# 1
-	TYPE			= 0
-	ITEMTYPE		= 0
-	POS 			= -400 500 0
-	FRAME 			= 1800
-END_PRISONERSET
-
-PRISONERSET									# 1
-	TYPE			= 0
-	ITEMTYPE		= 0
-	POS 			= -400 500 0
-	FRAME 			= 2400
-END_PRISONERSET
-
-PRISONERSET									# 1
-	TYPE			= 0
-	ITEMTYPE		= 0
-	POS 			= -400 500 0
-	FRAME 			= 3000
-END_PRISONERSET
 
 END_SCRIPT

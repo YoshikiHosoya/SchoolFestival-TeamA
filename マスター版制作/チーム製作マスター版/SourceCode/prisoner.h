@@ -57,6 +57,14 @@ public:
 		PRISONER_ITEM_DROPTYPE_MAX								// 最大数
 	};
 
+	// ボスマップ用の特別な捕虜
+	enum PRISONER_TYPE
+	{
+		PRISONER_TYPE_NORMAL,									// 普通の捕虜
+		PRISONER_TYPE_SPECIAL,									// ボスマップ用の特別な捕虜
+		PRISONER_TYPE_MAX										// 最大数
+	};
+
 	CPrisoner(OBJ_TYPE type);									// コンストラクタ
 	~CPrisoner();												// デストラクタ
 
@@ -73,7 +81,8 @@ public:
 	/* メンバ関数 */
 	void				DebugInfo(void);						// デバッグ
 	bool				DefaultMotion(void);					// デフォルトモーション
-	void				SetPlayerPtr(CPlayer *pPlayer);		// 助けたプレイヤーのポインタを取得
+	void				SetPlayerPtr(CPlayer *pPlayer);			// 助けたプレイヤーのポインタを取得
+	void				Collision();							//　当たり判定
 
 	PRISONER_STATE				GetPrisonerState()
 	{return m_PrisonerState;};									// 捕虜の状態の取得
@@ -92,7 +101,10 @@ public:
 
 	void				SetPrisonerItem(CItem::ITEMTYPE type)
 	{m_DropItem = type;};										// ドロップするアイテムの設定
-	void Collision();											//　当たり判定
+
+	void				SetPrisonerType(PRISONER_TYPE type)
+	{m_PrisonerType = type;};
+
 private:
 	/* 静的メンバ変数 */
 	static char				*m_PrisonerFileName;				// 捕虜のファイル名
@@ -110,6 +122,7 @@ private:
 	/* メンバ変数 */
 	PRISONER_STATE			m_PrisonerState;					// デバッグのステータス
 	PRISONER_ITEM_DROPTYPE	m_PrisonerDropType;					// 捕虜の種類
+	PRISONER_TYPE			m_PrisonerType;						// 捕虜の種類
 
 	void					Move(float move, float fdest);		// 捕虜の移動
 	int						m_nDieCount;						// 捕虜が消滅するまでのカウント

@@ -85,6 +85,7 @@ CBoss_One::CBoss_One(OBJ_TYPE type) :CEnemy(type)
 	m_nBalkanAngle						 = 0;
 	m_nFirstShotCount					 = 60;
 	m_nShotCount						 = 0;
+	m_nElapsedTime						 = 0;
 	m_fBalkanRot						 = 0.0f;
 	m_fRotTarget						 = -1.57f;
 	m_fPartsRotVentilation				 = 0.0f;
@@ -177,6 +178,13 @@ void CBoss_One::Uninit(void)
 // =====================================================================================================================================================================
 void CBoss_One::Update(void)
 {
+	// 時間を経過させる
+	m_nElapsedTime++;
+	// 一定時間毎にドローンを生成する
+	CreatePerFixedTime();
+
+
+
 	// ガンの更新
 	for (int nCnt = 0; nCnt < WEAPONTYPE_MAX; nCnt++)
 	{
@@ -1024,7 +1032,7 @@ void CBoss_One::ShiftPosture()
 	}
 	else
 	{
-		
+
 
 		if (GetModelSet()->GetCharacterModelList()[2]->GetRot().z >= 0.0f &&
 			GetModelSet()->GetCharacterModelList()[3]->GetRot().z >= 0.0f)
@@ -1727,6 +1735,28 @@ void CBoss_One::BubbleSort(std::vector<int*> &data)
 				std::swap(data[num - 1], data[num]);
 			}
 		}
+	}
+}
+
+// =====================================================================================================================================================================
+//
+// 一定時間毎に敵を生成
+//
+// =====================================================================================================================================================================
+void CBoss_One::CreatePerFixedTime()
+{
+	// 15秒ごとにドローンを生成
+	/*if (m_nElapsedTime % 900 == 0)
+	{
+		CMap *pMap = CManager::GetBaseMode()->GetMap();
+		pMap->BossWaveCreate(CMap::ARRANGEMENT_MODEL_ENEMY,D3DXVECTOR3(-300.0f,400.0f,0.0f),CEnemy::ENEMY_TYPE::ENEMY_SKYDRONE);
+	}*/
+
+	// 15秒ごとに捕虜を生成
+	if (m_nElapsedTime % 900 == 0)
+	{
+		CMap *pMap = CManager::GetBaseMode()->GetMap();
+		pMap->BossWaveCreate(CMap::ARRANGEMENT_MODEL_PRISONER, D3DXVECTOR3(-300.0f, 400.0f, 0.0f), CEnemy::ENEMY_TYPE::ENEMY_NORMAL);
 	}
 }
 

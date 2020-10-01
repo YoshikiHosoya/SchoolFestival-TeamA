@@ -37,8 +37,7 @@ public:
 		CHARACTER_TYPE_ENEMY_HELICOPTER,		// エネミー ヘリコプタ
 		CHARACTER_TYPE_ENEMY_MELTYHONEY,		// エネミー MeltyHoney
 		CHARACTER_TYPE_ENEMY_ZYCOCCA,			// エネミー Zycocca
-		CHARACTER_TYPE_ENEMY_DRONE,				// エネミー skyドローン
-		CHARACTER_TYPE_ENEMY_WALLDRONE,			// エネミー wallドローン
+		CHARACTER_TYPE_ENEMY_SKYDRONE,			// エネミー skyドローン
 		CHARACTER_TYPE_PRISONER,				// 捕虜
 		CHARACTER_TYPE_BOSS,					// ボス
 		CHARACTER_TYPE_BOSS_ONE,				// ボス

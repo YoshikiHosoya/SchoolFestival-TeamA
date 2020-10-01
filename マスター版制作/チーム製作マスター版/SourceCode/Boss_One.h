@@ -31,13 +31,6 @@ struct BOSS_ONE_DATABASE
 	int					nCoolTime;				// クールタイム
 	D3DXVECTOR3			CollisionSize[2];		// 当たり判定のサイズ
 	D3DXVECTOR3			GunShotOfsetPos[3];		// ガンのオフセット座標
-
-
-
-
-
-
-
 };
 
 // =====================================================================================================================================================================
@@ -186,6 +179,7 @@ private:
 	void					StateChangeReaction();								// 状態を変える
 	void					StayAction();										// 待機時の行動
 	void					BubbleSort(std::vector<int*> &data);				// 優先度の入れ替え 高い順に0番目から
+	void					CreatePerFixedTime();								// 一定時間毎に必要なものを生成
 
 	// --- 設定関数 ---  //
 	void					SetShotIntervalTime(int time)	{ m_nShotIntervalTime = time; };		// インターバルの時間の設定
@@ -249,6 +243,9 @@ private:
 	int							m_nTriggerCount;								// 何トリガー撃ったか
 	int							m_nBalkanAngle;									// 比較用ガンの回転情報
 	int							m_nFirstShotCount;								// 初弾を撃つまでの時間
+
+	int							m_nElapsedTime;									// ボスが出現してからの経過時間
+
 	float						m_fRotTarget;									// 回転目標
 	float						m_fBalkanRot;									// ガンの回転情報
 	float						m_fPartsRotVentilation;							// ボスの装甲パーツの回転用

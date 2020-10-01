@@ -59,6 +59,8 @@ FILENAME_LIST CParticleParam::m_aFileNameList =
 	{ "data/Load/Effect/Paramater/ChargeCircle.txt" },
 	{ "data/Load/Effect/Paramater/ChargeParticleTex.txt" },
 
+	{ "data/Load/Effect/Paramater/Charge.txt" },
+
 };
 //
 //FILENAME_LIST CParticleCreators::m_aFileNameList =

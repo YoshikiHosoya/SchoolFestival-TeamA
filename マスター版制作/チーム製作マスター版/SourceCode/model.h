@@ -72,24 +72,11 @@ public:
 
 		//===skyドローン ドラゴンノスケで使う===
 		MODEL_DRONE_BODY,						// ドローンの体
-		MODEL_DRONE_HAND_L,						// 左手
-		MODEL_DRONE_HAND_R,						// 右手
-		MODEL_DRONE_EYE,						// 目
-
-		//===wallドローン ドラゴンノスケで使う===
-		MODEL_DRONE_HEAD,					// ドローンの頭
-		MODEL_DRONE_JOINT_F_R,				// 右前足関節
-		MODEL_DRONE_THIGH_F_R,				// 右前大腿
-		MODEL_DRONE_LEG_F_R,				// 右前足
-		MODEL_DRONE_JOINT_B_R,				// 右後足関節
-		MODEL_DRONE_THIGH_B_R,				// 右後大腿
-		MODEL_DRONE_LEG_B_R,				// 右後足
-		MODEL_DRONE_JOINT_F_L,				// 左前足関節
-		MODEL_DRONE_THIGH_F_L,				// 左前大腿
-		MODEL_DRONE_LEG_F_L,				// 左前足
-		MODEL_DRONE_JOINT_B_L,				// 左後足関節
-		MODEL_DRONE_THIGH_B_L,				// 左後大腿
-		MODEL_DRONE_LEG_B_L,				// 左後足
+		MODEL_DRONE_WING_JOINT_L,				// 左翼関節
+		MODEL_DRONE_WING_JOINT_R,				// 右翼関節
+		MODEL_DRONE_WING_L,						// 左翼
+		MODEL_DRONE_WING_R,						// 右翼
+		MODEL_DRONE_LEG_B,						// 後足
 
 		//===マップのモデル===
 		MODEL_MAP_TUTORIAL=200,			// チュートリアルマップ

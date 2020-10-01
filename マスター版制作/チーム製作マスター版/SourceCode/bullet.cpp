@@ -50,6 +50,7 @@ char *CBullet::m_BulletFileName[CGun::GUNTYPE_MAX] =
 	{ "data/Load/Gun/Missile.txt" },				// ミサイル
 	{ "data/Load/Gun/FlameBullet.txt" },			// フレイムバレット
 	{ "data/Load/Gun/DropBomb.txt" },				// ドロップボム
+	{ "data/Load/Gun/DroneBeam.txt" },				// ドロップボム
 };
 
 // =====================================================================================================================================================================

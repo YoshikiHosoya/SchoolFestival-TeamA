@@ -9,7 +9,7 @@
 // É}ÉNÉçíËã`
 //=============================================================================
 #define DEFAULT_BACKCOLOR (D3DXCOLOR(0.0f,0.0f,0.0f,1.0f))
-#define SCREEN_LIMIT_COMPLEMENT_VALUE_X (80.0f)
+#define SCREEN_LIMIT_COMPLEMENT_VALUE_X (60.0f)
 #define SCREEN_LIMIT_COMPLEMENT_VALUE_Y (200.0f)
 
 //=============================================================================

@@ -22,6 +22,7 @@
 #include "zycoccaAI.h"
 #include "grenadefire.h"
 #include "EnemyHelicopterAI.h"
+#include "SkyDroneAI.h"
 
 //====================================================================
 //マクロ定義
@@ -39,7 +40,7 @@
 #define ENEMY_MELTYHONEY_LIFE					(60)									//ライフ
 #define ENEMY_ZYCOCCA_LIFE						(40)									//ライフ
 
-#define ENEMY_DRONE_LIFE						(3)										//ライフ
+#define ENEMY_DRONE_LIFE						(10)										//ライフ
 
 
 #define KNIFE_COLLISOIN_SIZE	(D3DXVECTOR3(40.0f,60.0f,0.0f))
@@ -218,19 +219,29 @@ HRESULT CWeakEnemy::Init(void)
 
 
 	case CWeakEnemy::ENEMY_TYPE::ENEMY_SKYDRONE:
+		// 正面を向かせる
+		SetRotDest(D3DXVECTOR3(0.0f, 1.57f, 0.0f));
+		SetRot(D3DXVECTOR3(0.0f, 1.57f, 0.0f));
+
 		//オフセット設定
-		GetModelSet()->SetCharacterType(CModelSet::CHARACTER_TYPE_ENEMY_DRONE);
+		GetModelSet()->SetCharacterType(CModelSet::CHARACTER_TYPE_ENEMY_SKYDRONE);
+		GetModelSet()->LoadOffset(CModelSet::CHARACTER_TYPE_ENEMY_SKYDRONE);
 
-		GetModelSet()->LoadOffset(CModelSet::CHARACTER_TYPE_ENEMY_DRONE);
+		//AIの追加
+		SetAIPtr(CSkyDroneAI::CreateAI(this));
+
 		// 銃の生成
-		GetGunPtr()->SetHandMtx(GetModelSet()->GetCharacterModelList()[3]->GetMatrix());
+		GetGunPtr()->SetHandMtx(GetModelSet()->GetCharacterModelList()[0]->GetMatrix());
 		// 発射する位置の設定
-		GetGunPtr()->SetShotOffsetPos(GetGunPtr()->GetShotOffsetPos());
+		//GetGunPtr()->SetShotOffsetPos(GetGunPtr()->GetShotOffsetPos());
+		// 発射する位置の設定
+		GetGunPtr()->SetShotOffsetPos(D3DXVECTOR3(GetGunPtr()->GetShotOffsetPos().x,
+			GetGunPtr()->GetShotOffsetPos().y + 0.0f,
+			GetGunPtr()->GetShotOffsetPos().z + 0.0f));
 		// 銃の弾の種類
-
-		GetGunPtr()->SetDisp(false);
-		// 弾をフレイムバレットに設定
-		GetGunPtr()->SetGunTypeOnly(CGun::GUNTYPE_BALKAN);
+		GetGunPtr()->SetDisp(true);
+		// 弾を単発ビームに設定
+		GetGunPtr()->SetGunTypeOnly(CGun::GUNTYPE_DRONEBEAM);
 		//モーションoff
 		CCharacter::GetModelSet()->SetUseMotion(false);
 		CCharacter::GetModelSet()->SetMotion(CModelSet::CHARACTER_MOTION_STATE_NONE);
@@ -241,36 +252,6 @@ HRESULT CWeakEnemy::Init(void)
 		CCharacter::SetMaxLife(ENEMY_DRONE_LIFE);
 		// 重力をかけない
 		SetGravity(false);
-		// 正面を向かせる
-		SetRotDest(D3DXVECTOR3(0.0f,0.0f,0.0f));
-
-		break;
-
-	case CWeakEnemy::ENEMY_TYPE::ENEMY_WALLDRONE:
-		//オフセット設定
-		GetModelSet()->SetCharacterType(CModelSet::CHARACTER_TYPE_ENEMY_WALLDRONE);
-		GetModelSet()->LoadOffset(CModelSet::CHARACTER_TYPE_ENEMY_WALLDRONE);
-		// 銃の生成
-		GetGunPtr()->SetHandMtx(GetModelSet()->GetCharacterModelList()[0]->GetMatrix());
-		// 発射する位置の設定
-		GetGunPtr()->SetShotOffsetPos(D3DXVECTOR3(GetGunPtr()->GetShotOffsetPos().x,
-			GetGunPtr()->GetShotOffsetPos().y,
-			GetGunPtr()->GetShotOffsetPos().z + 50.0f));
-
-		// 銃の弾の種類
-		GetGunPtr()->SetDisp(false);
-		// 弾をフレイムバレットに設定
-		GetGunPtr()->SetGunTypeOnly(CGun::GUNTYPE_BALKAN);
-		//モーションoff
-		CCharacter::GetModelSet()->SetUseMotion(false);
-		CCharacter::GetModelSet()->SetMotion(CModelSet::CHARACTER_MOTION_STATE_NONE);
-		// 当たり判定生成
-		GetCollision()->SetSize(ENEMY_WALLDRONE_COLLISIONSIZE);
-		//HP設定
-		CCharacter::SetMaxLife(ENEMY_DRONE_LIFE);
-		SetGravity(false);
-		// 正面を向かせる
-		SetRotDest(D3DXVECTOR3(0.0f, D3DX_PI*0.5f, 0.0f));
 
 		break;
 
@@ -281,7 +262,6 @@ HRESULT CWeakEnemy::Init(void)
 	switch (GetEnemyType())
 	{
 	case CWeakEnemy::ENEMY_TYPE::ENEMY_SKYDRONE:
-	case CWeakEnemy::ENEMY_TYPE::ENEMY_WALLDRONE:
 		GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_CHARACTER);
 		break;
 	default:
@@ -379,7 +359,7 @@ void CWeakEnemy::DebugInfo(void)
 	}
 
 	//オフセットビューワ
-	if (GetEnemyType() == CWeakEnemy::ENEMY_TYPE::ENEMY_ZYCOCCA)
+	if (GetEnemyType() == CWeakEnemy::ENEMY_TYPE::ENEMY_SKYDRONE)
 	{
 		CDebug_ModelViewer::OffsetViewer(CCharacter::GetModelSet()->GetCharacterModelList());
 	}
@@ -478,29 +458,26 @@ void CWeakEnemy::DamageReaction()
 //====================================================================
 void CWeakEnemy::DeathReaction()
 {
-	if (CHossoLibrary::Random(10) <= 1)
+	// 雑魚的の場合
+	if (GetEnemyType() == CEnemy::ENEMY_TYPE::ENEMY_NORMAL ||
+		GetEnemyType() == CEnemy::ENEMY_TYPE::ENEMY_SHIELD)
 	{
 		// ランダムな確率でアイテムをドロップする
 		if (CItem::DropRate())
 		{
-			// 雑魚的の場合
-			if (GetEnemyType() == CEnemy::ENEMY_TYPE::ENEMY_NORMAL &&
-				GetEnemyType() == CEnemy::ENEMY_TYPE::ENEMY_SHIELD)
-			{
-				//アイテムを生成
-				CItem::DropItem(GetPosition(),
-					false,
-					CItem::ITEMTYPE_NONE);
-			}
-			// その他
-			else
-			{
-				//アイテムを生成
-				CItem::DropItem(GetPosition(),
-					true,
-					CItem::ITEMTYPE_HEAVYMACHINEGUN);
-			}
+			//アイテムを生成
+			CItem::DropItem(GetPosition(),
+				false,
+				CItem::ITEMTYPE_NONE);
 		}
+	}
+	// その他
+	else
+	{
+		//アイテムを生成
+		CItem::DropItem(GetPosition(),
+			true,
+			CItem::ITEMTYPE_HEAVYMACHINEGUN);
 	}
 
 	CEnemy::DeathReaction();
@@ -547,7 +524,6 @@ void CWeakEnemy::StateChangeReaction()
 		case CEnemy::ENEMY_TYPE::ENEMY_ZYCOCCA:
 		case CEnemy::ENEMY_TYPE::ENEMY_HELICOPTER:
 		case CEnemy::ENEMY_TYPE::ENEMY_SKYDRONE:
-		case CEnemy::ENEMY_TYPE::ENEMY_WALLDRONE:
 
 			CParticle::CreateFromText(GetPosition(), ZeroVector3, CParticleParam::EFFECT_NO_COLLISION_EXPLOSION);
 			SetStateCount(1);

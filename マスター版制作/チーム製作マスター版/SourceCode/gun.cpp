@@ -25,6 +25,7 @@
 #include "flamethrower.h"
 #include "missile.h"
 #include "flamebullet.h"
+#include "dronebeam.h"
 
 // =====================================================================================================================================================================
 // 静的メンバ変数の初期化
@@ -410,6 +411,15 @@ void CGun::Shot()
 			m_bMultiple = true;		// 複数発撃つフラグをオン
 			break;
 
+		case CGun::GUNTYPE_DRONEBEAM:
+			// フレイムバレットの生成
+			pBullet = CDroneBeam::Create(m_ShotRot);
+
+			//音再生
+			CManager::GetSound()->Play(CSound::LABEL_SE_SHOT_MACHINEGUN);
+
+			m_bMultiple = true;		// 複数発撃つフラグをオン
+			break;
 		}
 		if (pBullet)
 		{
@@ -504,22 +514,6 @@ void CGun::MultipleShot()
 				//音再生
 				CManager::GetSound()->Play(CSound::LABEL_SE_SHOT_FLAMEBULLET);
 
-
-			}
-			break;
-
-			//フレイムバレット
-		case CGun::GUNTYPE_FLAMEBULLET:
-			if (m_nCntFrame >= FLAMEBULLET_SHOT_FRAME)
-			{
-				// 複数撃った弾を減らす処理
-				ProcessReduceMultipleBullet();
-
-				// フレイムバレットの生成
-				pBullet = CFlameBullet::Create(m_ShotRot);
-
-				//音再生
-				CManager::GetSound()->Play(CSound::LABEL_SE_SHOT_FLAMEBULLET);
 
 			}
 			break;

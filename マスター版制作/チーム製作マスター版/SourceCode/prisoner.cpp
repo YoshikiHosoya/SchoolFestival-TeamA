@@ -472,24 +472,32 @@ void CPrisoner::PrisonerDropType()
 			DropPos.x += 50.0f;
 		}
 
-		switch (m_PrisonerDropType)
+		if (m_PrisonerType == PRISONER_TYPE_NORMAL)
 		{
-			// アイテムを1種類指定して確定でドロップさせる
-		case CPrisoner::PRISONER_ITEM_DROPTYPE_PICK_ONE:
-			// アイテムの生成[捕虜の座標 ドロップするアイテムを確定させるかどうか 確定させるアイテムのタイプの指定]
-			CItem::DropItem(
-				DropPos,
-				true,
-				GetPrisonerDropItem());
-			break;
+			switch (m_PrisonerDropType)
+			{
+				// アイテムを1種類指定して確定でドロップさせる
+			case CPrisoner::PRISONER_ITEM_DROPTYPE_PICK_ONE:
+				// アイテムの生成[捕虜の座標 ドロップするアイテムを確定させるかどうか 確定させるアイテムのタイプの指定]
+				CItem::DropItem(
+					DropPos,
+					true,
+					GetPrisonerDropItem());
+				break;
 
-			// ドロップするアイテムを範囲で指定してドロップさせる
-		case CPrisoner::PRISONER_ITEM_DROPTYPE_RANGE:
-			CItem::DropItem(
-				DropPos,
-				false,
-				CItem::ITEMTYPE_NONE);
-			break;
+				// ドロップするアイテムを範囲で指定してドロップさせる
+			case CPrisoner::PRISONER_ITEM_DROPTYPE_RANGE:
+				CItem::DropItem(
+					DropPos,
+					false,
+					CItem::ITEMTYPE_NONE);
+				break;
+			}
+		}
+		else
+		{
+			// 特別な捕虜
+			CItem::DropItem_Multiple(GetPosition(), CItem::LIST_FOOD, CItem::BEHAVIOR_BURSTS);
 		}
 
 		m_bDrop = true;

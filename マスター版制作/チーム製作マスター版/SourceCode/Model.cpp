@@ -56,25 +56,12 @@ std::vector<CModel::MODEL_FILE_NAME> CModel::m_vModelFileName =
 	{ "data/MODEL/Enemy/Zycocca/wheel.x" ,					MODEL_ENEMY_ZYCOCCA_WHEEL },			// 右足
 
 	// ドローン sky
-	{ "data/MODEL/Enemy/Drone/SkyDrone_x/Drone_Body.x" ,	MODEL_DRONE_BODY },						// 体
-	{ "data/MODEL/Enemy/Drone/SkyDrone_x/Drone_Hand_L.x" ,	MODEL_DRONE_HAND_L },					// 左手
-	{ "data/MODEL/Enemy/Drone/SkyDrone_x/Drone_Hand_R.x" ,	MODEL_DRONE_HAND_R },					// 右手
-	{ "data/MODEL/Enemy/Drone/SkyDrone_x/Drone_Eye.x" ,		MODEL_DRONE_EYE },						// 目
-
-	// ドローン wall
-	{ "data/MODEL/Enemy/Drone/WallDrone_x/WallDrone_Head.x" ,		MODEL_DRONE_HEAD },				// 0ドローンの頭-1
-	{ "data/MODEL/Enemy/Drone/WallDrone_x/WallDrone_Joint.x" ,		MODEL_DRONE_JOINT_F_R },		// 1右前足関節0
-	{ "data/MODEL/Enemy/Drone/WallDrone_x/WallDrone_Thigh_F_R.x" ,	MODEL_DRONE_THIGH_F_R },		// 2右前大腿1
-	{ "data/MODEL/Enemy/Drone/WallDrone_x/WallDrone_Leg_F_R.x" ,	MODEL_DRONE_LEG_F_R },			// 3右前足2
-	{ "data/MODEL/Enemy/Drone/WallDrone_x/WallDrone_Joint.x" ,		MODEL_DRONE_JOINT_B_R },		// 4右後足関節0
-	{ "data/MODEL/Enemy/Drone/WallDrone_x/WallDrone_Thigh_B_R.x" ,	MODEL_DRONE_THIGH_B_R },		// 5右後大腿4
-	{ "data/MODEL/Enemy/Drone/WallDrone_x/WallDrone_Leg_B_R.x" ,	MODEL_DRONE_LEG_B_R },			// 6右後足5
-	{ "data/MODEL/Enemy/Drone/WallDrone_x/WallDrone_Joint.x" ,		MODEL_DRONE_JOINT_F_L },		// 7左前足関節0
-	{ "data/MODEL/Enemy/Drone/WallDrone_x/WallDrone_Thigh_F_L.x" ,	MODEL_DRONE_THIGH_F_L },		// 8左前大腿7
-	{ "data/MODEL/Enemy/Drone/WallDrone_x/WallDrone_Leg_F_L.x" ,	MODEL_DRONE_LEG_F_L },			// 9左前足8
-	{ "data/MODEL/Enemy/Drone/WallDrone_x/WallDrone_Joint.x" ,		MODEL_DRONE_JOINT_B_L },		// 10左後足関節0
-	{ "data/MODEL/Enemy/Drone/WallDrone_x/WallDrone_Thigh_B_L.x" ,	MODEL_DRONE_THIGH_B_L },		// 11左後大腿10
-	{ "data/MODEL/Enemy/Drone/WallDrone_x/WallDrone_Leg_B_L.x" ,	MODEL_DRONE_LEG_B_L },			// 12左後足11
+	{ "data/MODEL/Enemy/Drone/SkyDrone_x/SkyDrone_Body.x" ,				MODEL_DRONE_BODY },					// ドローンの体
+	{ "data/MODEL/Enemy/Drone/SkyDrone_x/SkyDrone_Wing_Joint_L.x" ,		MODEL_DRONE_WING_JOINT_L },			// 左翼関節
+	{ "data/MODEL/Enemy/Drone/SkyDrone_x/SkyDrone_Wing_Joint_R.x" ,		MODEL_DRONE_WING_JOINT_R },			// 右翼関節
+	{ "data/MODEL/Enemy/Drone/SkyDrone_x/SkyDrone_Wing_L.x" ,			MODEL_DRONE_WING_L },				// 左翼
+	{ "data/MODEL/Enemy/Drone/SkyDrone_x/SkyDrone_Wing_R.x" ,			MODEL_DRONE_WING_R },				// 右翼
+	{ "data/MODEL/Enemy/Drone/SkyDrone_x/SkyDrone_Leg_B.x" ,			MODEL_DRONE_LEG_B },				// 後足
 
 	//マップ
 	{ "data/MODEL/map/Map1_Boss stage.x" ,					MODEL_MAP_TUTORIAL },					// チュートリアルマップ

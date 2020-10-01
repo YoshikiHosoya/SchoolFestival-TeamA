@@ -738,6 +738,29 @@ CObstacle *CMap::PresentCreate(D3DXVECTOR3 pos, CObstacle::OBSTACLE_TYPE Type)
 
 // =====================================================================================================================================================================
 //
+// ボスマップ用の生成
+//
+// =====================================================================================================================================================================
+void CMap::BossWaveCreate(int nModelType, D3DXVECTOR3 eventpos, CWeakEnemy::ENEMY_TYPE EnemyType)
+{
+	if (nModelType == ARRANGEMENT_MODEL_ENEMY)
+	{
+		// 敵
+		m_pEnemy.emplace_back(CWeakEnemy::Create(EnemyType));
+		m_pEnemy[m_pEnemy.size() - 1]->SetPosition(eventpos);
+	}
+	else if (nModelType == ARRANGEMENT_MODEL_PRISONER)
+	{
+		// 捕虜
+		m_pPrisoner.emplace_back(CPrisoner::Create());
+		m_pPrisoner[m_pPrisoner.size() - 1]->SetPosition(eventpos);
+		// 特別な捕虜として設定
+		m_pPrisoner[m_pPrisoner.size() - 1]->SetPrisonerType(CPrisoner::PRISONER_TYPE_SPECIAL);
+	}
+}
+
+// =====================================================================================================================================================================
+//
 // モデルの最大数取得
 //
 // =====================================================================================================================================================================

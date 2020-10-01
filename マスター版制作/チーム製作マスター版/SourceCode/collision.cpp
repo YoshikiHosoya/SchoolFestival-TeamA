@@ -269,8 +269,7 @@ bool CCollision::ForPlayerBulletCollision(int nEnemyDamage, int nObstacleDamage,
 				if (pEnemy->GetCollision()->GetCanCollison())
 				{
 					// ƒhƒ[ƒ“Œn‚Ì“G‚Í•Ê‚Ì”»’è
-					if (pEnemy->GetEnemyType() == CEnemy::ENEMY_TYPE::ENEMY_SKYDRONE ||
-						pEnemy->GetEnemyType() == CEnemy::ENEMY_TYPE::ENEMY_WALLDRONE)
+					if (pEnemy->GetEnemyType() == CEnemy::ENEMY_TYPE::ENEMY_SKYDRONE)
 					{
 						if (this->CharCollision2D(pEnemy->GetCollision()))
 						{

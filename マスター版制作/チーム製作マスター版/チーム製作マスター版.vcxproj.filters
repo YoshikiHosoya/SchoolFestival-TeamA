@@ -331,6 +331,12 @@
     <ClCompile Include="SourceCode\meltyhoneyAI.cpp">
       <Filter>AI</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\SkyDroneAI.cpp">
+      <Filter>AI</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\dronebeam.cpp">
+      <Filter>Wepon\Gun</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SourceCode\BaseAI.h">
@@ -674,6 +680,12 @@
     </ClInclude>
     <ClInclude Include="SourceCode\meltyhoneyAI.h">
       <Filter>AI</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\SkyDroneAI.h">
+      <Filter>AI</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\dronebeam.h">
+      <Filter>Wepon\Gun</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

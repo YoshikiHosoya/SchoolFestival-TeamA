@@ -45,6 +45,7 @@ public:
 		GUNTYPE_MISSILE,							// ミサイル
 		GUNTYPE_FLAMEBULLET,						// フレイムバレット
 		GUNTYPE_DROPBOMB,							// ドロップボム
+		GUNTYPE_DRONEBEAM,							// ドローン用
 
 		GUNTYPE_MAX									// 銃の種類の最大数
 	};

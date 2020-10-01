@@ -16,22 +16,35 @@ SET_START ---------[1]----------
 	MODEL_TYPE = 1
 	INDEX = 22
 	PARENT = 0
-	POS = -40.0 0.0 0.0
+	POS = 25.0 17.9 0.0
 SET_END
 
 SET_START ---------[2]----------
 	MODEL_TYPE = 1
 	INDEX = 23
 	PARENT = 0
-	POS = 40.0 0.0 0.0
+	POS = -25.0 17.9 0.0
 SET_END
 
 SET_START ---------[3]----------
 	MODEL_TYPE = 1
 	INDEX = 24
-	PARENT = 0
-	POS = 0.0 20.0 -20.0
+	PARENT = 1
+	POS = 0.0 0.0 0.0
 SET_END
 
+SET_START ---------[4]----------
+	MODEL_TYPE = 1
+	INDEX = 25
+	PARENT = 2
+	POS = 0.0 0.0 0.0
+SET_END
+
+SET_START ---------[5]----------
+	MODEL_TYPE = 1
+	INDEX = 26
+	PARENT = 0
+	POS = 0.0 0.0 0.0
+SET_END
 
 MODEL_OFFSET_END

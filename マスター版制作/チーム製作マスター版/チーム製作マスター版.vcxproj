@@ -172,6 +172,7 @@
     <ClCompile Include="SourceCode\debugproc.cpp" />
     <ClCompile Include="SourceCode\Debug_MapEditor.cpp" />
     <ClCompile Include="SourceCode\diffusiongun.cpp" />
+    <ClCompile Include="SourceCode\dronebeam.cpp" />
     <ClCompile Include="SourceCode\Enemy.cpp" />
     <ClCompile Include="SourceCode\EnemyAI.cpp" />
     <ClCompile Include="SourceCode\EnemyHelicopterAI.cpp" />
@@ -247,6 +248,7 @@
     <ClCompile Include="SourceCode\ScoreManager.cpp" />
     <ClCompile Include="SourceCode\shield.cpp" />
     <ClCompile Include="SourceCode\ShieldEnemyAI.cpp" />
+    <ClCompile Include="SourceCode\SkyDroneAI.cpp" />
     <ClCompile Include="SourceCode\sound.cpp" />
     <ClCompile Include="SourceCode\tankgun.cpp" />
     <ClCompile Include="SourceCode\TexAnimation2D.cpp" />
@@ -284,6 +286,7 @@
     <ClInclude Include="SourceCode\debugproc.h" />
     <ClInclude Include="SourceCode\Debug_MapEditor.h" />
     <ClInclude Include="SourceCode\diffusiongun.h" />
+    <ClInclude Include="SourceCode\dronebeam.h" />
     <ClInclude Include="SourceCode\Enemy.h" />
     <ClInclude Include="SourceCode\EnemyAI.h" />
     <ClInclude Include="SourceCode\EnemyHelicopterAI.h" />
@@ -363,6 +366,7 @@
     <ClInclude Include="SourceCode\ScoreManager.h" />
     <ClInclude Include="SourceCode\shield.h" />
     <ClInclude Include="SourceCode\ShieldEnemyAI.h" />
+    <ClInclude Include="SourceCode\SkyDroneAI.h" />
     <ClInclude Include="SourceCode\sound.h" />
     <ClInclude Include="SourceCode\tankgun.h" />
     <ClInclude Include="SourceCode\TexAnimation2D.h" />
