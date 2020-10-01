@@ -29,6 +29,14 @@ std::vector<CModel::MODEL_FILE_NAME> CModel::m_vModelFileName =
 	{ "data/MODEL/character/Player/L_Leg.x",				MODEL_PLAYER_LFOOT				},		// プレイヤーの左足
 	{ "data/MODEL/character/Player/R_Leg.x",				MODEL_PLAYER_RFOOT				},		// プレイヤーの右足
 
+	{ "data/MODEL/character/Player/2pModel/Waist.x",		MODEL_PLAYER_2P_WAIST			 },		// 2Pプレイヤーの腰
+	{ "data/MODEL/character/Player/2pModel/Body.x",			MODEL_PLAYER_2P_BODY			 },		// 2Pプレイヤーの体
+	{ "data/MODEL/character/Player/2pModel/L_Knee.x",		MODEL_PLAYER_2P_LKNEE			 },		// 2Pプレイヤーの左膝
+	{ "data/MODEL/character/Player/2pModel/R_Knee.x",		MODEL_PLAYER_2P_RKNEE			 },		// 2Pプレイヤーの右膝
+	{ "data/MODEL/character/Player/2pModel/L_Foot.x",		MODEL_PLAYER_2P_LFOOT			 },		// 2Pプレイヤーの左脚
+	{ "data/MODEL/character/Player/2pModel/R_Foot.x",		MODEL_PLAYER_2P_RFOOT			 },		// 2Pプレイヤーの右脚
+
+
 	//敵
 	{ "data/MODEL/Enemy/EnemyHuman/Waist.x",				MODEL_ENEMY_HUMAN_WAIST },				// 腰
 	{ "data/MODEL/Enemy/EnemyHuman/Body.x" ,				MODEL_ENEMY_HUMAN_HEAD },				// 頭

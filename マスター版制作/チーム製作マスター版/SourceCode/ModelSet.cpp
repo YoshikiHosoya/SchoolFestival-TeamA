@@ -22,6 +22,7 @@ std::vector<CModelSet::MOTION*> CModelSet::m_CharacterMotion = {};
 char *CModelSet::m_LoadOffsetFileName[CHARACTER_TYPE_MAX] =
 {
 	{ "data/Load/Player/PlayerOffset.txt" },
+	{ "data/Load/Player/2PPlayerOffset.txt" },
 	{ "data/Load/Enemy/Enemy_Human_Offset.txt" },
 	{ "data/Load/Enemy/Enemy_Helicopter_Offset.txt" },
 	{ "data/Load/Enemy/Enemy_MeltyHoney_Offset.txt" },

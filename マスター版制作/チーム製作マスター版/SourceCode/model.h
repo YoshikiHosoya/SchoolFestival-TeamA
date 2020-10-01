@@ -40,6 +40,15 @@ public:
 		MODEL_PLAYER_RLEG,				// プレイヤーの右脚
 		MODEL_PLAYER_LFOOT,				// プレイヤーの左足
 		MODEL_PLAYER_RFOOT,				// プレイヤーの右足
+
+		MODEL_PLAYER_2P_WAIST,				// 2Pプレイヤーの腰
+		MODEL_PLAYER_2P_BODY,				// 2Pプレイヤーの体
+		MODEL_PLAYER_2P_LKNEE,				// 2Pプレイヤーの左膝
+		MODEL_PLAYER_2P_RKNEE,				// 2Pプレイヤーの右膝
+		MODEL_PLAYER_2P_LFOOT,				// 2Pプレイヤーの左足
+		MODEL_PLAYER_2P_RFOOT,				// 2Pプレイヤーの右足
+
+
 		//===敵のモデル===
 		//人型
 		MODEL_ENEMY_HUMAN_WAIST=100,			// 腰

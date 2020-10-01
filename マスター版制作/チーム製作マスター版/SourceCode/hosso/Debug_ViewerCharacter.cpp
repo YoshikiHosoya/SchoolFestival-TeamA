@@ -54,7 +54,7 @@ HRESULT CDebug_ViewerCharacter::Init()
 	CCharacter::Init();
 
 	//オフセット設定
-	GetModelSet()->LoadOffset(CModelSet::CHARACTER_TYPE_PRISONER);
+	GetModelSet()->LoadOffset(CModelSet::CHARACTER_TYPE_PLAYER);
 
 	//初期化
 	SetRotDest(ZeroVector3);
