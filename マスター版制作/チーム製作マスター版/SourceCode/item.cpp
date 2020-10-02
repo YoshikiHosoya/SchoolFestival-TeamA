@@ -688,6 +688,11 @@ void CItem::SetMultiType(ITEM_LIST_DROPMULTIPLE list)
 		SwitchTexture(this->RandDropItem(ITEMDROP_COIN), this);
 		break;
 
+	case CItem::LIST_WEAPON:
+		// コインのみ
+		SwitchTexture(this->RandDropItem(ITEMDROP_WEAPON), this);
+		break;
+
 	case CItem::LIST_RARE:
 		// レアなアイテムのみ
 		SwitchTexture(this->RandDropItem(ITEMDROP_RARE), this);
@@ -1029,11 +1034,20 @@ CItem * CItem::DebugCreate(ITEMTYPE type)
 // =====================================================================================================================================================================
 void CItem::SetRarityList()
 {
+	// --- 武器のみ --- //
+	//// 各レアリティに該当するアイテムの設定
+	//CItem::m_nBoxRandDefaultRarityData = {
+	//	{ ITEMTYPE_HEAVYMACHINEGUN, ITEMTYPE_ROCKETLAUNCHER },	// ★のアイテムリスト
+	//	{ ITEMTYPE_LASERGUN },									// ★★のアイテムリスト
+	//	{ ITEMTYPE_SHOTGUN, ITEMTYPE_FLAMESHOT },				// ★★★のアイテムリスト
+	//};
+
+	// --- ボスマップで使う方 --- //
 	// 各レアリティに該当するアイテムの設定
 	CItem::m_nBoxRandDefaultRarityData = {
-		{ ITEMTYPE_HEAVYMACHINEGUN, ITEMTYPE_ROCKETLAUNCHER },
-		{ ITEMTYPE_LASERGUN },
-		{ ITEMTYPE_SHOTGUN, ITEMTYPE_FLAMESHOT },
+		{ ITEMTYPE_HEAVYMACHINEGUN, ITEMTYPE_ROCKETLAUNCHER },	// ★のアイテムリスト
+		{ ITEMTYPE_LASERGUN },									// ★★のアイテムリスト
+		{ ITEMTYPE_SHOTGUN, ITEMTYPE_FLAMESHOT },				// ★★★のアイテムリスト
 	};
 
 	// 各レアリティの要素数を設定
@@ -1243,8 +1257,19 @@ void CItem::DropItem_Multiple(const D3DXVECTOR3 originpos, ITEM_LIST_DROPMULTIPL
 
 		// 挙動の設定
 		pItem->m_Behavior = behavior;
-		// 複数体のタイプ設定
-		pItem->SetMultiType(type);
+
+		// 特別なアイテムリストを指定された時のみアイテムの選考方法を変える
+		if (type == LIST_SPECIAL)
+		{
+			// 乱数リストからアイテムをランダムに選び設定する
+			SwitchTexture(pItem->BoxRand(), pItem);
+		}
+		else
+		{
+			// 複数体のタイプ設定
+			pItem->SetMultiType(type);
+		}
+
 		// アイテムの挙動と種類の設定
 		pItem->DropPattern_Multiple(type, behavior, nNum);
 	}

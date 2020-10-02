@@ -316,7 +316,6 @@ void CPrisoner::PrisonerState()
 
 			//音再生
 			CManager::GetSound()->Play(CSound::LABEL_SE_VOICE_OK);
-
 		}
 
 		// 距離がn以上離れていたら距離がn以下になるまで捕虜のステートを[PRISONER_STATE_SKIP]にする
@@ -396,7 +395,7 @@ void CPrisoner::PrisonerState()
 		{
 			// 捕虜の状態の変更
 			// 捕虜のタイプ別ドロップ処理
-			PrisonerDropType();
+			PrisonerDropItem();
 
 			if (m_StateTime <= 0)
 			{
@@ -458,7 +457,7 @@ void CPrisoner::PrisonerState()
 // 捕虜のタイプ別処理
 //
 // =====================================================================================================================================================================
-void CPrisoner::PrisonerDropType()
+void CPrisoner::PrisonerDropItem()
 {
 	if (!m_bDrop)
 	{
@@ -497,7 +496,7 @@ void CPrisoner::PrisonerDropType()
 		else
 		{
 			// 特別な捕虜
-			CItem::DropItem_Multiple(GetPosition(), CItem::LIST_FOOD, CItem::BEHAVIOR_BURSTS);
+			CItem::DropItem_Multiple(GetPosition(), CItem::LIST_SPECIAL, CItem::BEHAVIOR_BURSTS);
 		}
 
 		m_bDrop = true;

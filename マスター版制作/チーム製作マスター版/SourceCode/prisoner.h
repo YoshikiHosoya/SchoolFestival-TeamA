@@ -112,7 +112,7 @@ private:
 
 	/* メンバ関数 */
 	void					PrisonerState();					// 捕虜の状態別処理
-	void					PrisonerDropType();					// 捕虜のタイプ別処理
+	void					PrisonerDropItem();					// 捕虜のタイプ別処理
 	void					SetStateTime(int time)
 							{m_StateTime = time;};				// ステートが切り替わるまでの時間の設定
 

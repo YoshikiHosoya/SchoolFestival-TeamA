@@ -157,6 +157,7 @@
     <ClCompile Include="SourceCode\3Dline.cpp" />
     <ClCompile Include="SourceCode\3Dmultinumber.cpp" />
     <ClCompile Include="SourceCode\3Dnumber.cpp" />
+    <ClCompile Include="SourceCode\Anim_Item.cpp" />
     <ClCompile Include="SourceCode\balkan.cpp" />
     <ClCompile Include="SourceCode\BaseAI.cpp" />
     <ClCompile Include="SourceCode\BaseMode.cpp" />
@@ -202,6 +203,7 @@
     <ClCompile Include="SourceCode\incendiary.cpp" />
     <ClCompile Include="SourceCode\inputKeyboard.cpp" />
     <ClCompile Include="SourceCode\item.cpp" />
+    <ClCompile Include="SourceCode\ItemBase.cpp" />
     <ClCompile Include="SourceCode\Knife.cpp" />
     <ClCompile Include="SourceCode\light.cpp" />
     <ClCompile Include="SourceCode\main.cpp" />
@@ -252,6 +254,7 @@
     <ClCompile Include="SourceCode\sound.cpp" />
     <ClCompile Include="SourceCode\tankgun.cpp" />
     <ClCompile Include="SourceCode\TexAnimation2D.cpp" />
+    <ClCompile Include="SourceCode\TexAnimation3D.cpp" />
     <ClCompile Include="SourceCode\TexAnimationBase.cpp" />
     <ClCompile Include="SourceCode\texture.cpp" />
     <ClCompile Include="SourceCode\title.cpp" />
@@ -271,6 +274,7 @@
     <ClInclude Include="SourceCode\3Dline.h" />
     <ClInclude Include="SourceCode\3Dmultinumber.h" />
     <ClInclude Include="SourceCode\3Dnumber.h" />
+    <ClInclude Include="SourceCode\Anim_Item.h" />
     <ClInclude Include="SourceCode\balkan.h" />
     <ClInclude Include="SourceCode\BaseAI.h" />
     <ClInclude Include="SourceCode\BaseMode.h" />
@@ -319,6 +323,7 @@
     <ClInclude Include="SourceCode\incendiary.h" />
     <ClInclude Include="SourceCode\inputKeyboard.h" />
     <ClInclude Include="SourceCode\item.h" />
+    <ClInclude Include="SourceCode\ItemBase.h" />
     <ClInclude Include="SourceCode\Knife.h" />
     <ClInclude Include="SourceCode\light.h" />
     <ClInclude Include="SourceCode\main.h" />
@@ -370,6 +375,7 @@
     <ClInclude Include="SourceCode\sound.h" />
     <ClInclude Include="SourceCode\tankgun.h" />
     <ClInclude Include="SourceCode\TexAnimation2D.h" />
+    <ClInclude Include="SourceCode\TexAnimation3D.h" />
     <ClInclude Include="SourceCode\TexAnimationBase.h" />
     <ClInclude Include="SourceCode\texture.h" />
     <ClInclude Include="SourceCode\title.h" />

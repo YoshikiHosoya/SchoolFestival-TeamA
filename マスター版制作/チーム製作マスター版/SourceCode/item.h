@@ -80,6 +80,7 @@ public:
 		// ------ チャージ ------ //
 		ITEMTYPE_BOMBUP,			// 爆弾の数を増やす
 		ITEMTYPE_BULLETUP,			// ハンドガン以外の弾の残弾数を増やす
+		// ITEMTYPE_LIFEUP,// 残機を1上げる
 
 		ITEMTYPE_MAX				// 最大
 	};
@@ -132,7 +133,9 @@ public:
 		LIST_FRUIT,			// フルーツ
 		LIST_FOOD,			// 食べ物
 		LIST_COIN,			// コイン
-		LIST_RARE			// レアアイテム 宝石
+		LIST_RARE,			// レアアイテム 宝石
+		LIST_WEAPON,		// 武器
+		LIST_SPECIAL,		// ボスマップ用の特別なアイテム用リスト
 	};
 
 	/* 関数 */

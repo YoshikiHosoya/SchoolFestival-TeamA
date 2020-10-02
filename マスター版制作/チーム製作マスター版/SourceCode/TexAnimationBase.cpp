@@ -46,14 +46,14 @@ CTexAnimationBase::~CTexAnimationBase()
 //------------------------------------------------------------------------------
 bool CTexAnimationBase::UpdateAnimation()
 {
-	if (m_nLife-- <= 0 || m_nCntSwitch == 0)
-	{
-		//終了フラグtrue
-		m_bEnd = true;
+	//if (m_nCntSwitch == 0)
+	//{
+	//	//終了フラグtrue
+	//	m_bEnd = true;
 
-		//終了
-		return false;
-	}
+	//	//終了
+	//	return false;
+	//}
 	//カウンターを進める
 	m_nCntAnim++;
 

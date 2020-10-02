@@ -199,9 +199,6 @@
     <ClCompile Include="SourceCode\Scene.cpp">
       <Filter>ProjectBase</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\item.cpp">
-      <Filter>Scene2D_3D</Filter>
-    </ClCompile>
     <ClCompile Include="SourceCode\Scene2D.cpp">
       <Filter>Scene2D_3D\Base</Filter>
     </ClCompile>
@@ -336,6 +333,18 @@
     </ClCompile>
     <ClCompile Include="SourceCode\dronebeam.cpp">
       <Filter>Wepon\Gun</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\TexAnimation3D.cpp">
+      <Filter>Scene2D_3D\UI\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\item.cpp">
+      <Filter>Scene2D_3D\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Anim_Item.cpp">
+      <Filter>Scene2D_3D\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\ItemBase.cpp">
+      <Filter>Scene2D_3D\Item</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -549,9 +558,6 @@
     <ClInclude Include="SourceCode\Resource\resource.h">
       <Filter>Resource</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\item.h">
-      <Filter>Scene2D_3D</Filter>
-    </ClInclude>
     <ClInclude Include="SourceCode\scene2D.h">
       <Filter>Scene2D_3D\Base</Filter>
     </ClInclude>
@@ -687,6 +693,18 @@
     <ClInclude Include="SourceCode\dronebeam.h">
       <Filter>Wepon\Gun</Filter>
     </ClInclude>
+    <ClInclude Include="SourceCode\TexAnimation3D.h">
+      <Filter>Scene2D_3D\UI\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\item.h">
+      <Filter>Scene2D_3D\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Anim_Item.h">
+      <Filter>Scene2D_3D\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\ItemBase.h">
+      <Filter>Scene2D_3D\Item</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="AI">
@@ -766,6 +784,9 @@
     </Filter>
     <Filter Include="Wepon\Knife">
       <UniqueIdentifier>{c512de14-db22-4acf-b4d3-4e24562a7698}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene2D_3D\Item">
+      <UniqueIdentifier>{e6e5cc08-4143-4760-8532-8883fe96b6ea}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
