@@ -31,11 +31,6 @@ MAPSET										# 0
 	POS			= 0 0 0
 END_MAPSET
 
-NO_COLLISION_MAPSET										# 0
-	TYPE		= 9
-	POS			= 0 0 0
-END_NO_COLLISION_MAPSET
-
 //------------------------------------------------------------
 // ìGÇÃîzíuèÓïÒ
 //------------------------------------------------------------
@@ -125,12 +120,12 @@ ENEMYSET									# 15
 END_ENEMYSET
 
 ENEMYSET									# 16
-	TYPE		= 1
+	TYPE		= 0
 	POS			= 3918 93 0
 END_ENEMYSET
 
 ENEMYSET									# 17
-	TYPE		= 1
+	TYPE		= 0
 	POS			= 4338 94 0
 END_ENEMYSET
 
@@ -145,7 +140,7 @@ ENEMYSET									# 19
 END_ENEMYSET
 
 ENEMYSET									# 20
-	TYPE		= 1
+	TYPE		= 0
 	POS			= 3921 253 0
 END_ENEMYSET
 
@@ -322,12 +317,12 @@ END_PRISONERSET
 
 OBSTACLESET									# 47
 	TYPE		= 5
-	POS			= 1416 125 0
+	POS			= 1440 125 0
 END_OBSTACLESET
 
 OBSTACLESET									# 48
 	TYPE		= 5
-	POS			= 3209 123 0
+	POS			= 3226 123 0
 END_OBSTACLESET
 
 OBSTACLESET									# 49
@@ -337,7 +332,7 @@ END_OBSTACLESET
 
 OBSTACLESET									# 50
 	TYPE		= 5
-	POS			= 6500 79 0
+	POS			= 6338 79 0
 END_OBSTACLESET
 
 OBSTACLESET									# 51

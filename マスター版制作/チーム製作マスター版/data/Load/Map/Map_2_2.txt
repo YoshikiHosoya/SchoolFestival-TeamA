@@ -31,12 +31,6 @@ MAPSET										# 0
 	POS			= 0 0 0
 END_MAPSET
 
-NO_COLLISION_MAPSET										# 0
-	TYPE		= 10
-	POS			= 0 0 0
-END_NO_COLLISION_MAPSET
-
-
 //------------------------------------------------------------
 // ìGÇÃîzíuèÓïÒ
 //------------------------------------------------------------
@@ -52,37 +46,37 @@ END_NO_COLLISION_MAPSET
 
 ENEMYSET									# 1
 	TYPE		= 1
-	POS			= 893 62 0
+	POS			= 928 97 0
 END_ENEMYSET
 
 ENEMYSET									# 2
 	TYPE		= 1
-	POS			= 1051 63 0
+	POS			= 1051 105 0
 END_ENEMYSET
 
 ENEMYSET									# 3
 	TYPE		= 0
-	POS			= 1140 63 0
+	POS			= 1140 98 0
 END_ENEMYSET
 
 ENEMYSET									# 4
 	TYPE		= 0
-	POS			= 1316 63 0
+	POS			= 1316 104 0
 END_ENEMYSET
 
 ENEMYSET									# 5
 	TYPE		= 1
-	POS			= 1600 56 0
+	POS			= 1770 61 0
 END_ENEMYSET
 
 ENEMYSET									# 6
 	TYPE		= 0
-	POS			= 1661 58 0
+	POS			= 1825 58 0
 END_ENEMYSET
 
 ENEMYSET									# 7
 	TYPE		= 0
-	POS			= 1818 56 0
+	POS			= 1879 56 0
 END_ENEMYSET
 
 ENEMYSET									# 8
@@ -92,42 +86,42 @@ END_ENEMYSET
 
 ENEMYSET									# 9
 	TYPE		= 0
-	POS			= 3537 60 0
+	POS			= 3537 190 0
 END_ENEMYSET
 
 ENEMYSET									# 10
 	TYPE		= 0
-	POS			= 3611 60 0
+	POS			= 3611 191 0
 END_ENEMYSET
 
 ENEMYSET									# 11
 	TYPE		= 0
-	POS			= 3692 60 0
+	POS			= 3692 190 0
 END_ENEMYSET
 
 ENEMYSET									# 12
 	TYPE		= 0
-	POS			= 3771 60 0
+	POS			= 3771 191 0
 END_ENEMYSET
 
 ENEMYSET									# 13
 	TYPE		= 0
-	POS			= 4693 60 0
+	POS			= 4693 98 0
 END_ENEMYSET
 
 ENEMYSET									# 14
 	TYPE		= 1
-	POS			= 5699 60 0
+	POS			= 5941 60 0
 END_ENEMYSET
 
 ENEMYSET									# 15
 	TYPE		= 0
-	POS			= 5792 60 0
+	POS			= 5999 60 0
 END_ENEMYSET
 
 ENEMYSET									# 16
 	TYPE		= 0
-	POS			= 5904 53 0
+	POS			= 6062 53 0
 END_ENEMYSET
 
 ENEMYSET									# 17
@@ -209,7 +203,7 @@ END_PRISONERSET
 PRISONERSET									# 28
 	TYPE		= 1
 	ITEMTYPE	= -1
-	POS			= 3913 61 0
+	POS			= 4011 96 0
 END_PRISONERSET
 
 PRISONERSET									# 29
@@ -241,60 +235,40 @@ END_PRISONERSET
 
 OBSTACLESET									# 31
 	TYPE		= 5
-	POS			= 838 88 0
+	POS			= 838 102 0
 END_OBSTACLESET
 
 OBSTACLESET									# 32
 	TYPE		= 5
-	POS			= 1359 88 0
-END_OBSTACLESET
-
-OBSTACLESET									# 33
-	TYPE		= 5
-	POS			= 1517 91 0
-END_OBSTACLESET
-
-OBSTACLESET									# 34
-	TYPE		= 5
 	POS			= 5535 204 0
 END_OBSTACLESET
 
-OBSTACLESET									# 35
-	TYPE		= 1
-	POS			= 5622 92 0
-END_OBSTACLESET
-
-OBSTACLESET									# 36
-	TYPE		= 1
-	POS			= 6549 92 0
-END_OBSTACLESET
-
-OBSTACLESET									# 37
+OBSTACLESET									# 33
 	TYPE		= 3
-	POS			= 4103 268 150
+	POS			= 4108 268 150
 END_OBSTACLESET
 
-OBSTACLESET									# 38
+OBSTACLESET									# 34
 	TYPE		= 3
 	POS			= 4273 268 150
 END_OBSTACLESET
 
-OBSTACLESET									# 39
+OBSTACLESET									# 35
 	TYPE		= 3
 	POS			= 5173 268 150
 END_OBSTACLESET
 
-OBSTACLESET									# 40
+OBSTACLESET									# 36
 	TYPE		= 3
 	POS			= 5335 268 150
 END_OBSTACLESET
 
-OBSTACLESET									# 41
+OBSTACLESET									# 37
 	TYPE		= 6
 	POS			= 2999 147 0
 END_OBSTACLESET
 
-OBSTACLESET									# 42
+OBSTACLESET									# 38
 	TYPE		= 2
 	POS			= 2893 137 0
 END_OBSTACLESET
