@@ -1786,7 +1786,9 @@ void CMap::PrisonerDropTypeComboBox(int &nSelectType, int nNowSelect)
 void CMap::PrisonerItemTypeComboBox(int &nSelectType, int nNowSelect)
 {
 #ifdef _DEBUG
-	std::vector<std::string > aPrisonerItem = { "NONE","HMG","SG","LG","RL","FS"};
+	std::vector<std::string > aPrisonerItem = { "NONE","HMG","SG","LG","RL","FS","GOLDCOIN","SILVERCOIN","BRONZESCOIN","DIAMOND",
+												"BEAR","LETTER","APPLE","MELON","BANANA","MEAT","RICEBALL","CANDY","DONUT",
+												"LOLIPOP","BREAD","CHOCOLATE","ICE","BOMBUP","BULLETUP"};
 
 	// 現在のアイテムタイプを反映	( NONEがあるため +1 )
 	nSelectType = (int)m_pPrisoner[nNowSelect]->GetPrisonerDropItem() + 1;
@@ -1799,11 +1801,7 @@ void CMap::PrisonerItemTypeComboBox(int &nSelectType, int nNowSelect)
 			// 捕虜が落とすアイテムの種類の取得
 			CItem::ITEMTYPE PrisonerItem = (CItem::ITEMTYPE)(m_pPrisoner[nNowSelect]->GetPrisonerDropItem() + 1);
 
-
-
-
 			// 前回と違うとき
-
 			if (PrisonerItem != nSelectType)
 			{
 				// 種類代入	( NONEがあるため -1 )
