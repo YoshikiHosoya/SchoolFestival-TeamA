@@ -155,6 +155,23 @@ FILENAME_LIST CTexture::m_aSeparateTexFileNameList =
 
 	{ "data/TEXTURE/UI/Title_UI/Fracturing.png" },				//Fracturing
 	{ "data/TEXTURE/Effect/Charge.png" },						//攻撃を撃つ前の溜め
+	{ "data/TEXTURE/Effect/Charge02.png" },						//キャラクターの出現時
+	{ "data/TEXTURE/Effect/Glitter.png" },						//きらきら
+
+	{ "data/TEXTURE/Item/Score/Ani_Bear.png" },					//アニメーションするアイテム熊
+	{ "data/TEXTURE/Item/Score/Ani_Coin.png" },					//アニメーションするアイテムコイン
+	{ "data/TEXTURE/Item/Score/Ani_Doll.png" },					//アニメーションするアイテム人形
+	{ "data/TEXTURE/Item/Score/Ani_Fish.png" },					//アニメーションするアイテム魚
+	{ "data/TEXTURE/Item/Score/Ani_Letter.png" },				//アニメーションするアイテム手紙
+	{ "data/TEXTURE/Item/Score/Ani_Medal.png" },				//アニメーションするアイテムメダル
+	{ "data/TEXTURE/Item/Score/Ani_Medal2.png" },				//アニメーションするアイテムメダル2
+	{ "data/TEXTURE/Item/Score/Ani_RoastChicken.png" },			//アニメーションするアイテムローストチキン
+	{ "data/TEXTURE/Item/Score/Ani_Ruby.png" },					//アニメーションするアイテムルビー
+	{ "data/TEXTURE/Item/Score/Ani_Sapphire.png" },				//アニメーションするアイテムサファイア
+	{ "data/TEXTURE/Item/Score/Ani_Topaz.png" },				//アニメーションするアイテムトパーズ
+	{ "data/TEXTURE/Item/Score/Ani_DanceMonkey.png" },			//アニメーションするアイテム踊るサル
+	{ "data/TEXTURE/Item/Score/Ani_JumpMonkey.png" },			//アニメーションするアイテム飛ぶサル
+	{ "data/TEXTURE/Item/Ammo/Anim_Prisoner.png" },				//アニメーションするアイテム捕虜
 
 	{ "data/TEXTURE/UI/num.png" },								//ナンバー
 	{ "data/TEXTURE/UI/Player_UI/life.png" },					//体力のUI
@@ -205,6 +222,23 @@ std::vector<CTexture::SEPARATE_TEX_INFO> CTexture::m_apSeparateTexInfoList =
 
 	{ nullptr, CTexture::SEPARATE_TEX_EFFECT_FRACTURING,	D3DXVECTOR2(5,2),	ZeroVector2 },		//ガラスが砕け散る
 	{ nullptr, CTexture::SEPARATE_TEX_EFFECT_CHARGE,		D3DXVECTOR2(7,1),	ZeroVector2 },		//溜め
+	{ nullptr, CTexture::SEPARATE_TEX_EFFECT_CHARGE02,		D3DXVECTOR2(5,3),	ZeroVector2 },		//溜め
+	{ nullptr, CTexture::SEPARATE_TEX_EFFECT_GLITTER,		D3DXVECTOR2(5,2),	ZeroVector2 },		//きらきら
+
+	{ nullptr, CTexture::SEPARATE_TEX_ITEM_BEAR,			D3DXVECTOR2(5,1),	ZeroVector2 },		//アイテム 熊
+	{ nullptr, CTexture::SEPARATE_TEX_ITEM_COIN,			D3DXVECTOR2(9,1),	ZeroVector2 },		//アイテム コイン
+	{ nullptr, CTexture::SEPARATE_TEX_ITEM_DOLL,			D3DXVECTOR2(5,1),	ZeroVector2 },		//アイテム 人形
+	{ nullptr, CTexture::SEPARATE_TEX_ITEM_FISH,			D3DXVECTOR2(6,1),	ZeroVector2 },		//アイテム 魚
+	{ nullptr, CTexture::SEPARATE_TEX_ITEM_LETTER,			D3DXVECTOR2(11,1),	ZeroVector2 },		//アイテム 手紙
+	{ nullptr, CTexture::SEPARATE_TEX_ITEM_MEDAL,			D3DXVECTOR2(7,1),	ZeroVector2 },		//アイテム メダル
+	{ nullptr, CTexture::SEPARATE_TEX_ITEM_MEDAL2,			D3DXVECTOR2(6,1),	ZeroVector2 },		//アイテム メダル2
+	{ nullptr, CTexture::SEPARATE_TEX_ITEM_ROASTCHICKEN,	D3DXVECTOR2(11,1),	ZeroVector2 },		//アイテム ローストチキン
+	{ nullptr, CTexture::SEPARATE_TEX_ITEM_RUBY,			D3DXVECTOR2(21,1),	ZeroVector2 },		//アイテム ルビー
+	{ nullptr, CTexture::SEPARATE_TEX_ITEM_SAPPHIRE,		D3DXVECTOR2(21,1),	ZeroVector2 },		//アイテム サファイア
+	{ nullptr, CTexture::SEPARATE_TEX_ITEM_TOPAZ,			D3DXVECTOR2(21,1),	ZeroVector2 },		//アイテム トパーズ
+	{ nullptr, CTexture::SEPARATE_TEX_ITEM_DANCEMONKEY,		D3DXVECTOR2(10,1),	ZeroVector2 },		//アイテム 踊るサル
+	{ nullptr, CTexture::SEPARATE_TEX_ITEM_JUMPMONKEY,		D3DXVECTOR2(9,1),	ZeroVector2 },		//アイテム 飛ぶサル
+	{ nullptr, CTexture::SEPARATE_TEX_ITEM_PRISONER,		D3DXVECTOR2(12,1),	ZeroVector2 },		//アイテム 捕虜
 
 	{ nullptr, CTexture::SEPARATE_TEX_NUM,					D3DXVECTOR2(10,1),	ZeroVector2 },		//ナンバー
 	{ nullptr, CTexture::SEPARATE_TEX_UI_LIFE,				D3DXVECTOR2(5,1),	ZeroVector2 },		//体力のUI

@@ -48,6 +48,8 @@ public:
 		TYPE_PRESENTBOX,							// プレゼント
 		TYPE_PRESENTBOX_RARE,						// プレゼントレア
 		TYPE_BOSSMAP_BRIDGE,						// ボスのマップで使う橋
+		TYPE_BOSSMAP_BELL,							// 鐘
+		TYPE_BOSSMAP_CAGE,							// 檻
 		TYPE_MAX,									// 最大数
 	};
 

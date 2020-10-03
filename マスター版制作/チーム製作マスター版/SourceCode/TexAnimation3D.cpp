@@ -88,23 +88,8 @@ void CTexAnimation3D::Update()
 //------------------------------------------------------------------------------
 void CTexAnimation3D::Draw()
 {
-	//デバイス取得
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
-
-	//Zテスト無効でZライティング有効
-	CManager::GetRenderer()->SetRendererCommand(CRenderer::RENDERER_ZTEST_OFF_ZWRITING_ON);
-
-	//加算合成
-	CManager::GetRenderer()->SetRendererCommand(CRenderer::RENDERER_ALPHABLEND_ADD);
-
 	//描画処理
 	CScene3D::Draw();
-
-	//Zテスト通常
-	CManager::GetRenderer()->SetRendererCommand(CRenderer::RENDERER_ZTEST_DEFAULT);
-
-	//通常合成
-	CManager::GetRenderer()->SetRendererCommand(CRenderer::REDNERER_ALPHABLEND_DEFAULT);
 }
 //------------------------------------------------------------------------------
 //デバッグ情報表示

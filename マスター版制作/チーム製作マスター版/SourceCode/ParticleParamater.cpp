@@ -60,6 +60,8 @@ FILENAME_LIST CParticleParam::m_aFileNameList =
 	{ "data/Load/Effect/Paramater/ChargeParticleTex.txt" },
 
 	{ "data/Load/Effect/Paramater/Charge.txt" },
+	{ "data/Load/Effect/Paramater/ChargeAppear.txt" },
+	{ "data/Load/Effect/Paramater/Glitter.txt" },
 
 };
 //

@@ -10,11 +10,13 @@
 #include "game.h"
 #include "manager.h"
 #include "map.h"
-#include "item.h"
+#include "Normal_Iten.h"
+#include "Anim_Item.h"
 #include "scoremanager.h"
 #include "ModelSet.h"
 #include "player.h"
 #include "sound.h"
+#include "particle.h"
 
 // =====================================================================================================================================================================
 //
@@ -56,6 +58,7 @@ CPrisoner::CPrisoner(OBJ_TYPE type) :CCharacter(type)
 	//
 	m_bDrop = false;
 	m_pPlayer = nullptr;
+	m_nEffectCnt = 0;
 }
 // =====================================================================================================================================================================
 //
@@ -125,6 +128,24 @@ void CPrisoner::Update(void)
 			}
 			//処理しない
 			return;
+		}
+	}
+
+	// ボスマップに登場する捕虜だった時
+	if (this->m_PrisonerType == PRISONER_TYPE_SPECIAL)
+	{
+		// カウントを加算
+		m_nEffectCnt++;
+
+		if (m_nEffectCnt >= 60)
+		{
+			// 光る
+			CParticle::CreateFromText(D3DXVECTOR3(
+				GetPosition().x,
+				GetPosition().y + 50,
+				GetPosition().z),
+				ZeroVector3, CParticleParam::EFFECT_GLITTER);
+			m_nEffectCnt = 0;
 		}
 	}
 
@@ -477,8 +498,8 @@ void CPrisoner::PrisonerDropItem()
 			{
 				// アイテムを1種類指定して確定でドロップさせる
 			case CPrisoner::PRISONER_ITEM_DROPTYPE_PICK_ONE:
-				// アイテムの生成[捕虜の座標 ドロップするアイテムを確定させるかどうか 確定させるアイテムのタイプの指定]
-				CItem::DropItem(
+				// アイテムの生成[捕虜の座標 ドロップするアイテムを確定させるかどうか 確定させるアイテムのタイプの指定
+				CNormalItem::DropItem(
 					DropPos,
 					true,
 					GetPrisonerDropItem());
@@ -486,7 +507,7 @@ void CPrisoner::PrisonerDropItem()
 
 				// ドロップするアイテムを範囲で指定してドロップさせる
 			case CPrisoner::PRISONER_ITEM_DROPTYPE_RANGE:
-				CItem::DropItem(
+				CNormalItem::DropItem(
 					DropPos,
 					false,
 					CItem::ITEMTYPE_NONE);
@@ -496,7 +517,7 @@ void CPrisoner::PrisonerDropItem()
 		else
 		{
 			// 特別な捕虜
-			CItem::DropItem_Multiple(GetPosition(), CItem::LIST_SPECIAL, CItem::BEHAVIOR_BURSTS);
+			CNormalItem::DropItem_Multiple(GetPosition(), CItem::LIST_SPECIAL, CItem::BEHAVIOR_BURSTS);
 		}
 
 		m_bDrop = true;

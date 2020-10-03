@@ -325,7 +325,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "C:\\Users\\game317\\Desktop\\SchoolFestival-TeamA\\マスター版制作\\チーム製作マスター版\\data\\materialtexture\\Drone\\_color_4_.png";
+    "data\\materialtexture\\Drone\\_color_4_.png";
    }
   }
   Material {
@@ -364,7 +364,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "C:\\Users\\game317\\Desktop\\SchoolFestival-TeamA\\マスター版制作\\チーム製作マスター版\\data\\materialtexture\\Drone\\_color_1_.png";
+    "data\\materialtexture\\Drone\\_color_1_.png";
    }
   }
   Material {

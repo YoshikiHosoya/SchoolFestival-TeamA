@@ -130,5 +130,6 @@ private:
 	CItem::ITEMTYPE			m_DropItem;							// 確定ドロップの種類
 	bool					m_bDrop;
 	CPlayer					*m_pPlayer;							// 助けたプレイヤーのポインタ
+	int						m_nEffectCnt;						// effectを生成するカウント
 };
 #endif

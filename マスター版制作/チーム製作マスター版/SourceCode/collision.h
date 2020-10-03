@@ -119,7 +119,7 @@ public:
 
 	bool ForPlayer_VehicleCollision(CCollision * pCollision);	// プレイヤーと乗り物が行う判定
 	CVehicle *ForPlayer_VehicleCollision();							// プレイヤーと乗り物が行う判定
-	bool ForVehicleCollision();									// 乗り物が行う判定
+	bool ForVehicleCollision(TAG Tag);									// 乗り物が行う判定
 	bool ForTankCollision();									// 戦車が行う判定
 
 	void ForBossOne_PlayerCollision();

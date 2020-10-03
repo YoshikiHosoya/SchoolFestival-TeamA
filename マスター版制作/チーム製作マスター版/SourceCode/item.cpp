@@ -47,14 +47,13 @@ char *CItem::m_ItemFileName =
 // マクロ定義
 // =====================================================================================================================================================================
 #define FULLRAND_HITPROBABILITY (5)
-#define MULTIPLE_ITEM_NUM (5)// まとめて生成する際の数
 
 // =====================================================================================================================================================================
 //
 // コンストラクタ
 //
 // =====================================================================================================================================================================
-CItem::CItem(OBJ_TYPE type) :CScene3D(type)
+CItem::CItem()
 {
 	// プレイヤーのポインタ
 	m_pPlayer[MAX_CONTROLLER] = {};
@@ -105,17 +104,11 @@ HRESULT CItem::Init()
 		m_pPlayer[nCntPlayer] = CManager::GetBaseMode()->GetPlayer((TAG)(nCntPlayer));
 	}
 
-	// 初期化
-	CScene3D::Init();
-
 	// 重力の初期値
 	m_fGravity = 1.0f;
 
 	// 当たり判定生成
 	m_pCollision = CCollision::Create();
-	m_pCollision->SetPos(&GetPosition());
-	m_pCollision->SetSize(m_ItemData.CollisionSize);
-	m_pCollision->DeCollisionCreate(CCollision::COLLISIONTYPE_CHARACTER);
 
 	return S_OK;
 }
@@ -127,8 +120,6 @@ HRESULT CItem::Init()
 // =====================================================================================================================================================================
 void CItem::Uninit(void)
 {
-	// 終了処理
-	CScene3D::Uninit();
 }
 
 // =====================================================================================================================================================================
@@ -138,32 +129,15 @@ void CItem::Uninit(void)
 // =====================================================================================================================================================================
 void CItem::Update(void)
 {
-	// 1フレーム前の座標を求める
-	m_PosOld = GetPosition();
-
-	if (m_Behavior == BEHAVIOR_BURSTS)
-	{
-		GetPosition() += m_Move * 4.0f;
-	}
-	else
-	{
-		GetPosition() += m_Move * 1.5f;
-	}
-
-	SetPosition(GetPosition());
-
 	// 当たり判定系
 	ItemCollision();
 
-	// レイの判定に一回でも触れていた時
-	if (m_nHitRayCount >= 1)
-	{
-		// アイテムの滞在時間管理
-		RemainTimer();
-	}
-
-	// 更新
-	CScene3D::Update();
+	//// レイの判定に一回でも触れていた時
+	//if (m_nHitRayCount >= 1)
+	//{
+	//	// アイテムの滞在時間管理
+	//	RemainTimer();
+	//}
 }
 
 // =====================================================================================================================================================================
@@ -173,33 +147,28 @@ void CItem::Update(void)
 // =====================================================================================================================================================================
 void CItem::Draw(void)
 {
-	// 変数宣言
-	LPDIRECT3DDEVICE9 pDevice =									// デバイスの取得
-		CManager::GetRenderer()->GetDevice();
-
-	// アルファテストの設定に変更
-	pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);		// アルファテスト有効
-	pDevice->SetRenderState(D3DRS_ALPHAREF, 200);				// アルファ値の基準設定(基準より大きいと描画する)
-	pDevice->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);	// 状況に応じてアルファテストを実行する(新ピクセル > 現在のピクセル)
-	pDevice->SetRenderState(D3DRS_LIGHTING, false);				// ライティングoff
-	pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
-
-	// ビューマトリックスの代入用
-	D3DXMATRIX mtxView;
-	// 現在のビューマトリックスを取得
-	pDevice->GetTransform(D3DTS_VIEW, &mtxView);
-
-	// ビルボード処理
-	CHossoLibrary::SetBillboard(&mtxView);
-
-	// 描画
-	CScene3D::Draw();
-
-	pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
-	// アルファテストの設定を戻す
-	pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);		// アルファテスト無効
-	pDevice->SetRenderState(D3DRS_LIGHTING, true);				// ライティングon
 }
+
+// =====================================================================================================================================================================
+//
+// アイテムの挙動の種類ごとの種類
+//
+// =====================================================================================================================================================================
+void CItem::BehaviorType(D3DXVECTOR3 & pos)
+{
+	// 挙動が弾け飛ぶ状態だった時
+	if (m_Behavior == BEHAVIOR_BURSTS)
+	{
+		pos += m_Move * 5.0f;
+	}
+	// それ以外
+	else
+	{
+		pos += m_Move * 1.5f;
+	}
+}
+
+
 
 // =====================================================================================================================================================================
 //
@@ -208,200 +177,8 @@ void CItem::Draw(void)
 // =====================================================================================================================================================================
 void CItem::ItemAcquisition(ITEMTYPE type, TAG Tag)
 {
-	// アイテムの種類ごとの処理
-	switch (type)
-	{
-		// ヘビーマシンガン
-	case (ITEMTYPE_HEAVYMACHINEGUN): {
-		// SEを鳴らす
-		CManager::GetSound()->Play(CSound::LABEL_SE_GET_WEAPON);
-		CManager::GetSound()->Play(CSound::LABEL_SE_VOICE_HEAVYMACHINEGUN);
-
-		m_pPlayer[(int)Tag]->GetGun()->SetGunType(CGun::GUNTYPE_HEAVYMACHINEGUN);
-	}break;
-
-		// ショットガン
-	case (ITEMTYPE_SHOTGUN): {
-		// SEを鳴らす
-		CManager::GetSound()->Play(CSound::LABEL_SE_GET_WEAPON);
-		CManager::GetSound()->Play(CSound::LABEL_SE_VOICE_SHOTGUN);
-
-		m_pPlayer[(int)Tag]->GetGun()->SetGunType(CGun::GUNTYPE_SHOTGUN);
-	}break;
-
-		// レーザーガン
-	case (ITEMTYPE_LASERGUN): {
-		// SEを鳴らす
-		CManager::GetSound()->Play(CSound::LABEL_SE_GET_WEAPON);
-		CManager::GetSound()->Play(CSound::LABEL_SE_VOICE_LAZERGUN);
-
-		m_pPlayer[(int)Tag]->GetGun()->SetGunType(CGun::GUNTYPE_LASERGUN);
-	}break;
-
-		// ロケットランチャー
-	case (ITEMTYPE_ROCKETLAUNCHER): {
-		// SEを鳴らす
-		CManager::GetSound()->Play(CSound::LABEL_SE_GET_WEAPON);
-		CManager::GetSound()->Play(CSound::LABEL_SE_VOICE_ROCKETLAUNCHER);
-
-		m_pPlayer[(int)Tag]->GetGun()->SetGunType(CGun::GUNTYPE_ROCKETLAUNCHER);
-	}break;
-
-		// フレイムショット
-	case (ITEMTYPE_FLAMESHOT): {
-		// SEを鳴らす
-		CManager::GetSound()->Play(CSound::LABEL_SE_GET_WEAPON);
-		CManager::GetSound()->Play(CSound::LABEL_SE_VOICE_FLAMESHOT);
-
-		m_pPlayer[(int)Tag]->GetGun()->SetGunType(CGun::GUNTYPE_FLAMESHOT);
-	}break;
-
-		// 金貨
-	case (ITEMTYPE_GOLDCOIN): {
-		// SEを鳴らす
-		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
-		// スコアアップ
-		m_pPlayer[(int)Tag]->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_GCOIN), (int)Tag);
-	}break;
-
-		// 銀貨
-	case (ITEMTYPE_SILVERCOIN): {
-		// SEを鳴らす
-		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
-		// スコアアップ
-		m_pPlayer[(int)Tag]->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_SCOIN), (int)Tag);
-	}break;
-
-		// 銅貨
-	case (ITEMTYPE_BRONZESCOIN): {
-		// SEを鳴らす
-		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
-		// スコアアップ
-		m_pPlayer[(int)Tag]->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_BCOIN), (int)Tag);
-	}break;
-
-		// ダイアモンド
-	case (ITEMTYPE_DIAMOND): {
-		// SEを鳴らす
-		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
-		// スコアアップ
-		m_pPlayer[(int)Tag]->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_DIAMOND), (int)Tag);
-	}break;
-		// 熊
-	case (ITEMTYPE_BEAR): {
-		// SEを鳴らす
-		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
-		// スコアアップ
-		m_pPlayer[(int)Tag]->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_BEAR), (int)Tag);
-	}break;
-
-		// 手紙
-	case (ITEMTYPE_LETTER): {
-		// SEを鳴らす
-		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
-
-		// コインを取るたびにコインのスコアアップ
-		m_pPlayer[(int)Tag]->GetPlayerUI()->SetItemScore(AddCoinScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_LETTER)), (int)Tag);
-	}break;
-
-		// リンゴ
-	case ITEMTYPE_APPLE:
-		// SEを鳴らす
-		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
-		// スコアアップ
-		m_pPlayer[(int)Tag]->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_FRUIT), (int)Tag);
-		break;
-		// メロン
-	case ITEMTYPE_MELON:
-		// SEを鳴らす
-		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
-		// スコアアップ
-		m_pPlayer[(int)Tag]->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_FRUIT), (int)Tag);
-		break;
-		// バナナ
-	case ITEMTYPE_BANANA:
-		// SEを鳴らす
-		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
-		// スコアアップ
-		m_pPlayer[(int)Tag]->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_FRUIT), (int)Tag);
-	break;
-
-
-		// 肉
-	case ITEMTYPE_MEAT:
-		// SEを鳴らす
-		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
-		// スコアアップ
-		m_pPlayer[(int)Tag]->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_FOOD), (int)Tag);
-		break;
-		// おにぎり
-	case (ITEMTYPE_RICEBALL):
-		// SEを鳴らす
-		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
-		// スコアアップ
-		m_pPlayer[(int)Tag]->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_FOOD), (int)Tag);
-		break;
-		// 飴
-	case (ITEMTYPE_CANDY):
-		// SEを鳴らす
-		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
-		// スコアアップ
-		m_pPlayer[(int)Tag]->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_FOOD), (int)Tag);
-		break;
-		// ドーナツ
-	case (ITEMTYPE_DONUT):
-		// SEを鳴らす
-		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
-		// スコアアップ
-		m_pPlayer[(int)Tag]->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_FOOD), (int)Tag);
-		break;
-		// ロリポップ
-	case (ITEMTYPE_LOLIPOP):
-		// SEを鳴らす
-		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
-		// スコアアップ
-		m_pPlayer[(int)Tag]->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_FOOD), (int)Tag);
-		break;
-		// 熊
-	case (ITEMTYPE_BREAD):
-		// SEを鳴らす
-		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
-		// スコアアップ
-		m_pPlayer[(int)Tag]->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_FOOD), (int)Tag);
-		break;
-		// チョコレート
-	case (ITEMTYPE_CHOCOLATE):
-		// SEを鳴らす
-		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
-		// スコアアップ
-		m_pPlayer[(int)Tag]->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_FOOD), (int)Tag);
-		break;
-		// アイス
-	case (ITEMTYPE_ICE):
-		// SEを鳴らす
-		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
-		// スコアアップ
-		m_pPlayer[(int)Tag]->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_FOOD), (int)Tag);
-	break;
-
-		// 爆弾の数を増やす
-	case (ITEMTYPE_BOMBUP): {
-		// SEを鳴らす
-		CManager::GetSound()->Play(CSound::LABEL_SE_GET_WEAPON);
-		m_pPlayer[(int)Tag]->GetGrenadeFire()->GrenadeAddAmmo();
-	}break;
-
-		// ハンドガン以外の弾の残弾数を増やす
-	case (ITEMTYPE_BULLETUP): {
-		// SEを鳴らす
-		CManager::GetSound()->Play(CSound::LABEL_SE_GET_WEAPON);
-		m_pPlayer[(int)Tag]->GetGun()->GunAddAmmo(m_pPlayer[(int)Tag]->GetGun()->GetGunType());
-	}break;
-	}
-
+	// アイテム取得時の光
 	m_pPlayer[(int)Tag]->SetState(CCharacter::CHARACTER_STATE_ITEMGET_FLASH);
-
-	CParticle::CreateFromText(GetPosition(), ZeroVector3, CParticleParam::EFFECT_GETWEAPON);
 }
 
 // =====================================================================================================================================================================
@@ -422,8 +199,6 @@ void CItem::HitItem(ITEMTYPE type, TAG Tag)
 {
 	// 種類ごとの処理
 	ItemAcquisition(type, Tag);
-	// 削除
-	Rerease();
 }
 
 // =====================================================================================================================================================================
@@ -471,13 +246,6 @@ void CItem::RemainTimer()
 {
 	// アイテムの滞在時間を減少
 	m_nRemainTime--;
-
-	// 残り時間が0以下になったら削除
-	if (m_nRemainTime <= 0)
-	{
-		// 点滅させる
-		Flashing();
-	}
 }
 
 // =====================================================================================================================================================================
@@ -489,25 +257,6 @@ void CItem::Flashing()
 {
 	// カウント加算
 	m_nColCnt++;
-	// 余りが0の時透明にする
-	if (m_nColCnt % 30 == 0)
-	{
-		this->SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f));
-	}
-	// 余りが0の時通常状態にする
-	else if(m_nColCnt % 15 == 0)
-	{
-		this->SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
-	}
-
-	// 3秒以上経過したらアイテムを削除する
-	if (m_nColCnt >= m_ItemData.nFlashTime)
-	{
-		// 変数の初期化
-		m_nColCnt = 0;
-		// 削除
-		Rerease();
-	}
 }
 
 // =====================================================================================================================================================================
@@ -675,27 +424,44 @@ void CItem::SetMultiType(ITEM_LIST_DROPMULTIPLE list)
 	{
 	case CItem::LIST_FRUIT:
 		// フルーツのみ
-		SwitchTexture(this->RandDropItem(ITEMDROP_FRUIT), this);
+		this->SwitchTexture(this->RandDropItem(ITEMDROP_FRUIT));
 		break;
 
 	case CItem::LIST_FOOD:
 		// 食べ物のみ
-		SwitchTexture(this->RandDropItem(ITEMDROP_FOOD), this);
+		this->SwitchTexture(this->RandDropItem(ITEMDROP_FOOD));
 		break;
 
 	case CItem::LIST_COIN:
 		// コインのみ
-		SwitchTexture(this->RandDropItem(ITEMDROP_COIN), this);
+		this->SwitchTexture(this->RandDropItem(ITEMDROP_COIN));
 		break;
 
 	case CItem::LIST_WEAPON:
 		// コインのみ
-		SwitchTexture(this->RandDropItem(ITEMDROP_WEAPON), this);
+		this->SwitchTexture(this->RandDropItem(ITEMDROP_WEAPON));
 		break;
 
 	case CItem::LIST_RARE:
 		// レアなアイテムのみ
-		SwitchTexture(this->RandDropItem(ITEMDROP_RARE), this);
+		this->SwitchTexture(this->RandDropItem(ITEMDROP_RARE));
+		break;
+
+
+
+	case CItem::LIST_ANI_NORMAL:
+		// レアなアイテムのみ
+		this->SwitchTexture(this->RandDropItem(ITEMDROP_ANI_NORMAL));
+		break;
+
+	case CItem::LIST_ANI_RARE:
+		// レアなアイテムのみ
+		this->SwitchTexture(this->RandDropItem(ITEMDROP_ANI_RARE));
+		break;
+
+	case CItem::LIST_ANI_MONKEY:
+		// レアなアイテムのみ
+		this->SwitchTexture(this->RandDropItem(ITEMDROP_ANI_MONKEY));
 		break;
 	}
 }
@@ -707,58 +473,6 @@ void CItem::SetMultiType(ITEM_LIST_DROPMULTIPLE list)
 // =====================================================================================================================================================================
 void CItem::ItemCollision()
 {
-	// 当たり判定
-	if (m_pCollision != nullptr)
-	{
-		// 座標の更新 pos
-		m_pCollision->SetPos(&GetPosition());
-		// マップのポインタ取得
-		CMap *pMap = CManager::GetBaseMode()->GetMap();
-
-		if (pMap)
-		{
-			if (m_pCollision->RayCollision(pMap, m_PosOld,GetPosition()))
-			{
-				if (m_Behavior != BEHAVIOR_NONE)
-				{
-					// まだレイの判定に一度も触れていなかった時
-					if (m_nHitRayCount <= 0)
-					{
-						// アイテムの反射処理
-						ReflectionItem();
-						// 重力の初期化
-						m_fGravity = 0.0f;
-					}
-					else
-					{
-						m_Move = ZeroVector3;
-					}
-				}
-
-				m_nHitRayCount++;
-			}
-			else
-			{
-				if (m_nHitRayCount < 2)
-				{
-					// 正規化
-					D3DXVec3Normalize(&m_Move, &m_Move);
-
-					if (m_Behavior == BEHAVIOR_BURSTS)
-					{
-						m_fGravity += 0.1f;
-					}
-					else
-					{
-						// 重力を加速
-						m_fGravity += 0.05f;
-					}
-					// 重力を反映
-					GetPosition().y -= m_fGravity;
-				}
-			}
-		}
-	}
 }
 
 // =====================================================================================================================================================================
@@ -768,12 +482,6 @@ void CItem::ItemCollision()
 // =====================================================================================================================================================================
 void CItem::ReflectionItem()
 {
-	// 法線ベクトル
-	const D3DXVECTOR3 NormalV = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
-	// 進行ベクトル
-	D3DXVECTOR3 ProgressV = m_PosOld - GetPosition();
-	// レイの判定にに触れたとき進行ベクトルを法線ベクトルの方向に変換する
-	ReflectingVectorCalculation(&m_Move, ProgressV, NormalV);
 }
 
 // =====================================================================================================================================================================
@@ -994,37 +702,37 @@ bool CItem::DecideIfItemDrop(int nRate)
 CItem * CItem::DebugCreate(ITEMTYPE type)
 {
 	// メモリの確保
-	CItem * pItem = new CItem(OBJTYPE_ITEM);
+	//CItem * pItem = new CItem(OBJTYPE_ITEM);
 
-	// 初期化
-	pItem->Init();
+	//// 初期化
+	//pItem->Init();
 
-	// サイズの設定
-	pItem->SetSize(D3DXVECTOR3(
-		m_ItemData.CollisionSize.x / 2,
-		m_ItemData.CollisionSize.y / 2,
-		m_ItemData.CollisionSize.z / 2));
+	//// サイズの設定
+	//pItem->SetSize(D3DXVECTOR3(
+	//	m_ItemData.CollisionSize.x / 2,
+	//	m_ItemData.CollisionSize.y / 2,
+	//	m_ItemData.CollisionSize.z / 2));
 
-	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer(TAG::PLAYER_1);
+	//CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer(TAG::PLAYER_1);
 
-	if (pPlayer != nullptr)
-	{
-		D3DXVECTOR3 pos = pPlayer->GetPosition();
-		// アイテムが生成される位置の調整
-		pItem->SetDropPos(pos);
+	//if (pPlayer != nullptr)
+	//{
+	//	D3DXVECTOR3 pos = pPlayer->GetPosition();
+	//	// アイテムが生成される位置の調整
+	//	pItem->SetDropPos(pos);
 
-		// アイテムの位置の設定
-		pItem->SetPosition(pos);
+	//	// アイテムの位置の設定
+	//	pItem->SetPosition(pos);
 
-		pItem->m_Type = type;
+	//	pItem->m_Type = type;
 
-		pItem->m_Behavior = BEHAVIOR_NONE;
-	}
+	//	pItem->m_Behavior = BEHAVIOR_NONE;
+	//}
 
-	// 種類別にテクスチャを設定
-	pItem->SwitchTexture(pItem->m_Type, pItem);
+	//// 種類別にテクスチャを設定
+	//pItem->SwitchTexture(pItem->m_Type, pItem);
 
-	return pItem;
+	return nullptr;
 }
 
 // =====================================================================================================================================================================
@@ -1175,105 +883,6 @@ void CItem::ItemLoad()
 	}
 }
 
-// =====================================================================================================================================================================
-//
-// キャラクターがアイテムを落とすときの生成処理 確定しないならtypeにNONEを入れる
-//
-// =====================================================================================================================================================================
-CItem * CItem::DropItem(D3DXVECTOR3 droppos, bool fixed,ITEMTYPE type)
-{
-	// メモリの確保
-	CItem *pItem = new CItem(OBJTYPE_ITEM);
-
-	// 初期化
-	pItem->Init();
-
-	// サイズの設定
-	pItem->SetSize(D3DXVECTOR3(
-		m_ItemData.CollisionSize.x /2,
-		m_ItemData.CollisionSize.y /2,
-		m_ItemData.CollisionSize.z /2));
-
-	// アイテムが生成される位置の調整
-	//pItem->SetDropPos(droppos);
-
-	droppos.y += 30.0f;
-
-	// アイテムの位置の設定
-	pItem->SetPosition(droppos);
-
-	pItem->m_Behavior = BEHAVIOR_NONE;
-
-	// アイテムのドロップをパターンごとに変える
-	pItem->DropPattern(fixed, type);
-
-	// 種類別にテクスチャを設定
-	pItem->SwitchTexture(pItem->m_Type, pItem);
-
-	return pItem;
-}
-
-// =====================================================================================================================================================================
-//
-// アイテムを複数一気にドロップさせる時
-//
-// =====================================================================================================================================================================
-void CItem::DropItem_Multiple(const D3DXVECTOR3 originpos, ITEM_LIST_DROPMULTIPLE type, ITEM_BEHAVIOR behavior)
-{
-	// 生成する数分
-	for (int nNum = 0; nNum < MULTIPLE_ITEM_NUM; nNum++)
-	{
-		// メモリの確保
-		CItem *pItem = new CItem(OBJTYPE_ITEM);
-
-		// 初期化
-		pItem->Init();
-
-		// サイズの設定
-		pItem->SetSize(D3DXVECTOR3(
-			m_ItemData.CollisionSize.x / 2,
-			m_ItemData.CollisionSize.y / 2,
-			m_ItemData.CollisionSize.z / 2));
-
-		// 木から落ちるアイテムだけ
-		if (behavior == BEHAVIOR_FREEFALL)
-		{
-			pItem->SetPosition(pItem->RandomDropPosX(originpos, 100));
-		}
-		// その他は原点座標を基準にする
-		else
-		{
-			if (behavior == BEHAVIOR_BURSTS)
-			{
-				D3DXVECTOR3 pos = originpos;
-				pItem->SetPosition(D3DXVECTOR3(pos.x, pos.y + 50, pos.z));
-
-			}
-			else
-			{
-				pItem->SetPosition(originpos);
-			}
-		}
-
-		// 挙動の設定
-		pItem->m_Behavior = behavior;
-
-		// 特別なアイテムリストを指定された時のみアイテムの選考方法を変える
-		if (type == LIST_SPECIAL)
-		{
-			// 乱数リストからアイテムをランダムに選び設定する
-			SwitchTexture(pItem->BoxRand(), pItem);
-		}
-		else
-		{
-			// 複数体のタイプ設定
-			pItem->SetMultiType(type);
-		}
-
-		// アイテムの挙動と種類の設定
-		pItem->DropPattern_Multiple(type, behavior, nNum);
-	}
-}
 
 // =====================================================================================================================================================================
 //
@@ -1286,30 +895,30 @@ CItem * CItem::DropCreate_TEST()
 	D3DXVECTOR3 pos = pPlayer->GetPosition();
 
 	// 変数
-	CItem *pItem;
+	//CItem *pItem;
 
 	// メモリの確保
-	pItem = new CItem(OBJTYPE_ITEM);
+	//pItem = new CItem(OBJTYPE_ITEM);
 
-	// 初期化
-	pItem->Init();
+	//// 初期化
+	//pItem->Init();
 
-	// サイズの設定
-	pItem->SetSize(D3DXVECTOR3(
-		m_ItemData.CollisionSize.x / 2,
-		m_ItemData.CollisionSize.y / 2,
-		m_ItemData.CollisionSize.z / 2));
+	//// サイズの設定
+	//pItem->SetSize(D3DXVECTOR3(
+	//	m_ItemData.CollisionSize.x / 2,
+	//	m_ItemData.CollisionSize.y / 2,
+	//	m_ItemData.CollisionSize.z / 2));
 
-	// アイテムが生成される位置の調整
-	pItem->SetDropPos(pos);
-	// アイテムの位置の設定
-	pItem->SetPosition(pos);
-	// ボックスランドでアイテムを選出する
-	pItem->m_Type = pItem->BoxRand();
-	// 種類別にテクスチャを設定
-	pItem->SwitchTexture(pItem->m_Type, pItem);
+	//// アイテムが生成される位置の調整
+	//pItem->SetDropPos(pos);
+	//// アイテムの位置の設定
+	//pItem->SetPosition(pos);
+	//// ボックスランドでアイテムを選出する
+	//pItem->m_Type = pItem->BoxRand();
+	//// 種類別にテクスチャを設定
+	//pItem->SwitchTexture(pItem->m_Type, pItem);
 
-	return pItem;
+	return nullptr;
 }
 
 // =====================================================================================================================================================================
@@ -1317,83 +926,8 @@ CItem * CItem::DropCreate_TEST()
 // 種類別テクスチャバインド処理
 //
 // =====================================================================================================================================================================
-void CItem::SwitchTexture(ITEMTYPE type, CItem *pItem)
+void CItem::SwitchTexture(ITEMTYPE type)
 {
-	switch (type)
-	{
-	case CItem::ITEMTYPE_HEAVYMACHINEGUN:
-		pItem->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_HEAVYMACHINEGUN));
-		break;
-	case CItem::ITEMTYPE_SHOTGUN:
-		pItem->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_SHOTGUN));
-		break;
-	case CItem::ITEMTYPE_LASERGUN:
-		pItem->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_LASERGUN));
-		break;
-	case CItem::ITEMTYPE_ROCKETLAUNCHER:
-		pItem->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_ROCKETLAUNCHER));
-		break;
-	case CItem::ITEMTYPE_FLAMESHOT:
-		pItem->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_FLAMESHOT));
-		break;
-	case CItem::ITEMTYPE_GOLDCOIN:
-		pItem->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_GOLDCOIN));
-		break;
-	case CItem::ITEMTYPE_SILVERCOIN:
-		pItem->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_SILVERCOIN));
-		break;
-	case CItem::ITEMTYPE_BRONZESCOIN:
-		pItem->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_BRONZESCOIN));
-		break;
-	case CItem::ITEMTYPE_DIAMOND:
-		pItem->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_DIAMOND));
-		break;
-	case CItem::ITEMTYPE_BEAR:
-		pItem->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_BEAR));
-		break;
-	case CItem::ITEMTYPE_LETTER:
-		pItem->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_LETTER));
-		break;
-	case CItem::ITEMTYPE_APPLE:
-		pItem->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_APPLE));
-		break;
-	case CItem::ITEMTYPE_MELON:
-		pItem->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_MELON));
-		break;
-	case CItem::ITEMTYPE_BANANA:
-		pItem->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_BANANA));
-		break;
-	case CItem::ITEMTYPE_MEAT:
-		pItem->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_MEAT));
-		break;
-	case CItem::ITEMTYPE_RICEBALL:
-		pItem->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_RICEBALL));
-		break;
-	case CItem::ITEMTYPE_CANDY:
-		pItem->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_CANDY));
-		break;
-	case CItem::ITEMTYPE_DONUT:
-		pItem->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_DONUT));
-		break;
-	case CItem::ITEMTYPE_LOLIPOP:
-		pItem->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_LOLIPOP));
-		break;
-	case CItem::ITEMTYPE_BREAD:
-		pItem->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_BREAD));
-		break;
-	case CItem::ITEMTYPE_CHOCOLATE:
-		pItem->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_CHOCOLATE));
-		break;
-	case CItem::ITEMTYPE_ICE:
-		pItem->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_ICE));
-		break;
-	case CItem::ITEMTYPE_BOMBUP:
-		pItem->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_BOMBUP));
-		break;
-	case CItem::ITEMTYPE_BULLETUP:
-		pItem->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_BULLETUP));
-		break;
-	}
 }
 
 // =====================================================================================================================================================================
@@ -1431,6 +965,17 @@ CItem::ITEMTYPE CItem::RandDropItem(ITEMDROP drop)
 		break;
 	case CItem::ITEMDROP_ALL:
 		return m_Type = ItemRandomRange(ITEMTYPE_HEAVYMACHINEGUN, ITEMTYPE_BULLETUP);
+		break;
+
+		// --- アニメーションするアイテム --- //
+	case CItem::ITEMDROP_ANI_NORMAL:
+		return m_Type = ItemRandomRange(ANIM_ITEMTYPE_ROASTCHICKEN, ANIM_ITEMTYPE_MEDAL2);
+		break;
+	case CItem::ITEMDROP_ANI_RARE:
+		return m_Type = ItemRandomRange(ANIM_ITEMTYPE_COIN, ANIM_ITEMTYPE_TOPAZ);
+		break;
+	case CItem::ITEMDROP_ANI_MONKEY:
+		return m_Type = ItemRandomRange(ANIM_ITEMTYPE_DANCEMONKEY, ANIM_ITEMTYPE_PRISONER);
 		break;
 	}
 

@@ -66,6 +66,8 @@ public:
 		EFFECT_CHARGE_PARTICLE,					//チャージ　粒子
 
 		EFFECT_CHARGE,							//チャージ　アニメーション
+		EFFECT_CHARGEAPPEAR,					//チャージ　アニメーション
+		EFFECT_GLITTER,							//きらきら
 
 		PARTICLE_MAX,
 	};

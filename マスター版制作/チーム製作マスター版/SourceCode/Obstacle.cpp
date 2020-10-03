@@ -14,7 +14,8 @@
 #include "ModelSet.h"
 #include "Character.h"
 #include "model.h"
-#include "item.h"
+#include "Normal_Iten.h"
+#include "Anim_Item.h"
 #include "map.h"
 
 // =====================================================================================================================================================================
@@ -38,6 +39,8 @@ char *CObstacle::m_ObstacleFileName[CObstacle::TYPE_MAX] =
 	{ "data/Load/Obstacle/PresentBox01.txt" },		// ÉvÉåÉ[ÉìÉg
 	{ "data/Load/Obstacle/PresentBox00.txt" },		// ÉvÉåÉ[ÉìÉg ÉåÉA
 	{ "data/Load/Obstacle/Bridge.txt" },			// ã¥
+	{ "data/Load/Obstacle/Bell.txt" },				// è‡
+	{ "data/Load/Obstacle/Cage.txt" },				// üB
 };
 
 // =====================================================================================================================================================================
@@ -381,6 +384,8 @@ void CObstacle::Hit(TAG tag,int nDamage)
 	case CObstacle::TYPE_BALLOON:
 	case CObstacle::TYPE_PRESENTBOX:
 	case CObstacle::TYPE_PRESENTBOX_RARE:
+	case CObstacle::TYPE_BOSSMAP_BELL:
+	case CObstacle::TYPE_BOSSMAP_CAGE:
 
 		// ëÃóÕÇå∏éZÇ∑ÇÈ
 		this->AddDamage(nDamage);
@@ -401,33 +406,40 @@ void CObstacle::DropItem()
 	switch (m_ObstacleType)
 	{
 	case CObstacle::TYPE_BOX:
-		CItem::DropItem_Multiple(GetPosition(), CItem::LIST_FOOD, CItem::BEHAVIOR_BURSTS);
+		CNormalItem::DropItem_Multiple(GetPosition(), CItem::LIST_FOOD, CItem::BEHAVIOR_BURSTS);
 		break;
 	case CObstacle::TYPE_BARREL:
-		CItem::DropItem_Multiple(GetPosition(), CItem::LIST_FOOD, CItem::BEHAVIOR_BURSTS);
+		CAnimationItem::DropItem_Multiple(GetPosition(), CItem::LIST_ANI_NORMAL, CItem::BEHAVIOR_BURSTS);
 		break;
 	case CObstacle::TYPE_BARRELBOMB:
 		// îöî≠Ç∑ÇÈ
 		break;
 	case CObstacle::TYPE_TREE:
-		CItem::DropItem_Multiple(GetPosition(), CItem::LIST_FOOD, CItem::BEHAVIOR_FREEFALL);
+		CNormalItem::DropItem_Multiple(GetPosition(), CItem::LIST_FOOD, CItem::BEHAVIOR_FREEFALL);
 		break;
 	case CObstacle::TYPE_CHEST:
-		CItem::DropItem(GetPosition(), true, CItem::ITEMTYPE_GOLDCOIN);
+		CNormalItem::DropItem(GetPosition(), true, CItem::ITEMTYPE_GOLDCOIN);
 		break;
 	case CObstacle::TYPE_SANDBAGS:
 		break;
 	case CObstacle::TYPE_CAR:
-		CItem::DropItem_Multiple(GetPosition(), CItem::LIST_COIN, CItem::BEHAVIOR_BURSTS);
+		CNormalItem::DropItem_Multiple(GetPosition(), CItem::LIST_COIN, CItem::BEHAVIOR_BURSTS);
 		break;
 
 	case CObstacle::TYPE_BALLOON:
 		break;
 	case CObstacle::TYPE_PRESENTBOX:
-		CItem::DropItem_Multiple(GetPosition(), CItem::LIST_FOOD, CItem::BEHAVIOR_BURSTS);
+		CNormalItem::DropItem_Multiple(GetPosition(), CItem::LIST_FOOD, CItem::BEHAVIOR_BURSTS);
 		break;
 	case CObstacle::TYPE_PRESENTBOX_RARE:
-		CItem::DropItem_Multiple(GetPosition(), CItem::LIST_RARE, CItem::BEHAVIOR_BURSTS);
+		CNormalItem::DropItem_Multiple(GetPosition(), CItem::LIST_RARE, CItem::BEHAVIOR_BURSTS);
+		break;
+
+	case CObstacle::TYPE_BOSSMAP_BELL:
+		CAnimationItem::DropItem_Multiple(GetPosition(), CItem::LIST_ANI_RARE, CItem::BEHAVIOR_BURSTS);
+		break;
+	case CObstacle::TYPE_BOSSMAP_CAGE:
+		CAnimationItem::DropItem(GetPosition(), true, CItem::ANIM_ITEMTYPE_DANCEMONKEY);
 		break;
 	default:
 		break;
@@ -464,6 +476,8 @@ void CObstacle::CheckDie(TAG tag)
 		case CObstacle::TYPE_BALLOON:
 		case CObstacle::TYPE_PRESENTBOX:
 		case CObstacle::TYPE_PRESENTBOX_RARE:
+		case CObstacle::TYPE_BOSSMAP_BELL:
+		case CObstacle::TYPE_BOSSMAP_CAGE:
 
 			//îöî≠î≠ê∂
 			CParticle::CreateFromText(GetPosition(), ZeroVector3, CParticleParam::EFFECT_EXPLOSION_OBJECTBREAK);

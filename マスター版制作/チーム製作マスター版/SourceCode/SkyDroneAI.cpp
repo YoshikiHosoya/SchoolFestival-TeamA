@@ -148,29 +148,89 @@ void CSkyDroneAI::SkyDroneAIState()
 	// カウントアップ
 	m_nCntShotFrame++;
 
-	if (m_nCntShotFrame >= 120)
+	// 2人プレイの時
+	if (CPlayer::GetTwoPPlayFlag())
 	{
-		if (m_nCntShotFrame > 120)
+		// 二秒ごとに弾を撃つ
+		if (m_nCntShotFrame >= 120)
 		{
-			if (pPlayer[0])
+			if (m_nCntShotFrame > 120)
 			{
-				//射撃方向の計算
-				D3DXVECTOR3 ShotVec = pPlayer[0]->GetPosition() - m_pEnemyPass->GetPosition();
-				//値の正規化
-				D3DXVec3Normalize(&ShotVec, &ShotVec);
-				//撃つ向きの設定
-				m_pEnemyPass->GetGunPtr()->SetShotRot(D3DXVECTOR3(0.0f, 0.0f, atan2f(-ShotVec.x, ShotVec.y)));
-			}
+				if (CHossoLibrary::Random(10) >= 0)
+				{
+					if (pPlayer[0])
+					{
+						D3DXVECTOR3 RandPos = pPlayer[0]->GetPosition();
 
-			// 発射
-			m_pEnemyPass->GetGunPtr()->Shot();
-			m_nCntShotFrame = 0;
-		}
-		else
-		{
-			//パーティクル発生 軌跡みたいな
-			CParticle::CreateFromText(m_pEnemyPass->GetPosition(), m_pEnemyPass->GetRot(), CParticleParam::EFFECT_CHARGE);
+						RandPos.x += CHossoLibrary::Random(150.0f);
+
+						//射撃方向の計算
+						D3DXVECTOR3 ShotVec = RandPos - m_pEnemyPass->GetPosition();
+						//値の正規化
+						D3DXVec3Normalize(&ShotVec, &ShotVec);
+						//撃つ向きの設定
+						m_pEnemyPass->GetGunPtr()->SetShotRot(D3DXVECTOR3(0.0f, 0.0f, atan2f(-ShotVec.x, ShotVec.y)));
+					}
+				}
+				else
+				{
+					if (pPlayer[1])
+					{
+						D3DXVECTOR3 RandPos = pPlayer[1]->GetPosition();
+
+						RandPos.x += CHossoLibrary::Random(150.0f);
+
+						//射撃方向の計算
+						D3DXVECTOR3 ShotVec = RandPos - m_pEnemyPass->GetPosition();
+						//値の正規化
+						D3DXVec3Normalize(&ShotVec, &ShotVec);
+						//撃つ向きの設定
+						m_pEnemyPass->GetGunPtr()->SetShotRot(D3DXVECTOR3(0.0f, 0.0f, atan2f(-ShotVec.x, ShotVec.y)));
+					}
+				}
+
+				// 発射
+				m_pEnemyPass->GetGunPtr()->Shot();
+				m_nCntShotFrame = 0;
+			}
+			else
+			{
+				//パーティクル発生 軌跡みたいな
+				CParticle::CreateFromText(m_pEnemyPass->GetPosition(), m_pEnemyPass->GetRot(), CParticleParam::EFFECT_CHARGE);
+			}
 		}
 	}
+	// 1人プレイの時
+	else
+	{
+		// 二秒ごとに弾を撃つ
+		if (m_nCntShotFrame >= 120)
+		{
+			if (m_nCntShotFrame > 120)
+			{
+				if (pPlayer[0])
+				{
+					D3DXVECTOR3 RandPos = pPlayer[0]->GetPosition();
 
+					RandPos.x += CHossoLibrary::Random(150.0f);
+
+					//射撃方向の計算
+					D3DXVECTOR3 ShotVec = RandPos - m_pEnemyPass->GetPosition();
+					//値の正規化
+					D3DXVec3Normalize(&ShotVec, &ShotVec);
+					//撃つ向きの設定
+					m_pEnemyPass->GetGunPtr()->SetShotRot(D3DXVECTOR3(0.0f, 0.0f, atan2f(-ShotVec.x, ShotVec.y)));
+				}
+
+				// 発射
+				m_pEnemyPass->GetGunPtr()->Shot();
+				m_nCntShotFrame = 0;
+			}
+			else
+			{
+				//パーティクル発生 軌跡みたいな
+				CParticle::CreateFromText(m_pEnemyPass->GetPosition(), m_pEnemyPass->GetRot(), CParticleParam::EFFECT_CHARGE);
+			}
+		}
+	}
 }

@@ -293,7 +293,8 @@ void CScene::MapChangeRelease()
 		case OBJTYPE_EFFECT:
 		case OBJTYPE_ORBIT:
 		case OBJTYPE_EXPROSION:
-		case OBJTYPE_ITEM:
+		case OBJTYPE_NORMALITEM:
+		case OBJTYPE_ANIMATIONITEM:
 		case OBJTYPE_FIELD_NOCOLLIISION:
 
 			//”z—ñ‚ª‹ó‚©‚Ç‚¤‚©

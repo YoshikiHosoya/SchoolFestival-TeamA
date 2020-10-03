@@ -10,14 +10,16 @@
 // =====================================================================================================================================================================
 // インクルードファイル
 // =====================================================================================================================================================================
-#include "scene3D.h"
+#include "scene.h"
 
 // =====================================================================================================================================================================
 // マクロ定義
 // =====================================================================================================================================================================
 #define ITEM_FILE_NUM (2)
+#define MULTIPLE_ITEM_NUM (5)// まとめて生成する際の数
+
 // =====================================================================================================================================================================
-// アイテムのデータ
+// アイテムのデータ 共通の情報
 // =====================================================================================================================================================================
 struct ITEM_DATA
 {
@@ -43,7 +45,7 @@ class CPlayer;
 // =====================================================================================================================================================================
 // アイテムクラス
 // =====================================================================================================================================================================
-class CItem : public CScene3D
+class CItem
 {
 public:
 	/* 列挙型 */
@@ -80,7 +82,27 @@ public:
 		// ------ チャージ ------ //
 		ITEMTYPE_BOMBUP,			// 爆弾の数を増やす
 		ITEMTYPE_BULLETUP,			// ハンドガン以外の弾の残弾数を増やす
-		// ITEMTYPE_LIFEUP,// 残機を1上げる
+
+		// ------ アニメーションするアイテム ------ //
+		// ------ スコア ------ //
+		ANIM_ITEMTYPE_ROASTCHICKEN,	// ローストチキン
+		ANIM_ITEMTYPE_FISH,			// 魚
+		ANIM_ITEMTYPE_BEAR,			// 熊
+		ANIM_ITEMTYPE_DOLL,			// 人形
+		ANIM_ITEMTYPE_LETTER,		// 手紙
+
+		ANIM_ITEMTYPE_MEDAL,		// メダル
+		ANIM_ITEMTYPE_MEDAL2,		// メダル2
+
+		ANIM_ITEMTYPE_COIN,			// コイン
+		ANIM_ITEMTYPE_RUBY,			// ルビー
+		ANIM_ITEMTYPE_SAPPHIRE,		// サファイア
+		ANIM_ITEMTYPE_TOPAZ,		// トパーズ
+
+		ANIM_ITEMTYPE_DANCEMONKEY,	// 踊るサル
+		ANIM_ITEMTYPE_JUMPMONKEY,	// 飛ぶサル
+		// ------ チャージ ------ //
+		ANIM_ITEMTYPE_PRISONER,		// 捕虜 残機アップ
 
 		ITEMTYPE_MAX				// 最大
 	};
@@ -100,6 +122,10 @@ public:
 		ITEMDROP_RARE,				// スコアアップ_レア
 		ITEMDROP_FOOD,				// 食べ物
 		ITEMDROP_ALL,				// 全て
+
+		ITEMDROP_ANI_NORMAL,		// アニメーションするアイテム
+		ITEMDROP_ANI_RARE,			// アニメーションするアイテム
+		ITEMDROP_ANI_MONKEY,		// サル
 	};
 
 	// アイテムのドロップ形式
@@ -136,41 +162,57 @@ public:
 		LIST_RARE,			// レアアイテム 宝石
 		LIST_WEAPON,		// 武器
 		LIST_SPECIAL,		// ボスマップ用の特別なアイテム用リスト
+
+		LIST_ANI_NORMAL,	// アニメーションするアイテム
+		LIST_ANI_RARE,		// アニメーションするアイテム
+		LIST_ANI_MONKEY,	// サル
 	};
 
 	/* 関数 */
-	CItem(OBJ_TYPE type);														// コンストラクタ
-	~CItem();																	// デストラクタ
+	CItem();																			// コンストラクタ
+	~CItem();																			// デストラクタ
 
 	/* メンバ関数 */
-	HRESULT						Init();											// 初期化
-	void						Uninit();										// 終了
-	void						Update();										// 更新
-	void						Draw();											// 描画
-	void						DebugInfo();									// デバッグ
+	virtual HRESULT						Init();											// 初期化
+	virtual void						Uninit();										// 終了
+	virtual void						Update();										// 更新
+	virtual void						Draw();											// 描画
+	virtual void						DebugInfo();									// デバッグ
+	virtual	void						SwitchTexture(ITEMTYPE type);					// 種類別テクスチャ設定
+	virtual	void						Flashing();										// 点滅処理
 
-	void						ItemAcquisition(ITEMTYPE type, TAG Tag);		// アイテム取得時の種類別処理
-	void						HitItem(ITEMTYPE type, TAG Tag);				// アイテム取得時の種類別処理
-	void						RemainTimer();									// 滞在時間を計算し0になったら削除する
-	void						Flashing();										// 点滅処理
+
+	virtual void						ItemCollision();								// 当たり判定系
+	virtual void						ReflectionItem();								// 反射処理
+	virtual void						RemainTimer();									// 滞在時間を計算し0になったら削除する
+	virtual void						HitItem(ITEMTYPE type, TAG Tag);				// アイテム取得時の種類別処理
+	virtual void						ItemAcquisition(ITEMTYPE type, TAG Tag);		// アイテム取得時の種類別処理
+
+
+
+	D3DXVECTOR3							SetPosOld() { return m_PosOld; };				// 1フレーム前の座標を設定
+	int									GetRemainTime() const { return m_nRemainTime; };// アイテムの残り時間を取得
+
+
 
 	ITEMTYPE					GetItemType() { return m_Type; };				// アイテムタイプの取得
+	void						SetItemType(ITEMTYPE type) { m_Type = type; };	// アイテムタイプの設定
 	CCollision					*GetCollision() { return m_pCollision; };		// 当たり判定
 	void						SetDropPos(D3DXVECTOR3 &characterpos);			// アイテムを生成位置を設定
 	void						SetMove(D3DXVECTOR3 move);						// 移動量の設定
+	ITEM_DATA					GetItem_Data() const{ return m_ItemData; };		// アイテムのデータの取得 呼び出し側は書き換え不可
+	void						SetBehavior(ITEM_BEHAVIOR behavior) { m_Behavior = behavior; };// アイテムの挙動の設定
+	ITEM_BEHAVIOR				GetBehavior() { return m_Behavior; };			// アイテムの挙動の設定
+
+	CPlayer						*GetPlayer(int nCnt) { return m_pPlayer[nCnt]; };	// アイテムの挙動の設定
+
+
+
 
 	/* 静的メンバ関数 */
-	static	CItem				*DropItem(D3DXVECTOR3 droppos, bool fixed, ITEMTYPE type);	// キャラクターがアイテムを落とす時の生成
-	static	void				DropItem_Multiple(
-		const D3DXVECTOR3 originpos,
-		ITEM_LIST_DROPMULTIPLE type,
-		ITEM_BEHAVIOR behavior);												// アイテムを複数一気にドロップさせる時
-
-
 	static	CItem				*DropCreate_TEST();								// テスト用クリエイト処理
 
 
-	static	void				SwitchTexture(ITEMTYPE type, CItem *pItem);		// 種類別テクスチャ設定
 	static	bool				DropRate();										// アイテムをドロップさせるかのフラグを返す
 	static	bool				DecideIfItemDrop(int nRate);					// ドロップ率を元にアイテムがドロップするかを決めて結果を返す
 	static	uint64_t			GetRandRange(uint64_t min_val, uint64_t max_val);// ランダム関数 範囲
@@ -190,7 +232,29 @@ public:
 		ITEM_BEHAVIOR behavior,
 		int nNum);																	// 複数一気にドロップさせる時
 
+
+	void						BehaviorType(D3DXVECTOR3 &pos);						// アイテムの挙動の種類ごとの処理
 protected:
+	/* メンバ関数 */
+
+	ITEMTYPE					BoxRand();										// ボックス乱数
+	void						SetMultiType(ITEM_LIST_DROPMULTIPLE list);		// 複数体のタイプ設定
+	D3DXVECTOR3					RandomDropPosX(const D3DXVECTOR3 originpos, int radius);//原点から指定された指定範囲のX座標を返す
+
+	D3DXVECTOR3					*ReflectingVectorCalculation(					// 反射ベクトルを求める
+		D3DXVECTOR3 *outV,
+		const D3DXVECTOR3 &ProgressV,
+		const D3DXVECTOR3 &Normal);
+
+
+	/* メンバ変数 */
+	D3DXVECTOR3					m_PosOld;										// 1フレーム前の座標
+	float						m_fGravity;										// 重力
+	int							m_nHitRayCount;									// レイの判定に触れた回数
+	D3DXVECTOR3					m_Move;											// 移動量
+	int							m_nColCnt;										// αカラーカウント
+
+
 private:
 	/* 静的メンバ関数 */
 	static CItem				*DebugCreate(ITEMTYPE type);					// デバッグ用アイテム生成
@@ -215,25 +279,12 @@ private:
 	int							AddCoinScore(int nScore);						// コインのスコアを計算し結果を返す
 
 	ITEMTYPE					FullRand();										// 完全乱数 // 未完成
-	ITEMTYPE					BoxRand();										// ボックス乱数
 
 	void						SetBoxRandDataList();							// ボックス乱数の母数が0以下になった時内容をリセットする
 	static void					AddBoxRandList();								// アイテムのレアリティと母数を元にランダムなリストを生成する
 
 	void						BurstsItem();									// 複数個一気にアイテムが生成される時のアイテムの挙動制御
 	void						BounceItem();									// 空中にあったアイテムが床に着いた時跳ね返る処理
-
-	D3DXVECTOR3					RandomDropPosX(const D3DXVECTOR3 originpos,int radius);//原点から指定された指定範囲のX座標を返す
-	void						SetMultiType(ITEM_LIST_DROPMULTIPLE list);		// 複数体のタイプ設定
-
-	void						ItemCollision();								// 当たり判定系
-	void						ReflectionItem();								// 反射処理
-
-
-	D3DXVECTOR3					*ReflectingVectorCalculation(
-		D3DXVECTOR3 *outV,
-		const D3DXVECTOR3 &ProgressV,
-		const D3DXVECTOR3 &Normal);												// 反射ベクトルを求める
 
 	/* メンバ変数 */
 	CCollision					*m_pCollision;									// 当たり判定
@@ -245,10 +296,6 @@ private:
 	ITEM_LIST_DROPMULTIPLE		m_MultipleListType;								// 複数ドロップさせる時のまとまりの種類
 
 	int							m_nRemainTime;									// アイテムがマップに残る時間
-	int							m_nColCnt;										// αカラーカウント
-	D3DXVECTOR3					m_Move;											// 移動量
-	D3DXVECTOR3					m_PosOld;										// 1フレーム前の座標
-	float						m_fGravity;										// 重力
-	int							m_nHitRayCount;									// レイの判定に触れた回数
+
 };
 #endif

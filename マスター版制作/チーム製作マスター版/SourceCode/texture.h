@@ -173,7 +173,23 @@ public:
 
 		SEPARATE_TEX_EFFECT_FRACTURING,				//タイトルで使う演出
 		SEPARATE_TEX_EFFECT_CHARGE,					//攻撃を撃つ前の溜め
+		SEPARATE_TEX_EFFECT_CHARGE02,				//キャラクターの出現時
+		SEPARATE_TEX_EFFECT_GLITTER,				//きらきら
 
+		SEPARATE_TEX_ITEM_BEAR,						//アニメーションアイテム熊
+		SEPARATE_TEX_ITEM_COIN,						//アニメーションアイテムコイン
+		SEPARATE_TEX_ITEM_DOLL,						//アニメーションアイテム人形
+		SEPARATE_TEX_ITEM_FISH,						//アニメーションアイテム魚
+		SEPARATE_TEX_ITEM_LETTER,					//アニメーションアイテム手紙
+		SEPARATE_TEX_ITEM_MEDAL,					//アニメーションアイテムメダル
+		SEPARATE_TEX_ITEM_MEDAL2,					//アニメーションアイテムメダル2
+		SEPARATE_TEX_ITEM_ROASTCHICKEN,				//アニメーションアイテムローストチキン
+		SEPARATE_TEX_ITEM_RUBY,						//アニメーションアイテムルビー
+		SEPARATE_TEX_ITEM_SAPPHIRE,					//アニメーションアイテムサファイア
+		SEPARATE_TEX_ITEM_TOPAZ,					//アニメーションアイテムトパーズ
+		SEPARATE_TEX_ITEM_DANCEMONKEY,				//アニメーションアイテム踊るサル
+		SEPARATE_TEX_ITEM_JUMPMONKEY,				//アニメーションアイテム飛ぶサル
+		SEPARATE_TEX_ITEM_PRISONER,					//アニメーションアイテム捕虜
 
 		SEPARATE_TEX_NUM,							//ナンバー
 		SEPARATE_TEX_UI_LIFE,						//体力のUI

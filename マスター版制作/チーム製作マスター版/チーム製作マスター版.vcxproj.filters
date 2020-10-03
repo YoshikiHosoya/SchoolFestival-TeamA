@@ -343,7 +343,7 @@
     <ClCompile Include="SourceCode\Anim_Item.cpp">
       <Filter>Scene2D_3D\Item</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\ItemBase.cpp">
+    <ClCompile Include="SourceCode\Normal_Iten.cpp">
       <Filter>Scene2D_3D\Item</Filter>
     </ClCompile>
   </ItemGroup>
@@ -702,7 +702,7 @@
     <ClInclude Include="SourceCode\Anim_Item.h">
       <Filter>Scene2D_3D\Item</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\ItemBase.h">
+    <ClInclude Include="SourceCode\Normal_Iten.h">
       <Filter>Scene2D_3D\Item</Filter>
     </ClInclude>
   </ItemGroup>

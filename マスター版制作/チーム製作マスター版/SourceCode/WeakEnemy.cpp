@@ -15,7 +15,8 @@
 #include "sound.h"
 #include "shield.h"
 #include "Knife.h"
-#include "item.h"
+#include "Normal_Iten.h"
+#include "Anim_Item.h"
 #include "ModelSet.h"
 #include "hosso/Debug_ModelViewer.h"
 #include "meltyhoneyAI.h"
@@ -466,16 +467,24 @@ void CWeakEnemy::DeathReaction()
 		if (CItem::DropRate())
 		{
 			//アイテムを生成
-			CItem::DropItem(GetPosition(),
+			CNormalItem::DropItem(GetPosition(),
 				false,
 				CItem::ITEMTYPE_NONE);
 		}
+	}
+	// スカイドローンの場合
+	else if (GetEnemyType() == CEnemy::ENEMY_TYPE::ENEMY_SKYDRONE)
+	{
+		//アイテムを生成
+		CAnimationItem::DropItem(GetPosition(),
+			true,
+			CItem::ANIM_ITEMTYPE_PRISONER);
 	}
 	// その他
 	else
 	{
 		//アイテムを生成
-		CItem::DropItem(GetPosition(),
+		CNormalItem::DropItem(GetPosition(),
 			true,
 			CItem::ITEMTYPE_HEAVYMACHINEGUN);
 	}

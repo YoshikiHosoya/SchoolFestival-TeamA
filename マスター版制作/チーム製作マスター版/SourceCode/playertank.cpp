@@ -166,7 +166,7 @@ void CPlayertank::Update(void)
 			VehiclePartsRotCondition(GetModelSet()->GetCharacterModelList()[3], MODEL_ROT_TYPE_OPERATION, CCharacter::GetMove(), CCharacter::GetShotDirection(), CCharacter::GetCharacterDirection());
 
 			// æ‚è•¨‚Ì”»’è
-			GetCollision()->ForVehicleCollision();
+			GetCollision()->ForVehicleCollision(GetRideerTag());
 			// íŽÔ‚Ì”»’è
 			GetCollision()->ForTankCollision();
 

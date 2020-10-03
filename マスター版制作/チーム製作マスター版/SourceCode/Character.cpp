@@ -356,7 +356,10 @@ void CCharacter::StateChangeReaction()
 
 		break;
 	case CHARACTER_STATE_DEATH:
-		GetModelSet()->SetAllModelDisp(true);
+		if (GetModelSet()->GetCharacterType() != CModelSet::CHARACTER_TYPE::CHARACTER_TYPE_BOSS_ONE)
+		{
+			GetModelSet()->SetAllModelDisp(true);
+		}
 		m_nStateCnt = 10;
 		break;
 	}

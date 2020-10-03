@@ -37,6 +37,8 @@
 #include "boss_One.h"
 #include "ModelSet.h"
 #include "bullet.h"
+#include "Normal_Iten.h"
+#include "Anim_Item.h"
 
 //======================================================================================================================
 //
@@ -484,6 +486,30 @@ bool CCollision::ForEnemyCollision(int nPlayerDamage, int nPlayerTankDamage, boo
 			}
 		}
 	}
+
+	// 当たり判定 相手が障害物だったら
+	// 障害物の総数分
+	for (int nCntObst = 0; nCntObst < CManager::GetBaseMode()->GetMap()->GetMaxObstacle(); nCntObst++)
+	{
+		CObstacle *pObstacle = CManager::GetBaseMode()->GetMap()->GetObstacle(nCntObst);
+		if (pObstacle != nullptr)
+		{
+			if (pObstacle->GetCollision()->GetCanCollison())
+			{
+				if (this->Collision2D(pObstacle->GetCollision()))
+				{
+					// 当たり範囲フラグをtrueにする
+					bHitFlag = true;
+
+					if (Penetration == false)
+					{
+						return bHitFlag;
+					}
+				}
+			}
+		}
+	}
+
 	return bHitFlag;
 }
 //======================================================================================================================
@@ -768,37 +794,53 @@ CVehicle *CCollision::ForPlayer_VehicleCollision()
 //======================================================================================================================
 // 乗り物が行う判定
 //======================================================================================================================
-bool CCollision::ForVehicleCollision()
+bool CCollision::ForVehicleCollision(TAG Tag)
 {
 	// 判定を確認するフラグ
 	bool bHitFlag = false;
 
-	//相手がアイテムだったら
 	// ベクター型の変数
-	std::vector<CScene*> SceneList;
+	std::vector<CScene*> pNormalSceneList, pAnimationSceneList;
 
 	// 指定したオブジェクトのポインタを取得
-	CScene::GetSceneList(CScene::OBJTYPE_ITEM, SceneList);
+	CScene::GetSceneList(CScene::OBJTYPE_NORMALITEM, pNormalSceneList);
+	CScene::GetSceneList(CScene::OBJTYPE_ANIMATIONITEM, pAnimationSceneList);
 
-	//アイテムの総数分
-	for (size_t nCnt = 0; nCnt < SceneList.size(); nCnt++)
+	//通常アイテムの総数分
+	for (size_t nCnt = 0; nCnt < pNormalSceneList.size(); nCnt++)
 	{
-		CItem *pItem = (CItem*)SceneList[nCnt];
+		CNormalItem *pItem = (CNormalItem*)pNormalSceneList[nCnt];
 		if (pItem != nullptr)
 		{
-			//if (pItem->GetItemType() == CItem::ITEMTYPE_BEAR ||
-				//pItem->GetItemType() == CItem::ITEMTYPE_ENERGYUP||
-				//pItem->GetItemType() == CItem::ITEMTYPE_BOMBUP||
-				//pItem->GetItemType() == CItem::ITEMTYPE_BULLETUP)
-		//	{
+			if (pItem->GetCollision()->OtherCollision2D(this))
+			{
 				if (pItem->GetCollision()->OtherCollision2D(this))
 				{
 					bHitFlag = true;
 					// アイテムごとの処理を通す
-					pItem->HitItem(pItem->GetItemType(), TAG::PLAYER_1);
+					pItem->HitItem(pItem->GetItemType(), Tag);
 					pItem = nullptr;
 				}
-			//}
+			}
+		}
+	}
+
+	// アニメーションアイテムの総数分
+	for (size_t nCnt = 0; nCnt < pAnimationSceneList.size(); nCnt++)
+	{
+		CAnimationItem *pItem = (CAnimationItem*)pAnimationSceneList[nCnt];
+		if (pItem != nullptr)
+		{
+			if (pItem->GetCollision()->OtherCollision2D(this))
+			{
+				if (pItem->GetCollision()->OtherCollision2D(this))
+				{
+					bHitFlag = true;
+					// アイテムごとの処理を通す
+					pItem->HitItem(pItem->GetItemType(), Tag);
+					pItem = nullptr;
+				}
+			}
 		}
 	}
 
@@ -1194,17 +1236,17 @@ bool CCollision::ForPlayer_ItemCollision(TAG Tag)
 	// 判定を確認するフラグ
 	bool bHitFlag = false;
 
-	//相手がアイテムだったら
 	// ベクター型の変数
-	std::vector<CScene*> SceneList;
+	std::vector<CScene*> pNormalSceneList, pAnimationSceneList;
 
 	// 指定したオブジェクトのポインタを取得
-	CScene::GetSceneList(CScene::OBJTYPE_ITEM, SceneList);
+	CScene::GetSceneList(CScene::OBJTYPE_NORMALITEM, pNormalSceneList);
+	CScene::GetSceneList(CScene::OBJTYPE_ANIMATIONITEM, pAnimationSceneList);
 
-	//アイテムの総数分
-	for (size_t nCnt = 0; nCnt < SceneList.size(); nCnt++)
+	//通常アイテムの総数分
+	for (size_t nCnt = 0; nCnt < pNormalSceneList.size(); nCnt++)
 	{
-		CItem *pItem = (CItem*)SceneList[nCnt];
+		CNormalItem *pItem = (CNormalItem*)pNormalSceneList[nCnt];
 		if (pItem != nullptr)
 		{
 			if (pItem->GetCollision()->OtherCollision2D(this))
@@ -1215,6 +1257,26 @@ bool CCollision::ForPlayer_ItemCollision(TAG Tag)
 			}
 		}
 	}
+
+	// アニメーションアイテムの総数分
+	for (size_t nCnt = 0; nCnt < pAnimationSceneList.size(); nCnt++)
+	{
+		CAnimationItem *pItem = (CAnimationItem*)pAnimationSceneList[nCnt];
+		if (pItem != nullptr)
+		{
+			if (pItem->GetCollision()->OtherCollision2D(this))
+			{
+				if (pItem->GetCollision()->OtherCollision2D(this))
+				{
+					bHitFlag = true;
+					// アイテムごとの処理を通す
+					pItem->HitItem(pItem->GetItemType(), Tag);
+					pItem = nullptr;
+				}
+			}
+		}
+	}
+
 	return bHitFlag;
 }
 

@@ -87,6 +87,15 @@ void CScoreManager::SetScoreData()
 	m_nScore[SCORE_ITEM_BEAR]			 = m_ScoreData.nBear;
 	m_nScore[SCORE_ITEM_LETTER]			 = m_ScoreData.nLetter;
 	m_nScore[SCORE_ITEM_DIAMOND]		 = m_ScoreData.nDiamond;
+
+	m_nScore[SCORE_ITEM_ANI_BEAR]		 = m_ScoreData.nAni_Bear;
+	m_nScore[SCORE_ITEM_ANI_COIN]		 = m_ScoreData.nAni_Coin;
+	m_nScore[SCORE_ITEM_ANI_FOOD]		 = m_ScoreData.nAni_Food;
+	m_nScore[SCORE_ITEM_ANI_LETTER]		 = m_ScoreData.nAni_Letter;
+	m_nScore[SCORE_ITEM_ANI_MEDAL]		 = m_ScoreData.nAni_Jewelry;
+	m_nScore[SCORE_ITEM_ANI_JEWELRY]	 = m_ScoreData.nAni_Medal;
+	m_nScore[SCORE_ITEM_ANI_MONKEY]		 = m_ScoreData.nAni_Monkey;
+
 	m_nScore[SCORE_DAMAGE_BULLET]		 = m_ScoreData.nBullet;
 	m_nScore[SCORE_DAMAGE_ATTACK]		 = m_ScoreData.nAttack;
 	m_nScore[SCORE_RESCUE_PRISONER]		 = m_ScoreData.nPrisoner;
@@ -172,6 +181,35 @@ void CScoreManager::ScoreLoad()
 						{
 							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_ScoreData.nDiamond);	// 比較用テキストにBEARを代入
 						}
+						if (strcmp(cHeadText, "ANI_BEAR") == 0)
+						{
+							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_ScoreData.nAni_Bear);	// 比較用テキストにBEARを代入
+						}
+						if (strcmp(cHeadText, "ANI_COIN") == 0)
+						{
+							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_ScoreData.nAni_Coin);	// 比較用テキストにBEARを代入
+						}
+						if (strcmp(cHeadText, "ANI_FOOD") == 0)
+						{
+							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_ScoreData.nAni_Food);	// 比較用テキストにBEARを代入
+						}
+						if (strcmp(cHeadText, "ANI_LETTER") == 0)
+						{
+							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_ScoreData.nAni_Letter);	// 比較用テキストにBEARを代入
+						}
+						if (strcmp(cHeadText, "ANI_MEDAL") == 0)
+						{
+							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_ScoreData.nAni_Jewelry);	// 比較用テキストにBEARを代入
+						}
+						if (strcmp(cHeadText, "ANI_JEWELRY") == 0)
+						{
+							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_ScoreData.nAni_Medal);	// 比較用テキストにBEARを代入
+						}
+						if (strcmp(cHeadText, "ANI_MONKEY") == 0)
+						{
+							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_ScoreData.nAni_Monkey);	// 比較用テキストにBEARを代入
+						}
+
 						// BEARが来たら
 						else if (strcmp(cHeadText, "BULLET") == 0)
 						{

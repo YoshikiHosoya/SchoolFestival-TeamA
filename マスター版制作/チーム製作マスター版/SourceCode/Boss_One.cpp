@@ -183,8 +183,6 @@ void CBoss_One::Update(void)
 	// 一定時間毎にドローンを生成する
 	CreatePerFixedTime();
 
-
-
 	// ガンの更新
 	for (int nCnt = 0; nCnt < WEAPONTYPE_MAX; nCnt++)
 	{
@@ -1745,18 +1743,21 @@ void CBoss_One::BubbleSort(std::vector<int*> &data)
 // =====================================================================================================================================================================
 void CBoss_One::CreatePerFixedTime()
 {
-	// 15秒ごとにドローンを生成
-	/*if (m_nElapsedTime % 900 == 0)
+	// 10秒ごとにドローンを生成
+	if (m_nElapsedTime % 600 == 0)
 	{
 		CMap *pMap = CManager::GetBaseMode()->GetMap();
 		pMap->BossWaveCreate(CMap::ARRANGEMENT_MODEL_ENEMY,D3DXVECTOR3(-300.0f,400.0f,0.0f),CEnemy::ENEMY_TYPE::ENEMY_SKYDRONE);
-	}*/
+	}
 
 	// 15秒ごとに捕虜を生成
 	if (m_nElapsedTime % 900 == 0)
 	{
 		CMap *pMap = CManager::GetBaseMode()->GetMap();
 		pMap->BossWaveCreate(CMap::ARRANGEMENT_MODEL_PRISONER, D3DXVECTOR3(-300.0f, 400.0f, 0.0f), CEnemy::ENEMY_TYPE::ENEMY_NORMAL);
+
+		//
+		m_nElapsedTime = 0;
 	}
 }
 

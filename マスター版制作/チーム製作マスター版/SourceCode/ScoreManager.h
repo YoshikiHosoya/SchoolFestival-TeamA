@@ -30,6 +30,14 @@ struct SCORE_DATA
 	int					nLetter;		// 手紙のアイテム
 	int					nDiamond;		// ダイアモンドのアイテム
 
+	int					nAni_Bear;		// ぬいぐるみのアイテム
+	int					nAni_Coin;		// コインのアイテム
+	int					nAni_Food;		// 食べ物のアイテム
+	int					nAni_Letter;	// 手紙のアイテム
+	int					nAni_Jewelry;	// 宝石のアイテム
+	int					nAni_Medal;		// メダルのアイテム
+	int					nAni_Monkey;	// サルのアイテム
+
 	int					nBullet;		// 敵に弾を当てた時
 	int					nAttack;		// 敵に近接攻撃を当てたとき
 	int					nPrisoner;		// 捕虜を助けた時
@@ -57,6 +65,15 @@ public:
 		SCORE_ITEM_BEAR,		// 1500		// 熊
 		SCORE_ITEM_LETTER,		// 500		// 手紙
 		SCORE_ITEM_DIAMOND,		// 100000	// ダイヤモンド
+
+		SCORE_ITEM_ANI_BEAR,	// 3000		// ぬいぐるみのアイテム
+		SCORE_ITEM_ANI_COIN,	// 1000		// コインのアイテム
+		SCORE_ITEM_ANI_FOOD,	// 500		// 食べ物のアイテム
+		SCORE_ITEM_ANI_LETTER,	// 1000		// 手紙のアイテム
+		SCORE_ITEM_ANI_MEDAL,	// 1500		// 宝石のアイテム
+		SCORE_ITEM_ANI_JEWELRY,	// 5000		// メダルのアイテム
+		SCORE_ITEM_ANI_MONKEY,	// 50000	// サルのアイテム
+
 		SCORE_DAMAGE_BULLET,	// 100		// 敵に弾を当てた時
 		SCORE_DAMAGE_ATTACK,	// 500		// 敵に近接攻撃を当てたとき
 		SCORE_RESCUE_PRISONER,	// 500		// 捕虜を助けた時

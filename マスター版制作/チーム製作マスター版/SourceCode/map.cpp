@@ -23,6 +23,7 @@
 #include "sound.h"
 #include "ModelSet.h"
 #include "model.h"
+#include "particle.h"
 // =====================================================================================================================================================================
 // Ã“Iƒƒ“ƒo•Ï”‚Ì‰Šú‰»
 // =====================================================================================================================================================================
@@ -754,6 +755,14 @@ void CMap::BossWaveCreate(int nModelType, D3DXVECTOR3 eventpos, CWeakEnemy::ENEM
 		// •ß—¸
 		m_pPrisoner.emplace_back(CPrisoner::Create());
 		m_pPrisoner[m_pPrisoner.size() - 1]->SetPosition(eventpos);
+
+		//Œõ‚é
+		CParticle::CreateFromText(D3DXVECTOR3(
+			m_pPrisoner[m_pPrisoner.size() - 1]->GetPosition().x,
+			m_pPrisoner[m_pPrisoner.size() - 1]->GetPosition().y + 50,
+			m_pPrisoner[m_pPrisoner.size() - 1]->GetPosition().z),
+			ZeroVector3, CParticleParam::EFFECT_CHARGEAPPEAR);
+
 		// “Á•Ê‚È•ß—¸‚Æ‚µ‚ÄÝ’è
 		m_pPrisoner[m_pPrisoner.size() - 1]->SetPrisonerType(CPrisoner::PRISONER_TYPE_SPECIAL);
 	}

@@ -1,6 +1,6 @@
 // =====================================================================================================================================================================
 //
-// アニメーションアイテム処理の説明[animation_item.cpp]
+// 通常のアイテム処理[normal_item.cpp]
 // Author : Fujiwara Masato
 //
 // =====================================================================================================================================================================
@@ -8,7 +8,7 @@
 // =====================================================================================================================================================================
 //インクルード
 // =====================================================================================================================================================================
-#include "Anim_Item.h"
+#include "Normal_Iten.h"
 #include "collision.h"
 #include "basemode.h"
 #include "manager.h"
@@ -18,7 +18,7 @@
 #include "player.h"
 #include "scoremanager.h"
 #include "playerui.h"
-#include "map.h"
+#include "grenade.h"
 
 // =====================================================================================================================================================================
 //静的メンバ変数の初期化
@@ -27,17 +27,17 @@
 // =====================================================================================================================================================================
 //マクロ
 // =====================================================================================================================================================================
-#define SWITCHCOUNT (5)
+
 // =====================================================================================================================================================================
 //コンストラクタ
 // =====================================================================================================================================================================
-CAnimationItem::CAnimationItem(OBJ_TYPE obj) : CItem(), CTexAnimation3D(obj)
+CNormalItem::CNormalItem(OBJ_TYPE obj) : CItem(),CScene3D(obj)
 {
 }
 // =====================================================================================================================================================================
 //デストラクタ
 // =====================================================================================================================================================================
-CAnimationItem::~CAnimationItem()
+CNormalItem::~CNormalItem()
 {
 }
 
@@ -46,10 +46,10 @@ CAnimationItem::~CAnimationItem()
 // 初期化処理
 //
 // =====================================================================================================================================================================
-HRESULT CAnimationItem::Init()
+HRESULT CNormalItem::Init()
 {
 	// ポリゴンの生成
-	CTexAnimation3D::Init();
+	CScene3D::Init();
 	// アイテムの初期化
 	CItem::Init();
 
@@ -66,12 +66,12 @@ HRESULT CAnimationItem::Init()
 // 終了処理
 //
 // =====================================================================================================================================================================
-void CAnimationItem::Uninit(void)
+void CNormalItem::Uninit(void)
 {
 	// アイテムの終了処理
 	CItem::Uninit();
 	// ポリゴンの解放
-	CTexAnimation3D::Uninit();
+	CScene3D::Uninit();
 }
 
 // =====================================================================================================================================================================
@@ -79,7 +79,7 @@ void CAnimationItem::Uninit(void)
 // 更新処理
 //
 // =====================================================================================================================================================================
-void CAnimationItem::Update(void)
+void CNormalItem::Update(void)
 {
 	// 1フレーム前の座標を設定
 	m_PosOld = GetPosition();
@@ -93,8 +93,8 @@ void CAnimationItem::Update(void)
 	// レイの判定に一回でも触れていた時
 	//if (m_nHitRayCount >= 1)
 	//{
-	// アイテムの滞在時間管理
-	RemainTimer();
+		// アイテムの滞在時間管理
+		RemainTimer();
 	//}
 
 	// 座標を更新
@@ -103,7 +103,7 @@ void CAnimationItem::Update(void)
 	// アイテムの更新
 	CItem::Update();
 	// ポリゴンの更新
-	CTexAnimation3D::Update();
+	CScene3D::Update();
 }
 
 // =====================================================================================================================================================================
@@ -111,7 +111,7 @@ void CAnimationItem::Update(void)
 // 描画処理
 //
 // =====================================================================================================================================================================
-void CAnimationItem::Draw(void)
+void CNormalItem::Draw(void)
 {
 	// 変数宣言
 	LPDIRECT3DDEVICE9 pDevice =									// デバイスの取得
@@ -133,7 +133,7 @@ void CAnimationItem::Draw(void)
 	CHossoLibrary::SetBillboard(&mtxView);
 
 	// 描画
-	CTexAnimation3D::Draw();
+	CScene3D::Draw();
 
 	pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
 	// アルファテストの設定を戻す
@@ -146,7 +146,7 @@ void CAnimationItem::Draw(void)
 // デバッグ
 //
 // =====================================================================================================================================================================
-void CAnimationItem::DebugInfo()
+void CNormalItem::DebugInfo()
 {
 }
 
@@ -155,85 +155,85 @@ void CAnimationItem::DebugInfo()
 // 種類別テクスチャバインド処理
 //
 // =====================================================================================================================================================================
-void CAnimationItem::SwitchTexture(ITEMTYPE type)
+void CNormalItem::SwitchTexture(ITEMTYPE type)
 {
 	switch (type)
 	{
-	case CItem::ANIM_ITEMTYPE_ROASTCHICKEN:
-		this->BindTexture(CTexture::GetSeparateTexture(CTexture::SEPARATE_TEX_TYPE::SEPARATE_TEX_ITEM_ROASTCHICKEN));
-		this->SetTex(CTexture::SEPARATE_TEX_TYPE::SEPARATE_TEX_ITEM_ROASTCHICKEN);
-		this->SetCntSwitch(SWITCHCOUNT);
-		break;
-
-	case CItem::ANIM_ITEMTYPE_FISH:
-		this->BindTexture(CTexture::GetSeparateTexture(CTexture::SEPARATE_TEX_TYPE::SEPARATE_TEX_ITEM_FISH));
-		this->SetTex(CTexture::SEPARATE_TEX_TYPE::SEPARATE_TEX_ITEM_FISH);
-		this->SetCntSwitch(SWITCHCOUNT);
-		break;
-	case CItem::ANIM_ITEMTYPE_BEAR:
-		this->BindTexture(CTexture::GetSeparateTexture(CTexture::SEPARATE_TEX_TYPE::SEPARATE_TEX_ITEM_BEAR));
-		this->SetTex(CTexture::SEPARATE_TEX_TYPE::SEPARATE_TEX_ITEM_BEAR);
-		this->SetCntSwitch(SWITCHCOUNT);
-		break;
-
-
-	case CItem::ANIM_ITEMTYPE_DOLL:
-		this->BindTexture(CTexture::GetSeparateTexture(CTexture::SEPARATE_TEX_TYPE::SEPARATE_TEX_ITEM_DOLL));
-		this->SetTex(CTexture::SEPARATE_TEX_TYPE::SEPARATE_TEX_ITEM_DOLL);
-		this->SetCntSwitch(SWITCHCOUNT);
-		break;
-	case CItem::ANIM_ITEMTYPE_LETTER:
-		this->BindTexture(CTexture::GetSeparateTexture(CTexture::SEPARATE_TEX_TYPE::SEPARATE_TEX_ITEM_LETTER));
-		this->SetTex(CTexture::SEPARATE_TEX_TYPE::SEPARATE_TEX_ITEM_LETTER);
-		this->SetCntSwitch(SWITCHCOUNT);
-		break;
-	case CItem::ANIM_ITEMTYPE_MEDAL:
-		this->BindTexture(CTexture::GetSeparateTexture(CTexture::SEPARATE_TEX_TYPE::SEPARATE_TEX_ITEM_MEDAL));
-		this->SetTex(CTexture::SEPARATE_TEX_TYPE::SEPARATE_TEX_ITEM_MEDAL);
-		this->SetCntSwitch(SWITCHCOUNT);
-		break;
-	case CItem::ANIM_ITEMTYPE_MEDAL2:
-		this->BindTexture(CTexture::GetSeparateTexture(CTexture::SEPARATE_TEX_TYPE::SEPARATE_TEX_ITEM_MEDAL2));
-		this->SetTex(CTexture::SEPARATE_TEX_TYPE::SEPARATE_TEX_ITEM_MEDAL2);
-		this->SetCntSwitch(SWITCHCOUNT);
-		break;
-	case CItem::ANIM_ITEMTYPE_COIN:
-		this->BindTexture(CTexture::GetSeparateTexture(CTexture::SEPARATE_TEX_TYPE::SEPARATE_TEX_ITEM_COIN));
-		this->SetTex(CTexture::SEPARATE_TEX_TYPE::SEPARATE_TEX_ITEM_COIN);
-		this->SetCntSwitch(SWITCHCOUNT);
-		break;
-
-	case CItem::ANIM_ITEMTYPE_RUBY:
-		this->BindTexture(CTexture::GetSeparateTexture(CTexture::SEPARATE_TEX_TYPE::SEPARATE_TEX_ITEM_RUBY));
-		this->SetTex(CTexture::SEPARATE_TEX_TYPE::SEPARATE_TEX_ITEM_RUBY);
-		this->SetCntSwitch(SWITCHCOUNT);
-		break;
-	case CItem::ANIM_ITEMTYPE_SAPPHIRE:
-		this->BindTexture(CTexture::GetSeparateTexture(CTexture::SEPARATE_TEX_TYPE::SEPARATE_TEX_ITEM_SAPPHIRE));
-		this->SetTex(CTexture::SEPARATE_TEX_TYPE::SEPARATE_TEX_ITEM_SAPPHIRE);
-		this->SetCntSwitch(SWITCHCOUNT);
-		break;
-	case CItem::ANIM_ITEMTYPE_TOPAZ:
-		this->BindTexture(CTexture::GetSeparateTexture(CTexture::SEPARATE_TEX_TYPE::SEPARATE_TEX_ITEM_TOPAZ));
-		this->SetTex(CTexture::SEPARATE_TEX_TYPE::SEPARATE_TEX_ITEM_TOPAZ);
-		this->SetCntSwitch(SWITCHCOUNT);
-		break;
-	case CItem::ANIM_ITEMTYPE_DANCEMONKEY:
-		this->BindTexture(CTexture::GetSeparateTexture(CTexture::SEPARATE_TEX_TYPE::SEPARATE_TEX_ITEM_DANCEMONKEY));
-		this->SetTex(CTexture::SEPARATE_TEX_TYPE::SEPARATE_TEX_ITEM_DANCEMONKEY);
-		this->SetCntSwitch(SWITCHCOUNT);
-		break;
-	case CItem::ANIM_ITEMTYPE_JUMPMONKEY:
-		this->BindTexture(CTexture::GetSeparateTexture(CTexture::SEPARATE_TEX_TYPE::SEPARATE_TEX_ITEM_JUMPMONKEY));
-		this->SetTex(CTexture::SEPARATE_TEX_TYPE::SEPARATE_TEX_ITEM_JUMPMONKEY);
-		this->SetCntSwitch(SWITCHCOUNT);
-		break;
-	case CItem::ANIM_ITEMTYPE_PRISONER:
-		this->BindTexture(CTexture::GetSeparateTexture(CTexture::SEPARATE_TEX_TYPE::SEPARATE_TEX_ITEM_PRISONER));
-		this->SetTex(CTexture::SEPARATE_TEX_TYPE::SEPARATE_TEX_ITEM_PRISONER);
-		this->SetCntSwitch(SWITCHCOUNT);
-		break;
+	case CItem::ITEMTYPE_HEAVYMACHINEGUN:
+	this->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_HEAVYMACHINEGUN));
+	break;
+	case CItem::ITEMTYPE_SHOTGUN:
+	this->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_SHOTGUN));
+	break;
+	case CItem::ITEMTYPE_LASERGUN:
+	this->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_LASERGUN));
+	break;
+	case CItem::ITEMTYPE_ROCKETLAUNCHER:
+	this->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_ROCKETLAUNCHER));
+	break;
+	case CItem::ITEMTYPE_FLAMESHOT:
+	this->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_FLAMESHOT));
+	break;
+	case CItem::ITEMTYPE_GOLDCOIN:
+	this->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_GOLDCOIN));
+	break;
+	case CItem::ITEMTYPE_SILVERCOIN:
+	this->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_SILVERCOIN));
+	break;
+	case CItem::ITEMTYPE_BRONZESCOIN:
+	this->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_BRONZESCOIN));
+	break;
+	case CItem::ITEMTYPE_DIAMOND:
+	this->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_DIAMOND));
+	break;
+	case CItem::ITEMTYPE_BEAR:
+	this->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_BEAR));
+	break;
+	case CItem::ITEMTYPE_LETTER:
+	this->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_LETTER));
+	break;
+	case CItem::ITEMTYPE_APPLE:
+	this->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_APPLE));
+	break;
+	case CItem::ITEMTYPE_MELON:
+	this->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_MELON));
+	break;
+	case CItem::ITEMTYPE_BANANA:
+	this->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_BANANA));
+	break;
+	case CItem::ITEMTYPE_MEAT:
+	this->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_MEAT));
+	break;
+	case CItem::ITEMTYPE_RICEBALL:
+	this->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_RICEBALL));
+	break;
+	case CItem::ITEMTYPE_CANDY:
+	this->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_CANDY));
+	break;
+	case CItem::ITEMTYPE_DONUT:
+	this->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_DONUT));
+	break;
+	case CItem::ITEMTYPE_LOLIPOP:
+	this->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_LOLIPOP));
+	break;
+	case CItem::ITEMTYPE_BREAD:
+	this->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_BREAD));
+	break;
+	case CItem::ITEMTYPE_CHOCOLATE:
+	this->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_CHOCOLATE));
+	break;
+	case CItem::ITEMTYPE_ICE:
+	this->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_ICE));
+	break;
+	case CItem::ITEMTYPE_BOMBUP:
+	this->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_BOMBUP));
+	break;
+	case CItem::ITEMTYPE_BULLETUP:
+	this->BindTexture(CTexture::GetTexture(CTexture::TEX_TYPE::TEX_ITEM_BULLETUP));
+	break;
 	}
+
+	SetItemType(type);
 }
 
 // =====================================================================================================================================================================
@@ -241,7 +241,7 @@ void CAnimationItem::SwitchTexture(ITEMTYPE type)
 // アイテムの判定
 //
 // =====================================================================================================================================================================
-void CAnimationItem::ItemCollision()
+void CNormalItem::ItemCollision()
 {
 	// 当たり判定
 	if (GetCollision() != nullptr)
@@ -253,7 +253,7 @@ void CAnimationItem::ItemCollision()
 
 		if (pMap)
 		{
-			if (GetCollision()->RayCollision(pMap, GetPosition(), m_PosOld))
+			if (GetCollision()->RayCollision(pMap, m_PosOld,GetPosition()))
 			{
 				if (GetBehavior() != BEHAVIOR_NONE)
 				{
@@ -302,7 +302,7 @@ void CAnimationItem::ItemCollision()
 // 反射処理
 //
 // =====================================================================================================================================================================
-void CAnimationItem::ReflectionItem()
+void CNormalItem::ReflectionItem()
 {
 	// 法線ベクトル
 	const D3DXVECTOR3 NormalV = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
@@ -317,7 +317,7 @@ void CAnimationItem::ReflectionItem()
 // 点滅処理
 //
 // =====================================================================================================================================================================
-void CAnimationItem::Flashing()
+void CNormalItem::Flashing()
 {
 	CItem::Flashing();
 
@@ -327,7 +327,7 @@ void CAnimationItem::Flashing()
 		this->SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f));
 	}
 	// 余りが0の時通常状態にする
-	else if (m_nColCnt % 15 == 0)
+	else if(m_nColCnt % 15 == 0)
 	{
 		this->SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 	}
@@ -347,7 +347,7 @@ void CAnimationItem::Flashing()
 // 滞在時間を計算し0になったら削除する
 //
 // =====================================================================================================================================================================
-void CAnimationItem::RemainTimer()
+void CNormalItem::RemainTimer()
 {
 	// アイテムの滞在時間を減少
 	CItem::RemainTimer();
@@ -365,7 +365,7 @@ void CAnimationItem::RemainTimer()
 // アイテムが判定をもらった時
 //
 // =====================================================================================================================================================================
-void CAnimationItem::HitItem(ITEMTYPE type, TAG Tag)
+void CNormalItem::HitItem(ITEMTYPE type, TAG Tag)
 {
 	// アイテムが判定をもらった時
 	CItem::HitItem(type, Tag);
@@ -381,67 +381,197 @@ void CAnimationItem::HitItem(ITEMTYPE type, TAG Tag)
 // アイテム取得時の種類別処理
 //
 // =====================================================================================================================================================================
-void CAnimationItem::ItemAcquisition(ITEMTYPE type, TAG Tag)
+void CNormalItem::ItemAcquisition(ITEMTYPE type, TAG Tag)
 {
 	// アイテムの種類ごとの処理
 	switch (type)
 	{
-	case CItem::ANIM_ITEMTYPE_ROASTCHICKEN:
+		// ヘビーマシンガン
+	case (ITEMTYPE_HEAVYMACHINEGUN): {
+		// SEを鳴らす
+		CManager::GetSound()->Play(CSound::LABEL_SE_GET_WEAPON);
+		CManager::GetSound()->Play(CSound::LABEL_SE_VOICE_HEAVYMACHINEGUN);
+
+		CItem::GetPlayer((int)Tag)->GetGun()->SetGunType(CGun::GUNTYPE_HEAVYMACHINEGUN);
+	}break;
+
+		// ショットガン
+	case (ITEMTYPE_SHOTGUN): {
+		// SEを鳴らす
+		CManager::GetSound()->Play(CSound::LABEL_SE_GET_WEAPON);
+		CManager::GetSound()->Play(CSound::LABEL_SE_VOICE_SHOTGUN);
+
+		CItem::GetPlayer((int)Tag)->GetGun()->SetGunType(CGun::GUNTYPE_SHOTGUN);
+	}break;
+
+		// レーザーガン
+	case (ITEMTYPE_LASERGUN): {
+		// SEを鳴らす
+		CManager::GetSound()->Play(CSound::LABEL_SE_GET_WEAPON);
+		CManager::GetSound()->Play(CSound::LABEL_SE_VOICE_LAZERGUN);
+
+		CItem::GetPlayer((int)Tag)->GetGun()->SetGunType(CGun::GUNTYPE_LASERGUN);
+	}break;
+
+		// ロケットランチャー
+	case (ITEMTYPE_ROCKETLAUNCHER): {
+		// SEを鳴らす
+		CManager::GetSound()->Play(CSound::LABEL_SE_GET_WEAPON);
+		CManager::GetSound()->Play(CSound::LABEL_SE_VOICE_ROCKETLAUNCHER);
+
+		CItem::GetPlayer((int)Tag)->GetGun()->SetGunType(CGun::GUNTYPE_ROCKETLAUNCHER);
+	}break;
+
+		// フレイムショット
+	case (ITEMTYPE_FLAMESHOT): {
+		// SEを鳴らす
+		CManager::GetSound()->Play(CSound::LABEL_SE_GET_WEAPON);
+		CManager::GetSound()->Play(CSound::LABEL_SE_VOICE_FLAMESHOT);
+
+		CItem::GetPlayer((int)Tag)->GetGun()->SetGunType(CGun::GUNTYPE_FLAMESHOT);
+	}break;
+
+		// 金貨
+	case (ITEMTYPE_GOLDCOIN): {
+		// SEを鳴らす
 		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
-		CItem::GetPlayer((int)Tag)->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_ANI_FOOD), (int)Tag);
-		break;
-	case CItem::ANIM_ITEMTYPE_FISH:
-		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
-		CItem::GetPlayer((int)Tag)->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_ANI_FOOD), (int)Tag);
-		break;
-	case CItem::ANIM_ITEMTYPE_BEAR:
-		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
-		CItem::GetPlayer((int)Tag)->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_ANI_BEAR), (int)Tag);
-		break;
-	case CItem::ANIM_ITEMTYPE_DOLL:
-		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
-		CItem::GetPlayer((int)Tag)->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_ANI_BEAR), (int)Tag);
-		break;
-	case CItem::ANIM_ITEMTYPE_LETTER:
-		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
-		CItem::GetPlayer((int)Tag)->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_ANI_LETTER), (int)Tag);
-		break;
-	case CItem::ANIM_ITEMTYPE_MEDAL:
-		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
-		CItem::GetPlayer((int)Tag)->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_ANI_MEDAL), (int)Tag);
-		break;
-	case CItem::ANIM_ITEMTYPE_MEDAL2:
-		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
-		CItem::GetPlayer((int)Tag)->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_ANI_MEDAL), (int)Tag);
-		break;
-	case CItem::ANIM_ITEMTYPE_COIN:
-		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
+		// スコアアップ
 		CItem::GetPlayer((int)Tag)->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_GCOIN), (int)Tag);
-		break;
-	case CItem::ANIM_ITEMTYPE_RUBY:
+	}break;
+
+		// 銀貨
+	case (ITEMTYPE_SILVERCOIN): {
+		// SEを鳴らす
 		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
-		CItem::GetPlayer((int)Tag)->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_ANI_JEWELRY), (int)Tag);
-		break;
-	case CItem::ANIM_ITEMTYPE_SAPPHIRE:
+		// スコアアップ
+		CItem::GetPlayer((int)Tag)->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_SCOIN), (int)Tag);
+	}break;
+
+		// 銅貨
+	case (ITEMTYPE_BRONZESCOIN): {
+		// SEを鳴らす
 		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
-		CItem::GetPlayer((int)Tag)->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_ANI_JEWELRY), (int)Tag);
-		break;
-	case CItem::ANIM_ITEMTYPE_TOPAZ:
+		// スコアアップ
+		CItem::GetPlayer((int)Tag)->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_BCOIN), (int)Tag);
+	}break;
+
+		// ダイアモンド
+	case (ITEMTYPE_DIAMOND): {
+		// SEを鳴らす
 		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
-		CItem::GetPlayer((int)Tag)->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_ANI_JEWELRY), (int)Tag);
-		break;
-	case CItem::ANIM_ITEMTYPE_DANCEMONKEY:
+		// スコアアップ
+		CItem::GetPlayer((int)Tag)->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_DIAMOND), (int)Tag);
+	}break;
+		// 熊
+	case (ITEMTYPE_BEAR): {
+		// SEを鳴らす
 		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
-		CItem::GetPlayer((int)Tag)->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_ANI_MONKEY), (int)Tag);
-		break;
-	case CItem::ANIM_ITEMTYPE_JUMPMONKEY:
+		// スコアアップ
+		CItem::GetPlayer((int)Tag)->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_BEAR), (int)Tag);
+	}break;
+
+		// 手紙
+	case (ITEMTYPE_LETTER): {
+		// SEを鳴らす
 		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
-		CItem::GetPlayer((int)Tag)->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_ANI_MONKEY), (int)Tag);
-		break;
-	case CItem::ANIM_ITEMTYPE_PRISONER:
+		// スコアアップ
+		CItem::GetPlayer((int)Tag)->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_LETTER), (int)Tag);
+
+	}break;
+
+		// リンゴ
+	case ITEMTYPE_APPLE:
+		// SEを鳴らす
 		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
-		CItem::GetPlayer((int)Tag)->SetLife(GetPlayer((int)Tag)->GetLife() + 1);
+		// スコアアップ
+		CItem::GetPlayer((int)Tag)->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_FRUIT), (int)Tag);
 		break;
+		// メロン
+	case ITEMTYPE_MELON:
+		// SEを鳴らす
+		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
+		// スコアアップ
+		CItem::GetPlayer((int)Tag)->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_FRUIT), (int)Tag);
+		break;
+		// バナナ
+	case ITEMTYPE_BANANA:
+		// SEを鳴らす
+		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
+		// スコアアップ
+		CItem::GetPlayer((int)Tag)->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_FRUIT), (int)Tag);
+		break;
+
+
+		// 肉
+	case ITEMTYPE_MEAT:
+		// SEを鳴らす
+		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
+		// スコアアップ
+		CItem::GetPlayer((int)Tag)->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_FOOD), (int)Tag);
+		break;
+		// おにぎり
+	case (ITEMTYPE_RICEBALL):
+		// SEを鳴らす
+		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
+		// スコアアップ
+		CItem::GetPlayer((int)Tag)->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_FOOD), (int)Tag);
+		break;
+		// 飴
+	case (ITEMTYPE_CANDY):
+		// SEを鳴らす
+		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
+		// スコアアップ
+		CItem::GetPlayer((int)Tag)->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_FOOD), (int)Tag);
+		break;
+		// ドーナツ
+	case (ITEMTYPE_DONUT):
+		// SEを鳴らす
+		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
+		// スコアアップ
+		CItem::GetPlayer((int)Tag)->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_FOOD), (int)Tag);
+		break;
+		// ロリポップ
+	case (ITEMTYPE_LOLIPOP):
+		// SEを鳴らす
+		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
+		// スコアアップ
+		CItem::GetPlayer((int)Tag)->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_FOOD), (int)Tag);
+		break;
+		// 熊
+	case (ITEMTYPE_BREAD):
+		// SEを鳴らす
+		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
+		// スコアアップ
+		CItem::GetPlayer((int)Tag)->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_FOOD), (int)Tag);
+		break;
+		// チョコレート
+	case (ITEMTYPE_CHOCOLATE):
+		// SEを鳴らす
+		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
+		// スコアアップ
+		CItem::GetPlayer((int)Tag)->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_FOOD), (int)Tag);
+		break;
+		// アイス
+	case (ITEMTYPE_ICE):
+		// SEを鳴らす
+		CManager::GetSound()->Play(CSound::LABEL_SE_GET_SCORE_ITEM);
+		// スコアアップ
+		CItem::GetPlayer((int)Tag)->GetPlayerUI()->SetItemScore(CScoreManager::GetScorePoint(CScoreManager::SCORE_ITEM_FOOD), (int)Tag);
+		break;
+
+		// 爆弾の数を増やす
+	case (ITEMTYPE_BOMBUP): {
+		// SEを鳴らす
+		CManager::GetSound()->Play(CSound::LABEL_SE_GET_WEAPON);
+		CItem::GetPlayer((int)Tag)->GetGrenadeFire()->GrenadeAddAmmo();
+	}break;
+
+		// ハンドガン以外の弾の残弾数を増やす
+	case (ITEMTYPE_BULLETUP): {
+		// SEを鳴らす
+		CManager::GetSound()->Play(CSound::LABEL_SE_GET_WEAPON);
+		CItem::GetPlayer((int)Tag)->GetGun()->GunAddAmmo(CItem::GetPlayer((int)Tag)->GetGun()->GetGunType());
+	}break;
 	}
 
 	CItem::ItemAcquisition(type, Tag);
@@ -453,18 +583,18 @@ void CAnimationItem::ItemAcquisition(ITEMTYPE type, TAG Tag)
 // キャラクターがアイテムを落とすときの生成処理 確定しないならtypeにNONEを入れる
 //
 // =====================================================================================================================================================================
-CAnimationItem * CAnimationItem::DropItem(D3DXVECTOR3 droppos, bool fixed, ITEMTYPE type)
+CNormalItem * CNormalItem::DropItem(D3DXVECTOR3 droppos, bool fixed, ITEMTYPE type)
 {
 	// メモリの確保
-	CAnimationItem *pItem = new CAnimationItem(OBJTYPE_ANIMATIONITEM);
+	CNormalItem *pItem = new CNormalItem(OBJTYPE_NORMALITEM);
 
 	// 初期化
 	pItem->Init();
 	// サイズの設定
 	pItem->SetSize(D3DXVECTOR3(
-		pItem->GetItem_Data().CollisionSize.x / 2,
-		pItem->GetItem_Data().CollisionSize.y / 2,
-		pItem->GetItem_Data().CollisionSize.z / 2));
+		pItem->GetItem_Data().CollisionSize.x /2,
+		pItem->GetItem_Data().CollisionSize.y /2,
+		pItem->GetItem_Data().CollisionSize.z /2));
 
 	// アイテムが生成される位置の調整
 	//pItem->SetDropPos(droppos);
@@ -490,13 +620,13 @@ CAnimationItem * CAnimationItem::DropItem(D3DXVECTOR3 droppos, bool fixed, ITEMT
 // アイテムを複数一気にドロップさせる時
 //
 // =====================================================================================================================================================================
-void CAnimationItem::DropItem_Multiple(const D3DXVECTOR3 originpos, ITEM_LIST_DROPMULTIPLE type, ITEM_BEHAVIOR behavior)
+void CNormalItem::DropItem_Multiple(const D3DXVECTOR3 originpos, ITEM_LIST_DROPMULTIPLE type, ITEM_BEHAVIOR behavior)
 {
 	// 生成する数分
 	for (int nNum = 0; nNum < MULTIPLE_ITEM_NUM; nNum++)
 	{
 		// メモリの確保
-		CAnimationItem *pItem = new CAnimationItem(OBJTYPE_ANIMATIONITEM);
+		CNormalItem *pItem = new CNormalItem(OBJTYPE_NORMALITEM);
 
 		// 初期化
 		pItem->Init();
@@ -530,8 +660,17 @@ void CAnimationItem::DropItem_Multiple(const D3DXVECTOR3 originpos, ITEM_LIST_DR
 		// 挙動の設定
 		pItem->SetBehavior(behavior);
 
-		// 複数体のタイプ設定
-		pItem->SetMultiType(type);
+		// 特別なアイテムリストを指定された時のみアイテムの選考方法を変える
+		if (type == LIST_SPECIAL)
+		{
+			// 乱数リストからアイテムをランダムに選び設定する
+			pItem->SwitchTexture(pItem->BoxRand());
+		}
+		else
+		{
+			// 複数体のタイプ設定
+			pItem->SetMultiType(type);
+		}
 
 		// アイテムの挙動と種類の設定
 		pItem->DropPattern_Multiple(type, behavior, nNum);
