@@ -93,7 +93,7 @@ public:
 	void						SetPrisonerState(PRISONER_STATE state)
 	{m_PrisonerState = state;};									// •ß—¸‚Ìó‘Ô‚Ìİ’è
 
-	void				SetPrisonerType(PRISONER_ITEM_DROPTYPE type)
+	void				SetPrisonerDropType(PRISONER_ITEM_DROPTYPE type)
 	{m_PrisonerDropType = type;};								// •ß—¸‚Ìí—Ş‚Ìİ’è
 
 	CItem::ITEMTYPE		GetPrisonerDropItem()

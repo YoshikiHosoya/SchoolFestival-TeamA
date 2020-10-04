@@ -63,6 +63,12 @@ FILENAME_LIST CParticleParam::m_aFileNameList =
 	{ "data/Load/Effect/Paramater/ChargeAppear.txt" },
 	{ "data/Load/Effect/Paramater/Glitter.txt" },
 
+	{ "data/Load/Effect/Paramater/LightBulb.txt" },
+	{ "data/Load/Effect/Paramater/Confetti.txt" },
+
+	{ "data/Load/Effect/Paramater/NoCollisionFireworks4.txt" },
+	{ "data/Load/Effect/Paramater/NoCollisionFireworks5.txt" },
+	{ "data/Load/Effect/Paramater/NoCollisionFireworks6.txt" },
 };
 //
 //FILENAME_LIST CParticleCreators::m_aFileNameList =

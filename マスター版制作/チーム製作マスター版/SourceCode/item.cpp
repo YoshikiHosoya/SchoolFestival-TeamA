@@ -157,7 +157,12 @@ void CItem::Draw(void)
 void CItem::BehaviorType(D3DXVECTOR3 & pos)
 {
 	// 挙動が弾け飛ぶ状態だった時
-	if (m_Behavior == BEHAVIOR_BURSTS)
+	if (m_Behavior == BEHAVIOR_FULLBURSTS)
+	{
+		pos += m_Move * 8.0f;
+	}
+	// 挙動が弾け飛ぶ状態だった時
+	else if (m_Behavior == BEHAVIOR_BURSTS)
 	{
 		pos += m_Move * 5.0f;
 	}
@@ -582,6 +587,50 @@ void CItem::DropPattern_Multiple(ITEM_LIST_DROPMULTIPLE list, ITEM_BEHAVIOR beha
 			SetMove(D3DXVECTOR3(2.5f, 5.0f, 0.0f));
 		}
 		break;
+
+		// 弾け飛ぶ
+	case CItem::BEHAVIOR_FULLBURSTS:
+		if (nNum == 0)
+		{
+			SetMove(D3DXVECTOR3(-2.5f, 5.0f, 0.0f));
+		}
+		if (nNum == 1)
+		{
+			SetMove(D3DXVECTOR3(-7.5f, 5.0f, 0.0f));
+		}
+		if (nNum == 2)
+		{
+			SetMove(D3DXVECTOR3(0.0f, 5.0f, 0.0f));
+		}
+		if (nNum == 3)
+		{
+			SetMove(D3DXVECTOR3(7.5f, 5.0f, 0.0f));
+		}
+		if (nNum == 4)
+		{
+			SetMove(D3DXVECTOR3(2.5f, 5.0f, 0.0f));
+		}
+		if (nNum == 5)
+		{
+			SetMove(D3DXVECTOR3(-2.5f, -5.0f, 0.0f));
+		}
+		if (nNum == 6)
+		{
+			SetMove(D3DXVECTOR3(-7.5f, -5.0f, 0.0f));
+		}
+		if (nNum == 7)
+		{
+			SetMove(D3DXVECTOR3(0.0f, -5.0f, 0.0f));
+		}
+		if (nNum == 8)
+		{
+			SetMove(D3DXVECTOR3(7.5f, -5.0f, 0.0f));
+		}
+		if (nNum == 9)
+		{
+			SetMove(D3DXVECTOR3(2.5f, -5.0f, 0.0f));
+		}
+		break;
 	}
 }
 
@@ -923,6 +972,16 @@ CItem * CItem::DropCreate_TEST()
 
 // =====================================================================================================================================================================
 //
+// ランダムに武器のアイテムのタイプを返す
+//
+// =====================================================================================================================================================================
+CItem::ITEMTYPE CItem::RandomWeapon()
+{
+	return 	ItemRandomRange(ITEMTYPE_HEAVYMACHINEGUN, ITEMTYPE_FLAMESHOT);
+}
+
+// =====================================================================================================================================================================
+//
 // 種類別テクスチャバインド処理
 //
 // =====================================================================================================================================================================
@@ -972,7 +1031,7 @@ CItem::ITEMTYPE CItem::RandDropItem(ITEMDROP drop)
 		return m_Type = ItemRandomRange(ANIM_ITEMTYPE_ROASTCHICKEN, ANIM_ITEMTYPE_MEDAL2);
 		break;
 	case CItem::ITEMDROP_ANI_RARE:
-		return m_Type = ItemRandomRange(ANIM_ITEMTYPE_COIN, ANIM_ITEMTYPE_TOPAZ);
+		return m_Type = ItemRandomRange(ANIM_ITEMTYPE_COIN, ANIM_ITEMTYPE_PRISONER);
 		break;
 	case CItem::ITEMDROP_ANI_MONKEY:
 		return m_Type = ItemRandomRange(ANIM_ITEMTYPE_DANCEMONKEY, ANIM_ITEMTYPE_PRISONER);

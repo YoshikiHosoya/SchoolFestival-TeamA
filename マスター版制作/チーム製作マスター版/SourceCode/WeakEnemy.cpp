@@ -32,8 +32,7 @@
 #define ENEMY_HELICOPTER_COLLISIONSIZE			(D3DXVECTOR3(250.0f,150.0f,250.0f))		//敵の当たり判定サイズ
 #define ENEMY_MELTYHONEY_COLLISIONSIZE			(D3DXVECTOR3(250.0f,200.0f,250.0f))		//敵の当たり判定サイズ
 #define ENEMY_ZYCOCCA_COLLISIONSIZE				(D3DXVECTOR3(110.0f,95.0f,110.0f))		//敵の当たり判定サイズ
-#define ENEMY_SKYDRONE_COLLISIONSIZE			(D3DXVECTOR3(40.0f,90.0f,40.0f))		//敵の当たり判定サイズ
-#define ENEMY_WALLDRONE_COLLISIONSIZE			(D3DXVECTOR3(170.0f,100.0f,170.0f))		//敵の当たり判定サイズ
+#define ENEMY_SKYDRONE_COLLISIONSIZE			(D3DXVECTOR3(90.0f,60.0f,90.0f))		//敵の当たり判定サイズ
 
 #define ENEMY_HUMAN_LIFE						(1)										//ライフ
 
@@ -41,7 +40,7 @@
 #define ENEMY_MELTYHONEY_LIFE					(60)									//ライフ
 #define ENEMY_ZYCOCCA_LIFE						(40)									//ライフ
 
-#define ENEMY_DRONE_LIFE						(10)										//ライフ
+#define ENEMY_DRONE_LIFE						(20)										//ライフ
 
 
 #define KNIFE_COLLISOIN_SIZE	(D3DXVECTOR3(40.0f,60.0f,0.0f))
@@ -473,12 +472,10 @@ void CWeakEnemy::DeathReaction()
 		}
 	}
 	// スカイドローンの場合
-	else if (GetEnemyType() == CEnemy::ENEMY_TYPE::ENEMY_SKYDRONE)
+	else if (GetEnemyType() == CEnemy::ENEMY_TYPE::ENEMY_SKYDRONE && this->GetLife() <= 0)
 	{
 		//アイテムを生成
-		CAnimationItem::DropItem(GetPosition(),
-			true,
-			CItem::ANIM_ITEMTYPE_PRISONER);
+		CAnimationItem::DropItem_Multiple(GetPosition(), CItem::LIST_ANI_RARE, CItem::BEHAVIOR_BURSTS);
 	}
 	// その他
 	else

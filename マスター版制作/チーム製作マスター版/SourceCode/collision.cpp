@@ -570,10 +570,17 @@ bool CCollision::ForPlayer_EnemyCollision(bool Penetration)
 				{
 					CBoss_One *pBoss_One = (CBoss_One*)pEnemy;
 
-					if (pBoss_One->GetCollision() &&
+					/*if (pBoss_One->GetCollision() &&
 						pBoss_One->GetPostureType() == CBoss_One::POSTURETYPE_SQUAT)
 					{
 						if (this->BoxCollision2D_Character(pBoss_One->GetCollision()))
+						{
+							return false;
+						}
+					}*/
+					if (pBoss_One->GetCollision())
+					{
+						if (this->BoxCollision2D_Character(pBoss_One->CCharacter::GetCollision()))
 						{
 							return false;
 						}
@@ -1685,28 +1692,57 @@ bool CCollision::BoxCollision2D_Character(CCollision * pCollision)
 	bool bHitFlag = false;
 
 	// 素材のY範囲
-	if (this->m_ppos->y + this->m_size.y > pCollision->m_ppos->y - pCollision->m_size.y * 2.0f &&
-		this->m_ppos->y < pCollision->m_ppos->y + pCollision->m_size.y * 2.0f)
+	if (this->m_ppos->y + this->m_size.y * 0.5f > pCollision->m_ppos->y &&
+		this->m_ppos->y < pCollision->m_ppos->y + pCollision->m_size.y)
 	{
 		// 当たり判定(左)
-		if (this->m_ppos->x + this->m_size.x > pCollision->m_ppos->x - pCollision->m_size.x &&
-			this->m_posOld->x + this->m_size.x  <= pCollision->m_ppos->x - pCollision->m_size.x)
+		if (this->m_ppos->x + this->m_size.x * 0.5f > pCollision->m_ppos->x - pCollision->m_size.x * 0.5f &&
+			this->m_posOld->x + this->m_size.x * 0.5f <= pCollision->m_ppos->x - pCollision->m_size.x * 0.5f)
 		{
 			// 素材状の左に
-			this->m_ppos->x = pCollision->m_ppos->x - pCollision->m_size.x - this->m_size.x;
+			this->m_ppos->x = pCollision->m_ppos->x - pCollision->m_size.x * 0.5f - this->m_size.x * 0.5f;
 			// オブジェクトに当たったフラグ
 			bHitFlag = true;
 		}
 
 		// 当たり判定(右)
-		else if (this->m_ppos->x - this->m_size.x < pCollision->m_ppos->x + pCollision->m_size.x &&
-			this->m_posOld->x - this->m_size.x >= pCollision->m_ppos->x + pCollision->m_size.x)
+		else if (this->m_ppos->x - this->m_size.x * 0.5f < pCollision->m_ppos->x + pCollision->m_size.x * 0.5f &&
+			this->m_posOld->x - this->m_size.x * 0.5f >= pCollision->m_ppos->x + pCollision->m_size.x * 0.5f)
 		{
 			// 素材状の右に
-			this->m_ppos->x = pCollision->m_ppos->x + pCollision->m_size.x + this->m_size.x;
+			this->m_ppos->x = pCollision->m_ppos->x + pCollision->m_size.x * 0.5f + this->m_size.x * 0.5f;
 			// オブジェクトに当たったフラグ
 			bHitFlag = true;
 		}
+	}
+
+	// 素材のX範囲
+	if (this->m_ppos->x + this->m_size.x * 0.5f > pCollision->m_ppos->x - pCollision->m_size.x * 0.5f &&
+		this->m_ppos->x - this->m_size.x * 0.5f < pCollision->m_ppos->x + pCollision->m_size.x * 0.5f)
+	{
+		// 当たり判定(下)
+		if (this->m_ppos->y + this->m_size.y > pCollision->m_ppos->y &&
+			this->m_posOld->y + this->m_size.y <= pCollision->m_ppos->y)
+		{
+			// 素材状の下に
+			this->m_ppos->y = this->m_posOld->y;
+			if (m_pmove)
+			{
+				this->m_pmove = 0;
+			}
+		}
+
+		//// 当たり判定(上)
+		//else if (this->m_ppos->y < pCollision->m_ppos->y + pCollision->m_size.y * 0.5f &&
+		//	this->m_posOld->y >= pCollision->m_ppos->y + pCollision->m_size.y * 0.5f)
+		//{
+		//	// 素材状の上に
+		//	this->m_ppos->y = this->m_posOld->y;
+		//	// 移動量の初期化
+		//	this->m_pmove->y = 0.0f;
+		//	// オブジェクトに当たったフラグ
+		//	bHitFlag = true;
+		//}
 	}
 
 	// 当たっているかいないかを返す

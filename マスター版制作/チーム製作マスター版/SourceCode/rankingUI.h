@@ -174,5 +174,6 @@ private:
 	int						m_nTimeToTransition;
 	bool					m_bEvaluation[3];
 	bool					m_bRankingFail;
+	bool					m_bConfetti;
 };
 #endif

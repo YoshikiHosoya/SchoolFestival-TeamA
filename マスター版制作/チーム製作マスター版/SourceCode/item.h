@@ -98,11 +98,11 @@ public:
 		ANIM_ITEMTYPE_RUBY,			// ルビー
 		ANIM_ITEMTYPE_SAPPHIRE,		// サファイア
 		ANIM_ITEMTYPE_TOPAZ,		// トパーズ
+		// ------ チャージ ------ //
+		ANIM_ITEMTYPE_PRISONER,		// 捕虜 残機アップ
 
 		ANIM_ITEMTYPE_DANCEMONKEY,	// 踊るサル
 		ANIM_ITEMTYPE_JUMPMONKEY,	// 飛ぶサル
-		// ------ チャージ ------ //
-		ANIM_ITEMTYPE_PRISONER,		// 捕虜 残機アップ
 
 		ITEMTYPE_MAX				// 最大
 	};
@@ -151,6 +151,7 @@ public:
 		BEHAVIOR_NONE = -1,	// 動かない
 		BEHAVIOR_FREEFALL,	// 自由落下
 		BEHAVIOR_BURSTS,	// 上方向にランダムに弾ける
+		BEHAVIOR_FULLBURSTS,// 全方向にランダムに弾ける
 	};
 
 	// まとめてドロップする時のまとまりの種類
@@ -211,6 +212,8 @@ public:
 
 	/* 静的メンバ関数 */
 	static	CItem				*DropCreate_TEST();								// テスト用クリエイト処理
+	static	ITEMTYPE			RandomWeapon();									//
+	static ITEMTYPE				ItemRandomRange(ITEMTYPE min, ITEMTYPE max);		// ランダムの範囲選択
 
 
 	static	bool				DropRate();										// アイテムをドロップさせるかのフラグを返す
@@ -223,7 +226,6 @@ public:
 
 	/* メンバ関数 */
 	ITEMTYPE					RandDropItem(ITEMDROP drop);						// アイテムの種類をランダムに計算
-	ITEMTYPE					ItemRandomRange(ITEMTYPE min, ITEMTYPE max);		// ランダムの範囲選択
 	ITEM_RARITY					RarityRandomRange(ITEM_RARITY min, ITEM_RARITY max);// ランダムの範囲選択
 
 	void						DropPattern(bool fixed, ITEMTYPE type);				// アイテムのドロップパターン

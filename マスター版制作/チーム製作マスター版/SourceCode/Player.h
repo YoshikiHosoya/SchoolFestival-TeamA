@@ -110,7 +110,6 @@ public:
 	static	void	PlayerLoad();					// プレイヤーのロード
 private:
 	/* 静的メンバ関数 */
-	static void		SetPlayerData();				// 読み込んだデータの設定
 
 	/* メンバ関数 */
 	void Ride();									// 乗り物に乗っている時
@@ -119,14 +118,6 @@ private:
 	static			PLAYER_DATA		m_PlayerData;		// プレイヤーのデータ
 	static			char			*m_PlayerFileName;	// ランキングのファイル名
 	static			bool			m_bTwoPPlay;		// 2人プレイしているかどうか
-
-	/* 読み込んだデータを格納するメンバ変数 */
-	static			int				m_nLife[2];			// 体力初期残機
-	static			float			m_fRunSpeed;		// 走るスピード
-	static			float			m_fCrouchSpeed;		// しゃがみ歩き時のスピード
-	static			float			m_fJump;			// 通常時のジャンプ
-	static			float			m_fRideJump;		// 乗車中のジャンプ
-	static			D3DXVECTOR3		m_pos[2];			// 初期座標
 
 	/* メンバ変数 */
 	int				m_nRespawnCnt;						// リスポーンまでのカウント復活までのカウント

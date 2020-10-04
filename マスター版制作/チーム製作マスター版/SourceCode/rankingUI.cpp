@@ -86,6 +86,8 @@ CRankingUI::CRankingUI()
 	m_bCompleted			= false;
 	m_bCompletedEnd			= false;
 	m_bRankingFail			= false;
+	m_bConfetti = false;
+
 }
 
 // =====================================================================================================================================================================
@@ -1286,38 +1288,85 @@ void CRankingUI::RankingEvaluation()
 		// â‘âŒ
 		if (m_nTimeToFireworks % 3 == 0)
 		{
-			CParticle::CreateFromText(SCREEN_CENTER_POS + CHossoLibrary::RandomVector3(SCREEN_WIDTH * 0.5f),
+			CParticle::CreateFromText(SCREEN_CENTER_POS + CHossoLibrary::RandomVector3(SCREEN_WIDTH),
 				ZeroVector3,
 				CParticleParam::EFFECT_NO_COLLISION_FIREWORKS1);
+
+			CParticle::CreateFromText(SCREEN_CENTER_POS + CHossoLibrary::RandomVector3(SCREEN_WIDTH),
+				ZeroVector3,
+				CParticleParam::EFFECT_NO_COLLISION_FIREWORKS4);
+			CParticle::CreateFromText(SCREEN_CENTER_POS + CHossoLibrary::RandomVector3(SCREEN_WIDTH),
+				ZeroVector3,
+				CParticleParam::EFFECT_NO_COLLISION_FIREWORKS4);
 		}
 		if (m_nTimeToFireworks % 4 == 0)
 		{
-			CParticle::CreateFromText(SCREEN_CENTER_POS + CHossoLibrary::RandomVector3(SCREEN_WIDTH * 0.5f),
+			CParticle::CreateFromText(SCREEN_CENTER_POS + CHossoLibrary::RandomVector3(SCREEN_WIDTH),
 				ZeroVector3,
 				CParticleParam::EFFECT_NO_COLLISION_FIREWORKS2);
+
+			CParticle::CreateFromText(SCREEN_CENTER_POS + CHossoLibrary::RandomVector3(SCREEN_WIDTH),
+				ZeroVector3,
+				CParticleParam::EFFECT_NO_COLLISION_FIREWORKS5);
+			CParticle::CreateFromText(SCREEN_CENTER_POS + CHossoLibrary::RandomVector3(SCREEN_WIDTH),
+				ZeroVector3,
+				CParticleParam::EFFECT_NO_COLLISION_FIREWORKS5);
 		}
 		if (m_nTimeToFireworks % 5 == 0)
 		{
-			CParticle::CreateFromText(SCREEN_CENTER_POS + CHossoLibrary::RandomVector3(SCREEN_WIDTH * 0.5f),
+			CParticle::CreateFromText(SCREEN_CENTER_POS + CHossoLibrary::RandomVector3(SCREEN_WIDTH),
 				ZeroVector3,
 				CParticleParam::EFFECT_NO_COLLISION_FIREWORKS3);
+
+			CParticle::CreateFromText(SCREEN_CENTER_POS + CHossoLibrary::RandomVector3(SCREEN_WIDTH),
+				ZeroVector3,
+				CParticleParam::EFFECT_NO_COLLISION_FIREWORKS6);
+			CParticle::CreateFromText(SCREEN_CENTER_POS + CHossoLibrary::RandomVector3(SCREEN_WIDTH),
+				ZeroVector3,
+				CParticleParam::EFFECT_NO_COLLISION_FIREWORKS6);
+		}
+
+		if (!m_bConfetti)
+		{
+			// ëSâÊñ éÜêÅê·
+			CParticle::CreateFromText(SCREEN_CENTER_POS,
+				ZeroVector3,
+				CParticleParam::EFFECT_CONFETTI);
+
+			m_bConfetti = true;
 		}
 	}
 	if (m_bEvaluation[RANKING_EVALUATION_SECONDBEDT])
 	{
 		m_nTimeToFireworks--;
 		// â‘âŒ
-		if (m_nTimeToFireworks % 20 == 0)
+		if (m_nTimeToFireworks % 4 == 0)
 		{
 			CParticle::CreateFromText(SCREEN_CENTER_POS + CHossoLibrary::RandomVector3(SCREEN_WIDTH * 0.5f),
 				ZeroVector3,
 				CParticleParam::EFFECT_NO_COLLISION_FIREWORKS1);
+			CParticle::CreateFromText(SCREEN_CENTER_POS + CHossoLibrary::RandomVector3(SCREEN_WIDTH),
+				ZeroVector3,
+				CParticleParam::EFFECT_NO_COLLISION_FIREWORKS6);
 		}
-		if (m_nTimeToFireworks % 30 == 0)
+		if (m_nTimeToFireworks % 5 == 0)
 		{
 			CParticle::CreateFromText(SCREEN_CENTER_POS + CHossoLibrary::RandomVector3(SCREEN_WIDTH * 0.5f),
 				ZeroVector3,
 				CParticleParam::EFFECT_NO_COLLISION_FIREWORKS2);
+			CParticle::CreateFromText(SCREEN_CENTER_POS + CHossoLibrary::RandomVector3(SCREEN_WIDTH),
+				ZeroVector3,
+				CParticleParam::EFFECT_NO_COLLISION_FIREWORKS5);
+		}
+
+		if (!m_bConfetti)
+		{
+			// ëSâÊñ éÜêÅê·
+			CParticle::CreateFromText(SCREEN_CENTER_POS,
+				ZeroVector3,
+				CParticleParam::EFFECT_CONFETTI);
+
+			m_bConfetti = true;
 		}
 	}
 
@@ -1325,11 +1374,24 @@ void CRankingUI::RankingEvaluation()
 	{
 		m_nTimeToFireworks--;
 		// â‘âŒ
-		if (m_nTimeToFireworks % 60 == 0)
+		if (m_nTimeToFireworks % 3 == 0)
 		{
 			CParticle::CreateFromText(SCREEN_CENTER_POS + CHossoLibrary::RandomVector3(SCREEN_WIDTH * 0.5f),
 				ZeroVector3,
 				CParticleParam::EFFECT_NO_COLLISION_FIREWORKS1);
+			CParticle::CreateFromText(SCREEN_CENTER_POS + CHossoLibrary::RandomVector3(SCREEN_WIDTH),
+				ZeroVector3,
+				CParticleParam::EFFECT_NO_COLLISION_FIREWORKS5);
+		}
+
+		if (!m_bConfetti)
+		{
+			// ëSâÊñ éÜêÅê·
+			CParticle::CreateFromText(SCREEN_CENTER_POS,
+				ZeroVector3,
+				CParticleParam::EFFECT_CONFETTI);
+
+			m_bConfetti = true;
 		}
 	}
 }

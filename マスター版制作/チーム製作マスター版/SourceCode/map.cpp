@@ -405,7 +405,7 @@ void CMap::MapModelCreate(int ModelType, int nType, D3DXVECTOR3 pos,int nItemTyp
 		// 位置の設定
 		m_pPrisoner[m_pPrisoner.size() - 1]->SetPosition(pos);
 		// ドロップタイプの設定
-		m_pPrisoner[m_pPrisoner.size() - 1]->SetPrisonerType((CPrisoner::PRISONER_ITEM_DROPTYPE)nType);
+		m_pPrisoner[m_pPrisoner.size() - 1]->SetPrisonerDropType((CPrisoner::PRISONER_ITEM_DROPTYPE)nType);
 		// アイテムの種類の設定
 		m_pPrisoner[m_pPrisoner.size() - 1]->SetPrisonerItem((CItem::ITEMTYPE)nItemType);
 
@@ -742,7 +742,7 @@ CObstacle *CMap::PresentCreate(D3DXVECTOR3 pos, CObstacle::OBSTACLE_TYPE Type)
 // ボスマップ用の生成
 //
 // =====================================================================================================================================================================
-void CMap::BossWaveCreate(int nModelType, D3DXVECTOR3 eventpos, CWeakEnemy::ENEMY_TYPE EnemyType)
+void CMap::BossWaveCreate(int nModelType, D3DXVECTOR3 eventpos, CWeakEnemy::ENEMY_TYPE EnemyType, CPrisoner::PRISONER_TYPE Prisonertype)
 {
 	if (nModelType == ARRANGEMENT_MODEL_ENEMY)
 	{
@@ -756,15 +756,26 @@ void CMap::BossWaveCreate(int nModelType, D3DXVECTOR3 eventpos, CWeakEnemy::ENEM
 		m_pPrisoner.emplace_back(CPrisoner::Create());
 		m_pPrisoner[m_pPrisoner.size() - 1]->SetPosition(eventpos);
 
-		//光る
-		CParticle::CreateFromText(D3DXVECTOR3(
-			m_pPrisoner[m_pPrisoner.size() - 1]->GetPosition().x,
-			m_pPrisoner[m_pPrisoner.size() - 1]->GetPosition().y + 50,
-			m_pPrisoner[m_pPrisoner.size() - 1]->GetPosition().z),
-			ZeroVector3, CParticleParam::EFFECT_CHARGEAPPEAR);
+		if (Prisonertype == CPrisoner::PRISONER_TYPE_NORMAL)
+		{
+			// 特別な捕虜として設定
+			m_pPrisoner[m_pPrisoner.size() - 1]->SetPrisonerType(CPrisoner::PRISONER_TYPE_NORMAL);
 
-		// 特別な捕虜として設定
-		m_pPrisoner[m_pPrisoner.size() - 1]->SetPrisonerType(CPrisoner::PRISONER_TYPE_SPECIAL);
+			m_pPrisoner[m_pPrisoner.size() - 1]->SetPrisonerDropType(CPrisoner::PRISONER_ITEM_DROPTYPE_PICK_ONE);
+			m_pPrisoner[m_pPrisoner.size() - 1]->SetPrisonerItem(CItem::RandomWeapon());
+		}
+		else
+		{
+			//光る
+			CParticle::CreateFromText(D3DXVECTOR3(
+				m_pPrisoner[m_pPrisoner.size() - 1]->GetPosition().x,
+				m_pPrisoner[m_pPrisoner.size() - 1]->GetPosition().y + 50,
+				m_pPrisoner[m_pPrisoner.size() - 1]->GetPosition().z),
+				ZeroVector3, CParticleParam::EFFECT_CHARGEAPPEAR);
+
+			// 特別な捕虜として設定
+			m_pPrisoner[m_pPrisoner.size() - 1]->SetPrisonerType(CPrisoner::PRISONER_TYPE_SPECIAL);
+		}
 	}
 }
 
@@ -1252,7 +1263,7 @@ void CMap::WaveCreate(int nModelType, D3DXVECTOR3 eventpos, WAVE_PARAM * pWavePa
 		// 捕虜
 		m_pPrisoner.emplace_back(CPrisoner::Create());
 		m_pPrisoner[m_pPrisoner.size() - 1]->SetPosition(pWaveParam->pos + eventpos);
-		m_pPrisoner[m_pPrisoner.size() - 1]->SetPrisonerType((CPrisoner::PRISONER_ITEM_DROPTYPE)pWaveParam->nType);
+		m_pPrisoner[m_pPrisoner.size() - 1]->SetPrisonerDropType((CPrisoner::PRISONER_ITEM_DROPTYPE)pWaveParam->nType);
 		m_pPrisoner[m_pPrisoner.size() - 1]->SetPrisonerItem((CItem::ITEMTYPE)pWaveParam->nItemType);
 	}
 }
@@ -1770,7 +1781,7 @@ void CMap::PrisonerDropTypeComboBox(int &nSelectType, int nNowSelect)
 				// 種類代入
 				PrisonerType = (CPrisoner::PRISONER_ITEM_DROPTYPE)nSelectType;
 				// 捕虜のドロップタイプの設定
-				m_pPrisoner[nNowSelect]->SetPrisonerType(PrisonerType);
+				m_pPrisoner[nNowSelect]->SetPrisonerDropType(PrisonerType);
 			}
 		}
 	}

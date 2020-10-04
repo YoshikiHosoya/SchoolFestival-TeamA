@@ -21,6 +21,7 @@
 #include <algorithm>
 #include "ModelSet.h"
 #include "particle.h"
+#include "prisoner.h"
 
 // =====================================================================================================================================================================
 //マクロ定義
@@ -30,7 +31,7 @@
 #define POSTURE_HEIGHT_SQUAT (50.0f)										// しゃがみ状態の座標の高さ
 #define BALKAN_LENGTH		 (50.0f)										// バルカンの横の長さ
 #define PLAYER_HEADLINE		 (60.0f)										// プレイヤーのヘッドラインの高さ
-#define RUNAWAY_BOSSLIFE	 (250)											// 暴走状態になる体力のライン
+#define RUNAWAY_BOSSLIFE	 (400)											// 暴走状態になる体力のライン
 #define COOLTIME_BASE		 (120)											// クールタイムの基準
 #define ATTACK_PRIORITY		 (2)											// 攻撃の優先度を保存しておく総数
 
@@ -86,6 +87,8 @@ CBoss_One::CBoss_One(OBJ_TYPE type) :CEnemy(type)
 	m_nFirstShotCount					 = 60;
 	m_nShotCount						 = 0;
 	m_nElapsedTime						 = 0;
+	m_nDroneNum							 = 0;
+	m_nPrisonerNum						 = 0;
 	m_fBalkanRot						 = 0.0f;
 	m_fRotTarget						 = -1.57f;
 	m_fPartsRotVentilation				 = 0.0f;
@@ -96,6 +99,7 @@ CBoss_One::CBoss_One(OBJ_TYPE type) :CEnemy(type)
 	m_bShiftPosture						 = false;
 	m_bBalkanGunRotFlag					 = false;
 	m_bIntermediateSquat				 = false;
+
 }
 
 // =====================================================================================================================================================================
@@ -182,6 +186,8 @@ void CBoss_One::Update(void)
 	m_nElapsedTime++;
 	// 一定時間毎にドローンを生成する
 	CreatePerFixedTime();
+	// ボスの状態の管理
+	BossOneStateManager();
 
 	// ガンの更新
 	for (int nCnt = 0; nCnt < WEAPONTYPE_MAX; nCnt++)
@@ -532,7 +538,7 @@ void CBoss_One::SetCoolTime(int time)
 			m_nCoolTime = COOLTIME_BASE;
 			break;
 		case CBoss_One::STATE_RUNAWAY:
-			m_nCoolTime = COOLTIME_BASE;
+			m_nCoolTime = COOLTIME_BASE/2;
 			break;
 		}
 	}
@@ -781,61 +787,106 @@ void CBoss_One::ShotBalkan()
 						m_nShotIntervalTime--;
 					}
 				}
-				else
-				{
-					m_fRotTarget = -D3DX_PI / 4;
-				}
 
 				break;
 
 			case CBoss_One::STATE_RUNAWAY:
-				if (!m_bBalkanRotFlag)
-				{
-					// ガンの向きをプレイヤーの方へ向ける
-					SetRotBalkan(m_BossState);
-					//
-					m_bBalkanRotFlag = true;
-				}
 
-
-				if (m_bBalkanRotFlag)
+				// しゃがんでいたら通常通り
+				if (m_PostureType == POSTURETYPE_SQUAT)
 				{
+					// ガンの向きを往復させ回転させる
+					SetRotBalkan(STATE_NORMAL);
+					// 初弾を撃つまでの時間
 					m_nFirstShotCount--;
 					if (m_nFirstShotCount <= 0)
 					{
-						// 30フレームごとに1トリガー撃つ
 						if (m_nShotIntervalTime <= 0)
 						{
 							// バルカンを撃つ
 							m_pGun[WEAPONTYPE_BALKAN]->Shot();
 							// 弾を撃った回数を加算
 							m_nShotCount++;
-							// 1トリガー撃った時
-							if (m_nShotCount >= 3)
+							// インターバルの時間を設定
+							SetShotIntervalTime(10);
+							// 10発撃った時
+							if (m_nShotCount >= 15)
 							{
-								// インターバルの時間を設定
-								SetShotIntervalTime(30);
 								// ショットカウントの初期化
 								SetShotCount(0);
-								// 何トリガー撃ったかのカウントを加算
-								m_nTriggerCount++;
-								m_bBalkanRotFlag = false;
-							}
-							// インターバルの設定
-							else if (m_nShotCount >= 0)
-							{
-								// インターバルの時間を設定
-								SetShotIntervalTime(10);
+								// クールタイムの設定
+								SetCoolTime(NULL);
+								// ボスの状態を変更
+								SetBossAction(ACTION_PATTERN_STAY);
 							}
 						}
-
-						if (m_bBalkanRotFlag)
+						// インターバルの設定
+						else if (m_nShotIntervalTime >= 0)
 						{
 							// インターバルの時間を減少
 							m_nShotIntervalTime--;
 						}
 					}
+					else
+					{
+						m_fRotTarget = -D3DX_PI / 4;
+					}
 				}
+				else
+				{
+					if (!m_bBalkanRotFlag)
+					{
+						// ガンの向きをプレイヤーの方へ向ける
+						SetRotBalkan(m_BossState);
+						//
+						m_bBalkanRotFlag = true;
+					}
+
+
+					if (m_bBalkanRotFlag)
+					{
+						m_nFirstShotCount--;
+						if (m_nFirstShotCount <= 0)
+						{
+							// 30フレームごとに1トリガー撃つ
+							if (m_nShotIntervalTime <= 0)
+							{
+								// バルカンを撃つ
+								m_pGun[WEAPONTYPE_BALKAN]->Shot();
+								// 弾を撃った回数を加算
+								m_nShotCount++;
+								// 1トリガー撃った時
+								if (m_nShotCount >= 3)
+								{
+									// インターバルの時間を設定
+									SetShotIntervalTime(30);
+									// ショットカウントの初期化
+									SetShotCount(0);
+									// 何トリガー撃ったかのカウントを加算
+									m_nTriggerCount++;
+									m_bBalkanRotFlag = false;
+								}
+								// インターバルの設定
+								else if (m_nShotCount >= 0)
+								{
+									// インターバルの時間を設定
+									SetShotIntervalTime(10);
+								}
+							}
+
+							if (m_bBalkanRotFlag)
+							{
+								// インターバルの時間を減少
+								m_nShotIntervalTime--;
+							}
+						}
+					}
+					else
+					{
+						m_fRotTarget = -D3DX_PI / 4;
+					}
+				}
+
 				break;
 			}
 		}
@@ -1251,7 +1302,7 @@ void CBoss_One::SetRotBalkan(BOSS_ONE_STATE state)
 	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer(TAG::PLAYER_1);
 	if(pPlayer)
 	{
-		switch (m_BossState)
+		switch (state)
 		{
 		case CBoss_One::STATE_NORMAL:
 			if (m_fRotTarget >= -D3DX_PI / 4)
@@ -1401,6 +1452,7 @@ void CBoss_One::BossOneStateManager()
 	case CBoss_One::STATE_NORMAL:
 		if (this->GetLife() <= RUNAWAY_BOSSLIFE)
 		{
+			m_nPrisonerNum = 0;
 			m_BossState = STATE_RUNAWAY;
 		}
 		break;
@@ -1602,7 +1654,7 @@ void CBoss_One::Attack_Priority()
 	if (pPlayer)
 	{
 		// プレイヤーとボスの距離を求める
-		const unsigned int nDistance = (unsigned int)this->GetPosition().x - (unsigned int)pPlayer->GetPosition().x;
+		const unsigned int nDistance = (unsigned int)fabs(GetPosition().x - pPlayer->GetPosition().x);
 
 		// ----- 優先度の設定 ----- //
 
@@ -1743,20 +1795,50 @@ void CBoss_One::BubbleSort(std::vector<int*> &data)
 // =====================================================================================================================================================================
 void CBoss_One::CreatePerFixedTime()
 {
-	// 10秒ごとにドローンを生成
-	if (m_nElapsedTime % 600 == 0)
+	CMap *pMap = CManager::GetBaseMode()->GetMap();
+
+	// ボスが暴走状態だった時
+	if (m_BossState == STATE_RUNAWAY && this->GetCharacterState() != CHARACTER_STATE_DEATH)
 	{
-		CMap *pMap = CManager::GetBaseMode()->GetMap();
-		pMap->BossWaveCreate(CMap::ARRANGEMENT_MODEL_ENEMY,D3DXVECTOR3(-300.0f,400.0f,0.0f),CEnemy::ENEMY_TYPE::ENEMY_SKYDRONE);
+		if (m_nDroneNum <= 5)
+		{
+			// 20秒ごとにドローンを生成
+			if (m_nElapsedTime % 1200 == 0)
+			{
+				pMap->BossWaveCreate(CMap::ARRANGEMENT_MODEL_ENEMY, D3DXVECTOR3(0.0f, 720.0f, 0.0f),
+					CEnemy::ENEMY_TYPE::ENEMY_SKYDRONE, CPrisoner::PRISONER_TYPE::PRISONER_TYPE_NORMAL);
+				m_nDroneNum++;
+			}
+		}
+
+		if (m_nPrisonerNum <= 5)
+		{
+			// 30秒ごとに捕虜を生成
+			if (m_nElapsedTime % 1800 == 0)
+			{
+				pMap->BossWaveCreate(CMap::ARRANGEMENT_MODEL_PRISONER, D3DXVECTOR3(-300.0f, 400.0f, 0.0f),
+					CEnemy::ENEMY_TYPE::ENEMY_NORMAL, CPrisoner::PRISONER_TYPE::PRISONER_TYPE_SPECIAL);
+				m_nPrisonerNum++;
+			}
+		}
+	}
+	// 通常状態だった時
+	else
+	{
+		if (m_nPrisonerNum <= 5)
+		{
+			// 20秒ごとに捕虜を生成
+			if (m_nElapsedTime % 1200 == 0)
+			{
+				pMap->BossWaveCreate(CMap::ARRANGEMENT_MODEL_PRISONER, D3DXVECTOR3(-300.0f, 400.0f, 0.0f),
+					CEnemy::ENEMY_TYPE::ENEMY_NORMAL,CPrisoner::PRISONER_TYPE::PRISONER_TYPE_NORMAL);
+				m_nPrisonerNum++;
+			}
+		}
 	}
 
-	// 15秒ごとに捕虜を生成
-	if (m_nElapsedTime % 900 == 0)
+	if (m_nElapsedTime == 3600)
 	{
-		CMap *pMap = CManager::GetBaseMode()->GetMap();
-		pMap->BossWaveCreate(CMap::ARRANGEMENT_MODEL_PRISONER, D3DXVECTOR3(-300.0f, 400.0f, 0.0f), CEnemy::ENEMY_TYPE::ENEMY_NORMAL);
-
-		//
 		m_nElapsedTime = 0;
 	}
 }

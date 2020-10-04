@@ -18,6 +18,7 @@
 #include "inputKeyboard.h"
 #include "WeakEnemy.h"
 #include "obstacle.h"
+#include "prisoner.h"
 
 // =====================================================================================================================================================================
 // 前方宣言
@@ -118,7 +119,8 @@ public:
 	void			AllDelete();													// 配置しているモデルを全て破棄
 	void			WaveCreate(int nModelType, D3DXVECTOR3 eventpos, WAVE_PARAM *pWaveParam, CWeakEnemy::ENEMY_TYPE EnemyType);	// Waveの生成
 	CObstacle		*PresentCreate(D3DXVECTOR3 pos, CObstacle::OBSTACLE_TYPE Type);	// プレゼントボックスの生成
-	void			BossWaveCreate(int nModelType, D3DXVECTOR3 eventpos, CWeakEnemy::ENEMY_TYPE EnemyType);	// ボスのマップ用で出す敵や捕虜用
+	void			BossWaveCreate(int nModelType, D3DXVECTOR3 eventpos,
+		CWeakEnemy::ENEMY_TYPE EnemyType,CPrisoner::PRISONER_TYPE type);			// ボスのマップ用で出す敵や捕虜用
 
 	void			ShowDebugInfo();												// デバッグ情報表記
 

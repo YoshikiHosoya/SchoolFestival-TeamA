@@ -147,6 +147,7 @@ void CBullet::Update(void)
 			// ƒŒƒC‚Ì”»’è
 			if (GetCollision()->RayCollision(pMap, rPos - m_move, rPos))
 			{
+
 				DeleteBullet();
 				return;
 			}
@@ -259,6 +260,8 @@ void CBullet::DeleteBullet()
 	// ÄˆÎ’e‚ª’…’e‚µ‚½‚Æ‚«‚ÌƒGƒtƒFƒNƒg ƒhƒ‰ƒSƒ“ƒmƒXƒP‚ÌÄˆÎ’e
 	else
 	{
+		//’e‚ª“–‚½‚Á‚½SE
+		CManager::GetSound()->Play(CSound::LABEL_SE_EXPLOSION_04);
 		CParticle::CreateFromText(GetPosition(), ZeroVector3, CParticleParam::EFFECT_NO_COLLISION_EXPLOSION_INCENDIARY);
 	}
 
@@ -438,6 +441,12 @@ void CBullet::BulletHitSound()
 		//’e‚ª“–‚½‚Á‚½SE
 		CManager::GetSound()->Play(CSound::LABEL_SE_BULLET_HIT);
 		break;
+
+
+	//case CGun::GUNTYPE_INCENDIARY:
+	//	//’e‚ª“–‚½‚Á‚½SE
+	//	CManager::GetSound()->Play(CSound::LABEL_SE_EXPLOSION_00);
+	//	break;
 
 	default:
 		break;

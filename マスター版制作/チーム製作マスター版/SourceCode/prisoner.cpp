@@ -334,7 +334,10 @@ void CPrisoner::PrisonerState()
 		{
 			SetStateTime(20 * 4 + 60);
 			this->SetPrisonerState(PRISONER_STATE_DROPITEM);
-
+			// “d‹…
+			CParticle::CreateFromText(D3DXVECTOR3(GetPosition().x, GetPosition().y + 120.0f, GetPosition().z),
+				ZeroVector3,
+				CParticleParam::EFFECT_LIGHTBULB);
 			//‰¹Ä¶
 			CManager::GetSound()->Play(CSound::LABEL_SE_VOICE_OK);
 		}
@@ -384,6 +387,10 @@ void CPrisoner::PrisonerState()
 				SetStateTime(20 * 4 + 60);
 				this->SetPrisonerState(PRISONER_STATE_DROPITEM);
 
+				// “d‹…
+				CParticle::CreateFromText(D3DXVECTOR3(GetPosition().x, GetPosition().y + 120.0f, GetPosition().z),
+					ZeroVector3,
+					CParticleParam::EFFECT_LIGHTBULB);
 				//‰¹Ä¶
 				CManager::GetSound()->Play(CSound::LABEL_SE_VOICE_OK);
 
@@ -397,6 +404,10 @@ void CPrisoner::PrisonerState()
 				SetStateTime(20 * 4 + 60);
 				this->SetPrisonerState(PRISONER_STATE_DROPITEM);
 
+				// “d‹…
+				CParticle::CreateFromText(D3DXVECTOR3(GetPosition().x, GetPosition().y + 120.0f, GetPosition().z),
+					ZeroVector3,
+					CParticleParam::EFFECT_LIGHTBULB);
 				//‰¹Ä¶
 				CManager::GetSound()->Play(CSound::LABEL_SE_VOICE_OK);
 

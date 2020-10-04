@@ -366,16 +366,22 @@ void CGun::Shot()
 		case CGun::GUNTYPE_BALKAN:
 			//
 			pBullet = CBalkan::Create(m_ShotRot);
+			//‰¹Ä¶
+			CManager::GetSound()->Play(CSound::LABEL_SE_SHOT_MACHINEGUN);
 			break;
 
 		case CGun::GUNTYPE_FLAMETHROWER:
 			//
 			pBullet = CFlamethrower::Create(m_ShotRot);
+			//‰¹Ä¶
+			CManager::GetSound()->Play(CSound::LABEL_SE_SHOT_FIRE);
 			break;
 
 		case CGun::GUNTYPE_INCENDIARY:
 			//
 			pBullet = CIncendiary::Create(m_ShotRot);
+			//‰¹Ä¶
+			CManager::GetSound()->Play(CSound::LABEL_SE_SHOT_FLAMEBULLET);
 			break;
 
 		case CGun::GUNTYPE_TRACKINGGUN:

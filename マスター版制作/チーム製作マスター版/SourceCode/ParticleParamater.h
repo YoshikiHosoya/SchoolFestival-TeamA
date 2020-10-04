@@ -69,6 +69,13 @@ public:
 		EFFECT_CHARGEAPPEAR,					//チャージ　アニメーション
 		EFFECT_GLITTER,							//きらきら
 
+		EFFECT_LIGHTBULB,						//電球
+		EFFECT_CONFETTI,						//紙吹雪全画面
+
+		EFFECT_NO_COLLISION_FIREWORKS4,			//当たり判定の無い花火ランキングで使う
+		EFFECT_NO_COLLISION_FIREWORKS5,			//当たり判定の無い花火ランキングで使う
+		EFFECT_NO_COLLISION_FIREWORKS6,			//当たり判定の無い花火ランキングで使う
+
 		PARTICLE_MAX,
 	};
 

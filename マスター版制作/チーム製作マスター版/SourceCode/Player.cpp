@@ -38,12 +38,6 @@
 // 静的メンバ変数の初期化
 // =====================================================================================================================================================================
 PLAYER_DATA		CPlayer::m_PlayerData	 = {};
-int				CPlayer::m_nLife[2] = {};
-float			CPlayer::m_fRunSpeed	 = 0.0f;
-float			CPlayer::m_fCrouchSpeed	 = 0.0f;
-float			CPlayer::m_fJump		 = 0.0f;
-float			CPlayer::m_fRideJump	 = 0.0f;
-D3DXVECTOR3		CPlayer::m_pos[2] = {};
 bool			CPlayer::m_bTwoPPlay = false;
 
 // =====================================================================================================================================================================
@@ -97,9 +91,6 @@ CPlayer::~CPlayer()
 //====================================================================
 HRESULT CPlayer::Init(void)
 {
-	// 読み込んだ情報の代入
-	SetPlayerData();
-
 	//キャラの初期化
 	CCharacter::Init();
 
@@ -408,19 +399,39 @@ void CPlayer::MoveUpdate(void)
 		Pad_Y /= STICK_MAX_RANGE;//値の正規化
 	}
 
-	// Aの処理
-	if (key->GetKeyboardPress(DIK_A))
+	if (!m_bCruch)
 	{
-		CPlayer::Move(m_fRunSpeed, 0.5f);
-		SetCharacterDirection(DIRECTION::LEFT);
+		// Aの処理
+		if (key->GetKeyboardPress(DIK_A))
+		{
+			CPlayer::Move(m_PlayerData.fRunSpeed, 0.5f);
+			SetCharacterDirection(DIRECTION::LEFT);
+		}
+
+		// Dの処理
+		else if (key->GetKeyboardPress(DIK_D))
+		{
+			CPlayer::Move(-m_PlayerData.fRunSpeed, -0.5f);
+
+			SetCharacterDirection(DIRECTION::RIGHT);
+		}
 	}
-
-	// Dの処理
-	else if (key->GetKeyboardPress(DIK_D))
+	else
 	{
-		CPlayer::Move(-m_fRunSpeed, -0.5f);
+		// Aの処理
+		if (key->GetKeyboardPress(DIK_A))
+		{
+			CPlayer::Move(m_PlayerData.fCrouchSpeed, 0.5f);
+			SetCharacterDirection(DIRECTION::LEFT);
+		}
 
-		SetCharacterDirection(DIRECTION::RIGHT);
+		// Dの処理
+		else if (key->GetKeyboardPress(DIK_D))
+		{
+			CPlayer::Move(-m_PlayerData.fCrouchSpeed, -0.5f);
+
+			SetCharacterDirection(DIRECTION::RIGHT);
+		}
 	}
 
 	// しゃがんでない時はW押してたら上むく
@@ -432,7 +443,7 @@ void CPlayer::MoveUpdate(void)
 	//ジャンプ
 	if ((key->GetKeyboardTrigger(DIK_SPACE) || m_pPad->GetTrigger(m_pPad->JOYPADKEY_A, 1)) && GetJump() == true && m_DebugState == DEBUG_NORMAL)
 	{
-		GetMove().y += m_fJump;
+		GetMove().y += m_PlayerData.fJump;
 		GetModelSet()->SetMotion(CModelSet::PLAYER_MOTION_JUMP);
 	}
 	//ジャンプ中はジャンプモーション
@@ -645,14 +656,6 @@ void CPlayer::PadMoveUpdate(void)
 	//移動量
 	D3DXVECTOR3 MoveValue = ZeroVector3;
 
-
-	//パッドによる入力処理
-	if (CHossoLibrary::PadMoveInput(MoveValue, GetCharacterDirection(), GetJump(), GetTag()))
-	{
-		//移動量計算
-		Move(MoveValue.x, MoveValue.y);
-	}
-
 	D3DXVECTOR3 InputValue = ZeroVector3;
 
 	if (m_pPad)
@@ -676,7 +679,33 @@ void CPlayer::PadMoveUpdate(void)
 				m_bCruch = true;
 			}
 		}
+	}
 
+	//パッドによる入力処理
+	if (CHossoLibrary::PadMoveInput(MoveValue, GetCharacterDirection(), GetJump(), GetTag()))
+	{
+		if (!m_bCruch)
+		{
+			if (InputValue.x <= 0.0f && InputValue.x >= -1.0f)
+			{
+				CPlayer::Move(m_PlayerData.fRunSpeed, 0.5f);
+			}
+			else if (InputValue.x >= 0.0f && InputValue.x <= 1.0f)
+			{
+				CPlayer::Move(-m_PlayerData.fRunSpeed, -0.5f);
+			}
+		}
+		else
+		{
+			if (InputValue.x <= 0.0f && InputValue.x >= -1.0f)
+			{
+				CPlayer::Move(m_PlayerData.fCrouchSpeed, 0.5f);
+			}
+			else if (InputValue.x >= 0.0f && InputValue.x <= 1.0f)
+			{
+				CPlayer::Move(-m_PlayerData.fCrouchSpeed, -0.5f);
+			}
+		}
 	}
 }
 //====================================================================
@@ -697,7 +726,7 @@ void CPlayer::MapChangePlayerRespawn()
 {
 	SetState(CCharacter::CHARACTER_STATE_INVINCIBLE);
 
-	SetPosition(m_pos[(int)GetTag()]);
+	SetPosition(m_PlayerData.pos);
 
 	m_bRideVehicle = false;
 	GetModelSet()->SetMotion(CModelSet::PLAYER_MOTION_NORMAL);
@@ -708,14 +737,14 @@ void CPlayer::MapChangePlayerRespawn()
 //====================================================================
 void CPlayer::ResetPlayer()
 {
-	D3DXVECTOR3 pos = D3DXVECTOR3(m_pos[(int)GetTag()].x - 200.0f, m_pos[(int)GetTag()].y, m_pos[(int)GetTag()].z);
+	D3DXVECTOR3 pos = D3DXVECTOR3(m_PlayerData.pos.x - 200.0f, m_PlayerData.pos.y, m_PlayerData.pos.z);
 	SetPosition(pos);
 	SetMaxLife(1);
 
 	//// 捕虜の数がプレイヤーの体力の基準値より同じくか低かったら体力を基準値に設定
 	if (CResultUI::GetPrisonerNum((int)GetTag()) <= 3)
 	{
-		SetLife(m_nLife[0]);
+		SetLife(m_PlayerData.nLife);
 	}
 	// 捕虜の数が基準値より大きかったら捕虜の数をプレイヤーの体力にする
 	else
@@ -918,7 +947,7 @@ void CPlayer::Ride()
 				m_pVehicle = nullptr;
 			}
 			m_bRideVehicle = false;
-			GetMove().y += m_fRideJump;
+			GetMove().y += m_PlayerData.fRideJump;
 			GetModelSet()->SetMotion(CModelSet::PLAYER_MOTION_JUMP);
 		}
 	}
@@ -946,7 +975,7 @@ void CPlayer::ReSpawn(void)
 			m_pGun->SetGunType(CGun::GUNTYPE_HANDGUN);
 			GetModelSet()->SetMotion(CModelSet::PLAYER_MOTION_NORMAL);
 			SetState(CHARACTER_STATE_INVINCIBLE);
-			SetLife(m_nLife[0]);
+			SetLife(m_PlayerData.nLife);
 			m_pPlayerUI->SetStockUI(m_pPlayerUI->GetStock() - 1);
 			m_pGrenadeFire->SetGrenadeAmmoDefault();
 			m_pPlayerUI->SetGrenadeAmmo(m_pGrenadeFire->GetGrenadeAmmo());
@@ -1057,26 +1086,4 @@ void CPlayer::PlayerLoad()
 	{
 		MessageBox(NULL, "プレイヤーのデータ読み込み失敗", "警告", MB_ICONWARNING);
 	}
-}
-
-//====================================================================
-//プレイヤーのデータの設定
-//====================================================================
-void CPlayer::SetPlayerData()
-{
-	// 体力の情報を取得
-	m_nLife[0] = m_PlayerData.nLife;
-	// 初期座標の情報を取得
-	m_pos[0] = m_PlayerData.pos;
-	// 初期座標の情報を取得
-	m_pos[1] = m_PlayerData.pos - D3DXVECTOR3(100.0f,0.0f,0.0f);
-
-	// 移動速度の情報を取得
-	m_fRunSpeed = m_PlayerData.fRunSpeed;
-	// しゃがみ時の移動速度の情報を取得
-	m_fCrouchSpeed = m_PlayerData.fCrouchSpeed;
-	// 通常時のジャンプ量
-	m_fJump = m_PlayerData.fJump;
-	// 乗り物から降りる時のジャンプ量
-	m_fRideJump = m_PlayerData.fRideJump;
 }

@@ -120,6 +120,8 @@ std::vector<CModel::MODEL_FILE_NAME> CModel::m_vModelFileName =
 	{ "data/MODEL/Object/Obstacle_PresentBox01.x" ,			OBSTACLE_TYPE_PRESENTBOX },				// プレゼント
 	{ "data/MODEL/Object/Obstacle_PresentBox00.x" ,			OBSTACLE_TYPE_PRESENTBOX_RARE },		// プレゼント レア
 	{ "data/MODEL/Object/Obstacle_Bridge.x" ,				OBSTACLE_TYPE_BRIDGE },					// 橋
+	{ "data/MODEL/Object/Obstacle_Bell.x" ,					OBSTACLE_TYPE_BELL },					// 鐘
+	{ "data/MODEL/Object/Obstacle_Cage.x" ,					OBSTACLE_TYPE_CAGE },					// 檻
 
 	//捕虜
 	{ "data/MODEL/Prisoner/Waist.x",						MODEL_PRISONER_WAIST			},		// 捕虜の腰

@@ -370,7 +370,7 @@ void CCharacter::StateChangeReaction()
 void CCharacter::Move(float move, float fdest,float fSpeed)
 {
 	m_move.x += sinf(move * -D3DX_PI) * fSpeed;
-	m_move.z += cosf(move * -D3DX_PI) * fSpeed;
+	//m_move.z += cosf(move * -D3DX_PI) * fSpeed;
 	m_rotDest.y = fdest *  D3DX_PI;
 }
 //====================================================================

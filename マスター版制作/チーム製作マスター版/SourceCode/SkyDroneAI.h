@@ -30,12 +30,21 @@ public:
 	// ドローンのAIの状態
 	enum class DRONEAI_STATE
 	{
-		NONE = 0,			//何もしない
-		STOP,				//止まる
-		WALK_LEFT,			//左移動
-		WALK_RIGHT,			//右移動
-		ATTACK,				//攻撃
-		AI_MAX				//行動の最大数
+		NONE = 0,			// 何もしない
+		APPEARANCE,			// 登場
+		STOP,				// 止まる
+		MOVEROT,			// 回転
+		LEAVE,				// 退場
+		WALK_LEFT,			// 左移動
+		WALK_RIGHT,			// 右移動
+		AI_MAX				// 行動の最大数
+	};
+
+	// ドローンの移動
+	enum class DRONEAI_LEAVESTATE
+	{
+		FIRST = 0,			//
+		END,				//
 	};
 
 	CSkyDroneAI();											// コンストラクタ
@@ -61,7 +70,11 @@ private:
 	/* メンバ変数 */
 	CWeakEnemy				*m_pEnemyPass;					// 敵の情報の格納用
 	DRONEAI_STATE			m_StateAI;						// 行動の種類
+	DRONEAI_LEAVESTATE		m_LeaveState;
 	int						m_nCntShotFrame;				// 撃つまでのカウント
 	int						m_nCntMoveStopFrame;			// 止まるまでのカウント
+	int						m_nRotCnt;						// 回転させるようカウント
+	int						m_nWorkTime;					// ドローンの活動時間
+	int						m_nAngle;
 };
 #endif

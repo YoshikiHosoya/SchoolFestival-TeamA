@@ -631,6 +631,15 @@ void CResultUI::Conditions()
 	{
 		// ゲームクラスのポインタ取得
 		CGame *pGame = (CGame*)CManager::GetBaseMode();
+
+		// プレイヤーのポインタ
+		CPlayer *pPlayer[MAX_CONTROLLER] = {};
+
+		for (int nCntPlayer = 0; nCntPlayer < MAX_CONTROLLER; nCntPlayer++)
+		{
+			pPlayer[nCntPlayer] = CManager::GetBaseMode()->GetPlayer((TAG)nCntPlayer);
+		}
+
 		if (pGame != nullptr && pGame->GetResultManager() != nullptr)
 		{
 			if (pGame->GetResultManager()->GetResultState() == CResultManager::RESULT_STATE::RESULT_STATE_0)
@@ -644,17 +653,55 @@ void CResultUI::Conditions()
 					// 捕虜の数によって結果が変わる
 					// 条件によって描画する 評価
 					if (m_apScene2D[RESULT_UI_EVALUATION01P] != nullptr&&
-						m_apScene2D[RESULT_UI_EVALUATION02P] != nullptr)
+						m_apScene2D[RESULT_UI_EVALUATION02P] != nullptr&&
+						m_apScene2D[RESULT_UI_EVALUATION11P] != nullptr&&
+						m_apScene2D[RESULT_UI_EVALUATION12P] != nullptr&&
+						m_apScene2D[RESULT_UI_EVALUATION21P] != nullptr&&
+						m_apScene2D[RESULT_UI_EVALUATION22P] != nullptr)
 					{
-						m_apScene2D[RESULT_UI_EVALUATION01P]->SetDisp(true);
+						if (pPlayer[0] != nullptr)
+						{
+							if (pPlayer[0]->GetLife() <= 0)
+							{
+								m_apScene2D[RESULT_UI_EVALUATION21P]->SetDisp(true);
+							}
+							else if (pPlayer[0]->GetLife() < 10)
+							{
+								m_apScene2D[RESULT_UI_EVALUATION01P]->SetDisp(true);
+							}
+							else
+							{
+								m_apScene2D[RESULT_UI_EVALUATION11P]->SetDisp(true);
+							}
+						}
 
 						if (CPlayer::GetTwoPPlayFlag())
 						{
-							m_apScene2D[RESULT_UI_EVALUATION02P]->SetDisp(true);
+							if (pPlayer[1] != nullptr)
+							{
+								if (pPlayer[1]->GetLife() <= 0)
+								{
+									m_apScene2D[RESULT_UI_EVALUATION22P]->SetDisp(true);
+								}
+								else if (pPlayer[1]->GetLife() < 10)
+								{
+									m_apScene2D[RESULT_UI_EVALUATION02P]->SetDisp(true);
+								}
+								else
+								{
+									m_apScene2D[RESULT_UI_EVALUATION12P]->SetDisp(true);
+								}
+							}
 						}
+
+
 
 						m_apScene2D[RESULT_UI_EVALUATION01P]->Flashing();
 						m_apScene2D[RESULT_UI_EVALUATION02P]->Flashing();
+						m_apScene2D[RESULT_UI_EVALUATION11P]->Flashing();
+						m_apScene2D[RESULT_UI_EVALUATION12P]->Flashing();
+						m_apScene2D[RESULT_UI_EVALUATION21P]->Flashing();
+						m_apScene2D[RESULT_UI_EVALUATION22P]->Flashing();
 					}
 
 					// リザルトモードを次のモードに移行するためのフラグをtrueにする

@@ -243,8 +243,9 @@ private:
 	int							m_nTriggerCount;								// 何トリガー撃ったか
 	int							m_nBalkanAngle;									// 比較用ガンの回転情報
 	int							m_nFirstShotCount;								// 初弾を撃つまでの時間
-
 	int							m_nElapsedTime;									// ボスが出現してからの経過時間
+	int							m_nDroneNum;									// ドローンが出現した数
+	int							m_nPrisonerNum;									// 捕虜が出現した数
 
 	float						m_fRotTarget;									// 回転目標
 	float						m_fBalkanRot;									// ガンの回転情報
@@ -257,5 +258,6 @@ private:
 	bool						m_bFlame;										// 火炎放射を発射する許可
 	bool						m_bBalkanRotFlag;								// 回転許可フラグ
 	bool						m_bIntermediateSquat;							// しゃがみ途中かどうかのフラグ
+	bool						m_bStopTimer;									// 
 };
 #endif

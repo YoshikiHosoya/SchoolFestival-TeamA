@@ -44,6 +44,7 @@ public:
 		LABEL_SE_EXPLOSION_04,						//爆発
 
 		LABEL_SE_FRACTURING,						//ガラスが割れた音
+		LABEL_SE_HIT_BELL,							//鐘
 
 		//武器関連
 		LABEL_SE_SHOT_HANDGUN,						//ハンドガン
@@ -152,6 +153,7 @@ private:
 		{ "data/SE/Effect/explosion_04.wav", 0 },					//SE 爆発
 
 		{ "data/SE/Effect/Fracturing.wav", 0 },						//SE ガラスが割れた音
+		{ "data/SE/Game/hit_Bell.wav", 0 },							//SE ガラスが割れた音
 
 		//武器
 		{ "data/SE/Weapon/handgun.wav", 0 },						//SE ハンドガン

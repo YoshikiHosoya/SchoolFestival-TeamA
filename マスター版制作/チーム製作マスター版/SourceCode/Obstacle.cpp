@@ -17,6 +17,7 @@
 #include "Normal_Iten.h"
 #include "Anim_Item.h"
 #include "map.h"
+#include "sound.h"
 
 // =====================================================================================================================================================================
 // Ã“Iƒƒ“ƒo•Ï”‚Ì‰Šú‰»
@@ -384,15 +385,21 @@ void CObstacle::Hit(TAG tag,int nDamage)
 	case CObstacle::TYPE_BALLOON:
 	case CObstacle::TYPE_PRESENTBOX:
 	case CObstacle::TYPE_PRESENTBOX_RARE:
-	case CObstacle::TYPE_BOSSMAP_BELL:
 	case CObstacle::TYPE_BOSSMAP_CAGE:
-
 		// ‘Ì—Í‚ðŒ¸ŽZ‚·‚é
 		this->AddDamage(nDamage);
 		// íœ‚·‚é
 		this->CheckDie(tag);
-
 		break;
+
+	case CObstacle::TYPE_BOSSMAP_BELL:
+		CManager::GetSound()->Play(CSound::LABEL_SE_HIT_BELL);
+		// ‘Ì—Í‚ðŒ¸ŽZ‚·‚é
+		this->AddDamage(nDamage);
+		// íœ‚·‚é
+		this->CheckDie(tag);
+		break;
+
 	default:
 		break;
 	}
@@ -436,7 +443,7 @@ void CObstacle::DropItem()
 		break;
 
 	case CObstacle::TYPE_BOSSMAP_BELL:
-		CAnimationItem::DropItem_Multiple(GetPosition(), CItem::LIST_ANI_RARE, CItem::BEHAVIOR_BURSTS);
+		CAnimationItem::DropItem_Multiple(GetPosition(), CItem::LIST_ANI_RARE, CItem::BEHAVIOR_FULLBURSTS);
 		break;
 	case CObstacle::TYPE_BOSSMAP_CAGE:
 		CAnimationItem::DropItem(GetPosition(), true, CItem::ANIM_ITEMTYPE_DANCEMONKEY);

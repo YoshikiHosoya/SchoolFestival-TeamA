@@ -173,6 +173,13 @@ FILENAME_LIST CTexture::m_aSeparateTexFileNameList =
 	{ "data/TEXTURE/Item/Score/Ani_JumpMonkey.png" },			//アニメーションするアイテム飛ぶサル
 	{ "data/TEXTURE/Item/Ammo/Anim_Prisoner.png" },				//アニメーションするアイテム捕虜
 
+	{ "data/TEXTURE/Effect/LightBulb.png" },					//電球
+	{ "data/TEXTURE/Effect/Confetti.png" },						//紙吹雪
+
+	{ "data/TEXTURE/Effect/Fireworks2.png" },					//花火4
+	{ "data/TEXTURE/Effect/Fireworks4.png" },					//花火5
+	{ "data/TEXTURE/Effect/Fireworks6.png" },					//花火6
+
 	{ "data/TEXTURE/UI/num.png" },								//ナンバー
 	{ "data/TEXTURE/UI/Player_UI/life.png" },					//体力のUI
 
@@ -239,6 +246,14 @@ std::vector<CTexture::SEPARATE_TEX_INFO> CTexture::m_apSeparateTexInfoList =
 	{ nullptr, CTexture::SEPARATE_TEX_ITEM_DANCEMONKEY,		D3DXVECTOR2(10,1),	ZeroVector2 },		//アイテム 踊るサル
 	{ nullptr, CTexture::SEPARATE_TEX_ITEM_JUMPMONKEY,		D3DXVECTOR2(9,1),	ZeroVector2 },		//アイテム 飛ぶサル
 	{ nullptr, CTexture::SEPARATE_TEX_ITEM_PRISONER,		D3DXVECTOR2(12,1),	ZeroVector2 },		//アイテム 捕虜
+
+	{ nullptr, CTexture::SEPARATE_TEX_LIGHTBULB,			D3DXVECTOR2(5,2),	ZeroVector2 },		//電球
+	{ nullptr, CTexture::SEPARATE_TEX_CONFETTI,				D3DXVECTOR2(1,12),	ZeroVector2 },		//紙吹雪
+
+	{ nullptr, CTexture::SEPARATE_TEX_EFFECT_FIREWORKS4,	D3DXVECTOR2(14,1),	ZeroVector2 },		//花火4
+	{ nullptr, CTexture::SEPARATE_TEX_EFFECT_FIREWORKS5,	D3DXVECTOR2(14,1),	ZeroVector2 },		//花火5
+	{ nullptr, CTexture::SEPARATE_TEX_EFFECT_FIREWORKS6,	D3DXVECTOR2(14,1),	ZeroVector2 },		//花火6
+
 
 	{ nullptr, CTexture::SEPARATE_TEX_NUM,					D3DXVECTOR2(10,1),	ZeroVector2 },		//ナンバー
 	{ nullptr, CTexture::SEPARATE_TEX_UI_LIFE,				D3DXVECTOR2(5,1),	ZeroVector2 },		//体力のUI

@@ -90,12 +90,8 @@ void CAnimationItem::Update(void)
 	// アイテムの判定
 	ItemCollision();
 
-	// レイの判定に一回でも触れていた時
-	//if (m_nHitRayCount >= 1)
-	//{
 	// アイテムの滞在時間管理
 	RemainTimer();
-	//}
 
 	// 座標を更新
 	SetPosition(GetPosition());
@@ -269,6 +265,12 @@ void CAnimationItem::ItemCollision()
 					{
 						m_Move = ZeroVector3;
 					}
+				}
+				else
+				{
+					// 重力の初期化
+					m_fGravity = 0.0f;
+					m_Move = ZeroVector3;
 				}
 
 				m_nHitRayCount++;
@@ -470,7 +472,7 @@ CAnimationItem * CAnimationItem::DropItem(D3DXVECTOR3 droppos, bool fixed, ITEMT
 	//pItem->SetDropPos(droppos);
 
 	droppos.y += 30.0f;
-
+	droppos.z = 0.0f;
 	// アイテムの位置の設定
 	pItem->SetPosition(droppos);
 
@@ -492,8 +494,15 @@ CAnimationItem * CAnimationItem::DropItem(D3DXVECTOR3 droppos, bool fixed, ITEMT
 // =====================================================================================================================================================================
 void CAnimationItem::DropItem_Multiple(const D3DXVECTOR3 originpos, ITEM_LIST_DROPMULTIPLE type, ITEM_BEHAVIOR behavior)
 {
+	int nForNum = MULTIPLE_ITEM_NUM;
+
+	if (behavior == BEHAVIOR_FULLBURSTS)
+	{
+		nForNum = MULTIPLE_ITEM_NUM*2;
+	}
+
 	// 生成する数分
-	for (int nNum = 0; nNum < MULTIPLE_ITEM_NUM; nNum++)
+	for (int nNum = 0; nNum < nForNum; nNum++)
 	{
 		// メモリの確保
 		CAnimationItem *pItem = new CAnimationItem(OBJTYPE_ANIMATIONITEM);
@@ -523,7 +532,8 @@ void CAnimationItem::DropItem_Multiple(const D3DXVECTOR3 originpos, ITEM_LIST_DR
 			}
 			else
 			{
-				pItem->SetPosition(originpos);
+				D3DXVECTOR3 pos = originpos;
+				pItem->SetPosition(D3DXVECTOR3(pos.x, pos.y, 0.0f));
 			}
 		}
 
