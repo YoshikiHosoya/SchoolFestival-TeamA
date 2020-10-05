@@ -672,7 +672,7 @@ bool CCollision::ForPlayer_ObstacleCollision()
 	for (int nCntObst = 0; nCntObst < CManager::GetBaseMode()->GetMap()->GetMaxObstacle(); nCntObst++)
 	{
 		CObstacle *pObstacle = CManager::GetBaseMode()->GetMap()->GetObstacle(nCntObst);
-		if (pObstacle != nullptr && pObstacle->GetObstacleType() != CObstacle::TYPE_TREE && pObstacle->GetObstacleType() != CObstacle::TYPE_BOSSMAP_BRIDGE)
+		if (pObstacle != nullptr && pObstacle->GetObstacleType() != CObstacle::TYPE_TREE && pObstacle->GetObstacleType() != CObstacle::TYPE_BOSSMAP_BRIDGE&& pObstacle->GetObstacleType() != CObstacle::TYPE_BOSSMAP_BELL)
 		{
 			if (this->BlockCollision2D(pObstacle->GetCollision()))
 			{

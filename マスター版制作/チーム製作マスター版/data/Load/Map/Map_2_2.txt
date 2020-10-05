@@ -35,6 +35,7 @@ NO_COLLISION_MAPSET
 	TYPE		= 10
 	POS			= 0 0 0
 END_NO_COLLISION_MAPSET
+
 //------------------------------------------------------------
 // 敵の配置情報
 //------------------------------------------------------------
@@ -274,14 +275,13 @@ END_OBSTACLESET
 
 OBSTACLESET									# 38
 	TYPE		= 2
-	POS			= 2893 137 0
+	POS			= 2893 135 0
 END_OBSTACLESET
 
-OBSTACLESET									# 38
+OBSTACLESET									# 39
 	TYPE		= 11
-	POS			= 4700 400 120
+	POS			= 4700 411 159
 END_OBSTACLESET
-
 
 //------------------------------------------------------------
 // 戦車の配置情報
