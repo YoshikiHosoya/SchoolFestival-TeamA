@@ -48,7 +48,7 @@ FILENAME_LIST CTexture::m_aTexFileName =
 	{ "data/TEXTURE/UI/Title/Title.png" },						//タイトルロゴ
 
 	{ "data/TEXTURE/UI/Ranking/RankingLogo.png" },				//ランキングロゴ
-	{ "data/TEXTURE/UI/Ranking/Score.png" },					//ランキングスコア
+	{ "data/TEXTURE/UI/Ranking/Total.png" },					//ランキングスコア
 	{ "data/TEXTURE/UI/Ranking/rank_1.png" },					//1位
 	{ "data/TEXTURE/UI/Ranking/rank_2.png" },					//2位
 	{ "data/TEXTURE/UI/Ranking/rank_3.png" },					//3位

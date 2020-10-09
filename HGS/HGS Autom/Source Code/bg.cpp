@@ -102,9 +102,22 @@ void CBg::Update()
 			}
 			else
 			{
-				m_FigureMove.y = (float)m_apScene2D[nCnt]->GetSize().y / 10;
+				m_FigureMove.y = (float)m_apScene2D[nCnt]->GetSize().y / 20;
 
 				m_apScene2D[nCnt]->GetPos().y += m_FigureMove.y;
+			}
+
+			if ((int)m_apScene2D[nCnt]->GetSize().y == 20)
+			{
+				m_apScene2D[nCnt]->GetRot().z += 0.05f;
+			}
+			else if ((int)m_apScene2D[nCnt]->GetSize().y == 50)
+			{
+				m_apScene2D[nCnt]->GetRot().z += 0.03f;
+			}
+			else if ((int)m_apScene2D[nCnt]->GetSize().y == 100)
+			{
+				m_apScene2D[nCnt]->GetRot().z += 0.015f;
 			}
 
 			// îÕàÕäO
@@ -121,8 +134,6 @@ void CBg::Update()
 	{
 		m_pGridLine->SetAnimation(D3DXVECTOR2(1.0f, 1.0f - ((float)m_nCntScroll / 50)), D3DXVECTOR2(1.0f, 1.0f));
 	}
-
-	CDebugProc::Print(CDebugProc::PLACE_LEFT, "FigureNum >> %d\n", m_apScene2D.size());
 }
 
 //------------------------------------------------------------------------------
@@ -136,12 +147,13 @@ void CBg::Draw()
 //------------------------------------------------------------------------------
 //îwåiÇÃê∂ê¨èàóù
 //------------------------------------------------------------------------------
-std::unique_ptr<CBg> CBg::Create()
+std::unique_ptr<CBg> CBg::Create(int DropNum)
 {
 	//ÉÅÉÇÉäämï€
 	std::unique_ptr<CBg> pBg(new CBg);
 
 	pBg->Init();
+	pBg->m_DropRangeNum = DropNum;
 	pBg->SetObjType(OBJTYPE::OBJTYPE_BACK);
 	pBg->AddUniqueList(std::move(pBg));
 
@@ -177,7 +189,7 @@ void CBg::RandomFigure()
 	}
 
 	// ê}å`ÇÃê∂ê¨
-	if (nCntTime > 60)
+	if (nCntTime > m_DropRangeNum)
 	{
 		m_apScene2D.emplace_back(CScene2D::Create_Shared(D3DXVECTOR3((float)(rand() % 1280), -100.0f, 0.0f), m_FigureSize, CScene::OBJTYPE_BACK));
 		m_apScene2D[m_apScene2D.size() - 1]->SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.5f));

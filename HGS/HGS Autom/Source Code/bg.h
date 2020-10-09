@@ -53,7 +53,7 @@ public:
 	void Draw();						//描画
 	void ShowDebugInfo() {};			//デバッグ情報表記
 
-	static std::unique_ptr<CBg> Create();			//生成処理
+	static std::unique_ptr<CBg> Create(int DropNum);			//生成処理
 
 private:
 	void	RandomFigure();						// ランダム図形の生成
@@ -66,6 +66,7 @@ private:
 	BG_FIGURE_SIZE		m_FigureSizeType;		// 図形のサイズの種類
 	BG_FIGURE			m_FigureType;			// 図形の種類
 	int					m_nCntScroll;			// スクロールカウント
+	int					m_DropRangeNum;			// 落ちる許容範囲
 };
 
 #endif
