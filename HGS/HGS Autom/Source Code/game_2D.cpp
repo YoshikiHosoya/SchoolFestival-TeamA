@@ -77,11 +77,11 @@ HRESULT CGame_2D::Init(HWND hWnd)
 		m_pWayList.emplace_back(CWay::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, -nCnt * 400.0f + DEFAULT_CREATE_POS, 0.0f), CWay::UP));
 	}
 
-	m_pScore = CScene2D::Create_Shared(D3DXVECTOR3(850.0f, 100.0f, 0.0f), D3DXVECTOR3(150.0f, 50.0f, 0.0f), CScene::OBJTYPE_UI);
+	m_pScore = CScene2D::Create_Shared(D3DXVECTOR3(950.0f, 100.0f, 0.0f), D3DXVECTOR3(250.0f, 100.0f, 0.0f), CScene::OBJTYPE_UI);
 	m_pScore->BindTexture(CTexture::GetTexture(CTexture::TEX_UI_RANKING_SCORE));
 
 
-	m_pScoreNumber = CMultiNumber::Create(D3DXVECTOR3(1000.0f, 100.0f, 0.0f), D3DXVECTOR3(50.0f, 75.0f, 0.0f),0,7, CScene::OBJTYPE_UI);
+	m_pScoreNumber = CMultiNumber::Create(D3DXVECTOR3(1100.0f, 100.0f, 0.0f), D3DXVECTOR3(50.0f, 75.0f, 0.0f),0,7, CScene::OBJTYPE_UI);
 
 	m_pTimeNumber = CMultiNumber::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 50.0f, 0.0f), D3DXVECTOR3(50.0f, 75.0f, 0.0f), m_nTime, 2, CScene::OBJTYPE_UI);
 
