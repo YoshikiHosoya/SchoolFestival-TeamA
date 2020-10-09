@@ -10,6 +10,8 @@
 //------------------------------------------------------------------------------
 #include "way.h"
 #include "manager.h"
+#include "game.h"
+#include "game_2D.h"
 #include "renderer.h"
 //------------------------------------------------------------------------------
 //Ã“Iƒƒ“ƒo•Ï”‚Ì‰Šú‰»
@@ -57,6 +59,27 @@ void CWay::Uninit()
 void CWay::Update()
 {
 	CScene2D::Update();
+
+	CGame_2D *pGame2D = (CGame_2D*)CManager::GetGame();
+
+	switch (pGame2D->GetDirection())
+	{
+	case DIRECTION::UP:
+		CScene2D::GetPos().y += pGame2D->GetSpeed();
+
+		break;
+	case DIRECTION::LEFT:
+		CScene2D::GetPos().x += 100.0f;
+
+		break;
+	case DIRECTION::RIGHT:
+		CScene2D::GetPos().x -= 100.0f;
+
+		break;
+	default:
+		break;
+	}
+
 }
 //------------------------------------------------------------------------------
 //•`‰æˆ—
@@ -87,19 +110,29 @@ void CWay::ShowDebugInfo()
 //------------------------------------------------------------------------------
 //¶¬ˆ—
 //------------------------------------------------------------------------------
-std::shared_ptr<CWay> CWay::Create(D3DXVECTOR3 pos)
+std::shared_ptr<CWay> CWay::Create(D3DXVECTOR3 pos, WAY_TYPE waytype)
 {
 	//•Ï”éŒ¾
-	std::shared_ptr<CWay> pPlayer = std::make_shared<CWay>();
+	std::shared_ptr<CWay> pWay = std::make_shared<CWay>();
 
 
-	if (pPlayer)
+	if (pWay)
 	{
+		pWay->SetPos(pos);
+		pWay->SetSize(D3DXVECTOR3(400.0f, 400.0f, 0.0f));
 		//‰Šú‰»
-		pPlayer->Init();
+		pWay->Init();
+
+		pWay->m_waytype = waytype;
+
+		pWay->BindTexture(CTexture::GetTexture(((CTexture::TEX_TYPE)(int)(CTexture::TEX_WAY_UP + (CTexture::TEX_TYPE)(pWay->m_waytype)))));
+
+		pWay->SetObjType(OBJTYPE_WAY);
 
 
-		return pPlayer;
+		pWay->AddSharedList(pWay);
+
+		return pWay;
 	}
 
 	//¶¬‚µ‚½î•ñ

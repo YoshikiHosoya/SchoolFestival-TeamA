@@ -22,18 +22,33 @@
 class CWay : public CScene2D
 {
 public:
-	CWay();																//コンストラクタ
-	~CWay();															//デストラクタ
 
-	virtual HRESULT Init();												//初期化
-	virtual void Uninit();												//終了
-	virtual void Update();												//更新
-	virtual void Draw();												//描画
-	virtual void ShowDebugInfo();										//デバッグ情報表記
-	static std::shared_ptr<CWay> Create(D3DXVECTOR3 pos);				//生成
+	enum WAY_TYPE
+	{
+		UP,
+		RIGHT_01,
+		RIGHT_02,
+		LEFT_01,
+		LEFT_02,
+
+	};
+
+	CWay();																					//コンストラクタ
+	~CWay();																				//デストラクタ
+
+	virtual HRESULT Init();																	//初期化
+	virtual void Uninit();																	//終了
+	virtual void Update();																	//更新
+	virtual void Draw();																	//描画
+	virtual void ShowDebugInfo();															//デバッグ情報表記
+	static std::shared_ptr<CWay> Create(D3DXVECTOR3 pos,WAY_TYPE waytype);					//生成
+
+	WAY_TYPE GetWayType() { return m_waytype; };
 
 protected:
 
 private:
+	WAY_TYPE m_waytype;
+
 };
 #endif

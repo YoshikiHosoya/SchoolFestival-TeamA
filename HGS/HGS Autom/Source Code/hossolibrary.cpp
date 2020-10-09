@@ -51,21 +51,21 @@ bool CHossoLibrary::CheckMove(DIRECTION direction)
 	{
 	case DIRECTION::UP:
 		//ª
-		if (m_pKeyboard->GetPress(DIK_W) || m_pXInput->GetPress(CPad_XInput::JOYPADKEY_UP))
+		if (m_pKeyboard->GetTrigger(DIK_W) || m_pXInput->GetPress(CPad_XInput::JOYPADKEY_UP))
 		{
 			return true;
 		}
 		break;
 	case DIRECTION::DOWN:
 		//«
-		if (m_pKeyboard->GetPress(DIK_S) || m_pXInput->GetPress(CPad_XInput::JOYPADKEY_DOWN))
+		if (m_pKeyboard->GetTrigger(DIK_S) || m_pXInput->GetPress(CPad_XInput::JOYPADKEY_DOWN))
 		{
 			return true;
 		}
 		break;
 	case DIRECTION::LEFT:
 		//©
-		if (m_pKeyboard->GetPress(DIK_A) || m_pXInput->GetPress(CPad_XInput::JOYPADKEY_LEFT))
+		if (m_pKeyboard->GetTrigger(DIK_A) || m_pXInput->GetPress(CPad_XInput::JOYPADKEY_LEFT))
 		{
 			return true;
 		}
@@ -73,7 +73,7 @@ bool CHossoLibrary::CheckMove(DIRECTION direction)
 	case DIRECTION::RIGHT:
 
 		//¨
-		if (m_pKeyboard->GetPress(DIK_D) || m_pXInput->GetPress(CPad_XInput::JOYPADKEY_RIGHT))
+		if (m_pKeyboard->GetTrigger(DIK_D) || m_pXInput->GetPress(CPad_XInput::JOYPADKEY_RIGHT))
 		{
 			return true;
 		}

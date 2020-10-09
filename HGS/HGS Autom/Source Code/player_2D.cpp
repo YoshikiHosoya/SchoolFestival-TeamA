@@ -9,6 +9,7 @@
 //インクルード
 //------------------------------------------------------------------------------
 #include "player_2D.h"
+#include "game_2D.h"
 #include "manager.h"
 #include "renderer.h"
 #include "Pad_XInput.h"
@@ -103,70 +104,21 @@ void CPlayer_2D::MoveInput()
 		GetMove().y -= joypadY * CCharacter::GetDefaultParam(GetParam())->GetMoveSpeed() / 32768.0f;
 	}
 
-	//[D]キーを押した時
-	if (CHossoLibrary::CheckMove(CHossoLibrary::RIGHT))
-	{
-		//[W]キーを押した時
-		if (CHossoLibrary::CheckMove(CHossoLibrary::UP))
-		{
-			//右上に移動
-			GetMove().x += sinf(D3DX_PI * 0.75f) * CCharacter::GetDefaultParam(GetParam())->GetMoveSpeed();
-			GetMove().y += cosf(D3DX_PI * 0.75f) * CCharacter::GetDefaultParam(GetParam())->GetMoveSpeed();
+	CGame_2D *pGame2D = (CGame_2D*)CManager::GetGame();
 
-		}
-		//[S]キーを押した時
-		else if (CHossoLibrary::CheckMove(CHossoLibrary::DOWN))
-		{
-			//右下に移動
-			GetMove().x += sinf(D3DX_PI * 0.25f) * CCharacter::GetDefaultParam(GetParam())->GetMoveSpeed();
-			GetMove().y += cosf(D3DX_PI * 0.25f) * CCharacter::GetDefaultParam(GetParam())->GetMoveSpeed();
-		}
-		else
-		{
-			//右に移動
-			GetMove().x += sinf(D3DX_PI * 0.5f) * CCharacter::GetDefaultParam(GetParam())->GetMoveSpeed();
-			GetMove().y += cosf(D3DX_PI * 0.5f) * CCharacter::GetDefaultParam(GetParam())->GetMoveSpeed();
-
-		}
-	}
-	//[A]キーを押した時
-	else if (CHossoLibrary::CheckMove(CHossoLibrary::LEFT))
+	//上に進行してるとき
+	if (pGame2D->GetDirection() == DIRECTION::UP)
 	{
-		//[W]キーを押した時
-		if (CHossoLibrary::CheckMove(CHossoLibrary::UP))
+		//[D]キーを押した時
+		if (CHossoLibrary::CheckMove(CHossoLibrary::RIGHT))
 		{
-			//左上に移動
-			GetMove().x += sinf(-D3DX_PI * 0.75f) * CCharacter::GetDefaultParam(GetParam())->GetMoveSpeed();
-			GetMove().y += cosf(-D3DX_PI * 0.75f) * CCharacter::GetDefaultParam(GetParam())->GetMoveSpeed();
+			pGame2D->PlayerBending(DIRECTION::RIGHT);
 		}
-		//[S]キーを押した時
-		else if (CHossoLibrary::CheckMove(CHossoLibrary::DOWN))
+		//[A]キーを押した時
+		if (CHossoLibrary::CheckMove(CHossoLibrary::LEFT))
 		{
-			//左下に移動
-			GetMove().x += sinf(-D3DX_PI * 0.25f) * CCharacter::GetDefaultParam(GetParam())->GetMoveSpeed();
-			GetMove().y += cosf(-D3DX_PI * 0.25f) * CCharacter::GetDefaultParam(GetParam())->GetMoveSpeed();
+			pGame2D->PlayerBending(DIRECTION::LEFT);
 		}
-		else
-		{
-			//左に移動
-			GetMove().x += sinf(-D3DX_PI * 0.5f) * CCharacter::GetDefaultParam(GetParam())->GetMoveSpeed();
-			GetMove().y += cosf(-D3DX_PI * 0.5f) * CCharacter::GetDefaultParam(GetParam())->GetMoveSpeed();
-
-		}
-	}
-	//[W]キーを押した時
-	else if (CHossoLibrary::CheckMove(CHossoLibrary::UP))
-	{
-		//上に移動
-		GetMove().x += sinf(D3DX_PI * 1.0f) * CCharacter::GetDefaultParam(GetParam())->GetMoveSpeed();
-		GetMove().y += cosf(D3DX_PI * 1.0f) * CCharacter::GetDefaultParam(GetParam())->GetMoveSpeed();
-	}
-	//[S]キーを押した時
-	else if (CHossoLibrary::CheckMove(CHossoLibrary::DOWN))
-	{
-		//下に移動
-		GetMove().x += sinf(D3DX_PI * 0) * CCharacter::GetDefaultParam(GetParam())->GetMoveSpeed();
-		GetMove().y += cosf(D3DX_PI * 0) * CCharacter::GetDefaultParam(GetParam())->GetMoveSpeed();
 	}
 }
 

@@ -45,6 +45,8 @@ CScene2D::~CScene2D()
 //------------------------------------------------------------------------------
 HRESULT CScene2D::Init()
 {
+	MakeVertex();
+
 	return S_OK;
 }
 //------------------------------------------------------------------------------
@@ -217,15 +219,13 @@ std::unique_ptr<CScene2D> CScene2D::Create_SelfManagement(D3DXVECTOR3 pos, D3DXV
 	//メモリ確保
 	std::unique_ptr<CScene2D> pScene2D(new CScene2D);
 
-	//初期化
-	pScene2D->Init();
 
 	//座標とサイズ設定
 	pScene2D->SetPos(pos);
 	pScene2D->SetSize(size);
 
-	//頂点バッファ生成
-	pScene2D->MakeVertex();
+	//初期化
+	pScene2D->Init();
 
 	//return
 	return std::move(pScene2D);

@@ -29,6 +29,7 @@ public:
 		OBJTYPE_BACK,						//後ろ
 		OBJTYPE_MAPOBJECT,					//マップに配置されるオブジェクト
 		OBJTYPE_MESHFIELD,
+		OBJTYPE_WAY,
 		OBJTYPE_PLAYER,						//プレイヤー
 		OBJTYPE_ENEMY,						//敵
 		OBJTYPE_BULLET,						//弾
