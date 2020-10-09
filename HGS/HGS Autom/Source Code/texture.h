@@ -39,6 +39,9 @@ public:
 		TEX_WAY_LEFT01,						//道左
 		TEX_WAY_LEFT02,						//道左
 
+		TEX_ARROW_RIGHT,					//右方向
+		TEX_ARROW_LEFT,						//左方向
+
 		// --- UI ---
 		// BG
 		TEX_UI_BG_GRIDLINE,						// グリッド線

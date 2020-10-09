@@ -26,9 +26,10 @@
 //マクロ
 //------------------------------------------------------------------------------
 #define EFFECT_CREATE_POS (D3DXVECTOR3(0.0f, 50.0f, 100.0f))
-#define PARAMATER_SAVE_FILENAME ("data/Load/Effect/Paramater/SaveParamater.txt")
+#define PARAMATER_SAVE_FILENAME ("data/Load/EffectParam/SaveParamater.txt")
 #define LINE_LENGTH (500.0f)
 #define LINE_OFFSET (D3DXVECTOR3(0.0f,LINE_LENGTH,0.0f))
+
 
 //------------------------------------------------------------------------------
 //コンストラクタ
@@ -54,7 +55,7 @@ CDebug_EffectViewer::~CDebug_EffectViewer()
 HRESULT CDebug_EffectViewer::Init(HWND hWnd)
 {
 	//床
-	CMeshField::Create(ZeroVector3, D3DXVECTOR3(50.0f, 50.0f, 50.0f), INTEGER2(20, 20));
+	//CMeshField::Create(ZeroVector3, D3DXVECTOR3(50.0f, 50.0f, 50.0f), INTEGER2(20, 20));
 
 	//パーティクルのマネージャ
 	CParticleManager::Create();

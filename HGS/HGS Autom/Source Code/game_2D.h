@@ -53,6 +53,7 @@ private:
 	bool m_bBendingFlag;								//曲がりのフラグ
 	int m_nBendingTime;									//曲がってる時間
 	int m_nTime;										//タイム
+	int m_nBendingCountDown;							//曲がるときのカウントダウン
 
 	std::shared_ptr<CMultiNumber> m_pScoreNumber;
 	std::shared_ptr<CMultiNumber> m_pTimeNumber;
