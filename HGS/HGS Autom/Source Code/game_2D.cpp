@@ -19,6 +19,7 @@
 #include "ParticleManager.h"
 #include "multinumber.h"
 #include "bg.h"
+#include "particle.h"
 //------------------------------------------------------------------------------
 //静的メンバ変数の初期化
 //------------------------------------------------------------------------------
@@ -30,12 +31,13 @@
 #define WAY_SIZE (400.0f)
 #define BENDING_TIME (4)
 #define DEFAULT_TIME (30)
+#define COUNTDOWN	(3)
 //------------------------------------------------------------------------------
 //コンストラクタ
 //------------------------------------------------------------------------------
 CGame_2D::CGame_2D()
 {
-	m_nSpeed = 10;
+	m_nSpeed = 15;
 	m_direction = DIRECTION::UP;
 	m_nCnt = 0;
 	m_nScoreDistance = 0;
@@ -43,6 +45,7 @@ CGame_2D::CGame_2D()
 	m_bBendingFlag = false;
 	m_nTime = DEFAULT_TIME;
 	m_pWayList = {};
+	m_nBendingCountDown = COUNTDOWN;
 }
 //------------------------------------------------------------------------------
 //デストラクタ
@@ -78,9 +81,10 @@ HRESULT CGame_2D::Init(HWND hWnd)
 
 
 	m_pScoreNumber = CMultiNumber::Create(D3DXVECTOR3(1000.0f, 100.0f, 0.0f), D3DXVECTOR3(50.0f, 75.0f, 0.0f),0,7, CScene::OBJTYPE_UI);
+
 	m_pTimeNumber = CMultiNumber::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 50.0f, 0.0f), D3DXVECTOR3(50.0f, 75.0f, 0.0f), m_nTime, 2, CScene::OBJTYPE_UI);
 
-	m_pNextBending = CScene2D::Create_Shared(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 300.0f, 0.0f), D3DXVECTOR3(200.0f, 200.0f, 0.0f), CScene::OBJTYPE_UI);
+	m_pNextBending = CScene2D::Create_Shared(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 300.0f, 0.0f), D3DXVECTOR3(150.0f, 150.0f, 0.0f), CScene::OBJTYPE_UI);
 	m_pNextBending->SetDisp(false);
 
 	//最初のカーブ
@@ -113,10 +117,6 @@ void CGame_2D::Update()
 		if (m_nCnt % 60 == 0)
 		{
 			AddTimer(-1);
-		}
-
-		if (m_nCnt % 60 == 0)
-		{
 			m_nSpeed += 1;
 		}
 
@@ -134,6 +134,25 @@ void CGame_2D::Update()
 
 		//次の曲がり角までの差分
 		float fNextBendingDistance = m_fNextBendingPoint - m_nScoreDistance;
+
+
+		CDebugProc::Print(CDebugProc::PLACE_LEFT, "fNextBendingDistance >> %.2f\n", fNextBendingDistance + DEFAULT_CREATE_POS);
+
+		if (fNextBendingDistance + DEFAULT_CREATE_POS + 170 < 400 * m_nBendingCountDown)
+		{
+			m_pNextBending->SetDisp(true);
+			m_nBendingCountDown--;
+
+			printf("CountDown %d\n", m_nBendingCountDown);
+
+			CParticle::CreateFromText(m_pNextBending->GetPos(), ZeroVector3, CParticleParam::EFFECT_COUNTDOWN);
+
+		}
+		else
+		{
+			//m_pNextBending->SetDisp(false);
+		}
+
 
 		if (m_pWayList[m_pWayList.size() - 1]->GetPos().y >= -600.0f)
 		{
@@ -280,9 +299,23 @@ void CGame_2D::AddTimer(int nAddTime)
 void CGame_2D::Bending()
 {
 	m_NextBendingDirection = (DIRECTION)(rand() % 2);
-	//m_fNextBendingPoint = m_nScoreDistance + (m_nSpeed * 60) + rand() % (m_nSpeed * 60);
-	m_fNextBendingPoint = m_nScoreDistance + (m_nSpeed * 60);
+	m_fNextBendingPoint = (float)(m_nScoreDistance + (m_nSpeed * 60) + rand() % (m_nSpeed * 60));
+	//m_fNextBendingPoint = m_nScoreDistance + (m_nSpeed * 60);
 	//m_fNextBendingPoint = m_nScoreDistance + 2500.0f;
+
+	m_nBendingCountDown = COUNTDOWN;
+	m_pNextBending->SetDisp(false);
+
+
+	if (m_NextBendingDirection == DIRECTION::LEFT)
+	{
+		m_pNextBending->BindTexture(CTexture::GetTexture(CTexture::TEX_ARROW_LEFT));
+	}
+	if (m_NextBendingDirection == DIRECTION::RIGHT)
+	{
+		m_pNextBending->BindTexture(CTexture::GetTexture(CTexture::TEX_ARROW_RIGHT));
+	}
+
 
 	m_bBendingFlag = true;
 
