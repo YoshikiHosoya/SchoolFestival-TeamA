@@ -20,8 +20,6 @@
 #define FIGURE_SIZE_MEDIUM		(D3DXVECTOR3(50.0f, 50.0f, 0.0f))
 #define FIGURE_SIZE_BIG			(D3DXVECTOR3(100.0f, 100.0f, 0.0f))
 
-#define FIGURE_MOVE				(D3DXVECTOR3(0.0f, 10.0f, 0.0f))
-
 //------------------------------------------------------------------------------
 //静的メンバ変数の初期化
 //------------------------------------------------------------------------------
@@ -34,8 +32,10 @@ CBg::CBg()
 	m_apScene2D.clear();
 	m_pGridLine.reset();
 	m_FigureSize = ZeroVector3;
+	m_FigureMove = ZeroVector3;
 	m_FigureSizeType = BG_FIGURE_SIZE::NONE;
 	m_FigureType = BG_FIGURE::BG_NONE;
+	m_nCntScroll = 0;
 }
 
 //------------------------------------------------------------------------------
@@ -50,6 +50,13 @@ CBg::~CBg()
 //------------------------------------------------------------------------------
 HRESULT CBg::Init()
 {
+	if (CManager::GetMode() == CManager::MODE_2DGAME)
+	{
+		m_pGridLine = CScene2D::Create_Shared(SCREEN_CENTER_POS, SCREEN_SIZE, CScene::OBJTYPE_BACK);
+		m_pGridLine->BindTexture(CTexture::GetTexture(CTexture::TEX_UI_BG_GRIDLINE));
+
+	}
+	
 	return S_OK;
 }
 
@@ -67,6 +74,8 @@ void CBg::Uninit()
 void CBg::Update()
 {
 	D3DXVECTOR3 move = ZeroVector3;
+	// カウントアップ
+	m_nCntScroll++;
 
 	// 図形のランダム生成
 	RandomFigure();
@@ -80,11 +89,13 @@ void CBg::Update()
 				CGame_2D *pGame2D = (CGame_2D*)CManager::GetGame();
 				move.y = (float)pGame2D->GetSpeed();
 
-				m_apScene2D[nCnt]->SetPos(move);
+				m_apScene2D[nCnt]->GetPos().y += move.y * ((float)m_apScene2D[nCnt]->GetSize().y / 50);
 			}
 			else
 			{
-				m_apScene2D[nCnt]->GetPos() += FIGURE_MOVE;
+				m_FigureMove.y = (float)m_apScene2D[nCnt]->GetSize().y / 10;
+
+				m_apScene2D[nCnt]->GetPos().y += m_FigureMove.y;
 			}
 
 			// 範囲外
@@ -95,6 +106,11 @@ void CBg::Update()
 				m_apScene2D.erase(m_apScene2D.begin() + nCnt);
 			}
 		}
+	}
+	//m_nCntScroll
+	if (m_pGridLine)
+	{
+		m_pGridLine->SetAnimation(D3DXVECTOR2(0.0f, 0.0f), D3DXVECTOR2(0.0f, 0.0f));
 	}
 
 	CDebugProc::Print(CDebugProc::PLACE_LEFT, "FigureNum >> %d\n", m_apScene2D.size());
@@ -116,6 +132,7 @@ std::unique_ptr<CBg> CBg::Create()
 	//メモリ確保
 	std::unique_ptr<CBg> pBg(new CBg);
 
+	pBg->Init();
 	pBg->SetObjType(OBJTYPE::OBJTYPE_BACK);
 	pBg->AddUniqueList(std::move(pBg));
 
@@ -153,7 +170,7 @@ void CBg::RandomFigure()
 	// 図形の生成
 	if (nCntTime > 60)
 	{
-		m_apScene2D.emplace_back(CScene2D::Create_Shared(D3DXVECTOR3((float)(rand() % 1280), 0.0f, 0.0f), m_FigureSize, CScene::OBJTYPE_MAPOBJECT));
+		m_apScene2D.emplace_back(CScene2D::Create_Shared(D3DXVECTOR3((float)(rand() % 1280), -100.0f, 0.0f), m_FigureSize, CScene::OBJTYPE_BACK));
 
 		switch (m_FigureType)
 		{

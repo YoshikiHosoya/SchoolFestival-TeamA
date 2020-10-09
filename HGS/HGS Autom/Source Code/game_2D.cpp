@@ -18,6 +18,7 @@
 #include "Way.h"
 #include "ParticleManager.h"
 #include "multinumber.h"
+#include "bg.h"
 //------------------------------------------------------------------------------
 //静的メンバ変数の初期化
 //------------------------------------------------------------------------------
@@ -63,6 +64,9 @@ HRESULT CGame_2D::Init(HWND hWnd)
 
 	//パーティクルのマネージャ
 	CParticleManager::Create();
+
+	// 背景の生成
+	CBg::Create();
 
 	for (int nCnt = 0; nCnt < 5; nCnt++)
 	{
