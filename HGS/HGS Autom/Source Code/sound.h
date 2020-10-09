@@ -33,12 +33,23 @@ public:
 		LABEL_SE_EXPLOSION_02,						//爆発
 		LABEL_SE_EXPLOSION_03,						//爆発
 		LABEL_SE_EXPLOSION_04,						//爆発
+		LABEL_SE_COUNTDOWN,							//カウントダウン
+		LABEL_SE_GOOD,								//グッド
+		LABEL_SE_GREAT,								//グレイト
+		LABEL_SE_PERFECT,							//パーフェクト
+		LABEL_SE_SCORE_CHECK,						//スコアチェック
+		LABEL_SE_SPEED_UP,							//スピードアップ
+		LABEL_SE_ADDTIME,							//タイム追加
+		LABEL_SE_ARROW,								//矢印
 
 		//システム音
 		LABEL_SE_DECISION,						//決定
 		LABEL_SE_CANCEL,						//キャンセル
 		LABEL_SE_SELECT,						//選択
 		LABEL_SE_PAUSE,							//ポーズ
+		LABEL_SE_DEATH,							//死
+
+
 		LABEL_MAX,
 	} LABEL;
 
@@ -86,13 +97,21 @@ private:
 		{ "data/SE/Effect/explosion_02.wav", 0 },					//SE 爆発
 		{ "data/SE/Effect/explosion_03.wav", 0 },					//SE 爆発
 		{ "data/SE/Effect/explosion_04.wav", 0 },					//SE 爆発
+		{ "data/SE/Effect/countdown.wav", 0 },						//SE カウントダウン
+		{ "data/SE/Effect/good.wav", 0 },							//SE グッド
+		{ "data/SE/Effect/great.wav", 0 },							//SE グレイト
+		{ "data/SE/Effect/perfect.wav", 0 },						//SE パーフェクト
+		{ "data/SE/Effect/scorecheck.wav", 0 },						//SE スコアチェック
+		{ "data/SE/Effect/speedup.wav", 0 },						//SE スピードアップ
+		{ "data/SE/Effect/addtime.wav", 0 },						//SE タイム追加
+		{ "data/SE/Effect/arrow.wav", 0 },							//SE 矢印
 
 		//システム音
-		{ "data/SE/System/decision.wav", 0 },						//SE 決定
+		{ "data/SE/System/Determining_sound.wav", 0 },				//SE 決定
 		{ "data/SE/System/cancel.wav", 0 },							//SE キャンセル
 		{ "data/SE/System/select.wav", 0 },							//SE 選択
 		{ "data/SE/System/pause.wav", 0 },							//SE ポーズ
-
+		{ "data/SE/System/Death.wav", 0 },							//SE 死
 	};
 
 };

@@ -26,6 +26,10 @@ FILENAME_LIST CTexture::m_aTexFileName =
 	{ "data/TEXTURE/Way/Left01.png" },				//道
 	{ "data/TEXTURE/Way/Left02.png" },				//道
 
+	{ "data/TEXTURE/Way/Right_arrow.png" },				//道
+	{ "data/TEXTURE/Way/Left_arrow.png" },				//道
+
+
 	{ "data/TEXTURE/UI/BG/GridLine.png" },						//グリッド線
 	{ "data/TEXTURE/UI/BG/circle.png" },						//まる
 	{ "data/TEXTURE/UI/BG/triangle.png" },						//三角

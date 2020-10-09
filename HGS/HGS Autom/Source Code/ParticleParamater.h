@@ -26,6 +26,7 @@ public:
 	enum PARTICLE_TYPE
 	{
 		EFFECT_DEFAULT = 0,						//
+		EFFECT_COUNTDOWN,						//
 		PARTICLE_MAX,
 	};
 

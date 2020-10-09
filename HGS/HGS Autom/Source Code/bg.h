@@ -62,8 +62,10 @@ private:
 	std::shared_ptr<CScene2D>					m_pGridLine;						// グリッド線
 
 	D3DXVECTOR3			m_FigureSize;			// 図形のサイズ
+	D3DXVECTOR3			m_FigureMove;			// 図形の移動量
 	BG_FIGURE_SIZE		m_FigureSizeType;		// 図形のサイズの種類
 	BG_FIGURE			m_FigureType;			// 図形の種類
+	int					m_nCntScroll;			// スクロールカウント
 };
 
 #endif
