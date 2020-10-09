@@ -39,15 +39,21 @@ public:
 		TEX_WAY_LEFT01,						//道左
 		TEX_WAY_LEFT02,						//道左
 
-		//UI
+		// --- UI ---
+		//タイトル
+		TEX_UI_TITLE_NAME,						// タイトルロゴ
+
 		//ランキング
 		TEX_UI_RANKING_NAME,					// ランキングロゴ
+		TEX_UI_RANKING_SCORE,					// ランキングスコア
 		TEX_UI_RANKING_1st,						// 1位
 		TEX_UI_RANKING_2nd,						// 2位
 		TEX_UI_RANKING_3rd,						// 3位
 		TEX_UI_RANKING_4th,						// 4位
 		TEX_UI_RANKING_5th,						// 5位
 		TEX_UI_RANKING_GO_TITLE,				// タイトルへ
+
+		TEX_UI_ENTER,							// Enter
 
 		TEX_MAX									//MAX
 	};
@@ -61,6 +67,7 @@ public:
 		//エフェクト
 		SEPARATE_TEX_EFFECT_EXPLOSION00,			//爆発
 
+		SEPARATE_TEX_UI_NUMBER,						// ナンバー
 
 		SEPARATE_TEX_MAX							//MAX
 	};

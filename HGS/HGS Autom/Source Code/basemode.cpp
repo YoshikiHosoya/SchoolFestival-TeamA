@@ -32,10 +32,10 @@ void CBaseMode::DebugCommand()
 
 	CDebugProc::Print(CDebugProc::PLACE_LEFT, "[Ctrl] + テンキー [0] : 現在のModeに遷移\n");
 	CDebugProc::Print(CDebugProc::PLACE_LEFT, "[Ctrl] + テンキー [1] : Titleに遷移\n");
-	CDebugProc::Print(CDebugProc::PLACE_LEFT, "[Ctrl] + テンキー [2] : 2DGameに遷移\n");
-	//CDebugProc::Print(CDebugProc::PLACE_LEFT, "[Ctrl] + テンキー [3] : 3DGameに遷移\n");
+	CDebugProc::Print(CDebugProc::PLACE_LEFT, "[Ctrl] + テンキー [2] : Tutorialに遷移\n");
+	CDebugProc::Print(CDebugProc::PLACE_LEFT, "[Ctrl] + テンキー [3] : 2DGameに遷移\n");
 	CDebugProc::Print(CDebugProc::PLACE_LEFT, "[Ctrl] + テンキー [4] : Resultに遷移\n");
-	//CDebugProc::Print(CDebugProc::PLACE_LEFT, "[Ctrl] + テンキー [7] : MapEditorに遷移\n");
+	CDebugProc::Print(CDebugProc::PLACE_LEFT, "[Ctrl] + テンキー [5] : Rankingに遷移\n");
 	CDebugProc::Print(CDebugProc::PLACE_LEFT, "[Ctrl] + テンキー [8] : EffectViewerに遷移\n");
 	//CDebugProc::Print(CDebugProc::PLACE_LEFT, "[Ctrl] + テンキー [9] : MotionViewerに遷移\n");
 
