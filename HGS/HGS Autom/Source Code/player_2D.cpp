@@ -25,6 +25,7 @@
 //------------------------------------------------------------------------------
 CPlayer_2D::CPlayer_2D()
 {
+
 }
 
 //------------------------------------------------------------------------------
@@ -32,6 +33,7 @@ CPlayer_2D::CPlayer_2D()
 //------------------------------------------------------------------------------
 CPlayer_2D::~CPlayer_2D()
 {
+
 }
 //------------------------------------------------------------------------------
 //初期化処理
@@ -44,7 +46,7 @@ HRESULT CPlayer_2D::Init()
 	std::unique_ptr<CScene2D> pScene2D = CScene2D::Create_SelfManagement(GetPos(), D3DXVECTOR3(50.0f, 50.0f, 0.0f));
 
 	//テクスチャ設定
-	pScene2D->BindTexture(CTexture::GetTexture(CTexture::SEPARATE_TEX_PLAYER));
+	pScene2D->BindTexture(CTexture::GetTexture(CTexture::TEX_PLAYER));
 
 	//Scene2Dセット
 	SetScene2D(std::move(pScene2D));
