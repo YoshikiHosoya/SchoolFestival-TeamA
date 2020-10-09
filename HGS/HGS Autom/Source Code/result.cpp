@@ -74,7 +74,7 @@ void CResult::Update()
 		if (CHossoLibrary::CheckAnyButton())
 		{
 				//ステート変更
-				CManager::GetRenderer()->GetFade()->SetModeFade(CManager::MODE_TITLE);
+				CManager::GetRenderer()->GetFade()->SetModeFade(CManager::MODE_RANKING);
 				CManager::GetSound()->Play(CSound::LABEL_SE_DECISION);
 		}
 	}

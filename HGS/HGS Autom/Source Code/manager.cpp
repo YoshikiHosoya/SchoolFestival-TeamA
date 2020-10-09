@@ -24,6 +24,8 @@
 #include "TestMode.h"
 #include "game_2D.h"
 #include "game_3D.h"
+#include "tutorial.h"
+#include "ranking.h"
 //------------------------------------------------------------------------------
 //ê√ìIÉÅÉìÉoïœêîÇÃèâä˙âª
 //------------------------------------------------------------------------------
@@ -34,7 +36,7 @@ std::unique_ptr<CMouse> CManager::m_pMouse			= nullptr;
 std::unique_ptr<CPad_XInput> CManager::m_pXInput	= nullptr;
 std::unique_ptr<CBaseMode> CManager::m_pBaseMode	= nullptr;
 
-CManager::MODE CManager::m_mode = CManager::MODE_2DGAME;
+CManager::MODE CManager::m_mode = CManager::MODE_TITLE;
 HWND CManager::m_hWnd = nullptr;
 int CManager::m_nNumChangeMode = 0;
 //------------------------------------------------------------------------------
@@ -254,8 +256,8 @@ void CManager::SetMode(MODE nextmode)
 
 		//title
 	case MODE_TUTORIAL:
-		m_pBaseMode.reset(new CTitle);
-		std::cout << "new BaseMode[Title]" << NEWLINE;
+		m_pBaseMode.reset(new CTutorial);
+		std::cout << "new BaseMode[Tutorial]" << NEWLINE;
 		m_pSound->Play(CSound::LABEL_BGM_TITLE);
 		break;
 
@@ -269,14 +271,14 @@ void CManager::SetMode(MODE nextmode)
 		//result
 	case MODE_RESULT:
 		m_pBaseMode.reset(new CResult);
-		std::cout << "new BaseMode[result]" << NEWLINE;
+		std::cout << "new BaseMode[Result]" << NEWLINE;
 		m_pSound->Play(CSound::LABEL_BGM_RESULT);
 		break;
 
 		//game
 	case MODE_RANKING:
-		m_pBaseMode.reset(new CGame_3D);
-		std::cout << "new BaseMode[3DGame]" << NEWLINE;
+		m_pBaseMode.reset(new CRanking);
+		std::cout << "new BaseMode[Ranking]" << NEWLINE;
 		m_pSound->Play(CSound::LABEL_BGM_GAME);
 		break;
 
