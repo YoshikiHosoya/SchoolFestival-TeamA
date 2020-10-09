@@ -19,10 +19,38 @@
 //クラス定義
 //------------------------------------------------------------------------------
 class CMultiNumber;
+class CScene2D;
 
 class CRanking : public CBaseMode
 {
 public:
+
+	// ランキングUIの種類
+	enum class RANKING_UI
+	{
+		NONE = -1,
+		RANKING_NAME,				// 名前ロゴ
+		RANKING_1st,				// 順位1位
+		RANKING_2nd,				// 順位2位
+		RANKING_3rd,				// 順位3位
+		RANKING_4th,				// 順位4位
+		RANKING_5th,				// 順位5位
+		RANKING_GO_TITLE,			// タイトルへ
+		RANKING_MAX,
+	};
+
+	// ランキングデータ
+	enum class RANKING_SCORE
+	{
+		NONE = -1,
+		SCORE_1st,					// 順位1位
+		SCORE_2nd,					// 順位2位
+		SCORE_3rd,					// 順位3位
+		SCORE_4th,					// 順位4位
+		SCORE_5th,					// 順位5位
+		SCORE_MAX,
+	};
+
 	CRanking();
 	~CRanking();
 
@@ -35,7 +63,17 @@ public:
 	CPlayer* GetPlayer() { return nullptr; };		//プレイヤー取得処理
 
 private:
-	int m_nCntResult;	//カウンタ
+	void					RankingUICreate();										// ランキングUIの生成
+	void					RankingScoreCreate();									// ランキングスコアの生成
+
+	static char				*m_RankingFileName;										// ランキングのファイル名
+	static char				*m_SaveScoreFileName;									// スコアのファイル名
+
+	std::vector<int>				m_nRankingScore;										// 上位5位のランキング情報
+	int								m_nCntResult;											//カウンタ
+	std::vector<std::shared_ptr<CScene2D>>		m_apScene2D;						// ランキングUI 
+	std::vector<std::shared_ptr<CMultiNumber>>	m_apRankScore;					// スコアのUI
+
 };
 
 #endif
