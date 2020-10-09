@@ -20,6 +20,12 @@ FILENAME_LIST CTexture::m_aTexFileName =
 	{ "data/TEXTURE/Character/Player000.png" },				//プレイヤー
 	{ "data/TEXTURE/Character/Enemy000.png" },				//エネミー
 
+	{ "data/TEXTURE/Way/UP.png" },					//道
+	{ "data/TEXTURE/Way/Right01.png" },				//道
+	{ "data/TEXTURE/Way/Right02.png" },				//道
+	{ "data/TEXTURE/Way/Left01.png" },				//道
+	{ "data/TEXTURE/Way/Left02.png" },				//道
+
 };
 
 //テクスチャ名の設定

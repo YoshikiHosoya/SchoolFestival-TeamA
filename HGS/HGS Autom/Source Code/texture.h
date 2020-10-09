@@ -30,8 +30,15 @@ public:
 		TEX_EFFECT_PARTICLE,					//パーティクル
 
 		//キャラクター
-		SEPARATE_TEX_PLAYER,						//プレイヤー
-		SEPARATE_TEX_ENEMY,							//敵
+		TEX_PLAYER,						//プレイヤー
+		TEX_ENEMY,							//敵
+
+		TEX_WAY_UP,							//道上
+		TEX_WAY_RIGHT01,					//道右
+		TEX_WAY_RIGHT02,					//道右
+		TEX_WAY_LEFT01,						//道左
+		TEX_WAY_LEFT02,						//道左
+
 
 		TEX_MAX									//MAX
 	};
