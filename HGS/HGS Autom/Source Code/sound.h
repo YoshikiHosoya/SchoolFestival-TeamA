@@ -47,6 +47,7 @@ public:
 		LABEL_SE_CANCEL,						//キャンセル
 		LABEL_SE_SELECT,						//選択
 		LABEL_SE_PAUSE,							//ポーズ
+		LABEL_SE_DEATH,							//死
 
 
 		LABEL_MAX,
@@ -106,11 +107,11 @@ private:
 		{ "data/SE/Effect/arrow.wav", 0 },							//SE 矢印
 
 		//システム音
-		{ "data/SE/System/decision.wav", 0 },						//SE 決定
+		{ "data/SE/System/Determining_sound.wav", 0 },				//SE 決定
 		{ "data/SE/System/cancel.wav", 0 },							//SE キャンセル
 		{ "data/SE/System/select.wav", 0 },							//SE 選択
 		{ "data/SE/System/pause.wav", 0 },							//SE ポーズ
-
+		{ "data/SE/System/Death.wav", 0 },							//SE 死
 	};
 
 };
