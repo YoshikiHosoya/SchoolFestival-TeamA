@@ -79,7 +79,6 @@ void CWay::Update()
 	default:
 		break;
 	}
-
 }
 //------------------------------------------------------------------------------
 //•`‰æˆ—
@@ -139,3 +138,50 @@ std::shared_ptr<CWay> CWay::Create(D3DXVECTOR3 pos, WAY_TYPE waytype)
 	return nullptr;
 }
 
+//------------------------------------------------------------------------------
+//“–‚½‚è”»’èˆ—
+//------------------------------------------------------------------------------
+bool CWay::Collision(D3DXVECTOR3 pos)
+{
+	// X Y‚Ì”ÍˆÍ
+	if (this->GetPos().y + this->GetSize().y * 0.5f >=	pos.y &&
+		this->GetPos().y - this->GetSize().y * 0.5f <=	pos.y)
+	{
+		return true;
+	}
+	return false;
+}
+
+//------------------------------------------------------------------------------
+//“–‚½‚è”»’èˆ—
+//------------------------------------------------------------------------------
+bool CWay::CollisionPlayerHit(D3DXVECTOR3 pos)
+{
+	switch (m_waytype)
+	{
+	case CWay::UP:
+		// X Y‚Ì”ÍˆÍ
+		if (this->GetPos().x + this->GetSize().x * 0.5f <= pos.x ||
+			this->GetPos().x - this->GetSize().x * 0.5f >= pos.x)
+		{
+			return true;
+		}
+		break;
+	case CWay::RIGHT_01:
+	case CWay::LEFT_02:
+		if(this->GetPos().x - this->GetSize().x * 0.5f >= pos.x)
+		{
+			return true;
+		}
+		break;
+	case CWay::LEFT_01:
+	case CWay::RIGHT_02:
+		if (this->GetPos().x + this->GetSize().x * 0.5f <= pos.x)
+		{
+			return true;
+		}
+		break;
+	}
+
+	return false;
+}

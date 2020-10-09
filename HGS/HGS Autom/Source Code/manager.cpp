@@ -26,6 +26,7 @@
 #include "game_3D.h"
 #include "tutorial.h"
 #include "ranking.h"
+#include "Debug\Debug_EffectViewer.h"
 //------------------------------------------------------------------------------
 //Ã“Iƒƒ“ƒo•Ï”‚Ì‰Šú‰»
 //------------------------------------------------------------------------------
@@ -36,7 +37,7 @@ std::unique_ptr<CMouse> CManager::m_pMouse			= nullptr;
 std::unique_ptr<CPad_XInput> CManager::m_pXInput	= nullptr;
 std::unique_ptr<CBaseMode> CManager::m_pBaseMode	= nullptr;
 
-CManager::MODE CManager::m_mode = CManager::MODE_TITLE;
+CManager::MODE CManager::m_mode = CManager::MODE_2DGAME;
 HWND CManager::m_hWnd = nullptr;
 int CManager::m_nNumChangeMode = 0;
 //------------------------------------------------------------------------------
@@ -279,6 +280,13 @@ void CManager::SetMode(MODE nextmode)
 	case MODE_RANKING:
 		m_pBaseMode.reset(new CRanking);
 		std::cout << "new BaseMode[Ranking]" << NEWLINE;
+		m_pSound->Play(CSound::LABEL_BGM_GAME);
+		break;
+
+		//game
+	case MODE_EFFECTVIEWER:
+		m_pBaseMode.reset(new CDebug_EffectViewer);
+		std::cout << "new BaseMode[EffectViewer]" << NEWLINE;
 		m_pSound->Play(CSound::LABEL_BGM_GAME);
 		break;
 

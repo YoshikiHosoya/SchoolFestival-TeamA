@@ -159,6 +159,7 @@
     <ClCompile Include="Source Code\character_3D.cpp" />
     <ClCompile Include="Source Code\collision.cpp" />
     <ClCompile Include="Source Code\Debug\debugproc.cpp" />
+    <ClCompile Include="Source Code\Debug\Debug_EffectViewer.cpp" />
     <ClCompile Include="Source Code\fade.cpp" />
     <ClCompile Include="Source Code\game.cpp" />
     <ClCompile Include="Source Code\game_2D.cpp" />
@@ -220,6 +221,7 @@
     <ClInclude Include="Source Code\character_3D.h" />
     <ClInclude Include="Source Code\collision.h" />
     <ClInclude Include="Source Code\Debug\debugproc.h" />
+    <ClInclude Include="Source Code\Debug\Debug_EffectViewer.h" />
     <ClInclude Include="Source Code\fade.h" />
     <ClInclude Include="Source Code\game.h" />
     <ClInclude Include="Source Code\GameObject.h" />

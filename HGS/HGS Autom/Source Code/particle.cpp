@@ -125,10 +125,10 @@ void CParticle::Draw()
 	RendererSetting();
 
 	//頂点バッファをデバイスのデータストリームにバインド
-	pDevice->SetStreamSource(0, m_pVtxBuff, 0, sizeof(VERTEX_3D));
+	pDevice->SetStreamSource(0, m_pVtxBuff, 0, sizeof(VERTEX_2D));
 
 	//頂点フォーマットの設定
-	pDevice->SetFVF(FVF_VERTEX_3D);
+	pDevice->SetFVF(FVF_VERTEX_2D);
 
 	//テクスチャの設定
 	//アニメーションするかどうかで変化
@@ -136,29 +136,9 @@ void CParticle::Draw()
 		pDevice->SetTexture(0, CTexture::GetSeparateTexture(m_pParticleParam->GetSeparateTex())) :
 		pDevice->SetTexture(0, CTexture::GetTexture(m_pParticleParam->GetTex()));
 
-	//ワールドマトリックス計算
-	CHossoLibrary::CalcMatrix(&m_WorldMtx, m_posOrigin, ZeroVector3);
-
-	//パーティクルのリストの数分
 
 	for (size_t nCnt = 0; nCnt < m_pParticleList.size(); nCnt++)
 	{
-		//マトリック計算
-		CHossoLibrary::CalcMatrix(&m_pParticleList[nCnt]->m_Mtx, m_pParticleList[nCnt]->m_pos, m_pParticleList[nCnt]->m_rot);
-
-		//原点のマトリックスを掛け合わせる
-		m_pParticleList[nCnt]->m_Mtx *= m_WorldMtx;
-
-		if (m_pParticleParam->GetBillboard())
-		{
-			//ビルボード設定
-			CHossoLibrary::SetBillboard(&m_pParticleList[nCnt]->m_Mtx);
-		}
-
-
-		// ワールドマトリックスの設定
-		pDevice->SetTransform(D3DTS_WORLD, &m_pParticleList[nCnt]->m_Mtx);
-
 		//ポリゴン描画
 		pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP,			//プリミティブの種類
 			(4 * m_nVertexID) + nCnt * 4,					//開始するインデックス(頂点) (前回までの分で使った頂点) + 現在使う分
@@ -217,7 +197,7 @@ void CParticle::UpdateVertex()
 	}
 
 	//頂点情報へのポインタ
-	VERTEX_3D *pVtx;
+	VERTEX_2D *pVtx;
 
 	//頂点データの範囲をロックし、頂点バッファへのポインタを取得
 	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
@@ -236,23 +216,12 @@ void CParticle::UpdateVertex()
 		//移動
 		m_pParticleList[nCnt]->m_pos += m_pParticleList[nCnt]->m_move;
 
-		//中心が原点じゃない場合
-		if (m_pParticleParam->GetCollisionSizeCalc())
-		{
-			//頂点の座標
-			pVtx[0].pos = D3DXVECTOR3(-m_pParticleParam->GetSize().x, +m_pParticleParam->GetSize().y * 2.0f, 0.0f);
-			pVtx[1].pos = D3DXVECTOR3(+m_pParticleParam->GetSize().x, +m_pParticleParam->GetSize().y * 2.0f, 0.0f);
-			pVtx[2].pos = D3DXVECTOR3(-m_pParticleParam->GetSize().x, 0.0f, 0.0f);
-			pVtx[3].pos = D3DXVECTOR3(+m_pParticleParam->GetSize().x, 0.0f, 0.0f);
-		}
-		else
-		{
-			//頂点の座標
-			pVtx[0].pos = D3DXVECTOR3(-m_pParticleParam->GetSize().x, m_pParticleParam->GetSize().y, 0.0f);
-			pVtx[1].pos = D3DXVECTOR3(m_pParticleParam->GetSize().x, m_pParticleParam->GetSize().y, 0.0f);
-			pVtx[2].pos = D3DXVECTOR3(-m_pParticleParam->GetSize().x, -m_pParticleParam->GetSize().y, 0.0f);
-			pVtx[3].pos = D3DXVECTOR3(m_pParticleParam->GetSize().x, -m_pParticleParam->GetSize().y, 0.0f);
-		}
+		//頂点の座標
+		pVtx[0].pos = m_pParticleList[nCnt]->m_pos +  D3DXVECTOR3( -m_pParticleParam->GetSize().x,  -m_pParticleParam->GetSize().y, 0.0f);
+		pVtx[1].pos = m_pParticleList[nCnt]->m_pos +  D3DXVECTOR3(  m_pParticleParam->GetSize().x,   -m_pParticleParam->GetSize().y, 0.0f);
+		pVtx[2].pos = m_pParticleList[nCnt]->m_pos +  D3DXVECTOR3( -m_pParticleParam->GetSize().x, +m_pParticleParam->GetSize().y, 0.0f);
+		pVtx[3].pos = m_pParticleList[nCnt]->m_pos +  D3DXVECTOR3(  m_pParticleParam->GetSize().x,  +m_pParticleParam->GetSize().y, 0.0f);
+
 		//頂点の座標
 		pVtx[0].col = m_pParticleParam->GetCol();
 		pVtx[1].col = m_pParticleParam->GetCol();
@@ -458,9 +427,9 @@ HRESULT CParticle::MakeVertex()
 	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
 
 	//頂点バッファの生成
-	pDevice->CreateVertexBuffer(sizeof(VERTEX_3D) * MAX_PARTICLE * 4,	//確保するバッファサイズ
+	pDevice->CreateVertexBuffer(sizeof(VERTEX_2D) * MAX_PARTICLE * 4,	//確保するバッファサイズ
 		D3DUSAGE_WRITEONLY,
-		FVF_VERTEX_3D,			//頂点フォーマット
+		FVF_VERTEX_2D,			//頂点フォーマット
 		D3DPOOL_MANAGED,
 		&m_pVtxBuff,
 		nullptr);
@@ -476,7 +445,7 @@ HRESULT CParticle::MakeVertex()
 void CParticle::ResetVertex()
 {
 	//頂点情報へのポインタ
-	VERTEX_3D *pVtx;
+	VERTEX_2D *pVtx;
 
 	//頂点データの範囲をロックし、頂点バッファへのポインタを取得
 	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
@@ -490,10 +459,10 @@ void CParticle::ResetVertex()
 		pVtx[3].pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
 		//頂点の同次座標
-		pVtx[0].nor = D3DXVECTOR3(0.0f, 0.0f, -1.0f);
-		pVtx[1].nor = D3DXVECTOR3(0.0f, 0.0f, -1.0f);
-		pVtx[2].nor = D3DXVECTOR3(0.0f, 0.0f, -1.0f);
-		pVtx[3].nor = D3DXVECTOR3(0.0f, 0.0f, -1.0f);
+		pVtx[0].rhw = 1.0f;
+		pVtx[1].rhw = 1.0f;
+		pVtx[2].rhw = 1.0f;
+		pVtx[3].rhw = 1.0f;
 
 		//頂点の色
 		pVtx[0].col = WhiteColor;
@@ -615,7 +584,7 @@ void CParticle::SetParticle(D3DXVECTOR3 & pos, D3DXVECTOR3 const & rot, CParticl
 
 
 		//パーティクル生成
-		std::unique_ptr<COneParticle>pOneParticle = COneParticle::Create(randompos, move, rot);
+		std::unique_ptr<COneParticle>pOneParticle = COneParticle::Create(pos, move, rot);
 		//配列に追加
 		m_pParticleList.emplace_back(std::move(pOneParticle));
 	}

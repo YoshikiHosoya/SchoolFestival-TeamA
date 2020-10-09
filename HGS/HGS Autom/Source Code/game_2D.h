@@ -18,6 +18,7 @@
 //クラス定義
 //------------------------------------------------------------------------------
 class CWay;
+class CScene2D;
 
 class CGame_2D : public CGame
 {
@@ -31,15 +32,17 @@ public:
 	void ShowDebugInfo();									//デバッグ情報表記
 
 
-	float GetSpeed() { return m_fSpeed; };
+	int GetSpeed() { return m_nSpeed; };
 	DIRECTION GetDirection() { return m_direction; };
 	void Bending();
 	void PlayerBending(DIRECTION Direction);
+	void GameEnd();
+
 protected:
 private:
 	int m_nCnt;
-	float m_fSpeed;										//移動速度
-	float m_fScoreDistance;								//総合距離
+	int m_nSpeed;										//移動速度
+	int m_nScoreDistance;								//総合距離
 	DIRECTION m_direction;								//向き
 
 	float m_fNextBendingPoint;							//次の曲がり角までの距離
