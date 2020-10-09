@@ -171,6 +171,29 @@ void CScene2D::SetAnimation(D3DXVECTOR2 UV, D3DXVECTOR2 size)
 }
 
 //------------------------------------------------------------------------------
+//色設定
+//------------------------------------------------------------------------------
+void CScene2D::SetColor(D3DXCOLOR col)
+{
+	CSceneBase::SetColor(col);
+
+	//頂点情報へのポインタ
+	VERTEX_2D *pVtx;
+
+	//頂点データの範囲をロックし、頂点バッファへのポインタを取得
+	GetVtxBuff()->Lock(0, 0, (void**)&pVtx, 0);
+
+	//頂点の色
+	pVtx[0].col = col;
+	pVtx[1].col = col;
+	pVtx[2].col = col;
+	pVtx[3].col = col;
+
+	//頂点データをアンロック
+	GetVtxBuff()->Unlock();
+}
+
+//------------------------------------------------------------------------------
 //生成処理　共有管理用
 //------------------------------------------------------------------------------
 std::shared_ptr<CScene2D> CScene2D::Create_Shared(D3DXVECTOR3 pos, D3DXVECTOR3 size, OBJTYPE objtype)

@@ -160,7 +160,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hInstancePrev, LPSTR lpCmdLine
 				//最後に更新した時間を保存
 				dwExeclastTime = dwCurrentTime;
 
+#ifdef DEBUG
+
 				DWORD StartTime = timeGetTime();
+#endif // DEBUG
 
 				//更新処理
 				pManager->Update();
@@ -168,9 +171,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hInstancePrev, LPSTR lpCmdLine
 				//描画処理
 				pManager->Draw();
 
+#ifdef DEBUG
 				DWORD EndTime = timeGetTime();
 
 				g_nCountInterval = EndTime - StartTime;
+#endif // DEBUG
 
 				//回数をカウント
 				dwFrameCount++;
