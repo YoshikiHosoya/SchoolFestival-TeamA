@@ -16,6 +16,7 @@
 #include "sound.h"
 #include "scene2D.h"
 #include "multinumber.h"
+#include "game.h"
 
 //------------------------------------------------------------------------------
 //マクロ
@@ -39,11 +40,6 @@ char *CRanking::m_RankingFileName =
 {
 	"data/Ranking/RankingData.txt" 			// ランキングの情報
 };
-char *CRanking::m_SaveScoreFileName =
-{
-	"data/Ranking/SaveScoreData.txt" 			// ランキングの情報
-};
-
 
 //------------------------------------------------------------------------------
 //コンストラクタ
@@ -78,8 +74,6 @@ HRESULT CRanking::Init(HWND hWnd)
 
 	// スコアの読み込み
 	RankingDataLoad();
-	// プレイヤーのスコアを読み込み
-	PlayerScoreLoad();
 	// UI生成
 	RankingUICreate();
 	// スコア生成
@@ -141,7 +135,6 @@ void CRanking::Draw()
 			m_apScene2D[nCnt]->Draw();
 		}
 	}
-
 }
 
 //------------------------------------------------------------------------------
@@ -193,7 +186,7 @@ void CRanking::RankingScoreCreate()
 {
 	for (int nCnt = 0; nCnt < (int)RANKING_SCORE::SCORE_MAX; nCnt++)
 	{
-		m_nRankingScore.emplace_back(1000000);
+		m_nRankingScore.emplace_back(0);
 
 		// スコアの生成
 		m_apRankScore.emplace_back((CMultiNumber::Create(D3DXVECTOR3((SCREEN_WIDTH * 0.8f), ((200.0f - 15.0f) + (VERTICAL_SPACE * nCnt)) + RANKING_SPACE * nCnt, 0.0f),
@@ -212,7 +205,7 @@ void CRanking::PlayerScoreCreate()
 	// スコアの生成
 	m_pPlayerScore.emplace_back((CMultiNumber::Create(D3DXVECTOR3((SCREEN_WIDTH * 0.25f), SCREEN_HEIGHT * 0.6f, 0.0f),
 											PLAYER_SCORE_SIZE,
-											m_nPlayerScore,
+											CGame::GetScore(),
 											RANKINGSCOREDIGITS,
 											CScene::OBJTYPE_UI)));
 }
@@ -300,66 +293,5 @@ void CRanking::RankingDataLoad()
 	else
 	{
 		MessageBox(NULL, "ランキングのデータ読み込み失敗", "警告", MB_ICONWARNING);
-	}
-}
-
-//------------------------------------------------------------------------------
-//ランキングスコアのロード
-//------------------------------------------------------------------------------
-void CRanking::PlayerScoreLoad()
-{
-	// ファイルポイント
-	FILE *pFile;
-
-	char cReadText[128];			// 文字として読み取る
-	char cHeadText[128];			// 比較用
-	char cDie[128];					// 不要な文字
-	int nScore = 0;					// スコア
-
-	// ファイルを開く
-	pFile = fopen(m_SaveScoreFileName, "r");
-
-	// 開いているとき
-	if (pFile != NULL)
-	{
-		// SCRIPTが来るまでループ
-		while (strcmp(cHeadText, "SCRIPT") != 0)
-		{
-			fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
-			sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
-		}
-
-		// SCRIPTが来たら
-		if (strcmp(cHeadText, "SCRIPT") == 0)
-		{
-			// END_SCRIPTが来るまでループ
-			while (strcmp(cHeadText, "END_SCRIPT") != 0)
-			{
-				fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
-				sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
-
-				// SCORESETが来たら
-				if (strcmp(cHeadText, "SCORESET") == 0)
-				{
-					// END_SCORESETが来るまでループ
-					while (strcmp(cHeadText, "END_SCORESET") != 0)
-					{
-						fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
-						sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
-
-						if (strcmp(cHeadText, "SCORE") == 0)
-						{
-							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_nPlayerScore);
-						}
-					}
-				}
-			}
-		}
-		// ファイルを閉じる
-		fclose(pFile);
-	}
-	else
-	{
-		MessageBox(NULL, "スコアのデータ読み込み失敗", "警告", MB_ICONWARNING);
 	}
 }

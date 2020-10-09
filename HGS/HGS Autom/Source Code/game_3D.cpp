@@ -107,3 +107,4 @@ CMap * CGame_3D::GetMap()
 	}
 	return nullptr;
 }
+

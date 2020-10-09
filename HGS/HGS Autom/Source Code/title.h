@@ -24,6 +24,13 @@ class CScene2D;
 class CTitle : public CBaseMode
 {
 public:
+	enum class TITLE_UI
+	{
+		NONE = -1,
+		TITLE_NAME,				// 名前ロゴ
+		TITLE_ENTER,			// Enter
+		TITLE_MAX,
+	};
 	//状態
 	enum STATE
 	{
@@ -43,9 +50,12 @@ public:
 
 	CPlayer* GetPlayer() { return nullptr; };
 private:
+	void TitleUICreate();				// タイトルUIの生成
+
 	STATE m_titlestate;					//ステート
 	int m_nCntState;					//ステートのカウント
 	std::vector<std::shared_ptr<CScene2D>>		m_apScene2D;						// タイトルUI
+
 };
 
 #endif

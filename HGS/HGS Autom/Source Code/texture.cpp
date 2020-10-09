@@ -26,7 +26,22 @@ FILENAME_LIST CTexture::m_aTexFileName =
 	{ "data/TEXTURE/Way/Left01.png" },				//道
 	{ "data/TEXTURE/Way/Left02.png" },				//道
 
-	{ "data/TEXTURE/UI/Title/TitleLogo.png" },					//タイトルロゴ
+	{ "data/TEXTURE/UI/BG/GridLine.png" },						//グリッド線
+	{ "data/TEXTURE/UI/BG/circle.png" },						//まる
+	{ "data/TEXTURE/UI/BG/triangle.png" },						//三角
+	{ "data/TEXTURE/UI/BG/square.png" },						//四角
+	{ "data/TEXTURE/UI/BG/star.png" },							//星
+	{ "data/TEXTURE/UI/BG/cross.png" },							//ばつ
+
+	{ "data/TEXTURE/UI/GAME/Lady.png" },						//Lady
+	{ "data/TEXTURE/UI/GAME/Go.png" },							//Go
+	{ "data/TEXTURE/UI/GAME/Good.png" },						//Good
+	{ "data/TEXTURE/UI/GAME/Great.png" },						//Great
+	{ "data/TEXTURE/UI/GAME/Perfect.png" },						//Perfect
+	{ "data/TEXTURE/UI/GAME/Speedup.png" },						//Speedup
+	{ "data/TEXTURE/UI/GAME/+2.png" },							//+2
+
+	{ "data/TEXTURE/UI/Title/Title.png" },						//タイトルロゴ
 
 	{ "data/TEXTURE/UI/Ranking/RankingLogo.png" },				//ランキングロゴ
 	{ "data/TEXTURE/UI/Ranking/Score.png" },					//ランキングスコア

@@ -228,6 +228,9 @@
     <ClCompile Include="Source Code\Debug\Debug_EffectViewer.cpp">
       <Filter>Debug</Filter>
     </ClCompile>
+    <ClCompile Include="Source Code\bg.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source Code\camera.h">
@@ -424,6 +427,9 @@
     </ClInclude>
     <ClInclude Include="Source Code\Debug\Debug_EffectViewer.h">
       <Filter>Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="Source Code\bg.h">
+      <Filter>UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
