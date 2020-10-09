@@ -48,6 +48,15 @@ public:
 		TEX_UI_BG_STAR,							// 星
 		TEX_UI_BG_CROSS,						// ばつ
 
+		// ゲーム
+		TEX_UI_GAME_LADY,						// Lady
+		TEX_UI_GAME_GO,							// Go
+		TEX_UI_GAME_GOOD,						// Good
+		TEX_UI_GAME_GREAT,						// Great
+		TEX_UI_GAME_PERFECT,					// Perfect
+		TEX_UI_GAME_SPPED_UP,					// SpeeUp
+		TEX_UI_GAME_ADDTIME_2,					// +2
+
 		//タイトル
 		TEX_UI_TITLE_NAME,						// タイトルロゴ
 
