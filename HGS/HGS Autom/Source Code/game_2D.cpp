@@ -27,7 +27,7 @@
 //------------------------------------------------------------------------------
 //É}ÉNÉç
 //------------------------------------------------------------------------------
-#define DEFAULT_CREATE_POS (1000.0f)
+#define DEFAULT_CREATE_POS (2000.0f)
 #define WAY_SIZE (400.0f)
 #define BENDING_TIME (4)
 #define DEFAULT_TIME (30)
@@ -71,7 +71,7 @@ HRESULT CGame_2D::Init(HWND hWnd)
 	// îwåiÇÃê∂ê¨
 	CBg::Create();
 
-	for (int nCnt = 0; nCnt < 5; nCnt++)
+	for (int nCnt = 0; nCnt < 8; nCnt++)
 	{
 		m_pWayList.emplace_back(CWay::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, -nCnt * 400.0f + DEFAULT_CREATE_POS, 0.0f), CWay::UP));
 	}
@@ -117,7 +117,6 @@ void CGame_2D::Update()
 		if (m_nCnt % 60 == 0)
 		{
 			AddTimer(-1);
-			m_nSpeed += 1;
 		}
 
 		m_nScoreDistance += m_nSpeed;
@@ -128,8 +127,6 @@ void CGame_2D::Update()
 		if (m_nBendingTime < 0)
 		{
 			m_direction = DIRECTION::UP;
-
-
 		}
 
 		//éüÇÃã»Ç™ÇËäpÇ‹Ç≈ÇÃç∑ï™
@@ -138,12 +135,13 @@ void CGame_2D::Update()
 
 		CDebugProc::Print(CDebugProc::PLACE_LEFT, "fNextBendingDistance >> %.2f\n", fNextBendingDistance + DEFAULT_CREATE_POS);
 
-		if (fNextBendingDistance + DEFAULT_CREATE_POS + 170 < 400 * m_nBendingCountDown)
+		if (fNextBendingDistance + DEFAULT_CREATE_POS < 400 * m_nBendingCountDown)
 		{
 			m_pNextBending->SetDisp(true);
 			m_nBendingCountDown--;
 
 			printf("CountDown %d\n", m_nBendingCountDown);
+			printf("fNextBendingDistance %.2f\n", fNextBendingDistance + DEFAULT_CREATE_POS + 170);
 
 			CParticle::CreateFromText(m_pNextBending->GetPos(), ZeroVector3, CParticleParam::EFFECT_COUNTDOWN);
 
@@ -153,10 +151,9 @@ void CGame_2D::Update()
 			//m_pNextBending->SetDisp(false);
 		}
 
-
 		if (m_pWayList[m_pWayList.size() - 1]->GetPos().y >= -600.0f)
 		{
-			if (fNextBendingDistance <= 1200 && m_bBendingFlag)
+			if (fNextBendingDistance <= DEFAULT_CREATE_POS && m_bBendingFlag)
 			{
 				switch (m_NextBendingDirection)
 				{
@@ -175,6 +172,8 @@ void CGame_2D::Update()
 				default:
 					break;
 				}
+
+				m_fNextBendingWayPos = m_pWayList[m_pWayList.size() - 1]->GetPos().y;
 			}
 			else
 			{
@@ -299,7 +298,7 @@ void CGame_2D::AddTimer(int nAddTime)
 void CGame_2D::Bending()
 {
 	m_NextBendingDirection = (DIRECTION)(rand() % 2);
-	m_fNextBendingPoint = (float)(m_nScoreDistance + (m_nSpeed * 60) + rand() % (m_nSpeed * 60));
+	m_fNextBendingPoint = (float)(m_nScoreDistance + (m_nSpeed * 60) + rand() % (m_nSpeed * 90));
 	//m_fNextBendingPoint = m_nScoreDistance + (m_nSpeed * 60);
 	//m_fNextBendingPoint = m_nScoreDistance + 2500.0f;
 
@@ -315,6 +314,9 @@ void CGame_2D::Bending()
 	{
 		m_pNextBending->BindTexture(CTexture::GetTexture(CTexture::TEX_ARROW_RIGHT));
 	}
+
+	m_nSpeed += 2;
+
 
 
 	m_bBendingFlag = true;

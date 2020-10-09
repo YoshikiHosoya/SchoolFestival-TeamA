@@ -49,6 +49,7 @@ private:
 	DIRECTION m_direction;								//Œü‚«
 
 	float m_fNextBendingPoint;							//Ÿ‚Ì‹È‚ª‚èŠp‚Ü‚Å‚Ì‹——£
+	float m_fNextBendingWayPos;							//Ÿ‚Ì‹È‚ª‚è‰ÓŠ‚ÌÀ•W
 	DIRECTION m_NextBendingDirection;					//Ÿ‚Ì‹È‚ª‚èŠp‚Ì•ûŒü
 	bool m_bBendingFlag;								//‹È‚ª‚è‚Ìƒtƒ‰ƒO
 	int m_nBendingTime;									//‹È‚ª‚Á‚Ä‚éŠÔ
