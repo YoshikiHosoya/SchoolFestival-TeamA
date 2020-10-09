@@ -155,7 +155,7 @@ void CRanking::RankingUICreate()
 		if (nCnt == (int)RANKING_UI::RANKING_NAME)
 		{
 			// シーン2Dの生成
-			m_apScene2D.emplace_back(CScene2D::Create_Shared(D3DXVECTOR3((SCREEN_WIDTH * 0.75f), 65.0f, 0.0f), D3DXVECTOR3(500.0f, 100.0f, 0.0f), CScene::OBJTYPE_UI));
+			m_apScene2D.emplace_back(CScene2D::Create_Shared(D3DXVECTOR3((SCREEN_WIDTH * 0.75f), 90.0f, 0.0f), D3DXVECTOR3(700.0f, 200.0f, 0.0f), CScene::OBJTYPE_UI));
 			// テクスチャの割り当て
 			m_apScene2D[nCnt]->BindTexture(CTexture::GetTexture(CTexture::TEX_UI_RANKING_NAME));
 		}
@@ -171,7 +171,7 @@ void CRanking::RankingUICreate()
 		else if (nCnt == (int)RANKING_UI::RANKING_GO_TITLE)
 		{
 			// シーン2Dの生成
-			m_apScene2D.emplace_back(CScene2D::Create_Shared(D3DXVECTOR3((SCREEN_WIDTH * 0.5f), 650.0f, 0.0f), D3DXVECTOR3(450.0f, 200.0f, 0.0f), CScene::OBJTYPE_UI));
+			m_apScene2D.emplace_back(CScene2D::Create_Shared(D3DXVECTOR3((SCREEN_WIDTH * 0.5f), 650.0f, 0.0f), D3DXVECTOR3(500.0f, 200.0f, 0.0f), CScene::OBJTYPE_UI));
 			// テクスチャの割り当て
 			m_apScene2D[nCnt]->BindTexture(CTexture::GetTexture(CTexture::TEX_UI_ENTER));
 		}
