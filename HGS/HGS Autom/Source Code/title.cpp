@@ -117,6 +117,16 @@ void CTitle::TitleUICreate()
 {
 	for (int nCnt = 0; nCnt < (int)TITLE_UI::TITLE_MAX; nCnt++)
 	{
+		if (nCnt == (int)TITLE_UI::TITLE_BLACK)
+		{
+			// シーン2Dの生成
+			m_apScene2D.emplace_back(CScene2D::Create_Shared(D3DXVECTOR3((SCREEN_WIDTH * 0.25f), SCREEN_HEIGHT * 0.5f, 0.0f), D3DXVECTOR3((SCREEN_WIDTH * 0.5f), SCREEN_HEIGHT, 0.0f), CScene::OBJTYPE_UI));
+			// テクスチャの割り当て
+			m_apScene2D[nCnt]->BindTexture(CTexture::GetTexture(CTexture::TEX_NONE));
+			// 色変更
+			m_apScene2D[nCnt]->SetColor(BlackColor);
+		}
+
 		if (nCnt == (int)TITLE_UI::TITLE_NAME)
 		{
 			// シーン2Dの生成

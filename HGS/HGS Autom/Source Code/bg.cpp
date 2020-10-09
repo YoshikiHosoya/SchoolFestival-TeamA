@@ -110,7 +110,7 @@ void CBg::Update()
 	//m_nCntScroll
 	if (m_pGridLine)
 	{
-		m_pGridLine->SetAnimation(D3DXVECTOR2(0.0f, 0.0f), D3DXVECTOR2(0.0f, 0.0f));
+		m_pGridLine->SetAnimation(D3DXVECTOR2(1.0f, 1.0f + ((float)m_nCntScroll / 100)), D3DXVECTOR2(1.0f, 1.0f));
 	}
 
 	CDebugProc::Print(CDebugProc::PLACE_LEFT, "FigureNum >> %d\n", m_apScene2D.size());
