@@ -11,10 +11,11 @@
 //------------------------------------------------------------------------------
 #include "main.h"
 #include "scene2D.h"
+#include "TexAnimationBase.h"
 //------------------------------------------------------------------------------
 //ƒNƒ‰ƒX’è‹`
 //------------------------------------------------------------------------------
-class CNumber : public CScene2D
+class CNumber : public CScene2D ,public CTexAnimationBase
 {
 public:
 	CNumber();

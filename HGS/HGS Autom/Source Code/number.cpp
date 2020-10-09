@@ -77,6 +77,9 @@ void CNumber::Update()
 			m_nCntAnimation = 0;
 		}
 	}
+
+
+
 	//更新処理
 	CScene2D::Update();
 }
@@ -114,8 +117,6 @@ std::unique_ptr<CNumber> CNumber::Create(D3DXVECTOR3 pos, D3DXVECTOR3 size)
 	//nullcheck
 	if (pNumber)
 	{
-		//初期化
-		pNumber->Init();
 
 		//テクスチャ設定
 		pNumber->BindTexture(CTexture::GetSeparateTexture(CTexture::SEPARATE_TEX_UI_NUMBER));
@@ -123,6 +124,8 @@ std::unique_ptr<CNumber> CNumber::Create(D3DXVECTOR3 pos, D3DXVECTOR3 size)
 		pNumber->SetSize(size);
 		pNumber->m_DefaultSize = size;
 
+		//初期化
+		pNumber->Init();
 		//return
 		return pNumber;
 	}

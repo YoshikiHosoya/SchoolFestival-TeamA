@@ -45,6 +45,7 @@ public:
 private:
 	STATE m_titlestate;					//ステート
 	int m_nCntState;					//ステートのカウント
+	std::vector<std::shared_ptr<CScene2D>>		m_apScene2D;						// タイトルUI
 };
 
 #endif

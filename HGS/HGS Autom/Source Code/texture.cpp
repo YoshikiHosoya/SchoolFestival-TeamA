@@ -26,7 +26,10 @@ FILENAME_LIST CTexture::m_aTexFileName =
 	{ "data/TEXTURE/Way/Left01.png" },				//道
 	{ "data/TEXTURE/Way/Left02.png" },				//道
 
+	{ "data/TEXTURE/UI/Title/TitleLogo.png" },					//タイトルロゴ
+
 	{ "data/TEXTURE/UI/Ranking/RankingLogo.png" },				//ランキングロゴ
+	{ "data/TEXTURE/UI/Ranking/Score.png" },					//ランキングスコア
 	{ "data/TEXTURE/UI/Ranking/rank_1.png" },					//1位
 	{ "data/TEXTURE/UI/Ranking/rank_2.png" },					//2位
 	{ "data/TEXTURE/UI/Ranking/rank_3.png" },					//3位
@@ -34,6 +37,7 @@ FILENAME_LIST CTexture::m_aTexFileName =
 	{ "data/TEXTURE/UI/Ranking/rank_5.png" },					//5位
 	{ "data/TEXTURE/UI/Ranking/gototitle.png" },				//タイトルへ
 
+	{ "data/TEXTURE/UI/Enter.png" },							//Enter
 };
 
 //テクスチャ名の設定
@@ -52,6 +56,8 @@ std::vector<CTexture::SEPARATE_TEX_INFO> CTexture::m_apSeparateTexInfoList =
 	//ポインタとUVサイズに関してはLoad関数で読み込み＆計算する
 	{ nullptr, CTexture::SEPARATE_TEX_NONE,					D3DXVECTOR2(1,1),	ZeroVector2 },		//白紙
 	{ nullptr, CTexture::SEPARATE_TEX_EFFECT_EXPLOSION00,	D3DXVECTOR2(4,2),	ZeroVector2 },		//爆発
+	{ nullptr, CTexture::SEPARATE_TEX_UI_NUMBER,			D3DXVECTOR2(10,1),	ZeroVector2 },		//ナンバー
+
 };
 
 //-----------------------------------------------------------------------------
