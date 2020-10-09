@@ -1,0 +1,14 @@
+//------------------------------------------------------------
+//
+//モーションのファイル名
+//Author:Yoshiki Hosoya
+//
+//------------------------------------------------------------
+SCRIPT
+	FILENAME = data/SAVEDATA/Woman/Neutral.txt
+	FILENAME = data/SAVEDATA/Woman/Walk.txt
+	FILENAME = data/SAVEDATA/Woman/Dash.txt
+	FILENAME = data/SAVEDATA/Woman/Jump.txt
+	FILENAME = data/SAVEDATA/Woman/Hit.txt
+	FILENAME = data/SAVEDATA/Woman/Death.txt
+END_SCRIPT
