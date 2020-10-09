@@ -25,7 +25,7 @@ public:
 	{
 		LABEL_BGM_TITLE = 0,						//タイトル
 		LABEL_BGM_GAME,								//ゲーム
-		LABEL_BGM_RESULT,							//リザルト
+		LABEL_BGM_RANKING,							//リザルト
 
 		//エフェクト
 		LABEL_SE_EXPLOSION_00,						//爆発
@@ -33,10 +33,12 @@ public:
 		LABEL_SE_EXPLOSION_02,						//爆発
 		LABEL_SE_EXPLOSION_03,						//爆発
 		LABEL_SE_EXPLOSION_04,						//爆発
+
 		LABEL_SE_COUNTDOWN,							//カウントダウン
 		LABEL_SE_GOOD,								//グッド
 		LABEL_SE_GREAT,								//グレイト
 		LABEL_SE_PERFECT,							//パーフェクト
+
 		LABEL_SE_SCORE_CHECK,						//スコアチェック
 		LABEL_SE_SPEED_UP,							//スピードアップ
 		LABEL_SE_ADDTIME,							//タイム追加
@@ -48,6 +50,7 @@ public:
 		LABEL_SE_SELECT,						//選択
 		LABEL_SE_PAUSE,							//ポーズ
 		LABEL_SE_DEATH,							//死
+		LABEL_SE_TIMEUP,						//タイムアップ
 
 
 		LABEL_MAX,
@@ -89,7 +92,7 @@ private:
 		//BGM
 		{ "data/BGM/title.wav", -1 },								//BGM
 		{ "data/BGM/game.wav", -1 },								//BGM
-		{ "data/BGM/result.wav", -1 },								//BGM
+		{ "data/BGM/ranking.wav", -1 },								//BGM
 
 		//エフェクト
 		{ "data/SE/Effect/explosion_00.wav", 0 },					//SE 爆発
@@ -97,10 +100,12 @@ private:
 		{ "data/SE/Effect/explosion_02.wav", 0 },					//SE 爆発
 		{ "data/SE/Effect/explosion_03.wav", 0 },					//SE 爆発
 		{ "data/SE/Effect/explosion_04.wav", 0 },					//SE 爆発
+
 		{ "data/SE/Effect/countdown.wav", 0 },						//SE カウントダウン
 		{ "data/SE/Effect/good.wav", 0 },							//SE グッド
 		{ "data/SE/Effect/great.wav", 0 },							//SE グレイト
 		{ "data/SE/Effect/perfect.wav", 0 },						//SE パーフェクト
+
 		{ "data/SE/Effect/scorecheck.wav", 0 },						//SE スコアチェック
 		{ "data/SE/Effect/speedup.wav", 0 },						//SE スピードアップ
 		{ "data/SE/Effect/addtime.wav", 0 },						//SE タイム追加
@@ -112,6 +117,7 @@ private:
 		{ "data/SE/System/select.wav", 0 },							//SE 選択
 		{ "data/SE/System/pause.wav", 0 },							//SE ポーズ
 		{ "data/SE/System/Death.wav", 0 },							//SE 死
+		{ "data/SE/System/Death2.wav", 0 },							//SE た
 	};
 
 };

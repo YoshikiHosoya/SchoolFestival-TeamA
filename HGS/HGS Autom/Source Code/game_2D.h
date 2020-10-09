@@ -49,7 +49,7 @@ private:
 	DIRECTION m_direction;								//向き
 
 	float m_fNextBendingPoint;							//次の曲がり角までの距離
-	float m_fNextBendingWayPos;							//次の曲がり箇所の座標
+	D3DXVECTOR3 *m_pNextBendingWayPos;					//次の曲がり箇所の座標
 	DIRECTION m_NextBendingDirection;					//次の曲がり角の方向
 	bool m_bBendingFlag;								//曲がりのフラグ
 	int m_nBendingTime;									//曲がってる時間
@@ -60,6 +60,9 @@ private:
 	std::shared_ptr<CMultiNumber> m_pTimeNumber;
 	std::shared_ptr<CScene2D> m_pScore;
 	std::shared_ptr<CScene2D> m_pNextBending;
+
+	std::shared_ptr<CScene2D> m_pReadyGo;
+
 
 	std::vector<std::shared_ptr<CWay>> m_pWayList;
 

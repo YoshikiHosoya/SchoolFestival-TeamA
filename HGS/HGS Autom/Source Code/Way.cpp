@@ -13,6 +13,7 @@
 #include "game.h"
 #include "game_2D.h"
 #include "renderer.h"
+#include "sound.h"
 //------------------------------------------------------------------------------
 //Ã“Iƒƒ“ƒo•Ï”‚Ì‰Šú‰»
 //------------------------------------------------------------------------------
@@ -203,16 +204,25 @@ bool CWay::CollisionPlayerAddTimer(D3DXVECTOR3 pos)
 
 	CGame_2D *pGame2D = (CGame_2D*)CManager::GetGame();
 
+	//‰¹Ä¶
+	CManager::GetSound()->Play(CSound::LABEL_SE_ADDTIME);
+
+
 	if (fDistance >= 160)
 	{
 		pGame2D->AddTimer(2);
 		printf("AddTimer 2\n");
+		//‰¹Ä¶
+		CManager::GetSound()->Play(CSound::LABEL_SE_PERFECT);
+
 		return true;
 	}
 	else if (fDistance >= 100)
 	{
 		pGame2D->AddTimer(1);
 		printf("AddTimer 1\n");
+		//‰¹Ä¶
+		CManager::GetSound()->Play(CSound::LABEL_SE_GREAT);
 
 		return true;
 

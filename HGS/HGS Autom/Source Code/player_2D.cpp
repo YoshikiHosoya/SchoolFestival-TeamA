@@ -13,6 +13,7 @@
 #include "manager.h"
 #include "Way.h"
 #include "renderer.h"
+#include "sound.h"
 #include "particle.h"
 #include "Pad_XInput.h"
 //------------------------------------------------------------------------------
@@ -158,6 +159,10 @@ void CPlayer_2D::MoveInput()
 
 					GetScene2D()->SetDisp(false);
 					CManager::GetGame()->SetGamestate(CGame::STATE_GAMEOVER);
+
+					//‰¹Ä¶
+					CManager::GetSound()->Play(CSound::LABEL_SE_TIMEUP);
+
 
 					break;
 				}

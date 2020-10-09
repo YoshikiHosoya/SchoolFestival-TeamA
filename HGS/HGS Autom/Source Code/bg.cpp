@@ -56,7 +56,7 @@ HRESULT CBg::Init()
 		m_pGridLine->BindTexture(CTexture::GetTexture(CTexture::TEX_UI_BG_GRIDLINE));
 
 	}
-	
+
 	return S_OK;
 }
 
@@ -73,6 +73,15 @@ void CBg::Uninit()
 //------------------------------------------------------------------------------
 void CBg::Update()
 {
+
+	if (CManager::GetMode() == CManager::MODE_2DGAME)
+	{
+		if (CManager::GetGame()->GetGamestate() != CGame::STATE::STATE_NORMAL)
+		{
+			return;
+		}
+	}
+
 	D3DXVECTOR3 move = ZeroVector3;
 	// カウントアップ
 	m_nCntScroll++;

@@ -90,7 +90,7 @@ void CTitle::Update()
 	if (CHossoLibrary::CheckAnyButton())
 	{
 		//チュートリアルに遷移
-		CManager::GetRenderer()->GetFade()->SetModeFade(CManager::MODE_TUTORIAL);
+		CManager::GetRenderer()->GetFade()->SetModeFade(CManager::MODE_2DGAME);
 	}
 
 }

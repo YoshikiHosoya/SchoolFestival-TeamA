@@ -37,7 +37,7 @@ FILENAME_LIST CTexture::m_aTexFileName =
 	{ "data/TEXTURE/UI/BG/star.png" },							//êØ
 	{ "data/TEXTURE/UI/BG/cross.png" },							//ÇŒÇ¬
 
-	{ "data/TEXTURE/UI/GAME/Lady.png" },						//Lady
+	{ "data/TEXTURE/UI/GAME/Ready.png" },						//Lady
 	{ "data/TEXTURE/UI/GAME/Go.png" },							//Go
 	{ "data/TEXTURE/UI/GAME/Good.png" },						//Good
 	{ "data/TEXTURE/UI/GAME/Great.png" },						//Great

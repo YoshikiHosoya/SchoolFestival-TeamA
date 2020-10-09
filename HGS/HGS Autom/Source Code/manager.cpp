@@ -255,32 +255,17 @@ void CManager::SetMode(MODE nextmode)
 		m_pSound->Play(CSound::LABEL_BGM_TITLE);
 		break;
 
-		//title
-	case MODE_TUTORIAL:
-		m_pBaseMode.reset(new CTutorial);
-		std::cout << "new BaseMode[Tutorial]" << NEWLINE;
-		m_pSound->Play(CSound::LABEL_BGM_TITLE);
-		break;
-
 		//game
 	case MODE_2DGAME:
 		m_pBaseMode.reset(new CGame_2D);
 		std::cout << "new BaseMode[2DGame]" << NEWLINE;
 		m_pSound->Play(CSound::LABEL_BGM_GAME);
 		break;
-
-		//result
-	case MODE_RESULT:
-		m_pBaseMode.reset(new CResult);
-		std::cout << "new BaseMode[Result]" << NEWLINE;
-		m_pSound->Play(CSound::LABEL_BGM_RESULT);
-		break;
-
 		//game
 	case MODE_RANKING:
 		m_pBaseMode.reset(new CRanking);
 		std::cout << "new BaseMode[Ranking]" << NEWLINE;
-		m_pSound->Play(CSound::LABEL_BGM_GAME);
+		m_pSound->Play(CSound::LABEL_BGM_RANKING);
 		break;
 
 		//game
