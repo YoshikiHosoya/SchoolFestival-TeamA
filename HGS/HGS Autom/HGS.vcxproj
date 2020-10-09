@@ -153,6 +153,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Source Code\basemode.cpp" />
+    <ClCompile Include="Source Code\bg.cpp" />
     <ClCompile Include="Source Code\camera.cpp" />
     <ClCompile Include="Source Code\character.cpp" />
     <ClCompile Include="Source Code\character_2D.cpp" />
@@ -215,6 +216,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source Code\basemode.h" />
+    <ClInclude Include="Source Code\bg.h" />
     <ClInclude Include="Source Code\camera.h" />
     <ClInclude Include="Source Code\character.h" />
     <ClInclude Include="Source Code\character_2D.h" />
