@@ -26,6 +26,14 @@ FILENAME_LIST CTexture::m_aTexFileName =
 	{ "data/TEXTURE/Way/Left01.png" },				//道
 	{ "data/TEXTURE/Way/Left02.png" },				//道
 
+	{ "data/TEXTURE/UI/Ranking/RankingLogo.png" },				//ランキングロゴ
+	{ "data/TEXTURE/UI/Ranking/rank_1.png" },					//1位
+	{ "data/TEXTURE/UI/Ranking/rank_2.png" },					//2位
+	{ "data/TEXTURE/UI/Ranking/rank_3.png" },					//3位
+	{ "data/TEXTURE/UI/Ranking/rank_4.png" },					//4位
+	{ "data/TEXTURE/UI/Ranking/rank_5.png" },					//5位
+	{ "data/TEXTURE/UI/Ranking/gototitle.png" },				//タイトルへ
+
 };
 
 //テクスチャ名の設定
