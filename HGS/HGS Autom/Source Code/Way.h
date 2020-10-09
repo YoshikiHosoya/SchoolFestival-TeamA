@@ -45,6 +45,8 @@ public:
 
 	WAY_TYPE GetWayType() { return m_waytype; };
 
+	bool Collision(D3DXVECTOR3 pos);					//どのＷａｙにいるか
+	bool CollisionPlayerHit(D3DXVECTOR3 pos);			//プレイヤーの衝突判定用
 protected:
 
 private:

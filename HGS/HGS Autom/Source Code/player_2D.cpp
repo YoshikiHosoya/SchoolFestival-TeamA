@@ -11,7 +11,9 @@
 #include "player_2D.h"
 #include "game_2D.h"
 #include "manager.h"
+#include "Way.h"
 #include "renderer.h"
+#include "particle.h"
 #include "Pad_XInput.h"
 //------------------------------------------------------------------------------
 //Ã“Iƒƒ“ƒo•Ï”‚Ì‰Šú‰»
@@ -119,6 +121,35 @@ void CPlayer_2D::MoveInput()
 		{
 			pGame2D->PlayerBending(DIRECTION::LEFT);
 		}
+	}
+
+	std::vector<std::shared_ptr<CScene>> pWayList;
+
+	CScene::GetSceneList(OBJTYPE::OBJTYPE_WAY, pWayList);
+
+	for (size_t nCnt = 0; nCnt < pWayList.size(); nCnt++)
+	{
+		if (!pWayList[nCnt])
+		{
+			continue;
+		}
+
+		CWay *pWay = (CWay*)pWayList[nCnt].get();
+
+		if (pWay)
+		{
+			if(pWay->Collision(GetPos()))
+			{
+				CDebugProc::Print(CDebugProc::PLACE_LEFT, "WayPos.y >> %.2f\n", pWay->GetPos().y);
+
+				if (pWay->CollisionPlayerHit(GetPos()))
+				{
+					CParticle::CreateFromText(GetPos(), ZeroVector3, CParticleParam::EFFECT_DEFAULT);
+				}
+
+			}
+		}
+
 	}
 }
 

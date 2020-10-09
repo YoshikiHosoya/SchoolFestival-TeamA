@@ -194,6 +194,7 @@ public:
 	static float Random_PI();																					//-3.14から3.14までのランダムで返す
 	static float Random(float fInputValue);																		//入力された値の+-ランダムな値で返す
 	static D3DXVECTOR3 RandomVector3(float Max);																//ランダムなvector3型で値を返す
+	static bool ImGui_Combobox(std::vector<std::string> aItemNameList, std::string aTitle, int & nValue);
 	static void CalcRotation(float &fRot);																		//回転を360度以内にする計算
 	static void CalcRotation_XYZ(D3DXVECTOR3 &rot);																	//回転を360度以内にする計算
 

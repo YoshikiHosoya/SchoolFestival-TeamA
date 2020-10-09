@@ -42,6 +42,7 @@ public:
 		MODE_3DGAME,						//ゲーム
 		MODE_RESULT,						//リザルト
 		MODE_RANKING,						//ランキング
+		MODE_EFFECTVIEWER,					//エフェクトビューワ
 		MODE_END							//ゲーム終了
 	};
 

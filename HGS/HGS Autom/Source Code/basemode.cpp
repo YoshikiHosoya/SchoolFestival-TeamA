@@ -36,7 +36,7 @@ void CBaseMode::DebugCommand()
 	//CDebugProc::Print(CDebugProc::PLACE_LEFT, "[Ctrl] + テンキー [3] : 3DGameに遷移\n");
 	CDebugProc::Print(CDebugProc::PLACE_LEFT, "[Ctrl] + テンキー [4] : Resultに遷移\n");
 	//CDebugProc::Print(CDebugProc::PLACE_LEFT, "[Ctrl] + テンキー [7] : MapEditorに遷移\n");
-	//CDebugProc::Print(CDebugProc::PLACE_LEFT, "[Ctrl] + テンキー [8] : EffectViewerに遷移\n");
+	CDebugProc::Print(CDebugProc::PLACE_LEFT, "[Ctrl] + テンキー [8] : EffectViewerに遷移\n");
 	//CDebugProc::Print(CDebugProc::PLACE_LEFT, "[Ctrl] + テンキー [9] : MotionViewerに遷移\n");
 
 
@@ -104,11 +104,11 @@ void CBaseMode::DebugCommand()
 			CManager::GetRenderer()->GetFade()->SetModeFade(CManager::MODE_RANKING);
 		}
 
-		////エフェクトビューワ
-		//if (pKeyboard->GetTrigger(DIK_NUMPAD8))
-		//{
-		//	CManager::GetRenderer()->GetFade()->SetModeFade(CManager::MODE_TITLE);
-		//}
+		//エフェクトビューワ
+		if (pKeyboard->GetTrigger(DIK_NUMPAD8))
+		{
+			CManager::GetRenderer()->GetFade()->SetModeFade(CManager::MODE_EFFECTVIEWER);
+		}
 		////モーションビューワ
 		//if (pKeyboard->GetTrigger(DIK_NUMPAD9))
 		//{
@@ -152,6 +152,12 @@ void CBaseMode::BaseLoad(HWND hWnd)
 
 	//パーティクルのテクスチャと頂点確報
 	if (FAILED(CParticle::MakeVertex()))
+	{
+		//失敗
+		MessageBox(hWnd, "テクスチャ読み込み失敗", "CParticle", MB_OK | MB_ICONHAND);
+	}
+	//パーティクルのテクスチャと頂点確報
+	if (FAILED(CParticleParam::LoadParticleDefaultParam()))
 	{
 		//失敗
 		MessageBox(hWnd, "テクスチャ読み込み失敗", "CParticle", MB_OK | MB_ICONHAND);

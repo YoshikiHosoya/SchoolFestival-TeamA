@@ -48,11 +48,12 @@ public:
 	virtual void Draw() = 0;											//描画
 	virtual void ShowDebugInfo() = 0;									//デバッグ情報表記
 
-	void SetGamestate(STATE gamestate);						//ゲームの状態設定
+	void SetGamestate(STATE gamestate);									//ゲームの状態設定
 
-	STATE GetGamestate() { return m_gamestate; };			//ゲームの状態取得
-	CPlayer *GetPlayer(); 									//プレイヤーのポインタ取得
-
+	STATE GetGamestate() { return m_gamestate; };						//ゲームの状態取得
+	CPlayer *GetPlayer(); 												//プレイヤーのポインタ取得
+	static int GetScore() { return m_nScore; };							//スコア取得
+	static void SetScore(int nScore) { m_nScore = nScore; };
 protected:
 	void SetPlayerPtr(std::shared_ptr<CPlayer> pPlayer) { m_pPlayer = pPlayer; };
 private:
@@ -60,6 +61,7 @@ private:
 
 	STATE m_gamestate;									//ゲームステート
 	int m_nCntState;									//ステートのカウンタ
+	static int m_nScore;
 };
 
 #endif
