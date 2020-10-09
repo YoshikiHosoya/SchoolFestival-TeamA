@@ -43,6 +43,9 @@
     <Filter Include="Debug">
       <UniqueIdentifier>{a299ed23-8309-4e1f-824d-594ad8048391}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Way">
+      <UniqueIdentifier>{b0c5c8f9-9714-424a-a2ba-b6ce3b168405}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source Code\camera.cpp">
@@ -218,6 +221,9 @@
     </ClCompile>
     <ClCompile Include="Source Code\tutorial.cpp">
       <Filter>Mode</Filter>
+    </ClCompile>
+    <ClCompile Include="Source Code\Way.cpp">
+      <Filter>Way</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -409,6 +415,9 @@
     </ClInclude>
     <ClInclude Include="Source Code\tutorial.h">
       <Filter>Mode</Filter>
+    </ClInclude>
+    <ClInclude Include="Source Code\Way.h">
+      <Filter>Way</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

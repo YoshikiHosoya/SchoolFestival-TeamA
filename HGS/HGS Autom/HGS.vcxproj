@@ -210,6 +210,7 @@
     <ClCompile Include="Source Code\texture.cpp" />
     <ClCompile Include="Source Code\title.cpp" />
     <ClCompile Include="Source Code\tutorial.cpp" />
+    <ClCompile Include="Source Code\Way.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source Code\basemode.h" />
@@ -275,6 +276,7 @@
     <ClInclude Include="Source Code\texture.h" />
     <ClInclude Include="Source Code\title.h" />
     <ClInclude Include="Source Code\tutorial.h" />
+    <ClInclude Include="Source Code\Way.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Source Code\Resource\icon.rc" />
