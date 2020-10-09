@@ -28,7 +28,7 @@ public:
 	virtual void Draw();					//描画
 	virtual void ShowDebugInfo();			//デバッグ情報表記
 	void SetAnimation(D3DXVECTOR2 UV,D3DXVECTOR2 size);		//テクスチャUV座標設定
-
+	void SetColor(D3DXCOLOR col);	// 色設定
 	static std::shared_ptr<CScene2D> Create_Shared			(D3DXVECTOR3 pos, D3DXVECTOR3 size, OBJTYPE objtype);	//生成処理（SceneとReturn先で共有管理
 	static void Create_SceneManagement						(D3DXVECTOR3 pos, D3DXVECTOR3 size, OBJTYPE objtype);	//生成処理（CSceneのみで管理
 	static std::unique_ptr<CScene2D> Create_SelfManagement	(D3DXVECTOR3 pos, D3DXVECTOR3 size);					//生成処理（Return先で管理

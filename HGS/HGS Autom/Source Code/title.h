@@ -27,6 +27,7 @@ public:
 	enum class TITLE_UI
 	{
 		NONE = -1,
+		TITLE_BLACK,			// çï
 		TITLE_NAME,				// ñºëOÉçÉS
 		TITLE_ENTER,			// Enter
 		TITLE_MAX,
