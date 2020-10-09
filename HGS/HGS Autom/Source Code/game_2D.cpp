@@ -31,7 +31,7 @@
 #define DEFAULT_CREATE_POS (2000.0f)
 #define WAY_SIZE (400.0f)
 #define BENDING_TIME (4)
-#define DEFAULT_TIME (30)
+#define DEFAULT_TIME (20)
 #define COUNTDOWN	(3)
 //------------------------------------------------------------------------------
 //コンストラクタ
@@ -97,6 +97,10 @@ HRESULT CGame_2D::Init(HWND hWnd)
 	//ゲームステート初期化
 	SetGamestate(CGame::STATE_READY);
 
+	//音再生
+	CManager::GetSound()->Play(CSound::LABEL_SE_READY);
+
+
 	return S_OK;
 }
 
@@ -118,13 +122,30 @@ void CGame_2D::Update()
 	{
 		m_nCnt++;
 
-		if (m_nCnt >= 120)
+		if (m_nCnt >= 180)
 		{
 			//テクスチャ差し替え
 			m_pReadyGo->BindTexture(CTexture::GetTexture(CTexture::TEX_UI_GAME_GO));
 
 			//ゲームステート通常
 			SetGamestate(CGame::STATE_NORMAL);
+
+			CParticle::CreateFromText(SCREEN_CENTER_POS + CHossoLibrary::RandomVector3(500.0f), ZeroVector3, CParticleParam::EFFECT_CROSS, TAG::NONE, 0, CHossoLibrary::RandomColor());
+			CParticle::CreateFromText(SCREEN_CENTER_POS + CHossoLibrary::RandomVector3(500.0f), ZeroVector3, CParticleParam::EFFECT_CIRCLE, TAG::NONE, 0, CHossoLibrary::RandomColor());
+			CParticle::CreateFromText(SCREEN_CENTER_POS + CHossoLibrary::RandomVector3(500.0f), ZeroVector3, CParticleParam::EFFECT_STAR, TAG::NONE, 0, CHossoLibrary::RandomColor());
+			CParticle::CreateFromText(SCREEN_CENTER_POS + CHossoLibrary::RandomVector3(500.0f), ZeroVector3, CParticleParam::EFFECT_SQUARE, TAG::NONE, 0, CHossoLibrary::RandomColor());
+			CParticle::CreateFromText(SCREEN_CENTER_POS + CHossoLibrary::RandomVector3(500.0f), ZeroVector3, CParticleParam::EFFECT_TRIANGLE, TAG::NONE, 0, CHossoLibrary::RandomColor());
+			CParticle::CreateFromText(SCREEN_CENTER_POS + CHossoLibrary::RandomVector3(500.0f), ZeroVector3, CParticleParam::EFFECT_CROSS, TAG::NONE, 0, CHossoLibrary::RandomColor());
+			CParticle::CreateFromText(SCREEN_CENTER_POS + CHossoLibrary::RandomVector3(500.0f), ZeroVector3, CParticleParam::EFFECT_CIRCLE, TAG::NONE, 0, CHossoLibrary::RandomColor());
+			CParticle::CreateFromText(SCREEN_CENTER_POS + CHossoLibrary::RandomVector3(500.0f), ZeroVector3, CParticleParam::EFFECT_STAR, TAG::NONE, 0, CHossoLibrary::RandomColor());
+			CParticle::CreateFromText(SCREEN_CENTER_POS + CHossoLibrary::RandomVector3(500.0f), ZeroVector3, CParticleParam::EFFECT_SQUARE, TAG::NONE, 0, CHossoLibrary::RandomColor());
+			CParticle::CreateFromText(SCREEN_CENTER_POS + CHossoLibrary::RandomVector3(500.0f), ZeroVector3, CParticleParam::EFFECT_TRIANGLE, TAG::NONE, 0, CHossoLibrary::RandomColor());
+			CParticle::CreateFromText(SCREEN_CENTER_POS + CHossoLibrary::RandomVector3(500.0f), ZeroVector3, CParticleParam::EFFECT_CROSS, TAG::NONE, 0, CHossoLibrary::RandomColor());
+			CParticle::CreateFromText(SCREEN_CENTER_POS + CHossoLibrary::RandomVector3(500.0f), ZeroVector3, CParticleParam::EFFECT_CIRCLE, TAG::NONE, 0, CHossoLibrary::RandomColor());
+			CParticle::CreateFromText(SCREEN_CENTER_POS + CHossoLibrary::RandomVector3(500.0f), ZeroVector3, CParticleParam::EFFECT_STAR, TAG::NONE, 0, CHossoLibrary::RandomColor());
+			CParticle::CreateFromText(SCREEN_CENTER_POS + CHossoLibrary::RandomVector3(500.0f), ZeroVector3, CParticleParam::EFFECT_SQUARE, TAG::NONE, 0, CHossoLibrary::RandomColor());
+			CParticle::CreateFromText(SCREEN_CENTER_POS + CHossoLibrary::RandomVector3(500.0f), ZeroVector3, CParticleParam::EFFECT_TRIANGLE, TAG::NONE, 0, CHossoLibrary::RandomColor());
+
 
 		}
 	}
@@ -273,37 +294,6 @@ void CGame_2D::ShowDebugInfo()
 	CDebugProc::Print(CDebugProc::PLACE_LEFT, "m_fNextBendingPoint >> %.2f\n", m_fNextBendingPoint);
 	CDebugProc::Print(CDebugProc::PLACE_LEFT, "NextDirection >> %d\n", m_NextBendingDirection);
 
-	if (CManager::GetKeyboard()->GetTrigger(DIK_RETURN))
-	{
-		GameEnd();
-	}
-
-	if (CManager::GetKeyboard()->GetTrigger(DIK_L))
-	{
-		m_nSpeed += 5;
-	}
-
-	if (CManager::GetKeyboard()->GetTrigger(DIK_LEFT))
-	{
-		Bending();
-		m_NextBendingDirection = DIRECTION::LEFT;
-
-	}
-
-	if (CManager::GetKeyboard()->GetTrigger(DIK_RIGHT))
-	{
-		Bending();
-		m_NextBendingDirection = DIRECTION::RIGHT;
-
-	}
-
-	//[0]キーを押した時
-	if (pKeyboard->GetTrigger(DIK_0))
-	{
-		//ステート変更
-		SetGamestate(CGame_2D::STATE_GAMECLEAR);
-		return;
-	}
 
 #endif //_DEBUG
 }

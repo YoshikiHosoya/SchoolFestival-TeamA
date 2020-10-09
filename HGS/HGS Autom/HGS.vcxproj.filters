@@ -43,7 +43,7 @@
     <Filter Include="Debug">
       <UniqueIdentifier>{a299ed23-8309-4e1f-824d-594ad8048391}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Scene\Way">
+    <Filter Include="Way">
       <UniqueIdentifier>{b0c5c8f9-9714-424a-a2ba-b6ce3b168405}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -223,7 +223,7 @@
       <Filter>Mode</Filter>
     </ClCompile>
     <ClCompile Include="Source Code\Way.cpp">
-      <Filter>Scene\Way</Filter>
+      <Filter>Way</Filter>
     </ClCompile>
     <ClCompile Include="Source Code\Debug\Debug_EffectViewer.cpp">
       <Filter>Debug</Filter>
@@ -423,7 +423,7 @@
       <Filter>Mode</Filter>
     </ClInclude>
     <ClInclude Include="Source Code\Way.h">
-      <Filter>Scene\Way</Filter>
+      <Filter>Way</Filter>
     </ClInclude>
     <ClInclude Include="Source Code\Debug\Debug_EffectViewer.h">
       <Filter>Debug</Filter>

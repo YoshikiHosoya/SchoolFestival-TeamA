@@ -149,9 +149,6 @@ public:
 	static bool CheckMove(DIRECTION);								//移動用関数(AWSD + CrossKey) Press
 	static DIRECTION CheckSelect();									//セレクト用関数(AWSD + ARROW + LStick) Trigger
 
-	static bool CheckAttack_X(INPUTTYPE type);						//攻撃ボタン
-	static bool CheckAttack_Y(INPUTTYPE type);						//攻撃ボタン
-	static bool CheckAttack_B(INPUTTYPE type);						//攻撃ボタン
 	static bool CheckJump(INPUTTYPE type);							//ジャンプボタン
 	static bool CheckDash(INPUTTYPE type);							//ダッシュボタン
 	static bool CheckCameraReset(INPUTTYPE type);					//カメラリセットボタン
@@ -161,6 +158,8 @@ public:
 	static bool CheckPause();										//ポーズ
 	static bool CheckAnyButton();									//何かボタンを。。
 	static void ResetStickInfo();									//スティックのトリガー情報リセット
+
+	static D3DXCOLOR RandomColor();
 
 	static bool Check3DMoveStick(D3DXVECTOR3 &Move, float const fMove,float const fCameraRot,float &fRotGoal);	//3D用　LStick　移動量計算
 	static bool Check3DCameraStick(D3DXVECTOR3 &Rot,float fHolizonMove,float fVerticalMove);					//3D用　RStick　移動量計算

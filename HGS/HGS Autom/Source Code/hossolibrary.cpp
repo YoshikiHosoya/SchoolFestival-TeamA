@@ -51,21 +51,21 @@ bool CHossoLibrary::CheckMove(DIRECTION direction)
 	{
 	case DIRECTION::UP:
 		//↑
-		if (m_pKeyboard->GetTrigger(DIK_W) || m_pXInput->GetPress(CPad_XInput::JOYPADKEY_UP))
+		if (m_pKeyboard->GetTrigger(DIK_W) || m_pKeyboard->GetTrigger(DIK_UP) || m_pXInput->GetPress(CPad_XInput::JOYPADKEY_UP))
 		{
 			return true;
 		}
 		break;
 	case DIRECTION::DOWN:
 		//↓
-		if (m_pKeyboard->GetTrigger(DIK_S) || m_pXInput->GetPress(CPad_XInput::JOYPADKEY_DOWN))
+		if (m_pKeyboard->GetTrigger(DIK_S) || m_pKeyboard->GetTrigger(DIK_DOWN) || m_pXInput->GetPress(CPad_XInput::JOYPADKEY_DOWN))
 		{
 			return true;
 		}
 		break;
 	case DIRECTION::LEFT:
 		//←
-		if (m_pKeyboard->GetTrigger(DIK_A) || m_pXInput->GetPress(CPad_XInput::JOYPADKEY_LEFT))
+		if (m_pKeyboard->GetTrigger(DIK_A) || m_pKeyboard->GetTrigger(DIK_LEFT) || m_pXInput->GetPress(CPad_XInput::JOYPADKEY_LEFT))
 		{
 			return true;
 		}
@@ -73,7 +73,7 @@ bool CHossoLibrary::CheckMove(DIRECTION direction)
 	case DIRECTION::RIGHT:
 
 		//→
-		if (m_pKeyboard->GetTrigger(DIK_D) || m_pXInput->GetPress(CPad_XInput::JOYPADKEY_RIGHT))
+		if (m_pKeyboard->GetTrigger(DIK_D) || m_pKeyboard->GetTrigger(DIK_RIGHT) || m_pXInput->GetPress(CPad_XInput::JOYPADKEY_RIGHT))
 		{
 			return true;
 		}
@@ -259,6 +259,11 @@ void CHossoLibrary::ResetStickInfo()
 
 	//今フレームのスティック情報取得
 	m_pXInput->GetStickLeft(&m_fLeftStickX, &m_fLeftStickY);
+}
+
+D3DXCOLOR CHossoLibrary::RandomColor()
+{
+	return D3DXCOLOR(CHossoLibrary::Random(1), CHossoLibrary::Random(1), CHossoLibrary::Random(1), 1.0f);
 }
 
 void CHossoLibrary::StartVibration(int nCntVibration)

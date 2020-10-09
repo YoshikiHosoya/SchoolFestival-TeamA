@@ -96,9 +96,19 @@ void CParticleManager::Update()
 //------------------------------------------------------------------------------
 void CParticleManager::Draw()
 {
+
 	//頂点番号リセット
 	CParticle::ResetVertexID();
 
+	for (size_t nCnt = 0; nCnt < m_pParticleList.size(); nCnt++)
+	{
+		//頂点バッファ更新処理
+		m_pParticleList[nCnt]->UpdateVertex();
+	}
+
+
+	//頂点番号リセット
+	CParticle::ResetVertexID();
 	//nullcheck
 	if (!m_pParticleList.empty())
 	{

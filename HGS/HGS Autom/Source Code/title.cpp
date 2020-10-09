@@ -15,7 +15,7 @@
 #include "title.h"
 #include "scene2D.h"
 #include "bg.h"
-
+#include "sound.h"
 //------------------------------------------------------------------------------
 //マクロ
 //------------------------------------------------------------------------------
@@ -86,11 +86,17 @@ void CTitle::Update()
 		}
 	}
 
-	//なんかボタン押されたとき
-	if (CHossoLibrary::CheckAnyButton())
+
+	//フェードしてない時
+	if (CManager::GetRenderer()->GetFade()->GetFade() == CFade::FADE_NONE)
 	{
-		//チュートリアルに遷移
-		CManager::GetRenderer()->GetFade()->SetModeFade(CManager::MODE_2DGAME);
+		//何かボタン押したとき
+		if (CHossoLibrary::CheckAnyButton())
+		{
+			//ステート変更
+			CManager::GetRenderer()->GetFade()->SetModeFade(CManager::MODE_2DGAME);
+			CManager::GetSound()->Play(CSound::LABEL_SE_DECISION);
+		}
 	}
 
 }

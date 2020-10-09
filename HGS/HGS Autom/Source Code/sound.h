@@ -43,6 +43,7 @@ public:
 		LABEL_SE_SPEED_UP,							//スピードアップ
 		LABEL_SE_ADDTIME,							//タイム追加
 		LABEL_SE_ARROW,								//矢印
+		LABEL_SE_READY,								//矢印
 
 		//システム音
 		LABEL_SE_DECISION,						//決定
@@ -110,6 +111,7 @@ private:
 		{ "data/SE/Effect/speedup.wav", 0 },						//SE スピードアップ
 		{ "data/SE/Effect/addtime.wav", 0 },						//SE タイム追加
 		{ "data/SE/Effect/arrow.wav", 0 },							//SE 矢印
+		{ "data/SE/Effect/Ready.wav", 0 },							//SE た
 
 		//システム音
 		{ "data/SE/System/Determining_sound.wav", 0 },				//SE 決定

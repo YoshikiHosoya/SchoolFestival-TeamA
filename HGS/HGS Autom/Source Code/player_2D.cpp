@@ -16,6 +16,7 @@
 #include "sound.h"
 #include "particle.h"
 #include "Pad_XInput.h"
+
 //------------------------------------------------------------------------------
 //静的メンバ変数の初期化
 //------------------------------------------------------------------------------
@@ -78,6 +79,8 @@ void CPlayer_2D::Update()
 
 	//更新
 	CCharacter_2D::Update();
+
+
 }
 //------------------------------------------------------------------------------
 //描画処理
@@ -111,9 +114,21 @@ void CPlayer_2D::MoveInput()
 
 	CGame_2D *pGame2D = (CGame_2D*)CManager::GetGame();
 
+	if (pGame2D->GetGamestate() != CGame::STATE::STATE_NORMAL)
+	{
+		return;
+	}
+
 	//上に進行してるとき
 	if (pGame2D->GetDirection() == DIRECTION::UP)
 	{
+		GetScene2D()->SetRot(ZeroVector3);
+
+
+		CParticle::CreateFromText(GetPos() + D3DXVECTOR3(15.0f, 20.0f, 0.0f), ZeroVector3, CParticleParam::EFFECT_PLAYERENGINE);
+		CParticle::CreateFromText(GetPos() + D3DXVECTOR3(-15.0f, 20.0f, 0.0f), ZeroVector3, CParticleParam::EFFECT_PLAYERENGINE);
+
+
 		//[D]キーを押した時
 		if (CHossoLibrary::CheckMove(CHossoLibrary::RIGHT))
 		{
@@ -129,6 +144,15 @@ void CPlayer_2D::MoveInput()
 		}
 	}
 
+	else if (pGame2D->GetDirection() == DIRECTION::LEFT)
+	{
+		GetScene2D()->SetRot(D3DXVECTOR3(0.0f, 0.0f, -1.57f));
+	}
+
+	else if (pGame2D->GetDirection() == DIRECTION::RIGHT)
+	{
+		GetScene2D()->SetRot(D3DXVECTOR3(0.0f, 0.0f, 1.57f));
+	}
 	std::vector<std::shared_ptr<CScene>> pWayList;
 
 	CScene::GetSceneList(OBJTYPE::OBJTYPE_WAY, pWayList);
@@ -155,7 +179,8 @@ void CPlayer_2D::MoveInput()
 				if (pWay->CollisionPlayerHit(GetPos()))
 				{
 					//エフェクト発生
-					CParticle::CreateFromText(GetPos(), ZeroVector3, CParticleParam::EFFECT_DEFAULT);
+					CParticle::CreateFromText(GetPos(), ZeroVector3, CParticleParam::EFFECT_PLAYERDEATH01);
+					CParticle::CreateFromText(GetPos(), ZeroVector3, CParticleParam::EFFECT_PLAYERDEATH02);
 
 					GetScene2D()->SetDisp(false);
 					CManager::GetGame()->SetGamestate(CGame::STATE_GAMEOVER);

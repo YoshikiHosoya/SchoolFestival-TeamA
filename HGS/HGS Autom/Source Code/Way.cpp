@@ -14,6 +14,7 @@
 #include "game_2D.h"
 #include "renderer.h"
 #include "sound.h"
+#include "particle.h"
 //------------------------------------------------------------------------------
 //Ã“Iƒƒ“ƒo•Ï”‚Ì‰Šú‰»
 //------------------------------------------------------------------------------
@@ -208,16 +209,22 @@ bool CWay::CollisionPlayerAddTimer(D3DXVECTOR3 pos)
 	CManager::GetSound()->Play(CSound::LABEL_SE_ADDTIME);
 
 
-	if (fDistance >= 160)
+	if (fDistance >= 110)
 	{
 		pGame2D->AddTimer(2);
 		printf("AddTimer 2\n");
 		//‰¹Ä¶
 		CManager::GetSound()->Play(CSound::LABEL_SE_PERFECT);
 
+		CParticle::CreateFromText(pos, ZeroVector3, CParticleParam::EFFECT_CROSS, TAG::NONE,0,CHossoLibrary::RandomColor());
+		CParticle::CreateFromText(pos, ZeroVector3, CParticleParam::EFFECT_CIRCLE, TAG::NONE, 0, CHossoLibrary::RandomColor());
+		CParticle::CreateFromText(pos, ZeroVector3, CParticleParam::EFFECT_STAR, TAG::NONE, 0, CHossoLibrary::RandomColor());
+		CParticle::CreateFromText(pos, ZeroVector3, CParticleParam::EFFECT_SQUARE, TAG::NONE, 0, CHossoLibrary::RandomColor());
+		CParticle::CreateFromText(pos, ZeroVector3, CParticleParam::EFFECT_TRIANGLE, TAG::NONE, 0, CHossoLibrary::RandomColor());
+
 		return true;
 	}
-	else if (fDistance >= 100)
+	else if (fDistance >= 80)
 	{
 		pGame2D->AddTimer(1);
 		printf("AddTimer 1\n");
@@ -225,6 +232,12 @@ bool CWay::CollisionPlayerAddTimer(D3DXVECTOR3 pos)
 		CManager::GetSound()->Play(CSound::LABEL_SE_GREAT);
 
 		return true;
+
+	}
+	else
+	{
+		//‰¹Ä¶
+		CManager::GetSound()->Play(CSound::LABEL_SE_GOOD);
 
 	}
 	return false;
