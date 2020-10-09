@@ -83,20 +83,25 @@ void CBaseMode::DebugCommand()
 		{
 			CManager::GetRenderer()->GetFade()->SetModeFade(CManager::MODE_TITLE);
 		}
-		//ゲーム
+		//チュートリアル
 		if (pKeyboard->GetTrigger(DIK_NUMPAD2))
 		{
-			CManager::GetRenderer()->GetFade()->SetModeFade(CManager::MODE_2DGAME);
+			CManager::GetRenderer()->GetFade()->SetModeFade(CManager::MODE_TUTORIAL);
 		}
 		//ゲーム
 		if (pKeyboard->GetTrigger(DIK_NUMPAD3))
 		{
-			//CManager::GetRenderer()->GetFade()->SetModeFade(CManager::MODE_3DGAME);
+			CManager::GetRenderer()->GetFade()->SetModeFade(CManager::MODE_2DGAME);
 		}
 		//リザルト
 		if (pKeyboard->GetTrigger(DIK_NUMPAD4))
 		{
 			CManager::GetRenderer()->GetFade()->SetModeFade(CManager::MODE_RESULT);
+		}
+		//ランキング
+		if (pKeyboard->GetTrigger(DIK_NUMPAD5))
+		{
+			CManager::GetRenderer()->GetFade()->SetModeFade(CManager::MODE_RANKING);
 		}
 
 		////エフェクトビューワ
