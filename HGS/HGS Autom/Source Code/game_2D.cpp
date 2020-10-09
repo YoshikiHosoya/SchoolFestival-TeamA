@@ -70,7 +70,7 @@ HRESULT CGame_2D::Init(HWND hWnd)
 	CParticleManager::Create();
 
 	// îwåiÇÃê∂ê¨
-	CBg::Create();
+	CBg::Create(65);
 
 	for (int nCnt = 0; nCnt < 8; nCnt++)
 	{

@@ -73,7 +73,7 @@ HRESULT CRanking::Init(HWND hWnd)
 	CManager::GetRenderer()->GetCamera()->SetState(CCamera::CAMERA_FIXED);
 
 	// ”wŒi‚Ì¶¬
-	CBg::Create();
+	CBg::Create(60);
 	// ƒXƒRƒA‚Ì“Ç‚İ‚İ
 	RankingDataLoad();
 	// UI¶¬

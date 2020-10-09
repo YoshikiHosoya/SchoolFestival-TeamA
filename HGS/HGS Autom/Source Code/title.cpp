@@ -58,7 +58,7 @@ HRESULT CTitle::Init(HWND hWnd)
 	// タイトルUIの生成
 	TitleUICreate();
 
-	CBg::Create();
+	CBg::Create(95);
 	return S_OK;
 }
 
@@ -124,7 +124,7 @@ void CTitle::TitleUICreate()
 			// テクスチャの割り当て
 			m_apScene2D[nCnt]->BindTexture(CTexture::GetTexture(CTexture::TEX_NONE));
 			// 色変更
-			m_apScene2D[nCnt]->SetColor(BlackColor);
+			m_apScene2D[nCnt]->SetColor(D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f));
 		}
 
 		if (nCnt == (int)TITLE_UI::TITLE_NAME)
