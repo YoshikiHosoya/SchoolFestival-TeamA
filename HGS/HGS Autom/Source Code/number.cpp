@@ -118,7 +118,7 @@ std::unique_ptr<CNumber> CNumber::Create(D3DXVECTOR3 pos, D3DXVECTOR3 size)
 		pNumber->Init();
 
 		//テクスチャ設定
-		//pNumber->BindTexture(CTexture::GetSeparateTexture(CTexture::SEPARATE_TEX_UI_NUMBER));
+		pNumber->BindTexture(CTexture::GetSeparateTexture(CTexture::SEPARATE_TEX_UI_NUMBER));
 		pNumber->SetPos(pos);
 		pNumber->SetSize(size);
 		pNumber->m_DefaultSize = size;

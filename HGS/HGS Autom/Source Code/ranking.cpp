@@ -23,7 +23,9 @@
 #define VERTICAL_SPACE		(70.0f)									// 縦の間隔
 #define WAITTIME_BASE		(180)									// 待ち時間
 #define ONE_SECOND			(60)									// 1秒
-#define RANKINGSIZE			(D3DXVECTOR3(80.0f, 30.0f, 0.0f))		// ランキングUIのサイズ
+#define RANKINGSIZE			(D3DXVECTOR3(80.0f, 50.0f, 0.0f))		// ランキングUIのサイズ
+#define RANKING_GOTITLESIZE			(D3DXVECTOR3(240.0f, 100.0f, 0.0f))		// ランキングUIのサイズ	タイトルへ
+
 #define RANKING_SPACE		(10)									// ランキングの間隔
 #define RANKINGSCORESIZE	(D3DXVECTOR3(30.0f, 30.0f, 0.0f))		// ランキングスコアサイズ
 #define RANKINGSCOREDIGITS	(7)										// ランキングの桁数
@@ -50,10 +52,8 @@ CRanking::CRanking()
 	m_nRankingScore.clear();
 	m_apScene2D.clear();
 	m_apRankScore.clear();
+	m_nPlayerScore = 0;
 	m_nCntResult = 0;
-
-	RankingUICreate();	// 生成
-	RankingScoreCreate(); // スコア生成
 }
 
 //------------------------------------------------------------------------------
@@ -72,6 +72,15 @@ HRESULT CRanking::Init(HWND hWnd)
 {
 	//カメラ座標設定
 	CManager::GetRenderer()->GetCamera()->SetState(CCamera::CAMERA_FIXED);
+
+	// スコアの読み込み
+	RankingDataLoad();
+	// プレイヤーのスコアを読み込み
+	PlayerScoreLoad();
+	// UI生成
+	RankingUICreate();
+	// スコア生成
+	RankingScoreCreate();
 
 	return S_OK;
 }
@@ -145,7 +154,14 @@ void CRanking::RankingUICreate()
 			// テクスチャの割り当て
 			m_apScene2D[nCnt]->BindTexture(CTexture::GetTexture(CTexture::TEX_UI_RANKING_NAME));
 		}
-
+		// タイトルへ
+		else if (nCnt == (int)RANKING_UI::RANKING_GO_TITLE)
+		{
+			// シーン2Dの生成
+			m_apScene2D.emplace_back(CScene2D::Create_Shared(D3DXVECTOR3((SCREEN_WIDTH * 0.5f), (150.0f + (VERTICAL_SPACE * nCnt)) + RANKING_SPACE * nCnt, 0.0f), RANKING_GOTITLESIZE, CScene::OBJTYPE_UI));
+			// テクスチャの割り当て
+			m_apScene2D[nCnt]->BindTexture(CTexture::GetTexture(CTexture::TEX_UI_RANKING_GO_TITLE));
+		}
 		// 順位
 		else
 		{
@@ -153,8 +169,6 @@ void CRanking::RankingUICreate()
 			m_apScene2D.emplace_back(CScene2D::Create_Shared(D3DXVECTOR3((SCREEN_WIDTH * 0.2f), (100.0f + (VERTICAL_SPACE * nCnt)) + RANKING_SPACE * nCnt, 0.0f), RANKINGSIZE, CScene::OBJTYPE_UI));
 			// テクスチャの割り当て
 			m_apScene2D[nCnt]->BindTexture(CTexture::GetTexture((CTexture::TEX_TYPE)(CTexture::TEX_UI_RANKING_1st + nCnt - 1)));
-
-			m_apScene2D[nCnt]->SetDisp(false);
 		}
 	}
 }
@@ -166,7 +180,7 @@ void CRanking::RankingScoreCreate()
 {
 	for (int nCnt = 0; nCnt < (int)RANKING_SCORE::SCORE_MAX; nCnt++)
 	{
-		m_nRankingScore.emplace_back(0);
+		m_nRankingScore.emplace_back(1000000);
 
 		// スコアの生成
 		m_apRankScore.emplace_back((CMultiNumber::Create(D3DXVECTOR3((SCREEN_WIDTH * 0.4f), ((200.0f - 15.0f) + (VERTICAL_SPACE * nCnt)) + RANKING_SPACE * nCnt, 0.0f),
@@ -174,5 +188,152 @@ void CRanking::RankingScoreCreate()
 								m_nRankingScore[nCnt],
 								RANKINGSCOREDIGITS,
 								CScene::OBJTYPE_UI)));
+	}
+}
+
+//------------------------------------------------------------------------------
+//ランキングのデータのロード
+//------------------------------------------------------------------------------
+void CRanking::RankingDataLoad()
+{
+	// ファイルポイント
+	FILE *pFile;
+
+	char cReadText[128];			// 文字として読み取る
+	char cHeadText[128];			// 比較用
+	char cDie[128];					// 不要な文字
+
+	static int nRnak[(int)RANKING_SCORE::SCORE_MAX] = {};
+
+	// ファイルを開く
+	pFile = fopen(m_RankingFileName, "r");
+
+	// 開いているとき
+	if (pFile != NULL)
+	{
+		// SCRIPTが来るまでループ
+		while (strcmp(cHeadText, "SCRIPT") != 0)
+		{
+			fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
+			sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
+		}
+
+		// SCRIPTが来たら
+		if (strcmp(cHeadText, "SCRIPT") == 0)
+		{
+			// END_SCRIPTが来るまでループ
+			while (strcmp(cHeadText, "END_SCRIPT") != 0)
+			{
+				fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
+				sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
+
+															// RANKINGSETが来たら
+				if (strcmp(cHeadText, "RANKINGSET") == 0)
+				{
+					// END_RANKINGSETが来るまでループ
+					while (strcmp(cHeadText, "END_RANKINGSET") != 0)
+					{
+						fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
+						sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
+
+						if (strcmp(cHeadText, "RANKING_1st") == 0)
+						{
+							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &nRnak[(int)RANKING_SCORE::SCORE_1st]);		// 比較用テキストにRANKIG_1stを代入
+						}
+						else if (strcmp(cHeadText, "RANKING_2nd") == 0)
+						{
+							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &nRnak[(int)RANKING_SCORE::SCORE_2nd]);		// 比較用テキストにRANKIG_2ndを代入
+						}
+						else if (strcmp(cHeadText, "RANKING_3rd") == 0)
+						{
+							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &nRnak[(int)RANKING_SCORE::SCORE_3rd]);		// 比較用テキストにRANKIG_3rdを代入
+						}
+						else if (strcmp(cHeadText, "RANKING_4th") == 0)
+						{
+							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &nRnak[(int)RANKING_SCORE::SCORE_4th]);		// 比較用テキストにRANKIG_4thを代入
+						}
+						else if (strcmp(cHeadText, "RANKING_5th") == 0)
+						{
+							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &nRnak[(int)RANKING_SCORE::SCORE_5th]);		// 比較用テキストにRANKIG_5thを代入
+						}
+						else if (strcmp(cHeadText, "END_RANKINGSET") == 0)
+						{
+							for (int nCnt = 0; nCnt < (int)RANKING_SCORE::SCORE_MAX; nCnt++)
+							{
+								// 末尾にランキングのスコアデータを追加
+								m_nRankingScore.emplace_back(nRnak[nCnt]);
+							}
+						}
+					}
+				}
+			}
+		}
+		// ファイルを閉じる
+		fclose(pFile);
+	}
+	else
+	{
+		MessageBox(NULL, "ランキングのデータ読み込み失敗", "警告", MB_ICONWARNING);
+	}
+}
+
+//------------------------------------------------------------------------------
+//ランキングスコアのロード
+//------------------------------------------------------------------------------
+void CRanking::PlayerScoreLoad()
+{
+	// ファイルポイント
+	FILE *pFile;
+
+	char cReadText[128];			// 文字として読み取る
+	char cHeadText[128];			// 比較用
+	char cDie[128];					// 不要な文字
+	int nScore = 0;					// スコア
+
+	// ファイルを開く
+	pFile = fopen(m_SaveScoreFileName, "r");
+
+	// 開いているとき
+	if (pFile != NULL)
+	{
+		// SCRIPTが来るまでループ
+		while (strcmp(cHeadText, "SCRIPT") != 0)
+		{
+			fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
+			sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
+		}
+
+		// SCRIPTが来たら
+		if (strcmp(cHeadText, "SCRIPT") == 0)
+		{
+			// END_SCRIPTが来るまでループ
+			while (strcmp(cHeadText, "END_SCRIPT") != 0)
+			{
+				fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
+				sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
+
+				// SCORESETが来たら
+				if (strcmp(cHeadText, "SCORESET") == 0)
+				{
+					// END_SCORESETが来るまでループ
+					while (strcmp(cHeadText, "END_SCORESET") != 0)
+					{
+						fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
+						sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
+
+						if (strcmp(cHeadText, "SCORE") == 0)
+						{
+							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_nPlayerScore);
+						}
+					}
+				}
+			}
+		}
+		// ファイルを閉じる
+		fclose(pFile);
+	}
+	else
+	{
+		MessageBox(NULL, "スコアのデータ読み込み失敗", "警告", MB_ICONWARNING);
 	}
 }

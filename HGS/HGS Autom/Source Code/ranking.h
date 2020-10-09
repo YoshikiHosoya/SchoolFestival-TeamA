@@ -65,14 +65,16 @@ public:
 private:
 	void					RankingUICreate();										// ランキングUIの生成
 	void					RankingScoreCreate();									// ランキングスコアの生成
-
+	void					RankingDataLoad();										// ランキングのデータのロード
+	void					PlayerScoreLoad();										// プレイヤーのスコアをロード
 	static char				*m_RankingFileName;										// ランキングのファイル名
 	static char				*m_SaveScoreFileName;									// スコアのファイル名
 
-	std::vector<int>				m_nRankingScore;										// 上位5位のランキング情報
-	int								m_nCntResult;											//カウンタ
+	std::vector<int>							m_nRankingScore;					// 上位5位のランキング情報
 	std::vector<std::shared_ptr<CScene2D>>		m_apScene2D;						// ランキングUI 
-	std::vector<std::shared_ptr<CMultiNumber>>	m_apRankScore;					// スコアのUI
+	std::vector<std::shared_ptr<CMultiNumber>>	m_apRankScore;						// スコアのUI
+	int											m_nPlayerScore;						// プレイヤーが獲得したスコア
+	int											m_nCntResult;						// カウンタ
 
 };
 

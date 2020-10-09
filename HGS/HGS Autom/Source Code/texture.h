@@ -61,6 +61,7 @@ public:
 		//エフェクト
 		SEPARATE_TEX_EFFECT_EXPLOSION00,			//爆発
 
+		SEPARATE_TEX_UI_NUMBER,						// ナンバー
 
 		SEPARATE_TEX_MAX							//MAX
 	};

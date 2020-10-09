@@ -41,6 +41,7 @@ FILENAME_LIST CTexture::m_aSeparateTexFileNameList =
 {
 	{ "data/TEXTURE/TexNone.png"},								//”’†
 	{ "data/TEXTURE/Effect/Explosion00.png" },					//”š”­
+	{ "data/TEXTURE/UI/Num.png" },								//ƒiƒ“ƒo[
 };
 
 
