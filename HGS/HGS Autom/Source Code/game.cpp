@@ -62,7 +62,6 @@ void CGame::SetGamestate(STATE gamestate)
 	{
 		//ステート変更
 		m_gamestate = gamestate;
-
 	}
 }
 

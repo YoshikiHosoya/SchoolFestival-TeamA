@@ -41,5 +41,7 @@ public:
 protected:
 
 private:
+	bool m_bMove;
+
 };
 #endif

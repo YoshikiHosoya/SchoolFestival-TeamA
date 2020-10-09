@@ -19,6 +19,7 @@
 //------------------------------------------------------------------------------
 class CWay;
 class CScene2D;
+class CMultiNumber;
 
 class CGame_2D : public CGame
 {
@@ -31,12 +32,14 @@ public:
 	void Draw();											//描画
 	void ShowDebugInfo();									//デバッグ情報表記
 
-
 	int GetSpeed() { return m_nSpeed; };
 	DIRECTION GetDirection() { return m_direction; };
 	void Bending();
 	void PlayerBending(DIRECTION Direction);
 	void GameEnd();
+	void AddTimer(int nAddTime);
+	void SetGamestate(CGame::STATE state);
+
 
 protected:
 private:
@@ -49,6 +52,12 @@ private:
 	DIRECTION m_NextBendingDirection;					//次の曲がり角の方向
 	bool m_bBendingFlag;								//曲がりのフラグ
 	int m_nBendingTime;									//曲がってる時間
+	int m_nTime;										//タイム
+
+	std::shared_ptr<CMultiNumber> m_pScoreNumber;
+	std::shared_ptr<CMultiNumber> m_pTimeNumber;
+	std::shared_ptr<CScene2D> m_pScore;
+	std::shared_ptr<CScene2D> m_pNextBending;
 
 	std::vector<std::shared_ptr<CWay>> m_pWayList;
 

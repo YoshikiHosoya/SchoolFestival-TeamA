@@ -28,7 +28,7 @@
 //------------------------------------------------------------------------------
 CPlayer_2D::CPlayer_2D()
 {
-
+	m_bMove = false;
 }
 
 //------------------------------------------------------------------------------
@@ -46,7 +46,7 @@ HRESULT CPlayer_2D::Init()
 	CCharacter_2D::Init();
 
 	//メモリ確保
-	std::unique_ptr<CScene2D> pScene2D = CScene2D::Create_SelfManagement(GetPos(), D3DXVECTOR3(50.0f, 50.0f, 0.0f));
+	std::unique_ptr<CScene2D> pScene2D = CScene2D::Create_SelfManagement(GetPos(), D3DXVECTOR3(40.0f, 60.0f, 0.0f));
 
 	//テクスチャ設定
 	pScene2D->BindTexture(CTexture::GetTexture(CTexture::TEX_PLAYER));
@@ -91,20 +91,22 @@ void CPlayer_2D::Draw()
 //------------------------------------------------------------------------------
 void CPlayer_2D::MoveInput()
 {
+	m_bMove = false;
+
 	//ゲームパッドの情報取得
 	CPad_XInput *pGamePad = CManager::GetXInput();
 
-	//変数宣言
-	float joypadX, joypadY;
+	////変数宣言
+	//float joypadX, joypadY;
 
-	//ジョイパッドの移動処理
-	pGamePad->GetStickLeft(&joypadX, &joypadY);
+	////ジョイパッドの移動処理
+	//pGamePad->GetStickLeft(&joypadX, &joypadY);
 
-	if (joypadX != 0 || joypadY != 0)
-	{
-		GetMove().x += joypadX * CCharacter::GetDefaultParam(GetParam())->GetMoveSpeed() / 32768.0f;
-		GetMove().y -= joypadY * CCharacter::GetDefaultParam(GetParam())->GetMoveSpeed() / 32768.0f;
-	}
+	//if (joypadX != 0 || joypadY != 0)
+	//{
+	//	GetMove().x += joypadX * CCharacter::GetDefaultParam(GetParam())->GetMoveSpeed() / 32768.0f;
+	//	GetMove().y -= joypadY * CCharacter::GetDefaultParam(GetParam())->GetMoveSpeed() / 32768.0f;
+	//}
 
 	CGame_2D *pGame2D = (CGame_2D*)CManager::GetGame();
 
@@ -115,11 +117,14 @@ void CPlayer_2D::MoveInput()
 		if (CHossoLibrary::CheckMove(CHossoLibrary::RIGHT))
 		{
 			pGame2D->PlayerBending(DIRECTION::RIGHT);
+			m_bMove = true;
 		}
 		//[A]キーを押した時
 		if (CHossoLibrary::CheckMove(CHossoLibrary::LEFT))
 		{
 			pGame2D->PlayerBending(DIRECTION::LEFT);
+			m_bMove = true;
+
 		}
 	}
 
@@ -127,6 +132,8 @@ void CPlayer_2D::MoveInput()
 
 	CScene::GetSceneList(OBJTYPE::OBJTYPE_WAY, pWayList);
 
+
+	//サイズ分
 	for (size_t nCnt = 0; nCnt < pWayList.size(); nCnt++)
 	{
 		if (!pWayList[nCnt])
@@ -138,18 +145,36 @@ void CPlayer_2D::MoveInput()
 
 		if (pWay)
 		{
-			if(pWay->Collision(GetPos()))
+			//Ｗａｙポリゴンの上かどうか
+			if (pWay->Collision(GetPos()))
 			{
 				CDebugProc::Print(CDebugProc::PLACE_LEFT, "WayPos.y >> %.2f\n", pWay->GetPos().y);
 
+				//衝突してるか
 				if (pWay->CollisionPlayerHit(GetPos()))
 				{
+					//エフェクト発生
 					CParticle::CreateFromText(GetPos(), ZeroVector3, CParticleParam::EFFECT_DEFAULT);
-				}
 
+					GetScene2D()->SetDisp(false);
+					CManager::GetGame()->SetGamestate(CGame::STATE_GAMEOVER);
+
+					break;
+				}
+				else
+				{
+					//プレイヤーが動いたフレーム
+					if (m_bMove)
+					{
+						//時間加算するかどうかの判定
+						if (pWay->CollisionPlayerAddTimer(GetPos()))
+						{
+							break;
+						}
+					}
+				}
 			}
 		}
-
 	}
 }
 

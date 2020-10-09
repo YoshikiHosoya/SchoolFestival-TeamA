@@ -48,7 +48,7 @@ public:
 	virtual void Draw() = 0;											//描画
 	virtual void ShowDebugInfo() = 0;									//デバッグ情報表記
 
-	void SetGamestate(STATE gamestate);									//ゲームの状態設定
+	virtual void SetGamestate(STATE gamestate);									//ゲームの状態設定
 
 	STATE GetGamestate() { return m_gamestate; };						//ゲームの状態取得
 	CPlayer *GetPlayer(); 												//プレイヤーのポインタ取得

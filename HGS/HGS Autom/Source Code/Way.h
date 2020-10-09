@@ -30,7 +30,6 @@ public:
 		RIGHT_02,
 		LEFT_01,
 		LEFT_02,
-
 	};
 
 	CWay();																					//コンストラクタ
@@ -47,6 +46,8 @@ public:
 
 	bool Collision(D3DXVECTOR3 pos);					//どのＷａｙにいるか
 	bool CollisionPlayerHit(D3DXVECTOR3 pos);			//プレイヤーの衝突判定用
+	bool CollisionPlayerAddTimer(D3DXVECTOR3 pos);						//どれくらいギリギリでかわしたか判定してタイマー加算
+
 protected:
 
 private:

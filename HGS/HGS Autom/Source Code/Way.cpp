@@ -62,6 +62,12 @@ void CWay::Update()
 
 	CGame_2D *pGame2D = (CGame_2D*)CManager::GetGame();
 
+	//通常時以外は終わる
+	if (pGame2D->GetGamestate() != CGame::STATE_NORMAL)
+	{
+		return;
+	}
+
 	switch (pGame2D->GetDirection())
 	{
 	case DIRECTION::UP:
@@ -184,4 +190,33 @@ bool CWay::CollisionPlayerHit(D3DXVECTOR3 pos)
 	}
 
 	return false;
+}
+
+//------------------------------------------------------------------------------
+//当たり判定　タイマー追加
+//------------------------------------------------------------------------------
+bool CWay::CollisionPlayerAddTimer(D3DXVECTOR3 pos)
+{
+	float fDistance = 400.0f;
+
+	fDistance = fabsf(this->GetPos().y - pos.y);
+
+	CGame_2D *pGame2D = (CGame_2D*)CManager::GetGame();
+
+	if (fDistance >= 160)
+	{
+		pGame2D->AddTimer(2);
+		printf("AddTimer 2\n");
+		return true;
+	}
+	else if (fDistance >= 100)
+	{
+		pGame2D->AddTimer(1);
+		printf("AddTimer 1\n");
+
+		return true;
+
+	}
+	return false;
+
 }
