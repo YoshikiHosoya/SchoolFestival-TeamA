@@ -119,7 +119,7 @@ void CBg::Update()
 	//m_nCntScroll
 	if (m_pGridLine)
 	{
-		m_pGridLine->SetAnimation(D3DXVECTOR2(1.0f, 1.0f + ((float)m_nCntScroll / 100)), D3DXVECTOR2(1.0f, 1.0f));
+		m_pGridLine->SetAnimation(D3DXVECTOR2(1.0f, 1.0f - ((float)m_nCntScroll / 50)), D3DXVECTOR2(1.0f, 1.0f));
 	}
 
 	CDebugProc::Print(CDebugProc::PLACE_LEFT, "FigureNum >> %d\n", m_apScene2D.size());
@@ -180,7 +180,7 @@ void CBg::RandomFigure()
 	if (nCntTime > 60)
 	{
 		m_apScene2D.emplace_back(CScene2D::Create_Shared(D3DXVECTOR3((float)(rand() % 1280), -100.0f, 0.0f), m_FigureSize, CScene::OBJTYPE_BACK));
-
+		m_apScene2D[m_apScene2D.size() - 1]->SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.5f));
 		switch (m_FigureType)
 		{
 		case CBg::BG_FIGURE::BG_Circle:

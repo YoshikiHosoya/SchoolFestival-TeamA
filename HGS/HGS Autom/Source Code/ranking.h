@@ -68,6 +68,9 @@ private:
 	void					RankingScoreCreate();									// ランキングスコアの生成
 	void					PlayerScoreCreate();									// プレイヤースコアの生成
 	void					RankingDataLoad();										// ランキングのデータのロード
+	void					RankingCalculation();									// 順位の計算
+	void					BubbleSort(std::vector<int> &data);						// 優先度の入れ替え 高い順に0番目から
+	void					RankingDataSave();										// ランキングのデータのセーブ
 
 	static char				*m_RankingFileName;										// ランキングのファイル名
 
@@ -75,7 +78,6 @@ private:
 	std::vector<std::shared_ptr<CMultiNumber>>	m_pPlayerScore;						// スコアのUI
 	std::vector<std::shared_ptr<CScene2D>>		m_apScene2D;						// ランキングUI 
 	std::vector<std::shared_ptr<CMultiNumber>>	m_apRankScore;						// スコアのUI
-	int											m_nPlayerScore;						// プレイヤーが獲得したスコア
 	int											m_nCntResult;						// カウンタ
 
 };

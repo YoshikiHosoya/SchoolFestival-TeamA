@@ -17,6 +17,7 @@
 #include "scene2D.h"
 #include "multinumber.h"
 #include "game.h"
+#include "bg.h"
 
 //------------------------------------------------------------------------------
 //マクロ
@@ -51,7 +52,6 @@ CRanking::CRanking()
 	m_nRankingScore.clear();
 	m_apScene2D.clear();
 	m_apRankScore.clear();
-	m_nPlayerScore = 0;
 	m_nCntResult = 0;
 }
 
@@ -72,14 +72,21 @@ HRESULT CRanking::Init(HWND hWnd)
 	//カメラ座標設定
 	CManager::GetRenderer()->GetCamera()->SetState(CCamera::CAMERA_FIXED);
 
+	// 背景の生成
+	CBg::Create();
 	// スコアの読み込み
 	RankingDataLoad();
 	// UI生成
 	RankingUICreate();
 	// スコア生成
 	RankingScoreCreate();
+	// ランキングの計算
+	RankingCalculation();
 	// プレイヤースコア生成
 	PlayerScoreCreate();
+
+	// スコアの書き込み
+	RankingDataSave();
 
 	return S_OK;
 }
@@ -164,9 +171,9 @@ void CRanking::RankingUICreate()
 		else if (nCnt == (int)RANKING_UI::RANKING_GO_TITLE)
 		{
 			// シーン2Dの生成
-			m_apScene2D.emplace_back(CScene2D::Create_Shared(D3DXVECTOR3((SCREEN_WIDTH * 0.5f), 650.0f, 0.0f), RANKING_GOTITLESIZE, CScene::OBJTYPE_UI));
+			m_apScene2D.emplace_back(CScene2D::Create_Shared(D3DXVECTOR3((SCREEN_WIDTH * 0.5f), 650.0f, 0.0f), D3DXVECTOR3(450.0f, 200.0f, 0.0f), CScene::OBJTYPE_UI));
 			// テクスチャの割り当て
-			m_apScene2D[nCnt]->BindTexture(CTexture::GetTexture(CTexture::TEX_UI_RANKING_GO_TITLE));
+			m_apScene2D[nCnt]->BindTexture(CTexture::GetTexture(CTexture::TEX_UI_ENTER));
 		}
 		// 順位
 		else
@@ -186,8 +193,6 @@ void CRanking::RankingScoreCreate()
 {
 	for (int nCnt = 0; nCnt < (int)RANKING_SCORE::SCORE_MAX; nCnt++)
 	{
-		m_nRankingScore.emplace_back(0);
-
 		// スコアの生成
 		m_apRankScore.emplace_back((CMultiNumber::Create(D3DXVECTOR3((SCREEN_WIDTH * 0.8f), ((200.0f - 15.0f) + (VERTICAL_SPACE * nCnt)) + RANKING_SPACE * nCnt, 0.0f),
 								RANKINGSCORESIZE,
@@ -203,7 +208,7 @@ void CRanking::RankingScoreCreate()
 void CRanking::PlayerScoreCreate()
 {
 	// スコアの生成
-	m_pPlayerScore.emplace_back((CMultiNumber::Create(D3DXVECTOR3((SCREEN_WIDTH * 0.25f), SCREEN_HEIGHT * 0.6f, 0.0f),
+	m_pPlayerScore.emplace_back((CMultiNumber::Create(D3DXVECTOR3((SCREEN_WIDTH * 0.2f), SCREEN_HEIGHT * 0.6f, 0.0f),
 											PLAYER_SCORE_SIZE,
 											CGame::GetScore(),
 											RANKINGSCOREDIGITS,
@@ -293,5 +298,97 @@ void CRanking::RankingDataLoad()
 	else
 	{
 		MessageBox(NULL, "ランキングのデータ読み込み失敗", "警告", MB_ICONWARNING);
+	}
+}
+
+//------------------------------------------------------------------------------
+//ランキングのデータの計算
+//------------------------------------------------------------------------------
+void CRanking::RankingCalculation()
+{
+	// 末尾にプレイヤーのスコアデータを追加
+	m_nRankingScore.emplace_back(CGame::GetScore());
+	// スコアを大きい順に入れ替える
+	BubbleSort(m_nRankingScore);
+
+	for (int nCnt = 0; nCnt < (int)m_nRankingScore.size(); nCnt++)
+	{
+		if (m_nRankingScore[nCnt] == CGame::GetScore())
+		{
+			m_apRankScore[nCnt]->Settype(CMultiNumber::TYPE_FLASHING);
+		}
+		// マルチナンバーに値を代入
+		m_apRankScore[nCnt]->SetMultiNumber((int)m_nRankingScore[nCnt]);
+	}
+}
+
+//------------------------------------------------------------------------------
+//バブルソート
+//------------------------------------------------------------------------------
+void CRanking::BubbleSort(std::vector<int>& data)
+{
+	for (int nCnt = 0; nCnt < (int)data.size() - 1; nCnt++)
+	{
+		for (int num = (int)data.size() - 1; num > nCnt; num--)
+		{
+			if (data[num - 1] <= data[num])
+			{  // 大きさが逆転している箇所があったら swap
+				std::swap(data[num - 1], data[num]);
+			}
+		}
+	}
+
+	// 末尾を削除
+	data.pop_back();
+}
+
+//------------------------------------------------------------------------------
+//ランキングセーブ
+//------------------------------------------------------------------------------
+void CRanking::RankingDataSave()
+{
+	// ファイルポイント
+	FILE	*pFile;
+
+	// 各モデルファイルのファイルを開く
+	pFile = fopen(m_RankingFileName, "w");
+
+	// 開いているとき
+	if (pFile != NULL)
+	{
+		fprintf(pFile, "#------------------------------------------------------------------------------\n");
+		fprintf(pFile, "# ランキングデータの情報\n");
+		fprintf(pFile, "#------------------------------------------------------------------------------\n");
+		fprintf(pFile, "\n");
+
+		fprintf(pFile, "SCRIPT\n\n");
+		fprintf(pFile, "RANKINGSET\n");
+
+		// セーブするランキングの情報
+		fprintf(pFile, "	RANKING_1st	= %d\n", m_nRankingScore[(int)RANKING_SCORE::SCORE_1st]);
+		fprintf(pFile, "	RANKING_2nd	= %d\n", m_nRankingScore[(int)RANKING_SCORE::SCORE_2nd]);
+		fprintf(pFile, "	RANKING_3rd	= %d\n", m_nRankingScore[(int)RANKING_SCORE::SCORE_3rd]);
+		fprintf(pFile, "	RANKING_4th	= %d\n", m_nRankingScore[(int)RANKING_SCORE::SCORE_4th]);
+		fprintf(pFile, "	RANKING_5th	= %d\n", m_nRankingScore[(int)RANKING_SCORE::SCORE_5th]);
+
+
+		fprintf(pFile, "END_RANKINGSET\n\n");
+		fprintf(pFile, "END_SCRIPT\n");
+
+
+#ifdef _DEBUG
+		// 読み込み成功時の結果表示
+		//MessageBox(NULL, "ランキング情報をセーブしました", "結果", MB_OK | MB_ICONINFORMATION);
+#endif // DEBUG
+
+		// ファイルを閉じる
+		fclose(pFile);
+	}
+	else
+	{
+#ifdef _DEBUG
+		// 読み込み失敗時の警告表示
+		MessageBox(NULL, "ランキング情報の読み込み失敗", "警告", MB_ICONWARNING);
+#endif // DEBUG
 	}
 }
