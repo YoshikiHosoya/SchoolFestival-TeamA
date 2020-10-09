@@ -40,6 +40,14 @@ public:
 		TEX_WAY_LEFT02,						//道左
 
 		// --- UI ---
+		// BG
+		TEX_UI_BG_GRIDLINE,						// グリッド線
+		TEX_UI_BG_CIRCLE,						// まる
+		TEX_UI_BG_TRIANGLE,						// 三角
+		TEX_UI_BG_SQUARE,						// 四角
+		TEX_UI_BG_STAR,							// 星
+		TEX_UI_BG_CROSS,						// ばつ
+
 		//タイトル
 		TEX_UI_TITLE_NAME,						// タイトルロゴ
 
