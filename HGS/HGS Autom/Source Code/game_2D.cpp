@@ -19,6 +19,7 @@
 #include "ParticleManager.h"
 #include "multinumber.h"
 #include "bg.h"
+#include "sound.h"
 #include "particle.h"
 //------------------------------------------------------------------------------
 //静的メンバ変数の初期化
@@ -87,11 +88,14 @@ HRESULT CGame_2D::Init(HWND hWnd)
 	m_pNextBending = CScene2D::Create_Shared(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 300.0f, 0.0f), D3DXVECTOR3(150.0f, 150.0f, 0.0f), CScene::OBJTYPE_UI);
 	m_pNextBending->SetDisp(false);
 
+	m_pReadyGo = CScene2D::Create_Shared(SCREEN_CENTER_POS, D3DXVECTOR3(500.0f, 200.0f, 0.0f), CScene::OBJTYPE_UI);
+	m_pReadyGo->BindTexture(CTexture::GetTexture(CTexture::TEX_UI_GAME_LADY));
+
 	//最初のカーブ
 	Bending();
 
 	//ゲームステート初期化
-	SetGamestate(CGame::STATE_NORMAL);
+	SetGamestate(CGame::STATE_READY);
 
 	return S_OK;
 }
@@ -110,13 +114,45 @@ void CGame_2D::Uninit()
 //------------------------------------------------------------------------------
 void CGame_2D::Update()
 {
-	if (GetGamestate() == CGame::STATE_NORMAL)
+	if (GetGamestate() == CGame::STATE_READY)
 	{
+		m_nCnt++;
+
+		if (m_nCnt >= 120)
+		{
+			//テクスチャ差し替え
+			m_pReadyGo->BindTexture(CTexture::GetTexture(CTexture::TEX_UI_GAME_GO));
+
+			//ゲームステート通常
+			SetGamestate(CGame::STATE_NORMAL);
+
+		}
+	}
+
+	else if (GetGamestate() == CGame::STATE_NORMAL)
+	{
+		if (m_pReadyGo)
+		{
+			m_pReadyGo->SetColor(m_pReadyGo->GetColor() -= D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.02f));
+			if (m_pReadyGo->GetColor().a <= 0)
+			{
+				m_pReadyGo->Release();
+				m_pReadyGo.reset();
+			}
+		}
+
 		m_nCnt++;
 
 		if (m_nCnt % 60 == 0)
 		{
 			AddTimer(-1);
+
+			if (m_nTime <= 0)
+			{
+				SetGamestate(CGame::STATE_GAMEOVER);
+				//音再生
+				CManager::GetSound()->Play(CSound::LABEL_SE_TIMEUP);
+			}
 		}
 
 		m_nScoreDistance += m_nSpeed;
@@ -131,24 +167,31 @@ void CGame_2D::Update()
 
 		//次の曲がり角までの差分
 		float fNextBendingDistance = m_fNextBendingPoint - m_nScoreDistance;
-
-
 		CDebugProc::Print(CDebugProc::PLACE_LEFT, "fNextBendingDistance >> %.2f\n", fNextBendingDistance + DEFAULT_CREATE_POS);
 
-		if (fNextBendingDistance + DEFAULT_CREATE_POS < 400 * m_nBendingCountDown)
+		float fPlayerToBendingWayDistance = 99999999.9f;
+
+		if (m_pNextBendingWayPos)
 		{
-			m_pNextBending->SetDisp(true);
-			m_nBendingCountDown--;
+			fPlayerToBendingWayDistance = m_pNextBendingWayPos->y - GetPlayer()->GetPlayerPos().y;
 
-			printf("CountDown %d\n", m_nBendingCountDown);
-			printf("fNextBendingDistance %.2f\n", fNextBendingDistance + DEFAULT_CREATE_POS + 170);
+			CDebugProc::Print(CDebugProc::PLACE_LEFT, "m_pNextBendingWayPos >>>> %.2f\n", m_pNextBendingWayPos->y);
 
-			CParticle::CreateFromText(m_pNextBending->GetPos(), ZeroVector3, CParticleParam::EFFECT_COUNTDOWN);
+			CDebugProc::Print(CDebugProc::PLACE_LEFT, "fPlayerToBendingWayDistance >>>>>> %.2f\n", fPlayerToBendingWayDistance);
 
-		}
-		else
-		{
-			//m_pNextBending->SetDisp(false);
+			if (fabsf(fPlayerToBendingWayDistance) + 150 < 400 * m_nBendingCountDown)
+			{
+				m_pNextBending->SetDisp(true);
+				m_nBendingCountDown--;
+
+				printf("CountDown %d\n", m_nBendingCountDown);
+				printf("fNextBendingDistance %.2f\n", fNextBendingDistance + DEFAULT_CREATE_POS + 170);
+
+				CParticle::CreateFromText(m_pNextBending->GetPos(), ZeroVector3, CParticleParam::EFFECT_COUNTDOWN);
+
+				//音再生
+				CManager::GetSound()->Play(CSound::LABEL_SE_COUNTDOWN);
+			}
 		}
 
 		if (m_pWayList[m_pWayList.size() - 1]->GetPos().y >= -600.0f)
@@ -160,12 +203,16 @@ void CGame_2D::Update()
 				case DIRECTION::LEFT:
 					m_pWayList.emplace_back(CWay::Create(m_pWayList[m_pWayList.size() - 1]->GetPos() + D3DXVECTOR3(0.0f, -WAY_SIZE, 0.0f), CWay::LEFT_01));
 					m_pWayList.emplace_back(CWay::Create(m_pWayList[m_pWayList.size() - 1]->GetPos() + D3DXVECTOR3(-WAY_SIZE, 0.0f, 0.0f), CWay::LEFT_02));
+					m_pNextBendingWayPos = m_pWayList[m_pWayList.size() - 1]->GetPosPtr();
+
 					m_bBendingFlag = false;
 					break;
 
 				case DIRECTION::RIGHT:
 					m_pWayList.emplace_back(CWay::Create(m_pWayList[m_pWayList.size() - 1]->GetPos() + D3DXVECTOR3(0.0f, -WAY_SIZE, 0.0f), CWay::RIGHT_01));
 					m_pWayList.emplace_back(CWay::Create(m_pWayList[m_pWayList.size() - 1]->GetPos() + D3DXVECTOR3(WAY_SIZE, 0.0f, 0.0f), CWay::RIGHT_02));
+					m_pNextBendingWayPos = m_pWayList[m_pWayList.size() - 1]->GetPosPtr();
+
 					m_bBendingFlag = false;
 					break;
 
@@ -173,7 +220,6 @@ void CGame_2D::Update()
 					break;
 				}
 
-				m_fNextBendingWayPos = m_pWayList[m_pWayList.size() - 1]->GetPos().y;
 			}
 			else
 			{
@@ -290,6 +336,7 @@ void CGame_2D::AddTimer(int nAddTime)
 {
 	m_nTime += nAddTime;
 	m_pTimeNumber->SetMultiNumber(m_nTime);
+
 }
 
 //------------------------------------------------------------------------------
@@ -301,7 +348,7 @@ void CGame_2D::Bending()
 	m_fNextBendingPoint = (float)(m_nScoreDistance + (m_nSpeed * 60) + rand() % (m_nSpeed * 90));
 	//m_fNextBendingPoint = m_nScoreDistance + (m_nSpeed * 60);
 	//m_fNextBendingPoint = m_nScoreDistance + 2500.0f;
-
+	m_pNextBendingWayPos = nullptr;
 	m_nBendingCountDown = COUNTDOWN;
 	m_pNextBending->SetDisp(false);
 
@@ -315,7 +362,7 @@ void CGame_2D::Bending()
 		m_pNextBending->BindTexture(CTexture::GetTexture(CTexture::TEX_ARROW_RIGHT));
 	}
 
-	m_nSpeed += 2;
+	m_nSpeed += 3;
 
 
 
@@ -335,7 +382,7 @@ void CGame_2D::SetGamestate(STATE gamestate)
 
 		if (gamestate == CGame::STATE_GAMEOVER)
 		{
-			m_nCnt = 30;
+			m_nCnt = 60;
 		}
 	}
 }
