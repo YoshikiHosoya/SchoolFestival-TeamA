@@ -131,13 +131,6 @@ void CItem::Update(void)
 {
 	// 当たり判定系
 	ItemCollision();
-
-	//// レイの判定に一回でも触れていた時
-	//if (m_nHitRayCount >= 1)
-	//{
-	//	// アイテムの滞在時間管理
-	//	RemainTimer();
-	//}
 }
 
 // =====================================================================================================================================================================
@@ -172,8 +165,6 @@ void CItem::BehaviorType(D3DXVECTOR3 & pos)
 		pos += m_Move * 1.5f;
 	}
 }
-
-
 
 // =====================================================================================================================================================================
 //
@@ -288,38 +279,6 @@ uint64_t CItem::GetRandRange(uint64_t min_val, uint64_t max_val)
 
 // =====================================================================================================================================================================
 //
-// コインのスコアを加算する処理
-//
-// =====================================================================================================================================================================
-int CItem::AddCoinScore(int nScore)
-{
-	// スコアとカウントをかける
-	nScore *= m_nAddCoin;
-
-	// カウントを倍にする
-	m_nAddCoin += m_nAddCoin;
-
-	// スコアの値を返す
-	return nScore;
-}
-
-// =====================================================================================================================================================================
-//
-// 完全乱数
-//
-// =====================================================================================================================================================================
-CItem::ITEMTYPE CItem::FullRand()
-{
-	//FULLRAND_HITPROBABILITY
-	// 完全乱数で出たアイテムの結果を保存
-	//nSaveHitItem
-	// n回連続で★3が出ていなかった時強制的に★3のアイテムをドロップする
-	//if
-	return ITEMTYPE();
-}
-
-// =====================================================================================================================================================================
-//
 // ボックス乱数
 //
 // =====================================================================================================================================================================
@@ -333,8 +292,6 @@ CItem::ITEMTYPE CItem::BoxRand()
 		// ピックされた末尾の要素を削除する
 		m_nDefaultRarityList.pop_back();
 		// レアリティリストからピックされたレアリティのリストの中からランダムにアイテムを選出する
-		//v.list[Rarity].最初　.最後 何行目の何番目か (0番目から最大数分)
-		//const ITEMTYPE type = ItemRandomRange(m_nBoxRandDefaultRarityData.at(Rarity).at(0), m_nBoxRandDefaultRarityData.at(Rarity).at(m_nBoxRandDefaultRarityData.at(Rarity).size() - 1));
 		const ITEMTYPE type = ItemWhichOnePick(m_nBoxRandDefaultRarityData, Rarity);
 
 		// 配列が空だった時
@@ -389,18 +346,14 @@ void CItem::AddBoxRandList()
 // 複数個一気にアイテムが生成される時のアイテムの挙動制御
 //
 // =====================================================================================================================================================================
-void CItem::BurstsItem()
-{
-}
+void CItem::BurstsItem(){}
 
 // =====================================================================================================================================================================
 //
 // 空中にあったアイテムが床に着いた時跳ね返る処理
 //
 // =====================================================================================================================================================================
-void CItem::BounceItem()
-{
-}
+void CItem::BounceItem(){}
 
 // =====================================================================================================================================================================
 //
@@ -452,8 +405,6 @@ void CItem::SetMultiType(ITEM_LIST_DROPMULTIPLE list)
 		this->SwitchTexture(this->RandDropItem(ITEMDROP_RARE));
 		break;
 
-
-
 	case CItem::LIST_ANI_NORMAL:
 		// レアなアイテムのみ
 		this->SwitchTexture(this->RandDropItem(ITEMDROP_ANI_NORMAL));
@@ -491,7 +442,7 @@ void CItem::ReflectionItem()
 
 // =====================================================================================================================================================================
 //
-// テスト用
+// 反射処理
 //
 // =====================================================================================================================================================================
 D3DXVECTOR3 * CItem::ReflectingVectorCalculation(D3DXVECTOR3 *outV, const D3DXVECTOR3 &ProgressV, const D3DXVECTOR3 &Normal)
@@ -702,11 +653,6 @@ void CItem::DebugItemCommand(CKeyboard *key)
 		{
 			CItem::DebugCreate(ITEMTYPE_BULLETUP);
 		}
-		// boxramdテスト用
-		else if (key->GetKeyboardTrigger(DIK_NUMPADENTER))
-		{
-			CItem::DropCreate_TEST();
-		}
 	}
 }
 
@@ -750,37 +696,6 @@ bool CItem::DecideIfItemDrop(int nRate)
 // =====================================================================================================================================================================
 CItem * CItem::DebugCreate(ITEMTYPE type)
 {
-	// メモリの確保
-	//CItem * pItem = new CItem(OBJTYPE_ITEM);
-
-	//// 初期化
-	//pItem->Init();
-
-	//// サイズの設定
-	//pItem->SetSize(D3DXVECTOR3(
-	//	m_ItemData.CollisionSize.x / 2,
-	//	m_ItemData.CollisionSize.y / 2,
-	//	m_ItemData.CollisionSize.z / 2));
-
-	//CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer(TAG::PLAYER_1);
-
-	//if (pPlayer != nullptr)
-	//{
-	//	D3DXVECTOR3 pos = pPlayer->GetPosition();
-	//	// アイテムが生成される位置の調整
-	//	pItem->SetDropPos(pos);
-
-	//	// アイテムの位置の設定
-	//	pItem->SetPosition(pos);
-
-	//	pItem->m_Type = type;
-
-	//	pItem->m_Behavior = BEHAVIOR_NONE;
-	//}
-
-	//// 種類別にテクスチャを設定
-	//pItem->SwitchTexture(pItem->m_Type, pItem);
-
 	return nullptr;
 }
 
@@ -858,59 +773,48 @@ void CItem::ItemLoad()
 	char cHeadText[128];			// 比較用
 	char cDie[128];					// 不要な文字
 
-	// ファイルを開く
 	pFile = fopen(m_ItemFileName, "r");
 
-	// 開いているとき
 	if (pFile != NULL)
 	{
-		// SCRIPTが来るまでループ
 		while (strcmp(cHeadText, "SCRIPT") != 0)
 		{
-			fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
-			sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
+			fgets(cReadText, sizeof(cReadText), pFile);
+			sscanf(cReadText, "%s", &cHeadText);
 		}
 
-		// SCRIPTが来たら
 		if (strcmp(cHeadText, "SCRIPT") == 0)
 		{
-			// END_SCRIPTが来るまでループ
 			while (strcmp(cHeadText, "END_SCRIPT") != 0)
 			{
-				fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
-				sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
+				fgets(cReadText, sizeof(cReadText), pFile);
+				sscanf(cReadText, "%s", &cHeadText);
 
-				// 1つ目のファイルだった時
 				if (strcmp(cHeadText, "ITEMSET") == 0)
 				{
-					// END_ITEMSETが来るまでループ
 					while (strcmp(cHeadText, "END_ITEMSET") != 0)
 					{
-						fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
-						sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
+						fgets(cReadText, sizeof(cReadText), pFile);
+						sscanf(cReadText, "%s", &cHeadText);
 
-																	// SPEEDが来たら
 						if (strcmp(cHeadText, "RATE") == 0)
 						{
-							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_ItemData.nDropRate);		// 比較用テキストにRATEを代入
+							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_ItemData.nDropRate);
 						}
-						// LIFEが来たら
 						else if (strcmp(cHeadText, "DELETE") == 0)
 						{
-							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_ItemData.nDeleteTime);	// 比較用テキストにDELETEを代入
+							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_ItemData.nDeleteTime);
 						}
-						// FLASHが来たら
 						else if (strcmp(cHeadText, "FLASH") == 0)
 						{
-							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_ItemData.nFlashTime);	// 比較用テキストにFLASHを代入
+							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_ItemData.nFlashTime);
 						}
-						// COLLISIONSIZEが来たら
 						else if (strcmp(cHeadText, "COLLISIONSIZE") == 0)
 						{
 							sscanf(cReadText, "%s %s %f %f %f", &cDie, &cDie,
 								&m_ItemData.CollisionSize.x,
 								&m_ItemData.CollisionSize.y,
-								&m_ItemData.CollisionSize.z);										// 比較用テキストにCOLLISIONSIZEを代入
+								&m_ItemData.CollisionSize.z);
 						}
 						else if (strcmp(cHeadText, "END_ITEMSET") == 0)
 						{
@@ -932,44 +836,6 @@ void CItem::ItemLoad()
 	}
 }
 
-
-// =====================================================================================================================================================================
-//
-// デバッグ用アイテム生成
-//
-// =====================================================================================================================================================================
-CItem * CItem::DropCreate_TEST()
-{
-	CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer((TAG)(0));
-	D3DXVECTOR3 pos = pPlayer->GetPosition();
-
-	// 変数
-	//CItem *pItem;
-
-	// メモリの確保
-	//pItem = new CItem(OBJTYPE_ITEM);
-
-	//// 初期化
-	//pItem->Init();
-
-	//// サイズの設定
-	//pItem->SetSize(D3DXVECTOR3(
-	//	m_ItemData.CollisionSize.x / 2,
-	//	m_ItemData.CollisionSize.y / 2,
-	//	m_ItemData.CollisionSize.z / 2));
-
-	//// アイテムが生成される位置の調整
-	//pItem->SetDropPos(pos);
-	//// アイテムの位置の設定
-	//pItem->SetPosition(pos);
-	//// ボックスランドでアイテムを選出する
-	//pItem->m_Type = pItem->BoxRand();
-	//// 種類別にテクスチャを設定
-	//pItem->SwitchTexture(pItem->m_Type, pItem);
-
-	return nullptr;
-}
-
 // =====================================================================================================================================================================
 //
 // ランダムに武器のアイテムのタイプを返す
@@ -985,9 +851,7 @@ CItem::ITEMTYPE CItem::RandomWeapon()
 // 種類別テクスチャバインド処理
 //
 // =====================================================================================================================================================================
-void CItem::SwitchTexture(ITEMTYPE type)
-{
-}
+void CItem::SwitchTexture(ITEMTYPE type){}
 
 // =====================================================================================================================================================================
 //

@@ -226,64 +226,57 @@ void CRankingUI::RankingDataLoad()
 
 	static int nRnak[SCORE_MAX] = {};
 
-	// ファイルを開く
 	pFile = fopen(m_RankingFileName, "r");
 
-	// 開いているとき
 	if (pFile != NULL)
 	{
-		// SCRIPTが来るまでループ
 		while (strcmp(cHeadText, "SCRIPT") != 0)
 		{
-			fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
-			sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
+			fgets(cReadText, sizeof(cReadText), pFile);
+			sscanf(cReadText, "%s", &cHeadText);
 		}
 
-		// SCRIPTが来たら
 		if (strcmp(cHeadText, "SCRIPT") == 0)
 		{
-			// END_SCRIPTが来るまでループ
 			while (strcmp(cHeadText, "END_SCRIPT") != 0)
 			{
-				fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
-				sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
+				fgets(cReadText, sizeof(cReadText), pFile);
+				sscanf(cReadText, "%s", &cHeadText);
 
-				// RANKINGSETが来たら
 				if (strcmp(cHeadText, "RANKINGSET") == 0)
 				{
-					// END_RANKINGSETが来るまでループ
 					while (strcmp(cHeadText, "END_RANKINGSET") != 0)
 					{
-						fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
-						sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
+						fgets(cReadText, sizeof(cReadText), pFile);
+						sscanf(cReadText, "%s", &cHeadText);
 
 						if (strcmp(cHeadText, "RANKING_1st") == 0)
 						{
-							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &nRnak[SCORE_1st]);		// 比較用テキストにRANKIG_1stを代入
+							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &nRnak[SCORE_1st]);
 						}
 						else if (strcmp(cHeadText, "RANKING_2nd") == 0)
 						{
-							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &nRnak[SCORE_2nd]);		// 比較用テキストにRANKIG_2ndを代入
+							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &nRnak[SCORE_2nd]);
 						}
 						else if (strcmp(cHeadText, "RANKING_3rd") == 0)
 						{
-							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &nRnak[SCORE_3rd]);		// 比較用テキストにRANKIG_3rdを代入
+							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &nRnak[SCORE_3rd]);
 						}
 						else if (strcmp(cHeadText, "RANKING_4th") == 0)
 						{
-							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &nRnak[SCORE_4th]);		// 比較用テキストにRANKIG_4thを代入
+							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &nRnak[SCORE_4th]);
 						}
 						else if (strcmp(cHeadText, "RANKING_5th") == 0)
 						{
-							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &nRnak[SCORE_5th]);		// 比較用テキストにRANKIG_5thを代入
+							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &nRnak[SCORE_5th]);
 						}
 						else if (strcmp(cHeadText, "RANKING_6th") == 0)
 						{
-							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &nRnak[SCORE_6th]);		// 比較用テキストにRANKIG_5thを代入
+							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &nRnak[SCORE_6th]);
 						}
 						else if (strcmp(cHeadText, "RANKING_7th") == 0)
 						{
-							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &nRnak[SCORE_7th]);		// 比較用テキストにRANKIG_5thを代入
+							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &nRnak[SCORE_7th]);
 						}
 						else if (strcmp(cHeadText, "END_RANKINGSET") == 0)
 						{
@@ -481,36 +474,30 @@ void CRankingUI::PlayerScoreLoad()
 	char cHeadText[128];			// 比較用
 	char cDie[128];					// 不要な文字
 
-									// ファイルを開く
 	pFile = fopen(m_SaveScoreFileName, "r");
 
-	// 開いているとき
 	if (pFile != NULL)
 	{
 		// SCRIPTが来るまでループ
 		while (strcmp(cHeadText, "SCRIPT") != 0)
 		{
-			fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
-			sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
+			fgets(cReadText, sizeof(cReadText), pFile);
+			sscanf(cReadText, "%s", &cHeadText);
 		}
 
-		// SCRIPTが来たら
 		if (strcmp(cHeadText, "SCRIPT") == 0)
 		{
-			// END_SCRIPTが来るまでループ
 			while (strcmp(cHeadText, "END_SCRIPT") != 0)
 			{
-				fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
-				sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
+				fgets(cReadText, sizeof(cReadText), pFile);
+				sscanf(cReadText, "%s", &cHeadText);
 
-				// SCORESETが来たら
 				if (strcmp(cHeadText, "SCORESET") == 0)
 				{
-					// END_SCORESETが来るまでループ
 					while (strcmp(cHeadText, "END_SCORESET") != 0)
 					{
-						fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
-						sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
+						fgets(cReadText, sizeof(cReadText), pFile);
+						sscanf(cReadText, "%s", &cHeadText);
 
 						if (strcmp(cHeadText, "SCORE_ONE") == 0)
 						{
@@ -528,7 +515,6 @@ void CRankingUI::PlayerScoreLoad()
 				}
 			}
 		}
-		// ファイルを閉じる
 		fclose(pFile);
 	}
 	else
@@ -885,7 +871,7 @@ void CRankingUI::RankingState_Draw_Score()
 
 // =====================================================================================================================================================================
 //
-// ランキングステートRANKING_STATE_SCORE_CALCULATIONの時
+// ランキングステートRANKING_STATE_SCORE_CALCULATIONの時 1Pと2Pのスコアの合計を求める
 //
 // =====================================================================================================================================================================
 void CRankingUI::RankingState_Score_Calculation()
@@ -1001,7 +987,7 @@ void CRankingUI::RankingState_Score_Calculation()
 
 // =====================================================================================================================================================================
 //
-// ランキングステートRANKING_STATE_COMPARE_RANKINGの時
+// ランキングステートRANKING_STATE_COMPARE_RANKINGの時 求めたスコアとランキングのスコアを比較し入れ替えを行う
 //
 // =====================================================================================================================================================================
 void CRankingUI::RankingState_Compare_Ranking()
@@ -1161,7 +1147,7 @@ void CRankingUI::RankingState_Sort_Ranking()
 
 // =====================================================================================================================================================================
 //
-// ランキングステートRANKING_STATE_RANKINGの時
+// ランキングステートRANKING_STATE_RANKINGの時 順位にあった演出をする
 //
 // =====================================================================================================================================================================
 void CRankingUI::RankingState_Ranking()

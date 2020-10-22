@@ -114,7 +114,7 @@ private:
 	void					PrisonerState();					// 捕虜の状態別処理
 	void					PrisonerDropItem();					// 捕虜のタイプ別処理
 	void					SetStateTime(int time)
-							{m_StateTime = time;};				// ステートが切り替わるまでの時間の設定
+	{m_StateTime = time;};										// ステートが切り替わるまでの時間の設定
 
 	unsigned int			GetDistance_Player_This();			// プレイヤーと選択された捕虜の距離の長さを求めて結果を返す
 	bool					PrisonerPosX_Than_Large();			// 捕虜のx座標から見て左にいるか右にいるかの結果を返す

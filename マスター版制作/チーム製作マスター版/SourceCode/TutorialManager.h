@@ -47,7 +47,6 @@ public:
 	/* 静的メンバ関数 */
 	static					CTutorialManager	*Create();					// 生成
 	/* メンバ関数 */
-	void					TutorialState();								// チュートリアルの順番管理
 
 private:
 	/* 静的メンバ変数 */

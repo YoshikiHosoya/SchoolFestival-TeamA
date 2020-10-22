@@ -414,7 +414,7 @@ void CMap::MapModelCreate(int ModelType, int nType, D3DXVECTOR3 pos,int nItemTyp
 	/* --- 障害物 --- */
 	case CMap::ARRANGEMENT_MODEL_OBSTACLE:
 		// オブジェクトの生成
-		m_pObstacle.emplace_back(CObstacle::Create_Present(pos,(CObstacle::OBSTACLE_TYPE)nType));
+		m_pObstacle.emplace_back(CObstacle::Create(pos,(CObstacle::OBSTACLE_TYPE)nType));
 		// 障害物種類の設定
 		m_pObstacle[m_pObstacle.size() - 1]->SetModelConut(nType);
 		// 位置の設定
@@ -714,27 +714,6 @@ void CMap::WaveUnLoad()
 			m_aWaveInfo[nCntWave].PrisonerWaveInfo.clear();
 		}
 	}
-}
-
-// =====================================================================================================================================================================
-//
-// プレゼントボックスの生成
-//
-// =====================================================================================================================================================================
-CObstacle *CMap::PresentCreate(D3DXVECTOR3 pos, CObstacle::OBSTACLE_TYPE Type)
-{
-	// オブジェクトの生成
-	m_pObstacle.emplace_back(CObstacle::Create_Present(pos,Type));
-	// 障害物種類の設定
-	m_pObstacle[m_pObstacle.size() - 1]->SetModelConut(Type);
-	// 位置の設定
-	m_pObstacle[m_pObstacle.size() - 1]->SetPosition(pos);
-	// 当たり判定の大きさの設定
-	m_pObstacle[m_pObstacle.size() - 1]->SetCollisionSize((CObstacle::OBSTACLE_TYPE)Type);
-	// 種類の設定
-	m_pObstacle[m_pObstacle.size() - 1]->SetObstacleType((CObstacle::OBSTACLE_TYPE)Type);
-
-	return m_pObstacle[m_pObstacle.size() - 1];
 }
 
 // =====================================================================================================================================================================

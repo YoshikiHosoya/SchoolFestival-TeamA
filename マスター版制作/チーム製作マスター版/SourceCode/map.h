@@ -118,7 +118,6 @@ public:
 	void			UpdateDieFlag();												// 死亡フラグ確認関数
 	void			AllDelete();													// 配置しているモデルを全て破棄
 	void			WaveCreate(int nModelType, D3DXVECTOR3 eventpos, WAVE_PARAM *pWaveParam, CWeakEnemy::ENEMY_TYPE EnemyType);	// Waveの生成
-	CObstacle		*PresentCreate(D3DXVECTOR3 pos, CObstacle::OBSTACLE_TYPE Type);	// プレゼントボックスの生成
 	void			BossWaveCreate(int nModelType, D3DXVECTOR3 eventpos,
 		CWeakEnemy::ENEMY_TYPE EnemyType,CPrisoner::PRISONER_TYPE type);			// ボスのマップ用で出す敵や捕虜用
 

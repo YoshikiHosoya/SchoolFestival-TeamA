@@ -80,20 +80,6 @@ HRESULT CObstacle::Init()
 	// 初期化
 	CModel::Init();
 
-	CMap *pMap = CManager::GetBaseMode()->GetMap();
-
-	D3DXVECTOR3 ofsetpos = D3DXVECTOR3(GetPosition().x, GetPosition().y + 70.0f, GetPosition().z);
-	if (this->m_ObstacleType == TYPE_PRESENTBOX)
-	{
-		m_pBalloon = pMap->PresentCreate(ofsetpos, TYPE_BALLOON);
-		GetCollision()->SetCanCollision(false);
-	}
-	else if (this->m_ObstacleType == TYPE_PRESENTBOX_RARE)
-	{
-		m_pBalloon = pMap->PresentCreate(ofsetpos, TYPE_BALLOON);
-		GetCollision()->SetCanCollision(false);
-	}
-
 	// 当たり判定生成
 	GetCollision()->SetPos(&GetPosition());
 	GetCollision()->SetGameObject(this);
@@ -118,12 +104,6 @@ void CObstacle::Uninit(void)
 // =====================================================================================================================================================================
 void CObstacle::Update(void)
 {
-	D3DXVECTOR3 posold = GetPosition();
-	if (m_pBalloon && m_pBalloon->GetObstacleType() == TYPE_BALLOON && m_pBalloon->m_nLife <= 0)
-	{
-		m_bBreakBalloon = true;
-	}
-
 	if (GetCollision() != nullptr)
 	{
 		//座標の更新
@@ -148,34 +128,8 @@ void CObstacle::Update(void)
 					else
 					{
 					}
-
-					// 障害物の判定とレイの判定
-					//if (GetCollision()->RayCollision(pMap, posold, GetPosition()))
-					//{
-					//	//GetPosition().y += m_fGravity;
-					//}
-					//else
-					//{
-					//	//GetPosition().y += m_fGravity;
-					//}
 				}
 			}
-		}
-	}
-
-	// 風船が割れたら風船の持ち主の当たり判定を可能にする
-	if (this->m_ObstacleType == TYPE_PRESENTBOX ||
-		this->m_ObstacleType == TYPE_PRESENTBOX_RARE)
-	{
-		if (m_pBalloon && m_pBalloon->GetDieFlag())
-		{
-			GetCollision()->SetCanCollision(true);
-			m_pBalloon = nullptr;
-		}
-		else if (m_pBalloon && !m_pBalloon->GetDieFlag())
-		{
-			m_pBalloon->GetPosition() += m_BalloonMove;
-			GetPosition().x = m_pBalloon->GetPosition().x;
 		}
 	}
 
@@ -256,10 +210,10 @@ CObstacle * CObstacle::Create_Editor()
 
 // =====================================================================================================================================================================
 //
-// プレゼントの生成
+// 障害物の生成
 //
 // =====================================================================================================================================================================
-CObstacle * CObstacle::Create_Present(D3DXVECTOR3 pos, CObstacle::OBSTACLE_TYPE Type)
+CObstacle * CObstacle::Create(D3DXVECTOR3 pos, CObstacle::OBSTACLE_TYPE Type)
 {
 	// 変数
 	CObstacle *pObstacle;
@@ -296,53 +250,43 @@ void CObstacle::ObstacleLoad()
 	char cReadText[128];			// 文字として読み取る
 	char cHeadText[128];			// 比較用
 	char cDie[128];					// 不要な文字
-	D3DXVECTOR3 pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 位置
+
 	for (int nCnt = 0; nCnt < CObstacle::TYPE_MAX; nCnt++)
 	{
-		// ファイルを開く
 		pFile = fopen(m_ObstacleFileName[nCnt], "r");
 
-		// 開いているとき
 		if (pFile != NULL)
 		{
-			// SCRIPTが来るまでループ
 			while (strcmp(cHeadText, "SCRIPT") != 0)
 			{
-				fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
-				sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
+				fgets(cReadText, sizeof(cReadText), pFile);
+				sscanf(cReadText, "%s", &cHeadText);
 			}
 
-			// SCRIPTが来たら
 			if (strcmp(cHeadText, "SCRIPT") == 0)
 			{
-				// END_SCRIPTが来るまでループ
 				while (strcmp(cHeadText, "END_SCRIPT") != 0)
 				{
-					fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
-					sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
+					fgets(cReadText, sizeof(cReadText), pFile);
+					sscanf(cReadText, "%s", &cHeadText);
 
-					// OBSTACLESETが来たら
 					if (strcmp(cHeadText, "OBSTACLESET") == 0)
 					{
-						// END_OBSTACLESETが来るまでループ
 						while (strcmp(cHeadText, "END_OBSTACLESET") != 0)
 						{
-							fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
-							sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
+							fgets(cReadText, sizeof(cReadText), pFile);
+							sscanf(cReadText, "%s", &cHeadText);
 
-							// LIFEが来たら
 							if (strcmp(cHeadText, "LIFE") == 0)
 							{
-								sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_ObstacleParam[nCnt].nLife);			// 比較用テキストにLIFEを代入
+								sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_ObstacleParam[nCnt].nLife);
 							}
-							// COLLISIONSIZEが来たら
 							else if (strcmp(cHeadText, "COLLISIONSIZE") == 0)
 							{
 								sscanf(cReadText, "%s %s %f %f %f", &cDie, &cDie, &m_ObstacleParam[nCnt].CollisionSize.x
 									, &m_ObstacleParam[nCnt].CollisionSize.y
-									, &m_ObstacleParam[nCnt].CollisionSize.z);		// 比較用テキストにCOLLISIONSIZEを代入
+									, &m_ObstacleParam[nCnt].CollisionSize.z);
 							}
-							// breakが来たら
 							else if (strcmp(cHeadText, "BBREAK") == 0)
 							{
 								int nBreak;
@@ -356,7 +300,6 @@ void CObstacle::ObstacleLoad()
 					}
 				}
 			}
-			// ファイルを閉じる
 			fclose(pFile);
 		}
 		else
@@ -419,7 +362,6 @@ void CObstacle::DropItem()
 		CAnimationItem::DropItem_Multiple(GetPosition(), CItem::LIST_ANI_NORMAL, CItem::BEHAVIOR_BURSTS);
 		break;
 	case CObstacle::TYPE_BARRELBOMB:
-		// 爆発する
 		break;
 	case CObstacle::TYPE_TREE:
 		CNormalItem::DropItem_Multiple(GetPosition(), CItem::LIST_FOOD, CItem::BEHAVIOR_FREEFALL);
@@ -526,10 +468,5 @@ void CObstacle::SetCollisionSize(CObstacle::OBSTACLE_TYPE type)
 	GetCollision()->DeCollisionCreate(CCollision::COLLISIONTYPE_CHARACTER);
 	// 情報の設定
 	SetObstacleParam(type);
-
-	if (type == OBSTACLE_TYPE_BRIDGE-500)
-	{
-		GetCollision()->SetCanCollision(false);
-	}
 };
 

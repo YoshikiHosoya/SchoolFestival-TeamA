@@ -200,46 +200,39 @@ void CPrisoner::PrisonerLoad()
 	char cHeadText[128];			// 比較用
 	char cDie[128];					// 不要な文字
 
-									// ファイルを開く
 	pFile = fopen(m_PrisonerFileName, "r");
 
-	// 開いているとき
 	if (pFile != NULL)
 	{
-		// SCRIPTが来るまでループ
 		while (strcmp(cHeadText, "SCRIPT") != 0)
 		{
-			fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
-			sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
+			fgets(cReadText, sizeof(cReadText), pFile);
+			sscanf(cReadText, "%s", &cHeadText);
 		}
 
-		// SCRIPTが来たら
 		if (strcmp(cHeadText, "SCRIPT") == 0)
 		{
-			// END_SCRIPTが来るまでループ
 			while (strcmp(cHeadText, "END_SCRIPT") != 0)
 			{
-				fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
-				sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
+				fgets(cReadText, sizeof(cReadText), pFile);
+				sscanf(cReadText, "%s", &cHeadText);
 
-															// ITEMSETが来たら
 				if (strcmp(cHeadText, "PRISONERSET") == 0)
 				{
-					// END_ITEMSETが来るまでループ
 					while (strcmp(cHeadText, "END_PRISONERSET") != 0)
 					{
-						fgets(cReadText, sizeof(cReadText), pFile); // 一文読み込み
-						sscanf(cReadText, "%s", &cHeadText);		// 比較用テキストに文字を代入
+						fgets(cReadText, sizeof(cReadText), pFile);
+						sscanf(cReadText, "%s", &cHeadText);
 
 						// DELETEが来たら
 						if (strcmp(cHeadText, "DELETE") == 0)
 						{
-							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_PrisonerData.nDeleteTime);	// 比較用テキストにDELETEを代入
+							sscanf(cReadText, "%s %s %d", &cDie, &cDie, &m_PrisonerData.nDeleteTime);
 						}
 						// SPEEDが来たら
 						else if (strcmp(cHeadText, "SPEED") == 0)
 						{
-							sscanf(cReadText, "%s %s %f", &cDie, &cDie, &m_PrisonerData.fMoveSpeed);	// 比較用テキストにSPEEDを代入
+							sscanf(cReadText, "%s %s %f", &cDie, &cDie, &m_PrisonerData.fMoveSpeed);
 						}
 						// COLLISIONSIZEが来たら
 						else if (strcmp(cHeadText, "COLLISIONSIZE") == 0)
@@ -247,7 +240,7 @@ void CPrisoner::PrisonerLoad()
 							sscanf(cReadText, "%s %s %f %f %f", &cDie, &cDie,
 								&m_PrisonerData.CollisionSize.x,
 								&m_PrisonerData.CollisionSize.y,
-								&m_PrisonerData.CollisionSize.z);										// 比較用テキストにCOLLISIONSIZEを代入
+								&m_PrisonerData.CollisionSize.z);
 						}
 						else if (strcmp(cHeadText, "END_PRISONERSET") == 0)
 						{
@@ -256,7 +249,6 @@ void CPrisoner::PrisonerLoad()
 				}
 			}
 		}
-		// ファイルを閉じる
 		fclose(pFile);
 	}
 	else
@@ -366,14 +358,14 @@ void CPrisoner::PrisonerState()
 			// 捕虜がプレイヤーより右にいたら左に動く
 			if (this->PrisonerPosX_Than_Large())
 			{
-				Move(0.0f,-1.57f);
+				Move(0.0f,-D3DX_PI / 2);
 				SetMove(D3DXVECTOR3(-3.0f, 0.0f, 0.0f));
 			}
 			// 左なら左へ
 			else
 			{
 				// 向き
-				Move(0.0f, 1.57f);
+				Move(0.0f, D3DX_PI / 2);
 				SetMove(D3DXVECTOR3(3.0f, 0.0f, 0.0f));
 			}
 		}
@@ -464,7 +456,7 @@ void CPrisoner::PrisonerState()
 			{
 				// 左向きにに走る
 				GetModelSet()->SetMotion(CModelSet::PRISONER_MOTION_RUN);
-				Move(0.0f, -1.57f);
+				Move(0.0f, -D3DX_PI / 2);
 				SetMove(D3DXVECTOR3(-15.0f, 0.0f, 0.0f));
 			}
 
@@ -542,10 +534,7 @@ void CPrisoner::PrisonerDropItem()
 // =====================================================================================================================================================================
 unsigned int CPrisoner::GetDistance_Player_This()
 {
-	// 今は1pのポインタを取得し1pの距離で参照している
-	//CPlayer *pPlayer = CManager::GetBaseMode()->GetPlayer(TAG::PLAYER_1);
-
-	// プレイヤーと捕虜の距離を自然数で求める
+	// プレイヤーと捕虜の距離を絶対値で求める
 	return (unsigned int)fabs(this->GetPosition().x - m_pPlayer->GetPosition().x);
 }
 
@@ -556,9 +545,6 @@ unsigned int CPrisoner::GetDistance_Player_This()
 // =====================================================================================================================================================================
 bool CPrisoner::PrisonerPosX_Than_Large()
 {
-	// 今は1pのポインタを取得し1pの距離で参照している
-	//CPlayer *pPlayer =  CManager::GetBaseMode()->GetPlayer(TAG::PLAYER_1);
-
 	 // 比べる対象(今はプレイヤーのみ)が捕虜の座標より左にいるか右にいるかを求める
 	 // 左(捕虜より値が小さかったらfalse)右(値が大きかったらtrue)
 	 if (this->GetPosition().x >= m_pPlayer->GetPosition().x)

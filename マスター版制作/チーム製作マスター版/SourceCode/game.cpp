@@ -250,7 +250,7 @@ void CGame::ShowDebugInfo(void)
 	// デバッグ用当たり判定
 	DebugCollision(key);
 	// デバッグ用アイテム
-	DebugItem(key);
+	//DebugItem(key);
 }
 
 //==========================================================

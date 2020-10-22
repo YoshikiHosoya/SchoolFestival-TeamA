@@ -169,33 +169,28 @@ public:
 		LIST_ANI_MONKEY,	// サル
 	};
 
-	/* 関数 */
-	CItem();																			// コンストラクタ
-	~CItem();																			// デストラクタ
+	// 関数
+	CItem();																	// コンストラクタ
+	~CItem();																	// デストラクタ
 
 	/* メンバ関数 */
-	virtual HRESULT						Init();											// 初期化
-	virtual void						Uninit();										// 終了
-	virtual void						Update();										// 更新
-	virtual void						Draw();											// 描画
-	virtual void						DebugInfo();									// デバッグ
-	virtual	void						SwitchTexture(ITEMTYPE type);					// 種類別テクスチャ設定
-	virtual	void						Flashing();										// 点滅処理
+	virtual HRESULT				Init();											// 初期化
+	virtual void				Uninit();										// 終了
+	virtual void				Update();										// 更新
+	virtual void				Draw();											// 描画
+	virtual void				DebugInfo();									// デバッグ
+	virtual	void				SwitchTexture(ITEMTYPE type);					// 種類別テクスチャ設定
+	virtual	void				Flashing();										// 点滅処理
+	virtual void				ItemCollision();								// 当たり判定系
+	virtual void				ReflectionItem();								// 反射処理
+	virtual void				RemainTimer();									// 滞在時間を計算し0になったら削除する
+	virtual void				HitItem(ITEMTYPE type, TAG Tag);				// アイテム取得時の種類別処理
+	virtual void				ItemAcquisition(ITEMTYPE type, TAG Tag);		// アイテム取得時の種類別処理
 
+	D3DXVECTOR3					SetPosOld() { return m_PosOld; };				// 1フレーム前の座標を設定
+	int							GetRemainTime() const { return m_nRemainTime; };// アイテムの残り時間を取得
 
-	virtual void						ItemCollision();								// 当たり判定系
-	virtual void						ReflectionItem();								// 反射処理
-	virtual void						RemainTimer();									// 滞在時間を計算し0になったら削除する
-	virtual void						HitItem(ITEMTYPE type, TAG Tag);				// アイテム取得時の種類別処理
-	virtual void						ItemAcquisition(ITEMTYPE type, TAG Tag);		// アイテム取得時の種類別処理
-
-
-
-	D3DXVECTOR3							SetPosOld() { return m_PosOld; };				// 1フレーム前の座標を設定
-	int									GetRemainTime() const { return m_nRemainTime; };// アイテムの残り時間を取得
-
-
-
+	// --- 設定 取得 --- //
 	ITEMTYPE					GetItemType() { return m_Type; };				// アイテムタイプの取得
 	void						SetItemType(ITEMTYPE type) { m_Type = type; };	// アイテムタイプの設定
 	CCollision					*GetCollision() { return m_pCollision; };		// 当たり判定
@@ -204,25 +199,18 @@ public:
 	ITEM_DATA					GetItem_Data() const{ return m_ItemData; };		// アイテムのデータの取得 呼び出し側は書き換え不可
 	void						SetBehavior(ITEM_BEHAVIOR behavior) { m_Behavior = behavior; };// アイテムの挙動の設定
 	ITEM_BEHAVIOR				GetBehavior() { return m_Behavior; };			// アイテムの挙動の設定
-
 	CPlayer						*GetPlayer(int nCnt) { return m_pPlayer[nCnt]; };	// アイテムの挙動の設定
 
-
-
-
 	/* 静的メンバ関数 */
-	static	CItem				*DropCreate_TEST();								// テスト用クリエイト処理
-	static	ITEMTYPE			RandomWeapon();									//
-	static ITEMTYPE				ItemRandomRange(ITEMTYPE min, ITEMTYPE max);		// ランダムの範囲選択
+	static ITEMTYPE				RandomWeapon();									// 武器のランダム
+	static ITEMTYPE				ItemRandomRange(ITEMTYPE min, ITEMTYPE max);	// ランダムの範囲選択
 
-
-	static	bool				DropRate();										// アイテムをドロップさせるかのフラグを返す
-	static	bool				DecideIfItemDrop(int nRate);					// ドロップ率を元にアイテムがドロップするかを決めて結果を返す
-	static	uint64_t			GetRandRange(uint64_t min_val, uint64_t max_val);// ランダム関数 範囲
-
-	static	void				InitVariable();									// 静的変数の初期化
-	static	void				ItemLoad();										// アイテムの情報の読み込み
-	static  void				DebugItemCommand(CKeyboard *key);				// デバッグ用アイテムコマンド
+	static bool					DropRate();										// アイテムをドロップさせるかのフラグを返す
+	static bool					DecideIfItemDrop(int nRate);					// ドロップ率を元にアイテムがドロップするかを決めて結果を返す
+	static uint64_t				GetRandRange(uint64_t min_val, uint64_t max_val);// ランダム関数 範囲
+	static void					InitVariable();									// 静的変数の初期化
+	static void					ItemLoad();										// アイテムの情報の読み込み
+	static void					DebugItemCommand(CKeyboard *key);				// デバッグ用アイテムコマンド
 
 	/* メンバ関数 */
 	ITEMTYPE					RandDropItem(ITEMDROP drop);						// アイテムの種類をランダムに計算
@@ -233,7 +221,6 @@ public:
 		ITEM_LIST_DROPMULTIPLE list,
 		ITEM_BEHAVIOR behavior,
 		int nNum);																	// 複数一気にドロップさせる時
-
 
 	void						BehaviorType(D3DXVECTOR3 &pos);						// アイテムの挙動の種類ごとの処理
 protected:
@@ -256,7 +243,6 @@ protected:
 	D3DXVECTOR3					m_Move;											// 移動量
 	int							m_nColCnt;										// αカラーカウント
 
-
 private:
 	/* 静的メンバ関数 */
 	static CItem				*DebugCreate(ITEMTYPE type);					// デバッグ用アイテム生成
@@ -278,26 +264,18 @@ private:
 	static std::vector<std::vector<ITEMTYPE>> m_nBoxRandDefaultRarityData;		// デフォルトのボックス乱数用のレアリティごとのアイテムの種類
 
 	/* メンバ関数 */
-	int							AddCoinScore(int nScore);						// コインのスコアを計算し結果を返す
-
-	ITEMTYPE					FullRand();										// 完全乱数 // 未完成
-
 	void						SetBoxRandDataList();							// ボックス乱数の母数が0以下になった時内容をリセットする
 	static void					AddBoxRandList();								// アイテムのレアリティと母数を元にランダムなリストを生成する
-
 	void						BurstsItem();									// 複数個一気にアイテムが生成される時のアイテムの挙動制御
 	void						BounceItem();									// 空中にあったアイテムが床に着いた時跳ね返る処理
 
 	/* メンバ変数 */
 	CCollision					*m_pCollision;									// 当たり判定
 	CPlayer						*m_pPlayer[MAX_CONTROLLER];						// プレイヤーのポインタ
-
 	ITEMTYPE					m_Type;											// アイテムタイプ
 	ITEMDROP					m_Drop;											// アイテムをドロップさせる時の種類
 	ITEM_BEHAVIOR				m_Behavior;										// アイテムの挙動
 	ITEM_LIST_DROPMULTIPLE		m_MultipleListType;								// 複数ドロップさせる時のまとまりの種類
-
 	int							m_nRemainTime;									// アイテムがマップに残る時間
-
 };
 #endif

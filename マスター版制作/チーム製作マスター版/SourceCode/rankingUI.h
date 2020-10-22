@@ -149,7 +149,7 @@ private:
 	static char				*m_SaveScoreFileName;						// スコアのファイル名
 
 	/* メンバ変数 */
-	std::vector<int>		m_nRankingScore;							// 上位5位のランキング情報
+	std::vector<int>		m_nRankingScore;							// 上位7位のランキング情報
 	std::vector<int>		m_nPlayerScore;								// プレイヤーが獲得したスコア
 	RUNKING_DATA			m_RunkingData;								// ランキングデータの構造体変数
 	CScene2D				*m_apScene2D[RANKING_UI_MAX];				// シーン2Dのポインタ

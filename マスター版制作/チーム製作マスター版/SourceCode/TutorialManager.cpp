@@ -113,8 +113,6 @@ void CTutorialManager::Update(void)
 
 	// 各ステートごとの関数を管理する
 	StateManager();
-	// チュートリアルの順番管理
-	TutorialState();
 
 	// 最初の1回目は無条件に通す
 	if (m_TutorialState == TUTORIAL_STATE_NONE)
@@ -158,35 +156,6 @@ CTutorialManager * CTutorialManager::Create()
 
 	// ポインタを返す
 	return pTutorialManager;
-}
-
-// =====================================================================================================================================================================
-//
-// Uiの出現順番
-//
-// =====================================================================================================================================================================
-void CTutorialManager::TutorialState()
-{
-	// 順番
-	switch (m_TutorialState)
-	{
-	case CTutorialManager::TUTORIAL_STATE_FIRST:
-		break;
-	case CTutorialManager::TUTORIAL_STATE_1:
-		break;
-	case CTutorialManager::TUTORIAL_STATE_2:
-		break;
-	case CTutorialManager::TUTORIAL_STATE_3:
-		break;
-	case CTutorialManager::TUTORIAL_STATE_4:
-		break;
-	case CTutorialManager::TUTORIAL_STATE_5:
-		break;
-	case CTutorialManager::TUTORIAL_STATE_6:
-		break;
-	case CTutorialManager::TUTORIAL_STATE_FINAL:
-		break;
-	}
 }
 
 // =====================================================================================================================================================================
@@ -308,18 +277,18 @@ void CTutorialManager::JudgPushButton()
 			m_bPushButton = true;
 		}
 		break;
-		// padXまたはkeySPACEでジャンプ
+		// padXまたはkeyPで弾発射
 	case CTutorialManager::TUTORIAL_STATE_2:
 		if (PAD_X ||
-			KEY_SPACE)
+			KEY_U)
 		{
 			m_bPushButton = true;
 		}
 		break;
-		// padAまたはkeyPで弾発射
+		// padAまたはkeySPACEでジャンプ
 	case CTutorialManager::TUTORIAL_STATE_3:
 		if (PAD_A ||
-			KEY_U)
+			KEY_SPACE)
 		{
 			m_bPushButton = true;
 		}
